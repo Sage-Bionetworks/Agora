@@ -1,6 +1,6 @@
 # Wall of Targets
 
-# Getting Started
+## Getting Started
 ```bash
 # clone our repo
 git clone https://github.com/Sage-Bionetworks/WallOfTargets.git
@@ -10,6 +10,7 @@ cd WallOfTargets
 
 # WINDOWS only. In terminal as administrator
 npm install -g node-pre-gyp
+```
 
 ## Dependencies
 What you need to run this app:
@@ -97,6 +98,7 @@ npm run e2e:live
 ### build Docker
 ```bash
 npm run build:docker
+```
 
 # Configuration
 Configuration files live in `config/` we are currently using webpack, karma, and protractor for different stages of your application
