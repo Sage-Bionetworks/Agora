@@ -1,0 +1,25 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-table
+    [columns]="cols" [value]="genes" selectionMode="single"
+    [(selection)]="selectedGene" dataKey="gene"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of cols; let i = index;" [ngStyle]="{'text-align': getAlignment(i, cols.length-1)}">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns; let i = index;" [ngStyle]="{'text-align': getAlignment(i, cols.length-1)}">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

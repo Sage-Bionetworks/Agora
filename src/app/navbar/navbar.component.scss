@@ -1,0 +1,134 @@
+.hidden {
+    overflow: hidden;
+}
+
+.fixed-top-nav {
+  background: #3F85B3;
+  max-height: 65px;
+}
+
+.ui-menubar {
+  background: #3F85B3;
+  border: 0px;
+}
+
+img#logo {
+    padding: 22px;
+    max-width: 180px;
+    margin-top: 10px;
+    margin-left: 12px;
+    background: white;
+}
+
+img#user {
+  padding: 8px;
+  width: 14vw;
+}
+
+.user-img {
+  max-width: 38px;
+  border-radius: 19px;
+  margin-top: 6px;
+}
+
+.divider-vertical {
+  border-left: 2px solid #414141;
+}
+
+.user-nav-actions {
+  -webkit-text-fill-color: white;
+  background: transparent;
+  border: transparent;
+  .ui-widget.ui-button,
+  .ui-button {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    font-weight: 100;
+    background: transparent;
+    border: transparent;
+  }
+  .ui-widget.ui-button:enabled:hover,
+  .ui-widget.ui-button:focus,
+  .ui-button:enabled:hover,
+  .ui-button:focus {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    font-weight: 100;
+    background: transparent;
+    border: transparent;
+  }
+}
+
+.ui-inputgroup {
+    background: transparent;
+    border: 0px;
+    color: #fff;
+}
+
+.ui-inputtext {
+  min-width: 450px;
+}
+
+.ui-inputgroup .ui-inputgroup-addon:last-child {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.ui-inputgroup {
+  font-family: 'Open Sans';
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.user-name {
+  font-family: "Open Sans";
+  font-size: 14px !important;
+  color: white;
+  padding-left: 12px;
+  display: inline-block;
+}
+
+.user-info .ui-button-text-only .ui-button-text {
+
+    margin-top: 12px !important;
+    font-size: 13px! important;
+}
+
+.ui-listbox .ui-listbox-header .ui-listbox-filter-container .fa {
+    color: #222222;
+}
+
+.ui-multiselect-panel .ui-multiselect-filter-container .fa {
+    color: #222222;
+}
+
+#mobile-menu .fa {
+    margin-right: 10px;
+    color: #78FF49;
+}
+
+.ui-inputtext {
+    background: #ffffff;
+    color: #222222;
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    transition: .2s;
+    min-width: 450px;
+}
+
+.ui-corner-all {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.ui-state-default {
+    border: 1px solid #d6d6d6;
+    background: #ffffff;
+    color: #555555;
+}
+
+.ui-widget {
+    font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1em;
+}

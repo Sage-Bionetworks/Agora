@@ -1,0 +1,35 @@
+.search-group:hover {
+    color: #FFFFFF;
+    background: #3F85B3;
+    border-radius: 3px;
+}
+
+.search-group:not(:hover) {
+    color: #FFFFFF;
+    background: #17b3ee;
+    border-radius: 3px;
+}
+
+.search-group>button:hover {
+    color: #FFFFFF;
+    background: #3F85B3;
+    border-radius: 3px;
+}
+
+.search-group>button:not(:hover) {
+    color: #FFFFFF;
+    background: #17b3ee;
+    border-radius: 3px;
+}
+
+.search-group>button:active {
+    color: #FFFFFF;
+    background: #3F85B3;
+    border-radius: 3px;
+}
+
+.search-group>button:not(:active) {
+    color: #FFFFFF;
+    background: #17b3ee;
+    border-radius: 3px;
+}

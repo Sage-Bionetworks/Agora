@@ -217,7 +217,10 @@ module.exports = function (options) {
        */
       new CopyWebpackPlugin([
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta'}
+        { from: 'src/meta' },
+        { from: helpers.root('node_modules/font-awesome'), to: 'font-awesome' },
+        { from: helpers.root('node_modules/primeng/resources/primeng.min.css'), to: 'resources' },
+        { from: helpers.root('node_modules/primeng/resources/themes/_theme.scss'), to: 'resources/themes' }
       ],
         isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
       ),

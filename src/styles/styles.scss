@@ -1,19 +1,167 @@
 /* this file will be extracted to main dist folder and is imported in index.html */
+
+
 /* This file is for setting global styles  */
-@import 'variables';
 
-nav {
-  margin-top: 16px;
+// 1. Vendor files
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~primeng/resources/themes/omega/theme.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/utilities/flex";
+// 2. Helpers (variables, mixins, functions, ...)
+@import "../assets/css/helpers/variables";
+@import "../assets/css/helpers/mixins";
+// 3. Base stuff (common settings for all components and pages)
+@import "../assets/css/common/viewport-workaround";
+@import "../assets/css/common/global";
+@import "../assets/css/common/components";
+
+// 5. Custom Global Styles
+body {
+    background: #EAEDF2;
 }
 
-nav a {
-  background-color: $nav-button-color;
-  color: white;
-  padding: 8px 16px;
-  margin: 8px;
-  vertical-align: middle;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 4px;
+html {
+    background: rgb(251, 251, 251);
+    /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(251, 251, 251, 1) 0%, rgba(209, 209, 209, 1) 71%, rgba(226, 226, 226, 1) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(251, 251, 251, 1) 0%, rgba(209, 209, 209, 1) 71%, rgba(226, 226, 226, 1) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(251, 251, 251, 1) 0%, rgba(209, 209, 209, 1) 71%, rgba(226, 226, 226, 1) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbfbfb', endColorstr='#e2e2e2', GradientType=0);
+    /* IE6-9 */
+    height: 100%;
 }
+
+  a {
+
+    color: black;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background: #7d7e7d;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #7d7e7d 0%, #0e0e0e 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e', GradientType=0);
+    /* IE6-9 */
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    font-family: "Open Sans";
+    font-size: 12px;
+    padding: 16px;
+    opacity: .95;
+    box-shadow: 2px 4px 3px rgba(136, 136, 136, 0.55);
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+/* Dropdown */
+
+.ui-button-text-only .ui-button-text {
+    padding: none;
+}
+
+.ui-menu {
+    font-family: "Open Sans";
+}
+
+.ui-menu.ui-menu-dynamic {
+    display: none;
+    z-index: 100000;
+    background: rgb(46, 46, 46)!important;
+    border: rgb(66, 66, 66)!important;
+    font-family: "Open Sans";
+    opacity: .90;
+    position: absolute;
+    color: white;
+    min-width: 400px;
+    margin: 0;
+    padding: 20%;
+}
+
+.ui-menu.ui-menu-dynamic a:hover {
+    background: rgb(46, 46, 46)!important;
+    border: none;
+}
+
+.ui-menu .ui-menu-list .ui-widget-header {
+    clear: both;
+    float: left;
+    width: 100%;
+    /* margin: .125em 0; */
+    padding: .25em .5em;
+    background: none;
+    align-items: middle;
+    color: white;
+    border: none;
+    padding-top: 13px;
+    opacity: .97;
+}
+
+.ui-dialog.ui-widget .ui-dialog-titlebar .ui-dialog-title {
+    font-family: "Montserrat";
+}
+
+.ui-widget-header .ui-button,
+.ui-widget-content .ui-button,
+.ui-widget.ui-button,
+.ui-button {
+    margin: 0 auto;
+    font-family: "Open Sans";
+}
+
+.kebab-menu {
+    display: block;
+    top: 0px;
+    left: 531.109px;
+    /* opacity: 1.076; */
+    padding: 12px !important;
+    font-size: 10px;
+    width: 150px !important;
+    opacity: 0.95;
+  }
+
+  .kebab-menu .ui-menu.ui-menu-dynamic {
+    display: none !important;
+  }
+
+  .kebab-indicator .fa {
+    color: #3a3a3a;
+    font-size: 16px;
+    margin-left: -3px;
+    background: #e8e8e8;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+    padding-left: 4px;
+    margin-top: -40px;
+    border-style: solid;
+    border: 3px;
+    border-color: black;
+    box-shadow: 1px 1px #a8a8a8;
+  }

@@ -1,0 +1,14 @@
+{
+    "data": [
+        {"gene": "VGF", "center": "Broad-Rush, MSSM, UFL_SB-Mayo", "nominations": 3},
+        {"gene": "SNAP25", "center": "Broad-Rush, MSSM", "nominations": 2},
+        {"gene": "SYT1", "center": "Broad-Rush, MSSM", "nominations": 2},
+        {"gene": "STY12", "center": "Broad-Rush, MSSM", "nominations": 2},
+        {"gene": "PLXNB1", "center": "Broad-Rush, MSSM", "nominations": 2},
+        {"gene": "TGFBR2", "center": "MSSM, UFL_SB-Mayo", "nominations": 2},
+        {"gene": "CCDC85C", "center": "Broad-Rush", "nominations": 1},
+        {"gene": "CIC", "center": "Broad-Rush", "nominations": 1},
+        {"gene": "CSRP1", "center": "Broad-Rush", "nominations": 1},
+        {"gene": "DAB2IP", "center": "Broad-Rush", "nominations": 1}
+    ]
+}
