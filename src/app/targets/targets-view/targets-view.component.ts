@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BreadcrumbService } from 'app/shared/_services';
+import { BreadcrumbService } from '../../core/services';
+import { GeneService } from '../services';
 
 @Component({
     selector: 'targets-view',
@@ -13,7 +14,8 @@ export class TargetsViewComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private breadcrumb: BreadcrumbService
+        private breadcrumb: BreadcrumbService,
+        private geneService: GeneService
     ) { }
 
     ngOnInit() {
@@ -23,6 +25,6 @@ export class TargetsViewComponent implements OnInit {
     }
 
     viewGene() {
-
+        this.router.navigate(['/details', this.geneService.getCurrentGene().ensembl_gene_id]);
     }
 }

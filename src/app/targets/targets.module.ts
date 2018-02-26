@@ -1,27 +1,48 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { AppSharedModule } from 'app/shared';
+import { TargetsRoutingModule } from './targets-routing.module';
+import { AppSharedModule } from '../shared';
 
-import { routes } from './targets.routes';
+import {
+    SharedModule,
+    PanelModule,
+    ButtonModule,
+    GrowlModule
+} from 'primeng/primeng';
+
+import { TableModule } from 'primeng/table';
 
 import { TargetsViewComponent } from './targets-view';
 import { TargetsListComponent } from './targets-list';
+import { DetailsViewComponent } from './details/details-view';
+
+import { GeneService } from './services';
+
+import { PapaParseModule } from 'ngx-papaparse';
 
 @NgModule({
     declarations: [
         TargetsViewComponent,
-        TargetsListComponent
+        TargetsListComponent,
+        DetailsViewComponent
     ],
     imports: [
         CommonModule,
-        // Our shared module
-        AppSharedModule,
-        RouterModule.forChild(routes)
+        AppSharedModule.forRoot(),
+        TargetsRoutingModule,
+        // PrimeNG modules
+        SharedModule,
+        PanelModule,
+        ButtonModule,
+        GrowlModule,
+        TableModule,
+        // Other third party modules
+        PapaParseModule
+    ],
+    providers: [
+        GeneService
     ]
 })
 // Changed the name so it does not conflict with primeng module
-export class TargetsModule {
-    public static routes = routes;
-}
+export class TargetsModule {}

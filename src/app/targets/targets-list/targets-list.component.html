@@ -1,7 +1,7 @@
 <p-growl [(value)]="msgs"></p-growl>
 <p-table
     [columns]="cols" [value]="genes" selectionMode="single"
-    [(selection)]="selectedGene" dataKey="gene"
+    [(selection)]="selectedGene" dataKey="ensembl_gene_id"
     [paginator]="true"
     [rows]="10"
     [totalRecords]="totalRecords"

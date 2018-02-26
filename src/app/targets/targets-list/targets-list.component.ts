@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BreadcrumbService, GeneService } from 'app/shared/_services';
+import { BreadcrumbService } from 'app/core/services';
+import { GeneService } from '../services';
+import { PapaParseService } from 'ngx-papaparse';
+import { Observable } from 'rxjs/Observable';
 
-import { Gene } from '../../shared/_models';
+import { Gene } from '../../shared/models';
 
 import { Message } from 'primeng/primeng';
 
@@ -24,21 +27,19 @@ export class TargetsListComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private papa: PapaParseService
     ) { }
 
     ngOnInit() {
-        this.geneService.getGenes(this.fname).subscribe(data => {
-            console.log('data');
-            console.log(data);
-            console.log(data['data']);
-            this.genes = data['data'];
+        this.geneService.getGene(this.fname).subscribe(data => {
+            this.genes = data;
         });
 
         this.cols = [
-            { field: 'gene', header: 'Gene' },
-            { field: 'center', header: 'Center(s)' },
-            { field: 'nominations', header: 'Nominations' }
+            { field: 'hgnc_symbol', header: 'Gene' },
+            { field: 'Study', header: 'Center(s)' },
+            { field: 'percentage_gc_content', header: 'Nominations' }
         ];
     }
 
@@ -47,10 +48,12 @@ export class TargetsListComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.gene}];
+        this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
+        this.geneService.setCurrentGene(event.data.hgnc_symbol);
     }
 
     onRowUnselect(event) {
-        this.msgs = [{severity:'info', summary:'Gene Unselected', detail:'Gene: ' + event.data.gene}];
+        this.msgs = [{severity:'info', summary:'Gene Unselected', detail:'Gene: ' + event.data.hgnc_symbol}];
+        this.geneService.setCurrentGene(null);
     }
 }

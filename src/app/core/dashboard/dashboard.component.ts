@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { BreadcrumbService } from '../shared/_services';
+import { BreadcrumbService } from '../services';
 import {
     Router,
     ActivatedRoute

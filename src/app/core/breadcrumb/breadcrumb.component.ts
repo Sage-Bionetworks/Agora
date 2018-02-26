@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
 
-import { BreadcrumbService } from '../shared/_services';
+import { BreadcrumbService } from '../services';
 
 import { Observable } from 'rxjs/Observable';
 
