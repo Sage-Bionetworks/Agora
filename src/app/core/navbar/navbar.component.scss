@@ -3,13 +3,13 @@
 }
 
 .fixed-top-nav {
-  background: #3F85B3;
-  max-height: 65px;
+    background: #3F85B3;
+    max-height: 65px;
 }
 
 .ui-menubar {
-  background: #3F85B3;
-  border: 0px;
+    background: #3F85B3;
+    border: 0px;
 }
 
 img#logo {
@@ -21,42 +21,42 @@ img#logo {
 }
 
 img#user {
-  padding: 8px;
-  width: 14vw;
+    padding: 8px;
+    width: 14vw;
 }
 
 .user-img {
-  max-width: 38px;
-  border-radius: 19px;
-  margin-top: 6px;
+    max-width: 38px;
+    border-radius: 19px;
+    margin-top: 6px;
 }
 
 .divider-vertical {
-  border-left: 2px solid #414141;
+    border-left: 2px solid #414141;
 }
 
 .user-nav-actions {
-  -webkit-text-fill-color: white;
-  background: transparent;
-  border: transparent;
-  .ui-widget.ui-button,
-  .ui-button {
-    font-size: 16px;
-    font-family: 'Open Sans';
-    font-weight: 100;
+    -webkit-text-fill-color: white;
     background: transparent;
     border: transparent;
-  }
-  .ui-widget.ui-button:enabled:hover,
-  .ui-widget.ui-button:focus,
-  .ui-button:enabled:hover,
-  .ui-button:focus {
-    font-size: 16px;
-    font-family: 'Open Sans';
-    font-weight: 100;
-    background: transparent;
-    border: transparent;
-  }
+    .ui-widget.ui-button,
+    .ui-button {
+        font-size: 16px;
+        font-family: 'Open Sans';
+        font-weight: 100;
+        background: transparent;
+        border: transparent;
+    }
+    .ui-widget.ui-button:enabled:hover,
+    .ui-widget.ui-button:focus,
+    .ui-button:enabled:hover,
+    .ui-button:focus {
+        font-size: 16px;
+        font-family: 'Open Sans';
+        font-weight: 100;
+        background: transparent;
+        border: transparent;
+    }
 }
 
 .ui-inputgroup {
@@ -66,30 +66,39 @@ img#user {
 }
 
 .ui-inputtext {
-  min-width: 450px;
+    min-width: 450px;
 }
 
 .ui-inputgroup .ui-inputgroup-addon:last-child {
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ui-inputgroup .ui-inputtext:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0 none;
+}
+
+.ui-inputgroup .ui-inputtext {
+    padding-left: .5em;
 }
 
 .ui-inputgroup {
-  font-family: 'Open Sans';
-  font-weight: 300;
-  font-size: 14px;
+    font-family: 'Open Sans';
+    font-weight: 300;
+    font-size: 14px;
 }
 
 .user-name {
-  font-family: "Open Sans";
-  font-size: 14px !important;
-  color: white;
-  padding-left: 12px;
-  display: inline-block;
+    font-family: "Open Sans";
+    font-size: 14px !important;
+    color: white;
+    padding-left: 12px;
+    display: inline-block;
 }
 
 .user-info .ui-button-text-only .ui-button-text {
-
     margin-top: 12px !important;
     font-size: 13px! important;
 }

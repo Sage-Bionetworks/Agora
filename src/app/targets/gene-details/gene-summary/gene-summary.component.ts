@@ -5,12 +5,12 @@ import { BreadcrumbService } from '../../../core/services';
 import { GeneService } from '../../services';
 
 @Component({
-    selector: 'details-view',
-    templateUrl: './details-view.component.html',
-    styleUrls: [ './details-view.component.scss' ],
+    selector: 'gene-summary',
+    templateUrl: './gene-summary.component.html',
+    styleUrls: [ './gene-summary.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class DetailsViewComponent implements OnInit {
+export class GeneSummaryComponent implements OnInit {
     id: number;
 
     constructor(
@@ -20,9 +20,6 @@ export class DetailsViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.breadcrumb.setCrumbs([
-            { label: 'TARGETS', routerLink: ['/targets'] },
-            { label: this.geneService.getCurrentGene().hgnc_symbol.toUpperCase(), routerLink: ['/details/' + this.id] }
-        ])
+
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { BreadcrumbService } from '../../core/services';
 import { GeneService } from '../services';
@@ -14,6 +14,7 @@ export class TargetsViewComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private breadcrumb: BreadcrumbService,
         private geneService: GeneService
     ) { }
@@ -25,6 +26,7 @@ export class TargetsViewComponent implements OnInit {
     }
 
     viewGene() {
-        this.router.navigate(['/details', this.geneService.getCurrentGene().ensembl_gene_id]);
+        console.log(this.geneService.getCurrentGene());
+        this.router.navigate(['gene-details', this.geneService.getCurrentGene().ensembl_gene_id], {relativeTo: this.route});
     }
 }

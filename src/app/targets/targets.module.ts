@@ -15,7 +15,8 @@ import { TableModule } from 'primeng/table';
 
 import { TargetsViewComponent } from './targets-view';
 import { TargetsListComponent } from './targets-list';
-import { DetailsViewComponent } from './details/details-view';
+import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
+import { GeneSummaryComponent } from './gene-details/gene-summary';
 
 import { GeneService } from './services';
 
@@ -25,7 +26,8 @@ import { PapaParseModule } from 'ngx-papaparse';
     declarations: [
         TargetsViewComponent,
         TargetsListComponent,
-        DetailsViewComponent
+        GeneDetailsViewComponent,
+        GeneSummaryComponent
     ],
     imports: [
         CommonModule,

@@ -49,7 +49,8 @@ export class TargetsListComponent implements OnInit {
 
     onRowSelect(event) {
         this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
-        this.geneService.setCurrentGene(event.data.hgnc_symbol);
+        this.geneService.setCurrentGene(event.data);
+        console.log(this.geneService.getCurrentGene().hgnc_symbol);
     }
 
     onRowUnselect(event) {
