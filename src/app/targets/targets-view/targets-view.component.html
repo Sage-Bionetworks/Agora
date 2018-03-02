@@ -1,36 +1,35 @@
 <div class="container top-container mt-2">
-    <div class="row" style="padding-top:14px;">
+    <div class="row small-padding-top">
         <div class="col-md-12">
             <p-panel>
                 <p-header>
                     <div class="ui-helper-clearfix">
-                        <span class="ui-panel-title" style="font-size:24px;display:inline-block;margin-top:2px;">Nominated Target List</span>
+                        <span class="ui-panel-title" style="font-size:24px;display:inline-block;margin-top:2px;">Welcome to the AMP-AD Wall of Targets!</span>
                     </div>
                 </p-header>
-                <div class="container">
+
                     <div class="row">
                         <div class="col-md-11">
-                            Welcome to the AMP-AD Wall of Targets, an application to aggregate genomic evidence of nominated candidate drug
-                            targets for AD. The following is a list of all genes nominated by AMP-AD groups as targets of interest. <br><br>
-                            Please select a gene from the list and click the View button. <br>
-                            The table can be filtered to find a gene of interest by name by typing a gene symbol (e.g., 'VGF') in the box on the right. <br><br>
-                            Search &nbsp; <input type="text" pInputText />
+                            The Wall of Targets is an application to aggregate genomic evidence supporting candidate gene and module targets
+                            nominated by members of the AMP-AD consortium.
                         </div>
                         <div class="col-md-1">
                         </div>
                     </div>
-                </div>
+
             </p-panel>
         </div>
     </div>
-    <div class="row" style="padding-top:14px;">
+    <div class="row small-padding-top">
         <div class="col-md-12">
-            <targets-list [fname]="'geneSampleData.json'"></targets-list>
-        </div>
-    </div>
-    <div class="row" style="padding-top:14px;">
-        <div class="col-md-12">
-            <p-button (onClick)="viewGene()" icon="fa fa-fw fa-search" label="View"></p-button>
+            <p-tabView>
+                <p-tabPanel header="Gene Search" leftIcon="fas fa-dna">
+                    <gene-search [fname]="'geneSampleData.json'"></gene-search>
+                </p-tabPanel>
+                <p-tabPanel header="Nominated Target Genes" leftIcon="fas fa-dna">
+                    <targets-list [fname]="'geneSampleData.json'"></targets-list>
+                </p-tabPanel>
+            </p-tabView>
         </div>
     </div>
 </div>

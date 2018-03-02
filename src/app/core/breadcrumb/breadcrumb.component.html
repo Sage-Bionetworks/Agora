@@ -1,23 +1,10 @@
+
 <div class="row main align-items-center" [ngClass]="getGradient()">
-    <div class="col-md-12">
-        <div class="row align-items-center">
-            <div class="col-md-2" style="margin-right: -14%;">
-                <div class="row small-vpadding no-gutters">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-9">
-                        <p-menu #menu popup="popup" [model]="popupItems" [styleClass]="'breadcrumb-menu'"></p-menu>
-                        <button type="button" pButton icon="fa fa-bars" class="dropdown-button" (click)="menu.toggle($event)"></button>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <p-breadcrumb [model]="getCrumbs() | async" [home]="home" [styleClass]="'outer-breadcrumb'"></p-breadcrumb>
-            </div>
-            <div class="col-md-1 small-vpadding">
-                <div class="row row-centered">
-                </div>
-            </div>
-        </div>
+    <div class="col-md-1 menu-col">
+        <p-menu #menu popup="popup" [model]="popupItems" [styleClass]="'breadcrumb-menu'"></p-menu>
+        <button type="button" pButton icon="fa fa-list" class="dropdown-button" (click)="menu.toggle($event)"></button>
+    </div>
+    <div class="col-md-11">
+        <p-breadcrumb [model]="getCrumbs() | async" [home]="home" [styleClass]="'outer-breadcrumb'"></p-breadcrumb>
     </div>
 </div>

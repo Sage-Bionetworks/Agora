@@ -9,6 +9,8 @@
 @import "~primeng/resources/primeng.min.css";
 @import "~bootstrap/scss/bootstrap-grid";
 @import "~bootstrap/scss/utilities/flex";
+@import "~videogular2/fonts/videogular.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
 @import "../assets/css/helpers/mixins";
@@ -36,48 +38,12 @@ html {
     height: 100%;
 }
 
-  a {
-
+a {
     color: black;
-  }
+}
 
-  a:hover {
+a:hover {
     text-decoration: underline;
-  }
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    background: #7d7e7d;
-    /* Old browsers */
-    background: -moz-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%);
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #7d7e7d 0%, #0e0e0e 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e', GradientType=0);
-    /* IE6-9 */
-    color: #fff;
-    text-align: left;
-    border-radius: 6px;
-    font-family: "Open Sans";
-    font-size: 12px;
-    padding: 16px;
-    opacity: .95;
-    box-shadow: 2px 4px 3px rgba(136, 136, 136, 0.55);
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
 }
 
 /* Dropdown */
@@ -164,4 +130,23 @@ html {
     border: 3px;
     border-color: black;
     box-shadow: 1px 1px #a8a8a8;
-  }
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+
+    > .col,
+    > [class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.small-padding-top {
+    padding-top: 2%;
+}
+
+.light-blue {
+    background: #2AB7E6;
+}

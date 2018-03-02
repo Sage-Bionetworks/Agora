@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { BreadcrumbService } from 'app/core/services';
 import { GeneService } from '../services';
@@ -7,6 +7,9 @@ import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../shared/models';
+
+import { DecimalPipe } from '@angular/common';
+import { NumbersPipe } from '../../shared/pipes';
 
 import { Message } from 'primeng/primeng';
 
@@ -20,26 +23,27 @@ export class TargetsListComponent implements OnInit {
     @Input() fname: string = 'default.json';
 
     msgs: Message[] = [];
-    genes: Gene[];
+    genes: Observable<Gene[]>;
     totalRecords: number;
     cols: any[];
     loading: boolean;
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private geneService: GeneService,
         private papa: PapaParseService
     ) { }
 
     ngOnInit() {
-        this.geneService.getGene(this.fname).subscribe(data => {
-            this.genes = data;
-        });
+        this.genes = this.geneService.getGenes(this.fname);
+        this.genes.subscribe(data => {
+            this.geneService.setGenes(data);
+        })
 
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene' },
-            { field: 'Study', header: 'Center(s)' },
-            { field: 'percentage_gc_content', header: 'Nominations' }
+            { field: 'AveExpr', header: 'Score' }
         ];
     }
 
@@ -50,11 +54,16 @@ export class TargetsListComponent implements OnInit {
     onRowSelect(event) {
         this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
         this.geneService.setCurrentGene(event.data);
-        console.log(this.geneService.getCurrentGene().hgnc_symbol);
+        let gene = this.geneService.getCurrentGene();
+        if (gene) this.router.navigate(['gene-details', gene.ensembl_gene_id], {relativeTo: this.route});
     }
 
     onRowUnselect(event) {
         this.msgs = [{severity:'info', summary:'Gene Unselected', detail:'Gene: ' + event.data.hgnc_symbol}];
         this.geneService.setCurrentGene(null);
+    }
+
+    isNaN(input: any) {
+        return isNaN(input);
     }
 }

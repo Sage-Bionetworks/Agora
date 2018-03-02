@@ -10,8 +10,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class GeneService {
-    genes: Gene[] = [];
-
+    private genes: Gene[] = [];
     private currentGene: Gene;
 
     constructor(
@@ -19,8 +18,12 @@ export class GeneService {
         private papa: PapaParseService
     ) {}
 
-    getGene(fname: string): any {
+    getGenes(fname: string): Observable<Gene[]> {
         return this.http.get<Gene[]>('/assets/data/' + fname);
+    }
+
+    setGenes(genes: Gene[]) {
+        this.genes = genes;
     }
 
     setCurrentGene(gene: Gene) {
@@ -29,5 +32,11 @@ export class GeneService {
 
     getCurrentGene() {
         return this.currentGene;
+    }
+
+    getTissues(genes?: Gene[]): string[] {
+        console.log(this.genes);
+        console.log([...Array.from(new Set(this.genes.map(item => item.Tissue)))]);
+        return genes ? [...Array.from(new Set(genes.map(item => item.Tissue)))] : [...Array.from(new Set(this.genes.map(item => item.Tissue)))];
     }
 }

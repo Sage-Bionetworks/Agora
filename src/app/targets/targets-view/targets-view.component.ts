@@ -26,7 +26,6 @@ export class TargetsViewComponent implements OnInit {
     }
 
     viewGene() {
-        console.log(this.geneService.getCurrentGene());
         this.router.navigate(['gene-details', this.geneService.getCurrentGene().ensembl_gene_id], {relativeTo: this.route});
     }
 }

@@ -37,6 +37,7 @@ import {
 
 // Other third-party modules
 import { PapaParseModule } from 'ngx-papaparse';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import '../../styles/styles.scss';
 import '../../styles/headings.css';
@@ -59,7 +60,8 @@ import '../../styles/headings.css';
         TabViewModule,
         TableModule,
         // Other third-party modules
-        PapaParseModule
+        PapaParseModule,
+        NgSelectModule
     ],
     declarations: [
         //LoginComponent,

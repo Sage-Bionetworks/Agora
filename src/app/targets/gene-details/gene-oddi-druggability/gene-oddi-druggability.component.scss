@@ -1,0 +1,15 @@
+.oddi-panel {
+    width: 100%;
+
+    .ui-panel-titlebar {
+        background: #2AB7E6;
+        color: white;
+    }
+    > .ui-panel.ui-widget {
+        height: 100%;
+    }
+}
+
+.small-margin-right {
+    margin-right: 1%;
+}

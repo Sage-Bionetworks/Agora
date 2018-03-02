@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <h1>Gene Search</h1>
+    </div>
+    <div class="row">
+        <h3>Please type a gene symbol in the search box below.</h3>
+    </div>
+    <div class="row">
+        Gene Symbol
+    </div>
+    <div class="row search-row">
+        <ng-select [items]="genes$ | async"
+            bindLabel="hgnc_symbol"
+            bindValue="id"
+            [(ngModel)]="ensembl_gene_id"
+            (change)="onChange($event)">
+        </ng-select>
+    </div>
+    <div class="row small-padding-top">
+        <p-button (onClick)="viewGene()" icon="fa fa-fw fa-search" label="View"></p-button>
+    </div>
+</div>

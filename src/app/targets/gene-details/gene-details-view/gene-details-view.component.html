@@ -1,11 +1,27 @@
-<div class="container top-container mt-2">
-    <div class="row" style="padding-top:14px;">
-        <div class="col-md-6">
-            <h1>Test</h1>
-            <gene-summary></gene-summary>
+<div *ngIf="gene" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-overview [gene]="gene" [style]="{'height':'50vh'}"></gene-overview>
         </div>
-        <div class="col-md-6">
-            <h1>Test</h1>
+    </div>
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-rnaseq-de [gene]="gene" [style]="{'height': '50vh'}"></gene-rnaseq-de>
+        </div>
+    </div>
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-oddi-druggability [gene]="gene" [style]="{'height':'50vh'}"></gene-oddi-druggability>
+        </div>
+    </div>
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-lilly-drugebility [gene]="gene" [style]="{'height': '50vh'}"></gene-lilly-drugebility>
+        </div>
+    </div>
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-nomination-view [gene]="gene" [style]="{'height': '50vh'}"></gene-nomination-view>
         </div>
     </div>
 </div>

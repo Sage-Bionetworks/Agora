@@ -10,18 +10,17 @@ import {
     FocusDirective
 } from './directives';
 
-import {
-    fakeBackendProvider
-} from "./helpers";
+import { fakeBackendProvider } from "./helpers";
 
-import {
-    AlertService
-} from './services';
+import { AlertService } from './services';
+
+import { NumbersPipe } from './pipes';
 
 @NgModule({
     declarations: [
         AlertComponent,
-        FocusDirective
+        FocusDirective,
+        NumbersPipe
     ],
     imports: [
         CommonModule,
@@ -30,6 +29,8 @@ import {
     ],
     exports: [
         AlertComponent,
+        FocusDirective,
+        NumbersPipe,
         // Angular modules
         CommonModule,
         FormsModule,

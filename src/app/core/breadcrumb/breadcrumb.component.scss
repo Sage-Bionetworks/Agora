@@ -26,8 +26,9 @@
     color: #ffffff;
 }
 
-.fa-chevron-right:before {
-    color: #ffffff;
+//.fa-chevron-right:before
+.outer-breadcrumb .fa-chevron-right:before {
+    color: #ffffff !important;
 }
 
 .fa {
@@ -41,18 +42,17 @@
 }
 
 .dropdown-button {
-  background: transparent !important;
-  border: 0px !important;
-  border-color: transparent !important;
-  color: #fff !important;
+    background: transparent !important;
+    border: 0px !important;
+    border-color: transparent !important;
+    color: #fff !important;
 }
 
 .dropdown-button .fa {
-  color: #fff !important;
-  font-size: 22px;
-  margin-left: -44px;
-  border: 0px !important;
-  border-color: transparent !important;
+    color: #fff !important;
+    font-size: 22px;
+    border: 0px !important;
+    border-color: transparent !important;
 }
 
 .main {
@@ -147,10 +147,18 @@ button:focus {outline:0;}
   cursor: pointer;
 }
 
-.ui-menu {
+.menu-col {
+    margin-right: -40px;
+    margin-left: -20px;
+}
+
+.menu-col > button {
+    position: static;
+}
+
+.menu-col .ui-menu {
     width: 12.5em;
     padding: .25em;
-    position: relative;
 }
 
 .ui-menu.ui-menu-dynamic {
@@ -402,11 +410,10 @@ button:focus {outline:0;}
 }
 
 .breadcrumb-menu {
-  top: 22px !important;
-  opacity: 0.95 !important;
-  left: -38px !important;
-  border-radius: 0px !important;
-  top: 33px !important;
+    opacity: 0.95 !important;
+    margin-left: 57px !important;
+    border-radius: 0px !important;
+    margin-top: -0.8px !important;
 }
 
 .ui-menu .ui-menuitem-text {
