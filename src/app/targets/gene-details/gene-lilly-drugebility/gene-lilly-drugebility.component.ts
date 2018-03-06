@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Gene } from '../../../shared/models';
+import { Gene } from '../../../models';
 
 import { GeneService } from '../../services';
 
@@ -15,6 +15,7 @@ export class GeneLillyDrugEBIlityComponent implements OnInit {
     @Input() styleClass: string = 'lilly-ebi-panel';
     @Input() style: any;
     @Input() gene: Gene;
+    @Input() id: string;
 
     constructor(
         private router: Router,

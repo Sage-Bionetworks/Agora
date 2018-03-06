@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene } from '../../shared/models';
+import { Gene } from '../../models';
 
 import { BreadcrumbService } from '../../core/services';
 import { GeneService } from '../services';

@@ -6,7 +6,7 @@ import { GeneService } from '../services';
 import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 
-import { Gene } from '../../shared/models';
+import { Gene } from '../../models';
 
 import { DecimalPipe } from '@angular/common';
 import { NumbersPipe } from '../../shared/pipes';

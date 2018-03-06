@@ -5,6 +5,15 @@
         background: #2AB7E6;
         color: white;
     }
+
+    .ui-panel-content-wrapper {
+        height: 100%;
+
+        .ui-panel-content {
+            height: 100%;
+        }
+    }
+
     > .ui-panel.ui-widget {
         height: 100%;
     }
@@ -12,4 +21,13 @@
 
 .small-margin-right {
     margin-right: 1%;
+}
+
+.chart-row {
+    margin-top: 10px;
+    height: 65%;
+}
+
+.chart-header {
+    margin-bottom: 0px;
 }

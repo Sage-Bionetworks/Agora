@@ -39,4 +39,8 @@ export class GeneNominationVideoComponent implements OnInit {
 
     ngOnInit() {
     }
+
+    ngOnDestroy() {
+
+    }
 }

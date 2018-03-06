@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TargetsRoutingModule } from './targets-routing.module';
+import { ChartsModule } from '../charts';
 import { AppSharedModule } from '../shared';
 
 import {
@@ -55,6 +56,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
         CommonModule,
         AppSharedModule.forRoot(),
         TargetsRoutingModule,
+        ChartsModule,
         // Videogular2 modules
         VgCoreModule,
         VgControlsModule,

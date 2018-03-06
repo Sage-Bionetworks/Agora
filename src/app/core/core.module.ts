@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { TargetsModule } from './targets';
+import { ChartsModule } from './charts';
+
 import { CoreRoutingModule } from './core-routing.module';
 //import { LoginComponent } from './login/login.component';
-import { RouterModule } from '@angular/router';
+
 import {
     AuthGuardService,
     AuthenticationService,
@@ -74,22 +77,6 @@ import '../../styles/headings.css';
         NoContentComponent
     ],
     exports: [
-        RouterModule,
-        // PrimeNG modules
-        SplitButtonModule,
-        MenuModule,
-        MenubarModule,
-        BreadcrumbModule,
-        PanelModule,
-        DataTableModule,
-        ButtonModule,
-        DataGridModule,
-        SharedModule,
-        GrowlModule,
-        TabViewModule,
-        TableModule,
-        // Other third-party modules
-        PapaParseModule,
         // Exported components
         BreadcrumbComponent,
         NavbarComponent

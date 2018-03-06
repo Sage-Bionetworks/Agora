@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Response } from '@angular/http';
-import { Gene } from '../../shared/models';
+import { Gene } from '../../models';
 
 import { PapaParseService } from 'ngx-papaparse';
 import { fromCSV } from 'rx-from-csv';
@@ -35,8 +35,6 @@ export class GeneService {
     }
 
     getTissues(genes?: Gene[]): string[] {
-        console.log(this.genes);
-        console.log([...Array.from(new Set(this.genes.map(item => item.Tissue)))]);
         return genes ? [...Array.from(new Set(genes.map(item => item.Tissue)))] : [...Array.from(new Set(this.genes.map(item => item.Tissue)))];
     }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { BreadcrumbService } from '../../../core/services';
 import { GeneService } from '../../services';
 
-import { Gene } from '../../../shared/models';
+import { Gene } from '../../../models';
 
 @Component({
     selector: 'gene-details-view',
@@ -13,11 +13,14 @@ import { Gene } from '../../../shared/models';
     encapsulation: ViewEncapsulation.None
 })
 export class GeneDetailsViewComponent implements OnInit {
-    id: number;
+    private sub: any;
+
+    id: string;
     gene: Gene;
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private breadcrumb: BreadcrumbService,
         private geneService: GeneService
     ) { }
@@ -31,8 +34,13 @@ export class GeneDetailsViewComponent implements OnInit {
         if (!this.gene) {
             this.router.navigate(['/targets']);
         } else {
+            this.id = this.route.snapshot.paramMap.get('id');
             crumbs.push({ label: this.gene.hgnc_symbol.toUpperCase(), routerLink: ['/gene-details/' + this.id] });
         }
         this.breadcrumb.setCrumbs(crumbs);
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) : this.router.navigate([path], {relativeTo: this.route});
     }
 }
