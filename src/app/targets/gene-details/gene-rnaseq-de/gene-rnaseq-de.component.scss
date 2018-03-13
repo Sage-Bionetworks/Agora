@@ -23,11 +23,25 @@
     margin-right: 1%;
 }
 
-.chart-row {
+.container-row {
     margin-top: 10px;
-    height: 65%;
+    height: 90%;
 }
 
 .chart-header {
     margin-bottom: 0px;
+}
+
+.chart-selects-row {
+    height: 10%;
+    width: 100%;
+}
+
+.chart-container-row {
+    height: 90%;
+    width: 100%;
+}
+
+.select-header {
+    font-weight: 700;
 }

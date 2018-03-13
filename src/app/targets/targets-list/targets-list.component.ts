@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { BreadcrumbService } from 'app/core/services';
 import { GeneService } from '../services';
-import { PapaParseService } from 'ngx-papaparse';
 import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
@@ -11,7 +10,7 @@ import { Gene } from '../../models';
 import { DecimalPipe } from '@angular/common';
 import { NumbersPipe } from '../../shared/pipes';
 
-import { Message } from 'primeng/primeng';
+import { Message, SortEvent } from 'primeng/primeng';
 
 @Component({
     selector: 'targets-list',
@@ -23,7 +22,7 @@ export class TargetsListComponent implements OnInit {
     @Input() fname: string = 'default.json';
 
     msgs: Message[] = [];
-    genes: Observable<Gene[]>;
+    genes$: Observable<Gene[]>;
     totalRecords: number;
     cols: any[];
     loading: boolean;
@@ -31,13 +30,13 @@ export class TargetsListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private geneService: GeneService,
-        private papa: PapaParseService
+        private geneService: GeneService
     ) { }
 
     ngOnInit() {
-        this.genes = this.geneService.getGenes(this.fname);
-        this.genes.subscribe(data => {
+        this.genes$ = this.geneService.getGenes(this.fname);
+        //this.genes = this.geneService.getDBGenes();
+        this.genes$.subscribe(data => {
             this.geneService.setGenes(data);
         })
 
@@ -65,5 +64,26 @@ export class TargetsListComponent implements OnInit {
 
     isNaN(input: any) {
         return isNaN(input);
+    }
+
+    customSort(event: SortEvent) {
+        event.data.sort((data1, data2) => {
+            let value1 = data1[event.field];
+            let value2 = data2[event.field];
+            let result = null;
+
+            if (value1 == null && value2 != null)
+                result = -1;
+            else if (value1 != null && value2 == null)
+                result = 1;
+            else if (value1 == null && value2 == null)
+                result = 0;
+            else if (typeof value1 === 'string' && typeof value2 === 'string')
+                result = value1.localeCompare(value2);
+            else
+                result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+
+            return (event.order * result);
+        });
     }
 }

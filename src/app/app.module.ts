@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
 
 // Our other developed modules
 import { CoreModule } from './core';
-import { TargetsModule } from './targets';
-import { ChartsModule } from './charts';
 
 // Platform and Environment providers
 import { environment } from 'environments/environment';
@@ -40,9 +38,7 @@ type StoreType = {
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule,
-        CoreModule,
-        TargetsModule,
-        ChartsModule
+        CoreModule
     ],
     /**
      * Expose our Services and Providers into Angular's dependency injection.

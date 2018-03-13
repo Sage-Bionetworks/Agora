@@ -7,6 +7,8 @@ import { GeneService } from '../targets/services';
 
 import { ScatterPlotViewComponent } from './scatter-plot/scatter-plot-view';
 import { LineChartViewComponent } from './line-chart/line-chart-view';
+import { SelectMenuViewComponent } from './select-menu/select-menu-view';
+import { RowChartViewComponent } from './row-chart/row-chart-view';
 
 import {
     SharedModule,
@@ -22,7 +24,9 @@ import {
 @NgModule({
     declarations: [
         ScatterPlotViewComponent,
-        LineChartViewComponent
+        LineChartViewComponent,
+        SelectMenuViewComponent,
+        RowChartViewComponent
     ],
     imports: [
         CommonModule,
@@ -39,7 +43,9 @@ import {
     ],
     exports: [
         ScatterPlotViewComponent,
-        LineChartViewComponent
+        LineChartViewComponent,
+        SelectMenuViewComponent,
+        RowChartViewComponent
     ],
     providers: [
         GeneService

@@ -14,12 +14,13 @@
     </div>
     <div class="row">
         <p-table #gl
-            [columns]="cols" [value]="genes | async" selectionMode="single"
+            [columns]="cols" [value]="genes$ | async" selectionMode="single"
             [(selection)]="selectedGene" dataKey="ensembl_gene_id"
             [paginator]="true"
             [rows]="10"
             [totalRecords]="totalRecords"
             [loading]="loading"
+            (sortFunction)="customSort($event)"
             (onRowSelect)="onRowSelect($event)"
             (onRowUnselect)="onRowUnselect($event)">
             <ng-template pTemplate="caption">
@@ -29,8 +30,11 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of cols; let i = index;" [ngStyle]="{'text-align': getAlignment(i, cols.length-1)}">
+                    <th *ngFor="let col of cols; let i = index;"
+                        [ngStyle]="{'text-align': getAlignment(i, cols.length-1)}"
+                        [pSortableColumn]="col.field">
                         {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
                 </tr>
             </ng-template>

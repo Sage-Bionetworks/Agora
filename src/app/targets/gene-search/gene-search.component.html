@@ -12,6 +12,7 @@
         <ng-select [items]="genes$ | async"
             bindLabel="hgnc_symbol"
             bindValue="id"
+            [virtualScroll]="true"
             [(ngModel)]="ensembl_gene_id"
             (change)="onChange($event)">
         </ng-select>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ContentChild } from '@angular/core';
 
 import { MenuItem } from 'primeng/primeng';
 

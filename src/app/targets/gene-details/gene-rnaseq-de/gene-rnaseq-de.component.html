@@ -6,37 +6,43 @@
                 <i class="fa fa-question-circle" rel="tooltip" title="Differential gene expression of target genes."></i>
             </div>
         </p-header>
-        <div class="row">
-            <div class="col-md-4">
-                <h4>Tissue</h4>
-                <ng-select [items]="tissues"
-                    [(ngModel)]="selectedTissue"
-                    (change)="onChange($event)">
-                </ng-select>
+        <div class="container" style="height: 100%;">
+        <div class="row container-row">
+            <div class="col-md-3 chart-selects-row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="select-header">Tissue</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <select-menu [label]="'select-tissue'"></select-menu>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h4>Model</h4>
-                <ng-select [items]="tissues"
-                    [(ngModel)]="selectedModel"
-                    (change)="onChange($event)">
-                </ng-select>
+            <div class="col-md-3 chart-selects-row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="select-header">Model</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <select-menu [label]="'select-model'"></select-menu>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-6 chart-selects-row">
+            </div>
+            <div class="row chart-container-row">
+                <div class="col-md-7">
+                    <router-outlet name="left-chart"></router-outlet>
+                </div>
+                <div class="col-md-5">
+                    <router-outlet name="right-chart"></router-outlet>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-8">
-                <h2 class="chart chart-header">Volcano Plot</h2>
-            </div>
-            <div class="col-md-4">
-                <h2 class="chart chart-header">Log fold change forest plot</h2>
-            </div>
-        </div>
-        <div class="row chart-row">
-            <div class="col-md-8">
-                <router-outlet name="chart"></router-outlet>
-            </div>
-            <div class="col-md-4">
-            </div>
-        </div>
+    </div>
     </p-panel>
 </div>

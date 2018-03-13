@@ -18,7 +18,8 @@ export class GeneSearchComponent implements OnInit {
     @Input() fname: string = 'default.json';
     @Input() styleClass: string = '';
     @Input() style: any;
-    @Input() genes$: Observable<Gene[]>;
+
+    genes$: Observable<Gene[]>;
 
     constructor(
         private router: Router,
@@ -28,6 +29,7 @@ export class GeneSearchComponent implements OnInit {
 
     ngOnInit() {
         this.genes$ = this.geneService.getGenes(this.fname);
+        //this.genes$ = this.geneService.getDBGenes();
     }
 
     viewGene() {

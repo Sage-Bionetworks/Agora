@@ -1,23 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 
-import { TargetsModule } from './targets';
-import { ChartsModule } from './charts';
+import { TargetsModule } from '../targets';
+import { ChartsModule } from '../charts';
 
 import { CoreRoutingModule } from './core-routing.module';
-//import { LoginComponent } from './login/login.component';
-
-import {
-    AuthGuardService,
-    AuthenticationService,
-    BreadcrumbService
-} from './services';
-
-import { AboutComponent } from './about';
-import { BreadcrumbComponent } from './breadcrumb';
-import { DashboardComponent } from './dashboard';
-import { NavbarComponent } from './navbar';
-import { NoContentComponent } from './no-content';
 
 // PrimeNG modules
 import {
@@ -39,8 +26,29 @@ import {
 } from 'primeng/table';
 
 // Other third-party modules
-import { PapaParseModule } from 'ngx-papaparse';
 import { NgSelectModule } from '@ng-select/ng-select';
+
+// Backend modules and extra config
+import { environment } from 'environments/environment';
+import { AngularFireModule } from 'angularfire2';
+
+export const firebaseConfig = environment.firebaseConfig;
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+
+import {
+    AuthGuardService,
+    AuthenticationService,
+    BreadcrumbService,
+    ChartService,
+    ColorService
+} from './services';
+
+import { AboutComponent } from './about';
+import { BreadcrumbComponent } from './breadcrumb';
+import { DashboardComponent } from './dashboard';
+import { NavbarComponent } from './navbar';
+import { NoContentComponent } from './no-content';
+//import { LoginComponent } from './login/login.component';
 
 import '../../styles/styles.scss';
 import '../../styles/headings.css';
@@ -63,8 +71,12 @@ import '../../styles/headings.css';
         TabViewModule,
         TableModule,
         // Other third-party modules
-        PapaParseModule,
-        NgSelectModule
+        NgSelectModule,
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFirestoreModule.enablePersistence(),
+        // Feature Modules
+        TargetsModule,
+        ChartsModule
     ],
     declarations: [
         //LoginComponent,
@@ -84,7 +96,10 @@ import '../../styles/headings.css';
     providers: [
         AuthenticationService,
         AuthGuardService,
-        BreadcrumbService
+        BreadcrumbService,
+        ChartService,
+        ColorService,
+        DecimalPipe
     ]
 })
 export class CoreModule { }

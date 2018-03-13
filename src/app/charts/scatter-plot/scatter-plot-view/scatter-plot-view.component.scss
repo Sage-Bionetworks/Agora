@@ -1,7 +1,34 @@
-.dc-chart {
+.chart-view-container {
+    margin: 20px;
     height: 100%;
 }
 
 .chart-container {
     margin: 20px;
+    width: 100%;
+    height: 80%;
+}
+
+.chart-header-row {
+    height: 10%;
+}
+
+.schart-row {
+    height: 80%;
+}
+
+.sc {
+    svg {
+        g {
+            height: 100%;
+        }
+    }
+}
+
+.dc-chart {
+    height: 100%;
+}
+
+.sc.dc-chart {
+    width: 100%;
 }

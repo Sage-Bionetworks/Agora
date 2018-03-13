@@ -1,25 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Response } from '@angular/http';
+
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+
 import { Gene } from '../../models';
 
-import { PapaParseService } from 'ngx-papaparse';
-import { fromCSV } from 'rx-from-csv';
-
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class GeneService {
     private genes: Gene[] = [];
     private currentGene: Gene;
 
+    private genesCollection: AngularFirestoreCollection<Gene>;
+    private dbgenes: Observable<Gene[]>;
+
     constructor(
         private http: HttpClient,
-        private papa: PapaParseService
-    ) {}
+        private afs: AngularFirestore
+    ) {
+        //this.genesCollection = this.afs.collection('genes'); // reference
+        //this.dbgenes = this.genesCollection.valueChanges(); // observable of genes data
+    }
 
     getGenes(fname: string): Observable<Gene[]> {
-        return this.http.get<Gene[]>('/assets/data/' + fname);
+        return (this.dbgenes) ? this.dbgenes : this.http.get<Gene[]>('/assets/data/' + fname);
+    }
+
+    getDBGenes(): Observable<Gene[]> {
+        return this.dbgenes;
+    }
+
+    getGenesArray() {
+        return this.genes;
     }
 
     setGenes(genes: Gene[]) {
@@ -34,7 +49,11 @@ export class GeneService {
         return this.currentGene;
     }
 
-    getTissues(genes?: Gene[]): string[] {
-        return genes ? [...Array.from(new Set(genes.map(item => item.Tissue)))] : [...Array.from(new Set(this.genes.map(item => item.Tissue)))];
+    getTissues(fname: string): Observable<string[]> {
+        return this.http.get<string[]>('/assets/data/' + fname);
+    }
+
+    getModels(fname: string): Observable<string[]> {
+        return this.http.get<string[]>('/assets/data/' + fname);
     }
 }

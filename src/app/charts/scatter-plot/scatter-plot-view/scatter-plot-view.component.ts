@@ -1,56 +1,84 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, ContentChild, AfterContentInit } from '@angular/core';
 
 import {
-    Router,
     ActivatedRoute
 } from '@angular/router';
 
-import * as crossfilter from 'crossfilter2';
+import { Gene } from '../../../models';
+
+import {
+    ChartService,
+    ColorService
+} from '../../../core/services';
+
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
 @Component({
     selector: 'scatter-plot',
     templateUrl: './scatter-plot-view.component.html',
-    styleUrls: [ './scatter-plot-view.component.scss' ]
+    styleUrls: [ './scatter-plot-view.component.scss' ],
+    encapsulation: ViewEncapsulation.None
 })
-export class ScatterPlotViewComponent implements OnInit {
-    @ViewChild('test') chart: ElementRef;
+export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     @Input() title: string;
+    @Input() chart: any;
+    @Input() info: any;
+    @Input() label: string;
+
+    @ViewChild('chart') scatterPlot: ElementRef;
 
     constructor(
-        private router : Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private chartService: ChartService,
+        private colorService: ColorService
     ) { }
 
-    ngOnInit() {
-        let self = this;
-        let chart = dc.scatterPlot(this.chart.nativeElement);
-        d3.csv('assets/data/geneSampleData.csv', function(error, data) {
-            data.forEach(function(x) {
-                x['adj.P.Val'] = -Math.log10(+x['adj.P.Val']);
-                console.log(x['adj.P.Val']);
-                x['logFC'] = +x['logFC'];
+    ngOnInit() {}
+
+    ngAfterContentInit() {
+        if (!this.label) {
+            this.route.params.subscribe(params => {
+                this.label = params['label'];
+                this.initChart();
             });
-            let ndx = crossfilter(data);
-            let dim = ndx.dimension(function(d) { return [+d['logFC'], +d['adj.P.Val']] });
-            let group = dim.group();
-            chart
-                //.width(768)
-                //.height(480)
-                .x(d3.scale.linear().domain([-2,2]))
-                .y(d3.scale.linear().domain([0,20]))
-                .brushOn(false)
-                .clipPadding(10)
-                .xAxisLabel("Log Fold Change")
-                .yAxisLabel("-log10(Adjusted p-value)")
-                .dimension(dim)
-                .group(group);
-            chart.render();
-        });
+        } else {
+            this.initChart();
+        }
     }
 
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) : this.router.navigate([path], {relativeTo: this.route});
+    initChart() {
+        let self = this;
+        this.info = this.chartService.getChartInfo(this.label)
+        this.title = this.info.title;
+        this.chart = dc.scatterPlot(this.scatterPlot.nativeElement)
+            .height(this.scatterPlot.nativeElement.offsetHeight)
+            .x(this.info.x)
+            .brushOn(false)
+            .xAxisLabel(this.info.xAxisLabel)
+            .yAxisLabel(this.info.yAxisLabel)
+            .dimension(this.chartService.getDimension(this.label))
+            .group(this.chartService.getGroup(this.label))
+            .colors(['#B54F12', '#B95712', '#BD5F12', '#C26712', '#C66F12', '#CB7713', '#CF7F13', '#D38713', '#D88F13', '#DC9713', '#E1A014'])
+            .colorAccessor(function(d) {
+                return Number.isNaN(+d.key[0]) ? 0 : d.key[0];
+            });
+
+
+        if (this.info.xUnits) this.chart.xUnits(this.info.xUnits);
+        if (this.info.y) this.chart.y(this.info.y);
+
+        this.chart.render();
+    }
+
+    getValue (d: any) {
+        let value: number
+        if (!(isNaN(d.value))) {
+            value = d.value;
+        } else if (!d.value) {
+            value = 0;
+        }
+
+        return value;
     }
 }

@@ -36,7 +36,6 @@ import { GeneNominationVideoComponent } from './gene-details/gene-nomination-vie
 
 import { GeneService } from './services';
 
-import { PapaParseModule } from 'ngx-papaparse';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
@@ -73,7 +72,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
         TabViewModule,
         FieldsetModule,
         // Other third party modules
-        PapaParseModule,
         NgSelectModule
     ],
     providers: [
