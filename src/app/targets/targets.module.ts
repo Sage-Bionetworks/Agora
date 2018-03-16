@@ -13,13 +13,9 @@ import {
     CardModule,
     TooltipModule,
     TabViewModule,
-    FieldsetModule
+    FieldsetModule,
+    ProgressBarModule
 } from 'primeng/primeng';
-
-import { VgCoreModule } from 'videogular2/core';
-import { VgControlsModule } from 'videogular2/controls';
-import { VgOverlayPlayModule } from 'videogular2/overlay-play';
-import { VgBufferingModule } from 'videogular2/buffering';
 
 import { TableModule } from 'primeng/table';
 
@@ -28,13 +24,7 @@ import { TargetsListComponent } from './targets-list';
 import { GeneSearchComponent } from './gene-search';
 import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
-import { GeneODDIDrugabilityComponent } from './gene-details/gene-oddi-druggability';
-import { GeneLillyDrugEBIlityComponent } from './gene-details/gene-lilly-drugebility';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
-import { GeneNominationViewComponent } from './gene-details/gene-nomination-view';
-import { GeneNominationVideoComponent } from './gene-details/gene-nomination-view/gene-nomination-video';
-
-import { GeneService } from './services';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -45,22 +35,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
         GeneSearchComponent,
         GeneDetailsViewComponent,
         GeneOverviewComponent,
-        GeneODDIDrugabilityComponent,
-        GeneLillyDrugEBIlityComponent,
-        GeneRNASeqDEComponent,
-        GeneNominationViewComponent,
-        GeneNominationVideoComponent
+        GeneRNASeqDEComponent
     ],
     imports: [
         CommonModule,
         AppSharedModule.forRoot(),
         TargetsRoutingModule,
         ChartsModule,
-        // Videogular2 modules
-        VgCoreModule,
-        VgControlsModule,
-        VgOverlayPlayModule,
-        VgBufferingModule,
         // PrimeNG modules
         SharedModule,
         PanelModule,
@@ -71,11 +52,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
         TooltipModule,
         TabViewModule,
         FieldsetModule,
+        ProgressBarModule,
         // Other third party modules
         NgSelectModule
-    ],
-    providers: [
-        GeneService
     ]
 })
 // Changed the name so it does not conflict with primeng module

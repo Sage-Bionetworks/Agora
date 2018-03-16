@@ -3,8 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../models';
 
-import { BreadcrumbService } from '../../core/services';
-import { GeneService } from '../services';
+import {
+    BreadcrumbService,
+    GeneService
+} from '../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -15,11 +17,10 @@ import { Observable } from 'rxjs/Observable';
     encapsulation: ViewEncapsulation.None
 })
 export class GeneSearchComponent implements OnInit {
-    @Input() fname: string = 'default.json';
+    @Input() fname: string;
     @Input() styleClass: string = '';
     @Input() style: any;
-
-    genes$: Observable<Gene[]>;
+    @Input() genes$: Observable<Gene[]>;
 
     constructor(
         private router: Router,
@@ -27,10 +28,7 @@ export class GeneSearchComponent implements OnInit {
         private geneService: GeneService
     ) { }
 
-    ngOnInit() {
-        this.genes$ = this.geneService.getGenes(this.fname);
-        //this.genes$ = this.geneService.getDBGenes();
-    }
+    ngOnInit() {}
 
     viewGene() {
         let gene = this.geneService.getCurrentGene();

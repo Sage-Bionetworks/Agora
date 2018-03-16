@@ -40,7 +40,8 @@ import {
     AuthenticationService,
     BreadcrumbService,
     ChartService,
-    ColorService
+    ColorService,
+    GeneService
 } from './services';
 
 import { AboutComponent } from './about';
@@ -97,6 +98,7 @@ import '../../styles/headings.css';
         AuthenticationService,
         AuthGuardService,
         BreadcrumbService,
+        GeneService,
         ChartService,
         ColorService,
         DecimalPipe

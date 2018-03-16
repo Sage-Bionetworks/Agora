@@ -1,3 +1,12 @@
 .select-column {
     width: 100%;
 }
+
+select-menu {
+    width: 100%;
+    z-index: 10000;
+}
+
+.controls-row {
+    align-items: center;
+}

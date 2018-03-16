@@ -1,8 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Gene } from '../../models';
+
 import { BreadcrumbService } from '../../core/services';
-import { GeneService } from '../services';
+import { GeneService } from '../../core/services';
+
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'targets-view',
@@ -11,6 +15,9 @@ import { GeneService } from '../services';
     encapsulation: ViewEncapsulation.None
 })
 export class TargetsViewComponent implements OnInit {
+    genes$: Observable<Gene[]>;
+
+    dataLoaded: boolean = false;
 
     constructor(
         private router: Router,
@@ -23,6 +30,13 @@ export class TargetsViewComponent implements OnInit {
         this.breadcrumb.setCrumbs([
             { label: 'TARGETS', routerLink: ['/targets'] }
         ])
+
+        // To be removed when the real application is done
+        this.genes$ = this.geneService.loadGenesFile('sampleData.json');
+        this.genes$.subscribe(data => {
+            this.geneService.setGenes(data);
+            this.dataLoaded = true;
+        });
     }
 
     viewGene() {

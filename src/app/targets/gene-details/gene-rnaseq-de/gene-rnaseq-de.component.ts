@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../../models';
 
-import { GeneService } from '../../services';
-import { ChartService } from '../../../core/services';
+import {
+    ChartService,
+    GeneService
+} from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -21,18 +23,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
-    @Input() tissues$: Observable<string[]>;
-    @Input() models$: Observable<string[]>;
     @Input() id: string;
-    @Input() data: Gene[];
-
-    @ViewChild('st') selectTissue: ElementRef;
-    @ViewChild('sm') selectModel: ElementRef;
-
-    private sub: any;
-
-    selectedTissue: string;
-    selectedModel: string;
 
     constructor(
         private router: Router,
@@ -42,13 +33,6 @@ export class GeneRNASeqDEComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.gene) this.router.navigate(['/targets']);
-        this.tissues$ = this.geneService.getTissues('tissues.json');
-        this.models$ = this.geneService.getTissues('models.json');
-
-        this.selectedTissue = this.gene.tissue_study_pretty;
-        this.selectedModel = this.gene.model_sex_pretty;
-
         this.loadChartData();
 
         this.router.navigate([
@@ -57,7 +41,6 @@ export class GeneRNASeqDEComponent implements OnInit {
         ], {skipLocationChange: true}).then(data => {
             this.router.navigate([
                 '/targets/gene-details/'+this.id,
-                //{ outlets: { 'right-chart': [ 'right-scatter-plot', 'forest-plot' ] }}
                 { outlets: { 'right-chart': [ 'right-row-chart', 'forest-plot' ] }}
             ], {skipLocationChange: true});
         });
@@ -65,52 +48,48 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     loadChartData() {
-        // Begin getting chart data
-        if (!this.data) this.data = this.geneService.getGenesArray();
-
-        this.chartService.setData(this.data);
+        this.chartService.setData(this.geneService.getGenes());
         this.chartService.addChartInfo(
             'volcano-plot',
             {
-                dimension: function(d) { return [
-                    Number.isNaN(+d.logFC) ? 0 : d.logFC,
-                    Number.isNaN(+d.neg_log10_adj_P_Val) ? 0 : d.neg_log10_adj_P_Val
-                ] },
+                dimension: ['logFC', 'neg_log10_adj_P_Val'],
                 group: 'self',
                 type: 'scatter-plot',
                 title: 'Volcano Plot',
                 xAxisLabel: 'Log Fold Change',
                 yAxisLabel: '-log10(Adjusted p-value',
-                x: d3.scale.linear().domain([-2,2.5]),
-                y: d3.scale.linear().domain([0,20])
+                x: ['logFC'],
+                y: ['neg_log10_adj_P_Val']
             }
         );
         this.chartService.addChartInfo(
             'forest-plot',
             {
-                dimension: function(v) {
-                    return v.tissue_study_pretty;
-                },
-                group: 'self-avg',
-                type: 'row-chart',
+                dimension: ['tissue_study_pretty'],
+                group: 'self',
+                type: 'forest-plot',
                 title: 'Log fold forest plot',
-                x: d3.scale.linear().domain([-0.5,0.5])
+                x: ['ci_L', 'ci_R'],
+                filter: true,
+                attr: 'logFC'
             }
         );
         this.chartService.addChartInfo(
             'select-tissue',
             {
-                dimension: function(d) { return d.tissue_study_pretty },
+                dimension: ['tissue_study_pretty'],
                 group: 'self',
-                type: 'select-menu'
+                type: 'select-menu',
+                filter: true
             }
         );
         this.chartService.addChartInfo(
             'select-model',
             {
-                dimension: function(d) { return d.model_sex_pretty },
+                dimension: ['comparison_model_sex'],
                 group: 'self',
-                type: 'select-menu'
+                type: 'select-menu',
+                filter: true
             }
         );
     }

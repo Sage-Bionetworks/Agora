@@ -157,6 +157,7 @@
     "primeng": "^5.2.0",
     "protractor": "^5.1.1",
     "raw-loader": "0.5.1",
+    "reductio": "^0.6.3",
     "rimraf": "~2.6.1",
     "rx-from-csv": "^1.0.0",
     "sass-loader": "^6.0.3",

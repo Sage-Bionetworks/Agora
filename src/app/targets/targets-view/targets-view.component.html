@@ -19,15 +19,18 @@
         </div>
     </div>
     <div class="row small-padding-top">
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="dataLoaded"> <!--</div>*ngIf="genes$"-->
             <p-tabView>
                 <p-tabPanel header="Gene Search" leftIcon="fas fa-dna">
-                    <gene-search [fname]="'sampleData.json'"></gene-search>
+                    <gene-search [genes$]="genes$"></gene-search>
                 </p-tabPanel>
                 <p-tabPanel header="Nominated Target Genes" leftIcon="fas fa-dna">
-                    <targets-list [fname]="'sampleData.json'"></targets-list>
+                    <targets-list [genes$]="genes$"></targets-list>
                 </p-tabPanel>
             </p-tabView>
+        </div>
+        <div class="col-md-12" *ngIf="!dataLoaded">
+            <p-progressBar mode="indeterminate"></p-progressBar>
         </div>
     </div>
 </div>

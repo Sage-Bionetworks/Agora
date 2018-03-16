@@ -1,7 +1,7 @@
 export interface Gene {
-    model_sex: string[];
+    comparison_model_sex: string;
     Model: string;
-    tissue_study: string[];
+    tissue_study: string;
     Tissue: string;
     Comparison: string;
     ensembl_gene_id: string;

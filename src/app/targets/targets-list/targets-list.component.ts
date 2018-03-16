@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { BreadcrumbService } from 'app/core/services';
-import { GeneService } from '../services';
+import {
+    BreadcrumbService,
+    GeneService
+} from 'app/core/services';
 import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
@@ -19,10 +21,9 @@ import { Message, SortEvent } from 'primeng/primeng';
     encapsulation: ViewEncapsulation.None
 })
 export class TargetsListComponent implements OnInit {
-    @Input() fname: string = 'default.json';
+    @Input() genes$: Observable<Gene[]>;
 
     msgs: Message[] = [];
-    genes$: Observable<Gene[]>;
     totalRecords: number;
     cols: any[];
     loading: boolean;
@@ -34,12 +35,6 @@ export class TargetsListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.genes$ = this.geneService.getGenes(this.fname);
-        //this.genes = this.geneService.getDBGenes();
-        this.genes$.subscribe(data => {
-            this.geneService.setGenes(data);
-        })
-
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene' },
             { field: 'AveExpr', header: 'Score' }

@@ -6,7 +6,10 @@ import {
 
 import { Gene } from '../../../models';
 
-import { ChartService } from '../../../core/services';
+import {
+    ChartService,
+    GeneService
+} from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -37,6 +40,7 @@ export class RowChartViewComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private geneService: GeneService,
         private chartService: ChartService
     ) { }
 
@@ -56,25 +60,30 @@ export class RowChartViewComponent implements OnInit {
         this.info = this.chartService.getChartInfo(this.label)
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(this.info.x)
+            .x(d3.scale.linear().domain([this.geneService.ci_L, this.geneService.ci_R]))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return d.value.avg;
+                return d.value.logFC || 0;
             })
-            .valueAccessor(function(p) {
-                return p.value.avg;
+            .valueAccessor(function(d) {
+                return d.value.logFC || 0;
             })
             .label(function (d) {
                 return d.key;
             })
+            .othersGrouper(null)
             .ordinalColors(['#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704'])
             .dimension(this.chartService.getDimension(this.label))
             .group(this.chartService.getGroup(this.label));
+
         this.chart.xAxis().ticks(5);
 
-        this.chart.on('renderlet', function (chart) {
+        this.chart.on('filtered', function(chart, filter){
+            console.log(chart, filter);
+        });
 
+        this.chart.on('renderlet', function (chart) {
             let barHeight = chart.select('g.row rect').attr('height');
             let newSvg = d3.select(self.stdCol.nativeElement).append('svg');
             let textGroup = newSvg.append('g')
@@ -110,13 +119,13 @@ export class RowChartViewComponent implements OnInit {
                         'stroke-width': 1.5,
                         stroke: 'wheat',
                         x1: function(d) {
-                            return chart.x()(d.value.avg) - 30;
+                            return chart.x()(d.value.logFC) - 30;
                         },
                         y1: function(d) {
                             return barHeight/2;
                         },
                         x2: function(d) {
-                            return chart.x()(d.value.avg) + 40;
+                            return chart.x()(d.value.logFC) + 40;
                         },
                         y2: function(d) {
                             return barHeight/2;
@@ -130,7 +139,7 @@ export class RowChartViewComponent implements OnInit {
             chart
                 .selectAll('g.row rect')
                 .attr('transform', function(d) {
-                    return 'translate(' + chart.x()(d.value.avg) + ',' + ((barHeight/2)-5) + ')';
+                    return 'translate(' + chart.x()(d.value.logFC) + ',' + ((barHeight/2)-5) + ')';
                 })
                 .attr('width', '10')
                 .attr('height', '10');

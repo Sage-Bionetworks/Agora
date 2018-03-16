@@ -1,6 +1,10 @@
 import { Injectable, ContentChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
+import { Gene } from '../../models';
+
+import { GeneService } from './';
+
 import * as crossfilter from 'crossfilter2';
 
 @Injectable()
@@ -8,9 +12,12 @@ export class ChartService {
     private chartInfos: Map<string, any> = new Map<string, any>();
     private ndx: any;
     private data: any;
+    self = this;
+    test = 0;
 
     constructor(
-        private decimalPipe: DecimalPipe
+        private decimalPipe: DecimalPipe,
+        private geneService: GeneService
     ) { }
 
     getData() {
@@ -22,6 +29,10 @@ export class ChartService {
         this.ndx = crossfilter(data);
     }
 
+    getNdx() {
+        return this.ndx;
+    }
+
     addChartInfo(label: string, chartObj: any) {
         if (!this.chartInfos[label]) this.chartInfos.set(label, chartObj);
     }
@@ -31,50 +42,93 @@ export class ChartService {
     }
 
     getDimension(label: string): CrossFilter.Dimension<any, any> {
-        this.chartInfos.get(label).dim = this.ndx.dimension(this.chartInfos.get(label).dimension);
-        return this.chartInfos.get(label).dim;
+        let self = this;
+        let info = this.chartInfos.get(label);
+        let dimValue = info.dimension;
+        let dim = this.ndx.dimension(function(d) {
+            switch(info.type) {
+                case 'forest-plot':
+                    if (info.filter) {
+                        let filterGene = self.geneService.getCurrentGene();
+                        return (d.hgnc_symbol === filterGene.hgnc_symbol) ? d[dimValue[0]] : '';
+                    } else {
+                        return d[dimValue[0]];
+                    }
+                case 'scatter-plot':
+                    return [
+                        Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]],
+                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]]
+                    ];
+                case 'select-menu':
+                    if (info.filter) {
+                        let filterGene = self.geneService.getCurrentGene();
+                        return (d.hgnc_symbol === filterGene.hgnc_symbol) ? d[dimValue[0]] : '';
+                    } else {
+                        return d[dimValue[0]];
+                    }
+                default:
+                    return [
+                        Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]],
+                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]]
+                    ];
+            }
+        });
+
+        info.dim = dim;
+        return info.dim;
     }
 
     getGroup(label: string): CrossFilter.Group<any, any, any> {
-        // Self case
-        if (this.chartInfos.get(label).group === 'self') {
-            this.chartInfos.get(label).g = this.chartInfos.get(label).dim.group();
-        // Self-avg case
-        } else if (this.chartInfos.get(label).group === 'self-avg') {
-            this.chartInfos.get(label).g = this.chartInfos.get(label).dim.group().reduce(
-                this.reduceAddAvg('logFC'),
-                this.reduceRemoveAvg('logFC'),
-                this.reduceInitAvg);
+        let info = this.chartInfos.get(label);
+        let group = info.dim.group();
+        if (info.attr) {
+            group.reduce(
+                // callback for when data is added to the current filter results
+                this.reduceAddAvg(info.attr),
+                this.reduceRemoveAvg(info.attr),
+                this.reduceInitAvg
+            );
         }
-        return this.chartInfos.get(label).g;
+        if (info.filter) {
+            group = this.remove_empty_bins(group);
+        }
+        info.g = group;
+        return info.g;
     }
 
     // Reduce functions for average
-    reduceAddAvg(attr) {
-        let self = this;
-        return function(p,v) {
-            if (v[attr] !== 'NA') {
-                ++p.count
-                p.sum += Number(v[attr]);
-                p.avg = p.sum/p.count;
+    reduceAddAvg(attr: string) {
+        return function (p, v) {
+            if (!Number.isNaN(+v[attr]) && v[attr] != 'NA') {
+                ++p.count;
+                p[attr] += +v[attr];
             }
             return p;
-        };
+        }
     }
 
-    reduceRemoveAvg(attr) {
-        let self = this;
-        return function(p,v) {
-            if (v[attr] !== 'NA') {
-                --p.count
-                p.sum -= Number(v[attr]);
-                p.avg = p.count ? p.sum/p.count : 0;
+    reduceRemoveAvg(attr: string) {
+        return function (p, v) {
+            if (!Number.isNaN(+v[attr]) && v[attr] != 'NA') {
+                --p.count;
+                p[attr] -= +v[attr];
             }
             return p;
-        };
+        }
     }
 
     reduceInitAvg() {
-        return {count:0, sum:0, avg:0};
+        return {count:0, sum:0, logFC:0};
+    }
+
+    remove_empty_bins = (source_group) => {
+        return {
+            all: () => {
+                return source_group.all().filter(function(d) {
+                    // here your condition
+                    return d.key !== null && d.key !== '' && d.value !== 0; // etc.
+                });
+            }
+        };
     }
 }

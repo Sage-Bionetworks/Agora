@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { AppSharedModule } from '../shared';
 
-import { GeneService } from '../targets/services';
-
 import { ScatterPlotViewComponent } from './scatter-plot/scatter-plot-view';
 import { LineChartViewComponent } from './line-chart/line-chart-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
@@ -46,9 +44,6 @@ import {
         LineChartViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent
-    ],
-    providers: [
-        GeneService
     ]
 })
 // Changed the name so it does not conflict with primeng module

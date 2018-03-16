@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 
 import { Gene } from '../../../models';
 
-import { BreadcrumbService } from '../../../core/services';
-import { GeneService } from '../../services';
+import {
+    BreadcrumbService,
+    GeneService
+} from '../../../core/services';
 
 @Component({
     selector: 'gene-overview',

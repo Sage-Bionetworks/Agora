@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { BreadcrumbService } from '../../../core/services';
-import { GeneService } from '../../services';
+import {
+    BreadcrumbService,
+    GeneService
+} from '../../../core/services';
 
 import { Gene } from '../../../models';
 
@@ -13,10 +15,12 @@ import { Gene } from '../../../models';
     encapsulation: ViewEncapsulation.None
 })
 export class GeneDetailsViewComponent implements OnInit {
-    private sub: any;
-
     id: string;
+    // Change to smaller object, name based
     gene: Gene;
+    geneInfo: Gene[];
+    models: string[] = [];
+    tissues: string[] = [];
 
     constructor(
         private router: Router,
@@ -26,16 +30,35 @@ export class GeneDetailsViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        // Get the current clicked gene
+        this.gene = this.geneService.getCurrentGene();
+
+        // Crumb logic after getting the current gene
         let crumbs = [
             { label: 'TARGETS', routerLink: ['/targets'] }
         ];
-
-        this.gene = this.geneService.getCurrentGene()
         if (!this.gene) {
             this.router.navigate(['/targets']);
         } else {
             this.id = this.route.snapshot.paramMap.get('id');
             crumbs.push({ label: this.gene.hgnc_symbol.toUpperCase(), routerLink: ['/gene-details/' + this.id] });
+
+            // Filter the genes based on the current selection
+            this.geneService.filterGenes(this.gene.hgnc_symbol);
+            /*if (this.geneInfo.length) {
+                this.geneInfo.forEach(i => {
+                    this.models.push(i.comparison_model_sex);
+                    this.tissues.push(i.tissue_study_pretty);
+                });
+
+                this.models = this.models.filter((m, index, self) => {
+                    return self.indexOf(m) === index;
+                });
+                this.tissues = this.tissues.filter((t, index, self) => {
+                    return self.indexOf(t) === index;
+                });
+                this.geneService.loadPlotGenes(this.tissues, this.models);
+            }*/
         }
         this.breadcrumb.setCrumbs(crumbs);
     }

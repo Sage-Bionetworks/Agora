@@ -1,8 +1,10 @@
-<div #sm class="select-column">
-    <div>
-        <a class='reset'
-            href='javascript:select1.filterAll();dc.redrawAll();'
-            style='visibility: hidden;'>Reset
-        </a>
+<div class="row controls-row">
+    <div class="col-md-7">
+        <div #sm class="select-column">
+            <div></div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <p-button (onClick)="filterAll()" label="Reset" [disabled]="isDisabled"></p-button>
     </div>
 </div>
