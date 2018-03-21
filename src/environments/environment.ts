@@ -7,6 +7,8 @@ import { Environment } from './model';
 Error.stackTraceLimit = Infinity;
 require('zone.js/dist/long-stack-trace-zone');
 
+export const ENV_FIREBASE_CONFIG: any = FIREBASE_CONFIG;
+
 export const environment = {
     production: false,
 
@@ -29,16 +31,6 @@ export const environment = {
     },
     ENV_PROVIDERS: [
 
-    ],
-
-    // Initialize Firebase
-    firebaseConfig: {
-        apiKey: 'AIzaSyBMS96wgJfydRf7BLDVh4DGtRKAZT8UpTM',
-        authDomain: 'wall-of-targets.firebaseapp.com',
-        databaseURL: 'https://wall-of-targets.firebaseio.com',
-        projectId: 'wall-of-targets',
-        storageBucket: 'wall-of-targets.appspot.com',
-        messagingSenderId: '256222676709'
-    }
+    ]
 };
 

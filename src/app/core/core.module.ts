@@ -29,10 +29,10 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 
 // Backend modules and extra config
-import { environment } from 'environments/environment';
+import { environment, ENV_FIREBASE_CONFIG } from 'environments/environment';
 import { AngularFireModule } from 'angularfire2';
 
-export const firebaseConfig = environment.firebaseConfig;
+export const firebaseConfig = ENV_FIREBASE_CONFIG;
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import {

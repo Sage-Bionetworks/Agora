@@ -17,6 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ngcWebpack = require('ngc-webpack');
 
 const buildUtils = require('./build-utils');
@@ -28,20 +29,24 @@ const buildUtils = require('./build-utils');
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  const isProd = options.env === 'production';
-  const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, options.metadata || {});
-  const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
-  const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
+    const isProd = options.env === 'production';
+    const APP_CONFIG = require(process.env.ANGULAR_CONF_FILE || (isProd ? './config.prod.json' : './config.dev.json'));
 
-  const entry = {
-    polyfills: './src/polyfills.browser.ts',
-    main:      './src/main.browser.ts'
-  };
+    const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA,options.metadata || {});
+    const GTM_API_KEY = process.env.GTM_API_KEY || APP_CONFIG.gtmKey;
 
-  Object.assign(ngcWebpackConfig.plugin, {
-    tsConfigPath: METADATA.tsConfigPath,
-    mainPath: entry.main
-  });
+    const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
+    const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);
+
+    const entry = {
+      polyfills: './src/polyfills.browser.ts',
+      main:      './src/main.browser.ts'
+    };
+
+    Object.assign(ngcWebpackConfig.plugin, {
+      tsConfigPath: METADATA.tsConfigPath,
+      mainPath: entry.main
+    });
 
   return {
     /**
@@ -179,7 +184,8 @@ module.exports = function (options) {
         'AOT': METADATA.AOT,
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-        'process.env.HMR': METADATA.HMR
+        'process.env.HMR': METADATA.HMR,
+        'FIREBASE_CONFIG': JSON.stringify(APP_CONFIG.firebase)
       }),
 
       /**
@@ -303,6 +309,10 @@ module.exports = function (options) {
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
       new InlineManifestWebpackPlugin(),
+
+      new ProvidePlugin({
+        'dc': 'dc'
+      })
     ],
 
     /**
@@ -312,14 +322,12 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false,
-      fs: 'empty',
-      readline: 'empty'
+        global: true,
+        crypto: 'empty',
+        process: true,
+        module: false,
+        clearImmediate: false,
+        setImmediate: false
     }
 
   };

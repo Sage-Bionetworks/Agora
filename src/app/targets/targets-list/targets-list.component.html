@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <p-table #gl
-            [columns]="cols" [value]="genes$ | async" selectionMode="single"
+            [columns]="cols" [value]="genes" selectionMode="single"
             [(selection)]="selectedGene" dataKey="ensembl_gene_id"
             [paginator]="true"
             [rows]="10"

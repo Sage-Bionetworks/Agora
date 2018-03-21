@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, ContentChild, AfterContentInit } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 import {
     ActivatedRoute
@@ -7,14 +8,14 @@ import {
 import { Gene } from '../../../models';
 
 import {
-    ChartService,
-    ColorService
+    ChartService
 } from '../../../core/services';
 
 import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
+import '../../../../scripts/dc-canvas-scatterplot.js';
 
 @Component({
     selector: 'scatter-plot',
@@ -29,6 +30,8 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     @Input() label: string;
 
     @ViewChild('chart') scatterPlot: ElementRef;
+    subChart: any;
+    svgAdded: boolean = false;
 
     private dim: CrossFilter.Dimension<any, any>;
     private group: CrossFilter.Group<any, any, any>;
@@ -36,8 +39,8 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     constructor(
         private route: ActivatedRoute,
         private chartService: ChartService,
-        private colorService: ColorService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private decimalPipe: DecimalPipe
     ) { }
 
     ngOnInit() {}
@@ -62,38 +65,110 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         this.dim = this.chartService.getDimension(this.label);
         this.group = this.chartService.getGroup(this.label);
 
-        this.chart = dc.scatterPlot(this.scatterPlot.nativeElement)
-            .x(d3.scale.linear().domain([this.geneService.minLogFC, this.geneService.maxLogFC]))
-            .y(d3.scale.linear().domain([0, this.geneService.maxAdjPVal]))
+        let currentGene = this.geneService.getCurrentGene();
+        // Create a symbol scale based on d3 types, then make the accessor
+        // return two different types
+        let symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
+        let symbolAccessor = <any>function(d) {
+            return symbolScale(
+                (d.key[2] === currentGene.hgnc_symbol) ? '1' : '0'
+            )
+        };
+        // Add the scatter plot as a sub chart of a series chartso we can render two
+        // series of genes, the selected and the non selected ones
+        this.subChart = function(c) {
+            return dc.scatterPlot(c)
+                //['useCanvas'](true)
+                .symbol(symbolAccessor)
+                .symbolSize(5)
+                .highlightedSize(10)
+                .renderTitle(true)
+                .brushOn(false)
+                .title(function (p) {
+                    return [
+                        'Log Fold Change: ' + self.decimalPipe.transform(+p.key[0]),
+                        '-log10(Adjusted p-value): ' + self.decimalPipe.transform(+p.key[1])
+                    ].join('\n');
+                });
+        };
+        this.chart = dc.seriesChart(this.scatterPlot.nativeElement)
+            .x(d3.scale.linear().domain([this.geneService.minLogFC*1.1, this.geneService.maxLogFC*1.1]))
+            .chart(this.subChart)
             .brushOn(false)
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
+            .clipPadding(10)
             .dimension(this.dim)
             .group(this.group)
-            //.linearColors(['#b30000', '#fdd49e'])
-            .linearColors(['#000000', '#bbbbbb'])
-            .colorAccessor(function(d) {
-                if (Number.isNaN(+d.key[0]) || Number.isNaN(+d.key[1])) return 0;
-                let a = 0 - +d.key[0];
-                let b = 0 - +d.key[1];
-                //return  Math.sqrt(a*a + (b*b));
-                return  Math.abs(a);
-            });
+            //.elasticY(true)
+            //.mouseZoomable(true)
+            .shareTitle(false)
+            // Using this notation because the typings for dc do not show this method for this chart
+            ['seriesAccessor'](function(d) {
+                return (d.key[2] === currentGene.hgnc_symbol) ? '1' : '0';
+            })
+            .keyAccessor(function(d) {return +d.key[0];})
+            .valueAccessor(function(d) { return +d.key[1]; });
 
+        // Separate this call so we can get the correct chart reference below
+        this.chart.yAxis().tickFormat(function(d) { return d3.format(',d')(d); });
 
-        if (this.info.xUnits) this.chart.xUnits(this.info.xUnits);
+        // Register the scatter plot pretransition event
+        this.registerChartEvent(this.chart, 'pretransition');
 
         this.chart.render();
     }
 
-    getValue (d: any) {
-        let value: number
-        if (!(isNaN(d.value))) {
-            value = d.value;
-        } else if (!d.value) {
-            value = 0;
-        }
+    registerChartEvent(chart: dc.SeriesChart, type: string = 'renderlet') {
+        let self = this;
+        chart.on(type, function (chart) {
+            if (!self.svgAdded) {
+                let blackGenes = chart.selectAll('g.sub._0 path.symbol');
+                let redGenes = chart.selectAll('g.sub._1 path.symbol');
 
-        return value;
+                // Make the selection render for last
+                self.moveToFront(redGenes);
+
+                // Add a black and white gradient to the non selected genes
+                let svg = d3.select(self.scatterPlot.nativeElement).select('svg');
+                self.addGradientToSVG(blackGenes, svg, 'black-gradient', [
+                    {
+                        'offset': '0%', 'stop-color': 'white'
+                    }, {
+                        'offset': '60%', 'stop-color': 'black'
+                    }
+                ]);
+
+                // Add a red color tothe selected genes
+                redGenes
+                    .style('stroke', 'white')
+                    .style('fill', 'red')
+                    .style('stroke-width', 0.5);
+
+                self.svgAdded = true;
+            }
+        });
+    }
+
+    // Make the selection the last in the parent order
+    moveToFront(sel: d3.Selection<any>) {
+        sel.each(function() {
+            this.parentNode.appendChild(this);
+        });
+    }
+
+    // Adds a gradient color to an SVG, uses offset and stop color
+    addGradientToSVG(parent: d3.Selection<any>, svg: d3.Selection<any>, name: string, options: any[]) {
+        let gradient = svg.append("defs")
+            .append("radialGradient")
+            .attr('id', name);
+
+        options.forEach(o => {
+            gradient.append('stop')
+                .attr('offset', o.offset)
+                .attr('stop-color', o['stop-color'])
+        })
+
+        parent.style('fill', 'url(#'+name+')');
     }
 }

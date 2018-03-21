@@ -52,12 +52,12 @@ export class GeneRNASeqDEComponent implements OnInit {
         this.chartService.addChartInfo(
             'volcano-plot',
             {
-                dimension: ['logFC', 'neg_log10_adj_P_Val'],
+                dimension: ['logFC', 'neg_log10_adj_P_Val', 'hgnc_symbol'],
                 group: 'self',
                 type: 'scatter-plot',
                 title: 'Volcano Plot',
                 xAxisLabel: 'Log Fold Change',
-                yAxisLabel: '-log10(Adjusted p-value',
+                yAxisLabel: '-log10(Adjusted p-value)',
                 x: ['logFC'],
                 y: ['neg_log10_adj_P_Val']
             }
@@ -79,8 +79,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             {
                 dimension: ['tissue_study_pretty'],
                 group: 'self',
-                type: 'select-menu',
-                filter: true
+                type: 'select-menu'
             }
         );
         this.chartService.addChartInfo(
@@ -88,8 +87,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             {
                 dimension: ['comparison_model_sex'],
                 group: 'self',
-                type: 'select-menu',
-                filter: true
+                type: 'select-menu'
             }
         );
     }

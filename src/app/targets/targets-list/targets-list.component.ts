@@ -22,6 +22,7 @@ import { Message, SortEvent } from 'primeng/primeng';
 })
 export class TargetsListComponent implements OnInit {
     @Input() genes$: Observable<Gene[]>;
+    @Input() genes: Gene[];
 
     msgs: Message[] = [];
     totalRecords: number;

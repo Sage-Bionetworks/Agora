@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 import {
     ActivatedRoute
@@ -14,7 +15,7 @@ import {
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-// Using a d3 v4 function to get all node
+// Using a d3 v4 function to get all nodes
 d3.selection.prototype['nodes'] = function(){
     var nodes = new Array(this.size()), i = -1;
     this.each(function() { nodes[++i] = this; });
@@ -37,11 +38,13 @@ export class RowChartViewComponent implements OnInit {
     @ViewChild('studies') stdCol: ElementRef;
 
     changedLabels: boolean = false;
+    display: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private geneService: GeneService,
-        private chartService: ChartService
+        private chartService: ChartService,
+        private decimalPipe: DecimalPipe
     ) { }
 
     ngOnInit() {
@@ -64,7 +67,7 @@ export class RowChartViewComponent implements OnInit {
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return d.value.logFC || 0;
+                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logFC) || 0);
             })
             .valueAccessor(function(d) {
                 return d.value.logFC || 0;
@@ -77,74 +80,126 @@ export class RowChartViewComponent implements OnInit {
             .dimension(this.chartService.getDimension(this.label))
             .group(this.chartService.getGroup(this.label));
 
+        // Add this number of ticks so the x axis don't get cluttered with text
         this.chart.xAxis().ticks(5);
 
-        this.chart.on('filtered', function(chart, filter){
-            console.log(chart, filter);
-        });
-
-        this.chart.on('renderlet', function (chart) {
-            let barHeight = chart.select('g.row rect').attr('height');
-            let newSvg = d3.select(self.stdCol.nativeElement).append('svg');
-            let textGroup = newSvg.append('g')
-                .attr('class', 'textGroup');
-
-            let allText = chart.selectAll('g.row text');
-            let removed = allText.remove();
-
-            // Copy the texts to another div, so they show up
-            if (!self.changedLabels) {
-                let stdColHeight = chart.height();
-                let step = chart.select('g.axis g.tick line.grid-line').node().getBBox().height / (removed.nodes().length);
-                removed.nodes().forEach(n => {
-                    textGroup.append(function() {
-                        return n;
-                    })
-                })
-                d3.select(self.stdCol.nativeElement).selectAll('g.textGroup text').each(function(d, i) {
-                    let currentStep = step * i;
-                    // your update code here as it was in your example
-                    d3.select(this).attr('transform', function () {
-                        return 'translate(0,' + (currentStep+5) + ')';
-                    });
-                });
-
-                // Draw the lines through the squares
-                let bar = chart.selectAll('g.row')
-                    .insert('g', ':first-child')
-                    .attr('class', 'hline');
-                bar
-                    .insert('line')
-                    .attr({
-                        'stroke-width': 1.5,
-                        stroke: 'wheat',
-                        x1: function(d) {
-                            return chart.x()(d.value.logFC) - 30;
-                        },
-                        y1: function(d) {
-                            return barHeight/2;
-                        },
-                        x2: function(d) {
-                            return chart.x()(d.value.logFC) + 40;
-                        },
-                        y2: function(d) {
-                            return barHeight/2;
-                        }
-                    });
-
-                self.changedLabels = true;
-            }
-
-            // Change the rectangles to small ones
-            chart
-                .selectAll('g.row rect')
-                .attr('transform', function(d) {
-                    return 'translate(' + chart.x()(d.value.logFC) + ',' + ((barHeight/2)-5) + ')';
-                })
-                .attr('width', '10')
-                .attr('height', '10');
-        });
+        // Register the row chart renderlet
+        this.registerChartEvent(this.chart);
 
         this.chart.render();
+    }
+
+    // A custom renderlet function for this chart, allows us to change
+    // what happens to the chart after rendering
+    registerChartEvent(chart: dc.RowChart, type: string = 'renderlet') {
+        let self = this;
+        this.chart.on(type, function (chart) {
+            let rectHeight = chart.select('g.row rect').attr('height');
+            let squareSize = 10;
+            let lineWidth = 60;
+
+            // Test if we should display the chart. Using this variable so we don't see
+            // the rows rectangles change into small squares abruptly
+            if (!self.display) {
+                // Copy all vertical texts to another div, so they don't get hidden by
+                // the row chart svg after being translated
+                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize/2);
+
+                // Insert a line for each row of the chart
+                self.insertLinesInRows(chart);
+
+                // Draw the inserted lines in each row
+                self.drawLines(chart, rectHeight/2, lineWidth);
+            } else {
+                // This part will be called on redraw after filtering, so at this point we just need
+                // to move the lines to the correct position again. First translate the parent element
+                let hlines = chart.selectAll('g.row g.hline');
+                hlines.each(function(d, i) {
+                    d3.select(this).attr('transform', function(d) {
+                        return 'translate('+d.value.logFC+')';
+                    })
+                });
+
+                // Finally redraw the lines in each row
+                self.drawLines(chart, rectHeight/2, lineWidth);
+            }
+
+            // Change the row rectangles into small squares, this happens on
+            // every render or redraw
+            self.rectToSquares(chart, squareSize, rectHeight);
+
+            // Finally show the chart
+            self.display = true;
+        });
+    }
+
+    // Moves all text in textGroups to a new HTML element
+    moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
+        let newSvg = d3.select(el).append('svg');
+        let textGroup = newSvg.append('g')
+            .attr('class', 'textGroup');
+
+        // Remove the old texts and append to the new group
+        let allText = chart.selectAll('g.row text');
+        let removed = allText.remove();
+        removed['nodes']().forEach(n => {
+            textGroup.append(function() {
+                return n;
+            })
+        });
+
+        // Move the text to the correct position in the new svg
+        let stdColHeight = chart.height();
+        let step = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement).getBBox().height / (removed['nodes']().length);
+
+        d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+            let currentStep = step * i;
+            d3.select(this).attr('transform', function () {
+                return 'translate(0,' + (currentStep+(vSpacing)) + ')';
+            });
+        });
+    }
+
+    insertLinesInRows(chart: dc.RowChart) {
+        chart.selectAll('g.row')
+            .insert('g', ':first-child')
+            .attr('class', 'hline')
+            .insert('line');
+    }
+
+    // Draw the lines through the chart rows
+    drawLines(chart: dc.RowChart, yPos: number, lineWidth: number) {
+        let lines = chart.selectAll('g.row g.hline line')
+            .attr({
+                'stroke-width': 1.5,
+                stroke: 'wheat',
+                x1: function(d) {
+                    return chart.x()(d.value.logFC) - lineWidth/2;
+                },
+                y1: function(d) {
+                    return yPos;
+                },
+                x2: function(d) {
+                    return chart.x()(d.value.logFC) + lineWidth/2;
+                },
+                y2: function(d) {
+                    return yPos;
+                }
+            });
+    }
+
+    // Changes the chart row rects into squares of the square size
+    rectToSquares(chart: dc.RowChart, squareSize: number, rectHeight: number) {
+        chart
+            .selectAll('g.row rect')
+            .attr('transform', function(d) {
+                return 'translate(' + (chart.x()(d.value.logFC)-(squareSize/2)) + ',' + ((rectHeight/2)-(squareSize/2)) + ')';
+            })
+            .attr('width', squareSize)
+            .attr('height', squareSize);
+    }
+
+    displayChart() {
+        return {'opacity': (this.display) ? 1 : 0};
     }
 }

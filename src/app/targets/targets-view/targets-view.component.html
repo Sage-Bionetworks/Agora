@@ -22,10 +22,10 @@
         <div class="col-md-12" *ngIf="dataLoaded"> <!--</div>*ngIf="genes$"-->
             <p-tabView>
                 <p-tabPanel header="Gene Search" leftIcon="fas fa-dna">
-                    <gene-search [genes$]="genes$"></gene-search>
+                    <gene-search [genes]="genes"></gene-search>
                 </p-tabPanel>
                 <p-tabPanel header="Nominated Target Genes" leftIcon="fas fa-dna">
-                    <targets-list [genes$]="genes$"></targets-list>
+                    <targets-list [genes]="genes"></targets-list>
                 </p-tabPanel>
             </p-tabView>
         </div>

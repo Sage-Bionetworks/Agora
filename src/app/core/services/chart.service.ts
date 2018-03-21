@@ -57,7 +57,8 @@ export class ChartService {
                 case 'scatter-plot':
                     return [
                         Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]],
-                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]]
+                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]],
+                        d[dimValue[2]]
                     ];
                 case 'select-menu':
                     if (info.filter) {

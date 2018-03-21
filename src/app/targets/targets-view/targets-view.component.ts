@@ -16,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class TargetsViewComponent implements OnInit {
     genes$: Observable<Gene[]>;
+    genes: Gene[];
 
     dataLoaded: boolean = false;
 
@@ -35,6 +36,15 @@ export class TargetsViewComponent implements OnInit {
         this.genes$ = this.geneService.loadGenesFile('sampleData.json');
         this.genes$.subscribe(data => {
             this.geneService.setGenes(data);
+            let gids = new Set();
+            let fgenes = data.filter((d: Gene) => {
+                if (gids.has(d.hgnc_symbol)) {
+                    return false;
+                }
+                gids.add(d.hgnc_symbol);
+                return true;
+            })
+            this.genes = fgenes;
             this.dataLoaded = true;
         });
     }

@@ -21,6 +21,7 @@ export class GeneSearchComponent implements OnInit {
     @Input() styleClass: string = '';
     @Input() style: any;
     @Input() genes$: Observable<Gene[]>;
+    @Input() genes: Gene[];
 
     constructor(
         private router: Router,

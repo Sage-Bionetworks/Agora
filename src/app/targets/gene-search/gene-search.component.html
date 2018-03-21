@@ -9,7 +9,7 @@
         Gene Symbol
     </div>
     <div class="row search-row">
-        <ng-select [items]="genes$ | async"
+        <ng-select [items]="genes"
             bindLabel="hgnc_symbol"
             bindValue="id"
             [virtualScroll]="true"
