@@ -15,7 +15,10 @@
                         </div>
                     </div>
                     <div class="row controls-row">
-                        <select-menu [promptText]="'All tissues'" [label]="'select-tissue'"></select-menu>
+                        <select-menu [promptText]="'All tissues'"
+                            [label]="'select-tissue'"
+                            [defaultValue]="'DLPFC'">
+                        </select-menu>
                     </div>
                 </div>
                 <div class="col-md-8 chart-selects-row">

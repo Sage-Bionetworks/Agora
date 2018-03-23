@@ -44,7 +44,7 @@ export class GeneDetailsViewComponent implements OnInit {
             crumbs.push({ label: this.gene.hgnc_symbol.toUpperCase(), routerLink: ['/gene-details/' + this.id] });
 
             // Filter the genes based on the current selection
-            this.geneService.filterGenes(this.gene.hgnc_symbol);
+            //this.geneService.filterGenes(this.gene.hgnc_symbol);
             /*if (this.geneInfo.length) {
                 this.geneInfo.forEach(i => {
                     this.models.push(i.comparison_model_sex);

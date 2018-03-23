@@ -18,11 +18,13 @@
             [(selection)]="selectedGene" dataKey="ensembl_gene_id"
             [paginator]="true"
             [rows]="10"
+            [lazy]="true"
             [totalRecords]="totalRecords"
             [loading]="loading"
             (sortFunction)="customSort($event)"
             (onRowSelect)="onRowSelect($event)"
-            (onRowUnselect)="onRowUnselect($event)">
+            (onRowUnselect)="onRowUnselect($event)"
+            (onLazyLoad)="loadCarsLazy($event)">
             <ng-template pTemplate="caption">
                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
                 <input type="text" pInputText size="50" placeholder="Gene Filter"

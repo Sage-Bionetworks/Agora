@@ -39,9 +39,9 @@ import {
     AuthGuardService,
     AuthenticationService,
     BreadcrumbService,
-    ChartService,
     ColorService,
-    GeneService
+    GeneService,
+    DataService
 } from './services';
 
 import { AboutComponent } from './about';
@@ -98,8 +98,8 @@ import '../../styles/headings.css';
         AuthenticationService,
         AuthGuardService,
         BreadcrumbService,
+        DataService,
         GeneService,
-        ChartService,
         ColorService,
         DecimalPipe
     ]

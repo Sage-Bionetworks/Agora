@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../models';
 
-import { BreadcrumbService } from '../../core/services';
+import { BreadcrumbService, DataService } from '../../core/services';
 import { GeneService } from '../../core/services';
 
-import { Observable } from 'rxjs/Observable';
+import * as d3 from 'd3';
 
 @Component({
     selector: 'targets-view',
@@ -15,16 +15,14 @@ import { Observable } from 'rxjs/Observable';
     encapsulation: ViewEncapsulation.None
 })
 export class TargetsViewComponent implements OnInit {
-    genes$: Observable<Gene[]>;
-    genes: Gene[];
-
     dataLoaded: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private breadcrumb: BreadcrumbService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private dataService: DataService
     ) { }
 
     ngOnInit() {
@@ -32,20 +30,11 @@ export class TargetsViewComponent implements OnInit {
             { label: 'TARGETS', routerLink: ['/targets'] }
         ])
 
-        // To be removed when the real application is done
-        this.genes$ = this.geneService.loadGenesFile('sampleData.json');
-        this.genes$.subscribe(data => {
-            this.geneService.setGenes(data);
-            let gids = new Set();
-            let fgenes = data.filter((d: Gene) => {
-                if (gids.has(d.hgnc_symbol)) {
-                    return false;
-                }
-                gids.add(d.hgnc_symbol);
-                return true;
-            })
-            this.genes = fgenes;
-            this.dataLoaded = true;
+        this.dataService.loadGenesFile('sampleData.csv').then((status) => {
+            if (status) {
+                this.dataLoaded = true;
+            }
+            // Handle error later
         });
     }
 

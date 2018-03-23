@@ -7,6 +7,8 @@ import { ScatterPlotViewComponent } from './scatter-plot/scatter-plot-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
 
+import { ChartService } from './services';
+
 import {
     SharedModule,
     PanelModule,
@@ -41,6 +43,9 @@ import {
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent
+    ],
+    providers: [
+        ChartService
     ]
 })
 // Changed the name so it does not conflict with primeng module

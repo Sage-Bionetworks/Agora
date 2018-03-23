@@ -3,16 +3,22 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     BreadcrumbService,
-    GeneService
+    GeneService,
+    DataService
 } from 'app/core/services';
-import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
 
 import { DecimalPipe } from '@angular/common';
 import { NumbersPipe } from '../../shared/pipes';
 
-import { Message, SortEvent } from 'primeng/primeng';
+import {
+    Message,
+    SortEvent,
+    LazyLoadEvent
+} from 'primeng/primeng';
+
+
 
 @Component({
     selector: 'targets-list',
@@ -21,17 +27,19 @@ import { Message, SortEvent } from 'primeng/primeng';
     encapsulation: ViewEncapsulation.None
 })
 export class TargetsListComponent implements OnInit {
-    @Input() genes$: Observable<Gene[]>;
     @Input() genes: Gene[];
+    datasource: Gene[];
 
     msgs: Message[] = [];
     totalRecords: number;
     cols: any[];
     loading: boolean;
+    rowGroupMetadata: any;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private dataService: DataService,
         private geneService: GeneService
     ) { }
 
@@ -40,6 +48,12 @@ export class TargetsListComponent implements OnInit {
             { field: 'hgnc_symbol', header: 'Gene' },
             { field: 'AveExpr', header: 'Score' }
         ];
+
+        // USe a promise when doing remotely
+        this.datasource = this.dataService.getTableData();
+        this.totalRecords = this.datasource.length;
+
+        this.loading = true;
     }
 
     getAlignment(i: number, max: number) {
@@ -50,7 +64,11 @@ export class TargetsListComponent implements OnInit {
         this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
         this.geneService.setCurrentGene(event.data);
         let gene = this.geneService.getCurrentGene();
-        if (gene) this.router.navigate(['gene-details', gene.ensembl_gene_id], {relativeTo: this.route});
+        if (gene) {
+            this.geneService.filterTissuesModels(gene).then((status) => {
+                if (status) this.router.navigate(['gene-details', gene.hgnc_symbol], {relativeTo: this.route});
+            });
+        }
     }
 
     onRowUnselect(event) {
@@ -81,5 +99,24 @@ export class TargetsListComponent implements OnInit {
 
             return (event.order * result);
         });
+    }
+
+    loadCarsLazy(event: LazyLoadEvent) {
+        this.loading = true;
+
+        //in a real application, make a remote request to load data using state metadata from event
+        //event.first = First row offset
+        //event.rows = Number of rows per page
+        //event.sortField = Field name to sort with
+        //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
+        //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
+
+        //imitate db connection over a network
+        setTimeout(() => {
+            if (this.datasource) {
+                this.genes = this.datasource.slice(event.first, (event.first + event.rows));
+                this.loading = false;
+            }
+        }, 500);
     }
 }

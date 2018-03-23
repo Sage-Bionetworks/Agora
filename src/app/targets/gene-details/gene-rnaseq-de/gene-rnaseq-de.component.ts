@@ -3,10 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../../models';
 
-import {
-    ChartService,
-    GeneService
-} from '../../../core/services';
+import { ChartService } from '../../../charts/services';
+import { GeneService, DataService } from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -28,6 +26,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService
     ) { }
@@ -48,7 +47,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     loadChartData() {
-        this.chartService.setData(this.geneService.getGenes());
+        //this.chartService.setData(this.dataService.getGenes());
         this.chartService.addChartInfo(
             'volcano-plot',
             {
@@ -59,7 +58,8 @@ export class GeneRNASeqDEComponent implements OnInit {
                 xAxisLabel: 'Log Fold Change',
                 yAxisLabel: '-log10(Adjusted p-value)',
                 x: ['logFC'],
-                y: ['neg_log10_adj_P_Val']
+                y: ['neg_log10_adj_P_Val'],
+                filter: 'custom'
             }
         );
         this.chartService.addChartInfo(
@@ -70,8 +70,9 @@ export class GeneRNASeqDEComponent implements OnInit {
                 type: 'forest-plot',
                 title: 'Log fold forest plot',
                 x: ['ci_L', 'ci_R'],
-                filter: true,
-                attr: 'logFC'
+                filter: 'default',
+                attr: 'logFC',
+                constraint: { attr: 'tissue_study_pretty', names: this.geneService.getTissues() }
             }
         );
         this.chartService.addChartInfo(
@@ -79,7 +80,8 @@ export class GeneRNASeqDEComponent implements OnInit {
             {
                 dimension: ['tissue_study_pretty'],
                 group: 'self',
-                type: 'select-menu'
+                type: 'select-menu',
+                filter: 'default'
             }
         );
         this.chartService.addChartInfo(
@@ -87,7 +89,8 @@ export class GeneRNASeqDEComponent implements OnInit {
             {
                 dimension: ['comparison_model_sex'],
                 group: 'self',
-                type: 'select-menu'
+                type: 'select-menu',
+                filter: 'default'
             }
         );
     }

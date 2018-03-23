@@ -7,10 +7,8 @@ import {
 
 import { Gene } from '../../../models';
 
-import {
-    ChartService,
-    GeneService
-} from '../../../core/services';
+import { ChartService } from '../../services';
+import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -42,6 +40,7 @@ export class RowChartViewComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService,
         private decimalPipe: DecimalPipe
@@ -61,6 +60,12 @@ export class RowChartViewComponent implements OnInit {
     initChart() {
         let self = this;
         this.info = this.chartService.getChartInfo(this.label)
+        let currentGene = this.geneService.getCurrentGene();
+        let filterTissues = this.geneService.getTissues();
+        let filterModels = this.geneService.getModels();
+        let dim = this.dataService.getDimension(this.label, this.info, currentGene, filterTissues, filterModels);
+        let group = this.dataService.getGroup(this.label, this.info);
+
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
             .x(d3.scale.linear().domain([this.geneService.ci_L, this.geneService.ci_R]))
@@ -70,15 +75,16 @@ export class RowChartViewComponent implements OnInit {
                 return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logFC) || 0);
             })
             .valueAccessor(function(d) {
-                return d.value.logFC || 0;
+                return +(self.decimalPipe.transform(+d.value.logFC)) || 0;
             })
             .label(function (d) {
                 return d.key;
             })
             .othersGrouper(null)
             .ordinalColors(['#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704'])
-            .dimension(this.chartService.getDimension(this.label))
-            .group(this.chartService.getGroup(this.label));
+            .dimension(dim)
+            .group(group)
+            .transitionDuration(0);
 
         // Add this number of ticks so the x axis don't get cluttered with text
         this.chart.xAxis().ticks(5);

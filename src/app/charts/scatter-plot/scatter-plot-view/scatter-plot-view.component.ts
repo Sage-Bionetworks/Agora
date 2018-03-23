@@ -7,11 +7,8 @@ import {
 
 import { Gene } from '../../../models';
 
-import {
-    ChartService
-} from '../../../core/services';
-
-import { GeneService } from '../../../core/services';
+import { ChartService } from '../../services';
+import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -33,12 +30,10 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     subChart: any;
     svgAdded: boolean = false;
 
-    private dim: CrossFilter.Dimension<any, any>;
-    private group: CrossFilter.Group<any, any, any>;
-
     constructor(
         private route: ActivatedRoute,
         private chartService: ChartService,
+        private dataService: DataService,
         private geneService: GeneService,
         private decimalPipe: DecimalPipe
     ) { }
@@ -58,63 +53,58 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
 
     initChart() {
         let self = this;
-        this.info = this.chartService.getChartInfo(this.label)
+        this.info = this.chartService.getChartInfo(this.label);
+        let currentGene = this.geneService.getCurrentGene();
+        let filterTissues = this.geneService.getTissues();
+        let filterModels = this.geneService.getModels();
+        let dim = this.dataService.getDimension(this.label, this.info, currentGene, filterTissues, filterModels);
+        let group = this.dataService.getGroup(this.label, this.info);
         this.title = this.info.title;
 
-        // Init the chart variables
-        this.dim = this.chartService.getDimension(this.label);
-        this.group = this.chartService.getGroup(this.label);
-
-        let currentGene = this.geneService.getCurrentGene();
         // Create a symbol scale based on d3 types, then make the accessor
         // return two different types
-        let symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
+        /*let symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
         let symbolAccessor = <any>function(d) {
             return symbolScale(
                 (d.key[2] === currentGene.hgnc_symbol) ? '1' : '0'
             )
-        };
-        // Add the scatter plot as a sub chart of a series chartso we can render two
-        // series of genes, the selected and the non selected ones
-        this.subChart = function(c) {
-            return dc.scatterPlot(c)
-                //['useCanvas'](true)
-                .symbol(symbolAccessor)
-                .symbolSize(5)
-                .highlightedSize(10)
-                .renderTitle(true)
-                .brushOn(false)
-                .title(function (p) {
-                    return [
-                        'Log Fold Change: ' + self.decimalPipe.transform(+p.key[0]),
-                        '-log10(Adjusted p-value): ' + self.decimalPipe.transform(+p.key[1])
-                    ].join('\n');
-                });
-        };
-        this.chart = dc.seriesChart(this.scatterPlot.nativeElement)
+        };*/
+
+        this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
+        this.chart
+            .useCanvas(true)
             .x(d3.scale.linear().domain([this.geneService.minLogFC*1.1, this.geneService.maxLogFC*1.1]))
-            .chart(this.subChart)
-            .brushOn(false)
+            .y(d3.scale.linear().domain([0, this.geneService.maxAdjPVal*1.1]))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
-            .clipPadding(10)
-            .dimension(this.dim)
-            .group(this.group)
-            //.elasticY(true)
-            //.mouseZoomable(true)
-            .shareTitle(false)
-            // Using this notation because the typings for dc do not show this method for this chart
-            ['seriesAccessor'](function(d) {
-                return (d.key[2] === currentGene.hgnc_symbol) ? '1' : '0';
+            .dimension(dim)
+            .group(group)
+            .mouseZoomable(true)
+            //.symbol(symbolAccessor)
+            //.symbolSize(7)
+            .highlightedSize(15)
+            .renderTitle(true)
+            .title(function (p) {
+                return [
+                    'Log Fold Change: ' + self.decimalPipe.transform(+p.key[0]),
+                    '-log10(Adjusted p-value): ' + self.decimalPipe.transform(+p.key[1])
+                ].join('\n');
             })
-            .keyAccessor(function(d) {return +d.key[0];})
-            .valueAccessor(function(d) { return +d.key[1]; });
+            .colors(d3.scale.ordinal().domain(['yes', 'no']).range(['red', 'black']))
+            .colorAccessor(function (d) {
+                if (d.key[2] === currentGene.hgnc_symbol) {
+                    return "yes";
+                } else {
+                    return "no";
+                }
+            })
+            .brushOn(false);
 
         // Separate this call so we can get the correct chart reference below
         this.chart.yAxis().tickFormat(function(d) { return d3.format(',d')(d); });
 
         // Register the scatter plot pretransition event
-        this.registerChartEvent(this.chart, 'pretransition');
+        //this.registerChartEvent(this.chart, 'pretransition');
 
         this.chart.render();
     }

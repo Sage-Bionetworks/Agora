@@ -5,10 +5,9 @@ import { Gene } from '../../models';
 
 import {
     BreadcrumbService,
-    GeneService
+    GeneService,
+    DataService
 } from '../../core/services';
-
-import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'gene-search',
@@ -20,16 +19,18 @@ export class GeneSearchComponent implements OnInit {
     @Input() fname: string;
     @Input() styleClass: string = '';
     @Input() style: any;
-    @Input() genes$: Observable<Gene[]>;
     @Input() genes: Gene[];
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private dataService: DataService,
         private geneService: GeneService
     ) { }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.genes = this.dataService.getTableData();
+    }
 
     viewGene() {
         let gene = this.geneService.getCurrentGene();
