@@ -14,6 +14,8 @@ import * as d3 from 'd3';
 import * as dc from 'dc';
 import '../../../../scripts/dc-canvas-scatterplot.js';
 
+import { Subscription } from 'rxjs/Subscription';
+
 @Component({
     selector: 'scatter-plot',
     templateUrl: './scatter-plot-view.component.html',
@@ -25,10 +27,13 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     @Input() chart: any;
     @Input() info: any;
     @Input() label: string;
+    @Input() currentGene = this.geneService.getCurrentGene();
+    @Input() filterTissues = this.geneService.getTissues();
+    @Input() filterModels = this.geneService.getModels();
+    @Input() dim: any;
+    @Input() group: any;
 
     @ViewChild('chart') scatterPlot: ElementRef;
-    subChart: any;
-    svgAdded: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -54,13 +59,11 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
     initChart() {
         let self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        let currentGene = this.geneService.getCurrentGene();
-        let filterTissues = this.geneService.getTissues();
-        let filterModels = this.geneService.getModels();
-        let dim = this.dataService.getDimension(this.label, this.info, currentGene, filterTissues, filterModels);
-        let group = this.dataService.getGroup(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        this.group = this.dataService.getGroup(this.label, this.info);
         this.title = this.info.title;
 
+        //console.log(this.dataService.maxNegLogAdjPVal);
         // Create a symbol scale based on d3 types, then make the accessor
         // return two different types
         /*let symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
@@ -73,92 +76,74 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
-            .x(d3.scale.linear().domain([this.geneService.minLogFC*1.1, this.geneService.maxLogFC*1.1]))
-            .y(d3.scale.linear().domain([0, this.geneService.maxAdjPVal*1.1]))
+            .x(d3.scale.linear().domain(this.getDomain('logFC')))
+            .y(d3.scale.linear().domain(this.getDomain('neg_log10_adj_P_Val', true)))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
-            .dimension(dim)
-            .group(group)
+            .title(function(p) {
+                return null;
+            }) // disable tooltips
+            .renderTitle(false)
+            .brushOn(false)
             .mouseZoomable(true)
+            .zoomOutRestrict(false)
+            //.transitionDuration(0)
+            .dimension(this.dim)
+            .group(this.group)
+            .keyAccessor((d) => {
+                return d.key[0];
+            })
+            .valueAccessor((d) => {
+                return d.key[1];
+            })
+            .colors(d3.scale.ordinal().domain(['yes', 'no']).range(['red', 'black']))
+            .colorAccessor(function (d) {
+                if (d.key[2] === self.currentGene.hgnc_symbol) {
+                    return 'yes';
+                } else {
+                    return 'no';
+                }
+            })
+            .on('preRender', (chart) => {
+                /*chart
+                    .x(d3.scale.linear().domain(this.getDomain('logFC')))
+                    .y(d3.scale.linear().domain(self.getDomain('neg_log10_adj_P_Val', true)));*/
+
+                chart.rescale();
+            })
+            .on('preRedraw', (chart) => {
+                /*chart
+                    .x(d3.scale.linear().domain(this.getDomain('logFC')))
+                    .y(d3.scale.linear().domain(self.getDomain('neg_log10_adj_P_Val', true)));*/
+
+                chart.rescale();
+            });
+            //.elasticY(true);
             //.symbol(symbolAccessor)
             //.symbolSize(7)
-            .highlightedSize(15)
-            .renderTitle(true)
+            //.highlightedSize(15)
+            /*.renderTitle(true)
             .title(function (p) {
                 return [
                     'Log Fold Change: ' + self.decimalPipe.transform(+p.key[0]),
                     '-log10(Adjusted p-value): ' + self.decimalPipe.transform(+p.key[1])
                 ].join('\n');
-            })
-            .colors(d3.scale.ordinal().domain(['yes', 'no']).range(['red', 'black']))
-            .colorAccessor(function (d) {
-                if (d.key[2] === currentGene.hgnc_symbol) {
-                    return "yes";
-                } else {
-                    return "no";
-                }
-            })
-            .brushOn(false);
+            })*/
 
         // Separate this call so we can get the correct chart reference below
-        this.chart.yAxis().tickFormat(function(d) { return d3.format(',d')(d); });
-
-        // Register the scatter plot pretransition event
-        //this.registerChartEvent(this.chart, 'pretransition');
+        //this.chart.yAxis().tickFormat(function(d) { return d3.format('.2f')(d); });
 
         this.chart.render();
     }
 
-    registerChartEvent(chart: dc.SeriesChart, type: string = 'renderlet') {
+    getDomain(attr: string, altMin?: boolean): number[] {
         let self = this;
-        chart.on(type, function (chart) {
-            if (!self.svgAdded) {
-                let blackGenes = chart.selectAll('g.sub._0 path.symbol');
-                let redGenes = chart.selectAll('g.sub._1 path.symbol');
+        let min = (self.dim.bottom(1)[0] && !altMin) ? +self.dim.bottom(1)[0][attr] : 0;
+        let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
+        let margin = (max - min) * 0.05;
+        min -= margin;
+        max += margin;
 
-                // Make the selection render for last
-                self.moveToFront(redGenes);
-
-                // Add a black and white gradient to the non selected genes
-                let svg = d3.select(self.scatterPlot.nativeElement).select('svg');
-                self.addGradientToSVG(blackGenes, svg, 'black-gradient', [
-                    {
-                        'offset': '0%', 'stop-color': 'white'
-                    }, {
-                        'offset': '60%', 'stop-color': 'black'
-                    }
-                ]);
-
-                // Add a red color tothe selected genes
-                redGenes
-                    .style('stroke', 'white')
-                    .style('fill', 'red')
-                    .style('stroke-width', 0.5);
-
-                self.svgAdded = true;
-            }
-        });
-    }
-
-    // Make the selection the last in the parent order
-    moveToFront(sel: d3.Selection<any>) {
-        sel.each(function() {
-            this.parentNode.appendChild(this);
-        });
-    }
-
-    // Adds a gradient color to an SVG, uses offset and stop color
-    addGradientToSVG(parent: d3.Selection<any>, svg: d3.Selection<any>, name: string, options: any[]) {
-        let gradient = svg.append("defs")
-            .append("radialGradient")
-            .attr('id', name);
-
-        options.forEach(o => {
-            gradient.append('stop')
-                .attr('offset', o.offset)
-                .attr('stop-color', o['stop-color'])
-        })
-
-        parent.style('fill', 'url(#'+name+')');
+        return [min, max];
     }
 }

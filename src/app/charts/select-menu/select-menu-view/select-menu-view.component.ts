@@ -23,6 +23,11 @@ export class SelectMenuViewComponent implements OnInit {
     @Input() promptText: string;
     @Input() filterStrings: string[] = [];
     @Input() defaultValue: string;
+    @Input() currentGene = this.geneService.getCurrentGene();
+    @Input() filterTissues = this.geneService.getTissues();
+    @Input() filterModels = this.geneService.getModels();
+    @Input() dim: any;
+    @Input() group: any;
 
     @ViewChild('sm') selectMenu: ElementRef;
 
@@ -49,19 +54,16 @@ export class SelectMenuViewComponent implements OnInit {
     initChart() {
         let self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        let currentGene = this.geneService.getCurrentGene();
-        let filterTissues = this.geneService.getTissues();
-        let filterModels = this.geneService.getModels();
-        let dim = this.dataService.getDimension(this.label, this.info, currentGene, filterTissues, filterModels);
-        let group = this.dataService.getGroup(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        this.group = this.dataService.getGroup(this.label, this.info);
 
         this.chart = dc.selectMenu(this.selectMenu.nativeElement)
-            .dimension(dim)
-            .group(group)
+            .dimension(this.dim)
+            .group(this.group)
             .controlsUseVisibility(true)
             .on('filtered', function(chart, filter) {
                 // Do something else?
-                self.isDisabled = (!filter) ? true : false;
+                self.isDisabled = (filter) ? false : true;
             });
         this.chart.promptText(this.promptText);
 

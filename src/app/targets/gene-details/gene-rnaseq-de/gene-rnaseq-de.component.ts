@@ -58,8 +58,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 xAxisLabel: 'Log Fold Change',
                 yAxisLabel: '-log10(Adjusted p-value)',
                 x: ['logFC'],
-                y: ['neg_log10_adj_P_Val'],
-                filter: 'custom'
+                y: ['neg_log10_adj_P_Val']
             }
         );
         this.chartService.addChartInfo(
@@ -69,7 +68,6 @@ export class GeneRNASeqDEComponent implements OnInit {
                 group: 'self',
                 type: 'forest-plot',
                 title: 'Log fold forest plot',
-                x: ['ci_L', 'ci_R'],
                 filter: 'default',
                 attr: 'logFC',
                 constraint: { attr: 'tissue_study_pretty', names: this.geneService.getTissues() }
@@ -81,6 +79,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 dimension: ['tissue_study_pretty'],
                 group: 'self',
                 type: 'select-menu',
+                title: '',
                 filter: 'default'
             }
         );
@@ -90,6 +89,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 dimension: ['comparison_model_sex'],
                 group: 'self',
                 type: 'select-menu',
+                title: '',
                 filter: 'default'
             }
         );

@@ -31,6 +31,11 @@ export class RowChartViewComponent implements OnInit {
     @Input() chart: any;
     @Input() info: any;
     @Input() label: string;
+    @Input() currentGene = this.geneService.getCurrentGene();
+    @Input() filterTissues = this.geneService.getTissues();
+    @Input() filterModels = this.geneService.getModels();
+    @Input() dim: any;
+    @Input() group: any;
 
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
@@ -60,15 +65,12 @@ export class RowChartViewComponent implements OnInit {
     initChart() {
         let self = this;
         this.info = this.chartService.getChartInfo(this.label)
-        let currentGene = this.geneService.getCurrentGene();
-        let filterTissues = this.geneService.getTissues();
-        let filterModels = this.geneService.getModels();
-        let dim = this.dataService.getDimension(this.label, this.info, currentGene, filterTissues, filterModels);
-        let group = this.dataService.getGroup(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        this.group = this.dataService.getGroup(this.label, this.info);
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scale.linear().domain([this.geneService.ci_L, this.geneService.ci_R]))
+            .x(d3.scale.linear().domain(this.getDomain('logFC')))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
@@ -82,8 +84,8 @@ export class RowChartViewComponent implements OnInit {
             })
             .othersGrouper(null)
             .ordinalColors(['#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704'])
-            .dimension(dim)
-            .group(group)
+            .dimension(this.dim)
+            .group(this.group)
             .transitionDuration(0);
 
         // Add this number of ticks so the x axis don't get cluttered with text
@@ -207,5 +209,16 @@ export class RowChartViewComponent implements OnInit {
 
     displayChart() {
         return {'opacity': (this.display) ? 1 : 0};
+    }
+
+    getDomain(attr: string, altMin?: boolean): number[] {
+        let self = this;
+        let min = (self.dim.bottom(1)[0] && !altMin) ? +self.dim.bottom(1)[0][attr] : 0;
+        let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
+        let margin = (max - min) * 0.05;
+        min -= margin;
+        max += margin;
+
+        return [min, max];
     }
 }

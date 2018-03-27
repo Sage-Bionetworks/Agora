@@ -5,18 +5,16 @@ import { DataService } from './';
 
 import { Gene } from '../../models';
 
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 @Injectable()
 export class GeneService {
     private currentGene: Gene;
+    private currentTissue: string;
+    private currentModel: string;
     private models: string[] = [];
     private tissues: string[] = [];
-
-    // Genes max and min values
-    maxAdjPVal: number = -Infinity;
-    minLogFC: number = +Infinity;
-    maxLogFC: number = -Infinity;
-    ci_L: number = +Infinity;
-    ci_R: number = -Infinity;
 
     constructor(
         private decimalPipe: DecimalPipe,
@@ -33,6 +31,22 @@ export class GeneService {
         return this.currentGene;
     }
 
+    setCurrentTissue(tissue: string) {
+        this.currentTissue = tissue;
+    }
+
+    getCurrentTissue() {
+        return this.currentTissue;
+    }
+
+    setCurrentModel(model: string) {
+        this.currentModel = model;
+    }
+
+    getCurrentModel() {
+        return this.currentModel;
+    }
+
     getTissues(): string[] {
         return this.tissues;
     }
@@ -44,13 +58,7 @@ export class GeneService {
     filterTissuesModels(gene: Gene): Promise<boolean> {
         return new Promise((resolve, reject) => {
             // Don't apply a filter to the dimension here
-            this.dataService.getModelsDim().top(Infinity).filter((g) => {
-                if (+g.logFC > this.maxLogFC) this.maxLogFC = +g.logFC;
-                if (+g.logFC < this.minLogFC) this.minLogFC = +g.logFC;
-                if (+g.neg_log10_adj_P_Val > this.maxAdjPVal) this.maxAdjPVal = +g.neg_log10_adj_P_Val;
-                if (+g.CI_L < this.ci_L) this.ci_L = +g.CI_L;
-                if (+g.CI_R > this.ci_R) this.ci_R = +g.CI_R;
-
+            this.dataService.getGenesDimension().top(Infinity).forEach((g) => {
                 if (g.hgnc_symbol === gene.hgnc_symbol) {
                     this.models.push(g.comparison_model_sex);
                     this.tissues.push(g.tissue_study_pretty);
@@ -62,6 +70,7 @@ export class GeneService {
             this.tissues = this.tissues.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
+            //this.setCurrentTissue(this.tissues[0]);
 
             resolve(true);
         });

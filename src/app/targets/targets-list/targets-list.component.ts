@@ -15,7 +15,8 @@ import { NumbersPipe } from '../../shared/pipes';
 import {
     Message,
     SortEvent,
-    LazyLoadEvent
+    LazyLoadEvent,
+    FilterMetadata
 } from 'primeng/primeng';
 
 
@@ -101,7 +102,7 @@ export class TargetsListComponent implements OnInit {
         });
     }
 
-    loadCarsLazy(event: LazyLoadEvent) {
+    loadGenesLazy(event: LazyLoadEvent) {
         this.loading = true;
 
         //in a real application, make a remote request to load data using state metadata from event
@@ -114,9 +115,15 @@ export class TargetsListComponent implements OnInit {
         //imitate db connection over a network
         setTimeout(() => {
             if (this.datasource) {
-                this.genes = this.datasource.slice(event.first, (event.first + event.rows));
+                if (event.globalFilter) {
+                    this.genes = this.datasource.filter((d) => {
+                        return d.hgnc_symbol.includes(event.globalFilter);
+                    }).slice(event.first, (event.first + event.rows));
+                } else {
+                    this.genes = this.datasource.slice(event.first, (event.first + event.rows));
+                }
                 this.loading = false;
             }
-        }, 500);
+        }, 200);
     }
 }

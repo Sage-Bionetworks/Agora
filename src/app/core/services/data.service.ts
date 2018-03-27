@@ -19,13 +19,14 @@ export class DataService {
     private ndx: any;
     private data: any;
     private tableData: any = [];
-
     private hgncDim: any;
     private tissuesDim: any;
     private modelsDim: any;
 
     private genesCollection: AngularFirestoreCollection<Gene>;
     private dbgenes: Observable<Gene[]>;
+
+    tissuesMap = new Map<string, any>();
 
     constructor(
         private http: HttpClient,
@@ -47,40 +48,35 @@ export class DataService {
             d3.csv('/assets/data/' + fname, (data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
-                    d.logFC = self.decimalPipe.transform(+d.logFC);
-                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val);
-                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr);
+                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
+                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
+                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
-                    d.comparison_model_sex = d.comparison_model_sex;
+                    d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
                 });
 
                 self.ndx = crossfilter(data);
                 self.data = data;
+
                 self.hgncDim = self.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
-                self.tissuesDim = self.ndx.dimension((d) => {
-                    return [d.hgnc_symbol, d.tissue_study_pretty];
-                });
-                self.modelsDim = self.ndx.dimension((d) => {
-                    return [d.hgnc_symbol, d.comparison_model_sex];
-                });
 
                 self.tableData = self.hgncDim.group().reduce(
-                    /* callback for when data is added to the current filter results */
+                    // Callback for when data is added to the current filter results
                     function (p, v) {
                         ++p.count;
                         p.AveExpr += +v.AveExpr;
                         return p;
                     },
-                    /* callback for when data is removed from the current filter results */
+                    // Callback for when data is removed from the current filter results
                     function (p, v) {
                         --p.count;
                         p.AveExpr -= +v.AveExpr;
                         return p;
                     },
-                    /* initialize p */
+                    // Initialize p
                     function () {
                         return {
                             count: 0,
@@ -104,12 +100,8 @@ export class DataService {
         return this.tableData;
     }
 
-    getModelsDim() {
-        return this.modelsDim;
-    }
-
-    getTissuesDim() {
-        return this.tissuesDim;
+    getGenesDimension() {
+        return this.hgncDim;
     }
 
     // Charts crossfilter handling part
@@ -145,8 +137,8 @@ export class DataService {
                     // Binning coordinates into bins such that 1-2 bins per pixel makes
                     // crossfilter operations more efficient, especially with large
                     // datasets
-                    let nXBins = 540;
-                    let nYBins = 335;
+                    let nXBins = 400;
+                    let nYBins = 300;
                     let binWidth = 20 / nXBins;
                     let binHeight = 20 / nYBins;
                     let minLogFC: number = 0.5;
@@ -167,7 +159,6 @@ export class DataService {
                         Math.floor(y / binHeight) * binHeight,
                         d[dimValue[2]]
                     ];
-                    //return [x, y, d[dimValue[2]]];
                 case 'select-menu':
                     if (info.filter) {
                         if (dimValue[0] === 'comparison_model_sex') {
@@ -202,17 +193,13 @@ export class DataService {
             );
         }
         if (info.filter) {
-            if (info.filter === 'default') {
-                group = this.rmEmptyBinsDefault(group)
-            } else if (info.filter === 'custom') {
-                group = this.rmEmptyBinsCustom(group);
-            }
+            group = this.rmEmptyBinsDefault(group);
         }
         info.g = group;
         return info.g;
     }
 
-    // Reduce functions for average
+    // Reduce functions for constraint charts
     reduceAdd(attr: string, constraint?: any) {
         let self = this;
         return function (p, v) {
@@ -259,11 +246,11 @@ export class DataService {
         };
     }
 
-    rmEmptyBinsCustom = (source_group) => {
+    rmEmptyBinsCustom = (source_group, tissue?: string, model?: string) => {
         return {
             all: () => {
                 return source_group.all().filter(function(d) {
-                    // here your condition
+                    // Add your filter condition here
                     return +d.key[0] !== 0 || +d.key[1] !== 0;
                 });
             }
