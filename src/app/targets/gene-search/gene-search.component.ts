@@ -21,6 +21,10 @@ export class GeneSearchComponent implements OnInit {
     @Input() style: any;
     @Input() genes: Gene[];
 
+    private gene: Gene;
+
+    geneId;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -32,12 +36,17 @@ export class GeneSearchComponent implements OnInit {
         this.genes = this.dataService.getTableData();
     }
 
-    viewGene() {
-        let gene = this.geneService.getCurrentGene();
-        if (gene) this.router.navigate(['gene-details', gene.ensembl_gene_id], {relativeTo: this.route});
+    getGeneId() {
+        return this.gene.hgnc_symbol;
     }
 
-    onChange(event: Gene) {
-        this.geneService.setCurrentGene(event);
+    viewGene() {
+        this.gene = this.geneService.getCurrentGene();
+        if (this.gene) this.router.navigate(['gene-details', this.gene.hgnc_symbol], {relativeTo: this.route});
+    }
+
+    onChange(gene: Gene) {
+        this.geneId = gene.hgnc_symbol;
+        this.geneService.setCurrentGene(gene);
     }
 }

@@ -1,22 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { TargetsRoutingModule } from './targets-routing.module';
 import { ChartsModule } from '../charts';
 import { AppSharedModule } from '../shared';
 
-import {
-    SharedModule,
-    PanelModule,
-    ButtonModule,
-    GrowlModule,
-    CardModule,
-    TooltipModule,
-    TabViewModule,
-    FieldsetModule,
-    ProgressBarModule
-} from 'primeng/primeng';
-
+import { SharedModule } from 'primeng/shared';
+import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TabViewModule } from 'primeng/tabview';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 
 import { TargetsViewComponent } from './targets-view';
@@ -39,6 +34,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ],
     imports: [
         CommonModule,
+        FormsModule,
         AppSharedModule.forRoot(),
         TargetsRoutingModule,
         ChartsModule,
@@ -46,12 +42,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
         SharedModule,
         PanelModule,
         ButtonModule,
-        GrowlModule,
         TableModule,
         CardModule,
-        TooltipModule,
         TabViewModule,
-        FieldsetModule,
         ProgressBarModule,
         // Other third party modules
         NgSelectModule

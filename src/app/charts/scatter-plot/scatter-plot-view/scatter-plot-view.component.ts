@@ -12,6 +12,7 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
+//import { scatterPlot } from 'dc';
 import '../../../../scripts/dc-canvas-scatterplot.js';
 
 import { Subscription } from 'rxjs/Subscription';

@@ -19,8 +19,6 @@ import {
     FilterMetadata
 } from 'primeng/primeng';
 
-
-
 @Component({
     selector: 'targets-list',
     templateUrl: './targets-list.component.html',
@@ -29,9 +27,10 @@ import {
 })
 export class TargetsListComponent implements OnInit {
     @Input() genes: Gene[];
-    datasource: Gene[];
 
+    datasource: Gene[];
     msgs: Message[] = [];
+    selectedGene: Gene;
     totalRecords: number;
     cols: any[];
     loading: boolean;
@@ -64,10 +63,10 @@ export class TargetsListComponent implements OnInit {
     onRowSelect(event) {
         this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
         this.geneService.setCurrentGene(event.data);
-        let gene = this.geneService.getCurrentGene();
-        if (gene) {
-            this.geneService.filterTissuesModels(gene).then((status) => {
-                if (status) this.router.navigate(['gene-details', gene.hgnc_symbol], {relativeTo: this.route});
+        this.selectedGene = this.geneService.getCurrentGene();
+        if (this.selectedGene) {
+            this.geneService.filterTissuesModels(this.selectedGene).then((status) => {
+                if (status) this.router.navigate(['gene-details', this.selectedGene.hgnc_symbol], {relativeTo: this.route});
             });
         }
     }

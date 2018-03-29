@@ -17,7 +17,7 @@
                     <div class="row controls-row">
                         <select-menu [promptText]="'All tissues'"
                             [label]="'select-tissue'"
-                            [defaultValue]="geneService.getTissues()[1]">
+                            [defaultValue]="getTissue(1)">
                         </select-menu>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="row">
                         <select-menu [promptText]="'All models'"
                             [label]="'select-model'"
-                            [defaultValue]="geneService.getModels()[1]">
+                            [defaultValue]="getModel(1)">
                         </select-menu>
                     </div>
                 </div>

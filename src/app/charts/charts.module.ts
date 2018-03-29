@@ -10,15 +10,8 @@ import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ChartService } from './services';
 
 import {
-    SharedModule,
-    PanelModule,
-    ButtonModule,
-    GrowlModule,
-    CardModule,
-    TooltipModule,
-    TabViewModule,
-    FieldsetModule
-} from 'primeng/primeng';
+    ButtonModule
+} from 'primeng/button';
 
 @NgModule({
     declarations: [
@@ -30,14 +23,7 @@ import {
         CommonModule,
         AppSharedModule.forRoot(),
         // PrimeNG modules
-        SharedModule,
-        PanelModule,
-        ButtonModule,
-        GrowlModule,
-        CardModule,
-        TooltipModule,
-        TabViewModule,
-        FieldsetModule
+        ButtonModule
     ],
     exports: [
         ScatterPlotViewComponent,

@@ -12,6 +12,7 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
+//import { rowChart } from 'dc';
 
 // Using a d3 v4 function to get all nodes
 d3.selection.prototype['nodes'] = function(){

@@ -8,9 +8,6 @@ import { GeneService, DataService } from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
-import * as d3 from 'd3';
-import * as dc from 'dc';
-
 @Component({
     selector: 'gene-rnaseq-de',
     templateUrl: './gene-rnaseq-de.component.html',
@@ -93,6 +90,14 @@ export class GeneRNASeqDEComponent implements OnInit {
                 filter: 'default'
             }
         );
+    }
+
+    getTissue(index: number) {
+        return this.geneService.getTissues()[index];
+    }
+
+    getModel(index: number) {
+        return this.geneService.getModels()[index];
     }
 
     goToRoute(path: string, outlets?: any) {

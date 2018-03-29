@@ -1,10 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { BaseRequestOptions } from '@angular/http';
 
 import {
     AlertComponent,
@@ -25,7 +22,6 @@ import { NumbersPipe } from './pipes';
     ],
     imports: [
         CommonModule,
-        FormsModule,
         HttpClientModule,
         RouterModule
     ],
@@ -35,7 +31,6 @@ import { NumbersPipe } from './pipes';
         NumbersPipe,
         // Angular modules
         CommonModule,
-        FormsModule,
         HttpClientModule,
         RouterModule
     ]
@@ -46,12 +41,7 @@ export class AppSharedModule {
         return {
             ngModule: AppSharedModule,
             providers: [
-                AlertService,
-
-                // providers used to create fake backend
-                fakeBackendProvider,
-                MockBackend,
-                BaseRequestOptions
+                AlertService
             ]
         };
     }

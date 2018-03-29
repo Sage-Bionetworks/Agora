@@ -14,7 +14,6 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const EvalSourceMapDevToolPlugin = require('webpack/lib/EvalSourceMapDevToolPlugin');
 
-
 /**
  * Webpack configuration
  *
@@ -127,7 +126,7 @@ module.exports = function (options) {
       new LoaderOptionsPlugin({
         debug: true,
         options: { }
-      }),
+      })
 
       // TODO: HMR
     ],

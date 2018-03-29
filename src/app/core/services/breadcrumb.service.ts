@@ -3,7 +3,7 @@ import { Injectable, ContentChild } from '@angular/core';
 import { MenuItem } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/Rx';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class BreadcrumbService {

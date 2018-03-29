@@ -5,10 +5,8 @@ import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../models';
 
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter2';
@@ -23,19 +21,14 @@ export class DataService {
     private tissuesDim: any;
     private modelsDim: any;
 
-    private genesCollection: AngularFirestoreCollection<Gene>;
     private dbgenes: Observable<Gene[]>;
 
     tissuesMap = new Map<string, any>();
 
     constructor(
         private http: HttpClient,
-        private afs: AngularFirestore,
         private decimalPipe: DecimalPipe
-    ) {
-        //this.genesCollection = this.afs.collection('genes'); // reference
-        //this.dbgenes = this.genesCollection.valueChanges(); // observable of genes data
-    }
+    ) {}
 
     getNdx() {
         return this.ndx;

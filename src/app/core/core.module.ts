@@ -7,19 +7,10 @@ import { ChartsModule } from '../charts';
 import { CoreRoutingModule } from './core-routing.module';
 
 // PrimeNG modules
-import {
-    SplitButtonModule,
-    MenuModule,
-    MenubarModule,
-    BreadcrumbModule,
-    PanelModule,
-    DataTableModule,
-    ButtonModule,
-    DataGridModule,
-    SharedModule,
-    GrowlModule,
-    TabViewModule
-} from 'primeng/primeng';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuModule } from 'primeng/menu';
+import { MenubarModule } from 'primeng/menubar';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 import {
     TableModule
@@ -33,7 +24,6 @@ import { environment, ENV_FIREBASE_CONFIG } from 'environments/environment';
 import { AngularFireModule } from 'angularfire2';
 
 export const firebaseConfig = ENV_FIREBASE_CONFIG;
-import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import {
     AuthGuardService,
@@ -63,18 +53,9 @@ import '../../styles/headings.css';
         MenuModule,
         MenubarModule,
         BreadcrumbModule,
-        PanelModule,
-        DataTableModule,
-        ButtonModule,
-        DataGridModule,
-        SharedModule,
-        GrowlModule,
-        TabViewModule,
-        TableModule,
         // Other third-party modules
         NgSelectModule,
         AngularFireModule.initializeApp(firebaseConfig),
-        AngularFirestoreModule.enablePersistence(),
         // Feature Modules
         TargetsModule,
         ChartsModule

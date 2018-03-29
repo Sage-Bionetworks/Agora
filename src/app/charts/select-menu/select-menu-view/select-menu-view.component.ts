@@ -9,6 +9,7 @@ import { GeneService, DataService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
+//import { selectMenu, redrawAll } from 'dc';
 
 @Component({
     selector: 'select-menu',

@@ -18,6 +18,7 @@ const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ngcWebpack = require('ngc-webpack');
 
 const buildUtils = require('./build-utils');
@@ -212,7 +213,6 @@ module.exports = function (options) {
         minChunks: 2
       }),
 
-
       /**
        * Plugin: CopyWebpackPlugin
        * Description: Copy files and directories in webpack.
@@ -309,6 +309,16 @@ module.exports = function (options) {
        * https://github.com/szrenwei/inline-manifest-webpack-plugin
        */
       new InlineManifestWebpackPlugin(),
+
+      /**
+       * Plugin: BundleAnalyzerPlugin
+       * Visualize size of webpack output files with an interactive zoomable treemap
+       *
+       * https://github.com/webpack-contrib/webpack-bundle-analyzer
+       */
+      new BundleAnalyzerPlugin({
+        openAnalyzer: false
+      }),
 
       new ProvidePlugin({
         'dc': 'dc'
