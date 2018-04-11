@@ -26,35 +26,77 @@ Once you have those, you should install these globals with `npm install --global
 * `karma` (`npm install --global karma-cli`)
 * `protractor` (`npm install --global protractor`)
 * `typescript` (`npm install --global typescript`)
+* `cross-env` (`npm install --global cross-env`)
 
 ## Running the app
-After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
 
-### server
+* Local development environment
+
+For local development you'll need the DynamoDB Local (Downloadable Version). You can get it [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html). It is also important to install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) so we can run the commands we need from outside the project. With everything in place you can check your aws installation with:
+
 ```bash
-# development
-npm run server
-# production
-npm run build:prod
-npm run server:prod
-
-# if you're in China use cnpm
-# https://github.com/cnpm/cnpm
+aws --version
 ```
 
-go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser
+To connect to your local DynamoDB open a terminal and navigate to the installation folder. Once inside run the following command:
 
-## Other commands
+```bash
+#change this parameters at will
+java -Xms512m -Xmx4000m -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+```
+
+This will open the database server on port 8000 by default. The `server.js` file is already configured to look for this port on development mode. This project is configured to look for specific tables, so make sure you create them in your local DynamoDB.
+
+* Remote production environment
+
+For deployment you'll need access to an AWS account. You can create one [here](https://aws.amazon.com/free). After creating the account, launch an EC2 instance following this [guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html?icmpid=docs_ec2_console) and install `node` and `npm`. Later we will copy our distribution folder to that EC2 instance. You'll also need to create the tables referenced in this project, so check how to create a table in the AWS console [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SampleData.CreateTables.html).
+
+When you get everything done, create an IAM user with permissions to handle your AWS resources. It is advised not to use a root account key pair. You can follow this guide to create one following this [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html). With the IAM user key pair file in hands you can configure your local aws following [these steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html). Use the same steps for your EC2 instance (launch the instance and `ssh` with a permission file to connect to it), this way when we run the application from the instance we can get to the Amazon resources.
+
+* Summing-up we have:
+
+> Local development using local DynamoDB and the development mode to build and run the app. The database needs to be started and will be listening on port 8000.
+
+> Remote development using tables created through Amazon console in the DynamoDB section. Here we are going to build our app with the production flag and copy the dist folder to the EC2 instance. We need to connect to the instance and run the app from the remote folder.
+
+> If you are planning on running without AWS
+
+Remove the all the config dependencies to AWS in the package.json and within the code.
+
+* Final step
+
+After you have installed all dependencies and got every requirement ready you can run the app. Run `npm run build:dev` and `npm run build:server:dev` to build the files and our server. To run just `npm run start:server` the port will be displayed to you as `http://0.0.0.0:3000`. This will be our express server listening on port 3000 serving our application.
+
+Without AWS you can just `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
 
 ### build files
 ```bash
 # development
 npm run build:dev
+npm run build:server:dev
 # production (jit)
 npm run build:prod
+npm run build:server:prod
 # AoT
 npm run build:aot
+npm run build:server:prod
 ```
+
+### server
+```bash
+# development AWS
+npm run start:server
+# production AWS
+npm run start:server
+# development no AWS
+npm run server
+# production no AWS
+npm run server:prod
+```
+
+go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser
+
+## Other commands
 
 ### hot module replacement
 ```bash
@@ -230,7 +272,7 @@ and logout and login again.
 Because *node.js* is big memory consumer you need 1-2GB RAM or virtual memory to build docker image
 (it was successfully tested on machine with 512MB RAM + 2GB virtual memory - building process take 7min)
 
-Go to main project folder. To build big (~280MB) image which has cached data and is able to **FAST** rebuild  
+Go to main project folder. To build big (~280MB) image which has cached data and is able to **FAST** rebuild
 (this is good for testing or staging environment) type:
 
 `docker build -t angular-starter .`
@@ -255,7 +297,7 @@ And that's all, you can open browser and go to [localhost:8080](localhost:8080).
 
 ### Build and Run image using docker-compose
 
-To create and run docker image on [localhost:8080](localhost:8080) as part of large project you may use **docker-compose**. Type 
+To create and run docker image on [localhost:8080](localhost:8080) as part of large project you may use **docker-compose**. Type
 
 `docker-compose up &`
 

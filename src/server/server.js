@@ -27,7 +27,6 @@ app.use('/api', api);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
-    console.log(path.join(__dirname, './index.html'));
     res.sendFile(path.join(__dirname, './index.html'));
 });
 
