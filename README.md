@@ -341,5 +341,99 @@ starter kit in production on [Netlify](https://www.netlify.com/):
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/AngularClass/angular-starter)
 
+## Style Guide and Project Structure
+
+This project follows the directions provided by the official [angular style guide](https://angular.io/guide/styleguide). Things that the guide state to keep in mind:
+
+* Define components or services that do one thing only, per file. Try to use small sized functions where possible, making it reusable.
+
+* Keep the consistency in file and folder names. Use dashes to separate words in the descriptive prefix name and dots to separate the suffix words. Use the type and extension names in the file name, e.g. `a.component.ts`, `a.service.ts` or `a.module.ts`. The style guide has references about naming the other types of files in an Angular project.
+
+* The guide advises to use a `main.ts` file for boostrapping, we are using the notation `main.browser.ts` since it was modified for different configurations. It is also a reminder that is where the `platform browser` is.
+
+* Use camel case for variable names, even for constants as they are easy to read. If the values don't change, use a const declaration. For Interfaces use an upper camel case, e.g. `MyInterface`.
+
+* The guide advises separating application from third party imports. This projects goes one step further separating imports by source and purpose also, grouping Angular framework, project components and services, third party typescript/javascript libraries separately.
+
+* The folder structure in not restrictive in the style guide, but it should be structured in a way so it is to maintain and expand the project, and identify files in a glance. This project uses a root folder called `src` and one main folder for each module. When a spacific folder reaches seven or more files it is split into sub-folders. Another reason to split is to keep a view smart component with container dumb components as children.
+
+* For the file structure this project uses the component approach. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
+
+```
+angular-starter/
+ ├──config/                        * our configuration
+ |   ├──build-utils.js             * common config and shared functions for prod and dev
+ |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html
+ |   ├──config.dev.json            * config for devevlopment environment
+ |   ├──config.prod.json           * config for production environment
+ │   │                              (note: you can load your own config file, just set the evn ANGULAR_CONF_FILE with the path of your own file)
+ |   ├──helpers.js                 * helper functions for our configuration files
+ |   ├──spec-bundle.js             * ignore this magic that sets up our Angular testing environment
+ |   ├──karma.conf.js              * karma config for our unit tests
+ |   ├──protractor.conf.js         * protractor config for our end-to-end tests
+ │   ├──webpack.common.js          * common tasks for webpack build process shared for dev and prod
+ │   ├──webpack.dev.js             * our development webpack config
+ │   ├──webpack.prod.js            * our production webpack config
+ │   ├──webpack.server.js          * our server webpack config
+ │   └──webpack.test.js            * our testing webpack config
+ │
+ ├──src/                           * our source files that will be compiled to javascript
+ |   ├──main.browser.ts            * our entry file for our browser environment
+ │   │
+ |   ├──index.html                    * Index.html: where we generate our index page
+ │   │
+ |   ├──polyfills.ts                  * our polyfills file
+ │   │
+ │   ├──app/                          * WebApp: folder
+ │   │   ├──charts                    * the charts module main folder, chart specific code
+ │   │   ├   |──charts.module.ts      * the charts module file
+ │   │   ├   |──services              * the core services folder, to be used by different modules
+ │   │   ├   |   |──chart.service.ts  * chart related service, to be used only in this module
+ │   │   ├   |   |──...               * other nested files
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──core                      * the core module main folder, imports the other modules
+ │   │   ├   |──core.module.ts        * the core module file, to be imported once by the app module
+ │   │   ├   |──services              * the core services folder, to be used by different modules
+ │   │   ├   |   |──data.service.ts   * data related service, e.g. loading data into the app
+ │   │   ├   |   |──gene.service.ts   * gene related service, e.g. current selected gene
+ │   │   ├   |   |──...               * other nested files
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──models                    * our interface definitions
+ │   │   ├   |──gene.ts               * the gene interface
+ │   │   ├   |──index.ts              * exports all models
+ │   │   ├──shared                    * our shared module main folder, to be imported by other modules
+ │   │   ├   |──shared.module.ts      * the shared module file
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──genes                     * our genes module main folder
+ │   │   ├   |──genes.module.ts       * the genes module file
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──app.component.spec.ts     * a simple test of components in app.component.ts
+ │   │   ├──app.e2e.ts                * a simple end-to-end test for /
+ │   │   └──app.component.ts          * a simple version of our App component components
+ │   │
+ │   ├──server/                       * the server related code folder
+ │   |   ├──routes/                   * folder with our api routes
+ │   │   ├   |──api.js                * exports the api backend routes, connects to AWS
+ │   |   └──server.js                 * declares our express server and exports it in production mode
+ │   │
+ │   └──assets/                       * static assets are served here
+ │       ├──icon/                     * our list of icons from www.favicon-generator.org
+ │       ├──service-worker.js         * ignore this. Web App service worker that's not complete yet
+ │       ├──robots.txt                * for search engines to crawl your website
+ │       └──humans.txt                * for humans to know who the developers are
+ │
+ │
+ ├──tslint.json                       * typescript lint config
+ ├──typedoc.json                      * typescript documentation generator
+ ├──tsconfig.json                     * typescript config used outside webpack
+ ├──tsconfig.webpack.json             * config that webpack uses for typescript
+ ├──package.json                      * what npm uses to manage its dependencies
+ └──webpack.config.js                 * webpack main configuration file
+```
+
+# Database
+
+DynamoDB was chosen for this project because it is consistent, single-digit millisecond latency at any scale. It is Amazon's key-value NoSQL database, a fully managed cloud database that supports both document and key-value store models. It works great with the `aws-sdk` and is easy to start developing locally and remotelly.
+
 # License
  [MIT](/LICENSE)
