@@ -1,5 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormControl } from '@angular/forms';
+
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/empty'
+import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
 
@@ -20,6 +27,8 @@ export class GeneSearchComponent implements OnInit {
     @Input() styleClass: string = '';
     @Input() style: any;
     @Input() genes: Gene[];
+    queryField: FormControl = new FormControl();
+    results: Gene[] = [];
 
     private gene: Gene;
 
@@ -33,7 +42,25 @@ export class GeneSearchComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.genes = this.dataService.getTableData();
+        //this.genes = this.dataService.getTableData();
+        this.queryField.valueChanges
+            .debounceTime(200)
+            .distinctUntilChanged()
+            .switchMap((query) => {
+                if (query) {
+                    return this.search(query);
+                } else {
+                    this.results = [];
+                    return Observable.empty<Response>();
+                }
+            })
+            .subscribe(data => {
+                this.results = (data['items']) ? <Gene[]>data['items'] : [];
+            })
+    }
+
+    search(queryString: string) {
+        if (queryString) return this.dataService.getGene(queryString);
     }
 
     getGeneId() {

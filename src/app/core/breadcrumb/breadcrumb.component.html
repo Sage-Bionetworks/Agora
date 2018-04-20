@@ -1,10 +1,10 @@
 
 <div class="row main align-items-center" [ngClass]="getGradient()">
-    <div class="col-md-1 menu-col">
+    <!--<div class="col-md-1 menu-col">
         <p-menu #menu popup="popup" [model]="popupItems" [styleClass]="'breadcrumb-menu'"></p-menu>
         <button type="button" pButton icon="fa fa-list" class="dropdown-button" (click)="menu.toggle($event)"></button>
-    </div>
-    <div class="col-md-11">
+    </div>-->
+    <div class="col-md-12">
         <p-breadcrumb [model]="getCrumbs() | async" [home]="home" [styleClass]="'outer-breadcrumb'"></p-breadcrumb>
     </div>
 </div>

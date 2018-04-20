@@ -1,9 +1,10 @@
 import { Injectable, Input } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import { Response } from '@angular/http';
+import { HttpClientModule, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../models';
+
+import { LazyLoadEvent } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
@@ -89,8 +90,23 @@ export class DataService {
         })
     }
 
-    getTableData() {
-        return this.tableData;
+    getTableData(paramsObj?: LazyLoadEvent) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams();
+
+        for (var key in paramsObj) {
+            if (paramsObj.hasOwnProperty(key)) {
+                params = params.append(key, paramsObj[key]);
+            }
+        }
+
+        return this.http.get('/api/genes/page', { headers, params });
+    }
+
+    getGene(id: string) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.http.get('/api/gene/' + id, { headers });
     }
 
     getGenesDimension() {

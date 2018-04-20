@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TargetsRoutingModule } from './targets-routing.module';
 import { ChartsModule } from '../charts';
@@ -35,6 +35,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         AppSharedModule.forRoot(),
         TargetsRoutingModule,
         ChartsModule,

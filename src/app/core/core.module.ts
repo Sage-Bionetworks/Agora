@@ -11,6 +11,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 import {
     TableModule
@@ -36,10 +37,8 @@ import {
 
 import { AboutComponent } from './about';
 import { BreadcrumbComponent } from './breadcrumb';
-import { DashboardComponent } from './dashboard';
 import { NavbarComponent } from './navbar';
 import { NoContentComponent } from './no-content';
-//import { LoginComponent } from './login/login.component';
 
 import '../../styles/styles.scss';
 import '../../styles/headings.css';
@@ -52,6 +51,7 @@ import '../../styles/headings.css';
         SplitButtonModule,
         MenuModule,
         MenubarModule,
+        PanelMenuModule,
         BreadcrumbModule,
         // Other third-party modules
         NgSelectModule,
@@ -61,12 +61,8 @@ import '../../styles/headings.css';
         ChartsModule
     ],
     declarations: [
-        //LoginComponent,
-        //HeaderComponent,
-        //NotFoundComponent,
         AboutComponent,
         BreadcrumbComponent,
-        DashboardComponent,
         NavbarComponent,
         NoContentComponent
     ],

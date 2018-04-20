@@ -1,3 +1,5 @@
+import { Document } from 'mongoose';
+
 export interface Gene {
     comparison_model_sex: string;
     Model: string;
@@ -23,3 +25,5 @@ export interface Gene {
     tissue_study_pretty: string;
     model_sex_pretty: string;
 }
+
+export type GeneDocument = Gene & Document;

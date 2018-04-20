@@ -9,13 +9,18 @@
         Gene Symbol
     </div>
     <div class="row search-row">
-        <ng-select [items]="genes"
-            bindLabel="hgnc_symbol"
-            bindValue="id"
-            [virtualScroll]="true"
-            [(ngModel)]="geneId"
-            (change)="onChange($event)">
-        </ng-select>
+        <section class="filter-wrapper">
+            <div class="keyword-wrapper">
+                <input type="text" [formControl]="queryField" id="keyword" placeholder="Search by gene" autofocus/>
+            </div>
+            <ul class="filter-select">
+                <li *ngFor="let result of results" class="filter-select-list">
+                    <p class="artist-name">
+                        {{result.hgnc_symbol}} - {{result.AveExpr | number:'1.2-5'}}
+                    </p>
+                </li>
+            </ul>
+        </section>
     </div>
     <div class="row small-padding-top">
         <p-button (onClick)="viewGene()" icon="fa fa-fw fa-search" label="View"></p-button>

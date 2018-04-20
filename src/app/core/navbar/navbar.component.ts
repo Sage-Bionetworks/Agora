@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
@@ -15,7 +15,10 @@ import { User } from '../_models';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
+    @ViewChild('micon') menuIcon: ElementRef;
+
     //user: User;
+    popupItems: MenuItem[];
 
     items: MenuItem[];
 
@@ -25,13 +28,32 @@ export class NavbarComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // Returns a user by default
-        //this.user = this.users.getUser();
-        this.items= [{label:'Logout'}];
-
+        this.items = [
+            {
+                label: '',
+                icon: 'my-icon',
+                items: [
+                    {
+                        label: 'Your Profile'
+                    },
+                    {
+                        label: 'Settings',
+                        icon: 'fa-cog'
+                    },
+                    {
+                        label: 'Log Out',
+                        icon: 'fa-sign-out'
+                    }
+                ]
+            }
+        ];
     }
 
     goHome() {
         this.router.navigate(['/']);
+    }
+
+    closeMenu(event: any) {
+        this.menuIcon.nativeElement.classList.toggle('active');
     }
 }

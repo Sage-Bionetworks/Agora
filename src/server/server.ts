@@ -2,16 +2,19 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var cors = require('cors')
-var bodyParser = require('body-parser');
-var events = require('events');
-var path = require('path');
+import * as express from 'express';
+import * as path from 'path';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as events from 'events';
+import * as http from 'http';
 
 // Get our api routes
-var api = require('./routes/api');
+import * as api from './routes/api';
 
-var app = express();
+const debug = require('debug')('wot:server');
+
+const app = express();
 app.use(cors());
 
 //app.use(helmet());
@@ -31,8 +34,8 @@ app.get('*', (req, res) => {
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    let err: any = new Error('Not Found');
     err.status = 404;
     next(err);
 });
@@ -60,15 +63,12 @@ app.use(function(err, req, res, next) {
     });
 });
 
-var debug = require('debug')('wot:server');
-var http = require('http');
-
 // Get port from environment and store in Express
 var port = normalizePort(process.env.npm_package_config_port || '3000');
 app.set('port', port);
 
 // Create HTTP server
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 // Listen on provided port, on all network interfaces
 server.listen(port, () => console.log(`API running on localhost:${port}`));
@@ -127,6 +127,8 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
-if (express().get('env') === 'production') {
+/*if (express().get('env') === 'production') {
     module.exports = app;
-}
+}*/
+
+export = app;

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -8,8 +9,6 @@ import {
 } from 'app/core/services';
 
 import { Gene } from '../../models';
-
-import { DecimalPipe } from '@angular/common';
 import { NumbersPipe } from '../../shared/pipes';
 
 import {
@@ -33,7 +32,7 @@ export class TargetsListComponent implements OnInit {
     selectedGene: Gene;
     totalRecords: number;
     cols: any[];
-    loading: boolean;
+    loading: boolean = true;
     rowGroupMetadata: any;
 
     constructor(
@@ -48,12 +47,6 @@ export class TargetsListComponent implements OnInit {
             { field: 'hgnc_symbol', header: 'Gene' },
             { field: 'AveExpr', header: 'Score' }
         ];
-
-        // USe a promise when doing remotely
-        this.datasource = this.dataService.getTableData();
-        this.totalRecords = this.datasource.length;
-
-        this.loading = true;
     }
 
     getAlignment(i: number, max: number) {
@@ -81,6 +74,7 @@ export class TargetsListComponent implements OnInit {
     }
 
     customSort(event: SortEvent) {
+        console.log('test');
         event.data.sort((data1, data2) => {
             let value1 = data1[event.field];
             let value2 = data2[event.field];
@@ -104,25 +98,24 @@ export class TargetsListComponent implements OnInit {
     loadGenesLazy(event: LazyLoadEvent) {
         this.loading = true;
 
-        //in a real application, make a remote request to load data using state metadata from event
+        // Make a remote request to load data using state metadata from event
         //event.first = First row offset
         //event.rows = Number of rows per page
         //event.sortField = Field name to sort with
         //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
         //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
-        //imitate db connection over a network
-        setTimeout(() => {
-            if (this.datasource) {
-                if (event.globalFilter) {
-                    this.genes = this.datasource.filter((d) => {
-                        return d.hgnc_symbol.includes(event.globalFilter);
-                    }).slice(event.first, (event.first + event.rows));
-                } else {
-                    this.genes = this.datasource.slice(event.first, (event.first + event.rows));
-                }
-                this.loading = false;
-            }
-        }, 200);
+        console.log(event);
+
+        // Use a promise when doing remotely
+        //this.datasource = this.dataService.getTableData();
+        this.dataService.getTableData(event).subscribe(data => {
+            console.log(data);
+            this.datasource = (data['items']) ? <Gene[]>data['items'] : [];
+            this.genes = this.datasource;
+            console.log(data['totalRecords']);
+            this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
+            this.loading = false;
+        });
     }
 }

@@ -43,7 +43,7 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData">
                     <td *ngFor="let col of columns; let i = index;" [ngStyle]="{'text-align': getAlignment(i, cols.length-1)}">
-                        {{isNaN(rowData[col.field]) ? rowData[col.field] : (rowData[col.field] | number:'1.2-2')}}
+                        {{isNaN(rowData[col.field]) ? rowData[col.field] : (rowData[col.field] | number:'1.2-5')}}
                     </td>
                 </tr>
             </ng-template>

@@ -19,6 +19,13 @@
 @import "../assets/css/common/global";
 @import "../assets/css/common/components";
 
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
+}
+
 // 5. Custom Global Styles
 body {
     background: #EAEDF2;
@@ -39,97 +46,11 @@ html {
 }
 
 a {
-    color: black;
+    color: white;
 }
 
 a:hover {
     text-decoration: underline;
-}
-
-/* Dropdown */
-
-.ui-button-text-only .ui-button-text {
-    padding: none;
-}
-
-.ui-menu {
-    font-family: "Open Sans";
-}
-
-.ui-menu.ui-menu-dynamic {
-    display: none;
-    z-index: 100000;
-    background: rgb(46, 46, 46)!important;
-    border: rgb(66, 66, 66)!important;
-    font-family: "Open Sans";
-    opacity: .90;
-    position: absolute;
-    color: white;
-    min-width: 400px;
-    margin: 0;
-    padding: 20%;
-}
-
-.ui-menu.ui-menu-dynamic a:hover {
-    background: rgb(46, 46, 46)!important;
-    border: none;
-}
-
-.ui-menu .ui-menu-list .ui-widget-header {
-    clear: both;
-    float: left;
-    width: 100%;
-    /* margin: .125em 0; */
-    padding: .25em .5em;
-    background: none;
-    align-items: middle;
-    color: white;
-    border: none;
-    padding-top: 13px;
-    opacity: .97;
-}
-
-.ui-dialog.ui-widget .ui-dialog-titlebar .ui-dialog-title {
-    font-family: "Montserrat";
-}
-
-.ui-widget-header .ui-button,
-.ui-widget-content .ui-button,
-.ui-widget.ui-button,
-.ui-button {
-    margin: 0 auto;
-    font-family: "Open Sans";
-}
-
-.kebab-menu {
-    display: block;
-    top: 0px;
-    left: 531.109px;
-    /* opacity: 1.076; */
-    padding: 12px !important;
-    font-size: 10px;
-    width: 150px !important;
-    opacity: 0.95;
-  }
-
-  .kebab-menu .ui-menu.ui-menu-dynamic {
-    display: none !important;
-  }
-
-  .kebab-indicator .fa {
-    color: #3a3a3a;
-    font-size: 16px;
-    margin-left: -3px;
-    background: #e8e8e8;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-right: 4px;
-    padding-left: 4px;
-    margin-top: -40px;
-    border-style: solid;
-    border: 3px;
-    border-color: black;
-    box-shadow: 1px 1px #a8a8a8;
 }
 
 .no-gutters {

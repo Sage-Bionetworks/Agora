@@ -61,13 +61,13 @@ When you get everything done, create an IAM user with permissions to handle your
 
 > If you are planning on running without AWS
 
-Remove the all the config dependencies to AWS in the package.json and within the code.
+To clean all AWS references, uninstall all the package dependencies related to AWS in the package.json and remove the references within the code.
 
 * Final step
 
-After you have installed all dependencies and got every requirement ready you can run the app. Run `npm run build:dev` and `npm run build:server:dev` to build the files and our server. To run just `npm run start:server` the port will be displayed to you as `http://0.0.0.0:3000`. This will be our express server listening on port 3000 serving our application.
+After you have installed all dependencies and got every requirement ready you can run the app. Run `npm run build:dev` and `npm run build:server:dev` to build the files and our server. To run just `npm run server` the port will be displayed to you as `http://0.0.0.0:3000`. This will be our express server listening on port 3000 serving our application. The client configuration run webpack with the `--watch` flag, so any change to the `src/` folder (except the `src/server` folder) will rebuild the application. The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server`, it will reload if you change files in the `src/server` folder.
 
-Without AWS you can just `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
+Without AWS you can just `npm run server:dev` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
 
 ### build files
 ```bash
@@ -162,7 +162,33 @@ For example to use Bootstrap as an external stylesheet:
 1) Create a `styles.scss` file (name doesn't matter) in the `src/styles` directory.
 2) `npm install` the version of Boostrap you want.
 3) In `styles.scss` add `@import 'bootstrap/scss/bootstrap.scss';`
-4) In `src/app/app.module.ts` add underneath the other import statements: `import '../styles/styles.scss';`
+4) In `src/app/core/core.module.ts` add underneath the other import statements: `import '../styles/styles.scss';`
+
+Since we are using PrimeNG, style rules might not be applied to nested Angular children components. There are two ways to solve this issue enforce style scoping:
+
+* Special Selectors
+
+You can keep the Shadow DOM (emulated browser encapsulation) and still apply rules from third party libraries to nested children with this approach. This is the recommended way, but it is harder to implement in certain scenarios.
+
+```bash
+:host /deep/ .ui-paginator-bottom {
+    display: none;
+}
+```
+
+* Disable View Encapsulation
+
+This is the easiest way to apply nested style rules, just go to the component and turn off the encapsulation. This way the rules are passed from parent to children without problems, but any rule created in one component affects the other components. This project uses this approach, so be aware to create style classes with using names related to the current component only.
+
+```bash
+...
+import { ..., ViewEncapsulation } from '@angular/core';
+
+@Component {
+...
+encapsulation: ViewEncapsulation.None,
+}
+```
 
 # TypeScript
 > To take full advantage of TypeScript with autocomplete you would have to install it globally and use an editor with the correct TypeScript plugins.
