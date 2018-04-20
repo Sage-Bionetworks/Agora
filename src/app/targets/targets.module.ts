@@ -21,8 +21,6 @@ import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 
-import { NgSelectModule } from '@ng-select/ng-select';
-
 @NgModule({
     declarations: [
         TargetsViewComponent,
@@ -46,9 +44,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
         TableModule,
         CardModule,
         TabViewModule,
-        ProgressBarModule,
-        // Other third party modules
-        NgSelectModule
+        ProgressBarModule
     ]
 })
 // Changed the name so it does not conflict with primeng module

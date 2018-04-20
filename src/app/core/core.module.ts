@@ -17,9 +17,6 @@ import {
     TableModule
 } from 'primeng/table';
 
-// Other third-party modules
-import { NgSelectModule } from '@ng-select/ng-select';
-
 // Backend modules and extra config
 import { environment, ENV_FIREBASE_CONFIG } from 'environments/environment';
 import { AngularFireModule } from 'angularfire2';
@@ -54,7 +51,6 @@ import '../../styles/headings.css';
         PanelMenuModule,
         BreadcrumbModule,
         // Other third-party modules
-        NgSelectModule,
         AngularFireModule.initializeApp(firebaseConfig),
         // Feature Modules
         TargetsModule,
