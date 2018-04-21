@@ -14,7 +14,7 @@
                 <input type="text" [formControl]="queryField" id="keyword" placeholder="Search by gene" autofocus/>
             </div>
             <ul class="filter-select">
-                <li *ngFor="let result of results" class="filter-select-list">
+                <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
                     <p class="artist-name">
                         {{result.hgnc_symbol}} - {{result.AveExpr | number:'1.2-5'}}
                     </p>

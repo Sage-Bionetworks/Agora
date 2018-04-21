@@ -6,6 +6,12 @@
         "noImplicitAny": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "downlevelIteration": true,
+        "importHelpers": true,
+        "lib": [
+            "es7",
+            "es2015.iterable"
+        ],
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",

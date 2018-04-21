@@ -103,6 +103,12 @@ export class DataService {
         return this.http.get('/api/genes/page', { headers, params });
     }
 
+    getGenesMatchId(id: string) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.http.get('/api/genes/' + id, { headers });
+    }
+
     getGene(id: string) {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 

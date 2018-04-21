@@ -44,7 +44,7 @@ export class GeneSearchComponent implements OnInit {
     ngOnInit() {
         //this.genes = this.dataService.getTableData();
         this.queryField.valueChanges
-            .debounceTime(200)
+            .debounceTime(300)
             .distinctUntilChanged()
             .switchMap((query) => {
                 if (query) {
@@ -60,20 +60,17 @@ export class GeneSearchComponent implements OnInit {
     }
 
     search(queryString: string) {
-        if (queryString) return this.dataService.getGene(queryString);
+        if (queryString) return this.dataService.getGenesMatchId(queryString);
     }
 
     getGeneId() {
         return this.gene.hgnc_symbol;
     }
 
-    viewGene() {
-        this.gene = this.geneService.getCurrentGene();
-        if (this.gene) this.router.navigate(['gene-details', this.gene.hgnc_symbol], {relativeTo: this.route});
-    }
-
-    onChange(gene: Gene) {
-        this.geneId = gene.hgnc_symbol;
+    viewGene(gene: Gene) {
         this.geneService.setCurrentGene(gene);
+        this.geneId = gene.hgnc_symbol;
+        this.gene = gene;
+        if (this.gene) this.router.navigate(['gene-details', this.gene.hgnc_symbol], {relativeTo: this.route});
     }
 }
