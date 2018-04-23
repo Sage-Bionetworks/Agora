@@ -17,7 +17,6 @@ import colorbrewer from 'colorbrewer';
 export class DataService {
     private ndx: any;
     private data: any;
-    private tableData: any = [];
     private hgncDim: any;
     private tissuesDim: any;
     private modelsDim: any;
@@ -33,6 +32,37 @@ export class DataService {
 
     getNdx() {
         return this.ndx;
+    }
+
+    loadGenes(): Promise<boolean> {
+        let self = this;
+        return new Promise((resolve, reject) => {
+            let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            let params = new HttpParams();
+
+            // Get all the genes to render the charts
+            this.http.get('/api/genes', { headers, params }).subscribe((data) => {
+                console.log(data);
+                data['items'].forEach((d) => {
+                    // Separate the columns we need
+                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
+                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
+                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
+                    d.hgnc_symbol = d.hgnc_symbol;
+                    d.comparison_model_sex = d.comparison_model_sex_pretty;
+                    d.tissue_study_pretty = d.tissue_study_pretty;
+                });
+
+                self.ndx = crossfilter(data['items']);
+                self.data = data['items'];
+
+                self.hgncDim = self.ndx.dimension((d) => {
+                    return d.hgnc_symbol;
+                });
+
+                resolve(true);
+            });
+        })
     }
 
     loadGenesFile(fname: string): Promise<boolean> {
@@ -57,35 +87,7 @@ export class DataService {
                     return d.hgnc_symbol;
                 });
 
-                self.tableData = self.hgncDim.group().reduce(
-                    // Callback for when data is added to the current filter results
-                    function (p, v) {
-                        ++p.count;
-                        p.AveExpr += +v.AveExpr;
-                        return p;
-                    },
-                    // Callback for when data is removed from the current filter results
-                    function (p, v) {
-                        --p.count;
-                        p.AveExpr -= +v.AveExpr;
-                        return p;
-                    },
-                    // Initialize p
-                    function () {
-                        return {
-                            count: 0,
-                            AveExpr: 0
-                        };
-                    }
-                ).top(Infinity).map((te) => {
-                    return <Gene>{ hgnc_symbol: te.key, AveExpr: te.value.AveExpr }
-                });
-
-                if (self.tableData) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
+                resolve(true);
             });
         })
     }

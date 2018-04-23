@@ -1,0 +1,43 @@
+.rnaseq-panel {
+    width: 100%;
+
+    .ui-panel-titlebar {
+        background: #2AB7E6;
+        color: white;
+    }
+
+    .ui-panel-content-wrapper {
+        height: 100%;
+
+        .ui-panel-content {
+            height: 100%;
+        }
+    }
+
+    > .ui-panel.ui-widget {
+        height: 100%;
+    }
+}
+
+.small-margin-right {
+    margin-right: 1%;
+}
+
+.container-row {
+    margin-top: 10px;
+    height: 90%;
+}
+
+.chart-header {
+    margin-bottom: 0px;
+}
+
+.chart-selects-row {
+    height: 20%;
+    width: 100%;
+}
+
+.chart-container-row {
+    height: 80%;
+    width: 100%;
+}

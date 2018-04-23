@@ -58,19 +58,23 @@ export class GeneService {
     filterTissuesModels(gene: Gene): Promise<boolean> {
         return new Promise((resolve, reject) => {
             // Don't apply a filter to the dimension here
+            if (this.models.length) this.models = [];
+            if (this.tissues.length) this.tissues = [];
             this.dataService.getGenesDimension().top(Infinity).forEach((g) => {
                 if (g.hgnc_symbol === gene.hgnc_symbol) {
                     this.models.push(g.comparison_model_sex);
                     this.tissues.push(g.tissue_study_pretty);
                 }
             });
+
             this.models = this.models.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
             this.tissues = this.tissues.filter((value, index, array) => {
                 return array.indexOf(value) === index;
             });
-            //this.setCurrentTissue(this.tissues[0]);
+            console.log(this.tissues);
+            console.log(this.models);
 
             resolve(true);
         });

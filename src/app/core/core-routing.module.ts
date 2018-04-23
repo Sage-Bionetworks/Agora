@@ -5,9 +5,9 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
 const routes: Routes = [
-    { path: 'targets', loadChildren: '../targets#TargetsModule'},
+    { path: 'genes', loadChildren: '../genes#GenesModule'},
     { path: 'about', component: AboutComponent },
-    { path: '', redirectTo: '/targets', pathMatch: 'full' },
+    { path: '', redirectTo: '/genes', pathMatch: 'full' },
     { path: '**',    component: NoContentComponent }
 ];
 

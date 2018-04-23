@@ -64,16 +64,6 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         this.group = this.dataService.getGroup(this.label, this.info);
         this.title = this.info.title;
 
-        //console.log(this.dataService.maxNegLogAdjPVal);
-        // Create a symbol scale based on d3 types, then make the accessor
-        // return two different types
-        /*let symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
-        let symbolAccessor = <any>function(d) {
-            return symbolScale(
-                (d.key[2] === currentGene.hgnc_symbol) ? '1' : '0'
-            )
-        };*/
-
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
@@ -88,7 +78,6 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
             .brushOn(false)
             .mouseZoomable(true)
             .zoomOutRestrict(false)
-            //.transitionDuration(0)
             .dimension(this.dim)
             .group(this.group)
             .keyAccessor((d) => {
@@ -106,40 +95,18 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
                 }
             })
             .on('preRender', (chart) => {
-                /*chart
-                    .x(d3.scale.linear().domain(this.getDomain('logFC')))
-                    .y(d3.scale.linear().domain(self.getDomain('neg_log10_adj_P_Val', true)));*/
-
                 chart.rescale();
             })
             .on('preRedraw', (chart) => {
-                /*chart
-                    .x(d3.scale.linear().domain(this.getDomain('logFC')))
-                    .y(d3.scale.linear().domain(self.getDomain('neg_log10_adj_P_Val', true)));*/
-
                 chart.rescale();
             });
-            //.elasticY(true);
-            //.symbol(symbolAccessor)
-            //.symbolSize(7)
-            //.highlightedSize(15)
-            /*.renderTitle(true)
-            .title(function (p) {
-                return [
-                    'Log Fold Change: ' + self.decimalPipe.transform(+p.key[0]),
-                    '-log10(Adjusted p-value): ' + self.decimalPipe.transform(+p.key[1])
-                ].join('\n');
-            })*/
-
-        // Separate this call so we can get the correct chart reference below
-        //this.chart.yAxis().tickFormat(function(d) { return d3.format('.2f')(d); });
 
         this.chart.render();
     }
 
     getDomain(attr: string, altMin?: boolean): number[] {
         let self = this;
-        let min = (self.dim.bottom(1)[0] && !altMin) ? +self.dim.bottom(1)[0][attr] : 0;
+        let min = (self.dim.top(1)[0] && !altMin) ? -(+self.dim.top(1)[0][attr]) : 0;
         let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
         let margin = (max - min) * 0.05;
         min -= margin;

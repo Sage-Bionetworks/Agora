@@ -1,0 +1,48 @@
+<div class="row no-gutters small-padding-top" [ngStyle]="style">
+    <p-panel [ngClass]="styleClass">
+        <p-header>
+            <div class="ui-helper-clearfix test">
+                <span class="ui-panel-title small-margin-right" style="font-size:16px;display:inline-block;margin-top:2px">RNA-Seq Differential Expression</span>
+                <i class="fa fa-question-circle" rel="tooltip" title="Differential gene expression of target genes."></i>
+            </div>
+        </p-header>
+        <div class="container" style="height: 100%;">
+            <div class="row container-row">
+                <div class="col-md-4 chart-selects-row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Tissue</h2>
+                        </div>
+                    </div>
+                    <div class="row controls-row">
+                        <select-menu [promptText]="'All tissues'"
+                            [label]="'select-tissue'"
+                            [defaultValue]="getTissue(1)">
+                        </select-menu>
+                    </div>
+                </div>
+                <div class="col-md-8 chart-selects-row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Model</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <select-menu [promptText]="'All models'"
+                            [label]="'select-model'"
+                            [defaultValue]="getModel(1)">
+                        </select-menu>
+                    </div>
+                </div>
+                <div class="row chart-container-row">
+                    <div class="col-md-7">
+                        <router-outlet name="left-chart"></router-outlet>
+                    </div>
+                    <div class="col-md-5">
+                        <router-outlet name="right-chart"></router-outlet>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div>

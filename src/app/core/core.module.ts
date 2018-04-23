@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 
-import { TargetsModule } from '../targets';
+import { GenesModule } from '../genes';
 import { ChartsModule } from '../charts';
 
 import { CoreRoutingModule } from './core-routing.module';
@@ -53,7 +53,7 @@ import '../../styles/headings.css';
         // Other third-party modules
         AngularFireModule.initializeApp(firebaseConfig),
         // Feature Modules
-        TargetsModule,
+        GenesModule,
         ChartsModule
     ],
     declarations: [

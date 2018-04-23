@@ -30,7 +30,7 @@ module.exports = {
             verbose: true,
 
             // Node arguments.
-            nodeArgs: [ '--inspect=9222' ]
+            nodeArgs: [ '--inspect=9222', '--max_old_space_size=10000' ]
         }),
     ],
     target: 'node',

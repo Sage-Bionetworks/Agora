@@ -1,0 +1,23 @@
+<div *ngIf="dataLoaded" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-overview [id]="id" [gene]="gene" [style]="{'height':'50vh'}"></gene-overview>
+        </div>
+    </div>
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <gene-rnaseq-de
+                [id]="id"
+                [gene]="gene"
+                [style]="{'height': '75vh'}">
+            </gene-rnaseq-de>
+        </div>
+    </div>
+</div>
+<div *ngIf="!dataLoaded" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <p-progressBar mode="indeterminate"></p-progressBar>
+        </div>
+    </div>
+</div>

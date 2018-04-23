@@ -1,0 +1,37 @@
+<div class="row no-gutters small-padding-top" [ngStyle]="style">
+    <p-panel [ngClass]="styleClass">
+        <p-header>
+            <div class="ui-helper-clearfix test">
+                <span class="ui-panel-title small-margin-right" style="font-size:16px;display:inline-block;margin-top:2px">Target Overview</span>
+                <i class="fa fa-question-circle" rel="tooltip" title="Annotations associated with this gene from Gene Ontology."></i>
+            </div>
+        </p-header>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>
+                    <a class="light-blue-anchor" href="https://www.genenames.org/cgi-bin/gene_search?search={{gene.hgnc_symbol}}">
+                        {{gene.hgnc_symbol}}
+                    </a>
+                </h3>
+                <h4>
+                    <a class="light-blue-anchor" href="https://www.genenames.org/cgi-bin/gene_search?search={{gene.ensembl_gene_id}}">
+                        {{gene.ensembl_gene_id}}
+                    </a>
+                </h4>
+                <p-card [ngClass]="'summary-panel'" title="Summary">
+                    Add content
+                </p-card>
+            </div>
+            <div class="col-md-4">
+                <h3>
+                    Gene Ontology
+                </h3>
+            </div>
+            <div class="col-md-4">
+                <h3>
+                    Reactome Pathways
+                </h3>
+            </div>
+        </div>
+    </p-panel>
+</div>
