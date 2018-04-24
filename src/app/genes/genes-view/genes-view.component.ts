@@ -9,7 +9,7 @@ import { GeneService } from '../../core/services';
 import * as d3 from 'd3';
 
 @Component({
-    selector: 'targets-view',
+    selector: 'genes-view',
     templateUrl: './genes-view.component.html',
     styleUrls: [ './genes-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
@@ -27,7 +27,7 @@ export class GenesViewComponent implements OnInit {
 
     ngOnInit() {
         this.breadcrumb.setCrumbs([
-            { label: 'TARGETS', routerLink: ['/targets'] }
+            { label: 'GENES', routerLink: ['/genes'] }
         ]);
     }
 

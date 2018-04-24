@@ -136,8 +136,6 @@ router.get('/genes/:id', function (req, res, next) {
     genesById.forEach(g => {
         if (g.hgnc_symbol.includes(req.params.id.trim().toUpperCase())) {
             // Do not use a shallow copy here
-            console.log('passed');
-            console.log(JSON.parse(JSON.stringify(g)));
             genes.push(JSON.parse(JSON.stringify(g)));
         }
     });

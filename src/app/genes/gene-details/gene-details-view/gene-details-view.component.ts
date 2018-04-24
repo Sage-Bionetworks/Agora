@@ -38,7 +38,7 @@ export class GeneDetailsViewComponent implements OnInit {
 
         // Crumb logic after getting the current gene
         let crumbs = [
-            { label: 'TARGETS', routerLink: ['/genes'] }
+            { label: 'GENES', routerLink: ['/genes'] }
         ];
         if (!this.gene) {
             this.router.navigate(['/genes']);

@@ -25,6 +25,7 @@ Once you have those, you should install these globals with `npm install --global
 * `webpack-dev-server` (`npm install --global webpack-dev-server`)
 * `karma` (`npm install --global karma-cli`)
 * `protractor` (`npm install --global protractor`)
+* `rimraf` {`npm install --global rimraf`}
 * `typescript` (`npm install --global typescript`)
 * `cross-env` (`npm install --global cross-env`)
 
@@ -32,26 +33,54 @@ Once you have those, you should install these globals with `npm install --global
 
 * Local development environment
 
-For local development you'll need the DynamoDB Local (Downloadable Version). You can get it [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html). It is also important to install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) so we can run the commands we need from outside the project. With everything in place you can check your aws installation with:
+For local development you'll need the DynamoDB Local (Downloadable Version). For a guid on how to install MongoDB, go to [this link](https://docs.mongodb.com/manual/administration/install-community/). On Windows, you can get it from the following Download Center link [here](https://www.mongodb.com/download-center?_ga=2.62089900.1820272119.1524602800-952612734.1523898940&_gac=1.79428326.1523898940.CjwKCAjwk9HWBRApEiwA6mKWacqRgoYOQ4ayn_M_ol5d5C7yy0aTEbZjKsersvLRfXJAozzJyqu29RoClFoQAvD_BwE#production).
+
+After you downloaded it, go to the root of your `C` drive and create a `data` folder. After that, `cd` into the `data` folder and make a new folder called `db`.
+Mongo knows to go to this folder automatically to retrieve and store data. To run MongoDB, you need to start the process at the installation location, e.g. go to:
 
 ```bash
-aws --version
+C:\\Users\\YOUR_USER>cd "C:\Program Files\MongoDB\Server\3.6\bin"
+
+C:\\Program Files\\MongoDB\\Server\\3.6\\bin>mongod
 ```
 
-To connect to your local DynamoDB open a terminal and navigate to the installation folder. Once inside run the following command:
+You should see a connection to port `27017` (MongoDB default port). You can also specify an alternate path and port for this. The connection itself will come from
+our Express server through Mongoose (a framework that allows us to define objects with a strongly-typed schema that is mapped to a MongoDB document).
 
 ```bash
-#change this parameters at will
-java -Xms512m -Xmx4000m -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+[initandlisten] waiting for connections on port 27017
 ```
 
-This will open the database server on port 8000 by default. The `server.js` file is already configured to look for this port on development mode. This project is configured to look for specific tables, so make sure you create them in your local DynamoDB.
+If you also installed MongoDB Compass along with the main installation (a GUI to manage your MongoDB databases), just open it and connect to your localhost (use the default values). You'll notice a few connections opened in the cmd prompt with the database running (the one open with MongoDB listening on port `27017`). You should see something like:
+
+```bash
+[listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
+```
+
+Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it is time to load
+the data into our collection. Download the complete genes data from Synapse repository [here](https://www.synapse.org/#!Synapse:syn11318688). Install a global Node package to convert the `csv` to `json`:
+
+```bash
+$ npm i -g csvtojson
+```
+
+Navigate to the folder with the complete data and issue the following command:
+
+```bash
+$ csvtojson data.csv > data.json
+```
+
+Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following command:
+
+```bash
+mongoimport --db walloftargets --collection genes --drop --file "C:\PATH\TO\FILE\data.json"
+```
+
+We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
 
 * Remote production environment
 
-For deployment you'll need access to an AWS account. You can create one [here](https://aws.amazon.com/free). After creating the account, launch an EC2 instance following this [guide](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html?icmpid=docs_ec2_console) and install `node` and `npm`. Later we will copy our distribution folder to that EC2 instance. You'll also need to create the tables referenced in this project, so check how to create a table in the AWS console [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SampleData.CreateTables.html).
-
-When you get everything done, create an IAM user with permissions to handle your AWS resources. It is advised not to use a root account key pair. You can follow this guide to create one following this [guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html). With the IAM user key pair file in hands you can configure your local aws following [these steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html). Use the same steps for your EC2 instance (launch the instance and `ssh` with a permission file to connect to it), this way when we run the application from the instance we can get to the Amazon resources.
+To be added.
 
 * Summing-up we have:
 
@@ -65,33 +94,40 @@ To clean all AWS references, uninstall all the package dependencies related to A
 
 * Final step
 
-After you have installed all dependencies and got every requirement ready you can run the app. Run `npm run build:dev` and `npm run build:server:dev` to build the files and our server. To run just `npm run server` the port will be displayed to you as `http://0.0.0.0:3000`. This will be our express server listening on port 3000 serving our application. The client configuration run webpack with the `--watch` flag, so any change to the `src/` folder (except the `src/server` folder) will rebuild the application. The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server`, it will reload if you change files in the `src/server` folder.
+After you have installed all dependencies and got every requirement ready you can run the app. Open the project in an IDE or navigate to the root project folder and, in a terminal opened in that folder, you can run:
 
-Without AWS you can just `npm run server:dev` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
+```bash
+npm run build:dev
+```
+
+This builds the client-side of the application. The client configuration run webpack with the `--watch` flag, so any change to the `src/` folder (except the `src/server` folder) will rebuild the application. Leave that terminal open and open another one. In the second one you can issue our second command to get the server up and running.
+
+```bash
+npm start
+```
+
+The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server` or `npm start`, it will reload if you change files in the `src/server` folder.
+
+At the moment, you need to reload the page after changing the files on the client-side. You don't need to stop the server when doing this because they use different packaging pipes. You need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+
+The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so the MongoDB will not crash**.
 
 ### build files
 ```bash
 # development
 npm run build:dev
-npm run build:server:dev
 # production (jit)
 npm run build:prod
-npm run build:server:prod
 # AoT
 npm run build:aot
-npm run build:server:prod
 ```
 
 ### server
 ```bash
-# development AWS
-npm run start:server
-# production AWS
-npm run start:server
-# development no AWS
-npm run server
-# production no AWS
-npm run server:prod
+# development
+npm start
+# production
+npm run build:server:prod
 ```
 
 go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser
@@ -135,11 +171,6 @@ npm run ci
 ### run Protractor's elementExplorer (for end-to-end)
 ```bash
 npm run e2e:live
-```
-
-### build Docker
-```bash
-npm run build:docker
 ```
 
 # Configuration
@@ -261,111 +292,6 @@ import * as _ from 'lodash';
 ```
 
 # Deployment
-
-## Docker
-
-To run project you only need host machine with **operating system** with installed **git** (to clone this repo)
-and [docker](https://www.docker.com/) and thats all - any other software is not needed
-(other software like node.js etc. will be automatically downloaded and installed inside docker container during build step based on dockerfile).
-
-### Install docker
-
-#### MacOS:
-
-`brew cask install docker`
-
-And run docker by Mac bottom menu> launchpad > docker (on first run docker will ask you about password)
-
-#### Ubuntu:
-
-```
-sudo apt-get update
-sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
-sudo apt-get update
-apt-cache policy docker-engine
-sudo apt-get install -y docker-engine
-sudo systemctl status docker  # test:  shoud be ‘active’
-```
-And add your user to docker group (to avoid `sudo` before using `docker` command in future):
-```
-sudo usermod -aG docker $(whoami)
-```
-and logout and login again.
-
-### Build image
-
-Because *node.js* is big memory consumer you need 1-2GB RAM or virtual memory to build docker image
-(it was successfully tested on machine with 512MB RAM + 2GB virtual memory - building process take 7min)
-
-Go to main project folder. To build big (~280MB) image which has cached data and is able to **FAST** rebuild
-(this is good for testing or staging environment) type:
-
-`docker build -t angular-starter .`
-
-To build **SMALL** (~20MB) image without cache (so each rebuild will take the same amount of time as first build)
-(this is good for production environment) type:
-
-`docker build --squash="true" -t angular-starter .`
-
-The **angular-starter** name used in above commands is only example image name.
-To remove intermediate images created by docker on build process, type:
-
-`docker rmi -f $(docker images -f "dangling=true" -q)`
-
-### Run image
-
-To run created docker image on [localhost:8080](localhost:8080) type (parameter `-p 8080:80` is host:container port mapping)
-
-`docker run --name angular-starter -p 8080:80 angular-starter &`
-
-And that's all, you can open browser and go to [localhost:8080](localhost:8080).
-
-### Build and Run image using docker-compose
-
-To create and run docker image on [localhost:8080](localhost:8080) as part of large project you may use **docker-compose**. Type
-
-`docker-compose up &`
-
-And that's all, you can open browser and go to [localhost:8080](localhost:8080).
-
-
-### Run image on sub-domain
-
-If you want to run image as virtual-host on sub-domain you must setup [proxy](https://github.com/jwilder/nginx-proxy)
-. You should install proxy and set sub-domain in this way:
-
- ```
- docker pull jwilder/nginx-proxy:alpine
- docker run -d -p 80:80 --name nginx-proxy -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy:alpine
- ```
-
- And in your `/etc/hosts` file (linux) add line: `127.0.0.1 angular-starter.your-domain.com` or in yor hosting add
- folowing DNS record (wildchar `*` is handy because when you add new sub-domain in future, you don't need to touch/add any DNS record)
-
- ```
- Type: CNAME
- Hostname: *.your-domain.com
- Direct to: your-domain.com
- TTL(sec): 43200
- ```
-
-And now you are ready to run image on subdomain by:
-
-```
-docker run -e VIRTUAL_HOST=angular-starter.your-domain.com --name angular-starter angular-starter &
-```
-
-### Login into docker container
-
-`docker exec -t -i angular-starter /bin/bash`
-
-## Netlify
-
-You can quickly create a free site to get started using this
-starter kit in production on [Netlify](https://www.netlify.com/):
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/AngularClass/angular-starter)
 
 ## Style Guide and Project Structure
 
