@@ -33,7 +33,7 @@ Once you have those, you should install these globals with `npm install --global
 
 * Local development environment
 
-For local development you'll need the DynamoDB Local (Downloadable Version). For a guid on how to install MongoDB, go to [this link](https://docs.mongodb.com/manual/administration/install-community/). On Windows, you can get it from the following Download Center link [here](https://www.mongodb.com/download-center?_ga=2.62089900.1820272119.1524602800-952612734.1523898940&_gac=1.79428326.1523898940.CjwKCAjwk9HWBRApEiwA6mKWacqRgoYOQ4ayn_M_ol5d5C7yy0aTEbZjKsersvLRfXJAozzJyqu29RoClFoQAvD_BwE#production).
+For local development you'll need the MongoDB Local (Downloadable Version). For a guid on how to install MongoDB, go to [this link](https://docs.mongodb.com/manual/administration/install-community/). On Windows, you can get it from the following Download Center link [here](https://www.mongodb.com/download-center?_ga=2.62089900.1820272119.1524602800-952612734.1523898940&_gac=1.79428326.1523898940.CjwKCAjwk9HWBRApEiwA6mKWacqRgoYOQ4ayn_M_ol5d5C7yy0aTEbZjKsersvLRfXJAozzJyqu29RoClFoQAvD_BwE#production).
 
 After you downloaded it, go to the root of your `C` drive and create a `data` folder. After that, `cd` into the `data` folder and make a new folder called `db`.
 Mongo knows to go to this folder automatically to retrieve and store data. To run MongoDB, you need to start the process at the installation location, e.g. go to:
@@ -58,7 +58,11 @@ If you also installed MongoDB Compass along with the main installation (a GUI to
 ```
 
 Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it is time to load
-the data into our collection. Download the complete genes data from Synapse repository [here](https://www.synapse.org/#!Synapse:syn11318688). Install a global Node package to convert the `csv` to `json`:
+the data into our collection. Download the complete genes data in json form from Synapse repository [here](https://www.synapse.org/#!Synapse:syn12176105). 
+
+To regenerate the json file, start by downloading the complete genes data from [here](https://www.synapse.org/#!Synapse:syn11318688).
+
+Install a global Node package to convert the `csv` to `json`:
 
 ```bash
 $ npm i -g csvtojson
@@ -73,7 +77,7 @@ $ csvtojson data.csv > data.json
 Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following command:
 
 ```bash
-mongoimport --db walloftargets --collection genes --drop --file "C:\PATH\TO\FILE\data.json"
+mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
 ```
 
 We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
