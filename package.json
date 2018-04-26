@@ -161,6 +161,7 @@
     "karma-remap-coverage": "^0.1.5",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.11",
+    "lato-font": "^3.0.0",
     "ngc-webpack": "^4.1.2",
     "node-sass": "^4.7.2",
     "nodemon": "^1.17.3",

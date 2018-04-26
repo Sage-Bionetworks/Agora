@@ -38,11 +38,17 @@ export class GenesListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private breadcrumb: BreadcrumbService,
         private dataService: DataService,
         private geneService: GeneService
     ) { }
 
     ngOnInit() {
+        this.breadcrumb.setCrumbs([
+            { label: 'GENES', routerLink: ['/genes'] },
+            { label: 'LIST', routerLink: ['/genes/genes-list'] }
+        ]);
+
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene' },
             { field: 'AveExpr', header: 'Score' }

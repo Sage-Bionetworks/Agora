@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
@@ -15,11 +15,6 @@ import { User } from '../_models';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
-    @ViewChild('micon') menuIcon: ElementRef;
-
-    //user: User;
-    popupItems: MenuItem[];
-
     items: MenuItem[];
 
     constructor(
@@ -51,9 +46,5 @@ export class NavbarComponent implements OnInit {
 
     goHome() {
         this.router.navigate(['/']);
-    }
-
-    closeMenu(event: any) {
-        this.menuIcon.nativeElement.classList.toggle('active');
     }
 }

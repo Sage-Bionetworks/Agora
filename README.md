@@ -58,7 +58,7 @@ If you also installed MongoDB Compass along with the main installation (a GUI to
 ```
 
 Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it is time to load
-the data into our collection. Download the complete genes data in json form from Synapse repository [here](https://www.synapse.org/#!Synapse:syn12176105). 
+the data into our collection. Download the complete genes data in json form from Synapse repository [here](https://www.synapse.org/#!Synapse:syn12176105).
 
 To regenerate the json file, start by downloading the complete genes data from [here](https://www.synapse.org/#!Synapse:syn11318688).
 

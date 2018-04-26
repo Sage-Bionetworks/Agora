@@ -14,7 +14,6 @@ import { Observable } from 'rxjs/Observable';
     encapsulation: ViewEncapsulation.None
 })
 export class BreadcrumbComponent implements OnInit {
-    @Input() type: string = 'outer';
     @Input() styleClass: string = '';
 
     items: MenuItem[];
@@ -29,7 +28,7 @@ export class BreadcrumbComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.home = { icon: 'fa fa-home fa-lg fa fa-home fa-lg', routerLink: ['/dashboard'] };
+        this.home = { icon: 'fa fa-home fa-lg fa fa-home fa-lg', routerLink: ['/genes'] };
         this.crumbs$ = this.breadcrumb.crumbs$;
     }
 
@@ -39,9 +38,5 @@ export class BreadcrumbComponent implements OnInit {
 
     goToRoute(path: string) {
         this.router.navigate(['/' + path]);
-    }
-
-    getGradient() {
-        return 'gradientheader';
     }
 }
