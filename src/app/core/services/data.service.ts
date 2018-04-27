@@ -34,6 +34,14 @@ export class DataService {
         return this.ndx;
     }
 
+    loadNodes(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.http.get('/assets/mock-data/nodes.json').subscribe((data) => {
+                resolve(data);
+            });
+        });
+    }
+
     loadGenes(): Promise<boolean> {
         let self = this;
         return new Promise((resolve, reject) => {
@@ -66,30 +74,29 @@ export class DataService {
     }
 
     loadGenesFile(fname: string): Promise<boolean> {
-        let self = this;
         return new Promise((resolve, reject) => {
             // This will be done once at the server
-            d3.csv('/assets/data/' + fname, (data) => {
+            d3.csv(`/assets/data/${fname}`).then( (data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
-                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
-                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
-                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
+                    d.logFC = this.decimalPipe.transform(+d.logFC, '1.1-5');
+                    d.neg_log10_adj_P_Val = this.decimalPipe
+                    .transform(+d.neg_log10_adj_P_Val, '1.1-5');
+                    d.AveExpr = this.decimalPipe.transform(+d.AveExpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
                 });
+                this.ndx = crossfilter(data);
+                this.data = data;
 
-                self.ndx = crossfilter(data);
-                self.data = data;
-
-                self.hgncDim = self.ndx.dimension((d) => {
+                this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
 
                 resolve(true);
             });
-        })
+        });
     }
 
     getTableData(paramsObj?: LazyLoadEvent) {

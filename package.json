@@ -118,6 +118,7 @@
     "@firebase/app": "^0.1.10",
     "@ngtools/webpack": "1.10.0",
     "@types/core-js": "^0.9.46",
+    "@types/d3": "^5.0.0",
     "@types/hammerjs": "^2.0.34",
     "@types/jasmine": "2.5.45",
     "@types/mongodb": "^3.0.13",
