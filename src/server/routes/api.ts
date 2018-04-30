@@ -46,13 +46,16 @@ Genes.aggregate(
             $match: {
                 $or: [
                     {
-                        neg_log10_adj_p_val: {
-                            $gte: 10
+                        logfc: {
+                            $not: {
+                                $gt: -0.5,
+                                $lt: 0.5
+                            }
                         }
                     },
                     {
-                        logfc: {
-                            $gte: 0.5
+                        neg_log10_adj_p_val: {
+                            $gte: 10
                         }
                     }
                 ],
