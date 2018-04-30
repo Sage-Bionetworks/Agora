@@ -1,42 +1,24 @@
-.dropdown-button {
-    background: transparent !important;
-    border: 0px !important;
-    border-color: transparent !important;
-    color: #fff !important;
+.nav-row {
+    background: black;
+    height: 60px;
+    padding-left: 1%;
+    padding-right: 1%;
+    margin-right: 0px;
+
+    span {
+        color: white;
+    }
+
+    .ui-menubar {
+        background: #000000 !important;
+        border: 0px;
+
+        span.ui-menuitem-text {
+            color: black !important;
+        }
+    }
 }
 
-.dropdown-button .fa {
-    color: #fff !important;
-    font-size: 22px;
-    border: 0px !important;
-    border-color: transparent !important;
-}
-
-.fixed-top-nav {
-    background: #3F85B3;
-    max-height: 65px;
-}
-
-.ui-menubar {
-    background: #3F85B3;
-    border: 0px;
-}
-
-.ui-menubar-root-list {
-    padding-left:32px;
-}
-
-img#user {
-    width: 32px;
-    height: 32px;
-    position:absolute;
-    left:0;
-}
-
-.ui-submenu-icon {
-    padding-left:12px;
-}
-
-.my-icon::before {
+.my-icon {
     content: url('/assets/img/user_icon_32x32.jpg');
 }

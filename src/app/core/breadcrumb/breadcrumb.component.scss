@@ -1,4 +1,4 @@
-.outer-breadcrumb {
+.custom-breadcrumb {
   border: 0px;
   border-radius: 0px;
   padding: 12px;
@@ -21,13 +21,13 @@
   padding-bottom: 12px;
 }
 
-.outer-breadcrumb ul li .ui-menuitem-link {
+.custom-breadcrumb ul li .ui-menuitem-link {
     -webkit-text-fill-color: #ffffff;
     color: #ffffff;
 }
 
 //.fa-chevron-right:before
-.outer-breadcrumb .fa-chevron-right:before {
+.custom-breadcrumb .fa-chevron-right:before {
     color: #ffffff !important;
 }
 
@@ -41,9 +41,10 @@
     font-size: 14px;
 }
 
-.main {
+.breadcrumb-row {
     font-family: "Open Sans";
     font-size: 14px;
+    margin-right: 0px;
 }
 
 button:focus {outline:0;}

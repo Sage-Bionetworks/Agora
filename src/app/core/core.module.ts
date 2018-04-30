@@ -12,6 +12,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { TieredMenuModule } from 'primeng/tieredmenu';
 
 import {
     TableModule
@@ -35,6 +36,8 @@ import {
 import { AboutComponent } from './about';
 import { BreadcrumbComponent } from './breadcrumb';
 import { NavbarComponent } from './navbar';
+import { MenubarComponent } from './menubar';
+import { FooterComponent } from './footer';
 import { NoContentComponent } from './no-content';
 
 import '../../styles/styles.scss';
@@ -48,6 +51,7 @@ import '../../styles/headings.css';
         SplitButtonModule,
         MenuModule,
         MenubarModule,
+        TieredMenuModule,
         PanelMenuModule,
         BreadcrumbModule,
         // Other third-party modules
@@ -60,12 +64,16 @@ import '../../styles/headings.css';
         AboutComponent,
         BreadcrumbComponent,
         NavbarComponent,
+        MenubarComponent,
+        FooterComponent,
         NoContentComponent
     ],
     exports: [
         // Exported components
         BreadcrumbComponent,
-        NavbarComponent
+        NavbarComponent,
+        MenubarComponent,
+        FooterComponent
     ],
     providers: [
         AuthenticationService,
