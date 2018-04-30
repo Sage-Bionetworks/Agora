@@ -42,6 +42,12 @@ export class ForceChartViewComponent implements OnInit {
                 name: 'MTND1P23'
             });
             console.log(data);
+            const linkElements = svg.append('g')
+                .selectAll('line')
+                .data(data.links)
+                .enter().append('line')
+                .attr('stroke-width', (d: any) => 1)
+                .attr('stroke', '#E5E5E5');
             const nodeElements = svg.append('g')
                     .selectAll('circle')
                     .data(data.nodes)
@@ -71,32 +77,27 @@ export class ForceChartViewComponent implements OnInit {
                     .attr('x', (node: any) => node.x)
                     .attr('y', (node: any) => node.y);
             });
+
             simulation.force('link', d3.forceLink(data.links).id((d: any) => d.id)
                 .strength((link) => .001));
-            const linkElements = svg.append('g')
-                .selectAll('line')
-                .data(data.links)
-                .enter().append('line')
-                .attr('stroke-width', (d: any) => 1)
-                .attr('stroke', '#E5E5E5');
-            // const dragDrop = d3.drag()
-            //     .on('start', (node: any) => {
-            //         node.fx = node.x;
-            //         node.fy = node.y;
-            //     })
-            //     .on('drag', (node: any) => {
-            //         simulation.alphaTarget(0.7).restart();
-            //         node.fx = d3.event.x;
-            //         node.fy = d3.event.y;
-            //     })
-            //     .on('end', (node: any) => {
-            //         if (!d3.event.active) {
-            //             simulation.alphaTarget(0);
-            //         }
-            //         node.fx = null;
-            //         node.fy = null;
-            //     });
-            // nodeElements.call(dragDrop);
+            const dragDrop = d3.drag()
+                .on('start', (node: any) => {
+                    node.fx = node.x;
+                    node.fy = node.y;
+                })
+                .on('drag', (node: any) => {
+                    simulation.alphaTarget(0.001).restart();
+                    node.fx = d3.event.x;
+                    node.fy = d3.event.y;
+                })
+                .on('end', (node: any) => {
+                    if (!d3.event.active) {
+                        simulation.alphaTarget(0);
+                    }
+                    node.fx = null;
+                    node.fy = null;
+                });
+            nodeElements.call(dragDrop);
         })
         .catch((err) => { console.log(err); });
     }
