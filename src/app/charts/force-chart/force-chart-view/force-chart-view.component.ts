@@ -34,44 +34,31 @@ export class ForceChartViewComponent implements OnInit {
         const simulation = d3.forceSimulation()
             .force('charge', d3.forceManyBody().strength(-20))
             .force('center', d3.forceCenter(width / 2, height / 2));
-        this.dataService.loadNodes()
+        this.dataService.loadNodes(this.nodeA)
         .then((data) => {
-            data.forEach((obj: any) => {
-                obj.source = obj.geneA_ensembl_gene_id;
-                obj.target = obj.geneB_ensembl_gene_id;
+            data.nodes.unshift({
+                group: 1,
+                id: this.nodeA,
+                name: 'MTND1P23'
             });
-            this.links = data;
-            this.nodes = data.filter((obj, pos, arr) => {
-                 if (obj.geneA_ensembl_gene_id === this.nodeA) {
-                     obj.id = obj.geneB_ensembl_gene_id;
-                     return obj;
-                 }
-            });
-            this.nodes.unshift({
-                geneB_ensembl_gene_id: this.nodeA,
-                geneB_external_gene_name: 'MTND1P23',
-                geneA_ensembl_gene_id: this.nodeA,
-                geneA_external_gene_name: 'MTND1P23',
-                id: this.nodeA
-            });
-            console.log(this.nodes);
+            console.log(data);
             const nodeElements = svg.append('g')
                     .selectAll('circle')
-                    .data(this.nodes)
+                    .data(data.nodes)
                     .enter().append('circle')
-                    .attr('r', 4)
+                    .attr('r', 5)
                     .attr('fill', this.getNodeColor);
 
             const textElements = svg.append('g')
                     .selectAll('text')
-            .data(this.nodes)
+            .data(data.nodes)
             .enter().append('text')
-                .text((node: any) => node.geneB_external_gene_name)
+                .text((node: any) => node.name)
             .attr('font-size', 12)
             .attr('dx', 10)
             .attr('dy', 3);
 
-            simulation.nodes(this.nodes).on('tick', () => {
+            simulation.nodes(data.nodes).on('tick', () => {
                 nodeElements
                     .attr('cx', (node: any) => node.x)
                     .attr('cy', (node: any) => node.y);
@@ -81,7 +68,7 @@ export class ForceChartViewComponent implements OnInit {
             });
             const linkElements = svg.append('g')
                 .selectAll('line')
-                .data(this.links)
+                .data(data.links)
                 .enter().append('line')
                 .attr('stroke-width', 1)
                 .attr('stroke', '#E5E5E5');
@@ -90,14 +77,44 @@ export class ForceChartViewComponent implements OnInit {
                 .attr('y1', (link: any) => link.source.y)
                 .attr('x2', (link: any) => link.target.x)
                 .attr('y2', (link: any) => link.target.y);
-            simulation.force('link', d3.forceLink(this.links).id( (d: any) => {
+            simulation.force('link', d3.forceLink(data.links).id( (d: any) => {
                 return d.id;
-            }));
+            }).strength((link) => .001));
+
+            const dragDrop = d3.drag()
+                .on('start', (node: any) => {
+                    node.fx = node.x;
+                    node.fy = node.y;
+                })
+                .on('drag', (node: any) => {
+                    simulation.alphaTarget(0.7).restart();
+                    node.fx = d3.event.x;
+                    node.fy = d3.event.y;
+                })
+                .on('end', (node: any) => {
+                    if (!d3.event.active) {
+                        simulation.alphaTarget(0);
+                    }
+                    node.fx = null;
+                    node.fy = null;
+                });
+            nodeElements.call(dragDrop);
         })
         .catch((err) => { console.log(err); });
     }
 
     private getNodeColor(node) {
-        return node.geneB_ensembl_gene_id === 'ENSG00000225972' ? 'red' : 'gray';
+        return node.id === 'ENSG00000225972' ? 'red' : 'gray';
+    }
+
+    private getNeighbors(node) {
+        return this.links.reduce((neighbors, link) => {
+            if (link.target.id === node.id) {
+                neighbors.push(link.source.id);
+            } else if (link.source.id === node.id) {
+                neighbors.push(link.target.id);
+            }
+            return neighbors;
+        }, [node.id]);
     }
 }

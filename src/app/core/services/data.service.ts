@@ -34,10 +34,29 @@ export class DataService {
         return this.ndx;
     }
 
-    loadNodes(): Promise<any> {
+    loadNodes(sgene): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.http.get('/assets/mock-data/nodes.json').subscribe((data) => {
-                resolve(data);
+            this.http.get('/assets/mock-data/nodes.json').subscribe((data: object[]) => {
+                const genes: any = {
+                    links: [],
+                    nodes: []
+                };
+                data.forEach((obj: any) => {
+                    const gene: any = {
+                        value: 1,
+                        source: obj.geneA_ensembl_gene_id,
+                        target: obj.geneB_ensembl_gene_id
+                    };
+                    genes.links.push(gene);
+                    if (obj.geneA_ensembl_gene_id === sgene) {
+                        genes.nodes.push({
+                            id: obj.geneB_ensembl_gene_id,
+                            group: 1,
+                            name: obj.geneB_external_gene_name
+                        });
+                    }
+                });
+                resolve(genes);
             });
         });
     }
@@ -54,7 +73,8 @@ export class DataService {
                 data['items'].forEach((d) => {
                     // Separate the columns we need
                     d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
-                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
+                    d.neg_log10_adj_P_Val = self
+                    .decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
                     d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
