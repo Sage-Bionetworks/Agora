@@ -83,7 +83,7 @@ export class SelectMenuViewComponent implements OnInit {
                 } else {
                     options[0][1]['selected'] = 'selected';
                 }
-                //selectMenu.node().dispatchEvent(new Event('change'));
+                selectMenu.dispatch('change');
                 self.defaultValue = '';
             }
         });
