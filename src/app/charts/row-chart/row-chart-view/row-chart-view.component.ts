@@ -71,14 +71,14 @@ export class RowChartViewComponent implements OnInit {
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scale.linear().domain(this.getDomain('logFC')))
+            .x(d3.scale.linear().domain(this.getDomain('logfc')))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logFC) || 0);
+                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logfc) || 0);
             })
             .valueAccessor(function(d) {
-                return +(self.decimalPipe.transform(+d.value.logFC)) || 0;
+                return +(self.decimalPipe.transform(+d.value.logfc)) || 0;
             })
             .label(function (d) {
                 return d.key;
@@ -125,7 +125,7 @@ export class RowChartViewComponent implements OnInit {
                 let hlines = chart.selectAll('g.row g.hline');
                 hlines.each(function(d, i) {
                     d3.select(this).attr('transform', function(d) {
-                        return 'translate('+d.value.logFC+')';
+                        return 'translate('+d.value.logfc+')';
                     })
                 });
 
@@ -183,13 +183,13 @@ export class RowChartViewComponent implements OnInit {
                 'stroke-width': 1.5,
                 stroke: 'wheat',
                 x1: function(d) {
-                    return chart.x()(d.value.logFC) - lineWidth/2;
+                    return chart.x()(d.value.logfc) - lineWidth/2;
                 },
                 y1: function(d) {
                     return yPos;
                 },
                 x2: function(d) {
-                    return chart.x()(d.value.logFC) + lineWidth/2;
+                    return chart.x()(d.value.logfc) + lineWidth/2;
                 },
                 y2: function(d) {
                     return yPos;
@@ -202,7 +202,7 @@ export class RowChartViewComponent implements OnInit {
         chart
             .selectAll('g.row rect')
             .attr('transform', function(d) {
-                return 'translate(' + (chart.x()(d.value.logFC)-(squareSize/2)) + ',' + ((rectHeight/2)-(squareSize/2)) + ')';
+                return 'translate(' + (chart.x()(d.value.logfc)-(squareSize/2)) + ',' + ((rectHeight/2)-(squareSize/2)) + ')';
             })
             .attr('width', squareSize)
             .attr('height', squareSize);

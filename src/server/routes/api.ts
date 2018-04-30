@@ -43,16 +43,32 @@ var totalRecords = 0;
 Genes.aggregate(
     [
         {
+            $match: {
+                $or: [
+                    {
+                        neg_log10_adj_p_val: {
+                            $gte: 10
+                        }
+                    },
+                    {
+                        logfc: {
+                            $gte: 0.5
+                        }
+                    }
+                ],
+            }
+        },
+        {
             $group: {
                 _id: '$_id',
                 hgnc_symbol: { $first: '$hgnc_symbol' },
-                AveExpr : { $first: '$AveExpr' },
+                aveexpr : { $first: '$aveexpr' },
                 ensembl_gene_id : { $first: '$ensembl_gene_id' },
-                logFC : { $first: '$logFC' },
-                CI_L : { $first: '$CI_L' },
-                CI_R : { $first: '$CI_R' },
-                adj_P_Val : { $first: '$adj_P_Val' },
-                neg_log10_adj_P_Val : { $first: '$neg_log10_adj_P_Val' },
+                logfc : { $first: '$logfc' },
+                ci_l : { $first: '$ci_l' },
+                ci_r : { $first: '$ci_r' },
+                adj_p_val : { $first: '$adj_p_val' },
+                neg_log10_adj_p_val : { $first: '$neg_log10_adj_p_val' },
                 tissue_study_pretty : { $first: '$tissue_study_pretty' },
                 comparison_model_sex_pretty : { $first: '$comparison_model_sex_pretty' }
             }
@@ -74,7 +90,7 @@ Genes.aggregate(
         return g['hgnc_symbol'];
     });
     // Unique genes, ordered by score
-    genesByScore = genesById.slice().sort((a, b) => { return (a.AveExpr > b.AveExpr) ? 1 : ((b.AveExpr > a.AveExpr) ? -1 : 0); });
+    genesByScore = genesById.slice().sort((a, b) => { return (a.aveexpr > b.aveexpr) ? 1 : ((b.aveexpr > a.aveexpr) ? -1 : 0); });
 
     totalRecords = genesById.length;
 });
@@ -100,7 +116,7 @@ router.get('/genes/page', (req, res, next) => {
     let genes: Gene[] = [];
 
     if (req.query.globalFilter !== 'null' && req.query.globalFilter) {
-        ((req.query.sortField === 'AveExpr') ? genesByScore : genesById).forEach(g => {
+        ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).forEach(g => {
             // If we typed into the search above the list
             if (g.hgnc_symbol.includes(req.query.globalFilter.trim().toUpperCase()))  {
                 // Do not use a shallow copy here
@@ -108,7 +124,7 @@ router.get('/genes/page', (req, res, next) => {
             }
         });
     } else {
-        genes = ((req.query.sortField === 'AveExpr') ? genesByScore : genesById).slice();
+        genes = ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).slice();
     }
     // Updates the global length based on the filter
     totalRecords = genes.length;
