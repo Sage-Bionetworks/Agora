@@ -62,7 +62,7 @@ export class GenesListComponent implements OnInit {
     onRowSelect(event) {
         this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
         this.geneService.setCurrentGene(event.data);
-        this.router.navigate(['gene-details', this.selectedGene.hgnc_symbol], {relativeTo: this.route});
+        this.router.navigate(['../gene-details', this.selectedGene.hgnc_symbol], {relativeTo: this.route});
         /*this.selectedGene = this.geneService.getCurrentGene();
         if (this.selectedGene) {
             this.geneService.filterTissuesModels(this.selectedGene).then((status) => {
