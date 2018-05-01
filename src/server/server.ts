@@ -10,7 +10,7 @@ import * as events from 'events';
 import * as http from 'http';
 
 // Get our api routes
-import * as api from './routes/api';
+import api from './routes/api';
 
 const debug = require('debug')('wot:server');
 
@@ -131,4 +131,4 @@ function onListening() {
     module.exports = app;
 }*/
 
-export = app;
+export default app;
