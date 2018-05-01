@@ -178,4 +178,4 @@ router.get('/gene/:id', function (req, res, next) {
     });
 });
 
-export = router;
+export default router;
