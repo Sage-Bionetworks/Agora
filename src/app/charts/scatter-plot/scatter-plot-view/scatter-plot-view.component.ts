@@ -67,8 +67,8 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
-            .x(d3.scale.linear().domain(this.getDomain('logFC')))
-            .y(d3.scale.linear().domain(this.getDomain('neg_log10_adj_P_Val', true)))
+            .x(d3.scale.linear().domain(this.getDomain('logfc')))
+            .y(d3.scale.linear().domain(this.getDomain('neg_log10_adj_p_val', true)))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
             .title(function(p) {

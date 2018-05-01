@@ -48,14 +48,14 @@ export class GeneRNASeqDEComponent implements OnInit {
         this.chartService.addChartInfo(
             'volcano-plot',
             {
-                dimension: ['logFC', 'neg_log10_adj_P_Val', 'hgnc_symbol'],
+                dimension: ['logfc', 'neg_log10_adj_p_val', 'hgnc_symbol'],
                 group: 'self',
                 type: 'scatter-plot',
                 title: 'Volcano Plot',
                 xAxisLabel: 'Log Fold Change',
                 yAxisLabel: '-log10(Adjusted p-value)',
-                x: ['logFC'],
-                y: ['neg_log10_adj_P_Val']
+                x: ['logfc'],
+                y: ['neg_log10_adj_p_val']
             }
         );
         this.chartService.addChartInfo(
@@ -66,7 +66,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 type: 'forest-plot',
                 title: 'Log fold forest plot',
                 filter: 'default',
-                attr: 'logFC',
+                attr: 'logfc',
                 constraint: { attr: 'tissue_study_pretty', names: this.geneService.getTissues() }
             }
         );

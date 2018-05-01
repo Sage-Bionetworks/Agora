@@ -51,7 +51,7 @@ export class GenesListComponent implements OnInit {
 
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene' },
-            { field: 'AveExpr', header: 'Score' }
+            { field: 'aveexpr', header: 'Score' }
         ];
     }
 

@@ -45,9 +45,9 @@ export class DataService {
                 console.log(data);
                 data['items'].forEach((d) => {
                     // Separate the columns we need
-                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
-                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
-                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
+                    d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
+                    d.neg_log10_adj_p_val = self.decimalPipe.transform(+d.neg_log10_adj_p_val, '1.1-5');
+                    d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
@@ -72,9 +72,9 @@ export class DataService {
             d3.csv('/assets/data/' + fname, (data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
-                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
-                    d.neg_log10_adj_P_Val = self.decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
-                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
+                    d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
+                    d.neg_log10_adj_p_val = self.decimalPipe.transform(+d.neg_log10_adj_p_val, '1.1-5');
+                    d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
@@ -249,7 +249,7 @@ export class DataService {
     }
 
     reduceInit() {
-        return {count:0, sum:0, logFC:0};
+        return {count:0, sum:0, logfc:0};
     }
 
     rmEmptyBinsDefault = (source_group) => {
