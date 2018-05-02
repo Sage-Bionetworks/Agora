@@ -36,24 +36,38 @@ export class DataService {
 
     loadNodes(sgene): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.http.get('/assets/mock-data/nodes.json').subscribe((data: object[]) => {
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            const params = new HttpParams();
+
+            this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
                 const genes: any = {
                     links: [],
-                    nodes: []
+                    nodes: [{
+                        id: sgene.ensembl_gene_id,
+                        group: 1,
+                        name: sgene.hgnc_symbol
+                    }]
                 };
-                data.forEach((obj: any) => {
-                    const gene: any = {
+                const dnodes = [];
+                const enodes: object[] = data['items'].filter((node: any) => {
+                    return node.geneA_ensembl_gene_id === sgene.ensembl_gene_id;
+                });
+                data['items'].forEach((obj: any) => {
+                    const link: any = {
                         value: 1,
                         source: obj.geneA_ensembl_gene_id,
                         target: obj.geneB_ensembl_gene_id
                     };
-                    genes.links.push(gene);
-                    if (obj.geneA_ensembl_gene_id === sgene) {
-                        genes.nodes.push({
+                    genes.links = [...genes.links, link];
+                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
+                        && !dnodes[obj.geneB_ensembl_gene_id]) {
+                        const node = {
                             id: obj.geneB_ensembl_gene_id,
                             group: 1,
                             name: obj.geneB_external_gene_name
-                        });
+                        };
+                        genes.nodes = [...genes.nodes, node];
+                        dnodes[obj.geneB_ensembl_gene_id] = true;
                     }
                 });
                 resolve(genes);
@@ -62,35 +76,34 @@ export class DataService {
     }
 
     loadGenes(): Promise<boolean> {
-        let self = this;
         return new Promise((resolve, reject) => {
-            let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            let params = new HttpParams();
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            const params = new HttpParams();
 
             // Get all the genes to render the charts
             this.http.get('/api/genes', { headers, params }).subscribe((data) => {
                 console.log(data);
                 data['items'].forEach((d) => {
                     // Separate the columns we need
-                    d.logFC = self.decimalPipe.transform(+d.logFC, '1.1-5');
-                    d.neg_log10_adj_P_Val = self
+                    d.logFC = this.decimalPipe.transform(+d.logFC, '1.1-5');
+                    d.neg_log10_adj_P_Val = this
                     .decimalPipe.transform(+d.neg_log10_adj_P_Val, '1.1-5');
-                    d.AveExpr = self.decimalPipe.transform(+d.AveExpr, '1.1-5');
+                    d.AveExpr = this.decimalPipe.transform(+d.AveExpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
                 });
 
-                self.ndx = crossfilter(data['items']);
-                self.data = data['items'];
+                this.ndx = crossfilter(data['items']);
+                this.data = data['items'];
 
-                self.hgncDim = self.ndx.dimension((d) => {
+                this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
 
                 resolve(true);
             });
-        })
+        });
     }
 
     loadGenesFile(fname: string): Promise<boolean> {

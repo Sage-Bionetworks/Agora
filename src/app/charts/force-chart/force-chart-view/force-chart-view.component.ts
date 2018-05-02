@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 
-import { DataService } from '../../../core/services';
+import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
@@ -11,20 +11,24 @@ import * as d3 from 'd3';
     encapsulation: ViewEncapsulation.None
 })
 export class ForceChartViewComponent implements OnInit {
-    @Input() private title: string;
+    @Input() private name: string;
+    @Input() private currentGene = this.geneService.getCurrentGene();
 
     @ViewChild('chart') private forceChart: ElementRef;
 
     private nodes: object[];
     private links: any;
-    private nodeA: string = 'ENSG00000225972';
+    //private nodeA: string = 'ENSG00000225972';
 
-    constructor(private dataService: DataService) {
+    constructor(
+        private dataService: DataService,
+        private geneService: GeneService
+    ) {
         console.log('construct force');
     }
 
-    public  ngOnInit() {
-        const width: any = '650';
+    ngOnInit() {
+        const width: any = this.forceChart.nativeElement.parentElement.offsetWidth;
         const height: any = '500';
         console.log('init force');
         const svg = d3.select(this.forceChart.nativeElement)
@@ -34,25 +38,20 @@ export class ForceChartViewComponent implements OnInit {
         const simulation = d3.forceSimulation()
             .force('charge', d3.forceManyBody().strength(-20))
             .force('center', d3.forceCenter(width / 2, height / 2));
-        this.dataService.loadNodes(this.nodeA)
+        this.dataService.loadNodes(this.currentGene)
         .then((data) => {
-            data.nodes.unshift({
-                group: 1,
-                id: this.nodeA,
-                name: 'MTND1P23'
-            });
             console.log(data);
             const linkElements = svg.append('g')
                 .selectAll('line')
                 .data(data.links)
                 .enter().append('line')
-                .attr('stroke-width', (d: any) => 1)
+                .attr('stroke-width', (d: any) => d.value)
                 .attr('stroke', '#E5E5E5');
             const nodeElements = svg.append('g')
                     .selectAll('circle')
                     .data(data.nodes)
                     .enter().append('circle')
-                    .attr('r', 5)
+                    .attr('r', 7)
                     .attr('fill', this.getNodeColor);
 
             const textElements = svg.append('g')
@@ -102,8 +101,8 @@ export class ForceChartViewComponent implements OnInit {
         .catch((err) => { console.log(err); });
     }
 
-    private getNodeColor(node) {
-        return node.id === 'ENSG00000225972' ? 'red' : 'gray';
+    private getNodeColor(node , index, arr) {
+        return !index ? 'red' : 'gray';
     }
 
     private getNeighbors(node) {

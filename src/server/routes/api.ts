@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
-import { Gene } from '../../app/models';
+import { Gene, GeneLink } from '../../app/models';
 
 mongoose.set('debug', true);
 
@@ -9,6 +9,7 @@ const router = express.Router();
 var database = { url: '' };
 
 import { Genes } from '../../app/schemas/gene';
+import { GenesLinks } from '../../app/schemas/geneLink';
 
 // Set the rdatabase
 if (express().get('env') === 'development') {
@@ -156,6 +157,31 @@ router.get('/gene/:id', function (req, res, next) {
         } else {
             res.json({ item: gene });
         }
+    });
+});
+
+// Get a gene list by id
+router.get('/genelist/:id', function(req, res, next) {
+    console.log('Get a gene list with an id');
+    console.log(req.params.id);
+    // Return an empty array in case no id was passed or no params
+    if (!req.params || !req.params.id) { res.json({ items: [] }); }
+    GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
+        const arr = links.map((slink) => {
+            return slink.toJSON()['geneB_ensembl_gene_id'];
+        });
+        GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
+            .where('geneB_ensembl_gene_id')
+            .in(arr)
+            .exec((errB, linksC) => {
+                if (err) {
+                console.log(err);
+                next(err);
+            } else {
+                    const flinks = [...links, ...linksC];
+                    res.json({ items: flinks });
+            }
+        });
     });
 });
 
