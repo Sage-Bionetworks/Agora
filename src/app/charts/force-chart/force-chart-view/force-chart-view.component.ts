@@ -76,8 +76,18 @@ export class ForceChartViewComponent implements OnInit {
                     .attr('y', (node: any) => node.y);
             });
 
-            simulation.force('link', d3.forceLink(data.links).id((d: any) => d.id)
-                .strength((link) => .001));
+            simulation.force('link', d3.forceLink(data.links).links(data.links).id((d: any) => d.id)
+                .strength((link) => .001)
+                .distance(90)
+                .iterations(16))
+                .force('collide',
+                d3.forceCollide()
+                .radius(7 * 3)
+                .strength(0.7)
+                .iterations(16))
+                .force('charge', d3.forceManyBody().strength(-100))
+                .force('x', d3.forceX().strength(0.02).x(width / 2))
+                .force('y', d3.forceY().strength(0.02).y(height / 2));
             const dragDrop = d3.drag()
                 .on('start', (node: any) => {
                     node.fx = node.x;
