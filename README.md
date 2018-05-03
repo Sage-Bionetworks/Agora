@@ -88,9 +88,9 @@ To be added.
 
 * Summing-up we have:
 
-> Local development using local DynamoDB and the development mode to build and run the app. The database needs to be started and will be listening on port 8000.
+> Local development using local MongoDB and the development mode to build and run the app. The database needs to be started and will be listening on port `27017`.
 
-> Remote development using tables created through Amazon console in the DynamoDB section. Here we are going to build our app with the production flag and copy the dist folder to the EC2 instance. We need to connect to the instance and run the app from the remote folder.
+> Remote development using tables created using MongoDB in the EC2 instance. Here we are going to build our app with the production flag and copy the dist folder to the EC2 instance. We need to connect to the instance and run the app from the remote folder.
 
 > If you are planning on running without AWS
 
@@ -104,7 +104,9 @@ After you have installed all dependencies and got every requirement ready you ca
 npm run build:dev
 ```
 
-This builds the client-side of the application. The client configuration run webpack with the `--watch` flag, so any change to the `src/` folder (except the `src/server` folder) will rebuild the application. Leave that terminal open and open another one. In the second one you can issue our second command to get the server up and running.
+This builds the client-side of the application. If you need to watch for changes use `watch` instead of `build`. The client configuration can run webpack with the `--watch` flag, so any change made to the `src/` folder (except the `src/server` folder) will rebuild the application. At the moment, you need to reload the application manually after changing the files on the client-side. If you want to reload it automatically, use the `webpack-dev-server` by running the command `npm run server:dev` **only**, no need to run the next command.
+
+If you just built the application you are set for the next command. If you used the `watch` flag, leave that terminal open and open another one. In the second one you can issue our second command to get the server up and running.
 
 ```bash
 npm start
@@ -112,7 +114,7 @@ npm start
 
 The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server` or `npm start`, it will reload if you change files in the `src/server` folder.
 
-At the moment, you need to reload the page after changing the files on the client-side. You don't need to stop the server when doing this because they use different packaging pipes. You need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+You don't need to stop the server when chaning client-side files this because they use different packaging pipes. You need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
 
 The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so the MongoDB will not crash**.
 
@@ -131,7 +133,7 @@ npm run build:aot
 # development
 npm start
 # production
-npm run build:server:prod
+npm run watch:server:prod
 ```
 
 go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser

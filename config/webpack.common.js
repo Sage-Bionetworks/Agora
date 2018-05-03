@@ -186,7 +186,8 @@ module.exports = function (options) {
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
-        'FIREBASE_CONFIG': JSON.stringify(APP_CONFIG.firebase)
+        'FIREBASE_CONFIG': JSON.stringify(APP_CONFIG.firebase),
+        'Analyzer': JSON.stringify(METADATA.Analyzer)
       }),
 
       /**
@@ -316,14 +317,14 @@ module.exports = function (options) {
        *
        * https://github.com/webpack-contrib/webpack-bundle-analyzer
        */
-      new BundleAnalyzerPlugin({
+      (METADATA.Analyzer) ? new BundleAnalyzerPlugin({
         openAnalyzer: false
-      }),
+      }) : null,
 
       new ProvidePlugin({
         'dc': 'dc'
       })
-    ],
+    ].filter(Boolean),
 
     /**
      * Include polyfills or mocks for various node stuff
