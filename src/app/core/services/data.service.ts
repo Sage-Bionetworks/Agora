@@ -38,6 +38,7 @@ export class DataService {
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             const params = new HttpParams();
+            const dic = [];
 
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
                 const genes: any = {
@@ -53,12 +54,21 @@ export class DataService {
                     return node.geneA_ensembl_gene_id === sgene.ensembl_gene_id;
                 });
                 data['items'].forEach((obj: any) => {
-                    const link: any = {
-                        value: 1,
-                        source: obj.geneA_ensembl_gene_id,
-                        target: obj.geneB_ensembl_gene_id
-                    };
-                    genes.links = [...genes.links, link];
+                    if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
+                        const link: any = {
+                            value: 1,
+                            source: obj.geneA_ensembl_gene_id,
+                            target: obj.geneB_ensembl_gene_id,
+                            brainregions: [obj.brainRegion]
+                        };
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
+                        genes.links = [...genes.links,
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
+                    } else {
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                        .brainregions.push(obj.brainRegion);
+                    }
                     if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
                         && !dnodes[obj.geneB_ensembl_gene_id]) {
                         const node = {

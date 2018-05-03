@@ -18,7 +18,6 @@ export class ForceChartViewComponent implements OnInit {
 
     private nodes: object[];
     private links: any;
-    //private nodeA: string = 'ENSG00000225972';
 
     constructor(
         private dataService: DataService,
@@ -103,16 +102,5 @@ export class ForceChartViewComponent implements OnInit {
 
     private getNodeColor(node , index, arr) {
         return !index ? 'red' : 'gray';
-    }
-
-    private getNeighbors(node) {
-        return this.links.reduce((neighbors, link) => {
-            if (link.target.id === node.id) {
-                neighbors.push(link.source.id);
-            } else if (link.source.id === node.id) {
-                neighbors.push(link.target.id);
-            }
-            return neighbors;
-        }, [node.id]);
     }
 }
