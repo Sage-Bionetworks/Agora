@@ -15,6 +15,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 
 import { GenesViewComponent } from './genes-view';
+import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
 import { GeneSearchComponent } from './gene-search';
 import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
@@ -24,6 +25,7 @@ import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 @NgModule({
     declarations: [
         GenesViewComponent,
+        GenesIntroComponent,
         GenesListComponent,
         GeneSearchComponent,
         GeneDetailsViewComponent,

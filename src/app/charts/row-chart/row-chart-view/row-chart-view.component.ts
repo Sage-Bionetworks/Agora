@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import {
-    ActivatedRoute
-} from '@angular/router';
-
 import { Gene } from '../../../models';
 
 import { ChartService } from '../../services';
@@ -12,7 +8,6 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-//import { rowChart } from 'dc';
 
 // Using a d3 v4 function to get all nodes
 d3.selection.prototype['nodes'] = function(){
@@ -31,7 +26,7 @@ export class RowChartViewComponent implements OnInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
-    @Input() label: string;
+    @Input() label: string = 'forest-plot';
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() filterTissues = this.geneService.getTissues();
     @Input() filterModels = this.geneService.getModels();
@@ -45,7 +40,6 @@ export class RowChartViewComponent implements OnInit {
     display: boolean = false;
 
     constructor(
-        private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService,
@@ -53,14 +47,7 @@ export class RowChartViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.label) {
-            this.route.params.subscribe(params => {
-                this.label = params['label'];
-                this.initChart();
-            });
-        } else {
-            this.initChart();
-        }
+        this.initChart();
     }
 
     initChart() {
@@ -71,14 +58,14 @@ export class RowChartViewComponent implements OnInit {
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scale.linear().domain(this.getDomain('logfc')))
+            .x(d3.scale.linear().domain(this.geneService.getLogFC()))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
                 return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logfc) || 0);
             })
             .valueAccessor(function(d) {
-                return +(self.decimalPipe.transform(+d.value.logfc)) || 0;
+                return +(self.decimalPipe.transform(+d.value.logfc || 0));
             })
             .label(function (d) {
                 return d.key;
@@ -210,16 +197,5 @@ export class RowChartViewComponent implements OnInit {
 
     displayChart() {
         return {'opacity': (this.display) ? 1 : 0};
-    }
-
-    getDomain(attr: string, altMin?: boolean): number[] {
-        let self = this;
-        let min = (self.dim.bottom(1)[0] && !altMin) ? +self.dim.bottom(1)[0][attr] : 0;
-        let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
-        let margin = (max - min) * 0.05;
-        min -= margin;
-        max += margin;
-
-        return [min, max];
     }
 }

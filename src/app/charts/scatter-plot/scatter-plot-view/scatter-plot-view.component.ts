@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, ContentChild, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import {
@@ -12,10 +12,7 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-//import { scatterPlot } from 'dc';
 import '../../../../scripts/dc-canvas-scatterplot.js';
-
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'scatter-plot',
@@ -23,11 +20,11 @@ import { Subscription } from 'rxjs/Subscription';
     styleUrls: [ './scatter-plot-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
+export class ScatterPlotViewComponent implements OnInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
-    @Input() label: string;
+    @Input() label: string = 'volcano-plot';
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() filterTissues = this.geneService.getTissues();
     @Input() filterModels = this.geneService.getModels();
@@ -44,17 +41,8 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         private decimalPipe: DecimalPipe
     ) { }
 
-    ngOnInit() {}
-
-    ngAfterContentInit() {
-        if (!this.label) {
-            this.route.params.subscribe(params => {
-                this.label = params['label'];
-                this.initChart();
-            });
-        } else {
-            this.initChart();
-        }
+    ngOnInit() {
+        this.initChart();
     }
 
     initChart() {
@@ -67,13 +55,13 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
-            .x(d3.scale.linear().domain(this.getDomain('logfc')))
-            .y(d3.scale.linear().domain(this.getDomain('neg_log10_adj_p_val', true)))
+            .x(d3.scale.linear().domain(this.geneService.getLogFC()))
+            .y(d3.scale.linear().domain(this.geneService.getNegAdjPValue()))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
             .title(function(p) {
                 return null;
-            }) // disable tooltips
+            }) // Disable tooltips
             .renderTitle(false)
             .brushOn(false)
             .mouseZoomable(true)
@@ -102,16 +90,5 @@ export class ScatterPlotViewComponent implements OnInit, AfterContentInit {
             });
 
         this.chart.render();
-    }
-
-    getDomain(attr: string, altMin?: boolean): number[] {
-        let self = this;
-        let min = (self.dim.top(1)[0] && !altMin) ? -(+self.dim.top(1)[0][attr]) : 0;
-        let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
-        let margin = (max - min) * 0.05;
-        min -= margin;
-        max += margin;
-
-        return [min, max];
     }
 }

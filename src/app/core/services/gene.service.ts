@@ -15,13 +15,15 @@ export class GeneService {
     private currentModel: string;
     private models: string[] = [];
     private tissues: string[] = [];
+    private minLogFC: number = 0;
+    private maxLogFC: number = 10;
+    private maxNegLogPValue: number = 50;
+    private minNegLogPValue: number = 0;
 
     constructor(
         private decimalPipe: DecimalPipe,
         private dataService: DataService
-    ) {
-
-    }
+    ) {}
 
     setCurrentGene(gene: Gene) {
         this.currentGene = gene;
@@ -53,6 +55,24 @@ export class GeneService {
 
     getModels(): string[] {
         return this.models;
+    }
+
+    setLogFC(min: number, max: number) {
+        this.minLogFC = min;
+        this.maxLogFC = max;
+    }
+
+    getLogFC(): number[] {
+        return [this.minLogFC, this.maxLogFC];
+    }
+
+    setNegAdjPValue(max: number, min?: number) {
+        this.maxNegLogPValue = max;
+        this.minNegLogPValue = (min) ? min : 0;
+    }
+
+    getNegAdjPValue(): number[] {
+        return [0, this.maxNegLogPValue];
     }
 
     filterTissuesModels(gene: Gene): Promise<boolean> {

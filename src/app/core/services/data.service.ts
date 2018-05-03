@@ -42,7 +42,6 @@ export class DataService {
 
             // Get all the genes to render the charts
             this.http.get('/api/genes', { headers, params }).subscribe((data) => {
-                console.log(data);
                 data['items'].forEach((d) => {
                     // Separate the columns we need
                     d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
@@ -51,6 +50,8 @@ export class DataService {
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
+
+                    //if (d.hgnc_symbol === 'A2ML1') console.log(d);
                 });
 
                 self.ndx = crossfilter(data['items']);
@@ -131,6 +132,7 @@ export class DataService {
             switch(info.type) {
                 case 'forest-plot':
                     if (info.filter) {
+                        // The key returned
                         let rvalue: any = '';
                         if (!filterTissues.some((t) => { return t === d[dimValue[0]]; })) {
                             if (!allTissues[d[dimValue[0]]]) {
@@ -150,32 +152,10 @@ export class DataService {
                         return d[dimValue[0]];
                     }
                 case 'scatter-plot':
-                    // Calculate x and y binning with each bin being PIXEL_BIN_SIZE wide.
-                    // Binning coordinates into bins such that 1-2 bins per pixel makes
-                    // crossfilter operations more efficient, especially with large
-                    // datasets
-                    let nXBins = 400;
-                    let nYBins = 300;
-                    let binWidth = 20 / nXBins;
-                    let binHeight = 20 / nYBins;
-                    let minLogFC: number = 0.5;
-                    let minNegLogAdjPVal: number = 10;
                     let x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
                     let y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
 
-                    if ((d.hgnc_symbol !== filterGene.hgnc_symbol &&
-                        Math.abs(+d[dimValue[0]]) < minLogFC &&
-                        Math.abs(+d[dimValue[1]]) < minNegLogAdjPVal) ||
-                        !filterTissues.some((t) => { return t === d.tissue_study_pretty; })) {
-                        x = 0;
-                        y = 0;
-                    }
-
-                    return [
-                        Math.floor(x / binWidth) * binWidth,
-                        Math.floor(y / binHeight) * binHeight,
-                        d[dimValue[2]]
-                    ];
+                    return [x, y, d[dimValue[2]]];
                 case 'select-menu':
                     if (info.filter) {
                         if (dimValue[0] === 'comparison_model_sex') {
@@ -199,7 +179,6 @@ export class DataService {
     }
 
     getGroup(label: string, info: any): CrossFilter.Group<any, any, any> {
-        //let info = this.chartInfos.get(label);
         let group = info.dim.group();
         if (info.attr) {
             group.reduce(
@@ -256,7 +235,7 @@ export class DataService {
         return {
             all: () => {
                 return source_group.all().filter(function(d) {
-                    // here your condition
+                    // Add your filter condition here
                     return d.key !== null && d.key !== '';
                 });
             }

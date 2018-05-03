@@ -5,10 +5,10 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
 const routes: Routes = [
-    { path: 'genes', loadChildren: '../genes#GenesModule'},
+    { path: '', loadChildren: '../genes#GenesModule'},
     { path: 'about', component: AboutComponent },
-    { path: '', redirectTo: '/genes', pathMatch: 'full' },
-    { path: '**',    component: NoContentComponent }
+    //{ path: '', redirectTo: 'genes/genes-intro', pathMatch: 'full' },
+    { path: '**', component: NoContentComponent }
 ];
 
 @NgModule({

@@ -36,6 +36,7 @@ router.get('/', function (req, res) {
 // Get the genes collection size
 var genesById: Gene[] = [];
 var genesByScore: Gene[] = [];
+var geneEntries: Gene[] = [];
 var allGenes: Gene[] = [];
 var totalRecords = 0;
 
@@ -46,12 +47,18 @@ Genes.aggregate(
             $match: {
                 $or: [
                     {
-                        logfc: {
-                            $not: {
-                                $gt: -0.5,
-                                $lt: 0.5
+                        $or: [
+                            {
+                                logfc: {
+                                    $lte: -0.5
+                                }
+                            },
+                            {
+                                logfc: {
+                                    $gte: 0.5
+                                }
                             }
-                        }
+                        ]
                     },
                     {
                         neg_log10_adj_p_val: {
@@ -102,8 +109,22 @@ Genes.aggregate(
 router.get('/genes', function (req, res, next) {
     console.log('Get all genes');
 
+    let chartGenes = allGenes.slice();
+    if (geneEntries) {
+        geneEntries.forEach(ge => {
+            // If the current entry does not exist in the all genes array
+            if (!allGenes.some(g => {
+                return (g.hgnc_symbol === ge.hgnc_symbol) &&
+                       (g.tissue_study_pretty === ge.tissue_study_pretty) &&
+                       (g.comparison_model_sex === ge.comparison_model_sex)
+            })) {
+                chartGenes.push(ge);
+            }
+        })
+    }
+
     // Use mongoose to get one page of genes
-    res.json({ items: allGenes });
+    res.json({ items: chartGenes });
 });
 
 // Use mongoose to get one page of genes
@@ -167,13 +188,27 @@ router.get('/gene/:id', function (req, res, next) {
     console.log('Get a gene with an id');
     console.log(req.params.id);
     // Return an empty array in case no id was passed or no params
-    if (!req.params || !req.params.id) res.json({ items: []});
+    if (!req.params || !req.params.id) res.json({ item: null});
 
-    Genes.findById(req.params.id).exec((err, gene) => {
+    Genes.find({ 'hgnc_symbol': req.params.id}).exec((err, genes) => {
         if (err) {
             next(err);
         } else {
-            res.json({ item: gene });
+            geneEntries = genes.slice();
+            let minLogFC = +Infinity;
+            let maxLogFC = -Infinity;
+            let maxNegLogPValue = -Infinity;;
+            //console.log(genes);
+            genes.forEach(g => {
+                if (+g.logfc > maxLogFC) maxLogFC = (+g.logfc);
+                if (+g.logfc < minLogFC) minLogFC = (+g.logfc);
+                if (+g.neg_log10_adj_p_val > maxNegLogPValue) maxNegLogPValue = (+g.neg_log10_adj_p_val);
+            });
+            res.json({
+                item: genes[0],
+                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC))? -maxLogFC : minLogFC,
+                maxLogFC: maxLogFC,
+                maxNegLogPValue: maxNegLogPValue });
         }
     });
 });

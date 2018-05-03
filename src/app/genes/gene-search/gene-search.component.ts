@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
@@ -29,10 +29,9 @@ export class GeneSearchComponent implements OnInit {
     @Input() genes: Gene[];
     queryField: FormControl = new FormControl();
     results: Gene[] = [];
+    hasFocus: boolean = false;
 
     private gene: Gene;
-
-    geneId;
 
     constructor(
         private router: Router,
@@ -62,14 +61,29 @@ export class GeneSearchComponent implements OnInit {
         if (queryString) return this.dataService.getGenesMatchId(queryString);
     }
 
+    focusSearchList(state: boolean) {
+        this.hasFocus = state;
+    }
+
+    closeSearchList(event: any) {
+        if (!this.hasFocus) this.results = [];
+    }
+
     getGeneId() {
         return this.gene.hgnc_symbol;
     }
 
     viewGene(gene: Gene) {
-        this.geneService.setCurrentGene(gene);
-        this.geneId = gene.hgnc_symbol;
-        this.gene = gene;
-        if (this.gene) this.router.navigate(['gene-details', this.gene.hgnc_symbol], {relativeTo: this.route});
+        this.dataService.getGene(gene.hgnc_symbol).subscribe(data => {
+            if (!data['item']) this.router.navigate(['/genes']);
+            this.geneService.setCurrentGene(data['item']);
+            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.gene = data['item'];
+            this.router.navigate([
+                '/genes',
+                { outlets: {'genes-router': [ 'gene-details', data['item'].hgnc_symbol ] }}
+            ]);
+        });
     }
 }
