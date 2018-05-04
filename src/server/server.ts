@@ -12,7 +12,7 @@ import * as http from 'http';
 // Get our api routes
 import api from './routes/api';
 
-import debug = require('debug');
+import * as debug from 'debug';
 debug('wot:server');
 
 const app = express();

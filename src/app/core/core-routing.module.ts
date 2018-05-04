@@ -4,7 +4,7 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
-const routes: Routes = [
+export const routes: Routes = [
     { path: '', loadChildren: '../genes#GenesModule'},
     { path: 'about', component: AboutComponent },
     { path: '**', component: NoContentComponent }
