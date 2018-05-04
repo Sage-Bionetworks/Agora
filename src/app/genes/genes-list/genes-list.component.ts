@@ -58,18 +58,29 @@ export class GenesListComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.msgs = [{severity:'info', summary:'Gene Selected', detail:'Gene: ' + event.data.hgnc_symbol}];
-        this.dataService.getGene(this.selectedGene.hgnc_symbol).subscribe(data => {
-            if (!data['item']) this.router.navigate(['/genes']);
+        this.msgs = [{
+            severity: 'info',
+            summary: 'Gene Selected',
+            detail: 'Gene: ' + event.data.hgnc_symbol
+        }];
+        this.dataService.getGene(this.selectedGene.hgnc_symbol).subscribe((data) => {
+            if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
             this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
-            this.router.navigate(['../gene-details', this.selectedGene.hgnc_symbol], {relativeTo: this.route});
+            this.router.navigate(
+                ['../gene-details', this.selectedGene.hgnc_symbol],
+                {relativeTo: this.route}
+            );
         });
     }
 
     onRowUnselect(event) {
-        this.msgs = [{severity:'info', summary:'Gene Unselected', detail:'Gene: ' + event.data.hgnc_symbol}];
+        this.msgs = [{
+            severity: 'info',
+            summary: 'Gene Unselected',
+            detail: 'Gene: ' + event.data.hgnc_symbol
+        }];
         this.geneService.setCurrentGene(null);
     }
 
@@ -79,20 +90,21 @@ export class GenesListComponent implements OnInit {
 
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
-            let value1 = data1[event.field];
-            let value2 = data2[event.field];
+            const value1 = data1[event.field];
+            const value2 = data2[event.field];
             let result = null;
 
-            if (value1 == null && value2 != null)
+            if (value1 == null && value2 != null) {
                 result = -1;
-            else if (value1 != null && value2 == null)
+            } else if (value1 != null && value2 == null) {
                 result = 1;
-            else if (value1 == null && value2 == null)
+            } else if (value1 == null && value2 == null) {
                 result = 0;
-            else if (typeof value1 === 'string' && typeof value2 === 'string')
+            } else if (typeof value1 === 'string' && typeof value2 === 'string') {
                 result = value1.localeCompare(value2);
-            else
+            } else {
                 result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+            }
 
             return (event.order * result);
         });
@@ -102,16 +114,17 @@ export class GenesListComponent implements OnInit {
         this.loading = true;
 
         // Make a remote request to load data using state metadata from event
-        //event.first = First row offset
-        //event.rows = Number of rows per page
-        //event.sortField = Field name to sort with
-        //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
-        //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
+        // event.first = First row offset
+        // event.rows = Number of rows per page
+        // event.sortField = Field name to sort with
+        // event.sortOrder = Sort order as number, 1 for asc and -1 for dec
+        // filters: FilterMetadata object having field as key and filter value, filter
+        // matchMode as value
 
         // Use a promise when doing remotely
-        this.dataService.getTableData(event).subscribe(data => {
+        this.dataService.getTableData(event).subscribe((data) => {
             console.log(data);
-            this.datasource = (data['items']) ? <Gene[]>data['items'] : [];
+            this.datasource = (data['items']) ? data['items'] as Gene[] : [];
             this.genes = this.datasource;
             console.log(data['totalRecords']);
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;

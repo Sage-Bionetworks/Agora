@@ -1,1 +1,1 @@
-export { AppSharedModule } from "./shared.module";
+export { AppSharedModule } from './shared.module';

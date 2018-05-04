@@ -15,15 +15,13 @@ import colorbrewer from 'colorbrewer';
 
 @Injectable()
 export class DataService {
+    tissuesMap = new Map<string, any>();
     private ndx: any;
     private data: any;
     private hgncDim: any;
     private tissuesDim: any;
     private modelsDim: any;
-
     private dbgenes: Observable<Gene[]>;
-
-    tissuesMap = new Map<string, any>();
 
     constructor(
         private http: HttpClient,
@@ -35,23 +33,24 @@ export class DataService {
     }
 
     loadGenes(): Promise<boolean> {
-        let self = this;
+        const self = this;
         return new Promise((resolve, reject) => {
-            let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            let params = new HttpParams();
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            const params = new HttpParams();
 
             // Get all the genes to render the charts
             this.http.get('/api/genes', { headers, params }).subscribe((data) => {
                 data['items'].forEach((d) => {
                     // Separate the columns we need
                     d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = self.decimalPipe.transform(+d.neg_log10_adj_p_val, '1.1-5');
+                    d.neg_log10_adj_p_val = self.decimalPipe.transform(
+                        +d.neg_log10_adj_p_val,
+                        '1.1-5'
+                    );
                     d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
-
-                    //if (d.hgnc_symbol === 'A2ML1') console.log(d);
                 });
 
                 self.ndx = crossfilter(data['items']);
@@ -63,18 +62,21 @@ export class DataService {
 
                 resolve(true);
             });
-        })
+        });
     }
 
     loadGenesFile(fname: string): Promise<boolean> {
-        let self = this;
+        const self = this;
         return new Promise((resolve, reject) => {
             // This will be done once at the server
             d3.csv('/assets/data/' + fname, (data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
                     d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = self.decimalPipe.transform(+d.neg_log10_adj_p_val, '1.1-5');
+                    d.neg_log10_adj_p_val = self.decimalPipe.transform(
+                        +d.neg_log10_adj_p_val,
+                        '1.1-5'
+                    );
                     d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
@@ -90,14 +92,14 @@ export class DataService {
 
                 resolve(true);
             });
-        })
+        });
     }
 
     getTableData(paramsObj?: LazyLoadEvent) {
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
 
-        for (var key in paramsObj) {
+        for (const key in paramsObj) {
             if (paramsObj.hasOwnProperty(key)) {
                 params = params.append(key, paramsObj[key]);
             }
@@ -107,13 +109,13 @@ export class DataService {
     }
 
     getGenesMatchId(id: string) {
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.get('/api/genes/' + id, { headers });
     }
 
     getGene(id: string) {
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.get('/api/gene/' + id, { headers });
     }
@@ -123,18 +125,19 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(label: string, info:any, filterGene: Gene, filterTissues: string[], filterModels: string[]): CrossFilter.Dimension<any, any> {
-        let self = this;
-        let dimValue = info.dimension;
-        let allTissues: Map<string, any> = new Map<string, any>();
+    getDimension(label: string, info: any, filterGene: Gene, filterTissues: string[],
+                 filterModels: string[]): CrossFilter.Dimension<any, any> {
+        const self = this;
+        const dimValue = info.dimension;
+        const allTissues: Map<string, any> = new Map<string, any>();
 
-        let dim = this.getNdx().dimension(function(d) {
-            switch(info.type) {
+        const dim = this.getNdx().dimension(function(d) {
+            switch (info.type) {
                 case 'forest-plot':
                     if (info.filter) {
                         // The key returned
                         let rvalue: any = '';
-                        if (!filterTissues.some((t) => { return t === d[dimValue[0]]; })) {
+                        if (!filterTissues.some((t) => t === d[dimValue[0]])) {
                             if (!allTissues[d[dimValue[0]]]) {
                                 allTissues[d[dimValue[0]]] = { added: false };
                             }
@@ -152,16 +155,20 @@ export class DataService {
                         return d[dimValue[0]];
                     }
                 case 'scatter-plot':
-                    let x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
-                    let y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
+                    const x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
+                    const y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
 
                     return [x, y, d[dimValue[2]]];
                 case 'select-menu':
                     if (info.filter) {
                         if (dimValue[0] === 'comparison_model_sex') {
-                            return (filterModels.some((t) => { return t === d[dimValue[0]]})) ? d[dimValue[0]] : '';
+                            return (filterModels.some((t) => t === d[dimValue[0]])) ?
+                                    d[dimValue[0]] :
+                                    '';
                         } else if (dimValue[0] === 'tissue_study_pretty') {
-                            return (filterTissues.some((t) => { return t === d[dimValue[0]]})) ? d[dimValue[0]] : '';
+                            return (filterTissues.some((t) => t === d[dimValue[0]])) ?
+                                    d[dimValue[0]] :
+                                    '';
                         }
                     } else {
                         return d[dimValue[0]];
@@ -197,10 +204,10 @@ export class DataService {
 
     // Reduce functions for constraint charts
     reduceAdd(attr: string, constraint?: any) {
-        let self = this;
-        return function (p, v) {
-            if (!Number.isNaN(+v[attr]) && v[attr] != 'NA') {
-                if (constraint && constraint.names.some((t) => { return t === v[constraint.attr]; })) {
+        const self = this;
+        return (p, v) => {
+            if (!Number.isNaN(+v[attr]) && v[attr] !== 'NA') {
+                if (constraint && constraint.names.some((t) => t === v[constraint.attr])) {
                     p[attr] += +v[attr];
                 } else {
                     p[attr] += 0;
@@ -209,14 +216,14 @@ export class DataService {
 
             }
             return p;
-        }
+        };
     }
 
     reduceRemove(attr: string, constraint?: any) {
-        let self = this;
-        return function (p, v) {
-            if (!Number.isNaN(+v[attr]) && v[attr] != 'NA') {
-                if (constraint && constraint.names.some((t) => { return t === v[constraint.attr]; })) {
+        const self = this;
+        return (p, v) => {
+            if (!Number.isNaN(+v[attr]) && v[attr] !== 'NA') {
+                if (constraint && constraint.names.some((t) => t === v[constraint.attr])) {
                     p[attr] -= +v[attr];
                 } else {
                     p[attr] -= 0;
@@ -224,17 +231,17 @@ export class DataService {
                 --p.count;
             }
             return p;
-        }
+        };
     }
 
     reduceInit() {
-        return {count:0, sum:0, logfc:0};
+        return {count: 0, sum: 0, logfc: 0};
     }
 
-    rmEmptyBinsDefault = (source_group) => {
+    rmEmptyBinsDefault = (sourceGroup) => {
         return {
             all: () => {
-                return source_group.all().filter(function(d) {
+                return sourceGroup.all().filter(function(d) {
                     // Add your filter condition here
                     return d.key !== null && d.key !== '';
                 });
@@ -242,10 +249,10 @@ export class DataService {
         };
     }
 
-    rmEmptyBinsCustom = (source_group, tissue?: string, model?: string) => {
+    rmEmptyBinsCustom = (sourceGroup, tissue?: string, model?: string) => {
         return {
             all: () => {
-                return source_group.all().filter(function(d) {
+                return sourceGroup.all().filter(function(d) {
                     // Add your filter condition here
                     return +d.key[0] !== 0 || +d.key[1] !== 0;
                 });

@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/empty'
+import 'rxjs/add/observable/empty';
 import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
@@ -52,13 +52,13 @@ export class GeneSearchComponent implements OnInit {
                     return Observable.empty<Response>();
                 }
             })
-            .subscribe(data => {
-                this.results = (data['items']) ? <Gene[]>data['items'] : [];
-            })
+            .subscribe((data) => {
+                this.results = (data['items']) ? data['items'] as Gene[] : [];
+            });
     }
 
     search(queryString: string) {
-        if (queryString) return this.dataService.getGenesMatchId(queryString);
+        if (queryString) { return this.dataService.getGenesMatchId(queryString); }
     }
 
     focusSearchList(state: boolean) {
@@ -66,7 +66,7 @@ export class GeneSearchComponent implements OnInit {
     }
 
     closeSearchList(event: any) {
-        if (!this.hasFocus) this.results = [];
+        if (!this.hasFocus) { this.results = []; }
     }
 
     getGeneId() {
@@ -74,8 +74,8 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(gene: Gene) {
-        this.dataService.getGene(gene.hgnc_symbol).subscribe(data => {
-            if (!data['item']) this.router.navigate(['/genes']);
+        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+            if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
             this.geneService.setNegAdjPValue(data['maxNegLogPValue']);

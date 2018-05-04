@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,11 +7,8 @@ import { Router } from '@angular/router';
   styleUrls: [ './footer.component.scss' ],
   encapsulation: ViewEncapsulation.None
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
     constructor(
         private router: Router
     ) { }
-
-    ngOnInit() {
-    }
 }

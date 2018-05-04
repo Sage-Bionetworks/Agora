@@ -78,8 +78,8 @@ export class GeneService {
     filterTissuesModels(gene: Gene): Promise<boolean> {
         return new Promise((resolve, reject) => {
             // Don't apply a filter to the dimension here
-            if (this.models.length) this.models = [];
-            if (this.tissues.length) this.tissues = [];
+            if (this.models.length) { this.models = []; }
+            if (this.tissues.length) { this.tissues = []; }
             this.dataService.getGenesDimension().top(Infinity).forEach((g) => {
                 if (g.hgnc_symbol === gene.hgnc_symbol) {
                     this.models.push(g.comparison_model_sex);

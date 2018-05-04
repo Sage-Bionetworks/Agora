@@ -46,9 +46,15 @@ export class ScatterPlotViewComponent implements OnInit {
     }
 
     initChart() {
-        let self = this;
+        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        this.dim = this.dataService.getDimension(
+            this.label,
+            this.info,
+            this.currentGene,
+            this.filterTissues,
+            this.filterModels
+        );
         this.group = this.dataService.getGroup(this.label, this.info);
         this.title = this.info.title;
 
@@ -59,7 +65,7 @@ export class ScatterPlotViewComponent implements OnInit {
             .y(d3.scale.linear().domain(this.geneService.getNegAdjPValue()))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
-            .title(function(p) {
+            .title((p) => {
                 return null;
             }) // Disable tooltips
             .renderTitle(false)
@@ -75,7 +81,7 @@ export class ScatterPlotViewComponent implements OnInit {
                 return d.key[1];
             })
             .colors(d3.scale.ordinal().domain(['yes', 'no']).range(['red', 'black']))
-            .colorAccessor(function (d) {
+            .colorAccessor((d) => {
                 if (d.key[2] === self.currentGene.hgnc_symbol) {
                     return 'yes';
                 } else {

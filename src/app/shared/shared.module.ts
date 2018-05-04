@@ -8,7 +8,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { fakeBackendProvider } from "./helpers";
+import { fakeBackendProvider } from './helpers';
 
 import { AlertService } from './services';
 

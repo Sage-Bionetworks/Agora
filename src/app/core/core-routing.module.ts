@@ -7,7 +7,6 @@ import { NoContentComponent } from './no-content';
 const routes: Routes = [
     { path: '', loadChildren: '../genes#GenesModule'},
     { path: 'about', component: AboutComponent },
-    //{ path: '', redirectTo: 'genes/genes-intro', pathMatch: 'full' },
     { path: '**', component: NoContentComponent }
 ];
 

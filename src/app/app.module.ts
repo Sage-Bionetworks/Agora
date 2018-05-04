@@ -12,7 +12,7 @@ import { environment } from 'environments/environment';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 // Sub-components
-import { AppComponent }  from './app.component';
+import { AppComponent } from './app.component';
 
 // State related imports
 import { AppState, InternalStateType } from './app.service';
@@ -23,11 +23,11 @@ const APP_PROVIDERS = [
     AppState
 ];
 
-type StoreType = {
-    state: InternalStateType,
-    restoreInputValues: () => void,
-    disposeOldHosts: () => void
-};
+interface StoreType {
+    state: InternalStateType;
+    restoreInputValues: () => void;
+    disposeOldHosts: () => void;
+}
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -35,7 +35,7 @@ type StoreType = {
         AppComponent
     ],
     imports: [
-        //BrowserModule.withServerTransition({ appId: }),
+        // BrowserModule.withServerTransition({ appId: }),
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule,

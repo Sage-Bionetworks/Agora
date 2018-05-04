@@ -35,7 +35,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     loadChartData(): Promise<any> {
-        return new Promise((resolve, reject) =>{
+        return new Promise((resolve, reject) => {
             this.chartService.addChartInfo(
                 'volcano-plot',
                 {
@@ -58,7 +58,10 @@ export class GeneRNASeqDEComponent implements OnInit {
                     title: 'Log fold forest plot',
                     filter: 'default',
                     attr: 'logfc',
-                    constraint: { attr: 'tissue_study_pretty', names: this.geneService.getTissues() }
+                    constraint: {
+                        attr: 'tissue_study_pretty',
+                        names: this.geneService.getTissues()
+                    }
                 }
             );
             this.chartService.addChartInfo(
@@ -83,7 +86,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             );
 
             resolve(true);
-        })
+        });
     }
 
     getTissue(index: number) {
@@ -95,6 +98,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) : this.router.navigate([path], {relativeTo: this.route});
+        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) :
+        this.router.navigate([path], {relativeTo: this.route});
     }
 }

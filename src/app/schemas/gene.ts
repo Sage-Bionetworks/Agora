@@ -1,7 +1,7 @@
-import { Document, Schema, Model, model} from "mongoose";
-import { Gene, GeneDocument } from "../models";
+import { Document, Schema, Model, model } from 'mongoose';
+import { Gene, GeneDocument } from '../models';
 
-export var GeneSchema: Schema = new Schema({
+export let GeneSchema: Schema = new Schema({
     ensembl_gene_id: {
         required: true,
         type: String,
