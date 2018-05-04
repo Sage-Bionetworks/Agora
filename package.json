@@ -126,7 +126,7 @@
     "@types/mongoose": "^5.0.9",
     "@types/node": "^9.4.6",
     "@types/source-map": "^0.5.0",
-    "@types/tapable": "^1.0.2",
+    "@types/tapable": "^0.2.5",
     "@types/uglify-js": "^2.6.28",
     "@types/webpack": "^2.2.16",
     "add-asset-html-webpack-plugin": "~2.1.2",
