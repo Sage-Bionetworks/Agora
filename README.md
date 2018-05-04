@@ -21,14 +21,22 @@ What you need to run this app:
 
 ## Installing
 Once you have those, you should install these globals with `npm install --global`:
-* `webpack` (`npm install --global webpack`)
-* `webpack-dev-server` (`npm install --global webpack-dev-server`)
-* `karma` (`npm install --global karma-cli`)
-* `protractor` (`npm install --global protractor`)
-* `rimraf` {`npm install --global rimraf`}
-* `typescript` (`npm install --global typescript`)
-* `cross-env` (`npm install --global cross-env`)
-
+* `webpack`
+* `webpack-dev-server`
+* `karma`
+* `protractor`
+* `rimraf`
+* `typescript`
+* `cross-env`
+```
+npm install --global webpack
+npm install --global webpack-dev-server
+npm install --global karma-cli
+npm install --global protractor
+npm install --global rimraf
+npm install --global typescript
+npm install --global cross-env
+```
 ## Running the app
 
 * Local development environment
