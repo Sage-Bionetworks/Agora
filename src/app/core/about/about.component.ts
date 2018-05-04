@@ -24,12 +24,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AboutComponent implements OnInit {
 
-  public localState: any;
+  localState: any;
   constructor(
     public route: ActivatedRoute
   ) {}
 
-  public ngOnInit() {
+  ngOnInit() {
     this.route
       .data
       .subscribe((data: any) => {

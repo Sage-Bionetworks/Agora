@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Gene } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
-import { GeneService, DataService } from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -19,77 +19,74 @@ export class GeneRNASeqDEComponent implements OnInit {
     @Input() style: any;
     @Input() gene: Gene;
     @Input() id: string;
+    dataLoaded: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService
     ) { }
 
     ngOnInit() {
-        this.loadChartData();
-
-        this.router.navigate([
-            '/genes/gene-details/'+this.id,
-            { outlets: { 'left-chart': [ 'left-scatter-plot', 'volcano-plot' ] }}
-        ], {skipLocationChange: true}).then(data => {
-            this.router.navigate([
-                '/genes/gene-details/'+this.id,
-                { outlets: { 'right-chart': [ 'right-row-chart', 'forest-plot' ] }}
-            ], {skipLocationChange: true});
+        this.loadChartData().then((status) => {
+            this.dataLoaded = status;
         });
-
     }
 
-    loadChartData() {
-        //this.chartService.setData(this.dataService.getGenes());
-        this.chartService.addChartInfo(
-            'volcano-plot',
-            {
-                dimension: ['logfc', 'neg_log10_adj_p_val', 'hgnc_symbol'],
-                group: 'self',
-                type: 'scatter-plot',
-                title: 'Volcano Plot',
-                xAxisLabel: 'Log Fold Change',
-                yAxisLabel: '-log10(Adjusted p-value)',
-                x: ['logfc'],
-                y: ['neg_log10_adj_p_val']
-            }
-        );
-        this.chartService.addChartInfo(
-            'forest-plot',
-            {
-                dimension: ['tissue_study_pretty'],
-                group: 'self',
-                type: 'forest-plot',
-                title: 'Log fold forest plot',
-                filter: 'default',
-                attr: 'logfc',
-                constraint: { attr: 'tissue_study_pretty', names: this.geneService.getTissues() }
-            }
-        );
-        this.chartService.addChartInfo(
-            'select-tissue',
-            {
-                dimension: ['tissue_study_pretty'],
-                group: 'self',
-                type: 'select-menu',
-                title: '',
-                filter: 'default'
-            }
-        );
-        this.chartService.addChartInfo(
-            'select-model',
-            {
-                dimension: ['comparison_model_sex'],
-                group: 'self',
-                type: 'select-menu',
-                title: '',
-                filter: 'default'
-            }
-        );
+    loadChartData(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.chartService.addChartInfo(
+                'volcano-plot',
+                {
+                    dimension: ['logfc', 'neg_log10_adj_p_val', 'hgnc_symbol'],
+                    group: 'self',
+                    type: 'scatter-plot',
+                    title: 'Volcano Plot',
+                    xAxisLabel: 'Log Fold Change',
+                    yAxisLabel: '-log10(Adjusted p-value)',
+                    x: ['logfc'],
+                    y: ['neg_log10_adj_p_val']
+                }
+            );
+            this.chartService.addChartInfo(
+                'forest-plot',
+                {
+                    dimension: ['tissue_study_pretty'],
+                    group: 'self',
+                    type: 'forest-plot',
+                    title: 'Log fold forest plot',
+                    filter: 'default',
+                    attr: 'logfc',
+                    constraint: {
+                        attr: 'tissue_study_pretty',
+                        names: this.geneService.getTissues()
+                    }
+                }
+            );
+            this.chartService.addChartInfo(
+                'select-tissue',
+                {
+                    dimension: ['tissue_study_pretty'],
+                    group: 'self',
+                    type: 'select-menu',
+                    title: '',
+                    filter: 'default'
+                }
+            );
+            this.chartService.addChartInfo(
+                'select-model',
+                {
+                    dimension: ['comparison_model_sex'],
+                    group: 'self',
+                    type: 'select-menu',
+                    title: '',
+                    filter: 'default'
+                }
+            );
+
+            resolve(true);
+        });
     }
 
     getTissue(index: number) {
@@ -101,6 +98,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) : this.router.navigate([path], {relativeTo: this.route});
+        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) :
+        this.router.navigate([path], {relativeTo: this.route});
     }
 }

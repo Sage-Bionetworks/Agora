@@ -88,6 +88,8 @@
     line-height: normal;
     font-size: 18px;
     color: #1A1C29;
+    max-height: 250px;
+    overflow-y: auto;
 }
 .filter-select-list img {
     margin-right: 30px;
@@ -111,7 +113,7 @@
     height: 50px;
 }
 
-.artist-name {
+.gene-name {
     display: inline-block;
     position: absolute;
 }

@@ -15,13 +15,15 @@ export class GeneService {
     private currentModel: string;
     private models: string[] = [];
     private tissues: string[] = [];
+    private minLogFC: number = 0;
+    private maxLogFC: number = 10;
+    private maxNegLogPValue: number = 50;
+    private minNegLogPValue: number = 0;
 
     constructor(
         private decimalPipe: DecimalPipe,
         private dataService: DataService
-    ) {
-
-    }
+    ) {}
 
     setCurrentGene(gene: Gene) {
         this.currentGene = gene;
@@ -55,11 +57,29 @@ export class GeneService {
         return this.models;
     }
 
+    setLogFC(min: number, max: number) {
+        this.minLogFC = min;
+        this.maxLogFC = max;
+    }
+
+    getLogFC(): number[] {
+        return [this.minLogFC, this.maxLogFC];
+    }
+
+    setNegAdjPValue(max: number, min?: number) {
+        this.maxNegLogPValue = max;
+        this.minNegLogPValue = (min) ? min : 0;
+    }
+
+    getNegAdjPValue(): number[] {
+        return [0, this.maxNegLogPValue];
+    }
+
     filterTissuesModels(gene: Gene): Promise<boolean> {
         return new Promise((resolve, reject) => {
             // Don't apply a filter to the dimension here
-            if (this.models.length) this.models = [];
-            if (this.tissues.length) this.tissues = [];
+            if (this.models.length) { this.models = []; }
+            if (this.tissues.length) { this.tissues = []; }
             this.dataService.getGenesDimension().top(Infinity).forEach((g) => {
                 if (g.hgnc_symbol === gene.hgnc_symbol) {
                     this.models.push(g.comparison_model_sex);

@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/empty'
+import 'rxjs/add/observable/empty';
 import { Observable } from 'rxjs/Observable';
 
 import { Gene } from '../../models';
@@ -29,10 +29,9 @@ export class GeneSearchComponent implements OnInit {
     @Input() genes: Gene[];
     queryField: FormControl = new FormControl();
     results: Gene[] = [];
+    hasFocus: boolean = false;
 
     private gene: Gene;
-
-    geneId;
 
     constructor(
         private router: Router,
@@ -53,13 +52,21 @@ export class GeneSearchComponent implements OnInit {
                     return Observable.empty<Response>();
                 }
             })
-            .subscribe(data => {
-                this.results = (data['items']) ? <Gene[]>data['items'] : [];
-            })
+            .subscribe((data) => {
+                this.results = (data['items']) ? data['items'] as Gene[] : [];
+            });
     }
 
     search(queryString: string) {
-        if (queryString) return this.dataService.getGenesMatchId(queryString);
+        if (queryString) { return this.dataService.getGenesMatchId(queryString); }
+    }
+
+    focusSearchList(state: boolean) {
+        this.hasFocus = state;
+    }
+
+    closeSearchList(event: any) {
+        if (!this.hasFocus) { this.results = []; }
     }
 
     getGeneId() {
@@ -67,9 +74,16 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(gene: Gene) {
-        this.geneService.setCurrentGene(gene);
-        this.geneId = gene.hgnc_symbol;
-        this.gene = gene;
-        if (this.gene) this.router.navigate(['gene-details', this.gene.hgnc_symbol], {relativeTo: this.route});
+        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+            if (!data['item']) { this.router.navigate(['/genes']); }
+            this.geneService.setCurrentGene(data['item']);
+            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.gene = data['item'];
+            this.router.navigate([
+                '/genes',
+                { outlets: {'genes-router': [ 'gene-details', data['item'].hgnc_symbol ] }}
+            ]);
+        });
     }
 }

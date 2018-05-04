@@ -5,6 +5,7 @@ import {
   TestBed,
   ComponentFixture
 } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 /**
  * Load the implementations that should be tested
@@ -22,6 +23,7 @@ describe(`App`, () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AppComponent ],
+      imports: [ RouterTestingModule ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [AppState]
     })

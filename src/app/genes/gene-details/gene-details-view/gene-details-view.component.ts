@@ -17,7 +17,6 @@ import { Gene } from '../../../models';
 })
 export class GeneDetailsViewComponent implements OnInit {
     id: string;
-    // Change to smaller object, name based
     gene: Gene;
     geneInfo: Gene[];
     models: string[] = [];
@@ -37,28 +36,50 @@ export class GeneDetailsViewComponent implements OnInit {
         this.gene = this.geneService.getCurrentGene();
 
         // Crumb logic after getting the current gene
-        let crumbs = [
+        const crumbs = [
             { label: 'GENES', routerLink: ['/genes'] }
         ];
-        if (!this.gene) {
-            this.router.navigate(['/genes']);
-        } else {
-            this.id = this.route.snapshot.paramMap.get('id');
-            crumbs.push({ label: this.gene.hgnc_symbol.toUpperCase(), routerLink: ['/gene-details/' + this.id] });
 
-            this.dataService.loadGenes().then((loaded) => {
-                if (loaded) {
-                    this.geneService.filterTissuesModels(this.gene).then((loaded: boolean) => {
-                        this.dataLoaded = loaded;
-                    });
-                }
-                // Handle error later
+        this.id = this.route.snapshot.paramMap.get('id');
+        // If we don't have a Gene here, in case we are reloading the page
+        // try to get it from the server and move on
+        if (!this.gene) {
+            this.dataService.getGene(this.id).subscribe((data) => {
+                if (!data['item']) { this.router.navigate(['/genes']); }
+                this.geneService.setCurrentGene(data['item']);
+                this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+                this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+                this.gene = data['item'];
+                crumbs.push({
+                    label: this.gene.hgnc_symbol.toUpperCase(),
+                    routerLink: ['/gene-details/' + this.id]
+                });
+                this.breadcrumb.setCrumbs(crumbs);
+                this.initDetails();
             });
+        } else {
+            crumbs.push({
+                label: this.gene.hgnc_symbol.toUpperCase(),
+                routerLink: ['/gene-details/' + this.id]
+            });
+            this.breadcrumb.setCrumbs(crumbs);
+            this.initDetails();
         }
-        this.breadcrumb.setCrumbs(crumbs);
+    }
+
+    initDetails() {
+        this.dataService.loadGenes().then((genesLoaded) => {
+            if (genesLoaded) {
+                this.geneService.filterTissuesModels(this.gene).then((loaded: boolean) => {
+                    this.dataLoaded = loaded;
+                });
+            }
+            // Handle error later
+        });
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) : this.router.navigate([path], {relativeTo: this.route});
+        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) :
+        this.router.navigate([path], {relativeTo: this.route});
     }
 }

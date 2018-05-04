@@ -4,11 +4,10 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
-const routes: Routes = [
-    { path: 'genes', loadChildren: '../genes#GenesModule'},
+export const routes: Routes = [
+    { path: '', loadChildren: '../genes#GenesModule'},
     { path: 'about', component: AboutComponent },
-    { path: '', redirectTo: '/genes', pathMatch: 'full' },
-    { path: '**',    component: NoContentComponent }
+    { path: '**', component: NoContentComponent }
 ];
 
 @NgModule({
