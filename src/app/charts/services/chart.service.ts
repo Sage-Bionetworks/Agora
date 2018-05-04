@@ -12,7 +12,7 @@ export class ChartService {
     ) { }
 
     addChartInfo(label: string, chartObj: any) {
-        if (!this.chartInfos[label]) this.chartInfos.set(label, chartObj);
+        if (!this.chartInfos[label]) { this.chartInfos.set(label, chartObj); }
     }
 
     getChartInfo(label: string): any {

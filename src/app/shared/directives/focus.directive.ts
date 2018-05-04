@@ -4,13 +4,12 @@ import { Directive, ElementRef, Input, HostListener } from '@angular/core';
     selector: '[validateOnBlur]'
 })
 export class FocusDirective {
-    constructor() { }
     @HostListener('focus', ['$event.target'])
         onFocus(target) {
-            console.log("Focus called");
+            console.log('Focus called.');
         }
     @HostListener('focusout', ['$event.target'])
         onFocusout(target) {
-            console.log("Focus out called");
+            console.log('Focus out called.');
         }
 }

@@ -1,7 +1,7 @@
-import { Document, Schema, Model, model} from "mongoose";
-import { Gene, GeneDocument } from "../models";
+import { Document, Schema, Model, model } from 'mongoose';
+import { Gene, GeneDocument } from '../models';
 
-export var GeneSchema: Schema = new Schema({
+export let GeneSchema: Schema = new Schema({
     ensembl_gene_id: {
         required: true,
         type: String,
@@ -9,6 +9,38 @@ export var GeneSchema: Schema = new Schema({
     hgnc_symbol: {
         required: true,
         type: String,
+    },
+    logfc: {
+        required: false,
+        type: Number
+    },
+    aveexpr: {
+        required: false,
+        type: Number
+    },
+    ci_l: {
+        required: false,
+        type: Number
+    },
+    ci_r: {
+        required: false,
+        type: Number
+    },
+    adj_p_val: {
+        required: false,
+        type: Number
+    },
+    neg_log10_adj_p_val: {
+        required: false,
+        type: Number
+    },
+    tissue_study_pretty: {
+        required: false,
+        type: String
+    },
+    comparison_model_sex_pretty: {
+        required: false,
+        type: String
     }
 }, {
     timestamps: true

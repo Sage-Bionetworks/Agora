@@ -36,10 +36,12 @@
                 </div>
                 <div class="row chart-container-row">
                     <div class="col-md-7">
-                        <router-outlet name="left-chart"></router-outlet>
+                        <scatter-plot *ngIf="dataLoaded"></scatter-plot>
+                        <!--<router-outlet name="left-chart"></router-outlet>-->
                     </div>
                     <div class="col-md-5">
-                        <router-outlet name="right-chart"></router-outlet>
+                        <row-chart *ngIf="dataLoaded"></row-chart>
+                        <!--<router-outlet name="right-chart"></router-outlet>-->
                     </div>
                 </div>
             </div>

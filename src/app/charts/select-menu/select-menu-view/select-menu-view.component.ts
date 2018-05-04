@@ -9,7 +9,7 @@ import { GeneService, DataService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-//import { selectMenu, redrawAll } from 'dc';
+// import { selectMenu, redrawAll } from 'dc';
 
 @Component({
     selector: 'select-menu',
@@ -43,7 +43,7 @@ export class SelectMenuViewComponent implements OnInit {
 
     ngOnInit() {
         if (!this.label) {
-            this.route.params.subscribe(params => {
+            this.route.params.subscribe((params) => {
                 this.label = params['label'];
                 this.initChart();
             });
@@ -53,9 +53,15 @@ export class SelectMenuViewComponent implements OnInit {
     }
 
     initChart() {
-        let self = this;
+        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        this.dim = this.dataService.getDimension(
+            this.label,
+            this.info,
+            this.currentGene,
+            this.filterTissues,
+            this.filterModels
+        );
         this.group = this.dataService.getGroup(this.label, this.info);
 
         this.chart = dc.selectMenu(this.selectMenu.nativeElement)
@@ -71,11 +77,11 @@ export class SelectMenuViewComponent implements OnInit {
         // Improve this later
         this.chart.on('postRender', function(chart) {
             if (self.defaultValue) {
-                let selectMenu = d3.select(self.selectMenu.nativeElement)
-                    .select('select.dc-select-menu')
-                let options = selectMenu
+                const selectMenu = d3.select(self.selectMenu.nativeElement)
+                    .select('select.dc-select-menu');
+                const options = selectMenu
                     .selectAll('option');
-                let defaultOption = options[0]['find'](o => {
+                const defaultOption = options[0]['find']((o) => {
                     return (o['innerHTML'].includes(self.defaultValue));
                 });
                 if (defaultOption) {
@@ -92,7 +98,7 @@ export class SelectMenuViewComponent implements OnInit {
     }
 
     filterAll() {
-        (this.filterStrings.length) ? this.chart.filterAll(this.filterStrings) : this.chart.filterAll();
+        this.chart.filterAll((this.filterStrings.length) ? this.filterStrings : null);
         dc.redrawAll();
         this.isDisabled = true;
     }

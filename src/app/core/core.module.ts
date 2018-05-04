@@ -19,10 +19,10 @@ import {
 } from 'primeng/table';
 
 // Backend modules and extra config
-import { environment, ENV_FIREBASE_CONFIG } from 'environments/environment';
+import { environment } from 'environments/environment';
 import { AngularFireModule } from 'angularfire2';
 
-export const firebaseConfig = ENV_FIREBASE_CONFIG;
+// export const firebaseConfig = ENV_FIREBASE_CONFIG;
 
 import {
     AuthGuardService,
@@ -55,7 +55,7 @@ import '../../styles/headings.css';
         PanelMenuModule,
         BreadcrumbModule,
         // Other third-party modules
-        AngularFireModule.initializeApp(firebaseConfig),
+        // AngularFireModule.initializeApp(firebaseConfig),
         // Feature Modules
         GenesModule,
         ChartsModule

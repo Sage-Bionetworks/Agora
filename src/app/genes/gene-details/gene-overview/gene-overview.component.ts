@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Gene } from '../../../models';
@@ -18,7 +18,6 @@ export class GeneOverviewComponent implements OnInit {
     @Input() styleClass: string = 'overview-panel';
     @Input() style: any;
     @Input() gene: Gene;
-    @Input() id: string;
 
     constructor(
         private router: Router,

@@ -1,0 +1,30 @@
+.section-intro-main-page {
+    padding-top:50px;
+    padding-left: 5em;
+    padding-bottom: 5em;
+    padding-right: 5em;
+    height:250px;color: #000000;
+    background-color: #ffffff;
+}
+
+.section-search-main-page {
+    padding-top:50px;
+    padding-left: 5em;
+    padding-bottom: 5em;
+    padding-right: 5em;
+    height:300px;color: #000000;
+    background-color: #ffffff;
+    background: rgba(45, 156, 219, 0.25);
+}
+
+.genes-list-header {
+    a {
+        cursor: pointer;
+        color: #00BCD4;
+        text-decoration: none;
+
+        &:hover {
+            color: rgb(4, 125, 141) !important;
+        }
+    }
+}
