@@ -31,6 +31,7 @@ export class ForceChartViewComponent implements OnInit {
         const height: any = '500';
         console.log('init force');
         const svg = d3.select(this.forceChart.nativeElement)
+            .append('svg:svg')
             .attr('width', width)
             .attr('height', height);
 
@@ -51,7 +52,23 @@ export class ForceChartViewComponent implements OnInit {
                     .data(data.nodes)
                     .enter().append('circle')
                     .attr('r', 7)
-                    .attr('fill', this.getNodeColor);
+                    .attr('fill', this.getNodeColor)
+                    .on('mouseover', (d: any) => {
+                        tooltip.transition()
+                            .duration(200)
+                            .style('opacity', .9);
+                        tooltip.html(d.name)
+                            .style('left', (d3.event.layerX) + 'px')
+                            .style('top', (d3.event.layerY - 28) + 'px');
+                    })
+                    .on('mouseout', (d) => {
+                        tooltip.transition()
+                            .duration(500)
+                            .style('opacity', 0);
+                    })
+                    .on('click', (d: any) => {
+                        console.log('click' + d.name);
+                    });
 
             const textElements = svg.append('g')
                 .selectAll('text')
@@ -106,6 +123,9 @@ export class ForceChartViewComponent implements OnInit {
                     node.fy = null;
                 });
             nodeElements.call(dragDrop);
+            const tooltip = d3.select(this.forceChart.nativeElement).append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0);
         })
         .catch((err) => { console.log(err); });
     }
