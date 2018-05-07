@@ -84,7 +84,6 @@ export class DataService {
     }
 
     loadGenes(): Promise<boolean> {
-        const self = this;
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             const params = new HttpParams();
@@ -94,12 +93,12 @@ export class DataService {
                 data['items'].forEach((d) => {
                     // Separate the columns we need
 
-                    d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = self.decimalPipe.transform(
+                    d.logfc = this.decimalPipe.transform(+d.logfc, '1.1-5');
+                    d.neg_log10_adj_p_val = this.decimalPipe.transform(
                         +d.neg_log10_adj_p_val,
                         '1.1-5'
                     );
-                    d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
+                    d.aveexpr = this.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;

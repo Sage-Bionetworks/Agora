@@ -12,6 +12,7 @@ import { Genes } from '../../app/schemas/gene';
 import { GenesLinks } from '../../app/schemas/geneLink';
 
 // Set the rdatabase
+console.log('env', express().get('env'));
 if (express().get('env') === 'development') {
     database.url = 'mongodb://localhost:27017/walloftargets';
 } else {
@@ -177,6 +178,7 @@ router.get('/genes/:id', (req, res, next) => {
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
+        console.log(g);
         if (g.hgnc_symbol.includes(req.params.id.trim().toUpperCase())) {
             // Do not use a shallow copy here
             genes.push(JSON.parse(JSON.stringify(g)));
@@ -187,16 +189,22 @@ router.get('/genes/:id', (req, res, next) => {
 });
 
 // Get a gene by id, currently hgnc_symbol
+// Get a gene by id, currently hgnc_symbol
 router.get('/gene/:id', (req, res, next) => {
     console.log('Get a gene with an id');
     console.log(req.params.id);
     // Return an empty array in case no id was passed or no params
-    if (!req.params || !req.params.id) { res.json({ item: null}); }
+    if (!req.params || !req.params.id) {
+        console.log('no id');
+        res.json({ item: null });
+    }
 
-    Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
+    Genes.find({ hgnc_symbol: req.params.id }).exec((err, genes) => {
         if (err) {
+            console.log(err);
             next(err);
         } else {
+            console.log('loaded', genes);
             geneEntries = genes.slice();
             let minLogFC = +Infinity;
             let maxLogFC = -Infinity;
@@ -242,5 +250,4 @@ router.get('/genelist/:id', function(req, res, next) {
         });
     });
 });
-
-export = router;
+export default router;

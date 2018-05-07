@@ -120,7 +120,7 @@ export class RowChartViewComponent implements OnInit {
                 // translate the parent element
                 const hlines = chart.selectAll('g.row g.hline');
                 hlines.each(function(p, i) {
-                    d3.select(this).attr('transform', function(d) {
+                    d3.select(this).attr('transform', function(d: any) {
                         return 'translate(' + d.value.logfc + ')';
                     });
                 });
