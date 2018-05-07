@@ -1,0 +1,32 @@
+<div class="section-intro-main-page">
+    <h1>
+        Welcome!
+    </h1>
+    <p>
+        The Wall of Targets is an application to aggregate genomic evidence supporting candidate gene and module targets
+        nominated by members of the AMP-AD consortium.
+    </p>
+</div>
+
+<div class="section-search-main-page center-justified">
+    <h1>
+        Search for a gene
+    </h1>
+    <p>
+        Please type a gene symbol in the search box below.
+    </p>
+    <gene-search></gene-search>
+    <!-- Add popular genes here -->
+    <!--<p>
+        Popular community searches.
+    </p>-->
+</div>
+
+<div class="section-intro-main-page center-justified">
+    <h1 class="genes-list-header">
+        <a (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }})">View nominated target list</a>
+    </h1>
+    <p>
+        View a list of all genes nominated by AMP-AD groups as targets of interest.
+    </p>
+</div>

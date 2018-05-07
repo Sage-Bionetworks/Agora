@@ -1,10 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import {
-    ActivatedRoute
-} from '@angular/router';
-
 import { Gene } from '../../../models';
 
 import { ChartService } from '../../services';
@@ -12,14 +8,14 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-//import { rowChart } from 'dc';
 
 // Using a d3 v4 function to get all nodes
-d3.selection.prototype['nodes'] = function(){
-    var nodes = new Array(this.size()), i = -1;
+d3.selection.prototype['nodes'] = function() {
+    const nodes = new Array(this.size());
+    let i = -1;
     this.each(function() { nodes[++i] = this; });
     return nodes;
-}
+};
 
 @Component({
     selector: 'row-chart',
@@ -31,7 +27,7 @@ export class RowChartViewComponent implements OnInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
-    @Input() label: string;
+    @Input() label: string = 'forest-plot';
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() filterTissues = this.geneService.getTissues();
     @Input() filterModels = this.geneService.getModels();
@@ -45,7 +41,6 @@ export class RowChartViewComponent implements OnInit {
     display: boolean = false;
 
     constructor(
-        private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService,
@@ -53,38 +48,37 @@ export class RowChartViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.label) {
-            this.route.params.subscribe(params => {
-                this.label = params['label'];
-                this.initChart();
-            });
-        } else {
-            this.initChart();
-        }
+        this.initChart();
     }
 
     initChart() {
-        let self = this;
-        this.info = this.chartService.getChartInfo(this.label)
-        this.dim = this.dataService.getDimension(this.label, this.info, this.currentGene, this.filterTissues, this.filterModels);
+        const self = this;
+        this.info = this.chartService.getChartInfo(this.label);
+        this.dim = this.dataService.getDimension(
+            this.label,
+            this.info,
+            this.currentGene,
+            this.filterTissues,
+            this.filterModels
+        );
         this.group = this.dataService.getGroup(this.label, this.info);
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scaleLinear().domain(this.getDomain('logFC')))
+            .x(d3.scaleLinear().domain(this.geneService.getLogFC()))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logFC) || 0);
+                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logfc) || 0);
             })
-            .valueAccessor(function(d) {
-                return +(self.decimalPipe.transform(+d.value.logFC)) || 0;
+            .valueAccessor((d) => {
+                return +(self.decimalPipe.transform(+d.value.logfc || 0));
             })
-            .label(function (d) {
+            .label((d) => {
                 return d.key;
             })
             .othersGrouper(null)
-            .ordinalColors(['#fdae6b','#fd8d3c','#f16913','#d94801','#a63603','#7f2704'])
+            .ordinalColors(['#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'])
             .dimension(this.dim)
             .group(this.group)
             .transitionDuration(0);
@@ -100,37 +94,39 @@ export class RowChartViewComponent implements OnInit {
 
     // A custom renderlet function for this chart, allows us to change
     // what happens to the chart after rendering
-    registerChartEvent(chart: dc.RowChart, type: string = 'renderlet') {
-        let self = this;
-        this.chart.on(type, function (chart) {
-            let rectHeight = chart.select('g.row rect').attr('height');
-            let squareSize = 10;
-            let lineWidth = 60;
+    registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
+        const self = this;
+        // Using a different name for the chart variable here so it's nor shadowed
+        chartEl.on(type, function(chart) {
+            const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
+            const squareSize = 10;
+            const lineWidth = 60;
 
             // Test if we should display the chart. Using this variable so we don't see
             // the rows rectangles change into small squares abruptly
             if (!self.display) {
                 // Copy all vertical texts to another div, so they don't get hidden by
                 // the row chart svg after being translated
-                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize/2);
+                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
                 // Insert a line for each row of the chart
                 self.insertLinesInRows(chart);
 
                 // Draw the inserted lines in each row
-                self.drawLines(chart, rectHeight/2, lineWidth);
+                self.drawLines(chart, rectHeight / 2, lineWidth);
             } else {
-                // This part will be called on redraw after filtering, so at this point we just need
-                // to move the lines to the correct position again. First translate the parent element
-                let hlines = chart.selectAll('g.row g.hline');
-                hlines.each(function(d, i) {
-                    d3.select(this).attr('transform', function(d: any) {
-                        return 'translate('+d.value.logFC+')';
-                    })
+                // This part will be called on redraw after filtering, so at this point
+                // we just need to move the lines to the correct position again. First
+                // translate the parent element
+                const hlines = chart.selectAll('g.row g.hline');
+                hlines.each(function(p, i) {
+                    d3.select(this).attr('transform', function(d) {
+                        return 'translate(' + d.value.logfc + ')';
+                    });
                 });
 
                 // Finally redraw the lines in each row
-                self.drawLines(chart, rectHeight/2, lineWidth);
+                self.drawLines(chart, rectHeight / 2, lineWidth);
             }
 
             // Change the row rectangles into small squares, this happens on
@@ -144,29 +140,29 @@ export class RowChartViewComponent implements OnInit {
 
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
-        let newSvg = d3.select(el).append('svg');
-        let textGroup = newSvg.append('g')
-            .attr('class', 'textGroup');
+        const newSvg = d3.select(el).append('svg');
+        const textGroup = newSvg.append('g').attr('class', 'textGroup');
 
         // Remove the old texts and append to the new group
-        let allText = chart.selectAll('g.row text');
-        let removed = allText.remove();
-        removed['nodes']().forEach(n => {
+        const allText = chart.selectAll('g.row text');
+        const removed = allText.remove();
+        removed['nodes']().forEach((n) => {
             textGroup.append(function() {
                 return n;
-            })
+            });
         });
 
         // Move the text to the correct position in the new svg
-        let stdColHeight = chart.height();
-        let step = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement).getBBox().height / (removed['nodes']().length);
+        const stdColHeight = chart.height();
+        const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
+        const step = svgEl.getBBox().height / (removed['nodes']().length);
 
         d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
-            let currentStep = step * i;
-            d3.select(this).attr('transform', function () {
-                return 'translate(0,' + (currentStep+(vSpacing)) + ')';
-            });
-        });
+            const currentStep = step * i;
+            d3.select(this).attr('transform', () => {
+                return 'translate(0,' + (currentStep + (vSpacing)) + ')';
+            } );
+        } );
     }
 
     insertLinesInRows(chart: dc.RowChart) {
@@ -178,20 +174,21 @@ export class RowChartViewComponent implements OnInit {
 
     // Draw the lines through the chart rows
     drawLines(chart: dc.RowChart, yPos: number, lineWidth: number) {
-        let lines = chart.selectAll('g.row g.hline line')
+        const lines = chart.selectAll('g.row g.hline line')
             .attr({
                 'stroke-width': 1.5,
-                stroke: 'wheat',
-                x1: function(d) {
-                    return chart.x()(d.value.logFC) - lineWidth/2;
+                'stroke': 'wheat',
+                // ES6 method shorthand for object literals
+                'x1'(d) {
+                    return chart.x()(d.value.logfc) - lineWidth / 2;
                 },
-                y1: function(d) {
+                'y1'(d) {
                     return yPos;
                 },
-                x2: function(d) {
-                    return chart.x()(d.value.logFC) + lineWidth/2;
+                'x2'(d) {
+                    return chart.x()(d.value.logfc) + lineWidth / 2;
                 },
-                y2: function(d) {
+                'y2'(d) {
                     return yPos;
                 }
             });
@@ -202,24 +199,19 @@ export class RowChartViewComponent implements OnInit {
         chart
             .selectAll('g.row rect')
             .attr('transform', function(d) {
-                return 'translate(' + (chart.x()(d.value.logFC)-(squareSize/2)) + ',' + ((rectHeight/2)-(squareSize/2)) + ')';
+                return 'translate(' +
+                    // X translate
+                    (chart.x()(d.value.logfc) - (squareSize / 2)) +
+                    ',' +
+                    // Y translate
+                    ((rectHeight / 2) - (squareSize / 2)) +
+                ')';
             })
             .attr('width', squareSize)
             .attr('height', squareSize);
     }
 
     displayChart() {
-        return {'opacity': (this.display) ? 1 : 0};
-    }
-
-    getDomain(attr: string, altMin?: boolean): number[] {
-        let self = this;
-        let min = (self.dim.bottom(1)[0] && !altMin) ? +self.dim.bottom(1)[0][attr] : 0;
-        let max = (self.dim.top(1)[0]) ? +self.dim.top(1)[0][attr] : 0;
-        let margin = (max - min) * 0.05;
-        min -= margin;
-        max += margin;
-
-        return [min, max];
+        return { opacity: (this.display) ? 1 : 0 };
     }
 }

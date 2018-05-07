@@ -10,19 +10,20 @@ import * as events from 'events';
 import * as http from 'http';
 
 // Get our api routes
-import * as api from './routes/api';
+import api from './routes/api';
 
-const debug = require('debug')('wot:server');
+import * as debug from 'debug';
+debug('wot:server');
 
 const app = express();
 app.use(cors());
 
-//app.use(helmet());
+// app.use(helmet());
 
-// serve static files from public folder
+// Serve static files from public folder
 app.use(express.static(__dirname));
 
-// parse application/json
+// Parse application/json
 app.use(bodyParser.json({limit: '50mb'}));
 
 // Set our api routes
@@ -35,7 +36,7 @@ app.get('*', (req, res) => {
 
 // catch 404 and forward to error handler
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    let err: any = new Error('Not Found');
+    const err: any = new Error('Not Found');
     err.status = 404;
     next(err);
 });
@@ -64,7 +65,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Get port from environment and store in Express
-var port = normalizePort(process.env.npm_package_config_port || '3000');
+const port = normalizePort(process.env.npm_package_config_port || '3000');
 app.set('port', port);
 
 // Create HTTP server
@@ -78,16 +79,16 @@ server.on('listening', onListening);
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {
-    var port = parseInt(val, 10);
+    const tPort = parseInt(val, 10);
 
-    if (isNaN(port)) {
+    if (isNaN(tPort)) {
         // named pipe
         return val;
     }
 
-    if (port >= 0) {
+    if (tPort >= 0) {
         // port number
-        return port;
+        return tPort;
     }
 
     return false;
@@ -99,9 +100,7 @@ function onError(error) {
         throw error;
     }
 
-    var bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
@@ -120,8 +119,8 @@ function onError(error) {
 
 // Event listener for HTTP server "listening" event
 function onListening() {
-    var addr = server.address();
-    var bind = typeof addr === 'string'
+    const addr = server.address();
+    const bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
@@ -131,4 +130,4 @@ function onListening() {
     module.exports = app;
 }*/
 
-export = app;
+export default app;

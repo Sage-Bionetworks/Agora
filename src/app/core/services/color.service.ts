@@ -15,9 +15,10 @@ export class ColorService {
     @Input() palette: any;
 
     constructor() {
-        //this.scheme = colorbrewer[this.schemeSelect];
-        this.scheme = ["#fdae6b","#fd8d3c","#f16913","#d94801","#a63603","#7f2704"];
-        this.range = (this.singleColorIndex >= 0) ? [this.scheme[this.quantiles][this.singleColorIndex]] : this.scheme[this.quantiles]
+        this.scheme = ['#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+        this.range = (this.singleColorIndex >= 0) ?
+            [this.scheme[this.quantiles][this.singleColorIndex]] :
+            this.scheme[this.quantiles];
         this.palette = this.scale.range(this.range);
     }
 

@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, HostBinding } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
-
-//import { UserService } from '../shared/_services';
 
 // Dummy user for now
 import { User } from '../_models';
@@ -18,7 +16,6 @@ export class NavbarComponent implements OnInit {
     items: MenuItem[];
 
     constructor(
-        //private users: UserService,
         private router: Router
     ) { }
 

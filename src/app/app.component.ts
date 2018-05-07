@@ -16,14 +16,14 @@ import { AppState } from './app.service';
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
-    public name = 'Citi Prime';
-    public showDevModule: boolean = environment.showDevModule;
+    name = 'Wall of Targets';
+    showDevModule: boolean = environment.showDevModule;
 
     constructor(
-        public appState: AppState
+        private appState: AppState
     ) {}
 
-    public ngOnInit() {
+    ngOnInit() {
         console.log('Initial App State', this.appState.state);
     }
 }

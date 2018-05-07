@@ -26,6 +26,10 @@
   box-sizing: border-box
 }
 
+*:focus {
+    outline: none;
+}
+
 // 5. Custom Global Styles
 html, body{
     height: 100%;

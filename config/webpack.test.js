@@ -81,7 +81,8 @@ module.exports = function (options) {
              * These packages have problems with their sourcemaps
              */
             helpers.root('node_modules/rxjs'),
-            helpers.root('node_modules/@angular')
+            helpers.root('node_modules/@angular'),
+            helpers.root('node_modules/primeng')
           ]
         },
 
@@ -204,14 +205,14 @@ module.exports = function (options) {
        * Plugin: ContextReplacementPlugin
        * Description: Provides context to Angular's use of System.import
        *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
+       * See: https://webpack.js.org/plugins/context-replacement-plugin/
        * See: https://github.com/angular/angular/issues/11580
        */
       new ContextReplacementPlugin(
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /angular(\\|\/)core(\\|\/)@angular/,
+        /\@angular(\\|\/)core(\\|\/)esm5/,
         helpers.root('src'), // location of your src
         {
           /**
