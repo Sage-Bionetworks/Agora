@@ -1,6 +1,28 @@
+/**
+ * @author: @AngularClass
+ */
+
+const helpers = require('./helpers');
+const buildUtils = require('./build-utils');
+const webpackMerge = require('webpack-merge'); // used to merge webpack configs
+
+/**
+ * Webpack Plugins
+ *
+ * problem with copy-webpack-plugin
+ */
+const DefinePlugin = require('webpack/lib/DefinePlugin');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require( 'nodemon-webpack-plugin' );
-const helpers = require('./helpers');
+
+const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
+const Docker = process.env.Docker || false;
+const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
+    host: process.env.HOST || 'localhost',
+    port: process.env.PORT || 8080,
+    ENV: ENV,
+    Docker: Docker
+});
 
 module.exports = {
     entry: {
@@ -32,6 +54,23 @@ module.exports = {
             // Node arguments.
             nodeArgs: [ '--inspect=9222', '--max_old_space_size=10000' ]
         }),
+
+        /**
+       * Plugin: DefinePlugin
+       * Description: Define free variables.
+       * Useful for having development builds with debug logging or adding global constants.
+       *
+       * Environment helpers
+       *
+       * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+       */
+      // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
+      new DefinePlugin({
+        'ENV': JSON.stringify(METADATA.ENV),
+        'process.env.ENV': JSON.stringify(METADATA.ENV),
+        'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+        'process.env.Docker': JSON.stringify(METADATA.Docker)
+      })
     ],
     target: 'node',
     externals: [nodeExternals()],
