@@ -187,6 +187,11 @@ npm run ci
 npm run e2e:live
 ```
 
+### build Docker
+```bash
+npm run build:docker
+```
+
 # Configuration
 Configuration files live in `config/` we are currently using webpack, karma, and protractor for different stages of your application
 
@@ -306,6 +311,28 @@ import * as _ from 'lodash';
 ```
 
 # Deployment
+
+## Docker
+
+You can deploy this project using docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
+
+```bash
+$ docker --version
+Docker version 18.03.1-ce, build 9ee9f40
+```
+
+The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it go to the Dockerfile and change the service). Using our Express server, the URL is localhost for development and the EC2 URL for production.
+
+Now it is just a matter of going to the project root, running `npm run build:docker` and after that a last command:
+
+```bash
+# Building for the first time or rebuilding
+docker-compose up --build
+# Using cached versions
+docker-compose up
+```
+
+Now go to `localhost:3000` and you should see the application up. At the moment a sample data is being loaded when building.
 
 ## Style Guide and Project Structure
 

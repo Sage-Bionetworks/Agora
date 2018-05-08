@@ -23,13 +23,15 @@ module.exports = function (options) {
   const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 3000;
+  const Docker = process.env.Docker || false;
 
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: HOST,
     port: PORT,
     ENV: ENV,
     HMR: helpers.hasProcessFlag('hot'),
-    PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT
+    PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT,
+    Docker: Docker
   });
 
   return webpackMerge(commonConfig({ env: ENV, metadata: METADATA  }), {
