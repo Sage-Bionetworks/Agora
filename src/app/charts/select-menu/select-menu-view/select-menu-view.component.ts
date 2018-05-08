@@ -81,13 +81,13 @@ export class SelectMenuViewComponent implements OnInit {
                     .select('select.dc-select-menu');
                 const options = selectMenu
                     .selectAll('option');
-                const defaultOption = options[0]['find']((o) => {
-                    return (o['innerHTML'].includes(self.defaultValue));
+                const defaultOption = options['_groups']['forEach']((o, i) => {
+                    return (o[i]['innerHTML'].includes(self.defaultValue));
                 });
                 if (defaultOption) {
                     defaultOption['selected'] = 'selected';
                 } else {
-                    options[0][1]['selected'] = 'selected';
+                    options['_groups'][0][1]['selected'] = 'selected';
                 }
                 selectMenu.dispatch('change');
                 self.defaultValue = '';

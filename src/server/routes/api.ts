@@ -52,19 +52,19 @@ Genes.aggregate(
                         $or: [
                             {
                                 logfc: {
-                                    $lte: -0.5
+                                    $lte: '-0.5'
                                 }
                             },
                             {
                                 logfc: {
-                                    $gte: 0.5
+                                    $gte: '0.5'
                                 }
                             }
                         ]
                     },
                     {
-                        neg_log10_adj_p_val: {
-                            $gte: 10
+                        neg_log10_adj_P_Val: {
+                            $gte: '10'
                         }
                     }
                 ],
@@ -92,6 +92,7 @@ Genes.aggregate(
         }
     ]
 ).allowDiskUse(true).exec().then((genes) => {
+    console.log(genes);
     // All the genes, ordered by hgnc_symbol
     allGenes = genes.slice();
     // Unique genes, ordered by hgnc_symbol
@@ -101,6 +102,7 @@ Genes.aggregate(
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
     });
+    console.log(genesById);
     // Unique genes, ordered by score
     genesByScore = genesById.slice().sort((a, b) => {
         return (a.aveexpr > b.aveexpr) ? 1 : ((b.aveexpr > a.aveexpr) ? -1 : 0);
@@ -174,7 +176,7 @@ router.get('/genes/:id', (req, res, next) => {
 
     // Get one array or the other depending on the list column we want to sort by
     const genes: Gene[] = [];
-
+    console.log('gene id pass');
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
