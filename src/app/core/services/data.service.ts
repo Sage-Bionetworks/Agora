@@ -72,7 +72,7 @@ export class DataService {
                         const node = {
                             id: obj.geneB_ensembl_gene_id,
                             group: 1,
-                            name: obj.geneB_external_gene_name
+                            hgnc_symbol: obj.geneB_external_gene_name
                         };
                         genes.nodes = [...genes.nodes, node];
                         dnodes[obj.geneB_ensembl_gene_id] = true;
