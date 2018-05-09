@@ -4,7 +4,23 @@ import { GeneLink, GeneLinkDocument } from '../models';
 export let GeneLinkSchema: Schema = new Schema({
     geneA_ensembl_gene_id: {
         required: true,
-        type: String,
+        type: String
+    },
+    geneB_ensembl_gene_id: {
+        required: true,
+        type: String
+    },
+    geneA_external_gene_name: {
+        required: false,
+        type: String
+    },
+    geneB_external_gene_name: {
+        required: false,
+        type: String
+    },
+    brainRegion:{
+        required: false,
+        type: String
     }
 }, {
         timestamps: true

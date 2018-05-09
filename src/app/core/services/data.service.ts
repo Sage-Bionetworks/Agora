@@ -32,7 +32,7 @@ export class DataService {
         return this.ndx;
     }
 
-    loadNodes(sgene): Promise<any> {
+    loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             const params = new HttpParams();
