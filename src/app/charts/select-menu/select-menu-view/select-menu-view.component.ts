@@ -87,7 +87,7 @@ export class SelectMenuViewComponent implements OnInit {
                 if (defaultOption) {
                     defaultOption['selected'] = 'selected';
                 } else {
-                    options['_groups'][0][1]['selected'] = 'selected';
+                    options['_groups'][0][0]['selected'] = 'selected';
                 }
                 selectMenu.dispatch('change');
                 self.defaultValue = '';
