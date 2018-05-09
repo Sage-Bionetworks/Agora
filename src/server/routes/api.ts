@@ -52,19 +52,19 @@ Genes.aggregate(
                         $or: [
                             {
                                 logfc: {
-                                    $lte: '-0.5'
+                                    $lte: -0.5
                                 }
                             },
                             {
                                 logfc: {
-                                    $gte: '0.5'
+                                    $gte: 0.5
                                 }
                             }
                         ]
                     },
                     {
                         neg_log10_adj_P_Val: {
-                            $gte: '10'
+                            $gte: 10
                         }
                     }
                 ],
@@ -92,7 +92,6 @@ Genes.aggregate(
         }
     ]
 ).allowDiskUse(true).exec().then((genes) => {
-    console.log(genes);
     // All the genes, ordered by hgnc_symbol
     allGenes = genes.slice();
     // Unique genes, ordered by hgnc_symbol
@@ -102,7 +101,6 @@ Genes.aggregate(
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
     });
-    console.log(genesById);
     // Unique genes, ordered by score
     genesByScore = genesById.slice().sort((a, b) => {
         return (a.aveexpr > b.aveexpr) ? 1 : ((b.aveexpr > a.aveexpr) ? -1 : 0);
@@ -180,7 +178,6 @@ router.get('/genes/:id', (req, res, next) => {
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
-        console.log(g);
         if (g.hgnc_symbol.includes(req.params.id.trim().toUpperCase())) {
             // Do not use a shallow copy here
             genes.push(JSON.parse(JSON.stringify(g)));
@@ -206,7 +203,7 @@ router.get('/gene/:id', (req, res, next) => {
             console.log(err);
             next(err);
         } else {
-            console.log('loaded', genes);
+            //console.log('loaded', genes);
             geneEntries = genes.slice();
             let minLogFC = +Infinity;
             let maxLogFC = -Infinity;
@@ -235,15 +232,17 @@ router.get('/genelist/:id', function(req, res, next) {
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: [] }); }
     GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
-        const arr = links.map((slink) => {
+        console.log(links);
+        const arr = links.slice().map((slink) => {
             return slink.toJSON()['geneB_ensembl_gene_id'];
         });
+        console.log(arr);
         GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
             .where('geneB_ensembl_gene_id')
             .in(arr)
             .exec((errB, linksC) => {
                 if (err) {
-                console.log(err);
+                //console.log(err);
                 next(err);
             } else {
                     const flinks = [...links, ...linksC];
