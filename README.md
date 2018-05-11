@@ -88,6 +88,42 @@ Now go back to the Mongo binary folder directory (same folder you issued the `mo
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
 ```
 
+* convert mongo value types
+
+csvtojson and mongoimport doesn't suppory valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
+
+```mongo
+var requests = [];
+db.genes.find().toArray().forEach(document => {
+    requests.push({
+        'updateOne': {
+            'filter': { '_id': document._id },
+            'update': { '$set': { 
+                'logFC': +document.logFC,
+                'neg_log10_adj_P_Val': +document.neg_log10_adj_P_Val,
+                'gene_length': +document.gene_length,
+                'percentage_gc_content': +document.percentage_gc_content,
+                'B': +document.B,
+                't': +document.t,
+                'CI_L': +document.CI_L,
+                'CI_R': +document.CI_R,
+                'AveExpr': +document.AveExpr,
+                'P_Value': +document.P_Value,
+                'adj_P_Val': +document.adj_P_Val,
+                'percentage_gc_content': +document.percentage_gc_content
+        } }
+        }
+    });
+    if (requests.length === 500) {
+        //Execute per 500 operations and re-init
+        db.genes.bulkWrite(requests);
+        requests = [];
+    }
+});
+if (requests.length > 0) {
+    db.genes.bulkWrite(requests);
+}```
+
 We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
 
 * Remote production environment
