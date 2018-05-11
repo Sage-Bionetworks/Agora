@@ -122,7 +122,8 @@ db.genes.find().toArray().forEach(document => {
 });
 if (requests.length > 0) {
     db.genes.bulkWrite(requests);
-}```
+}
+```
 
 We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
 
