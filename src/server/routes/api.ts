@@ -203,7 +203,6 @@ router.get('/gene/:id', (req, res, next) => {
             console.log(err);
             next(err);
         } else {
-            //console.log('loaded', genes);
             geneEntries = genes.slice();
             let minLogFC = +Infinity;
             let maxLogFC = -Infinity;
@@ -242,7 +241,6 @@ router.get('/genelist/:id', function(req, res, next) {
             .in(arr)
             .exec((errB, linksC) => {
                 if (err) {
-                //console.log(err);
                 next(err);
             } else {
                     const flinks = [...links, ...linksC];

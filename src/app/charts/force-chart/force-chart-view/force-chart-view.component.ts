@@ -146,12 +146,15 @@ export class ForceChartViewComponent implements OnInit {
 
     private viewGene(gene: Gene) {
         this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
-            if (!data['item']) { this.router.navigate(['/genes']); }
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            const currentUrl = this.router.url + '?';
+            if (!data['item']) {
+                this.router.navigate(['/genes']);
+                return;
+            }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
             this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
-            this.router.routeReuseStrategy.shouldReuseRoute =  () => false;
-            const currentUrl = this.router.url + '?';
             this.router.navigateByUrl(currentUrl)
             .then(() => {
                 this.router.navigated = false;

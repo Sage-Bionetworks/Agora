@@ -44,7 +44,7 @@ export class DataService {
                     nodes: [{
                         id: sgene.ensembl_gene_id,
                         group: 1,
-                        name: sgene.hgnc_symbol
+                        hgnc_symbol: sgene.hgnc_symbol
                     }]
                 };
                 const dnodes = [];
