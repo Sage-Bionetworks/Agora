@@ -20,6 +20,7 @@ export class ForceChartViewComponent implements OnInit {
 
     private nodes: object[];
     private links: any;
+    private d3: any;
 
     constructor(
         private dataService: DataService,
@@ -27,6 +28,7 @@ export class ForceChartViewComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute
     ) {
+        this.d3 = d3;
         console.log('construct force');
     }
 
@@ -62,13 +64,22 @@ export class ForceChartViewComponent implements OnInit {
                     .enter().append('circle')
                     .attr('r', 7)
                     .attr('fill', this.getNodeColor)
-                    .on('mouseover', (d: any) => {
+                    .on('mouseover', (d: Gene) => {
                         tooltip.transition()
                             .duration(200)
                             .style('opacity', .9);
-                        tooltip.html(d.hgnc_symbol)
+                        tooltip.html('<h3>Loading...</h3>')
                             .style('left', (d3.event.layerX) + 'px')
                             .style('top', (d3.event.layerY - 28) + 'px');
+                        this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
+                            tooltip.html(`
+                            <h3>${lgene.item.hgnc_symbol}</h3>
+                            <div>Study: ${lgene.item.Study}</div>
+                            <div>Tissue: ${lgene.item.Tissue}</div>
+                            <div>Lenght ${lgene.item.gene_length}</div>
+                            <div>Sex: ${lgene.item.Sex}</div>
+                            `);
+                        });
                     })
                     .on('mouseout', (d) => {
                         tooltip.transition()
