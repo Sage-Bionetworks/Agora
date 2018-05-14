@@ -44,7 +44,7 @@ export class ForceChartViewComponent implements OnInit {
             .attr('height', height);
 
         const simulation = d3.forceSimulation()
-            .force('charge', d3.forceManyBody().strength(-20))
+            .force('charge', d3.forceManyBody().strength(-100))
             .force('center', d3.forceCenter(width / 2, height / 2));
         this.dataService.loadNodes(this.currentGene)
             .then((data) => {
@@ -55,6 +55,7 @@ export class ForceChartViewComponent implements OnInit {
                     .enter().append('line')
                     .attr('stroke-width', (d: any) => d.value)
                     .attr('stroke', '#E5E5E5');
+
                 const nodeElements = svg.append('g')
                     .selectAll('circle')
                     .data(data.nodes)
@@ -89,17 +90,19 @@ export class ForceChartViewComponent implements OnInit {
                     .attr('dy', 3);
 
                 simulation.nodes(data.nodes).on('tick', () => {
+                    nodeElements
+                        .attr('cx', (node: any) => node.x = Math.max(7,
+                            Math.min(width - 7, node.x)))
+                        .attr('cy', (node: any) => node.y = Math.max(7,
+                            Math.min(height - 7, node.y)));
+                    textElements
+                        .attr('x', (node: any) => node.x)
+                        .attr('y', (node: any) => node.y);
                     linkElements
                         .attr('x1', (link: any) => link.source.x)
                         .attr('y1', (link: any) => link.source.y)
                         .attr('x2', (link: any) => link.target.x)
                         .attr('y2', (link: any) => link.target.y);
-                    nodeElements
-                        .attr('cx', (node: any) => node.x)
-                        .attr('cy', (node: any) => node.y);
-                    textElements
-                        .attr('x', (node: any) => node.x)
-                        .attr('y', (node: any) => node.y);
                 });
 
                 simulation.force('link', d3.forceLink(data.links)
@@ -111,10 +114,8 @@ export class ForceChartViewComponent implements OnInit {
                         d3.forceCollide()
                             .radius(7 * 3)
                             .strength(0.7)
-                            .iterations(16))
-                    .force('charge', d3.forceManyBody().strength(-100))
-                    .force('x', d3.forceX().strength(0.02).x(width / 2))
-                    .force('y', d3.forceY().strength(0.02).y(height / 2));
+                            .iterations(16));
+
                 const dragDrop = d3.drag()
                     .on('start', (node: any) => {
                         node.fx = node.x;
