@@ -21,6 +21,7 @@ import { GeneSearchComponent } from './gene-search';
 import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
+import { GeneNetworkComponent } from './gene-details/gene-network';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
         GeneSearchComponent,
         GeneDetailsViewComponent,
         GeneOverviewComponent,
-        GeneRNASeqDEComponent
+        GeneRNASeqDEComponent,
+        GeneNetworkComponent
     ],
     imports: [
         CommonModule,
