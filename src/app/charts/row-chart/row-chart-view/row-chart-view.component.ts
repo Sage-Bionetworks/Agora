@@ -29,8 +29,6 @@ export class RowChartViewComponent implements OnInit {
     @Input() info: any;
     @Input() label: string = 'forest-plot';
     @Input() currentGene = this.geneService.getCurrentGene();
-    @Input() filterTissues = this.geneService.getTissues();
-    @Input() filterModels = this.geneService.getModels();
     @Input() dim: any;
     @Input() group: any;
 
@@ -57,9 +55,7 @@ export class RowChartViewComponent implements OnInit {
         this.dim = this.dataService.getDimension(
             this.label,
             this.info,
-            this.currentGene,
-            this.filterTissues,
-            this.filterModels
+            this.currentGene
         );
         this.group = this.dataService.getGroup(this.label, this.info);
 
@@ -69,10 +65,10 @@ export class RowChartViewComponent implements OnInit {
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + (self.decimalPipe.transform(+d.value.logfc) || 0);
+                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.1-5');
             })
             .valueAccessor((d) => {
-                return +(self.decimalPipe.transform(+d.value.logfc || 0));
+                return +self.decimalPipe.transform(+d.value.logfc, '1.1-5');
             })
             .label((d) => {
                 return d.key;
@@ -96,7 +92,7 @@ export class RowChartViewComponent implements OnInit {
     // what happens to the chart after rendering
     registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
         const self = this;
-        // Using a different name for the chart variable here so it's nor shadowed
+        // Using a different name for the chart variable here so it's not shadowed
         chartEl.on(type, function(chart) {
             const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
             const squareSize = 10;

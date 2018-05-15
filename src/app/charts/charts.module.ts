@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AppSharedModule } from '../shared';
 
 import { ScatterPlotViewComponent } from './scatter-plot/scatter-plot-view';
+import { BoxPlotViewComponent } from './box-plot/box-plot-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ForceChartViewComponent } from './force-chart/force-chart-view';
@@ -16,6 +17,7 @@ import {
 
 @NgModule({
     declarations: [
+        BoxPlotViewComponent,
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,
@@ -28,6 +30,7 @@ import {
         ButtonModule
     ],
     exports: [
+        BoxPlotViewComponent,
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,

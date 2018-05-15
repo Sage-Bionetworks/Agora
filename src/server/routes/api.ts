@@ -40,6 +40,8 @@ let genesById: Gene[] = [];
 let genesByScore: Gene[] = [];
 let geneEntries: Gene[] = [];
 let allGenes: Gene[] = [];
+let allTissues: string[] = [];
+let allModels: string[] = [];
 let totalRecords = 0;
 
 // Group by id and sort by hgnc_symbol
@@ -97,6 +99,8 @@ Genes.aggregate(
     // Unique genes, ordered by hgnc_symbol
     const seen = {};
     genesById = genes.slice().filter((g) => {
+        if (allTissues.indexOf(g['tissue_study_pretty']) == -1) allTissues.push(g['tissue_study_pretty']);
+        if (allModels.indexOf(g['comparison_model_sex_pretty']) == -1) allModels.push(g['comparison_model_sex_pretty']);
         if (seen[g['hgnc_symbol']]) { return; }
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
@@ -113,22 +117,28 @@ Genes.aggregate(
 router.get('/genes', (req, res, next) => {
     console.log('Get all genes');
 
+    let resObj = {
+        items: [],
+        geneEntries: []
+    };
     const chartGenes = allGenes.slice();
     if (geneEntries) {
+        resObj.geneEntries = geneEntries;
         geneEntries.forEach((ge) => {
             // If the current entry does not exist in the all genes array
             if (!allGenes.some((g) => {
                 return (g.hgnc_symbol === ge.hgnc_symbol) &&
                        (g.tissue_study_pretty === ge.tissue_study_pretty) &&
-                       (g.comparison_model_sex === ge.comparison_model_sex);
+                       (g.comparison_model_sex_pretty === ge.comparison_model_sex_pretty);
             })) {
                 chartGenes.push(ge);
             }
         });
     }
+    resObj.items = chartGenes;
 
     // Use mongoose to get one page of genes
-    res.json({ items: chartGenes });
+    res.json(resObj);
 });
 
 // Use mongoose to get one page of genes
@@ -165,7 +175,7 @@ router.get('/genes/page', (req, res, next) => {
     res.json({ items: genes.slice(skip, skip + limit), totalRecords });
 });
 
-// Get a gene by id, currently hgnc_symbol
+// Get all genes that match an id, currently hgnc_symbol
 router.get('/genes/:id', (req, res, next) => {
     console.log('Get the genes that match an id');
     console.log(req.params.id);
@@ -198,7 +208,8 @@ router.get('/gene/:id', (req, res, next) => {
         res.json({ item: null });
     }
 
-    Genes.find({ hgnc_symbol: req.params.id }).exec((err, genes) => {
+    // Find all the Genes with the current id
+    Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
         if (err) {
             console.log(err);
             next(err);
@@ -214,6 +225,7 @@ router.get('/gene/:id', (req, res, next) => {
                     maxNegLogPValue = (+g.neg_log10_adj_p_val);
                 }
             });
+            //console.log(geneEntries);
             res.json({
                 item: genes[0],
                 minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
@@ -249,4 +261,25 @@ router.get('/genelist/:id', function(req, res, next) {
         });
     });
 });
+
+// Get all the tissues
+router.get('/tissues', (req, res, next) => {
+    console.log('Get all tissues');
+
+    // Return an empty array in case we don't have tissues
+    if (!allTissues.length) { res.json({ items: null }); }
+
+    res.json({ items: allTissues });
+});
+
+// Get all the models
+router.get('/models', (req, res, next) => {
+    console.log('Get all models');
+
+    // Return an empty array in case we don't have models
+    if (!allModels.length) { res.json({ items: null }); }
+
+    res.json({ items: allModels });
+});
+
 export default router;
