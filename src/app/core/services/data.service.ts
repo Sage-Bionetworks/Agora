@@ -93,7 +93,6 @@ export class DataService {
                 if (data['geneEntries']) this.geneEntries = data['geneEntries'];
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
-
                     d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
                     d.neg_log10_adj_p_val = +this.decimalPipe.transform(
                         +d.neg_log10_adj_p_val,
@@ -121,7 +120,7 @@ export class DataService {
         const self = this;
         return new Promise((resolve, reject) => {
             // This will be done once at the server
-            d3.csv(`/assets/data/${fname}`).then( (data) => {
+            d3.csv(`/assets/data/${fname}`).then((data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
                     d['logfc'] = self.decimalPipe.transform(+d['logfc'], '1.1-5');
