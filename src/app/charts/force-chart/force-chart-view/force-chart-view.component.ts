@@ -72,6 +72,11 @@ export class ForceChartViewComponent implements OnInit {
                             .style('left', (d3.event.layerX) + 'px')
                             .style('top', (d3.event.layerY - 28) + 'px');
                         this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
+                            if (!lgene.item) {
+                                tooltip.html(`
+                            <h3>Gene information not found.</h3>`);
+                                return;
+                            }
                             tooltip.html(`
                             <h3>${lgene.item.hgnc_symbol}</h3>
                             <div>Study: ${lgene.item.Study}</div>
@@ -131,11 +136,16 @@ export class ForceChartViewComponent implements OnInit {
                     .on('start', (node: any) => {
                         node.fx = node.x;
                         node.fy = node.y;
+                        tooltip.transition()
+                            .duration(500)
+                            .style('opacity', 0);
                     })
                     .on('drag', (node: any) => {
                         simulation.alphaTarget(0.001).restart();
                         node.fx = d3.event.x;
                         node.fy = d3.event.y;
+                        tooltip
+                            .style('opacity', 0);
                     })
                     .on('end', (node: any) => {
                         if (!d3.event.active) {
