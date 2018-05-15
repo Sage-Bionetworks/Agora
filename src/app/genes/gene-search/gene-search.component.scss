@@ -30,11 +30,10 @@
     padding-top: 15px;
     width: 50%;
     outline: none;
-    transition: border 0.5s ease-in-out;
     background: #FFFFFF;
-    border: 2px solid rgba(45, 156, 219, 0.5);
-    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 100px;
+    -moz-box-shadow:    inset 0 0 4px #C7C5C5;
+    -webkit-box-shadow: inset 0 0 4px #C7C5C5;
+    box-shadow:         inset 0 0 4px #C7C5C5;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
@@ -47,7 +46,6 @@
         color: #BDBDBD;
     }
 
-    color: #1A1C29;
 }
 
 #keyword:focus {

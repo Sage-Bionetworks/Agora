@@ -8,7 +8,7 @@
         </p-header>
         <div class="container" style="height: 100%;">
             <div class="row container-row">
-                <div class="col-md-4 chart-selects-row">
+                <div class="col-md-6 chart-selects-row">
                     <div class="row">
                         <div class="col-md-12">
                             <h2>Tissue</h2>
@@ -21,27 +21,30 @@
                         </select-menu>
                     </div>
                 </div>
-                <div class="col-md-8 chart-selects-row">
+                <div class="col-md-6 chart-selects-row">
                     <div class="row">
                         <div class="col-md-12">
                             <h2>Model</h2>
                         </div>
                     </div>
                     <div class="row">
-                        <select-menu [promptText]="'All models'"
-                            [label]="'select-model'"
-                            [defaultValue]="getModel(1)">
-                        </select-menu>
+                        <div class="col-md-12">
+                            <select-menu [promptText]="'All models'"
+                                [label]="'select-model'"
+                                [defaultValue]="getModel(1)">
+                            </select-menu>
+                        </div>
                     </div>
                 </div>
                 <div class="row chart-container-row">
-                    <div class="col-md-7">
-                        <scatter-plot *ngIf="dataLoaded"></scatter-plot>
-                        <!--<router-outlet name="left-chart"></router-outlet>-->
+                    <div class="col-md-3">
+                        <box-plot *ngIf="dataLoaded" [label]="'box-plot'"></box-plot>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
+                        <box-plot *ngIf="dataLoaded" [label]="'box-plot2'"></box-plot>
+                    </div>
+                    <div class="col-md-6">
                         <row-chart *ngIf="dataLoaded"></row-chart>
-                        <!--<router-outlet name="right-chart"></router-outlet>-->
                     </div>
                 </div>
             </div>
