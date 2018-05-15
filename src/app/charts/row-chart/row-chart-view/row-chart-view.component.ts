@@ -65,7 +65,7 @@ export class RowChartViewComponent implements OnInit {
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scale.linear().domain(this.geneService.getLogFC()))
+            .x(d3.scaleLinear().domain(this.geneService.getLogFC()))
             .elasticX(true)
             .gap(4)
             .title(function(d) {
@@ -120,7 +120,7 @@ export class RowChartViewComponent implements OnInit {
                 // translate the parent element
                 const hlines = chart.selectAll('g.row g.hline');
                 hlines.each(function(p, i) {
-                    d3.select(this).attr('transform', function(d) {
+                    d3.select(this).attr('transform', function(d: any) {
                         return 'translate(' + d.value.logfc + ')';
                     });
                 });

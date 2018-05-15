@@ -61,8 +61,8 @@ export class ScatterPlotViewComponent implements OnInit {
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
-            .x(d3.scale.linear().domain(this.geneService.getLogFC()))
-            .y(d3.scale.linear().domain(this.geneService.getNegAdjPValue()))
+            .x(d3.scaleLinear().domain(this.geneService.getLogFC()))
+            .y(d3.scaleLinear().domain(this.geneService.getNegAdjPValue()))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
             .title((p) => {
@@ -80,7 +80,7 @@ export class ScatterPlotViewComponent implements OnInit {
             .valueAccessor((d) => {
                 return d.key[1];
             })
-            .colors(d3.scale.ordinal().domain(['yes', 'no']).range(['red', 'black']))
+            .colors(d3.scaleOrdinal().domain(['yes', 'no']).range(['red', 'black']))
             .colorAccessor((d) => {
                 if (d.key[2] === self.currentGene.hgnc_symbol) {
                     return 'yes';

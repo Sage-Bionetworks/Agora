@@ -23,7 +23,7 @@
  */
 dc.scatterPlot = function (parent, chartGroup) {
     var _chart = dc.coordinateGridMixin({});
-    var _symbol = d3.svg.symbol();
+    var _symbol = this.d3.symbol();
 
     var _existenceAccessor = function (d) { return d.value; };
 

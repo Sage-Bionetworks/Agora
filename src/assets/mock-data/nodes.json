@@ -1,0 +1,836 @@
+[
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000229344",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTCO2P12",
+        "brainRegion": "TCX"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000269028",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTRNR2L12",
+        "brainRegion": "TCX"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000249119",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTND6P4",
+        "brainRegion": "TCX"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000248923",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTND5P11",
+        "brainRegion": "TCX"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000249119",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTND6P4",
+        "brainRegion": "CBE"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000248923",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTND5P11",
+        "brainRegion": "CBE"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000247627",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTND4P12",
+        "brainRegion": "CBE"
+    },
+    {
+        "geneA_ensembl_gene_id": "ENSG00000225972",
+        "geneB_ensembl_gene_id": "ENSG00000270672",
+        "geneA_external_gene_name": "MTND1P23",
+        "geneB_external_gene_name": "MTRNR2L6",
+        "brainRegion": "CBE"
+    },
+    {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000229344",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTCO2P12",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000269028",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTRNR2L12",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000249119",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTND6P4",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000148090",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AUH",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000162174",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "ASRGL1",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000182327",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "GLTPD2",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000244921",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTCYBP18",
+    "brainRegion": "TCX"
+  },
+
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000176986",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "SEC24C",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000258199",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AC073896.4",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000215769",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "ARHGAP27P1-BPTFP1-KPNA2P3",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000271941",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AC104184.1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000140264",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "SERF2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000267388",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AF038458.2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000268205",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AC005261.2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000260816",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "AC027279.1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000225972",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTND1P23",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000249119",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND6P4",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000249119",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTND6P4",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000244921",
+    "geneB_ensembl_gene_id": "ENSG00000249119",
+    "geneA_external_gene_name": "MTCYBP18",
+    "geneB_external_gene_name": "MTND6P4",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000249119",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTND6P4",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000244921",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTCYBP18",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000244921",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTCYBP18",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000148090",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "AUH",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000244921",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTCYBP18",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000258199",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "AC073896.4",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000258199",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "AC073896.4",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000244921",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTCYBP18",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000248923",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTND5P11",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000249119",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTND6P4",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "DLPFC"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000247627",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTND4P12",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000260816",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "AC027279.1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256148",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "AP000763.2",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000229344",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTCO2P12",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000269028",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTRNR2L12",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000248923",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTND5P11",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000247627",
+    "geneB_ensembl_gene_id": "ENSG00000256148",
+    "geneA_external_gene_name": "MTND4P12",
+    "geneB_external_gene_name": "AP000763.2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000247627",
+    "geneB_ensembl_gene_id": "ENSG00000258199",
+    "geneA_external_gene_name": "MTND4P12",
+    "geneB_external_gene_name": "AC073896.4",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000271941",
+    "geneB_ensembl_gene_id": "ENSG00000215769",
+    "geneA_external_gene_name": "AC104184.1",
+    "geneB_external_gene_name": "ARHGAP27P1-BPTFP1-KPNA2P3",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000258199",
+    "geneB_ensembl_gene_id": "ENSG00000262902",
+    "geneA_external_gene_name": "AC073896.4",
+    "geneB_external_gene_name": "MTCO1P40",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000262902",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO1P40",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000262902",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO1P40",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000267541",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO2P2",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000267541",
+    "geneB_ensembl_gene_id": "ENSG00000230916",
+    "geneA_external_gene_name": "MTCO2P2",
+    "geneB_external_gene_name": "MTCO1P53",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000230916",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTCO1P53",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000267541",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTCO2P2",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256045",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTRNR2L10",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256045",
+    "geneB_ensembl_gene_id": "ENSG00000270672",
+    "geneA_external_gene_name": "MTRNR2L10",
+    "geneB_external_gene_name": "MTRNR2L6",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000230916",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTCO1P53",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000230916",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTCO1P53",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256045",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTRNR2L10",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000256045",
+    "geneB_ensembl_gene_id": "ENSG00000256618",
+    "geneA_external_gene_name": "MTRNR2L10",
+    "geneB_external_gene_name": "MTRNR2L1",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000262902",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTCO1P40",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000230916",
+    "geneB_ensembl_gene_id": "ENSG00000232177",
+    "geneA_external_gene_name": "MTCO1P53",
+    "geneB_external_gene_name": "MTND4P24",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000258199",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "AC073896.4",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000262902",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "MTCO1P40",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000247627",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "MTND4P12",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "TCX"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000247627",
+    "geneB_ensembl_gene_id": "ENSG00000267541",
+    "geneA_external_gene_name": "MTND4P12",
+    "geneB_external_gene_name": "MTCO2P2",
+    "brainRegion": "CBE"
+  },
+  {
+    "geneA_ensembl_gene_id": "ENSG00000262902",
+    "geneB_ensembl_gene_id": "ENSG00000256045",
+    "geneA_external_gene_name": "MTCO1P40",
+    "geneB_external_gene_name": "MTRNR2L10",
+    "brainRegion": "CBE"
+  }
+]

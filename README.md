@@ -21,14 +21,22 @@ What you need to run this app:
 
 ## Installing
 Once you have those, you should install these globals with `npm install --global`:
-* `webpack` (`npm install --global webpack`)
-* `webpack-dev-server` (`npm install --global webpack-dev-server`)
-* `karma` (`npm install --global karma-cli`)
-* `protractor` (`npm install --global protractor`)
-* `rimraf` {`npm install --global rimraf`}
-* `typescript` (`npm install --global typescript`)
-* `cross-env` (`npm install --global cross-env`)
-
+* `webpack`
+* `webpack-dev-server`
+* `karma`
+* `protractor`
+* `rimraf`
+* `typescript`
+* `cross-env`
+```
+npm install --global webpack
+npm install --global webpack-dev-server
+npm install --global karma-cli
+npm install --global protractor
+npm install --global rimraf
+npm install --global typescript
+npm install --global cross-env
+```
 ## Running the app
 
 * Local development environment
@@ -57,8 +65,8 @@ If you also installed MongoDB Compass along with the main installation (a GUI to
 [listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
 ```
 
-Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it is time to load
-the data into our collection. Download the complete genes data in json form from Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177499).
+Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it is time to load
+the data into our collection. Download the complete genes data in json form from Synapse repository for `genes` => [here](https://www.synapse.org/#!Synapse:syn12176105) and `geneslinks` => [here](https://www.synapse.org/#!Synapse:syn11685347).
 
 To regenerate the json file, start by downloading the complete genes data from [here](https://www.synapse.org/#!Synapse:syn11318688).
 
@@ -78,6 +86,43 @@ Now go back to the Mongo binary folder directory (same folder you issued the `mo
 
 ```bash
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
+```
+
+* convert mongo value types
+
+csvtojson and mongoimport doesn't suppory valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
+
+```mongo
+var requests = [];
+db.genes.find().toArray().forEach(document => {
+    requests.push({
+        'updateOne': {
+            'filter': { '_id': document._id },
+            'update': { '$set': { 
+                'logFC': +document.logFC,
+                'neg_log10_adj_P_Val': +document.neg_log10_adj_P_Val,
+                'gene_length': +document.gene_length,
+                'percentage_gc_content': +document.percentage_gc_content,
+                'B': +document.B,
+                't': +document.t,
+                'CI_L': +document.CI_L,
+                'CI_R': +document.CI_R,
+                'AveExpr': +document.AveExpr,
+                'P_Value': +document.P_Value,
+                'adj_P_Val': +document.adj_P_Val,
+                'percentage_gc_content': +document.percentage_gc_content
+        } }
+        }
+    });
+    if (requests.length === 500) {
+        //Execute per 500 operations and re-init
+        db.genes.bulkWrite(requests);
+        requests = [];
+    }
+});
+if (requests.length > 0) {
+    db.genes.bulkWrite(requests);
+}
 ```
 
 We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).

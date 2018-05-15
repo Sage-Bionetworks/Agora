@@ -6,6 +6,7 @@ import { AppSharedModule } from '../shared';
 import { ScatterPlotViewComponent } from './scatter-plot/scatter-plot-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
+import { ForceChartViewComponent } from './force-chart/force-chart-view';
 
 import { ChartService } from './services';
 
@@ -17,7 +18,8 @@ import {
     declarations: [
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
-        RowChartViewComponent
+        RowChartViewComponent,
+        ForceChartViewComponent
     ],
     imports: [
         CommonModule,
@@ -28,7 +30,8 @@ import {
     exports: [
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
-        RowChartViewComponent
+        RowChartViewComponent,
+        ForceChartViewComponent
     ],
     providers: [
         ChartService

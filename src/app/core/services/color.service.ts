@@ -6,8 +6,8 @@ import colorbrewer from 'colorbrewer';
 @Injectable()
 export class ColorService {
     @Input() domain: number[] = [0, 200];
-    @Input() scale: any = d3.scale.quantile();
-    @Input() schemeSelect: string = 'Oranges';
+    @Input() scale: any = d3.scaleQuantile();
+    @Input() schemeSelect: string = "Oranges";
     @Input() scheme: any;
     @Input() quantiles: number = 5;
     @Input() singleColorIndex: number = 1;

@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
-import { Gene } from '../../app/models';
+import { Gene, GeneLink } from '../../app/models';
 
 mongoose.set('debug', true);
 
@@ -9,8 +9,10 @@ const router = express.Router();
 const database = { url: '' };
 
 import { Genes } from '../../app/schemas/gene';
+import { GenesLinks } from '../../app/schemas/geneLink';
 
 // Set the rdatabase
+console.log('env', express().get('env'));
 if (express().get('env') === 'development') {
     database.url = 'mongodb://localhost:27017/walloftargets';
 } else {
@@ -61,7 +63,7 @@ Genes.aggregate(
                         ]
                     },
                     {
-                        neg_log10_adj_p_val: {
+                        neg_log10_adj_P_Val: {
                             $gte: 10
                         }
                     }
@@ -172,7 +174,7 @@ router.get('/genes/:id', (req, res, next) => {
 
     // Get one array or the other depending on the list column we want to sort by
     const genes: Gene[] = [];
-
+    console.log('gene id pass');
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
@@ -186,14 +188,19 @@ router.get('/genes/:id', (req, res, next) => {
 });
 
 // Get a gene by id, currently hgnc_symbol
+// Get a gene by id, currently hgnc_symbol
 router.get('/gene/:id', (req, res, next) => {
     console.log('Get a gene with an id');
     console.log(req.params.id);
     // Return an empty array in case no id was passed or no params
-    if (!req.params || !req.params.id) { res.json({ item: null}); }
+    if (!req.params || !req.params.id) {
+        console.log('no id');
+        res.json({ item: null });
+    }
 
-    Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
+    Genes.find({ hgnc_symbol: req.params.id }).exec((err, genes) => {
         if (err) {
+            console.log(err);
             next(err);
         } else {
             geneEntries = genes.slice();
@@ -217,4 +224,29 @@ router.get('/gene/:id', (req, res, next) => {
     });
 });
 
+// Get a gene list by id
+router.get('/genelist/:id', function(req, res, next) {
+    console.log('Get a gene list with an id');
+    console.log(req.params.id);
+    // Return an empty array in case no id was passed or no params
+    if (!req.params || !req.params.id) { res.json({ items: [] }); }
+    GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
+        console.log(links);
+        const arr = links.slice().map((slink) => {
+            return slink.toJSON()['geneB_ensembl_gene_id'];
+        });
+        console.log(arr);
+        GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
+            .where('geneB_ensembl_gene_id')
+            .in(arr)
+            .exec((errB, linksC) => {
+                if (err) {
+                next(err);
+            } else {
+                    const flinks = [...links, ...linksC];
+                    res.json({ items: flinks });
+            }
+        });
+    });
+});
 export default router;

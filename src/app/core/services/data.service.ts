@@ -32,8 +32,58 @@ export class DataService {
         return this.ndx;
     }
 
+    loadNodes(sgene: Gene): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            const params = new HttpParams();
+            const dic = [];
+
+            this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
+                const genes: any = {
+                    links: [],
+                    nodes: [{
+                        id: sgene.ensembl_gene_id,
+                        group: 1,
+                        hgnc_symbol: sgene.hgnc_symbol
+                    }]
+                };
+                const dnodes = [];
+                const enodes: object[] = data['items'].filter((node: any) => {
+                    return node.geneA_ensembl_gene_id === sgene.ensembl_gene_id;
+                });
+                data['items'].forEach((obj: any) => {
+                    if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
+                        const link: any = {
+                            value: 1,
+                            source: obj.geneA_ensembl_gene_id,
+                            target: obj.geneB_ensembl_gene_id,
+                            brainregions: [obj.brainRegion]
+                        };
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
+                        genes.links = [...genes.links,
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
+                    } else {
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
+                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                        .brainregions.push(obj.brainRegion);
+                    }
+                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
+                        && !dnodes[obj.geneB_ensembl_gene_id]) {
+                        const node = {
+                            id: obj.geneB_ensembl_gene_id,
+                            group: 1,
+                            hgnc_symbol: obj.geneB_external_gene_name
+                        };
+                        genes.nodes = [...genes.nodes, node];
+                        dnodes[obj.geneB_ensembl_gene_id] = true;
+                    }
+                });
+                resolve(genes);
+            });
+        });
+    }
+
     loadGenes(): Promise<boolean> {
-        const self = this;
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             const params = new HttpParams();
@@ -42,21 +92,22 @@ export class DataService {
             this.http.get('/api/genes', { headers, params }).subscribe((data) => {
                 data['items'].forEach((d) => {
                     // Separate the columns we need
-                    d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = self.decimalPipe.transform(
+
+                    d.logfc = this.decimalPipe.transform(+d.logfc, '1.1-5');
+                    d.neg_log10_adj_p_val = this.decimalPipe.transform(
                         +d.neg_log10_adj_p_val,
                         '1.1-5'
                     );
-                    d.aveexpr = self.decimalPipe.transform(+d.aveexpr, '1.1-5');
+                    d.aveexpr = this.decimalPipe.transform(+d.aveexpr, '1.1-5');
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
                 });
 
-                self.ndx = crossfilter(data['items']);
-                self.data = data['items'];
+                this.ndx = crossfilter(data['items']);
+                this.data = data['items'];
 
-                self.hgncDim = self.ndx.dimension((d) => {
+                this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
 
@@ -69,7 +120,7 @@ export class DataService {
         const self = this;
         return new Promise((resolve, reject) => {
             // This will be done once at the server
-            d3.csv('/assets/data/' + fname, (data) => {
+            d3.csv(`/assets/data/${fname}`).then( (data) => {
                 data.forEach((d) => {
                     // Separate the columns we need
                     d.logfc = self.decimalPipe.transform(+d.logfc, '1.1-5');
@@ -82,11 +133,10 @@ export class DataService {
                     d.comparison_model_sex = d.comparison_model_sex_pretty;
                     d.tissue_study_pretty = d.tissue_study_pretty;
                 });
+                this.ndx = crossfilter(data);
+                this.data = data;
 
-                self.ndx = crossfilter(data);
-                self.data = data;
-
-                self.hgncDim = self.ndx.dimension((d) => {
+                this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
 
