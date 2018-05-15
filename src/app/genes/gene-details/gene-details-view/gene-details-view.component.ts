@@ -55,7 +55,17 @@ export class GeneDetailsViewComponent implements OnInit {
                     routerLink: ['/gene-details/' + this.id]
                 });
                 this.breadcrumb.setCrumbs(crumbs);
-                this.initDetails();
+
+                this.geneService.loadTissues().then((tstatus) => {
+                    if (tstatus) {
+                        this.geneService.loadModels().then((mstatus) => {
+                            if (mstatus) {
+                                this.initDetails();
+                            }
+                        });
+                    }
+                })
+                //this.initDetails();
             });
         } else {
             crumbs.push({
@@ -70,9 +80,7 @@ export class GeneDetailsViewComponent implements OnInit {
     initDetails() {
         this.dataService.loadGenes().then((genesLoaded) => {
             if (genesLoaded) {
-                this.geneService.filterTissuesModels(this.gene).then((loaded: boolean) => {
-                    this.dataLoaded = loaded;
-                });
+                this.dataLoaded = genesLoaded;
             }
             // Handle error later
         });
