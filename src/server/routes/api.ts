@@ -11,13 +11,18 @@ const database = { url: '' };
 import { Genes } from '../../app/schemas/gene';
 import { GenesLinks } from '../../app/schemas/geneLink';
 
-// Set the rdatabase
-console.log('env', express().get('env'));
-if (express().get('env') === 'development') {
-    database.url = 'mongodb://localhost:27017/walloftargets';
+// Set the database url
+var env = process.env.NODE_ENV || 'development';
+if (process.env.Docker) {
+    database.url = 'mongodb://mongodb/walloftargets';
 } else {
-    database.url =
-        'mongodb://wotadmin:2w3o5t8@ec2-34-237-52-244.compute-1.amazonaws.com:27017/walloftargets';
+    if (env === 'development') {
+        database.url = 'mongodb://localhost:27017/walloftargets';
+    } else {
+        database.url = 'mongodb://wotadmin:2w3o5t8@' +
+            + 'ec2-34-237-52-244.compute-1.amazonaws.com:'
+            + '27017/walloftargets';
+    }
 }
 
 // Connect to mongoDB database, local or remotely
