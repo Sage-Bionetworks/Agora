@@ -7,6 +7,8 @@ import * as d3 from 'd3';
         duration = 0,
         delay = 0,      // New in 2.1.9
         domain = null,
+        min = 0,
+        max = 0,
         value = Number,
         whiskers = boxWhiskers,
         quartiles = boxQuartiles,
@@ -18,11 +20,16 @@ import * as d3 from 'd3';
         dataBoxPercentage = 0.8,
         renderTitle = false,
         showOutliers = true,
-        boldOutlier = false;
+        boldOutlier = false,
+        outlierClass,
+        outlierSize,
+        outlierX,
+        that = this;
+
 
     // For each small multiple…
-    function box(g) {
-        g.each(function (d, i) {
+    let box = (g) => {
+        g.each( function (d, i) {
             d = d.map(value).sort(d3.ascending);
             var g = d3.select(this),
                 n = d.length;
@@ -36,7 +43,7 @@ import * as d3 from 'd3';
 
             // Compute whiskers. Must return exactly 2 elements, or null.
             var whiskerIndices = whiskers && whiskers.call(this, d, i),
-                whiskerData = whiskerIndices && whiskerIndices.map(function (i) {
+                whiskerData = whiskerIndices && whiskerIndices.map( (i) => {
                         return d[i];
                     });
 
@@ -345,7 +352,7 @@ import * as d3 from 'd3';
             // Remove temporary quartiles element from within data array.
             delete d.quartiles;
         });
-        d3.timer.flush();
+        that.timerFlush();
     }
 
     box.width = function (x) {
@@ -421,7 +428,7 @@ import * as d3 from 'd3';
         return box;
     };
 
-    box.domain = function (x) {
+    box.domain = (x) => {
         if (!arguments.length) {
             return domain;
         }

@@ -22,8 +22,9 @@ import './d3-boxjitters';
  * Interaction with a chart will only trigger events and redraws within the chart's group.
  * @return {dc.boxPlot}
  */
-dc.boxPlot = function (parent, chartGroup) {
+dc.boxPlot = (parent, chartGroup) => {
     var _chart = dc.coordinateGridMixin({});
+    let that = this;
 
     // Returns a function to compute the interquartile range.
     function DEFAULT_WHISKERS_IQR(k) {
@@ -196,14 +197,15 @@ dc.boxPlot = function (parent, chartGroup) {
             .width(_calculatedBoxWidth)
             .height(_chart.effectiveHeight())
             .value(_chart.valueAccessor())
-            .domain(_chart.y().domain())
             .duration(_chart.transitionDuration())
             .tickFormat(_tickFormat)
             .renderData(_renderData)
             .dataBoxPercentage(_dataBoxPercentage)
             .renderTitle(_renderTitle)
             .showOutliers(_showOutliers)
-            .boldOutlier(_boldOutlier);
+            .boldOutlier(_boldOutlier)
+            .domain(_chart.y().domain());
+
 
         var boxesG = _chart.chartBodyG().selectAll('g.box').data(_chart.data(), function (d) {
             return d.key;
