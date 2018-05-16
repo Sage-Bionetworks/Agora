@@ -4,6 +4,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+declare var System: any;
+
 @Component({
   selector: 'about',
   styles: [`

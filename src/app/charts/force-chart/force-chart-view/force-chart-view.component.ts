@@ -13,7 +13,7 @@ import { Gene } from '../../../models';
     encapsulation: ViewEncapsulation.None
 })
 export class ForceChartViewComponent implements OnInit {
-    @Input() private name: string;
+    @Input() name: string;
     @Input() private currentGene = this.geneService.getCurrentGene();
 
     @ViewChild('chart') private forceChart: ElementRef;

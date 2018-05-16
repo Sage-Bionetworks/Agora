@@ -62,6 +62,7 @@
     "server:dev": "npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --watch --content-base src/",
     "server:dev:hmr": "npm run server:dev -- --hotOnly",
     "server:prod": "cross-env NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
+    "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
     "start": "npm run server",
     "start:hmr": "npm run server:dev:hmr",
     "test": "npm run lint && karma start",

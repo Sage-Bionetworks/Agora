@@ -28,4 +28,4 @@ export let GeneLinkSchema: Schema = new Schema({
 
 // Mongoose forces a lowcase name for collections when using the queries
 export const GenesLinks: Model<GeneLinkDocument> =
-model<GeneLinkDocument>('geneslinks', GeneLinkSchema);
+                model<GeneLinkDocument>('geneslinks', GeneLinkSchema);
