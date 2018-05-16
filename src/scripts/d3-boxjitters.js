@@ -1,4 +1,6 @@
- // Inspired by http://informationandvisualization.de/blog/box-plot
+import * as d3 from 'd3';
+
+// Inspired by http://informationandvisualization.de/blog/box-plot
  d3.boxJitters = function () {
     var width = 1,
         height = 1,
