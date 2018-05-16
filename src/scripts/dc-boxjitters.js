@@ -22,9 +22,11 @@ import './d3-boxjitters';
  * Interaction with a chart will only trigger events and redraws within the chart's group.
  * @return {dc.boxPlot}
  */
+var that2 = this;
+
 dc.boxPlot = (parent, chartGroup) => {
     var _chart = dc.coordinateGridMixin({});
-    let that = this;
+    _chart.d3 = d3;
 
     // Returns a function to compute the interquartile range.
     function DEFAULT_WHISKERS_IQR(k) {
@@ -231,7 +233,7 @@ dc.boxPlot = (parent, chartGroup) => {
             });
     }
 
-    function updateBoxes(boxesG) {
+    let updateBoxes = (boxesG) => {
         //dc.transition(boxesG, _chart.transitionDuration())
         dc.transition(boxesG, _chart.transitionDuration(), _chart.transitionDelay())
             .attr('transform', boxTransform)
@@ -241,11 +243,13 @@ dc.boxPlot = (parent, chartGroup) => {
                 // TODO: Is there a better way to get a unique color, I don't like drilling down.
                 //d3.select(this).select('rect.box').attr('fill', _chart.getColor);
 
-                var color = _chart.getColor(d3.select(this).select('rect.box')[0][0].__data__, 0);
-                d3.select(this).select('rect.box').attr('fill', color);
+                var color = _chart.getColor(_chart.d3.select(this).select('rect.box')._groups[0][0].__data__, 0);
+                _chart.d3.select(this).select('rect.box').attr('fill', color);
+
 
                 // TODO: Change style to attr once we remove the fill attribute for .box circle from dc.css
-                d3.select(this).selectAll('circle.data').style('fill', color);
+                _chart.d3.select(this).selectAll('circle.data').style('fill', color);
+
             });
     }
 
