@@ -58,7 +58,8 @@ dc.boxPlot = function (parent, chartGroup) {
 
     var _boxWidth = function (innerChartWidth, xUnits) {
         if (_chart.isOrdinal()) {
-            return _chart.x().rangeBand();
+            return _chart.x().bandwidth();
+
         } else {
             return innerChartWidth / (1 + _chart.boxPadding()) / xUnits;
         }
@@ -66,7 +67,8 @@ dc.boxPlot = function (parent, chartGroup) {
 
     var _boxHeight = function (innerChartHeight, yUnits) {
         if (_chart.isOrdinal()) {
-            return _chart.x().rangeBand();
+            return _chart.x().bandwidth();
+
         } else {
             return innerChartWidth / (1 + _chart.boxPadding()) / xUnits;
         }
@@ -95,7 +97,7 @@ dc.boxPlot = function (parent, chartGroup) {
     //_chart.yAxisPadding(12);
 
     // default to ordinal
-    _chart.x(d3.scale.ordinal());
+    _chart.x(d3.scaleOrdinal());
     _chart.xUnits(dc.units.ordinal);
 
     // valueAccessor should return an array of values that can be coerced into numbers

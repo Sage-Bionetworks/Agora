@@ -57,12 +57,12 @@ import * as d3 from 'd3';
             let pointIndices = d3.range(whiskerIndices[0], whiskerIndices[1] +1);
 
             // Compute the new x-scale.
-            var x1 = d3.scale.linear()
+            var x1 = d3.scaleLinear()
                 .domain(domain && domain.call(this, d, i) || [min, max])
                 .range([height, 0]);
 
             // Retrieve the old x-scale, if this is an update.
-            var x0 = this.__chart__ || d3.scale.linear()
+            var x0 = this.__chart__ || d3.scaleLinear()
                     .domain([0, Infinity])
                     .range(x1.range());
 
