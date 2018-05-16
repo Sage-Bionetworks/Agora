@@ -85,22 +85,20 @@ interface GlobalEnvironment {
   Analyser: boolean;
 }
 
-interface Es6PromiseLoader {
-  (id: string): (exportName?: string) => Promise<any>;
-}
+type Es6PromiseLoader = (id: string) => (exportName?: string) => Promise<any>;
 
 type FactoryEs6PromiseLoader = () => Es6PromiseLoader;
 type FactoryPromise = () => Promise<any>;
 
-type AsyncRoutes = {
+interface AsyncRoutes {
   [component: string]: Es6PromiseLoader |
-                               Function |
+                           (() => void) |
                 FactoryEs6PromiseLoader |
                          FactoryPromise ;
-};
+}
 
 type IdleCallbacks = Es6PromiseLoader |
-                             Function |
+                         (() => void) |
               FactoryEs6PromiseLoader |
                        FactoryPromise ;
 
@@ -136,8 +134,8 @@ interface ErrorStackTraceLimit {
 }
 
 // Extend typings
-interface NodeRequire extends WebpackRequire {}
-interface ErrorConstructor extends ErrorStackTraceLimit {}
-interface NodeRequireFunction extends Es6PromiseLoader  {}
-interface NodeModule extends WebpackModule {}
-interface Global extends GlobalEnvironment  {}
+export type NodeRequire = WebpackRequire;
+export type ErrorConstructor = ErrorStackTraceLimit;
+export type NodeRequireFunction = Es6PromiseLoader;
+export type NodeModule = WebpackModule;
+export type Global = GlobalEnvironment;

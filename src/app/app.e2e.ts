@@ -9,7 +9,7 @@ describe('App', () => {
 
   it('should have a title', async () => {
     const subject = await browser.getTitle();
-    const result  = 'Angular Starter by @gdi2290 from @TipeIO';
+    const result  = 'Wall of Targets';
     expect(subject).toEqual(result);
   });
 
@@ -19,6 +19,8 @@ describe('App', () => {
     expect(subject).toEqual(result);
   });
 
+  // Add new app.e2e.ts tests
+  /*
   it('should have <home>', async () => {
     const subject = await element(by.css('app home')).isPresent();
     const result  = true;
@@ -29,6 +31,6 @@ describe('App', () => {
     const subject = await element(by.css('button')).getText();
     const result  = 'Submit Value';
     expect(subject).toEqual(result);
-  });
+  });*/
 
 });

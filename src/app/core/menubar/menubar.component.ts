@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 
 // Dummy user for now
-import { User } from '../_models';
+// import { User } from '../../models';
 
 @Component({
   selector: 'menubar',
