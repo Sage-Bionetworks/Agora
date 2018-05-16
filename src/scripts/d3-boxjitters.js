@@ -15,9 +15,9 @@ import * as d3 from 'd3';
         // SBC (Added new attributes)
         renderData = false,
         dataRadius = 3,
-        dataBoxPercentage = 0.8;
+        dataBoxPercentage = 0.8,
         renderTitle = false,
-        showOutliers = true;
+        showOutliers = true,
         boldOutlier = false;
 
     // For each small multiple…
