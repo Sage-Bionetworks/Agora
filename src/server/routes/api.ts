@@ -12,7 +12,7 @@ import { Genes } from '../../app/schemas/gene';
 import { GenesLinks } from '../../app/schemas/geneLink';
 
 // Set the database url
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
 if (process.env.Docker) {
     database.url = 'mongodb://mongodb/walloftargets';
 } else {
