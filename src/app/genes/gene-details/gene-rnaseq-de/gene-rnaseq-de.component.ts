@@ -50,6 +50,34 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }
             );
             this.chartService.addChartInfo(
+                'box-plot',
+                {
+                    dimension: ['logfc', 'hgnc_symbol'],
+                    group: 'self',
+                    type: 'box-plot',
+                    title: '',
+                    filter: 'default',
+                    xAxisLabel: '',
+                    yAxisLabel: 'log2(fold change)',
+                    format: 'array',
+                    attr: 'logfc'
+                }
+            );
+            this.chartService.addChartInfo(
+                'box-plot2',
+                {
+                    dimension: ['neg_log10_adj_p_val', 'hgnc_symbol'],
+                    group: 'self',
+                    type: 'box-plot',
+                    title: '',
+                    filter: 'default',
+                    xAxisLabel: '',
+                    yAxisLabel: 'log10(adj p val)',
+                    format: 'array',
+                    attr: 'neg_log10_adj_p_val'
+                }
+            );
+            this.chartService.addChartInfo(
                 'forest-plot',
                 {
                     dimension: ['tissue_study_pretty'],
@@ -57,11 +85,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                     type: 'forest-plot',
                     title: 'Log fold forest plot',
                     filter: 'default',
-                    attr: 'logfc',
-                    constraint: {
-                        attr: 'tissue_study_pretty',
-                        names: this.geneService.getTissues()
-                    }
+                    attr: 'logfc'
                 }
             );
             this.chartService.addChartInfo(
@@ -77,7 +101,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'select-model',
                 {
-                    dimension: ['comparison_model_sex'],
+                    dimension: ['comparison_model_sex_pretty'],
                     group: 'self',
                     type: 'select-menu',
                     title: '',

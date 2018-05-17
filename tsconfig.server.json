@@ -10,7 +10,8 @@
         "importHelpers": true,
         "lib": [
             "es7",
-            "es2015.iterable"
+            "es2015.iterable",
+            "dom"
         ],
         "moduleResolution": "node",
         "sourceMap": true,

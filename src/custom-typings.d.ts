@@ -62,14 +62,15 @@ declare var HMR: boolean;
 declare var System: SystemJS;
 // declare const FIREBASE_CONFIG: FirebaseConfig;
 declare var Analyser: boolean;
+declare var Docker: boolean;
 
 interface FirebaseConfig {
-    apiKey: string;
-    authDomain: string;
-    databaseURL: string;
-    projectId: string;
-    storageBucket: string;
-    messagingSenderId: string;
+  apiKey: string;
+  authDomain: string;
+  databaseURL: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
 }
 
 interface SystemJS {
@@ -83,24 +84,23 @@ interface GlobalEnvironment {
   System: SystemJS;
   // FIREBASE_CONFIG: FirebaseConfig;
   Analyser: boolean;
+  Docker: boolean;
 }
 
-interface Es6PromiseLoader {
-  (id: string): (exportName?: string) => Promise<any>;
-}
+type Es6PromiseLoader = (id: string) => (exportName?: string) => Promise<any>;
 
 type FactoryEs6PromiseLoader = () => Es6PromiseLoader;
 type FactoryPromise = () => Promise<any>;
 
-type AsyncRoutes = {
+interface AsyncRoutes {
   [component: string]: Es6PromiseLoader |
-                               Function |
+                           (() => void) |
                 FactoryEs6PromiseLoader |
                          FactoryPromise ;
-};
+}
 
 type IdleCallbacks = Es6PromiseLoader |
-                             Function |
+                         (() => void) |
               FactoryEs6PromiseLoader |
                        FactoryPromise ;
 
@@ -121,14 +121,14 @@ interface WebpackModule {
 }
 
 interface WebpackRequire {
-    (id: string): any;
-    (paths: string[], callback: (...modules: any[]) => void): void;
-    ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
-    context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
+  (id: string): any;
+  (paths: string[], callback: (...modules: any[]) => void): void;
+  ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
+  context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
 }
 
 interface WebpackContext extends WebpackRequire {
-    keys(): string[];
+  keys(): string[];
 }
 
 interface ErrorStackTraceLimit {
@@ -136,8 +136,8 @@ interface ErrorStackTraceLimit {
 }
 
 // Extend typings
-interface NodeRequire extends WebpackRequire {}
-interface ErrorConstructor extends ErrorStackTraceLimit {}
-interface NodeRequireFunction extends Es6PromiseLoader  {}
-interface NodeModule extends WebpackModule {}
-interface Global extends GlobalEnvironment  {}
+export type NodeRequire = WebpackRequire;
+export type ErrorConstructor = ErrorStackTraceLimit;
+export type NodeRequireFunction = Es6PromiseLoader;
+export type NodeModule = WebpackModule;
+export type Global = GlobalEnvironment;

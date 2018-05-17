@@ -1,3 +1,29 @@
 h1 {
-  color: #00BCD4;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 30px;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+h2 {
+    text-align: left;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    color: #1A1C29;
+    font-size: 24px;
+}
+
+h3 {
+    text-align: left;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    color: #1A1C29;
+    font-size: 18px;
 }

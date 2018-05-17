@@ -1,7 +1,9 @@
 import { Document } from 'mongoose';
 
 export interface Gene {
+    _id: string;
     comparison_model_sex: string;
+    comparison_model_sex_pretty: string;
     Model: string;
     tissue_study: string;
     Tissue: string;

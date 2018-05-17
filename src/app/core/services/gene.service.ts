@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClientModule, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
 import { DataService } from './';
@@ -21,6 +22,7 @@ export class GeneService {
     private minNegLogPValue: number = 0;
 
     constructor(
+        private http: HttpClient,
         private decimalPipe: DecimalPipe,
         private dataService: DataService
     ) {}
@@ -75,28 +77,25 @@ export class GeneService {
         return [0, this.maxNegLogPValue];
     }
 
-    filterTissuesModels(gene: Gene): Promise<boolean> {
+    loadTissues(): Promise<any> {
         return new Promise((resolve, reject) => {
-            // Don't apply a filter to the dimension here
-            if (this.models.length) { this.models = []; }
-            if (this.tissues.length) { this.tissues = []; }
-            this.dataService.getGenesDimension().top(Infinity).forEach((g) => {
-                if (g.hgnc_symbol === gene.hgnc_symbol) {
-                    this.models.push(g.comparison_model_sex);
-                    this.tissues.push(g.tissue_study_pretty);
-                }
-            });
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            this.http.get('/api/tissues', { headers }).subscribe((data) => {
+                this.tissues = data['items'];
 
-            this.models = this.models.filter((value, index, array) => {
-                return array.indexOf(value) === index;
+                resolve(true);
             });
-            this.tissues = this.tissues.filter((value, index, array) => {
-                return array.indexOf(value) === index;
-            });
-            console.log(this.tissues);
-            console.log(this.models);
+        });
+    }
 
-            resolve(true);
+    loadModels(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            this.http.get('/api/models', { headers }).subscribe((data) => {
+                this.models = data['items'];
+
+                resolve(true);
+            });
         });
     }
 }
