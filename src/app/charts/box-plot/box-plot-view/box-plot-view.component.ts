@@ -76,7 +76,6 @@ export class BoxPlotViewComponent implements OnInit {
 
         this.registerChartEvent(this.chart, 'postRedraw');
         this.registerChartEvent(this.chart, 'postRender');
-        //this.registerChartEvent(this.chart, 'filtered');
 
         this.chart.render();
     }
@@ -93,20 +92,20 @@ export class BoxPlotViewComponent implements OnInit {
                     return 'src: log2(fold change)';
                 });
 
-            let lineCenter = chart.selectAll('line.center')
-            let allCircles = chart.selectAll('circle')
+            const lineCenter = chart.selectAll('line.center');
+            const allCircles = chart.selectAll('circle')
                 .attr('cx', lineCenter.attr('x1'));
 
-            let filteredGenes = self.geneEntries.slice().filter((g) => {
+            const filteredGenes = self.geneEntries.slice().filter((g) => {
                 return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
                     g.comparison_model_sex_pretty === self.geneService.getCurrentModel() &&
                     g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
             });
             let found = false;
             let foundIndex = -1;
-            let foundCircles = chart.selectAll('circle')
+            const foundCircles = chart.selectAll('circle')
                 .filter((c, i) => {
-                    let cfound = filteredGenes.some((g) => {
+                    const cfound = filteredGenes.some((g) => {
                         return (chart.group().all()[0].value[i] || !cfound) ?
                             chart.group().all()[0].value[i] === g[self.info.attr] :
                             false;
@@ -121,8 +120,7 @@ export class BoxPlotViewComponent implements OnInit {
                 .style('r', 4)
                 .style('opacity', 1);
 
-            let found2 = false;
-            let notFoundCircles = chart.selectAll('circle')
+            const notFoundCircles = chart.selectAll('circle')
                 .filter((c, i) => {
                     return i !== foundIndex;
                 })

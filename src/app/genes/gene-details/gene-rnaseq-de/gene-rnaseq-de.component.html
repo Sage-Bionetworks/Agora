@@ -1,53 +1,104 @@
-<div class="row no-gutters small-padding-top" [ngStyle]="style">
-    <p-panel [ngClass]="styleClass">
-        <p-header>
-            <div class="ui-helper-clearfix test">
-                <span class="ui-panel-title small-margin-right" style="font-size:16px;display:inline-block;margin-top:2px">RNA-Seq Differential Expression</span>
-                <i class="fa fa-question-circle" rel="tooltip" title="Differential gene expression of target genes."></i>
+<div class="row no-gutters small-padding-top ui-panel-titlebar rnaseq-panel" [ngStyle]="style">
+    <div class="row panel-header no-gutters">
+        <div class="container">
+            <h1>
+                RNA-Seq Differential Expression for APC
+            </h1>
+        </div>
+    </div>
+    <div class="row no-gutters row-shadow select-row">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <h3>
+                        Tissue
+                        <span class="icon-spacing"></span>
+                        <i class="fa fa-info-circle"></i>
+                    </h3>
+                </div>
+                <div class="col-md-5">
+                    <h3>
+                        Model
+                        <span class="icon-spacing"></span>
+                        <i class="fa fa-info-circle"></i>
+                    </h3>
+                </div>
+                <div class="col-md-2">
+                </div>
             </div>
-        </p-header>
-        <div class="container" style="height: 100%;">
-            <div class="row container-row">
-                <div class="col-md-6 chart-selects-row">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Tissue</h2>
-                        </div>
-                    </div>
-                    <div class="row controls-row">
-                        <select-menu [promptText]="'All tissues'"
-                            [label]="'select-tissue'"
-                            [defaultValue]="getTissue(1)">
-                        </select-menu>
-                    </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <select-menu [promptText]="'All tissues'"
+                        [label]="'select-tissue'"
+                        [defaultValue]="getTissue(1)">
+                    </select-menu>
                 </div>
-                <div class="col-md-6 chart-selects-row">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Model</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select-menu [promptText]="'All models'"
-                                [label]="'select-model'"
-                                [defaultValue]="getModel(1)">
-                            </select-menu>
-                        </div>
-                    </div>
+                <div class="col-md-5">
+                    <select-menu [promptText]="'All models'"
+                        [label]="'select-model'"
+                        [defaultValue]="getModel(1)">
+                    </select-menu>
                 </div>
-                <div class="row chart-container-row">
-                    <div class="col-md-3">
-                        <box-plot *ngIf="dataLoaded" [label]="'box-plot'"></box-plot>
-                    </div>
-                    <div class="col-md-3">
-                        <box-plot *ngIf="dataLoaded" [label]="'box-plot2'"></box-plot>
-                    </div>
-                    <div class="col-md-6">
-                        <row-chart *ngIf="dataLoaded"></row-chart>
-                    </div>
+                <div class="col-md-2">
                 </div>
             </div>
         </div>
-    </p-panel>
+    </div>
+    <div class="row no-gutters box-plot-row row-shadow">
+        <div class="container">
+            <div class="row box-plot-title">
+                <div class="col-md-12">
+                    <h2>
+                        Box Plots
+                        <span class="icon-spacing"></span>
+                        <i class="fa fa-info-circle"></i>
+                    </h2>
+                </div>
+            </div>
+            <div class="row box-plot-description">
+                <div class="col-md-12 box-plot-description-col">
+                    These box plots show the distribution of the effect size (log fold change) and
+                    significance (-log10 adjusted p-value) of the selected gene in the context of
+                    all genes of the selected tissue and model. The selected gene is shown as the
+                    larger red dot.
+                </div>
+            </div>
+            <div class="row box-plot-content">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-3">
+                    <box-plot *ngIf="dataLoaded" [label]="'box-plot'"></box-plot>
+                </div>
+                <div class="col-md-3">
+                    <box-plot *ngIf="dataLoaded" [label]="'box-plot2'"></box-plot>
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters box-plot-row row-shadow">
+        <div class="container">
+            <div class="row box-plot-title">
+                <div class="col-md-12">
+                    <h2>
+                        Log Change Forest Plot
+                        <span class="icon-spacing"></span>
+                        <i class="fa fa-info-circle"></i>
+                    </h2>
+                </div>
+            </div>
+            <div class="row box-plot-description">
+                <div class="col-md-12 box-plot-description-col">
+                    These box plots show the distribution of the effect size (log fold change) and
+                    significance (-log10 adjusted p-value) of the selected gene in the context of
+                    all genes of the selected tissue and model. The selected gene is shown as the
+                    larger red dot.
+                </div>
+            </div>
+            <div class="box-plot-content">
+                <row-chart *ngIf="dataLoaded"></row-chart>
+            </div>
+        </div>
+    </div>
 </div>

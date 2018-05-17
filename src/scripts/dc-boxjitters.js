@@ -100,7 +100,7 @@ dc.boxPlot = (parent, chartGroup) => {
     //_chart.yAxisPadding(12);
 
     // default to ordinal
-    _chart.x(d3.scaleOrdinal());
+    _chart.x(d3.scaleBand());
     _chart.xUnits(dc.units.ordinal);
 
     // valueAccessor should return an array of values that can be coerced into numbers

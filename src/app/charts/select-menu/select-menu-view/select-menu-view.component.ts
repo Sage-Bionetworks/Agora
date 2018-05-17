@@ -62,8 +62,8 @@ export class SelectMenuViewComponent implements OnInit {
             .group(this.dim.group())
             .controlsUseVisibility(true)
             .on('filtered', function(chart, filter) {
-                if (self.label === 'select-tissue') self.geneService.setCurrentTissue(filter);
-                if (self.label === 'select-model') self.geneService.setCurrentModel(filter);
+                if (self.label === 'select-tissue') { self.geneService.setCurrentTissue(filter); }
+                if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }
                 self.isDisabled = (filter) ? false : true;
             });
         this.chart.promptText(this.promptText);
@@ -83,7 +83,7 @@ export class SelectMenuViewComponent implements OnInit {
                     options['_groups'][0][0]['selected'] = 'selected';
                 }
 
-                options.filter(function(d, i) { return i == 0; }).remove();
+                options.filter(function(d, i) { return i === 0; }).remove();
                 selectMenu.dispatch('change');
 
                 self.defaultValue = '';

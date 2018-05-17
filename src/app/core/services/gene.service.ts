@@ -84,8 +84,8 @@ export class GeneService {
                 this.tissues = data['items'];
 
                 resolve(true);
-            })
-        })
+            });
+        });
     }
 
     loadModels(): Promise<any> {
@@ -95,7 +95,7 @@ export class GeneService {
                 this.models = data['items'];
 
                 resolve(true);
-            })
-        })
+            });
+        });
     }
 }

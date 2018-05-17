@@ -40,9 +40,9 @@ let genesById: Gene[] = [];
 let genesByScore: Gene[] = [];
 let geneEntries: Gene[] = [];
 let allGenes: Gene[] = [];
-let allTissues: string[] = [];
-let allModels: string[] = [];
 let totalRecords = 0;
+const allTissues: string[] = [];
+const allModels: string[] = [];
 
 // Group by id and sort by hgnc_symbol
 Genes.aggregate(
@@ -99,8 +99,12 @@ Genes.aggregate(
     // Unique genes, ordered by hgnc_symbol
     const seen = {};
     genesById = genes.slice().filter((g) => {
-        if (allTissues.indexOf(g['tissue_study_pretty']) == -1) allTissues.push(g['tissue_study_pretty']);
-        if (allModels.indexOf(g['comparison_model_sex_pretty']) == -1) allModels.push(g['comparison_model_sex_pretty']);
+        if (allTissues.indexOf(g['tissue_study_pretty']) === -1) {
+            allTissues.push(g['tissue_study_pretty']);
+        }
+        if (allModels.indexOf(g['comparison_model_sex_pretty']) === -1) {
+            allModels.push(g['comparison_model_sex_pretty']);
+        }
         if (seen[g['hgnc_symbol']]) { return; }
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
@@ -117,7 +121,7 @@ Genes.aggregate(
 router.get('/genes', (req, res, next) => {
     console.log('Get all genes');
 
-    let resObj = {
+    const resObj = {
         items: [],
         geneEntries: []
     };
@@ -198,7 +202,6 @@ router.get('/genes/:id', (req, res, next) => {
 });
 
 // Get a gene by id, currently hgnc_symbol
-// Get a gene by id, currently hgnc_symbol
 router.get('/gene/:id', (req, res, next) => {
     console.log('Get a gene with an id');
     console.log(req.params.id);
@@ -225,7 +228,7 @@ router.get('/gene/:id', (req, res, next) => {
                     maxNegLogPValue = (+g.neg_log10_adj_p_val);
                 }
             });
-            //console.log(geneEntries);
+
             res.json({
                 item: genes[0],
                 minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,

@@ -64,8 +64,7 @@ export class GeneDetailsViewComponent implements OnInit {
                             }
                         });
                     }
-                })
-                //this.initDetails();
+                });
             });
         } else {
             crumbs.push({

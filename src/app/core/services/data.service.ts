@@ -90,7 +90,7 @@ export class DataService {
 
             // Get all the genes to render the charts
             this.http.get('/api/genes', { headers, params }).subscribe((data: Gene[]) => {
-                if (data['geneEntries']) this.geneEntries = data['geneEntries'];
+                if (data['geneEntries']) { this.geneEntries = data['geneEntries']; }
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
                     d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
@@ -184,7 +184,6 @@ export class DataService {
         const self = this;
         const dimValue = info.dimension;
 
-        let test = 0;
         const dim = this.getNdx().dimension(function(d) {
             switch (info.type) {
                 case 'forest-plot':
@@ -306,18 +305,7 @@ export class DataService {
             all: () => {
                 return sourceGroup.all().filter(function(d) {
                     // Add your filter condition here
-                    return d.key !== null && d.key !== ''
-                });
-            }
-        };
-    }
-
-    rmEmptyBinsCustom = (sourceGroup, tissue?: string, model?: string) => {
-        return {
-            all: () => {
-                return sourceGroup.all().filter(function(d) {
-                    // Add your filter condition here
-                    return +d.key[0] !== 0 || +d.key[1] !== 0;
+                    return d.key !== null && d.key !== '';
                 });
             }
         };
