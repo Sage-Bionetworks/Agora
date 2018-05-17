@@ -26,8 +26,6 @@ export class ScatterPlotViewComponent implements OnInit {
     @Input() info: any;
     @Input() label: string = 'volcano-plot';
     @Input() currentGene = this.geneService.getCurrentGene();
-    @Input() filterTissues = this.geneService.getTissues();
-    @Input() filterModels = this.geneService.getModels();
     @Input() dim: any;
     @Input() group: any;
 
@@ -48,13 +46,7 @@ export class ScatterPlotViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(
-            this.label,
-            this.info,
-            this.currentGene,
-            this.filterTissues,
-            this.filterModels
-        );
+        this.dim = this.dataService.getDimension(this.label, this.info);
         this.group = this.dataService.getGroup(this.label, this.info);
         this.title = this.info.title;
 

@@ -1,14 +1,11 @@
-<div class="container chart-view-container">
-    <div class="row chart-header-row">
-        <div class="col-md-12">
-            <h2 class="chart chart-header">{{title}}</h2>
-        </div>
+<div class="row row-chart-row">
+    <div class="col-md-3">
     </div>
-    <div class="row rchart-row">
-        <div #studies class="col-md-4 rc" style="padding-right: 0px;">
-        </div>
-        <div class="col-md-8" style="padding-left: 0px;">
-            <div #chart class="rc" [ngStyle]="displayChart()"></div>
-        </div>
+    <div #studies class="col-md-3 rc" style="padding-right: 0px;">
+    </div>
+    <div class="col-md-3" style="padding-left: 0px;">
+        <div #chart class="rc" [ngStyle]="displayChart()"></div>
+    </div>
+    <div class="col-md-3">
     </div>
 </div>

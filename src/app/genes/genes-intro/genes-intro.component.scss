@@ -3,8 +3,10 @@
     padding-left: 5em;
     padding-bottom: 5em;
     padding-right: 5em;
-    height:250px;color: #000000;
+    height:250px;
+    color: #000000;
     background-color: #ffffff;
+    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
 
 .section-search-main-page {
@@ -12,19 +14,49 @@
     padding-left: 5em;
     padding-bottom: 5em;
     padding-right: 5em;
-    height:300px;color: #000000;
+    height:300px;
+    color: #000000;
     background-color: #ffffff;
-    background: rgba(45, 156, 219, 0.25);
+}
+
+.section-nomlist-main-page {
+    padding-top:50px;
+    padding-left: 5em;
+    padding-bottom: 5em;
+    padding-right: 5em;
+    height:250px;
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.intro-paragraph {
+    color: white;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+}
+
+.main-paragraph {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+    color: #1A1C29;
 }
 
 .genes-list-header {
     a {
         cursor: pointer;
-        color: #00BCD4;
+        color: #28448A;
         text-decoration: none;
 
         &:hover {
-            color: rgb(4, 125, 141) !important;
+            color: rgb(63, 108, 221) !important;
         }
     }
 }
