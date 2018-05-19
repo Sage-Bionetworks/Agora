@@ -9,7 +9,7 @@ import { DataService, GeneService } from '../../../core/services';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-import '../../../../scripts/dc-boxjitters.js';
+import '../../../../scripts/dc-boxplot.js';
 
 @Component({
     selector: 'box-plot',
