@@ -48,8 +48,8 @@ export class GenesListComponent implements OnInit {
         ]);
 
         this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene' },
-            { field: 'aveexpr', header: 'Score' }
+            { field: 'hgnc_symbol', header: 'Gene name' },
+            { field: 'aveexpr', header: 'Number of nominations' }
         ];
     }
 
@@ -130,5 +130,9 @@ export class GenesListComponent implements OnInit {
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
             this.loading = false;
         });
+    }
+
+    goHome() {
+        this.router.navigate(['/']);
     }
 }

@@ -1,52 +1,35 @@
-.section-intro-main-page {
-    padding-top:50px;
-    padding-left: 5em;
-    padding-bottom: 5em;
-    padding-right: 5em;
-    height:250px;
+.section-intro-desc {
+    padding-top: 2em;
+    padding-left: 27.7%;
+    padding-bottom: 2em;
+    padding-right: 27.7%;
     color: #000000;
     background-color: #ffffff;
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
 
-.section-search-main-page {
-    padding-top:50px;
-    padding-left: 5em;
-    padding-bottom: 5em;
-    padding-right: 5em;
-    height:300px;
+.section-intro-search {
+    padding-top: 2em;
+    padding-left: 27.7%;
+    padding-bottom: 2em;
+    padding-right: 27.7%;
     color: #000000;
     background-color: #ffffff;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%;
 }
 
-.section-nomlist-main-page {
-    padding-top:50px;
-    padding-left: 5em;
-    padding-bottom: 5em;
-    padding-right: 5em;
-    height:250px;
+.section-intro-nomlist {
+    padding-top: 2em;
+    padding-left: 27.7%;
+    padding-bottom: 2em;
+    padding-right: 27.7%;
     color: #000000;
     background-color: #ffffff;
-}
-
-.intro-paragraph {
-    color: white;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-    text-align: center;
-}
-
-.main-paragraph {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-    text-align: center;
-    color: #1A1C29;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%;
 }
 
 .genes-list-header {
@@ -59,4 +42,39 @@
             color: rgb(63, 108, 221) !important;
         }
     }
+}
+
+p-button {
+    width: 60%;
+    height: 100%;
+
+    button {
+        width: 100%;
+        height: 100%;
+    }
+
+    span {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 20px;
+        text-align: center;
+        letter-spacing: 1px;
+        color: #1A1C29;
+    }
+}
+
+.list-button {
+    background: #FCCB6F !important;
+    border: 0px !important;
+    color: black !important;
+    border-radius: 100px;
+}
+
+.list-control-row {
+    display: block;
+    height: 52px;
+    margin-top: 8%;
+    margin-bottom: 2%;
 }

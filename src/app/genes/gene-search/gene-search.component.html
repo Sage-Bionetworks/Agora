@@ -1,15 +1,17 @@
 
-    <div class="row search-row">
-        <section class="filter-wrapper">
-            <div class="keyword-wrapper">
-                <input type="text" [formControl]="queryField" id="keyword" (blur)="closeSearchList($event.target)"  placeholder="Search by gene" autofocus/>
-            </div>
-            <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
-                <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
-                    <p class="gene-name">
-                        {{result.hgnc_symbol}} - {{result.aveexpr | number:'1.2-5'}}
-                    </p>
-                </li>
-            </ul>
-        </section>
-    </div>
+<div class="row search-row">
+    <section class="filter-wrapper">
+        <div class="keyword-wrapper">
+            <input type="text" [formControl]="queryField" id="keyword"
+                (blur)="closeSearchList($event.target)"  placeholder="Search by gene" autofocus/>
+            <i class="fa fa-search fa-lg"></i>
+        </div>
+        <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
+            <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
+                <p class="gene-name">
+                    {{result.hgnc_symbol}}
+                </p>
+            </li>
+        </ul>
+    </section>
+</div>

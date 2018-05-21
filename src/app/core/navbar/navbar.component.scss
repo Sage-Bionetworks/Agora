@@ -1,6 +1,7 @@
 .nav-row {
-    background: black;
-    height: 60px;
+    //background: black;
+    height: 87px;
+    max-height: 87px;
     padding-left: 1%;
     padding-right: 1%;
     margin-right: 0px;
@@ -21,4 +22,16 @@
 
 .my-icon {
     content: url('/assets/img/user_icon_32x32.jpg');
+}
+
+.logo-bg {
+    background: #C4C4C4;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 30px;
+    color: #FFFFFF;
+    text-align: center;
+    max-width: 180px;
 }

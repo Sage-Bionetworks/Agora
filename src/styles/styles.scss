@@ -64,6 +64,20 @@ a:hover {
     text-decoration: underline;
 }
 
+p {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+    color: white;
+}
+
+.black-paragraph {
+    color: black;
+}
+
 .no-gutters {
     margin-right: 0;
     margin-left: 0;
@@ -92,4 +106,8 @@ a:hover {
 
 .light-blue {
     background: #2AB7E6;
+}
+
+.row-shadow {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
 }

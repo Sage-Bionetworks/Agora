@@ -1,5 +1,7 @@
 .search-row {
     display: block;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
 
 .filter-wrapper,
@@ -21,6 +23,14 @@
 
     text-align: justify;
     text-align-last: left;
+
+    i {
+        position: absolute;
+        z-index: 2;
+        color: #FCCB6F;
+        top: 35%;
+        left: 92%;
+    }
 }
 
 #keyword {
@@ -28,12 +38,13 @@
     padding-right: 25px;
     padding-bottom: 15px;
     padding-top: 15px;
-    width: 50%;
+    width: 100%;
     outline: none;
     background: #FFFFFF;
-    -moz-box-shadow:    inset 0 0 4px #C7C5C5;
+    -moz-box-shadow: inset 0 0 4px #C7C5C5;
     -webkit-box-shadow: inset 0 0 4px #C7C5C5;
-    box-shadow:         inset 0 0 4px #C7C5C5;
+    box-shadow: inset 0 0 4px #C7C5C5;
+    border-radius: 6px;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
@@ -66,12 +77,11 @@
 }
 
 .filter-select {
-    width: 50%;
+    width: 100%;
     list-style: none;
     border-top: none;
     /*so things don't jump around*/
     position: absolute;
-    left: 25%;
     /*Since we know the wrapper will always be 100% height, we can use half of 100% + half the height of the input*/
     top: calc(50% + 25px);
     /*for a better calculation use JS.  I'm calculating half of the body height - half the height of the input - li padding*/
@@ -93,22 +103,23 @@
     margin-right: 30px;
 }
 
-.tags {
-    font-size: 12px;
-    font-style: italic;
-    color: #c6c6c6;
-    margin-right: 10px;
-    position: relative;
-    top: -10px;
-}
-.filter-select-list:hover .tags {
-    color: #fff;
-}
-
 .filter-select-list {
     cursor: pointer;
     padding: 5px 10px;
-    height: 50px;
+    height: 60px;
+    color: #1A1C29;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+    color: #1A1C29;
+    padding-left: 7.5%;
+    box-shadow: inset 0px 0px 4px #C7C5C5;
+
+    p {
+        color: #1A1C29;
+    }
 }
 
 .gene-name {
@@ -117,7 +128,7 @@
 }
 
 .filter-select-list:hover {
-    background: #C0C0C0;
+    background: rgba(91, 176, 181, 0.25);
     color: #fff
 }
 
