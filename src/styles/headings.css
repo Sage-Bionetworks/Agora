@@ -27,3 +27,7 @@ h3 {
     color: #1A1C29;
     font-size: 18px;
 }
+
+.normal-heading {
+    font-weight: normal;
+}

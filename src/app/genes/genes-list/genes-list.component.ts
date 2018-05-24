@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Location } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -38,7 +39,8 @@ export class GenesListComponent implements OnInit {
         private route: ActivatedRoute,
         private breadcrumb: BreadcrumbService,
         private dataService: DataService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private location: Location
     ) { }
 
     ngOnInit() {
@@ -123,16 +125,14 @@ export class GenesListComponent implements OnInit {
 
         // Use a promise when doing remotely
         this.dataService.getTableData(event).subscribe((data) => {
-            console.log(data);
             this.datasource = (data['items']) ? data['items'] as Gene[] : [];
             this.genes = this.datasource;
-            console.log(data['totalRecords']);
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
             this.loading = false;
         });
     }
 
-    goHome() {
-        this.router.navigate(['/']);
+    goBack() {
+        this.location.back();
     }
 }

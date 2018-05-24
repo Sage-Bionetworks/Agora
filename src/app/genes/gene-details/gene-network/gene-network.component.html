@@ -1,11 +1,17 @@
-<div class="row no-gutters small-padding-top" [ngStyle]="style">
-    <p-panel [ngClass]="styleClass">
-    <p-header>
-        <div class="ui-helper-clearfix test">
-        <span class="ui-panel-title small-margin-right" style="font-size:16px;display:inline-block;margin-top:2px">Network</span>
-        </div>
-    </p-header>
-
-    <force-chart name="Network Widget"></force-chart>
-    </p-panel>
+<div class="row back-home-wrapper no-gutter">
+    <div class="row back-home-row no-gutter">
+        <i class="fa-inverse fa fa-arrow-left fa-2x" (click)="goBack()"></i>
+    </div>
+</div>
+<div class="section-overview-header">
+    <h1>
+        Gene Co-Expression Network
+    </h1>
+</div>
+<div *ngIf="dataLoaded" class="row network-content">
+    <div class="col-md-8 network-container">
+        <force-chart></force-chart>
+    </div>
+    <div class="col-md-4 network-description">
+    </div>
 </div>

@@ -1,37 +1,247 @@
-<div class="row no-gutters small-padding-top" [ngStyle]="style">
-    <p-panel [ngClass]="styleClass">
-        <p-header>
-            <div class="ui-helper-clearfix test">
-                <span class="ui-panel-title small-margin-right" style="font-size:16px;display:inline-block;margin-top:2px">Target Overview</span>
-                <i class="fa fa-question-circle" rel="tooltip" title="Annotations associated with this gene from Gene Ontology."></i>
-            </div>
-        </p-header>
+<div *ngIf="dataLoaded">
+    <div class="row back-home-wrapper no-gutter">
+        <div class="row back-home-row no-gutter">
+            <i class="fa-inverse fa fa-arrow-left fa-2x" (click)="goBack()"></i>
+        </div>
+    </div>
+    <div class="section-overview-header">
+        <h1>{{gene.hgnc_symbol}}</h1>
+        <p>
+            Longer name
+        </p>
+    </div>
+
+    <div class="section-overview-desc">
+        <h2>
+            Description
+        </h2>
+        <p class="black-paragraph">
+            Description
+        </p>
+    </div>
+
+    <div class="section-overview-rel">
+        <h2>
+            Relevance
+            <span class="icon-spacing"></span>
+            <i class="fa fa-info-circle"></i>
+        </h2>
+        <!-- TODO: Improve this part -->
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h3>
-                    <a class="light-blue-anchor" href="https://www.genenames.org/cgi-bin/gene_search?search={{gene.hgnc_symbol}}">
-                        {{gene.hgnc_symbol}}
-                    </a>
-                </h3>
-                <h4>
-                    <a class="light-blue-anchor" href="https://www.genenames.org/cgi-bin/gene_search?search={{gene.ensembl_gene_id}}">
-                        {{gene.ensembl_gene_id}}
-                    </a>
-                </h4>
-                <p-card [ngClass]="'summary-panel'" title="Summary">
-                    Add content
-                </p-card>
-            </div>
-            <div class="col-md-4">
-                <h3>
-                    Gene Ontology
+                    Network &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
                 </h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
+                <h3>AD Relevance &nbsp;&nbsp;&nbsp; Lorem Ipsum</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <h3>
-                    Reactome Pathways
+                    Gene in Normal Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(true, true)">On</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Clinical Outcomes &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
                 </h3>
             </div>
         </div>
-    </p-panel>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Gene in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(false, true)">Off</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Distribution in Body &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Reactome Pathways &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Cell Types &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Gene Ontology &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Consistency among cohorts from <br>
+                    differential expresion analyses &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(false, true)">No</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-overview-link">
+        <h2 (click)="goToRoute('/genes', { outlets: {'genes-router': getRNASeqLink() }})">
+            RNA-Seq Differential Expression
+            <i class="fa fa-angle-right fa-lg"></i>
+        </h2>
+    </div>
+
+    <div class="section-overview-link">
+        <h2 (click)="goToRoute('/genes', { outlets: {'genes-router': getCoExpNetLink() }})">
+            Gene Co-Expression Network
+            <i class="fa fa-angle-right fa-lg"></i>
+        </h2>
+    </div>
+
+    <div class="section-overview-actions">
+        <h2>
+            Actions
+            <span class="icon-spacing"></span>
+            <i class="fa fa-info-circle"></i>
+        </h2>
+        <!-- TODO: Improve this part -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Tractable &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(true, true)">Yes</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Studiable Models &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Drugability &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(true, true)">Yes</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Drug categories &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    ODDI &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-overview-sdata">
+        <h2>
+            Source Data
+            <span class="icon-spacing"></span>
+            <i class="fa fa-info-circle"></i>
+        </h2>
+        <!-- TODO: Improve this part -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Data Generation &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Population &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    ROSMAP &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Brain Sources &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    Other Sources &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    MSBB &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    MayoRNAseq &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">Lorem Ipsum</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-overview-sgenes">
+        <h2>
+            Similar Genes
+        </h2>
+        <!-- TODO: Improve this part -->
+        <div class="row">
+            <div class="col-md-12">
+                <a href="#">Gene</a>
+            </div>
+        </div>
+    </div>
 </div>
+<div *ngIf="!dataLoaded" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <p-progressBar mode="indeterminate"></p-progressBar>
+        </div>
+    </div>
+</div>
+
