@@ -9,7 +9,6 @@ import { GeneNetworkComponent } from './gene-details/gene-network';
 import { ScatterPlotViewComponent } from '../charts/scatter-plot/scatter-plot-view';
 import { RowChartViewComponent } from '../charts/row-chart/row-chart-view';
 
-
 const routes: Routes = [
     { path: 'genes', component: GenesViewComponent, children: [
         { path: '', component: GenesIntroComponent, outlet: 'genes-router' },

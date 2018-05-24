@@ -25,7 +25,6 @@ export class GeneOverviewComponent implements OnInit {
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
 
-
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -75,7 +74,7 @@ export class GeneOverviewComponent implements OnInit {
     }
 
     getTextColor(state: boolean, normal?: boolean) {
-        let colorClass = (state) ? 'green-text' : 'red-text';
+        const colorClass = (state) ? 'green-text' : 'red-text';
         return (normal) ? colorClass + ' normal-heading' : '';
     }
 
