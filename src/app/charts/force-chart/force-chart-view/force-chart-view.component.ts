@@ -21,6 +21,8 @@ export class ForceChartViewComponent implements OnInit {
     private nodes: object[];
     private links: any;
     private d3: any;
+    private cachedGene: Gene = this.currentGene;
+    private pathways: any[] = [];
 
     constructor(
         private dataService: DataService,
@@ -71,20 +73,19 @@ export class ForceChartViewComponent implements OnInit {
                         tooltip.html('<h3>Loading...</h3>')
                             .style('left', (d3.event.layerX) + 'px')
                             .style('top', (d3.event.layerY - 28) + 'px');
-                        this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
-                            if (!lgene.item) {
-                                tooltip.html(`
+                        if (d.hgnc_symbol !== this.cachedGene.hgnc_symbol) {
+                            this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
+                                if (!lgene.item) {
+                                    tooltip.html(`
                             <h3>Gene information not found.</h3>`);
-                                return;
-                            }
-                            tooltip.html(`
-                            <h3>${lgene.item.hgnc_symbol}</h3>
-                            <div>Study: ${lgene.item.Study}</div>
-                            <div>Tissue: ${lgene.item.Tissue}</div>
-                            <div>Lenght ${lgene.item.gene_length}</div>
-                            <div>Sex: ${lgene.item.Sex}</div>
-                            `);
-                        });
+                                    return;
+                                }
+                                this.cachedGene = lgene.item;
+                                this.tooltipFill(lgene.item, tooltip);
+                            });
+                        } else {
+                            this.tooltipFill(this.cachedGene, tooltip);
+                        }
                     })
                     .on('mouseout', (d) => {
                         tooltip.transition()
@@ -93,7 +94,9 @@ export class ForceChartViewComponent implements OnInit {
                     })
                     .on('click', (d: any) => {
                         console.log('click' + d.hgnc_symbol);
-                        this.viewGene(d);
+                        //this.viewGene(d);
+                        console.log(d);
+                        this.buildPath(d);
                     });
 
                 const textElements = svg.append('g')
@@ -164,6 +167,23 @@ export class ForceChartViewComponent implements OnInit {
 
     private getNodeColor(node , index, arr) {
         return !index ? 'red' : 'gray';
+    }
+
+    private tooltipFill(gene: Gene, tooltip) {
+        tooltip.html(`
+            <h3>${gene.hgnc_symbol}</h3>
+            <div>Study: ${gene.Study}</div>
+            <div>Tissue: ${gene.Tissue}</div>
+            <div>Lenght ${gene.gene_length}</div>
+            <div>Sex: ${gene.Sex}</div>
+        `);
+    }
+
+    private buildPath(gene: Gene) {
+        console.log(gene);
+        this.dataService.loadNodes(gene).then((data: any) => {
+            this.pathways = data.nodes;
+        });
     }
 
     private viewGene(gene: Gene) {

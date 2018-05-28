@@ -39,18 +39,19 @@ export class DataService {
             const dic = [];
 
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
+                const dnodes = [];
                 const genes: any = {
                     links: [],
-                    nodes: [{
-                        id: sgene.ensembl_gene_id,
-                        group: 1,
-                        hgnc_symbol: sgene.hgnc_symbol
-                    }]
+                    nodes: []
                 };
-                const dnodes = [];
-                const enodes: object[] = data['items'].filter((node: any) => {
-                    return node.geneA_ensembl_gene_id === sgene.ensembl_gene_id;
-                });
+                dnodes[sgene.ensembl_gene_id] = {
+                    id: sgene.ensembl_gene_id,
+                    ensembl_gene_id: sgene.ensembl_gene_id,
+                    group: 1,
+                    hgnc_symbol: sgene.hgnc_symbol,
+                    brainregions: []
+                };
+                genes.nodes = [...genes.nodes, dnodes[sgene.ensembl_gene_id]];
                 data['items'].forEach((obj: any) => {
                     if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
                         const link: any = {
@@ -66,16 +67,19 @@ export class DataService {
                         dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
                         dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                         .brainregions.push(obj.brainRegion);
+                        dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
                     }
                     if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
                         && !dnodes[obj.geneB_ensembl_gene_id]) {
                         const node = {
                             id: obj.geneB_ensembl_gene_id,
+                            ensembl_gene_id: obj.geneB_ensembl_gene_id,
                             group: 1,
-                            hgnc_symbol: obj.geneB_external_gene_name
+                            hgnc_symbol: obj.geneB_external_gene_name,
+                            brainregions: [obj.brainRegion]
                         };
-                        genes.nodes = [...genes.nodes, node];
-                        dnodes[obj.geneB_ensembl_gene_id] = true;
+                        dnodes[obj.geneB_ensembl_gene_id] = node;
+                        genes.nodes = [...genes.nodes, dnodes[obj.geneB_ensembl_gene_id]];
                     }
                 });
                 resolve(genes);

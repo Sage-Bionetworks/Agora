@@ -26,6 +26,7 @@ export interface Gene {
     neg_log10_adj_p_val: number;
     tissue_study_pretty: string;
     model_sex_pretty: string;
+    brainregions: string[];
 }
 
 export type GeneDocument = Gene & Document;
