@@ -1,9 +1,27 @@
 .footer-row {
-    background: #F2F2F2;
+    background: #EDEDED;
     height: 100px;
-    padding-left: 1%;
-    padding-right: 1%;
     margin-right: 0px;
     text-align: center;
-    padding-top: 15px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 16px;
+    text-align: center;
+    color: #0D1C38;
+    z-index: 2;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.footer-span {
+    margin-left: 5%;
+    margin-right: 5%;
 }

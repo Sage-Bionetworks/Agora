@@ -9,7 +9,6 @@ import { GeneService, DataService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-// import { selectMenu, redrawAll } from 'dc';
 
 @Component({
     selector: 'select-menu',
@@ -33,6 +32,8 @@ export class SelectMenuViewComponent implements OnInit {
     @ViewChild('sm') selectMenu: ElementRef;
 
     isDisabled: boolean = true;
+    destroyed: boolean = false;
+    menuSelection: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -70,21 +71,12 @@ export class SelectMenuViewComponent implements OnInit {
 
         this.chart.on('postRender', function(chart) {
             if (self.defaultValue) {
-                const selectMenu = d3.select(self.selectMenu.nativeElement)
+                self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
-                const options = selectMenu
-                    .selectAll('option');
-                const defaultOption = options['_groups']['forEach']((o, i) => {
-                    return (o[i]['innerHTML'].includes(self.defaultValue));
-                });
-                if (defaultOption) {
-                    defaultOption['selected'] = 'selected';
-                } else {
-                    options['_groups'][0][0]['selected'] = 'selected';
-                }
-
-                options.filter(function(d, i) { return i === 0; }).remove();
-                selectMenu.dispatch('change');
+                const oldOptions = self.menuSelection.selectAll('option');
+                const newOptions = oldOptions.filter(function(d, i) { return i === 0; }).remove();
+                newOptions['_groups'][0][0]['selected'] = 'selected';
+                self.menuSelection.dispatch('change');
 
                 self.defaultValue = '';
             }

@@ -9,8 +9,6 @@ import { DataService, GeneService } from '../../../core/services';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-import '../../../../scripts/dc-boxjitters.js';
-
 @Component({
     selector: 'box-plot',
     templateUrl: './box-plot-view.component.html',
@@ -60,13 +58,13 @@ export class BoxPlotViewComponent implements OnInit {
         this.chart
             .dimension(this.dim)
             .group(this.group)
-            .renderData(true)
+            .renderDataPoints(true)
             .renderTitle(true)
             .elasticX(true)
             .elasticY(true)
             .boldOutlier(true)
             .yAxisLabel(this.info.yAxisLabel)
-            .dataBoxPercentage(1)
+            .dataWidthPortion(1)
             .boldOutlier(true)
             .colors('black')
             .transitionDuration(0);

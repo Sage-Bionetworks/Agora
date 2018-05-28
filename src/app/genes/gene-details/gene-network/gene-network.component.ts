@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../../models';
 
-import { ChartService } from '../../../charts/services';
-import { GeneService } from '../../../core/services';
+import { GeneService, DataService } from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -19,21 +19,44 @@ export class GeneNetworkComponent implements OnInit {
     @Input() style: any;
     @Input() gene: Gene;
     @Input() id: string;
-    dataLoaded: boolean = true;
+    dataLoaded: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
-        private chartService: ChartService
+        private dataService: DataService,
+        private location: Location
     ) { }
 
     ngOnInit() {
-        console.log('init');
+        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+
+        // The data wasn't loaded yet, redirect for now
+        if (!this.dataService.getNdx()) {
+            this.id = this.route.snapshot.paramMap.get('id');
+            this.router.navigate([
+                '/genes',
+                {
+                    outlets: {
+                        'genes-router':
+                        [
+                            'gene-details', this.id
+                        ]
+                    }
+                }
+            ]);
+        } else {
+            this.dataLoaded = true;
+        }
     }
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
             this.router.navigate([path], { relativeTo: this.route });
+    }
+
+    goBack() {
+        this.location.back();
     }
 }
