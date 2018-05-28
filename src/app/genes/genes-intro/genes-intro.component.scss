@@ -1,33 +1,26 @@
-.section-intro-desc {
-    padding-top: 2em;
-    padding-left: 27.7%;
-    padding-bottom: 2em;
-    padding-right: 27.7%;
-    color: #000000;
-    background-color: #ffffff;
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.intro-desc {
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
 
-.section-intro-search {
-    padding-top: 2em;
-    padding-left: 27.7%;
-    padding-bottom: 2em;
-    padding-right: 27.7%;
-    color: #000000;
-    background-color: #ffffff;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+.intro-search {
+    box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.35);
     margin-bottom: 2%;
+    padding-top: 0px;
+
+    @include respond-to('ex-small') {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    @include respond-to('small') {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 }
 
-.section-intro-nomlist {
-    padding-top: 2em;
-    padding-left: 27.7%;
-    padding-bottom: 2em;
-    padding-right: 27.7%;
-    color: #000000;
-    background-color: #ffffff;
-    background: #FFFFFF;
+.intro-nomlist-desc {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
 }
@@ -45,6 +38,9 @@
 }
 
 p-button {
+    @include respond-to('ex-small') {
+        width: 70%;
+    }
     width: 60%;
     height: 100%;
 
@@ -58,6 +54,9 @@ p-button {
         font-style: normal;
         font-weight: bold;
         line-height: normal;
+        @include respond-to('ex-small') {
+            font-size: 18px;
+        }
         font-size: 20px;
         text-align: center;
         letter-spacing: 1px;

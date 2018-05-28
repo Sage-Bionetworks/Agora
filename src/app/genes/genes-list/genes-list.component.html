@@ -3,14 +3,14 @@
         <i class="fa-inverse fa fa-arrow-left fa-2x" (click)="goBack()"></i>
     </div>
 </div>
-<div class="section-nomlist-intro center-justified">
+<div class="section nomlist-intro center-justified">
     <h1>Nominated Target List</h1>
     <p>
         Please select a gene from the list to view details and evidence. You can find a gene by
         name by typing in a gene symbol (e.g. “WGF”).
     </p>
 </div>
-<div class="section-nomlist-list center-justified">
+<div class="nomlist-list center-justified">
     <p-table #gl
         [columns]="cols" [value]="genes" selectionMode="single"
         [(selection)]="selectedGene" dataKey="ensembl_gene_id"

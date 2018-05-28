@@ -14,8 +14,7 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes, {
         useHash: Boolean(history.pushState) === false,
         preloadingStrategy: PreloadAllModules,
-        onSameUrlNavigation: 'reload',
-        enableTracing: true
+        onSameUrlNavigation: 'reload'
     })],
     exports: [RouterModule]
 })

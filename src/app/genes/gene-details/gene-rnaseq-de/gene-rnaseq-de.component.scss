@@ -1,31 +1,3 @@
-.back-home-wrapper {
-    width: 100%;
-    height: 63px;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-}
-
-.back-home-row {
-    width: 100%;
-    height: 100%;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: rgba(0, 0, 0, 0.15);
-    background-blend-mode: darken;
-    position: relative;
-
-    i {
-        top: 25%;
-        left: 2%;
-        position: absolute;
-    }
-
-    i:hover {
-        cursor: pointer !important;
-    }
-}
-
 .plot-content {
     min-height: 450px;
     margin-top: 2%;
@@ -49,16 +21,8 @@
     }
 }
 
-.section-rna-seq-sel {
-    padding-top: 2em;
-    padding-left: 10%;
-    padding-bottom: 2em;
-    padding-right: 10%;
-    color: #000000;
-    background-color: #ffffff;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2%;
+.rna-seq-sel {
+    background: rgba(245, 245, 245, 0.5);
 
     .fa-info-circle:before {
         color: #9DA3B3;
@@ -98,17 +62,7 @@
     }
 }
 
-.section-rna-seq-bplot {
-    padding-top: 2em;
-    padding-left: 10%;
-    padding-bottom: 2em;
-    padding-right: 10%;
-    color: #000000;
-    background-color: #ffffff;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2%;
-
+.rna-seq-bplot {
     p {
         text-align: left;
     }
@@ -122,17 +76,7 @@
     }
 }
 
-.section-rna-seq-fplot {
-    padding-top: 2em;
-    padding-left: 10%;
-    padding-bottom: 2em;
-    padding-right: 10%;
-    color: #000000;
-    background-color: #ffffff;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2%;
-
+.rna-seq-fplot {
     p {
         text-align: left;
     }

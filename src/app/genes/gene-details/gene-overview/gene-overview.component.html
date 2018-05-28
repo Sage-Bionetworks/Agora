@@ -4,14 +4,14 @@
             <i class="fa-inverse fa fa-arrow-left fa-2x" (click)="goBack()"></i>
         </div>
     </div>
-    <div class="section-overview-header">
+    <div class="section-thin overview-header">
         <h1>{{gene.hgnc_symbol}}</h1>
         <p>
             Longer name
         </p>
     </div>
 
-    <div class="section-overview-desc">
+    <div class="section-thin overview-desc">
         <h2>
             Description
         </h2>
@@ -20,7 +20,7 @@
         </p>
     </div>
 
-    <div class="section-overview-rel">
+    <div class="section-thin overview-rel">
         <h2>
             Relevance
             <span class="icon-spacing"></span>
@@ -97,21 +97,19 @@
         </div>
     </div>
 
-    <div class="section-overview-link">
-        <h2 (click)="goToRoute('/genes', { outlets: {'genes-router': getRNASeqLink() }})">
-            RNA-Seq Differential Expression
-            <i class="fa fa-angle-right fa-lg"></i>
-        </h2>
+    <div class="overview-link">
+        <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+            <gene-rnaseq-de></gene-rnaseq-de>
+        </p-panel>
     </div>
 
-    <div class="section-overview-link">
-        <h2 (click)="goToRoute('/genes', { outlets: {'genes-router': getCoExpNetLink() }})">
-            Gene Co-Expression Network
-            <i class="fa fa-angle-right fa-lg"></i>
-        </h2>
+    <div class="overview-link">
+        <p-panel header="Gene Co-Expression Network" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+            <gene-network></gene-network>
+        </p-panel>
     </div>
 
-    <div class="section-overview-actions">
+    <div class="section-thin overview-actions">
         <h2>
             Actions
             <span class="icon-spacing"></span>
@@ -160,7 +158,7 @@
         </div>
     </div>
 
-    <div class="section-overview-sdata">
+    <div class="section-thin overview-sdata">
         <h2>
             Source Data
             <span class="icon-spacing"></span>
@@ -225,7 +223,7 @@
         </div>
     </div>
 
-    <div class="section-overview-sgenes">
+    <div class="section-thin overview-sgenes">
         <h2>
             Similar Genes
         </h2>

@@ -1,3 +1,6 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .back-home-wrapper {
     width: 100%;
     height: 63px;
@@ -26,38 +29,61 @@
     }
 }
 
-.section-nomlist-intro {
-    padding-top: 2em;
-    padding-left: 27.7%;
-    padding-bottom: 2em;
-    padding-right: 27.7%;
-    color: #000000;
-    background-color: #ffffff;
+.nomlist-intro {
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
 
-.section-nomlist-list {
+.nomlist-list {
+    margin-top: -0.1em;
+
     .ui-table-caption {
         background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
         border: none;
-    }
-
-    .ui-table-caption {
         padding-bottom: 4%;
         position: relative;
 
+        @include respond-to('ex-small') {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        @include respond-to('small') {
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
         >input {
             height: 50px;
-            width: 38%;
+            @include respond-to('ex-small') {
+                width: 100%;
+                padding-left: 4%;
+            }
+            @include respond-to('small') {
+                width: 100%;
+                padding-left: 4%;
+            }
+            @include respond-to('medium') {
+                width: 42%;
+                border-radius: 6px;
+                padding-left: 2%;
+            }
+            @include respond-to('large') {
+                width: 42%;
+                border-radius: 6px;
+                padding-left: 2%;
+            }
+            @include respond-to('ex-large') {
+                width: 42%;
+                border-radius: 6px;
+                padding-left: 2%;
+            }
             box-shadow: inset 0px 0px 4px #C7C5C5;
-            border-radius: 6px;
             text-align-last: left;
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
             line-height: normal;
             font-size: 16px;
-            padding-left: 2%;
+            border: 0px;
 
             ::-moz-placeholder,
             ::-ms-input-placeholder,
@@ -70,8 +96,26 @@
             position: absolute;
             z-index: 2;
             color: #FCCB6F;
-            top: 20%;
-            left: 66%;
+            @include respond-to('ex-small') {
+                left: 90%;
+                top: 30%;
+            }
+            @include respond-to('small') {
+                left: 92%;
+                top: 27%;
+            }
+            @include respond-to('medium') {
+                left: 66%;
+                top: 24%;
+            }
+            @include respond-to('large') {
+                left: 67%;
+                top: 22%;
+            }
+            @include respond-to('ex-large') {
+                left: 67.5%;
+                top: 21%;
+            }
         }
     }
 
@@ -87,6 +131,34 @@
             font-size: 18px;
             color: #0D1C38;
         }
+
+        @include respond-to('ex-small') {
+            >tr>th:first-child {
+                padding-left: 4%;
+                text-align-last: left;
+            }
+        }
+        @include respond-to('small') {
+            >tr>th:first-child {
+                padding-left: 4%;
+                text-align-last: left;
+            }
+        }
+        @include respond-to('medium') {
+            >tr>th:first-child {
+                text-align-last: center;
+            }
+        }
+        @include respond-to('large') {
+            >tr>th:first-child {
+                text-align-last: center;
+            }
+        }
+        @include respond-to('ex-large') {
+            >tr>th:first-child {
+                text-align-last: center;
+            }
+        }
     }
 
     .ui-table-tbody {
@@ -98,6 +170,33 @@
             font-size: 18px;
             color: #1A1C29;
             height: 40px;
+        }
+        @include respond-to('ex-small') {
+            >tr>td:first-child {
+                padding-left: 3.8%;
+                text-align-last: left;
+            }
+        }
+        @include respond-to('small') {
+            >tr>td:first-child {
+                padding-left: 3.8%;
+                text-align-last: left;
+            }
+        }
+        @include respond-to('medium') {
+            >tr>td:first-child {
+                text-align-last: center;
+            }
+        }
+        @include respond-to('large') {
+            >tr>td:first-child {
+                text-align-last: center;
+            }
+        }
+        @include respond-to('ex-large') {
+            >tr>td:first-child {
+                text-align-last: center;
+            }
         }
     }
 }

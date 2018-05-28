@@ -1,7 +1,8 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .search-row {
     display: block;
-    margin-top: 10%;
-    margin-bottom: 10%;
 }
 
 .filter-wrapper,
@@ -29,13 +30,47 @@
         z-index: 2;
         color: #FCCB6F;
         top: 35%;
-        left: 92%;
+
+        @include respond-to('ex-small') {
+            left: 88%;
+        }
+        @include respond-to('small') {
+            left: 88%;
+        }
+        @include respond-to('medium') {
+            left: 85%;
+        }
+        @include respond-to('large') {
+            left: 84%;
+        }
+        @include respond-to('ex-large') {
+            left: 84%;
+        }
     }
 }
 
 #keyword {
-    padding-left: 25px;
-    padding-right: 25px;
+
+    @include respond-to('ex-small') {
+        padding-left: 8%;
+        padding-right: 8%;
+    }
+    @include respond-to('small') {
+        padding-left: 8%;
+        padding-right: 8%;
+    }
+    @include respond-to('medium') {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+    @include respond-to('large') {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+    @include respond-to('ex-large') {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
     padding-bottom: 15px;
     padding-top: 15px;
     width: 100%;
@@ -50,6 +85,7 @@
     font-weight: normal;
     line-height: normal;
     font-size: 18px;
+    border: 0px;
 
     ::-moz-placeholder,
     ::-ms-input-placeholder,
@@ -140,34 +176,46 @@
 
 
 /*some simple responsive designs*/
-
-@media only screen and (max-width: 768px) {
-    .filter-select,
-    #keyword {
+.filter-select,
+#keyword {
+    @include respond-to('ex-small') {
+        width: 100%;
+    }
+    @include respond-to('small') {
+        width: 100%;
+    }
+    @include respond-to('medium') {
         width: 80%;
     }
-    #keyword {
-        font-size: 1.3em
+    @include respond-to('large') {
+        width: 80%;
     }
-    .filter-select {
-        font-size: 0.9em;
-        left: 10%;
-        top: calc(50% + 23px);
-    }
-    #keyword-button {
-        right: 11%
+    @include respond-to('ex-large') {
+        width: 80%;
     }
 }
-
-@media only screen and (max-width: 480px) {
-    .filter-select,
-    #keyword {
-        width: 95%;
+#keyword {
+    font-size: 1.3em
+}
+.filter-select {
+    font-size: 0.9em;
+    @include respond-to('ex-small') {
+        left: 0%;
     }
-    .filter-select {
-        left: 2.5%;
+    @include respond-to('small') {
+        left: 0%;
     }
-    #keyword-button {
-        right: 3.5%
+    @include respond-to('medium') {
+        left: 10%;
     }
+    @include respond-to('large') {
+        left: 10%;
+    }
+    @include respond-to('ex-large') {
+        left: 10%;
+    }
+    top: calc(50% + 23px);
+}
+#keyword-button {
+    right: 11%
 }

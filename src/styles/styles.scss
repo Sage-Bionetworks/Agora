@@ -5,12 +5,12 @@
 
 // 1. Vendor files
 @import "~font-awesome/css/font-awesome.min.css";
-//@import "~lato-font/css/lato-font.min.css";
 @import "~primeng/resources/themes/omega/theme.css";
 @import "~primeng/resources/primeng.min.css";
 @import "~bootstrap/scss/bootstrap-grid";
 @import "~bootstrap/scss/utilities/flex";
 @import "~dc/style/dc.scss";
+@import "~lato-font/css/lato-font.css";
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
 @import "../assets/css/helpers/mixins";
@@ -33,7 +33,9 @@
 // 5. Custom Global Styles
 html, body{
     height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    min-width: 367px;
+    font-family: Lato;
 }
 
 .wrapper {
@@ -54,6 +56,7 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
+    font-family: Lato;
 }
 
 a {
@@ -110,4 +113,92 @@ p {
 
 .row-shadow {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.section {
+    font-family: Lato;
+    @include respond-to('ex-small') {
+        padding-top: 2em;
+        padding-left: 9%;
+        padding-bottom: 2em;
+        padding-right: 9%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('small') {
+        padding-top: 2em;
+        padding-left: 9%;
+        padding-bottom: 2em;
+        padding-right: 9%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('medium') {
+        padding-top: 2em;
+        padding-left: 15%;
+        padding-bottom: 2em;
+        padding-right: 15%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('large') {
+        padding-top: 2em;
+        padding-left: 21%;
+        padding-bottom: 2em;
+        padding-right: 21%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('ex-large') {
+        padding-top: 2em;
+        padding-left: 27.7%;
+        padding-bottom: 2em;
+        padding-right: 27.7%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+}
+
+.section-thin {
+    font-family: Lato;
+    @include respond-to('ex-small') {
+        padding-top: 2em;
+        padding-left: 4.5%;
+        padding-bottom: 2em;
+        padding-right: 4.5%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('small') {
+        padding-top: 2em;
+        padding-left: 4.5%;
+        padding-bottom: 2em;
+        padding-right: 4.5%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('medium') {
+        padding-top: 2em;
+        padding-left: 7.5%;
+        padding-bottom: 2em;
+        padding-right: 7.5%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('large') {
+        padding-top: 2em;
+        padding-left: 10.5%;
+        padding-bottom: 2em;
+        padding-right: 10.5%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('ex-large') {
+        padding-top: 2em;
+        padding-left: 13.8%;
+        padding-bottom: 2em;
+        padding-right: 13.8%;
+        color: #000000;
+        background-color: #ffffff;
+    }
 }
