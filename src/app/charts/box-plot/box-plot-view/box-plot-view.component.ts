@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../../models';
@@ -16,6 +16,7 @@ import * as dc from 'dc';
     encapsulation: ViewEncapsulation.None
 })
 export class BoxPlotViewComponent implements OnInit {
+    @HostListener('window:resize', ['$event'])
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;

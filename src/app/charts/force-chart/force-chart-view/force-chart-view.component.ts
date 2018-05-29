@@ -31,6 +31,8 @@ export class ForceChartViewComponent implements AfterViewInit {
     private d3: any;
     private cachedGene: Gene = this.currentGene;
     private pathways: any[] = [];
+    private width: any;
+    private height: any;
 
     constructor(
         private dataService: DataService,
@@ -43,21 +45,26 @@ export class ForceChartViewComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        console.log('init force');
+        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
+        this.height = this.forceChart.nativeElement.offsetHeight;
         this.renderChart();
     }
 
+    private onResize(event) {
+        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
+        this.height = this.forceChart.nativeElement.offsetHeight;
+        this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
+    }
+
     private renderChart() {
-        const width: any = this.forceChart.nativeElement.offsetWidth;
-        const height: any = this.forceChart.nativeElement.offsetHeight;
         const svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
-            .attr('width', width)
-            .attr('height', height);
+            .attr('width', this.width)
+            .attr('height', this.height);
 
         const simulation = d3.forceSimulation()
             .force('charge', d3.forceManyBody().strength(-100))
-            .force('center', d3.forceCenter(width / 2, height / 2));
+            .force('center', d3.forceCenter(this.width / 2, this.height / 2));
         this.dataService.loadNodes(this.currentGene)
             .then((data) => {
                 console.log(data);
@@ -119,9 +126,9 @@ export class ForceChartViewComponent implements AfterViewInit {
                 simulation.nodes(data.nodes).on('tick', () => {
                     nodeElements
                         .attr('cx', (node: any) => node.x = Math.max(7,
-                            Math.min(width - 7, node.x)))
+                            Math.min(this.width - 7, node.x)))
                         .attr('cy', (node: any) => node.y = Math.max(7,
-                            Math.min(height - 7, node.y)));
+                            Math.min(this.height - 7, node.y)));
                     textElements
                         .attr('x', (node: any) => node.x)
                         .attr('y', (node: any) => node.y);

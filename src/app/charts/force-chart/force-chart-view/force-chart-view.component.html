@@ -4,7 +4,7 @@
             <h2 class="chart chart-header">{{name}}</h2>
         </div>
     </div>
-    <div class="row">
+    <div class="row" (window:resize)="onResize($event)">
         <div #chart class="fc">
         </div>
     </div>
