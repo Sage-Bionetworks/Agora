@@ -18,7 +18,6 @@ import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
 import { GeneSearchComponent } from './gene-search';
-import { GeneDetailsViewComponent } from './gene-details/gene-details-view';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
@@ -29,7 +28,6 @@ import { GeneNetworkComponent } from './gene-details/gene-network';
         GenesIntroComponent,
         GenesListComponent,
         GeneSearchComponent,
-        GeneDetailsViewComponent,
         GeneOverviewComponent,
         GeneRNASeqDEComponent,
         GeneNetworkComponent

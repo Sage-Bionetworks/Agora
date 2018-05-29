@@ -1,5 +1,15 @@
-.chart-header-row {
-    height: 10%;
+.dc-chart {
+    width: 100%;
+    height: 100%;
+}
+
+.fc {
+    height: 100%;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 div.tooltip {

@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input,
+    AfterViewInit
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService, GeneService } from '../../../core/services';
 
@@ -12,7 +20,7 @@ import { Gene } from '../../../models';
     styleUrls: ['./force-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ForceChartViewComponent implements OnInit {
+export class ForceChartViewComponent implements AfterViewInit {
     @Input() name: string;
     @Input() private currentGene = this.geneService.getCurrentGene();
 
@@ -34,14 +42,14 @@ export class ForceChartViewComponent implements OnInit {
         console.log('construct force');
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         console.log('init force');
         this.renderChart();
     }
 
     private renderChart() {
-        const width: any = this.forceChart.nativeElement.parentElement.offsetWidth;
-        const height: any = '500';
+        const width: any = this.forceChart.nativeElement.offsetWidth;
+        const height: any = this.forceChart.nativeElement.offsetHeight;
         const svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
             .attr('width', width)

@@ -1,40 +1,14 @@
-.network-panel {
-  width: 100%;
-  .ui-panel-titlebar {
-    background: #2AB7E6;
-    color: white;
-  }
-  .ui-panel-content-wrapper {
-    height: 100%;
-    .ui-panel-content {
-      height: 100%;
+.network-content {
+    min-height: 600px;
+    overflow-y: hidden;
+
+    force-chart {
+        width: 100%;
+        height: 100%;
     }
-  }
-  >.ui-panel.ui-widget {
-    height: 100%;
-  }
 }
 
-.small-margin-right {
-  margin-right: 1%;
+.network-container {
+    padding: 4%;
+    background: rgba(245, 245, 245, 0.5);
 }
-
-.container-row {
-  margin-top: 10px;
-  height: 50%;
-}
-
-.chart-header {
-  margin-bottom: 0px;
-}
-
-.chart-selects-row {
-  height: 20%;
-  width: 100%;
-}
-
-.chart-container-row {
-  height: 80%;
-  width: 100%;
-}
-
