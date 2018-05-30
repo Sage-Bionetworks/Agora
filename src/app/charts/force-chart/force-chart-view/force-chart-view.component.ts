@@ -87,10 +87,10 @@ export class ForceChartViewComponent implements AfterViewInit {
                             }
                             tooltip.html(`
                             <h3>${lgene.item.hgnc_symbol}</h3>
-                            <div>Study: ${lgene.item.Study}</div>
-                            <div>Tissue: ${lgene.item.Tissue}</div>
+                            <div>Study: ${lgene.item.study}</div>
+                            <div>Tissue: ${lgene.item.tissue}</div>
                             <div>Lenght ${lgene.item.gene_length}</div>
-                            <div>Sex: ${lgene.item.Sex}</div>
+                            <div>Sex: ${lgene.item.sex}</div>
                             `);
                         });
                     })
