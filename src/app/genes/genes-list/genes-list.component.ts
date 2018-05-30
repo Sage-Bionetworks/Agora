@@ -4,7 +4,6 @@ import { DecimalPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
-    BreadcrumbService,
     GeneService,
     DataService
 } from 'app/core/services';
@@ -37,18 +36,12 @@ export class GenesListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private breadcrumb: BreadcrumbService,
         private dataService: DataService,
         private geneService: GeneService,
         private location: Location
     ) { }
 
     ngOnInit() {
-        this.breadcrumb.setCrumbs([
-            { label: 'GENES', routerLink: ['/genes'] },
-            { label: 'LIST', routerLink: ['/genes/genes-list'] }
-        ]);
-
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene name' },
             { field: 'aveexpr', header: 'Nominations' }
@@ -65,6 +58,7 @@ export class GenesListComponent implements OnInit {
             summary: 'Gene Selected',
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
+        if (!this.selectedGene) { this.selectedGene = event.data; }
         this.dataService.getGene(this.selectedGene.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
