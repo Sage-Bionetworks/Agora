@@ -191,10 +191,10 @@ export class ForceChartViewComponent implements AfterViewInit {
     private tooltipFill(gene: Gene, tooltip) {
         tooltip.html(`
             <h3>${gene.hgnc_symbol}</h3>
-            <div>Study: ${gene.Study}</div>
-            <div>Tissue: ${gene.Tissue}</div>
+            <div>Study: ${gene.study}</div>
+            <div>Tissue: ${gene.tissue}</div>
             <div>Lenght ${gene.gene_length}</div>
-            <div>Sex: ${gene.Sex}</div>
+            <div>Sex: ${gene.sex}</div>
         `);
     }
 
