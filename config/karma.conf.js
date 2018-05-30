@@ -1,3 +1,5 @@
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 /**
  * @author: tipe.io
  */
@@ -125,8 +127,14 @@ module.exports = function (config) {
 
     customLaunchers: {
       ChromeTravisCi: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu']
+        base: 'Chrome',
+        flags: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--headless',
+          '--disable-gpu',
+          '--remote-debugging-port=9222'
+        ]
       }
     },
 
