@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="row">
-        <div *ngFor="let path of pathways; let i = index" class="pathbox">
+        <div *ngFor="let path of getPathways(); let i = index" class="pathbox">
             <span *ngIf="i === 0" (click)="viewGene(path)">--></span>
             {{path.hgnc_symbol}}
             <div>BrainRegions:</div>

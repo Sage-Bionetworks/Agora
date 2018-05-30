@@ -26,11 +26,11 @@ export class ForceChartViewComponent implements AfterViewInit {
 
     @ViewChild('chart') private forceChart: ElementRef;
 
+    private pathways: any[] = [];
     private nodes: object[];
     private links: any;
     private d3: any;
     private cachedGene: Gene = this.currentGene;
-    private pathways: any[] = [];
     private width: any;
     private height: any;
 
@@ -50,10 +50,14 @@ export class ForceChartViewComponent implements AfterViewInit {
         this.renderChart();
     }
 
-    private onResize(event) {
+    onResize(event) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
         this.height = this.forceChart.nativeElement.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
+    }
+
+    getPathways(): any[] {
+        return this.pathways;
     }
 
     private renderChart() {
@@ -109,7 +113,7 @@ export class ForceChartViewComponent implements AfterViewInit {
                     })
                     .on('click', (d: any) => {
                         console.log('click' + d.hgnc_symbol);
-                        //this.viewGene(d);
+                        // this.viewGene(d);
                         console.log(d);
                         this.buildPath(d);
                     });
