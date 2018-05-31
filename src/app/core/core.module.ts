@@ -20,9 +20,6 @@ import {
 
 // Backend modules and extra config
 import { environment } from 'environments/environment';
-import { AngularFireModule } from 'angularfire2';
-
-// export const firebaseConfig = ENV_FIREBASE_CONFIG;
 
 import {
     AuthGuardService,
@@ -54,8 +51,6 @@ import '../../styles/headings.css';
         TieredMenuModule,
         PanelMenuModule,
         BreadcrumbModule,
-        // Other third-party modules
-        // AngularFireModule.initializeApp(firebaseConfig),
         // Feature Modules
         GenesModule,
         ChartsModule
