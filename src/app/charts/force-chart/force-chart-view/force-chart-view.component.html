@@ -4,8 +4,18 @@
             <h2 class="chart chart-header">{{name}}</h2>
         </div>
     </div>
+    <div class="row" (window:resize)="onResize($event)">
+        <div #chart class="fc">
+        </div>
+    </div>
     <div class="row">
-        <div #chart class="col">
+        <div *ngFor="let path of getPathways(); let i = index" class="pathbox">
+            <span *ngIf="i === 0" (click)="viewGene(path)">--></span>
+            {{path.hgnc_symbol}}
+            <div>BrainRegions:</div>
+            <span *ngFor="let region of path.brainregions;">
+                {{region}}
+            </span>
         </div>
     </div>
 </div>

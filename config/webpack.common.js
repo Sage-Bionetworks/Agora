@@ -186,7 +186,6 @@ module.exports = function (options) {
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
-        // 'FIREBASE_CONFIG': JSON.stringify(APP_CONFIG.firebase),
         'Analyzer': JSON.stringify(METADATA.Analyzer),
         'process.env.Docker': JSON.stringify(METADATA.Docker)
       }),

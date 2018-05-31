@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input,
+    HostListener
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../../models';
@@ -9,8 +17,6 @@ import { DataService, GeneService } from '../../../core/services';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-import '../../../../scripts/dc-boxjitters.js';
-
 @Component({
     selector: 'box-plot',
     templateUrl: './box-plot-view.component.html',
@@ -18,6 +24,7 @@ import '../../../../scripts/dc-boxjitters.js';
     encapsulation: ViewEncapsulation.None
 })
 export class BoxPlotViewComponent implements OnInit {
+    @HostListener('window:resize', ['$event'])
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -60,13 +67,13 @@ export class BoxPlotViewComponent implements OnInit {
         this.chart
             .dimension(this.dim)
             .group(this.group)
-            .renderData(true)
+            .renderDataPoints(true)
             .renderTitle(true)
             .elasticX(true)
             .elasticY(true)
             .boldOutlier(true)
             .yAxisLabel(this.info.yAxisLabel)
-            .dataBoxPercentage(1)
+            .dataWidthPortion(1)
             .boldOutlier(true)
             .colors('black')
             .transitionDuration(0);

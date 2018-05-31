@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input,
+    AfterViewInit
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService, GeneService } from '../../../core/services';
 
@@ -12,15 +20,19 @@ import { Gene } from '../../../models';
     styleUrls: ['./force-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ForceChartViewComponent implements OnInit {
+export class ForceChartViewComponent implements AfterViewInit {
     @Input() name: string;
     @Input() private currentGene = this.geneService.getCurrentGene();
 
     @ViewChild('chart') private forceChart: ElementRef;
 
+    private pathways: any[] = [];
     private nodes: object[];
     private links: any;
     private d3: any;
+    private cachedGene: Gene = this.currentGene;
+    private width: any;
+    private height: any;
 
     constructor(
         private dataService: DataService,
@@ -32,22 +44,31 @@ export class ForceChartViewComponent implements OnInit {
         console.log('construct force');
     }
 
-    ngOnInit() {
-        console.log('init force');
+    ngAfterViewInit() {
+        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
+        this.height = this.forceChart.nativeElement.offsetHeight;
         this.renderChart();
     }
 
+    onResize(event) {
+        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
+        this.height = this.forceChart.nativeElement.offsetHeight;
+        this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
+    }
+
+    getPathways(): any[] {
+        return this.pathways;
+    }
+
     private renderChart() {
-        const width: any = this.forceChart.nativeElement.parentElement.offsetWidth;
-        const height: any = '500';
         const svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
-            .attr('width', width)
-            .attr('height', height);
+            .attr('width', this.width)
+            .attr('height', this.height);
 
         const simulation = d3.forceSimulation()
             .force('charge', d3.forceManyBody().strength(-100))
-            .force('center', d3.forceCenter(width / 2, height / 2));
+            .force('center', d3.forceCenter(this.width / 2, this.height / 2));
         this.dataService.loadNodes(this.currentGene)
             .then((data) => {
                 console.log(data);
@@ -71,20 +92,19 @@ export class ForceChartViewComponent implements OnInit {
                         tooltip.html('<h3>Loading...</h3>')
                             .style('left', (d3.event.layerX) + 'px')
                             .style('top', (d3.event.layerY - 28) + 'px');
-                        this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
-                            if (!lgene.item) {
-                                tooltip.html(`
+                        if (d.hgnc_symbol !== this.cachedGene.hgnc_symbol) {
+                            this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
+                                if (!lgene.item) {
+                                    tooltip.html(`
                             <h3>Gene information not found.</h3>`);
-                                return;
-                            }
-                            tooltip.html(`
-                            <h3>${lgene.item.hgnc_symbol}</h3>
-                            <div>Study: ${lgene.item.Study}</div>
-                            <div>Tissue: ${lgene.item.Tissue}</div>
-                            <div>Lenght ${lgene.item.gene_length}</div>
-                            <div>Sex: ${lgene.item.Sex}</div>
-                            `);
-                        });
+                                    return;
+                                }
+                                this.cachedGene = lgene.item;
+                                this.tooltipFill(lgene.item, tooltip);
+                            });
+                        } else {
+                            this.tooltipFill(this.cachedGene, tooltip);
+                        }
                     })
                     .on('mouseout', (d) => {
                         tooltip.transition()
@@ -93,7 +113,9 @@ export class ForceChartViewComponent implements OnInit {
                     })
                     .on('click', (d: any) => {
                         console.log('click' + d.hgnc_symbol);
-                        this.viewGene(d);
+                        // this.viewGene(d);
+                        console.log(d);
+                        this.buildPath(d);
                     });
 
                 const textElements = svg.append('g')
@@ -108,9 +130,9 @@ export class ForceChartViewComponent implements OnInit {
                 simulation.nodes(data.nodes).on('tick', () => {
                     nodeElements
                         .attr('cx', (node: any) => node.x = Math.max(7,
-                            Math.min(width - 7, node.x)))
+                            Math.min(this.width - 7, node.x)))
                         .attr('cy', (node: any) => node.y = Math.max(7,
-                            Math.min(height - 7, node.y)));
+                            Math.min(this.height - 7, node.y)));
                     textElements
                         .attr('x', (node: any) => node.x)
                         .attr('y', (node: any) => node.y);
@@ -164,6 +186,23 @@ export class ForceChartViewComponent implements OnInit {
 
     private getNodeColor(node , index, arr) {
         return !index ? 'red' : 'gray';
+    }
+
+    private tooltipFill(gene: Gene, tooltip) {
+        tooltip.html(`
+            <h3>${gene.hgnc_symbol}</h3>
+            <div>Study: ${gene.study}</div>
+            <div>Tissue: ${gene.tissue}</div>
+            <div>Lenght ${gene.gene_length}</div>
+            <div>Sex: ${gene.sex}</div>
+        `);
+    }
+
+    private buildPath(gene: Gene) {
+        console.log(gene);
+        this.dataService.loadNodes(gene).then((data: any) => {
+            this.pathways = data.nodes;
+        });
     }
 
     private viewGene(gene: Gene) {

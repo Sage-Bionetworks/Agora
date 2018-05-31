@@ -14,53 +14,52 @@ import { AppComponent } from './app.component';
 import { AppState } from './app.service';
 
 describe(`App`, () => {
-  let comp: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
-
-  /**
-   * async beforeEach
-   */
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AppComponent ],
-      imports: [ RouterTestingModule ],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [AppState]
-    })
-    /**
-     * Compile template and css
-     */
-    .compileComponents();
-  }));
-
-  /**
-   * Synchronous beforeEach
-   */
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    comp    = fixture.componentInstance;
+    let comp: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
 
     /**
-     * Trigger initial data binding
+     * async beforeEach
      */
-    fixture.detectChanges();
-  });
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ AppComponent ],
+            imports: [ RouterTestingModule ],
+            schemas: [NO_ERRORS_SCHEMA],
+            providers: [AppState]
+        })
+        /**
+         * Compile template and css
+         */
+        .compileComponents();
+    }));
 
-  it(`should be readly initialized`, () => {
-    expect(fixture).toBeDefined();
-    expect(comp).toBeDefined();
-  });
+    /**
+     * Synchronous beforeEach
+     */
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AppComponent);
+        comp    = fixture.componentInstance;
 
-  it(`should be @TipeIO`, () => {
-    expect(comp.name).toEqual('Wall of Targets');
-  });
+        /**
+         * Trigger initial data binding
+         */
+        fixture.detectChanges();
+    });
 
-  it('should log ngOnInit', () => {
-    spyOn(console, 'log');
-    expect(console.log).not.toHaveBeenCalled();
+    it(`should be readly initialized`, () => {
+        expect(fixture).toBeDefined();
+        expect(comp).toBeDefined();
+    });
 
-    comp.ngOnInit();
-    expect(console.log).toHaveBeenCalled();
-  });
+    it(`should be @Wall of Targets`, () => {
+        expect(comp.name).toEqual('Wall of Targets');
+    });
 
+    it('should log ngOnInit', () => {
+        spyOn(console, 'log');
+        expect(console.log).not.toHaveBeenCalled();
+
+        comp.ngOnInit();
+        expect(console.log).toHaveBeenCalled();
+    });
 });

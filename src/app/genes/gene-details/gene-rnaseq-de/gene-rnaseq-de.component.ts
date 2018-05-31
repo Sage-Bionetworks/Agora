@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
-import { GeneService } from '../../../core/services';
+import { GeneService, DataService } from '../../../core/services';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -25,13 +26,33 @@ export class GeneRNASeqDEComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
-        private chartService: ChartService
+        private dataService: DataService,
+        private chartService: ChartService,
+        private location: Location
     ) { }
 
     ngOnInit() {
-        this.loadChartData().then((status) => {
-            this.dataLoaded = status;
-        });
+        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+
+        // The data wasn't loaded yet, redirect for now
+        if (!this.dataService.getNdx()) {
+            this.id = this.route.snapshot.paramMap.get('id');
+            this.router.navigate([
+                '/genes',
+                {
+                    outlets: {
+                        'genes-router':
+                        [
+                            'gene-details', this.id
+                        ]
+                    }
+                }
+            ]);
+        } else {
+            this.loadChartData().then((status) => {
+                this.dataLoaded = status;
+            });
+        }
     }
 
     loadChartData(): Promise<any> {
@@ -121,8 +142,7 @@ export class GeneRNASeqDEComponent implements OnInit {
         return this.geneService.getModels()[index];
     }
 
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {relativeTo: this.route}) :
-        this.router.navigate([path], {relativeTo: this.route});
+    goBack() {
+        this.location.back();
     }
 }
