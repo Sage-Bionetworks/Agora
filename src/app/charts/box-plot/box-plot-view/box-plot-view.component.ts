@@ -4,8 +4,7 @@ import {
     ViewEncapsulation,
     ViewChild,
     ElementRef,
-    Input,
-    HostListener
+    Input
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
@@ -24,7 +23,6 @@ import * as dc from 'dc';
     encapsulation: ViewEncapsulation.None
 })
 export class BoxPlotViewComponent implements OnInit {
-    @HostListener('window:resize', ['$event'])
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -39,6 +37,8 @@ export class BoxPlotViewComponent implements OnInit {
     display: boolean = false;
     counter: number = 0;
     geneEntries: Gene[] = [];
+
+    private resizeTimer;
 
     constructor(
         private dataService: DataService,
@@ -62,9 +62,11 @@ export class BoxPlotViewComponent implements OnInit {
         );
         this.group = this.dataService.getGroup(this.label, this.info);
 
-        this.title = this.info.title;
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
         this.chart
+            .title((d) => {
+                return d.value;
+            })
             .dimension(this.dim)
             .group(this.group)
             .renderDataPoints(true)
@@ -79,7 +81,6 @@ export class BoxPlotViewComponent implements OnInit {
             .transitionDuration(0);
 
         this.chart.tickFormat(d3.format('.5f'));
-        this.chart['_whiskers'] = null;
 
         this.registerChartEvent(this.chart, 'postRedraw');
         this.registerChartEvent(this.chart, 'postRender');
@@ -138,5 +139,23 @@ export class BoxPlotViewComponent implements OnInit {
                 this.parentNode.appendChild(this);
             });
         });
+    }
+
+    onResize(event) {
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(function() {
+            self.chart
+                .width(self.boxPlot.nativeElement.parentElement.offsetWidth)
+                .height(self.boxPlot.nativeElement.offsetHeight);
+
+            if (self.chart.rescale) {
+                self.chart.rescale();
+            }
+
+            // Run code here, resizing has "stopped"
+            self.chart.redraw();
+        }, 100);
     }
 }
