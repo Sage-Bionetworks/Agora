@@ -19,7 +19,8 @@ import {
     RouterLinkStubDirective,
     DataServiceStub,
     GeneServiceStub,
-    mockGene1
+    mockGene1,
+    mockGene2
 } from '../../../app/testing';
 
 import { Gene } from '../../models';
@@ -36,6 +37,7 @@ describe('Component: GenesList', () => {
     let router: RouterStub;
     let location: any;
     let dataService: DataServiceStub;
+    let geneService: GeneServiceStub;
     let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
@@ -64,6 +66,7 @@ describe('Component: GenesList', () => {
         router = fixture.debugElement.injector.get(Router);
         location = fixture.debugElement.injector.get(Location);
         dataService = fixture.debugElement.injector.get(DataService);
+        geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockGene1.hgnc_symbol });
 
@@ -73,6 +76,29 @@ describe('Component: GenesList', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should load the table', fakeAsync(() => {
+        const res = { items: [mockGene1, mockGene2] };
+        const loadEvent = {
+            filters: {},
+            first: 0,
+            globalFilter: null,
+            multiSortMeta: undefined,
+            rows: 14,
+            sortField: undefined,
+            sortOrder: 1
+        };
+
+        const dsSpy = spyOn(dataService, 'getTableData').and.returnValue(
+            Observable.of(res)
+        );
+        spyOn(component, 'loadGenesLazy').and.callThrough(); // mock event object to load the table
+        component.loadGenesLazy(loadEvent);
+        fixture.detectChanges();
+        tick(1);
+        expect(component.datasource).toEqual(res.items);
+        expect(dsSpy.calls.any()).toEqual(true);
+    }));
 
     it('should tell ROUTER to navigate when selecting gene', fakeAsync(() => {
         const dsSpy = spyOn(dataService, 'getGene').and.returnValue(
@@ -94,6 +120,14 @@ describe('Component: GenesList', () => {
             ],
             { relativeTo: activatedRoute }
         );
+    }));
+
+    it('should unselect gene', fakeAsync(() => {
+        const gsSpy = spyOn(geneService, 'setCurrentGene');
+
+        component.onRowUnselect({ data: mockGene1 }); // trigger click on row
+        fixture.detectChanges();
+        expect(gsSpy.calls.any()).toEqual(true);
     }));
 
     it ('goBack() function test', () => {
