@@ -10,7 +10,6 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { routes } from '../genes-routing.module';
 
 import {
     ActivatedRouteStub,
@@ -23,6 +22,7 @@ import {
     mockGene2
 } from '../../../app/testing';
 
+import { routes } from '../genes-routing.module';
 import { Gene } from '../../models';
 
 import { GenesListComponent } from './genes-list.component';
@@ -104,7 +104,6 @@ describe('Component: GenesList', () => {
         const dsSpy = spyOn(dataService, 'getGene').and.returnValue(
             Observable.of(mockGene1)
         );
-
         spyOn(router, 'navigate').and.callThrough();
 
         component.onRowSelect({ data: mockGene1 }); // trigger click on row
