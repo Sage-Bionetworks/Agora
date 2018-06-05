@@ -15,13 +15,15 @@ import colorbrewer from 'colorbrewer';
 
 @Injectable()
 export class DataService {
-    private ndx: any;
-    private data: any;
-    private hgncDim: any;
-    private tissuesDim: any;
-    private modelsDim: any;
-    private dbgenes: Observable<Gene[]>;
-    private geneEntries: Gene[];
+    // Add the new #[field] from TypeScript when it's out
+    // https://github.com/Microsoft/TypeScript/issues/24418
+    ndx: any;
+    data: any;
+    hgncDim: any;
+    tissuesDim: any;
+    modelsDim: any;
+    dbgenes: Observable<Gene[]>;
+    geneEntries: Gene[];
 
     constructor(
         private http: HttpClient,
@@ -149,7 +151,7 @@ export class DataService {
         });
     }
 
-    getTableData(paramsObj?: LazyLoadEvent) {
+    getTableData(paramsObj?: LazyLoadEvent): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
 
