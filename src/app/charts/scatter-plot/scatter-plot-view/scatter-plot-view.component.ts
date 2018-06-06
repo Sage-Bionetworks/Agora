@@ -46,8 +46,8 @@ export class ScatterPlotViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.label, this.info);
-        this.group = this.dataService.getGroup(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.info);
+        this.group = this.dataService.getGroup(this.info);
         this.title = this.info.title;
 
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);

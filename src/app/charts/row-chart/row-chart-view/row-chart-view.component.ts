@@ -55,11 +55,10 @@ export class RowChartViewComponent implements OnInit {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
-            this.label,
             this.info,
             this.currentGene
         );
-        this.group = this.dataService.getGroup(this.label, this.info);
+        this.group = this.dataService.getGroup(this.info);
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)

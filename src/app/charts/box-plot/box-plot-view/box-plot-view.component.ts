@@ -54,13 +54,14 @@ export class BoxPlotViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.geneEntries = this.dataService.getGeneEntries();
-        this.info = this.chartService.getChartInfo(this.label);
+        if (!this.info) {
+            this.info = this.chartService.getChartInfo(this.label);
+        }
         this.dim = this.dataService.getDimension(
-            this.label,
             this.info,
             this.currentGene
         );
-        this.group = this.dataService.getGroup(this.label, this.info);
+        this.group = this.dataService.getGroup(this.info);
 
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
         this.chart
@@ -105,9 +106,10 @@ export class BoxPlotViewComponent implements OnInit {
                 .attr('cx', lineCenter.attr('x1'));
 
             const filteredGenes = self.geneEntries.slice().filter((g) => {
-                return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
+                /*return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
                     g.comparison_model_sex_pretty === self.geneService.getCurrentModel() &&
-                    g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
+                    g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;*/
+                return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
             });
             let found = false;
             let foundIndex = -1;
@@ -124,15 +126,19 @@ export class BoxPlotViewComponent implements OnInit {
                     }
                     return cfound;
                 })
-                .style('fill', 'red')
-                .style('r', 4)
+                .style('fill', '#FCA79A')
+                .style('stroke', '#F47E6C')
+                .style('stroke-width', 3)
+                .style('r', 13.6)
                 .style('opacity', 1);
 
             const notFoundCircles = chart.selectAll('circle')
                 .filter((c, i) => {
                     return i !== foundIndex;
                 })
-                .style('fill', 'black');
+                .style('fill', '#8D919E')
+                .style('stroke', 'none')
+                .style('r', 4.6);
 
             // Move the red circles to front
             foundCircles.each(function() {

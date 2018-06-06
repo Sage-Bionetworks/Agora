@@ -13,6 +13,7 @@ import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
@@ -21,6 +22,7 @@ import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
+import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
 
 @NgModule({
     declarations: [
@@ -30,7 +32,8 @@ import { GeneNetworkComponent } from './gene-details/gene-network';
         GeneSearchComponent,
         GeneOverviewComponent,
         GeneRNASeqDEComponent,
-        GeneNetworkComponent
+        GeneNetworkComponent,
+        BoxPlotsViewComponent
     ],
     imports: [
         CommonModule,
@@ -46,7 +49,11 @@ import { GeneNetworkComponent } from './gene-details/gene-network';
         TableModule,
         CardModule,
         TabViewModule,
-        ProgressBarModule
+        ProgressBarModule,
+        MultiSelectModule
+    ],
+    entryComponents: [
+        BoxPlotsViewComponent
     ]
 })
 // Changed the name so it does not conflict with primeng module

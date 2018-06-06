@@ -1,13 +1,13 @@
 <div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
     <div class="row">
-        <div class="col-md-5 col-sm-5 col-5">
-            <h3>
-                Tissue
+        <div class="col-md-12 col-sm-12 col-12">
+            <h2>
+                Filter by Tissue
                 <span class="icon-spacing"></span>
                 <i class="fa fa-info-circle"></i>
-            </h3>
+            </h2>
         </div>
-        <div class="col-md-5 col-sm-5 col-5">
+        <!--<div class="col-md-5 col-sm-5 col-5">
             <h3>
                 Model
                 <span class="icon-spacing"></span>
@@ -15,10 +15,23 @@
             </h3>
         </div>
         <div class="col-md-2 col-sm-2 col-2">
+        </div>-->
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-12">
+            <p-multiSelect
+                [options]="tissues"
+                [(ngModel)]="selectedTissues"
+                [showToggleAll]="false"
+                [showHeader]="false"
+                [panelStyle]="{minWidth:'12em'}"
+                [defaultLabel]="'Choose tissues...'"
+                (onChange)="toggleTissue($event)">
+            </p-multiSelect>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-5 col-sm-5 col-5">
+        <!--<div class="col-md-5 col-sm-5 col-5">
             <select-menu [promptText]="'All'"
                 [label]="'select-tissue'"
                 [defaultValue]="getTissue(1)">
@@ -29,7 +42,7 @@
                 [label]="'select-model'"
                 [defaultValue]="getModel(1)">
             </select-menu>
-        </div>
+        </div>-->
         <div class="col-md-2 col-sm-2 col-2">
         </div>
     </div>
@@ -47,7 +60,8 @@
         all genes of the selected tissue and model. The selected gene is shown as the
         larger red dot.
     </p>
-    <div class="row plot-content">
+    <ng-template *ngFor="let tissue of tissues" #t></ng-template>
+    <!--<div *ngFor="let tissue of tissues" class="row plot-content" [hidden]="!showBoxPlot(tissue)">
         <div class="col-md-2">
         </div>
         <div class="col-md-4 col-sm-6 col-12">
@@ -58,7 +72,7 @@
         </div>
         <div class="col-md-2">
         </div>
-    </div>
+    </div>-->
 </div>
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
@@ -72,6 +86,6 @@
         across the tissues and studies where the model was fit.
     </p>
     <div class="row plot-content">
-        <row-chart></row-chart>
+        <!--<row-chart></row-chart>-->
     </div>
 </div>

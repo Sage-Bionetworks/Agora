@@ -1,3 +1,6 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .plot-content {
     min-height: 450px;
     margin-top: 2%;
@@ -41,6 +44,157 @@
         font-size: 16px;
         color: #1A1C29;
         padding-left: 3%;
+    }
+
+    p-multiselect {
+        width: 100%;
+
+        .ui-multiselect,
+        .ui-multiselect-panel
+        {
+            width: 100%;
+            color: black;
+        }
+
+        .ui-multiselect-items {
+            vertical-align: middle;
+        }
+
+        .ui-multiselect:not(.ui-state-disabled):hover {
+            background: white;
+        }
+
+        .ui-multiselect-label-container {
+            padding-left: 10px;
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+
+            @include respond-to('ex-small') {
+                font-size: 16px;
+            }
+            @include respond-to('small') {
+                font-size: 16px;
+            }
+            @include respond-to('medium') {
+                font-size: 18px;
+            }
+            @include respond-to('large') {
+                font-size: 18px;
+            }
+            @include respond-to('ex-large') {
+                font-size: 18px;
+            }
+
+            color: #1A1C29;
+            height: 52px;
+            line-height: 44px;
+            background: #FFFFFF;
+            box-shadow: 0px 0px 4px #C7C5C5;
+        }
+
+        .ui-chkbox {
+            margin-right: 1.125em;
+            height: 32px;
+            width: 32px;
+        }
+
+        .ui-chkbox-box {
+            height: 32px;
+            width: 32px;
+            vertical-align: middle;
+        }
+
+        ul {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        li {
+            width: 100%;
+            line-height: 44px;
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+
+            @include respond-to('ex-small') {
+                font-size: 14px;
+            }
+            @include respond-to('small') {
+                font-size: 14px;
+            }
+            @include respond-to('medium') {
+                font-size: 16px;
+            }
+            @include respond-to('large') {
+                font-size: 16px;
+            }
+            @include respond-to('ex-large') {
+                font-size: 16px;
+            }
+
+            color: #1A1C29;
+            padding-left: 30px !important;
+            border-bottom: 1px solid #EDEDED !important;
+            height: 51px;
+            vertical-align: middle;
+
+            .ui-state-default {
+                background: #FFFFFF;
+                border: 2px solid #C7C5C5;
+                -webkit-box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
+                -moz-box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
+                box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
+                border-radius: 6px;
+                background-color: white;
+            }
+
+            .ui-state-active {
+                background: #2F8E94;
+                border: 2px solid #73C8CC;
+                background-color: #5BB0B5;
+                border-radius: 6px;
+                color: white;
+            }
+
+            label {
+                cursor: pointer;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        .ui-state-highlight {
+            background: white !important;
+            background-color: white !important;
+            color: #1A1C29;
+        }
+
+        span {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+        }
+
+        .fa-check:before {
+            z-index: 1000;
+            position: absolute;
+            left: 21.5%;
+            top: 15%;
+            margin: 0 auto;
+            transform: scale(1.2,1);
+        }
+
+        .ui-multiselect-trigger {
+            color: #5BB0B5;
+            width: 32px;
+
+            .ui-clickable {
+                margin-top: 1.2em;
+            }
+        }
     }
 
     .dc-select-option {
