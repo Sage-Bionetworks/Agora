@@ -15,13 +15,15 @@ import colorbrewer from 'colorbrewer';
 
 @Injectable()
 export class DataService {
-    private ndx: any;
-    private data: any;
-    private hgncDim: any;
-    private tissuesDim: any;
-    private modelsDim: any;
-    private dbgenes: Observable<Gene[]>;
-    private geneEntries: Gene[];
+    // Add the new #[field] from TypeScript when it's out
+    // https://github.com/Microsoft/TypeScript/issues/24418
+    ndx: any;
+    data: any;
+    hgncDim: any;
+    tissuesDim: any;
+    modelsDim: any;
+    dbgenes: Observable<Gene[]>;
+    geneEntries: Gene[];
 
     constructor(
         private http: HttpClient,
@@ -149,7 +151,7 @@ export class DataService {
         });
     }
 
-    getTableData(paramsObj?: LazyLoadEvent) {
+    getTableData(paramsObj?: LazyLoadEvent): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
 
@@ -162,13 +164,13 @@ export class DataService {
         return this.http.get('/api/genes/page', { headers, params });
     }
 
-    getGenesMatchId(id: string) {
+    getGenesMatchId(id: string): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.get('/api/genes/' + id, { headers });
     }
 
-    getGene(id: string) {
+    getGene(id: string): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.get('/api/gene/' + id, { headers });
@@ -183,9 +185,8 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(label: string, info: any, filterGene?: Gene, filterTissues?: string[],
+    getDimension(info: any, filterGene?: Gene, filterTissues?: string[],
                  filterModels?: string[]): CrossFilter.Dimension<any, any> {
-        const self = this;
         const dimValue = info.dimension;
 
         const dim = this.getNdx().dimension(function(d) {
@@ -204,8 +205,7 @@ export class DataService {
 
                     return [x, y, d[dimValue[2]]];
                 case 'box-plot':
-                case 'box-plot2':
-                    return 1;
+                    return (info.constraintNames.some((t) => t === d[dimValue[0]])) ? 1 : '';
                 case 'select-menu':
                     return d[dimValue[0]];
                 default:
@@ -220,7 +220,7 @@ export class DataService {
         return info.dim;
     }
 
-    getGroup(label: string, info: any): CrossFilter.Group<any, any, any> {
+    getGroup(info: any): CrossFilter.Group<any, any, any> {
         let group = info.dim.group();
 
         // If we want to reduce based on certain parameters
@@ -250,22 +250,22 @@ export class DataService {
 
     // Reduce functions for constraint charts
     reduceAdd(attr: string, constraint?: any, format?: string) {
-        const self = this;
         return (p, v) => {
-            // Using tissue constraint for the forest-plot
+            let val = 0;
+            // Using tissue constraint for the forest and box plots
             if (constraint) {
                 if (constraint.names.some((t) => t === v[constraint.attr])) {
-                    p[attr] += +v[attr];
-                } else {
-                    p[attr] += 0;
+                    val = +v[attr];
                 }
             } else {
-                if (format && format === 'array') {
-                    p.push(+v[attr]);
-                    return p;
-                } else {
-                    p[attr] += +v[attr];
-                }
+                val = +v[attr];
+            }
+
+            if (format && format === 'array') {
+                p.push(val);
+                return p;
+            } else {
+                p[attr] += val;
             }
             ++p.count;
             return p;
@@ -273,22 +273,22 @@ export class DataService {
     }
 
     reduceRemove(attr: string, constraint?: any, format?: string) {
-        const self = this;
         return (p, v) => {
-            // Using tissue constraint for the forest-plot
+            let val = 0;
+            // Using tissue constraint for the forest and box plots
             if (constraint) {
                 if (constraint && constraint.names.some((t) => t === v[constraint.attr])) {
-                    p[attr] -= +v[attr];
-                } else {
-                    p[attr] -= 0;
+                    val = +v[attr];
                 }
             } else {
-                if (format && format === 'array') {
-                    p.splice(p.indexOf(+v[attr]), 1);
-                    return p;
-                } else {
-                    p[attr] -= +v[attr];
-                }
+                val = +v[attr];
+            }
+
+            if (format && format === 'array') {
+                if (val) { p.splice(p.indexOf(val), 1); }
+                return p;
+            } else {
+                p[attr] -= val;
             }
             --p.count;
             return p;

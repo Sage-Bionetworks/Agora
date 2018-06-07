@@ -29,6 +29,7 @@ export class ForceChartViewComponent implements AfterViewInit {
 
     @ViewChild('chart') private forceChart: ElementRef;
 
+    private pathways: any[] = [];
     private nodes: object[];
     private links: any;
     private d3: any;
@@ -57,7 +58,7 @@ export class ForceChartViewComponent implements AfterViewInit {
         this.renderChart();
     }
 
-    private onResize(event) {
+    onResize(event) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
         this.height = this.forceChart.nativeElement.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
@@ -75,6 +76,10 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .iterations(16))
             .alpha(0.3)
             .restart();
+    }
+
+    getPathways(): any[] {
+        return this.pathways;
     }
 
     private renderChart() {
@@ -222,10 +227,10 @@ export class ForceChartViewComponent implements AfterViewInit {
     private tooltipFill(gene: Gene, tooltip) {
         tooltip.html(`
             <h3>${gene.hgnc_symbol}</h3>
-            <div>Study: ${gene.Study}</div>
-            <div>Tissue: ${gene.Tissue}</div>
+            <div>Study: ${gene.study}</div>
+            <div>Tissue: ${gene.tissue}</div>
             <div>Lenght ${gene.gene_length}</div>
-            <div>Sex: ${gene.Sex}</div>
+            <div>Sex: ${gene.sex}</div>
         `);
     }
 

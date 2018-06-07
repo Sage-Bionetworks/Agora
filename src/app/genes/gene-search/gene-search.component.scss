@@ -32,49 +32,47 @@
         top: 35%;
 
         @include respond-to('ex-small') {
-            left: 88%;
+            left: 89.5%;
         }
         @include respond-to('small') {
-            left: 88%;
+            left: 93%;
         }
         @include respond-to('medium') {
-            left: 85%;
+            left: 78.5%;
         }
         @include respond-to('large') {
-            left: 84%;
+            left: 74%;
         }
         @include respond-to('ex-large') {
-            left: 84%;
+            left: 69.5%;
         }
     }
 }
 
 #keyword {
-
     @include respond-to('ex-small') {
         padding-left: 8%;
         padding-right: 8%;
     }
     @include respond-to('small') {
-        padding-left: 8%;
-        padding-right: 8%;
+        padding-left: 5%;
+        padding-right: 5%;
     }
     @include respond-to('medium') {
-        padding-left: 4%;
-        padding-right: 4%;
+        padding-left: 2%;
+        padding-right: 2%;
     }
     @include respond-to('large') {
-        padding-left: 4%;
-        padding-right: 4%;
+        padding-left: 2%;
+        padding-right: 2%;
     }
     @include respond-to('ex-large') {
-        padding-left: 4%;
-        padding-right: 4%;
+        padding-left: 2%;
+        padding-right: 2%;
     }
-    padding-bottom: 15px;
-    padding-top: 15px;
+
     width: 100%;
-    outline: none;
+    outline: none !important;
     background: #FFFFFF;
     -moz-box-shadow: inset 0 0 4px #C7C5C5;
     -webkit-box-shadow: inset 0 0 4px #C7C5C5;
@@ -83,9 +81,10 @@
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
-    line-height: normal;
+    line-height: 55px;
     font-size: 18px;
-    border: 0px;
+    border-color: rgba(197,199,196,0.5);
+    border: 2px;
 
     ::-moz-placeholder,
     ::-ms-input-placeholder,
@@ -96,7 +95,10 @@
 }
 
 #keyword:focus {
-    border-color : rgba(81, 203, 238, 1);
+    outline: none !important;
+    box-shadow: 0px 0px 4px #5BB0B5;
+    border-radius: 6px;
+    border: 2px;
 }
 
 #keyword-button {
@@ -119,7 +121,7 @@
     /*so things don't jump around*/
     position: absolute;
     /*Since we know the wrapper will always be 100% height, we can use half of 100% + half the height of the input*/
-    top: calc(50% + 25px);
+    top: calc(50% + 28.5px);
     /*for a better calculation use JS.  I'm calculating half of the body height - half the height of the input - li padding*/
     //max-height: calc(50% - 15px);
     overflow-y: auto;
@@ -135,6 +137,7 @@
     max-height: 250px;
     overflow-y: auto;
 }
+
 .filter-select-list img {
     margin-right: 30px;
 }
@@ -185,20 +188,24 @@
         width: 100%;
     }
     @include respond-to('medium') {
-        width: 80%;
+        width: 65%;
     }
     @include respond-to('large') {
-        width: 80%;
+        width: 55%;
     }
     @include respond-to('ex-large') {
-        width: 80%;
+        width: 45%;
     }
 }
+
 #keyword {
     font-size: 1.3em
 }
+
 .filter-select {
     font-size: 0.9em;
+    top: calc(50% + 23px);
+
     @include respond-to('ex-small') {
         left: 0%;
     }
@@ -206,16 +213,16 @@
         left: 0%;
     }
     @include respond-to('medium') {
-        left: 10%;
+        left: 17.5%;
     }
     @include respond-to('large') {
-        left: 10%;
+        left: 22.5%;
     }
     @include respond-to('ex-large') {
-        left: 10%;
+        left: 27.5%;
     }
-    top: calc(50% + 23px);
 }
+
 #keyword-button {
     right: 11%
 }

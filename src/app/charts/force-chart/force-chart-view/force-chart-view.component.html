@@ -8,4 +8,17 @@
         <div #chart class="fc">
         </div>
     </div>
+<<<<<<< HEAD
+=======
+    <div class="row">
+        <div *ngFor="let path of getPathways(); let i = index" class="pathbox">
+            <span *ngIf="i === 0" (click)="viewGene(path)">--></span>
+            {{path.hgnc_symbol}}
+            <div>BrainRegions:</div>
+            <span *ngFor="let region of path.brainregions;">
+                {{region}}
+            </span>
+        </div>
+    </div>
+>>>>>>> bf347e9073a3e5272bbd79530830347604447533
 </div>

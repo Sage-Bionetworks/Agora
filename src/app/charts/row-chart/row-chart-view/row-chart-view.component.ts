@@ -38,6 +38,8 @@ export class RowChartViewComponent implements OnInit {
     changedLabels: boolean = false;
     display: boolean = false;
 
+    private resizeTimer;
+
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
@@ -53,11 +55,10 @@ export class RowChartViewComponent implements OnInit {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
-            this.label,
             this.info,
             this.currentGene
         );
-        this.group = this.dataService.getGroup(this.label, this.info);
+        this.group = this.dataService.getGroup(this.info);
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement)
@@ -134,6 +135,25 @@ export class RowChartViewComponent implements OnInit {
         });
     }
 
+    adjustTextToElement(el: HTMLElement) {
+        d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+            const pRigth = parseInt(d3.select(el).style('padding-right'), 10);
+            const transfString = d3.select(this).attr('transform');
+            const translateString = transfString.substring(
+                transfString.indexOf('(') + 1,
+                transfString.indexOf(')')
+            );
+            const translate = (translateString.split(',').length > 1) ?
+                translateString.split(',') :
+                translateString.split(' ');
+            const transfX = parseFloat(d3.select(el).select('svg').style('width')) - pRigth;
+            d3.select(this)
+                .attr('transform', () => {
+                    return 'translate(' + transfX + ',' + parseFloat(translate[1]) + ')';
+                });
+        });
+    }
+
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
         const newSvg = d3.select(el).append('svg');
@@ -155,10 +175,14 @@ export class RowChartViewComponent implements OnInit {
 
         d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
             const currentStep = step * i;
-            d3.select(this).attr('transform', () => {
-                return 'translate(0,' + (currentStep + (vSpacing)) + ')';
-            } );
-        } );
+            const transfX = parseFloat(newSvg.style('width')) -
+                parseFloat(d3.select(el).style('padding-right'));
+            d3.select(this)
+                .attr('text-anchor', 'end')
+                .attr('transform', () => {
+                    return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
+                });
+        });
     }
 
     insertLinesInRows(chart: dc.RowChart) {
@@ -170,23 +194,21 @@ export class RowChartViewComponent implements OnInit {
 
     // Draw the lines through the chart rows
     drawLines(chart: dc.RowChart, yPos: number, lineWidth: number) {
-        const lines = chart.selectAll('g.row g.hline line')
-            .attr({
-                'stroke-width': 1.5,
-                'stroke': 'wheat',
-                // ES6 method shorthand for object literals
-                'x1'(d) {
-                    return chart.x()(d.value.logfc) - lineWidth / 2;
-                },
-                'y1'(d) {
-                    return yPos;
-                },
-                'x2'(d) {
-                    return chart.x()(d.value.logfc) + lineWidth / 2;
-                },
-                'y2'(d) {
-                    return yPos;
-                }
+        chart.selectAll('g.row g.hline line')
+            .attr('stroke-width', 1.5)
+            .attr('stroke', 'wheat')
+            // ES6 method shorthand for object literals
+            .attr('x1', (d) => {
+                return chart.x()(d.value.logfc) - lineWidth / 2;
+            })
+            .attr('y1', (d) => {
+                return yPos;
+            })
+            .attr('x2', (d) => {
+                return chart.x()(d.value.logfc) + lineWidth / 2;
+            })
+            .attr('y2', (d) => {
+                return yPos;
             });
     }
 
@@ -209,5 +231,26 @@ export class RowChartViewComponent implements OnInit {
 
     displayChart() {
         return { opacity: (this.display) ? 1 : 0 };
+    }
+
+    onResize(event) {
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(function() {
+            self.chart
+                .width(self.rowChart.nativeElement.parentElement.offsetWidth)
+                .height(self.rowChart.nativeElement.offsetHeight);
+
+            if (self.chart.rescale) {
+                self.chart.rescale();
+            }
+
+            // Adjust the text as the svg reduces its width
+            self.adjustTextToElement(self.stdCol.nativeElement);
+
+            // Run code here, resizing has "stopped"
+            self.chart.redraw();
+        }, 100);
     }
 }

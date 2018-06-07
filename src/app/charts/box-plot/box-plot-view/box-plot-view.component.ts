@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input
+} from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../../models';
@@ -16,7 +23,6 @@ import * as dc from 'dc';
     encapsulation: ViewEncapsulation.None
 })
 export class BoxPlotViewComponent implements OnInit {
-    @HostListener('window:resize', ['$event'])
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -32,6 +38,8 @@ export class BoxPlotViewComponent implements OnInit {
     counter: number = 0;
     geneEntries: Gene[] = [];
 
+    private resizeTimer;
+
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
@@ -46,17 +54,20 @@ export class BoxPlotViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.geneEntries = this.dataService.getGeneEntries();
-        this.info = this.chartService.getChartInfo(this.label);
+        if (!this.info) {
+            this.info = this.chartService.getChartInfo(this.label);
+        }
         this.dim = this.dataService.getDimension(
-            this.label,
             this.info,
             this.currentGene
         );
-        this.group = this.dataService.getGroup(this.label, this.info);
+        this.group = this.dataService.getGroup(this.info);
 
-        this.title = this.info.title;
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
         this.chart
+            .title((d) => {
+                return d.value;
+            })
             .dimension(this.dim)
             .group(this.group)
             .renderDataPoints(true)
@@ -71,7 +82,6 @@ export class BoxPlotViewComponent implements OnInit {
             .transitionDuration(0);
 
         this.chart.tickFormat(d3.format('.5f'));
-        this.chart['_whiskers'] = null;
 
         this.registerChartEvent(this.chart, 'postRedraw');
         this.registerChartEvent(this.chart, 'postRender');
@@ -96,9 +106,10 @@ export class BoxPlotViewComponent implements OnInit {
                 .attr('cx', lineCenter.attr('x1'));
 
             const filteredGenes = self.geneEntries.slice().filter((g) => {
-                return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
+                /*return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
                     g.comparison_model_sex_pretty === self.geneService.getCurrentModel() &&
-                    g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
+                    g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;*/
+                return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
             });
             let found = false;
             let foundIndex = -1;
@@ -115,20 +126,42 @@ export class BoxPlotViewComponent implements OnInit {
                     }
                     return cfound;
                 })
-                .style('fill', 'red')
-                .style('r', 4)
+                .style('fill', '#FCA79A')
+                .style('stroke', '#F47E6C')
+                .style('stroke-width', 3)
+                .style('r', 13.6)
                 .style('opacity', 1);
 
             const notFoundCircles = chart.selectAll('circle')
                 .filter((c, i) => {
                     return i !== foundIndex;
                 })
-                .style('fill', 'black');
+                .style('fill', '#8D919E')
+                .style('stroke', 'none')
+                .style('r', 4.6);
 
             // Move the red circles to front
             foundCircles.each(function() {
                 this.parentNode.appendChild(this);
             });
         });
+    }
+
+    onResize(event) {
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(function() {
+            self.chart
+                .width(self.boxPlot.nativeElement.parentElement.offsetWidth)
+                .height(self.boxPlot.nativeElement.offsetHeight);
+
+            if (self.chart.rescale) {
+                self.chart.rescale();
+            }
+
+            // Run code here, resizing has "stopped"
+            self.chart.redraw();
+        }, 100);
     }
 }
