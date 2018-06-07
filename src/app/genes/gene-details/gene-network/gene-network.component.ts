@@ -21,6 +21,9 @@ export class GeneNetworkComponent implements OnInit {
     @Input() id: string;
     dataLoaded: boolean = false;
 
+    private pathways: any[] = [];
+    private currentGene = this.geneService.getCurrentGene();
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -51,9 +54,40 @@ export class GeneNetworkComponent implements OnInit {
         }
     }
 
+    updategene(event) {
+        this.dataService.loadNodes(event).then((data: any) => {
+            this.pathways = data.nodes;
+        });
+    }
+
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
             this.router.navigate([path], { relativeTo: this.route });
+    }
+
+    viewGene(gene: Gene) {
+        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            const currentUrl = this.router.url + '?';
+            if (!data['item']) {
+                this.router.navigate(['/genes']);
+                return;
+            }
+            this.geneService.setCurrentGene(data['item']);
+            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.router.navigateByUrl(currentUrl)
+                .then(() => {
+                    this.router.navigated = false;
+                    this.router.navigate(['/genes',
+                        {
+                            outlets:
+                                {
+                                    'genes-router': ['gene-details', data['item'].hgnc_symbol]
+                                }
+                        }]);
+                });
+        });
     }
 
     goBack() {
