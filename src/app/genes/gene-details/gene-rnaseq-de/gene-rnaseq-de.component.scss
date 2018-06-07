@@ -58,10 +58,23 @@
 
         .ui-multiselect-items {
             vertical-align: middle;
+
+            >:hover {
+                background: rgba(91, 176, 181, 0.25) !important;
+                background-color: rgba(91, 176, 181, 0.25) !important;
+            }
         }
 
         .ui-multiselect:not(.ui-state-disabled):hover {
             background: white;
+        }
+
+        .ui-multiselect-item:not(.ui-state-highlight):hover {
+            background-color: rgba(91, 176, 181, 0.25);
+        }
+
+        .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
+            background-color: rgba(91, 176, 181, 0.25);
         }
 
         .ui-multiselect-label-container {
@@ -143,10 +156,10 @@
             .ui-state-default {
                 background: #FFFFFF;
                 border: 2px solid #C7C5C5;
-                -webkit-box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
-                -moz-box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
-                box-shadow: inset 0px 0px 5px 2px rgba(197,199,196,0.5);
+                box-sizing: border-box;
+                box-shadow: inset 0px 0px 4px rgba(199, 197, 197, 0.5);
                 border-radius: 6px;
+                border-color: #c0c0c0;
                 background-color: white;
             }
 

@@ -53,6 +53,8 @@
 
         >input {
             height: 50px;
+            line-height: 50px;
+
             @include respond-to('ex-small') {
                 width: 100%;
                 padding-left: 4%;
@@ -76,12 +78,12 @@
                 border-radius: 6px;
                 padding-left: 2%;
             }
+
             box-shadow: inset 0px 0px 4px #C7C5C5;
             text-align-last: left;
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
-            line-height: normal;
             font-size: 16px;
             border: 0px;
 
@@ -110,16 +112,20 @@
             }
             @include respond-to('large') {
                 left: 67%;
-                top: 22%;
+                top: 21%;
             }
             @include respond-to('ex-large') {
                 left: 67.5%;
-                top: 21%;
+                top: 18%;
             }
         }
     }
 
     .ui-table-thead {
+        .ui-state-highlight {
+            color: #0D1C38;
+        }
+
         >tr>th {
             background: #E1F4F5 !important;
             border: none;
@@ -127,7 +133,7 @@
             font-family: Lato;
             font-style: normal;
             font-weight: bold;
-            line-height: normal;
+            line-height: 40px;
             font-size: 18px;
             color: #0D1C38;
         }
@@ -162,11 +168,15 @@
     }
 
     .ui-table-tbody {
+        >tr.ui-state-highlight {
+            background-color: rgba(91, 176, 181, 0.25) !important;
+        }
+
         >tr>td {
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
-            line-height: normal;
+            line-height: 40px;
             font-size: 18px;
             color: #1A1C29;
             height: 40px;

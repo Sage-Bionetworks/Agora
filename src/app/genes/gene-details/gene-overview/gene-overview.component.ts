@@ -39,9 +39,10 @@ export class GeneOverviewComponent implements OnInit {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-        // If we don't have a Gene here, in case we are reloading the page
-        // try to get it from the server and move on
-        if (!this.gene) {
+        // If we don't have a Gene or any Models/Tissues here, or in case we are
+        // reloading the page, try to get it from the server and move on
+        if (!this.gene || !this.geneService.getModels().length ||
+            this.geneService.getTissues().length) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
