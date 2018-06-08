@@ -20,15 +20,9 @@ div.tooltip {
     pointer-events: none;
 }
 
-.pathbox {
-    padding: 10px;
-    border: 1px solid #CCC;
-    border-radius: 3px;
-    margin: 10px;
-    span{
-        margin: 5px;
-        background-color: lightsteelblue;
-
+.hex:hover{
+    path{
+        fill:#5dafb4 !important;
 
     }
 }

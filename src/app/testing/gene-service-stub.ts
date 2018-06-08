@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 
 import { Gene } from '../models';
+import { GeneService, DataService } from '../core/services';
 
 @Injectable()
 export class GeneServiceStub {
-    private currentGene: Gene;
-    private currentTissue: string;
-    private currentModel: string;
-    private models: string[] = [];
-    private tissues: string[] = [];
-    private minLogFC: number = 0;
-    private maxLogFC: number = 10;
-    private maxNegLogPValue: number = 50;
-    private minNegLogPValue: number = 0;
+    currentGene: Gene;
+    currentTissue: string;
+    currentModel: string;
+    models: string[] = [];
+    tissues: string[] = [];
+    minLogFC: number = 0;
+    maxLogFC: number = 10;
+    maxNegLogPValue: number = 50;
+    minNegLogPValue: number = 0;
 
     setLogFC(min: number, max: number) {
         this.minLogFC = min;

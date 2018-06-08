@@ -12,3 +12,42 @@
     padding: 4%;
     background: rgba(245, 245, 245, 0.5);
 }
+
+.pathbox {
+    padding: 0 10px 10px 10px;
+    width: 100%;
+  div {
+    color: #86C4C7;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+  }
+  span {
+    margin-right: 5px;
+  }
+}
+
+.currentGene{
+    div{
+        width: 100%;
+    }
+    border-top: 1px solid #DDD;
+}
+.brainregions {
+  height: 200px;
+  overflow-y: scroll;
+  border-top: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+}
+
+.nopadding{
+    padding-left: 0;
+    padding-right: 0;
+}
+.true{
+    color:green;
+}
+.false{
+    color:red;
+}

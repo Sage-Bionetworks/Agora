@@ -3,7 +3,7 @@
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
             <input type="text" [formControl]="queryField" id="keyword"
-                (blur)="closeSearchList($event.target)"  placeholder="Search by gene" autofocus/>
+                (blur)="closeSearchList($event.target)"  placeholder="Search by gene"/>
             <i class="fa fa-search fa-lg"></i>
         </div>
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">

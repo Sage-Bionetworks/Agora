@@ -1,11 +1,11 @@
-<div class="row row-chart-row">
-    <div class="col-md-1">
+<div class="row row-chart-row" (window:resize)="onResize($event)">
+    <div class="col-md-1 d-none d-md-block">
     </div>
-    <div #studies class="col-md-5 rc" style="padding-right: 0px;">
+    <div #studies class="col-md-5 col-sm-6 col-12 sc">
     </div>
-    <div class="col-md-5" style="padding-left: 0px;">
+    <div class="col-md-5 col-sm-6 col-12 rc">
         <div #chart class="rc" [ngStyle]="displayChart()"></div>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 d-none d-md-block">
     </div>
 </div>

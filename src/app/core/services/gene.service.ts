@@ -11,15 +11,17 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class GeneService {
-    private currentGene: Gene;
-    private currentTissue: string;
-    private currentModel: string;
-    private models: string[] = [];
-    private tissues: string[] = [];
-    private minLogFC: number = 0;
-    private maxLogFC: number = 10;
-    private maxNegLogPValue: number = 50;
-    private minNegLogPValue: number = 0;
+    // Add the new #[field] from TypeScript when it's out
+    // https://github.com/Microsoft/TypeScript/issues/24418
+    currentGene: Gene;
+    currentTissue: string;
+    currentModel: string;
+    models: string[] = [];
+    tissues: string[] = [];
+    minLogFC: number = 0;
+    maxLogFC: number = 10;
+    maxNegLogPValue: number = 50;
+    minNegLogPValue: number = 0;
 
     constructor(
         private http: HttpClient,
