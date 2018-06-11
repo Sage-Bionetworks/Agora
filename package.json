@@ -20,7 +20,7 @@
     "build:aot": "npm run build:aot:prod",
     "build:aot:dev": "cross-env BUILD_AOT=1 npm run build:dev",
     "build:dev": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
-    "build:docker": "npm run build:prod && npm run build:server:docker && docker build -t angular2-webpack-start:latest .",
+    "build:docker": "docker-compose up --build",
     "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:server:dev": "npm run clean:server && npm run webpack:server -- --config config/webpack.server.js --progress --profile --bail",
     "build:server:docker": "npm run clean:server && cross-env NODE_ENV=production Docker=true npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
@@ -38,6 +38,7 @@
     "clean:server": "npm run rimraf dist/server.js",
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist compiled dll",
+    "docker": "docker-compose up",
     "docs": "npm run typedoc -- --options typedoc.json --exclude '**/*.spec.ts' ./src/",
     "docs:compodoc": "compodoc -p tsconfig.json",
     "docs:compodoc:serve": "compodoc -p tsconfig.json -s",
@@ -85,8 +86,8 @@
     "webdriver-manager": "node ./node_modules/protractor/bin/webdriver-manager",
     "webdriver:start": "node ./node_modules/protractor/bin/webdriver-manager start",
     "webdriver:update": "node ./node_modules/protractor/bin/webdriver-manager update",
-    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "webpack-dev-server": "node --max_old_space_size=6000 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
