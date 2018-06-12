@@ -486,20 +486,33 @@ WallOfTargets/
 
 MongoDB was chosen for this project because it is an object-oriented, simple, dynamic, and scalable NoSQL database. It is based on the NoSQL document store model. The data objects are stored as separate documents inside a collection. Pros:
 
-..* Document oriented
-..* High performance
-..* High availability — Replication
-..* High scalability – Sharding
-..* Dynamic — No rigid schema.
-..* Flexible – field addition/deletion have less or no impact on the application
-..* Heterogeneous Data
-..* No Joins
-..* Distributed
-..* Data Representation in JSON or BSON
-..* Geospatial support
-..* Easy Integration with BigData Hadoop
-..* Document-based query language that’s nearly as powerful as SQL
-..* Cloud distributions such as AWS, Microsoft, RedHat,dotCloud and SoftLayer etc:-. In fact, MongoDB is built for the cloud. Its native scale-out architecture, enabled by ‘sharding,’ aligns well with the horizontal scaling and agility afforded by cloud computing.
+* Document oriented
+
+* High performance
+
+* High availability — Replication
+
+* High scalability – Sharding
+
+* Dynamic — No rigid schema.
+
+* Flexible – field addition/deletion have less or no impact on the application
+
+* Heterogeneous Data
+
+* No Joins
+
+* Distributed
+
+* Data Representation in JSON or BSON
+
+* Geospatial support
+
+* Easy Integration with BigData Hadoop
+
+* Document-based query language that’s nearly as powerful as SQL
+
+* Cloud distributions such as AWS, Microsoft, RedHat,dotCloud and SoftLayer etc:-. In fact, MongoDB is built for the cloud. Its native scale-out architecture, enabled by ‘sharding,’ aligns well with the horizontal scaling and agility afforded by cloud computing.
 
 # License
  [MIT](/LICENSE)
