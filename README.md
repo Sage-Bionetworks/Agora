@@ -65,8 +65,11 @@ If you also installed MongoDB Compass along with the main installation (a GUI to
 [listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
 ```
 
-Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it's time to load
-the data into our collections. Download the complete `genes` data file from the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177499.5), and the `geneslinks` [here](https://www.synapse.org/#!Synapse:syn11685347).
+Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it's time to load the data into our collections.
+
+# Downloading the data
+
+Download the complete `genes` data file from the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177499.5), and the `geneslinks` [here](https://www.synapse.org/#!Synapse:syn11685347). Rename the first file to `data.json` and the second one to `dataLinks.csv`.
 
 Install a global Node package to convert the `csv` to `json`:
 
@@ -77,13 +80,14 @@ $ npm i -g csvtojson
 Navigate to the folder with the complete data and issue the following command:
 
 ```bash
-$ csvtojson data.csv > data.json
+$ csvtojson dataLinks.csv > dataLinks.json
 ```
 
-Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following command:
+Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following commands:
 
 ```bash
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
+mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
 ```
 
 * convert mongo value types
@@ -345,7 +349,16 @@ import * as _ from 'lodash';
 
 ## Docker
 
-You can deploy this project using docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
+Before using Docker go one level above the root folder of the project and create a folder called `data`:
+
+```bash
+PATH_TO_PROJECT\WallOfTargets> cd ..
+PATH_TO_PROJECT> mkdir data
+```
+
+This folder will be used to load the data into MongoDB when we build the DOcker image. Go ahead and grab the latest data files from the [Downloading the data](#downloading-the-data) section. Convert the `dataLinks` file as described there and copy both `data.json` and `dataLinks.json` to the `data` folder you just created.
+
+The easiest way to deploy this project is by using Docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
 
 ```bash
 $ docker --version
