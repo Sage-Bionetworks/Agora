@@ -10,13 +10,14 @@ import {
 
 import { AlertService } from './services';
 
-import { NumbersPipe } from './pipes';
+import { NumbersPipe, MyArraySortPipe } from './pipes';
 
 @NgModule({
     declarations: [
         AlertComponent,
         FocusDirective,
-        NumbersPipe
+        NumbersPipe,
+        MyArraySortPipe
     ],
     imports: [
         CommonModule,
@@ -27,6 +28,7 @@ import { NumbersPipe } from './pipes';
         AlertComponent,
         FocusDirective,
         NumbersPipe,
+        MyArraySortPipe,
         // Angular modules
         CommonModule,
         HttpClientModule,

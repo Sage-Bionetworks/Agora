@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene } from '../../../models';
+import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
 
 import { GeneService, DataService } from '../../../core/services';
 
@@ -21,8 +21,9 @@ export class GeneNetworkComponent implements OnInit {
     @Input() id: string;
     dataLoaded: boolean = false;
 
-    private pathways: any[] = [];
+    private pathways: GeneNode[] = [];
     private currentGene = this.geneService.getCurrentGene();
+    private currentGeneData: Gene[] = [];
 
     constructor(
         private router: Router,
@@ -33,8 +34,6 @@ export class GeneNetworkComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
-
         // The data wasn't loaded yet, redirect for now
         if (!this.dataService.getNdx()) {
             this.id = this.route.snapshot.paramMap.get('id');
@@ -52,10 +51,11 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             this.dataLoaded = true;
         }
+        this.loadGenes();
     }
 
     updategene(event) {
-        this.dataService.loadNodes(event).then((data: any) => {
+        this.dataService.loadNodes(event).then((data: GeneNetwork) => {
             this.pathways = data.nodes;
         });
     }
@@ -65,7 +65,15 @@ export class GeneNetworkComponent implements OnInit {
             this.router.navigate([path], { relativeTo: this.route });
     }
 
-    viewGene(gene: Gene) {
+    loadGenes() {
+        this.dataService.loadNodes(this.currentGene).then((data: any) => {
+            data.nodes.shift();
+            this.currentGeneData = data.nodes;
+            console.log(data);
+        });
+    }
+
+    viewGene(gene: GeneNode) {
         this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';

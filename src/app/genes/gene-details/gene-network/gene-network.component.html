@@ -12,12 +12,18 @@
         </div>
         <div class="row brainregions nopadding">
             <div>BrainRegions:</div>
-            <div *ngFor="let path of pathways; let i = index" class="pathbox">
+            <div *ngFor="let path of pathways;" class="pathbox">
                 <div (click)="viewGene(path)">{{path.hgnc_symbol}}</div>
-                <span *ngFor="let region of path.brainregions;">
-                {{region}}
+                <span *ngFor="let region of path.brainregions; last as isLast">
+                {{region}}{{isLast ? '' : ', '}}
                 </span>
             </div>
+        </div>
+        <div class="row brainregions nopadding">
+        <div>Similar Genes:</div>
+        <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
+            <div (click)="viewGene(node)">{{node.hgnc_symbol}}</div>
+        </div>
         </div>
     </div>
 </div>

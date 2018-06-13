@@ -14,7 +14,7 @@ import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
-import { Gene } from '../../../models';
+import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
 
 @Component({
     selector: 'force-chart',
@@ -29,15 +29,15 @@ export class ForceChartViewComponent implements AfterViewInit {
 
     @ViewChild('chart') private forceChart: ElementRef;
 
-    private pathways: any[] = [];
-    private nodes: object[];
-    private links: any;
+    private pathways: GeneNode[] = [];
+    private nodes: GeneNode[];
+    private links: GeneLink[];
     private d3: any;
     private cachedGene: Gene = this.currentGene;
     private width: any;
     private height: any;
     private simulation: any;
-    private simulationData: any;
+    private simulationData: GeneNetwork;
     private force: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
     private pnode: any;
@@ -98,8 +98,8 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .selectAll('line')
                     .data(data.links)
                     .enter().append('line')
-                    .attr('stroke-width', (d: any) => d.value)
-                    .attr('stroke', '#E5E5E5');
+                    .attr('stroke-width', 3 )
+                    .attr('stroke', this.getLinkColor);
 
                 const nodeElements = svg.append('g')
                     .selectAll('.hex')
@@ -114,41 +114,41 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .attr('transform', 'scale(1.75)')
                     .attr('r', 14)
                     .attr('fill', this.getNodeColor)
-                    .on('mouseover', (d: Gene) => {
-                        tooltip.transition()
-                            .duration(200)
-                            .style('opacity', .9);
-                        tooltip.html('<h3>Loading...</h3>')
-                            .style('left', (d3.event.layerX + 28) + 'px')
-                            .style('top', (d3.event.layerY - 28) + 'px');
-                        if (d.hgnc_symbol !== this.cachedGene.hgnc_symbol) {
-                            this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
-                                if (!lgene.item) {
-                                    tooltip.html(`
-                            <h3>Gene information not found.</h3>`);
-                                    return;
-                                }
-                                this.cachedGene = lgene.item;
-                                this.tooltipFill(lgene.item, tooltip);
-                            });
-                        } else {
-                            this.tooltipFill(this.cachedGene, tooltip);
-                        }
+                    .on('mouseover', (d: GeneNode) => {
+                        // tooltip.transition()
+                        //     .duration(200)
+                        //     .style('opacity', .9);
+                        // tooltip.html('<h3>Loading...</h3>')
+                        //     .style('left', (d3.event.layerX + 28) + 'px')
+                        //     .style('top', (d3.event.layerY - 28) + 'px');
+                        // if (d.hgnc_symbol !== this.cachedGene.hgnc_symbol) {
+                        //     this.dataService.getGene(d.hgnc_symbol).subscribe((lgene: any) => {
+                        //         if (!lgene.item) {
+                        //             tooltip.html(`
+                        //     <h3>Gene information not found.</h3>`);
+                        //             return;
+                        //         }
+                        //         this.cachedGene = lgene.item;
+                        //         this.tooltipFill(lgene.item, tooltip);
+                        //     });
+                        // } else {
+                        //     this.tooltipFill(this.cachedGene, tooltip);
+                        // }
                     })
                     .on('mouseout', (d) => {
-                        tooltip.transition()
-                            .duration(500)
-                            .style('opacity', 0);
+                        // tooltip.transition()
+                        //     .duration(500)
+                        //     .style('opacity', 0);
                     })
                     .on('click', (d: any, i, nodes ) => {
-                        if (this.pnode) {
-                            d3.select(this.pnode.node[this.pnode.i])
-                                .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.i],
-                                    this.pnode.i,
-                                    []));
-                        }
-                        this.pnode = {node: nodes, index: i};
-                        d3.select(nodes[i]).attr('fill', '#14656A');
+                        // if (this.pnode) {
+                        //     d3.select(this.pnode.node[this.pnode.index])
+                        //         .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.index],
+                        //             this.pnode.index,
+                        //             []));
+                        // }
+                        // this.pnode = {node: nodes, index: i};
+                        // d3.select(nodes[i]).attr('fill', '#14656A');
                         this.buildPath(d);
                     });
 
@@ -163,10 +163,10 @@ export class ForceChartViewComponent implements AfterViewInit {
 
                 this.simulation.nodes(data.nodes).on('tick', () => {
                     nodeElements
-                        .attr('cx', (node: any) => node.x = Math.max(14,
-                            Math.min(this.width - 14, node.x)))
-                        .attr('cy', (node: any) => node.y = Math.max(14,
-                            Math.min(this.height - 14, node.y)));
+                        .attr('cx', (node: any) => node.x = Math.max(24,
+                            Math.min(this.width - 24, node.x)))
+                        .attr('cy', (node: any) => node.y = Math.max(24,
+                            Math.min(this.height - 24, node.y)));
                     nodeElements.attr('transform',
                     (d: any) =>  'translate(' + (d.x - 22) + ',' + (d.y - 22) + ')');
                     textElements
@@ -220,8 +220,34 @@ export class ForceChartViewComponent implements AfterViewInit {
             .catch((err) => { console.log(err); });
     }
 
-    private getNodeColor(node , index, arr) {
-        return !index ? '#F5DAB4' : 'grey';
+    private getNodeColor(node: GeneNode , index, arr) {
+        if (!index) {
+            return '#F38070';
+        }
+        if (node.brainregions.length >= 6) {
+            return '#11656A';
+        }
+        if (node.brainregions.length >= 4) {
+            return '#5DAFB4';
+        }
+        if (node.brainregions.length >= 2) {
+            return '#A7DDDF';
+        }
+        return '#BCC0CA';
+        //return !index ? '#F5DAB4' : '#BCC0CA';
+    }
+
+    private getLinkColor(link: GeneLink , index, arr) {
+        if (link.value >= 6) {
+            return '#11656A';
+        }
+        if (link.value >= 4) {
+            return '#5DAFB4';
+        }
+        if (link.value >= 2) {
+            return '#A7DDDF';
+        }
+        return '#BCC0CA';
     }
 
     private tooltipFill(gene: Gene, tooltip) {
