@@ -16,6 +16,14 @@ services:
     ports:
       - 27017:27017
   mongo_seed:
-    build: ./mongo-seed
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/Dockerfile
     links:
       - mongodb
+  mongo_seed_links:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/Dockerfile-links
+    links:
+      - mongo_seed

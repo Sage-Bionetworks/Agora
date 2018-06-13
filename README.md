@@ -65,10 +65,11 @@ If you also installed MongoDB Compass along with the main installation (a GUI to
 [listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
 ```
 
-Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it is time to load
-the data into our collection. Download the complete genes data in json form from Synapse repository for `genes` => [here](https://www.synapse.org/#!Synapse:syn12176105) and `geneslinks` => [here](https://www.synapse.org/#!Synapse:syn11685347).
+Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it's time to load the data into our collections.
 
-To regenerate the json file, start by downloading the complete genes data from [here](https://www.synapse.org/#!Synapse:syn11318688).
+# Downloading the data
+
+Download the complete `genes` data file from the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177499.5), and the `geneslinks` [here](https://www.synapse.org/#!Synapse:syn11685347). Rename the first file to `data.json` and the second one to `dataLinks.csv`.
 
 Install a global Node package to convert the `csv` to `json`:
 
@@ -79,18 +80,19 @@ $ npm i -g csvtojson
 Navigate to the folder with the complete data and issue the following command:
 
 ```bash
-$ csvtojson data.csv > data.json
+$ csvtojson dataLinks.csv > dataLinks.json
 ```
 
-Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following command:
+Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following commands:
 
 ```bash
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
+mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
 ```
 
 * convert mongo value types
 
-csvtojson and mongoimport doesn't suppory valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
+csvtojson and mongoimport doesn't support valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
 
 ```mongo
 var requests = [];
@@ -98,7 +100,7 @@ db.genes.find().toArray().forEach(document => {
     requests.push({
         'updateOne': {
             'filter': { '_id': document._id },
-            'update': { '$set': { 
+            'update': { '$set': {
                 'logFC': +document.logFC,
                 'neg_log10_adj_P_Val': +document.neg_log10_adj_P_Val,
                 'gene_length': +document.gene_length,
@@ -129,17 +131,13 @@ We will be using lowercase name for the collection because Mongoose uses lowerca
 
 * Remote production environment
 
-To be added.
+There are two ways to use this application in a remote production environment. One is by copying the dist or root project folder to a remote machine and the second one is by copying the Docker image and running it. The first method will be discussed in this section, and the other one will be discussed in the deployment section.
 
-* Summing-up we have:
+If you are copying the dist folder, install Node in the remote machine. Then, install MongoDB and populate the needed collections (follow the steps described above). Start the application by running `node` against the `server.js` file.
 
-> Local development using local MongoDB and the development mode to build and run the app. The database needs to be started and will be listening on port `27017`.
+If you are copying the entire project, install Node and any needed global dependencies in the remote machine. Then, run `npm install` to get all local dependencies installed and just follow the same steps for the local development (see below). You'll need to expose port `3000` so anyone can access the application.
 
-> Remote development using tables created using MongoDB in the EC2 instance. Here we are going to build our app with the production flag and copy the dist folder to the EC2 instance. We need to connect to the instance and run the app from the remote folder.
-
-> If you are planning on running without AWS
-
-To clean all AWS references, uninstall all the package dependencies related to AWS in the package.json and remove the references within the code.
+In both cases the final URL will be the remote machine public ip.
 
 * Final step
 
@@ -159,9 +157,9 @@ npm start
 
 The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server` or `npm start`, it will reload if you change files in the `src/server` folder.
 
-You don't need to stop the server when chaning client-side files this because they use different packaging pipes. You need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+You don't need to stop the server when changing client-side files. This is because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
 
-The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so the MongoDB will not crash**.
+The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so that MongoDB won't crash**.
 
 ### build files
 ```bash
@@ -351,25 +349,48 @@ import * as _ from 'lodash';
 
 ## Docker
 
-You can deploy this project using docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
+Before using Docker go one level above the root folder of the project and create a folder called `data`:
+
+```bash
+PATH_TO_PROJECT\WallOfTargets> cd ..
+PATH_TO_PROJECT> mkdir data
+```
+
+This folder will be used to load the data into MongoDB when we build the DOcker image. Go ahead and grab the latest data files from the [Downloading the data](#downloading-the-data) section. Convert the `dataLinks` file as described there and copy both `data.json` and `dataLinks.json` to the `data` folder you just created.
+
+The easiest way to deploy this project is by using Docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
 
 ```bash
 $ docker --version
 Docker version 18.03.1-ce, build 9ee9f40
 ```
 
-The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it go to the Dockerfile and change the service). Using our Express server, the URL is localhost for development and the EC2 URL for production.
+The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL will be the public ip address of that machine.
 
-Now it is just a matter of going to the project root, running `npm run build:docker` and after that a last command:
+Go to the project root and run `npm run build:docker`. This command will build an image called `wall-of-targets` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker`.
 
 ```bash
 # Building for the first time or rebuilding
-docker-compose up --build
+npm run build:docker
 # Using cached versions
-docker-compose up
+npm run docker
 ```
 
-Now go to `localhost:3000` and you should see the application up. At the moment a sample data is being loaded when building.
+Now go to `localhost:3000` and you should see the application up. If you run into the following error:
+
+```bash
+...Cannot start service mongodb: driver failed programming external connectivity on endpoint...
+Error starting userland proxy: mkdir /port/tcp:0.0.0.0:27017:tcp:172.19.0.2:27017: input/output error
+```
+
+Try to restart Docker and see if the error goes away. To remove all images and containers (to restart the whole Docker process) you can run the following commands:
+
+```bash
+# Delete all containers
+docker rm $(docker ps -a -q)
+# Delete all images
+docker rmi $(docker images -q)
+```
 
 ## Style Guide and Project Structure
 
@@ -390,7 +411,7 @@ This project follows the directions provided by the official [angular style guid
 * For the file structure this project uses the component approach. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
 
 ```
-angular-starter/
+WallOfTargets/
  ├──config/                        * our configuration
  |   ├──build-utils.js             * common config and shared functions for prod and dev
  |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html
@@ -428,15 +449,28 @@ angular-starter/
  │   │   ├   |   |──gene.service.ts   * gene related service, e.g. current selected gene
  │   │   ├   |   |──...               * other nested files
  │   │   ├   |──...                   * other nested files
- │   │   ├──models                    * our interface definitions
- │   │   ├   |──gene.ts               * the gene interface
- │   │   ├   |──index.ts              * exports all models
- │   │   ├──shared                    * our shared module main folder, to be imported by other modules
- │   │   ├   |──shared.module.ts      * the shared module file
- │   │   ├   |──...                   * other nested files
  │   │   ├──genes                     * our genes module main folder
  │   │   ├   |──genes.module.ts       * the genes module file
  │   │   ├   |──...                   * other nested files
+ │   │   ├──models                    * our interface definitions
+ │   │   ├   |──gene.ts               * the gene interface
+ │   │   ├   |──geneLink.ts           * connection between genes interface
+ │   │   ├   |──index.ts              * exports all models
+ │   │   ├──schemas                   * our schemas to be used by Mongoose
+ │   │   ├   |──gene.ts               * the gene schema
+ │   │   ├   |──geneLink.ts           * the connection between genes schema
+ │   │   ├   |──index.ts              * exports all schemas
+ │   │   ├──shared                    * our shared module main folder, to be imported by other modules
+ │   │   ├   |──shared.module.ts      * the shared module file
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──shared                    * our shared module main folder, to be imported by other modules
+ │   │   ├   |──shared.module.ts      * the shared module file
+ │   │   ├   |──...                   * other nested files
+ │   │   ├──testing                   * our shared module main folder, to be imported by other modules
+ │   │   ├   |──gene-mocks.ts         * mocks for genes
+ │   │   ├   |──data-service-stub.ts  * mock for the data service
+ │   │   ├   |──gene-service-stub.ts  * mock for the gene service
+ │   │   ├   |──...                   * other stub files
  │   │   ├──app.component.spec.ts     * a simple test of components in app.component.ts
  │   │   ├──app.e2e.ts                * a simple end-to-end test for /
  │   │   └──app.component.ts          * a simple version of our App component components
@@ -463,7 +497,35 @@ angular-starter/
 
 # Database
 
-DynamoDB was chosen for this project because it is consistent, single-digit millisecond latency at any scale. It is Amazon's key-value NoSQL database, a fully managed cloud database that supports both document and key-value store models. It works great with the `aws-sdk` and is easy to start developing locally and remotelly.
+MongoDB was chosen for this project because it is an object-oriented, simple, dynamic, and scalable NoSQL database. It is based on the NoSQL document store model. The data objects are stored as separate documents inside a collection. Pros:
+
+* Document oriented
+
+* High performance
+
+* High availability — Replication
+
+* High scalability – Sharding
+
+* Dynamic — No rigid schema.
+
+* Flexible – field addition/deletion have less or no impact on the application
+
+* Heterogeneous Data
+
+* No Joins
+
+* Distributed
+
+* Data Representation in JSON or BSON
+
+* Geospatial support
+
+* Easy Integration with BigData Hadoop
+
+* Document-based query language that’s nearly as powerful as SQL
+
+* Cloud distributions such as AWS, Microsoft, RedHat,dotCloud and SoftLayer etc:-. In fact, MongoDB is built for the cloud. Its native scale-out architecture, enabled by ‘sharding,’ aligns well with the horizontal scaling and agility afforded by cloud computing.
 
 # License
  [MIT](/LICENSE)

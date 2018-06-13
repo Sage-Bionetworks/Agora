@@ -1,0 +1,5 @@
+FROM mongo
+
+COPY /dataLinks.json /dataLinks.json
+
+CMD mongoimport --host mongodb --db walloftargets --collection geneslinks --type json --file /dataLinks.json --jsonArray
