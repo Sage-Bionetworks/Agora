@@ -143,7 +143,7 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .on('click', (d: any, i, nodes ) => {
                         // if (this.pnode) {
                         //     d3.select(this.pnode.node[this.pnode.index])
-                        //         .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.index],
+                        //     .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.index],
                         //             this.pnode.index,
                         //             []));
                         // }
@@ -234,7 +234,7 @@ export class ForceChartViewComponent implements AfterViewInit {
             return '#A7DDDF';
         }
         return '#BCC0CA';
-        //return !index ? '#F5DAB4' : '#BCC0CA';
+        // return !index ? '#F5DAB4' : '#BCC0CA';
     }
 
     private getLinkColor(link: GeneLink , index, arr) {
