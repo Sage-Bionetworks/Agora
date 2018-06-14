@@ -1,16 +1,5 @@
 version: '3'
 services:
-  wall-of-targets:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: wall-of-targets
-    environment:
-      - MONGO_URI=mongodb://mongodb/walloftargets
-    links:
-      - mongodb
-    ports:
-     - '3000:3000'
   mongodb:
     image: 'mongo'
     ports:
@@ -26,4 +15,4 @@ services:
       context: ../data
       dockerfile: ../WallOfTargets/mongo-seed/Dockerfile-links
     links:
-      - mongo_seed
+      - mongodb

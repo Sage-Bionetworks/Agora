@@ -1,0 +1,11 @@
+version: '3'
+services:
+  wall-of-targets:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wall-of-targets
+    environment:
+      - MONGO_URI=mongodb://mongodb/walloftargets
+    ports:
+     - '3000:3000'
