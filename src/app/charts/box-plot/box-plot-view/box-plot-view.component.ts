@@ -81,11 +81,14 @@ export class BoxPlotViewComponent implements OnInit {
                     let newMax = chart.group().all()[0].value.reduce(function(a, b) {
                         return Math.max(a, b);
                     });
-                    newMax = Math.ceil(newMax * 10) / 10;
-                    const logDomain = this.geneService.getAdjPValue();
+                    let accum = 1;
+                    while (newMax * accum < 1) {
+                        accum *= 10;
+                    }
+                    newMax = Math.ceil(newMax * accum) / accum;
                     this.chart
-                        .y(d3.scaleLog().domain([logDomain[0], newMax]).clamp(true))
-                        .tickFormat(d3.format('5'));
+                        .y(d3.scaleLog().domain([Math.pow(10, -20), newMax]).clamp(true))
+                        .tickFormat(d3.format('.5f'));
                 }
             })
             .on('preRedraw', (chart) => {
@@ -93,11 +96,14 @@ export class BoxPlotViewComponent implements OnInit {
                     let newMax = chart.group().all()[0].value.reduce(function(a, b) {
                         return Math.max(a, b);
                     });
-                    newMax = Math.ceil(newMax * 10) / 10;
-                    const logDomain = this.geneService.getAdjPValue();
+                    let accum = 1;
+                    while (newMax * accum < 1) {
+                        accum *= 10;
+                    }
+                    newMax = Math.ceil(newMax * accum) / accum;
                     this.chart
-                        .y(d3.scaleLog().domain([logDomain[0], newMax]).clamp(true))
-                        .tickFormat(d3.format('5'));
+                        .y(d3.scaleLog().domain([Math.pow(10, -20), newMax]).clamp(true))
+                        .tickFormat(d3.format('.5f'));
                 }
             });
 
