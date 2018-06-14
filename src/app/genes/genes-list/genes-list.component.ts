@@ -44,7 +44,7 @@ export class GenesListComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'aveexpr', header: 'Nominations' }
+            { field: 'logfc', header: 'Nominations' }
         ];
     }
 
@@ -63,7 +63,7 @@ export class GenesListComponent implements OnInit {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigate(
                 ['../gene-details', this.selectedGene.hgnc_symbol],
                 {relativeTo: this.route}

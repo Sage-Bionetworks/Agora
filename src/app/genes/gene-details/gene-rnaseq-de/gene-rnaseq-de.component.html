@@ -7,15 +7,6 @@
                 <i class="fa fa-info-circle"></i>
             </h2>
         </div>
-        <!--<div class="col-md-5 col-sm-5 col-5">
-            <h3>
-                Model
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle"></i>
-            </h3>
-        </div>
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>-->
     </div>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-12">
@@ -31,18 +22,6 @@
         </div>
     </div>
     <div class="row">
-        <!--<div class="col-md-5 col-sm-5 col-5">
-            <select-menu [promptText]="'All'"
-                [label]="'select-tissue'"
-                [defaultValue]="getTissue(1)">
-            </select-menu>
-        </div>
-        <div class="col-md-5 col-sm-5 col-5">
-            <select-menu [promptText]="'All'"
-                [label]="'select-model'"
-                [defaultValue]="getModel(1)">
-            </select-menu>
-        </div>-->
         <div class="col-md-2 col-sm-2 col-2">
         </div>
     </div>
@@ -61,18 +40,30 @@
         larger red dot.
     </p>
     <ng-template *ngFor="let tissue of tissues" #t></ng-template>
-    <!--<div *ngFor="let tissue of tissues" class="row plot-content" [hidden]="!showBoxPlot(tissue)">
-        <div class="col-md-2">
+</div>
+
+<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12">
+            <h2>
+                Filter by Model
+                <span class="icon-spacing"></span>
+                <i class="fa fa-info-circle"></i>
+            </h2>
         </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <box-plot [label]="'box-plot'"></box-plot>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-12">
+            <select-menu [promptText]="'All'"
+                [label]="'select-model'"
+                [defaultValue]="getModel(1)">
+            </select-menu>
         </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <box-plot [label]="'box-plot2'"></box-plot>
+    </div>
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-2">
         </div>
-        <div class="col-md-2">
-        </div>
-    </div>-->
+    </div>
 </div>
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
@@ -86,6 +77,6 @@
         across the tissues and studies where the model was fit.
     </p>
     <div class="row plot-content">
-        <!--<row-chart></row-chart>-->
+        <row-chart></row-chart>
     </div>
 </div>

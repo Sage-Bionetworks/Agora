@@ -68,11 +68,6 @@ Genes.aggregate(
                                 }
                             }
                         ]
-                    },
-                    {
-                        neg_log10_adj_P_Val: {
-                            $gte: 10
-                        }
                     }
                 ],
             }
@@ -81,15 +76,14 @@ Genes.aggregate(
             $group: {
                 _id: '$_id',
                 hgnc_symbol: { $first: '$hgnc_symbol' },
-                aveexpr : { $first: '$aveexpr' },
                 ensembl_gene_id : { $first: '$ensembl_gene_id' },
                 logfc : { $first: '$logfc' },
                 ci_l : { $first: '$ci_l' },
                 ci_r : { $first: '$ci_r' },
                 adj_p_val : { $first: '$adj_p_val' },
-                neg_log10_adj_p_val : { $first: '$neg_log10_adj_p_val' },
-                tissue_study_pretty : { $first: '$tissue_study_pretty' },
-                comparison_model_sex_pretty : { $first: '$comparison_model_sex_pretty' }
+                tissue : { $first: '$tissue' },
+                study : { $first: '$study' },
+                model : { $first: '$model' }
             }
         },
         {
@@ -99,16 +93,18 @@ Genes.aggregate(
         }
     ]
 ).allowDiskUse(true).exec().then((genes) => {
+    console.log(genes.length);
     // All the genes, ordered by hgnc_symbol
     allGenes = genes.slice();
+    console.log(allGenes.length);
     // Unique genes, ordered by hgnc_symbol
     const seen = {};
     genesById = genes.slice().filter((g) => {
-        if (allTissues.indexOf(g['tissue_study_pretty']) === -1) {
-            allTissues.push(g['tissue_study_pretty']);
+        if (allTissues.indexOf(g['tissue']) === -1) {
+            allTissues.push(g['tissue']);
         }
-        if (allModels.indexOf(g['comparison_model_sex_pretty']) === -1) {
-            allModels.push(g['comparison_model_sex_pretty']);
+        if (allModels.indexOf(g['model']) === -1) {
+            allModels.push(g['model']);
         }
         if (seen[g['hgnc_symbol']]) { return; }
         seen[g['hgnc_symbol']] = true;
@@ -116,7 +112,7 @@ Genes.aggregate(
     });
     // Unique genes, ordered by score
     genesByScore = genesById.slice().sort((a, b) => {
-        return (a.aveexpr > b.aveexpr) ? 1 : ((b.aveexpr > a.aveexpr) ? -1 : 0);
+        return (a.logfc > b.logfc) ? 1 : ((b.logfc > a.logfc) ? -1 : 0);
     });
 
     totalRecords = genesById.length;
@@ -137,8 +133,8 @@ router.get('/genes', (req, res, next) => {
             // If the current entry does not exist in the all genes array
             if (!allGenes.some((g) => {
                 return (g.hgnc_symbol === ge.hgnc_symbol) &&
-                       (g.tissue_study_pretty === ge.tissue_study_pretty) &&
-                       (g.comparison_model_sex_pretty === ge.comparison_model_sex_pretty);
+                       (g.tissue === ge.tissue) &&
+                       (g.model === ge.model);
             })) {
                 chartGenes.push(ge);
             }
@@ -163,7 +159,7 @@ router.get('/genes/page', (req, res, next) => {
     let genes: Gene[] = [];
 
     if (req.query.globalFilter !== 'null' && req.query.globalFilter) {
-        ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).forEach((g) => {
+        ((req.query.sortField === 'logfc') ? genesByScore : genesById).forEach((g) => {
             // If we typed into the search above the list
             if (g.hgnc_symbol.includes(req.query.globalFilter.trim().toUpperCase()))  {
                 // Do not use a shallow copy here
@@ -171,7 +167,7 @@ router.get('/genes/page', (req, res, next) => {
             }
         });
     } else {
-        genes = ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).slice();
+        genes = ((req.query.sortField === 'logfc') ? genesByScore : genesById).slice();
     }
     // Updates the global length based on the filter
     totalRecords = genes.length;
@@ -223,14 +219,21 @@ router.get('/gene/:id', (req, res, next) => {
             next(err);
         } else {
             geneEntries = genes.slice();
-            let minLogFC = +Infinity;
-            let maxLogFC = -Infinity;
-            let maxNegLogPValue = -Infinity;
+            let minLogFC: number = +Infinity;
+            let maxLogFC: number = -Infinity;
+            let maxAdjPValue: number = -Infinity;
+            let minAdjPValue: number = Infinity;
             genes.forEach((g) => {
                 if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
                 if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                if (+g.neg_log10_adj_p_val > maxNegLogPValue) {
-                    maxNegLogPValue = (+g.neg_log10_adj_p_val);
+                const adjPVal: number = +g.adj_p_val;
+                if (+g.adj_p_val) {
+                    if (adjPVal > maxAdjPValue) {
+                        maxAdjPValue = adjPVal;
+                    }
+                    if (adjPVal < minAdjPValue) {
+                        minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                    }
                 }
             });
 
@@ -238,7 +241,8 @@ router.get('/gene/:id', (req, res, next) => {
                 item: genes[0],
                 minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
                 maxLogFC,
-                maxNegLogPValue
+                minAdjPValue,
+                maxAdjPValue
             });
         }
     });

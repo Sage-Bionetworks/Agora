@@ -2,31 +2,23 @@ import { Document } from 'mongoose';
 
 export interface Gene {
     _id: string;
-    comparison_model_sex?: string;
-    comparison_model_sex_pretty: string;
-    model?: string;
-    tissue_study?: string;
-    tissue?: string;
-    comparison?: string;
-    ensembl_gene_id: string;
-    logfc: number;
+    adj_p_val: number;
+    b?: number;
+    brainregions?: string[];
     ci_l: number;
     ci_r: number;
-    aveexpr: number;
-    t?: number;
-    p_value?: string;
-    adj_p_val: string;
-    b?: number;
     direction?: string;
-    hgnc_symbol: string;
-    percentage_gc_content?: number;
+    ensembl_gene_id: string;
     gene_length?: number;
+    hgnc_symbol: string;
+    logfc: number;
+    model?: string;
+    percentage_gc_content?: number;
+    p_value?: string;
     sex?: string;
     study?: string;
-    neg_log10_adj_p_val: number;
-    tissue_study_pretty: string;
-    model_sex_pretty?: string;
-    brainregions?: string[];
+    t?: number;
+    tissue?: string;
 }
 
 export type GeneDocument = Gene & Document;

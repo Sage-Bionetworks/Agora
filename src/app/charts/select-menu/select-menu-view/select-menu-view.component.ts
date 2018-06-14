@@ -56,7 +56,7 @@ export class SelectMenuViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.info);
 
         this.chart = dc.selectMenu(this.selectMenu.nativeElement)
             .dimension(this.dim)

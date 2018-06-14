@@ -6,7 +6,6 @@ import {
     ElementRef,
     Input
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../../models';
 
@@ -43,8 +42,7 @@ export class BoxPlotViewComponent implements OnInit {
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
-        private chartService: ChartService,
-        private decimalPipe: DecimalPipe
+        private chartService: ChartService
     ) { }
 
     ngOnInit() {
@@ -72,16 +70,43 @@ export class BoxPlotViewComponent implements OnInit {
             .group(this.group)
             .renderDataPoints(true)
             .renderTitle(true)
-            .elasticX(true)
-            .elasticY(true)
             .boldOutlier(true)
             .yAxisLabel(this.info.yAxisLabel)
             .dataWidthPortion(1)
             .boldOutlier(true)
             .colors('black')
-            .transitionDuration(0);
+            .transitionDuration(0)
+            .on('preRender', (chart) => {
+                if (this.info.attr !== 'logfc') {
+                    let newMax = chart.group().all()[0].value.reduce(function(a, b) {
+                        return Math.max(a, b);
+                    });
+                    newMax = Math.ceil(newMax * 10) / 10;
+                    const logDomain = this.geneService.getAdjPValue();
+                    this.chart
+                        .y(d3.scaleLog().domain([logDomain[0], newMax]).clamp(true))
+                        .tickFormat(d3.format('5'));
+                }
+            })
+            .on('preRedraw', (chart) => {
+                if (this.info.attr !== 'logfc') {
+                    let newMax = chart.group().all()[0].value.reduce(function(a, b) {
+                        return Math.max(a, b);
+                    });
+                    newMax = Math.ceil(newMax * 10) / 10;
+                    const logDomain = this.geneService.getAdjPValue();
+                    this.chart
+                        .y(d3.scaleLog().domain([logDomain[0], newMax]).clamp(true))
+                        .tickFormat(d3.format('5'));
+                }
+            });
 
-        this.chart.tickFormat(d3.format('.5f'));
+        if (this.info.attr === 'logfc') {
+            this.chart
+                .y(d3.scaleLinear().domain(this.geneService.getLogFC()))
+                .tickFormat(d3.format('.5f'))
+                .elasticY(true);
+        }
 
         this.registerChartEvent(this.chart, 'postRedraw');
         this.registerChartEvent(this.chart, 'postRender');
@@ -97,18 +122,22 @@ export class BoxPlotViewComponent implements OnInit {
         chartEl.on(type, function(chart) {
             chart.selectAll('rect.box')
                 .append('title')
-                .text(function(d) {
+                .text(function() {
                     return 'src: log2(fold change)';
                 });
 
             const lineCenter = chart.selectAll('line.center');
-            const allCircles = chart.selectAll('circle')
+            chart.selectAll('circle')
                 .attr('cx', lineCenter.attr('x1'));
 
+            chart.selectAll('g.axis').each(function() {
+                const firstChild = this.parentNode.firstChild;
+                if (firstChild) {
+                    this.parentNode.insertBefore(this, firstChild);
+                }
+            });
+
             const filteredGenes = self.geneEntries.slice().filter((g) => {
-                /*return g.tissue_study_pretty === self.geneService.getCurrentTissue() &&
-                    g.comparison_model_sex_pretty === self.geneService.getCurrentModel() &&
-                    g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;*/
                 return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
             });
             let found = false;
@@ -117,8 +146,7 @@ export class BoxPlotViewComponent implements OnInit {
                 .filter((c, i) => {
                     const cfound = filteredGenes.some((g) => {
                         return (chart.group().all()[0].value[i] || !cfound) ?
-                            chart.group().all()[0].value[i] === g[self.info.attr] :
-                            false;
+                            chart.group().all()[0].value[i] === +g[self.info.attr] : false;
                     });
                     if (cfound) {
                         found = cfound;
@@ -132,7 +160,7 @@ export class BoxPlotViewComponent implements OnInit {
                 .style('r', 13.6)
                 .style('opacity', 1);
 
-            const notFoundCircles = chart.selectAll('circle')
+            chart.selectAll('circle')
                 .filter((c, i) => {
                     return i !== foundIndex;
                 })

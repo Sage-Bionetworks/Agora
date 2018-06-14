@@ -1,11 +1,4 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-
-import {
-    ActivatedRoute
-} from '@angular/router';
-
-import { Gene } from '../../../models';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -32,11 +25,9 @@ export class ScatterPlotViewComponent implements OnInit {
     @ViewChild('chart') scatterPlot: ElementRef;
 
     constructor(
-        private route: ActivatedRoute,
         private chartService: ChartService,
         private dataService: DataService,
         private geneService: GeneService,
-        private decimalPipe: DecimalPipe
     ) { }
 
     ngOnInit() {
@@ -50,11 +41,12 @@ export class ScatterPlotViewComponent implements OnInit {
         this.group = this.dataService.getGroup(this.info);
         this.title = this.info.title;
 
+        const logDomain = this.geneService.getAdjPValue();
         this.chart = dc.scatterPlot(this.scatterPlot.nativeElement);
         this.chart
             .useCanvas(true)
             .x(d3.scaleLinear().domain(this.geneService.getLogFC()))
-            .y(d3.scaleLinear().domain(this.geneService.getNegAdjPValue()))
+            .y(d3.scaleLog().domain([logDomain[0], +logDomain[1]]))
             .xAxisLabel(this.info.xAxisLabel)
             .yAxisLabel(this.info.yAxisLabel)
             .title((p) => {

@@ -78,7 +78,7 @@ export class GeneSearchComponent implements OnInit {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.gene = data['item'];
             this.router.navigate([
                 '/genes',

@@ -84,20 +84,20 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'volcano-plot',
                 {
-                    dimension: ['logfc', 'neg_log10_adj_p_val', 'hgnc_symbol'],
+                    dimension: ['logfc', 'adj_p_val', 'hgnc_symbol'],
                     group: 'self',
                     type: 'scatter-plot',
                     title: 'Volcano Plot',
                     xAxisLabel: 'Log Fold Change',
                     yAxisLabel: '-log10(Adjusted p-value)',
                     x: ['logfc'],
-                    y: ['neg_log10_adj_p_val']
+                    y: ['adj_p_val']
                 }
             );
             this.chartService.addChartInfo(
                 'forest-plot',
                 {
-                    dimension: ['tissue_study_pretty'],
+                    dimension: ['tissue'],
                     group: 'self',
                     type: 'forest-plot',
                     title: 'Log fold forest plot',
@@ -108,7 +108,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'select-tissue',
                 {
-                    dimension: ['tissue_study_pretty'],
+                    dimension: ['tissue'],
                     group: 'self',
                     type: 'select-menu',
                     title: '',
@@ -118,7 +118,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'select-model',
                 {
-                    dimension: ['comparison_model_sex_pretty'],
+                    dimension: ['model'],
                     group: 'self',
                     type: 'select-menu',
                     title: '',
@@ -162,7 +162,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                     'box-plot-' + index + '2',
                     [this.currentTissues[index]],
                     '-log10(adjusted p-value)',
-                    'neg_log10_adj_p_val'
+                    'adj_p_val'
                 );
             }
             this.createComponent(index, info1, info2, label1, label2);
@@ -176,7 +176,7 @@ export class GeneRNASeqDEComponent implements OnInit {
         this.chartService.addChartInfo(
             label,
             {
-                dimension: ['tissue_study_pretty'],
+                dimension: ['tissue'],
                 group: 'self',
                 type: 'box-plot',
                 title: '',

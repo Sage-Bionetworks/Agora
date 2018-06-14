@@ -20,8 +20,8 @@ export class GeneService {
     tissues: string[] = [];
     minLogFC: number = 0;
     maxLogFC: number = 10;
-    maxNegLogPValue: number = 50;
-    minNegLogPValue: number = 0;
+    maxAdjPValue: number = 1e-50;
+    minAdjPValue: number = Math.pow(10, -20);
 
     constructor(
         private http: HttpClient,
@@ -70,13 +70,13 @@ export class GeneService {
         return [this.minLogFC, this.maxLogFC];
     }
 
-    setNegAdjPValue(max: number, min?: number) {
-        this.maxNegLogPValue = max;
-        this.minNegLogPValue = (min) ? min : 0;
+    setAdjPValue(min: number, max: number) {
+        this.maxAdjPValue = max;
+        this.minAdjPValue = min;
     }
 
-    getNegAdjPValue(): number[] {
-        return [0, this.maxNegLogPValue];
+    getAdjPValue(): number[] {
+        return [this.minAdjPValue, this.maxAdjPValue];
     }
 
     loadTissues(): Promise<any> {

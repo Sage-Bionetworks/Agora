@@ -14,10 +14,6 @@ export let GeneSchema: Schema = new Schema({
         required: false,
         type: Number
     },
-    aveexpr: {
-        required: false,
-        type: Number
-    },
     ci_l: {
         required: false,
         type: Number
@@ -30,15 +26,15 @@ export let GeneSchema: Schema = new Schema({
         required: false,
         type: Number
     },
-    neg_log10_adj_p_val: {
-        required: false,
-        type: Number
-    },
-    tissue_study_pretty: {
+    tissue: {
         required: false,
         type: String
     },
-    comparison_model_sex_pretty: {
+    study: {
+        required: false,
+        type: String
+    },
+    model: {
         required: false,
         type: String
     }

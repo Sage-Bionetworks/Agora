@@ -1,5 +1,5 @@
-import { Injectable, Input } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../models';
@@ -7,11 +7,9 @@ import { Gene } from '../../models';
 import { LazyLoadEvent } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
 
 import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter2';
-import colorbrewer from 'colorbrewer';
 
 @Injectable()
 export class DataService {
@@ -100,14 +98,11 @@ export class DataService {
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
                     d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = +this.decimalPipe.transform(
-                        +d.neg_log10_adj_p_val,
-                        '1.1-5'
-                    );
-                    d.aveexpr = +this.decimalPipe.transform(+d.aveexpr, '1.1-5');
+                    d.adj_p_val = +d.adj_p_val;
                     d.hgnc_symbol = d.hgnc_symbol;
-                    d.comparison_model_sex_pretty = d.comparison_model_sex_pretty;
-                    d.tissue_study_pretty = d.tissue_study_pretty;
+                    d.model = d.model;
+                    d.study = d.study;
+                    d.tissue = d.tissue;
                 });
 
                 this.ndx = crossfilter(data['items']);
@@ -130,14 +125,11 @@ export class DataService {
                 data.forEach((d) => {
                     // Separate the columns we need
                     d['logfc'] = self.decimalPipe.transform(+d['logfc'], '1.1-5');
-                    d['neg_log10_adj_p_val'] = self.decimalPipe.transform(
-                        +d['neg_log10_adj_p_val'],
-                        '1.1-5'
-                    );
-                    d['aveexpr'] = self.decimalPipe.transform(+d['aveexpr'], '1.1-5');
+                    d['adj_p_val'] = d['adj_p_val'];
                     d['hgnc_symbol'] = d['hgnc_symbol'];
-                    d['comparison_model_sex_pretty'] = d['comparison_model_sex_pretty'];
-                    d['tissue_study_pretty'] = d['tissue_study_pretty'];
+                    d['model'] = d['model'];
+                    d['study'] = d['study'];
+                    d['tissue'] = d['tissue'];
                 });
                 this.ndx = crossfilter(data);
                 this.data = data;
@@ -296,7 +288,7 @@ export class DataService {
     }
 
     reduceInit() {
-        return {count: 0, sum: 0, logfc: 0, neg_log10_adj_p_val: 0};
+        return {count: 0, sum: 0, logfc: 0, adj_p_val: 0};
     }
 
     // Box-plot uses a different function name in dc.js

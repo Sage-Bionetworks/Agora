@@ -49,9 +49,8 @@ export class GeneNetworkComponent implements OnInit {
                 }
             ]);
         } else {
-            this.dataLoaded = true;
+            this.loadGenes();
         }
-        this.loadGenes();
     }
 
     updategene(event) {
@@ -69,6 +68,7 @@ export class GeneNetworkComponent implements OnInit {
         this.dataService.loadNodes(this.currentGene).then((data: any) => {
             data.nodes.shift();
             this.currentGeneData = data.nodes;
+            this.dataLoaded = true;
             console.log(data);
         });
     }
@@ -83,7 +83,7 @@ export class GeneNetworkComponent implements OnInit {
             }
             this.geneService.setCurrentGene(data['item']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigateByUrl(currentUrl)
                 .then(() => {
                     this.router.navigated = false;

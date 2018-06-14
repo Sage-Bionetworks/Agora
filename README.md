@@ -102,16 +102,14 @@ db.genes.find().toArray().forEach(document => {
             'filter': { '_id': document._id },
             'update': { '$set': {
                 'logFC': +document.logFC,
-                'neg_log10_adj_P_Val': +document.neg_log10_adj_P_Val,
+                'adj_p_val': document.adj_p_val,
                 'gene_length': +document.gene_length,
                 'percentage_gc_content': +document.percentage_gc_content,
-                'B': +document.B,
+                'b': +document.b,
                 't': +document.t,
-                'CI_L': +document.CI_L,
-                'CI_R': +document.CI_R,
-                'AveExpr': +document.AveExpr,
-                'P_Value': +document.P_Value,
-                'adj_P_Val': +document.adj_P_Val,
+                'ci_l': +document.ci_l,
+                'ci_r': +document.ci_r,
+                'p_value': +document.p_value,
                 'percentage_gc_content': +document.percentage_gc_content
         } }
         }

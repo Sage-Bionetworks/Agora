@@ -42,12 +42,12 @@ export class GeneOverviewComponent implements OnInit {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneService.getModels().length ||
-            this.geneService.getTissues().length) {
+            !this.geneService.getTissues().length) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
                 this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-                this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+                this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
                 this.gene = data['item'];
 
                 this.geneService.loadTissues().then((tstatus) => {

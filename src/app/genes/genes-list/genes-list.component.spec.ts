@@ -2,28 +2,22 @@ import {
     async,
     ComponentFixture,
     TestBed,
-    inject,
     fakeAsync,
     tick
 } from '@angular/core/testing';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Location } from '@angular/common';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     ActivatedRouteStub,
     RouterStub,
     RouterOutletStubComponent,
-    RouterLinkStubDirective,
     DataServiceStub,
     GeneServiceStub,
     mockGene1,
     mockGene2
 } from '../../../app/testing';
-
-import { routes } from '../genes-routing.module';
-import { Gene } from '../../models';
 
 import { GenesListComponent } from './genes-list.component';
 
