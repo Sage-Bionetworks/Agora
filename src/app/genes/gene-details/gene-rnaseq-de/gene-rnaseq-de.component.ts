@@ -71,6 +71,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             ]);
         } else {
             this.loadChartData().then((status) => {
+                console.log(this.geneService.getTissues());
                 this.geneService.getTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });

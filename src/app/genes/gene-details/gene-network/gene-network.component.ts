@@ -2,11 +2,9 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
+import { Gene, GeneNetwork, GeneNode } from '../../../models';
 
 import { GeneService, DataService } from '../../../core/services';
-
-import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'gene-network',

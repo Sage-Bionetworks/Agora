@@ -93,10 +93,8 @@ Genes.aggregate(
         }
     ]
 ).allowDiskUse(true).exec().then((genes) => {
-    console.log(genes.length);
     // All the genes, ordered by hgnc_symbol
     allGenes = genes.slice();
-    console.log(allGenes.length);
     // Unique genes, ordered by hgnc_symbol
     const seen = {};
     genesById = genes.slice().filter((g) => {
@@ -255,11 +253,9 @@ router.get('/genelist/:id', function(req, res, next) {
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: [] }); }
     GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
-        console.log(links);
         const arr = links.slice().map((slink) => {
             return slink.toJSON()['geneB_ensembl_gene_id'];
         });
-        console.log(arr);
         GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
             .where('geneB_ensembl_gene_id')
             .in(arr)
