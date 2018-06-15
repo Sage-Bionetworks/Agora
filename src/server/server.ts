@@ -2,11 +2,11 @@
  * Module dependencies.
  */
 
+import * as compression from 'compression';
 import * as express from 'express';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import * as events from 'events';
 import * as http from 'http';
 
 // Get our api routes
@@ -16,6 +16,7 @@ import * as debug from 'debug';
 debug('wot:server');
 
 const app = express();
+app.use(compression());
 app.use(cors());
 
 // app.use(helmet());
