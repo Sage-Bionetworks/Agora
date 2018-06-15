@@ -226,6 +226,11 @@ npm run e2e:live
 npm run build:docker
 ```
 
+## run load tests, so you can stress test the application
+```bash
+npm run test:load
+```
+
 # Configuration
 Configuration files live in `config/` we are currently using webpack, karma, and protractor for different stages of your application
 
