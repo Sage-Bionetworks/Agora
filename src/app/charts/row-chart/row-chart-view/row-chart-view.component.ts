@@ -84,7 +84,9 @@ export class RowChartViewComponent implements OnInit {
         this.chart.xAxis().scale(this.chart.x()).ticks(5);
 
         // Removes the click event for the rowChart to prevent filtering
-        this.chart.onClick = function() {}
+        this.chart.onClick = () => {
+            //
+        };
 
         // Register the row chart renderlet
         this.registerChartEvent(this.chart);
