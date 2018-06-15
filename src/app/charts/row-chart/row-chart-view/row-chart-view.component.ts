@@ -81,7 +81,12 @@ export class RowChartViewComponent implements OnInit {
             .transitionDuration(0);
 
         // Add this number of ticks so the x axis don't get cluttered with text
-        this.chart.xAxis().ticks(5);
+        this.chart.xAxis().scale(this.chart.x()).ticks(5);
+
+        // Removes the click event for the rowChart to prevent filtering
+        this.chart.onClick = () => {
+            //
+        };
 
         // Register the row chart renderlet
         this.registerChartEvent(this.chart);

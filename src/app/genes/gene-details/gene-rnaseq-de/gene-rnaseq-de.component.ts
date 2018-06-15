@@ -40,7 +40,10 @@ export class GeneRNASeqDEComponent implements OnInit {
     dataLoaded: boolean = false;
     tissues: SelectItem[] = [];
     currentTissues: string[] = [];
+    selectedTissues: string[] = [];
     componentRefs: any[] = [];
+    oldIndex: number = -1;
+    index: number = -1;
 
     constructor(
         private router: Router,
@@ -71,7 +74,6 @@ export class GeneRNASeqDEComponent implements OnInit {
             ]);
         } else {
             this.loadChartData().then((status) => {
-                console.log(this.geneService.getTissues());
                 this.geneService.getTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
@@ -140,37 +142,49 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     toggleTissue(event: any) {
-        const oldIndex = this.currentTissues.indexOf(event.itemValue);
-        const index = this.tissues.findIndex((t) => t.value === event.itemValue);
-        const hasTissue = (this.currentTissues[index]) ? true : false;
+        this.index = this.tissues.findIndex((t) => t.value === event.itemValue);
+        const LIMIT_NUMBER = 1;
+        const hasTissue = (this.currentTissues[this.index]) ? true : false;
         // Create or destroy the box plots for this tissue
         if (!hasTissue) {
-            this.currentTissues[index] = event.itemValue;
-            const label1 = 'box-plot-' + index + '1';
-            const label2 = 'box-plot-' + index + '2';
+            this.currentTissues[this.index] = event.itemValue;
+            // Remove the old box plot and erase the index
+            if (this.oldIndex !== -1) {
+                this.destroyComponent(this.oldIndex);
+                if (this.index !== this.oldIndex) {
+                    this.currentTissues[this.oldIndex] = undefined;
+                }
+            }
+
+            const label1 = 'box-plot-' + this.index + '1';
+            const label2 = 'box-plot-' + this.index + '2';
             const info1 = this.chartService.getChartInfo(label1);
             const info2 = this.chartService.getChartInfo(label2);
             if (!info1) {
                 this.registerBoxPlot(
-                    'box-plot-' + index + '1',
-                    [this.currentTissues[index]],
+                    'box-plot-' + this.index + '1',
+                    [this.currentTissues[this.index]],
                     'log2(fold change)',
                     'logfc'
                 );
             }
             if (!info2) {
                 this.registerBoxPlot(
-                    'box-plot-' + index + '2',
-                    [this.currentTissues[index]],
+                    'box-plot-' + this.index + '2',
+                    [this.currentTissues[this.index]],
                     '-log10(adjusted p-value)',
                     'adj_p_val'
                 );
             }
-            this.createComponent(index, info1, info2, label1, label2);
+
+            this.createComponent(this.index, info1, info2, label1, label2);
         } else {
-            this.currentTissues[index] = undefined;
-            this.destroyComponent(oldIndex);
+            this.destroyComponent(this.index);
+            this.currentTissues[this.index] = undefined;
         }
+
+        this.oldIndex = this.index;
+        if (event.value.length > LIMIT_NUMBER) { event.value.splice(0, 1); }
     }
 
     registerBoxPlot(label: string, constraintNames: string[], yAxisLabel: string, attr: string) {
