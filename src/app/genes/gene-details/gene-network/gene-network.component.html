@@ -5,9 +5,9 @@
     <div class="col-md-4 ">
         <div class="row nopadding currentGene">
             <h3>{{currentGene.hgnc_symbol}}</h3>
-            <div>Known AD Gene Variant <span class="true"> True</span></div>
+            <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
             <div>AMP-AD target <span class="true"> True</span></div>
-            <div>Brain eQTL <span class="false"> False</span></div>
+            <div>Brain eQTL <span [ngClass]="{'true':eqtl,'false':!eqtl}"> {{eqtl}}</span></div>
             <div>Protein Precense <span class="false"> False</span></div>
         </div>
         <div class="row brainregions nopadding">

@@ -22,6 +22,8 @@ export class GeneNetworkComponent implements OnInit {
     private pathways: GeneNode[] = [];
     private currentGene = this.geneService.getCurrentGene();
     private currentGeneData: Gene[] = [];
+    private variants: boolean = false;
+    private eqtl: boolean = false;
 
     constructor(
         private router: Router,
@@ -53,6 +55,7 @@ export class GeneNetworkComponent implements OnInit {
 
     updategene(event) {
         this.dataService.loadNodes(event).then((data: GeneNetwork) => {
+            data.nodes.shift();
             this.pathways = data.nodes;
         });
     }
@@ -67,9 +70,29 @@ export class GeneNetworkComponent implements OnInit {
             data.nodes.shift();
             this.currentGeneData = data.nodes;
             this.dataLoaded = true;
+            // this.eqtl = this.findEqtl();
+            // this.variants = this.findVariant();
             console.log(data);
         });
     }
+
+    // findVariant() {
+    //     this.variantsJson.find( (variant: any) => {
+    //         if (variant.ENSEMBL === this.currentGene.ensembl_gene_id) {
+    //             return true;
+    //         }
+    //     });
+    //     return false;
+    // }
+
+    // findEqtl() {
+    //     this.eqtlJson.find( (eqtl: any) => {
+    //         if (eqtl.ensembl_gene_id === this.currentGene.ensembl_gene_id) {
+    //             return true;
+    //         }
+    //     });
+    //     return false;
+    // }
 
     viewGene(gene: GeneNode) {
         this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
