@@ -1,0 +1,12 @@
+config:
+  target: 'http://ec2-54-234-198-188.compute-1.amazonaws.com:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+  defaults:
+    headers:
+      Content-Type: 'application/json'
+scenarios:
+  - flow:
+    - get:
+        url: '/api/genes'

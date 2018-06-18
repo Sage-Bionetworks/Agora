@@ -29,13 +29,14 @@ Once you have those, you should install these globals with `npm install --global
 * `typescript`
 * `cross-env`
 ```
-npm install --global webpack
-npm install --global webpack-dev-server
-npm install --global karma-cli
-npm install --global protractor
-npm install --global rimraf
-npm install --global typescript
-npm install --global cross-env
+npm install -g webpack
+npm install -g webpack-dev-server
+npm install -g karma-cli
+npm install -g protractor
+npm install -g rimraf
+npm install -g typescript
+npm install -g cross-env
+npm install -g artillery
 ```
 ## Running the app
 
@@ -223,6 +224,11 @@ npm run e2e:live
 ### build Docker
 ```bash
 npm run build:docker
+```
+
+## run load tests, so you can stress test the application
+```bash
+npm run test:load
 ```
 
 # Configuration
