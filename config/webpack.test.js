@@ -180,11 +180,6 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      new SourceMapDevToolPlugin({
-        filename: null, // if no value is provided the sourcemap is inlined
-        test: /\.(ts|js)($|\?)/i // process .js and .ts files only
-      }),
-
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.

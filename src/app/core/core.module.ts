@@ -15,17 +15,9 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 
 import {
-    TableModule
-} from 'primeng/table';
-
-// Backend modules and extra config
-import { environment } from 'environments/environment';
-
-import {
     AuthGuardService,
     AuthenticationService,
     BreadcrumbService,
-    ColorService,
     GeneService,
     DataService
 } from './services';
@@ -76,7 +68,6 @@ import '../../styles/headings.css';
         BreadcrumbService,
         DataService,
         GeneService,
-        ColorService,
         DecimalPipe
     ]
 })
