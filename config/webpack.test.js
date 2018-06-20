@@ -83,7 +83,8 @@ module.exports = function (options) {
             helpers.root('node_modules/rxjs'),
             helpers.root('node_modules/@angular'),
             helpers.root('node_modules/primeng'),
-            helpers.root('node_modules/ng-mocks')
+            helpers.root('node_modules/ng-mocks'),
+            helpers.root('node_modules/d3')
           ]
         },
 
