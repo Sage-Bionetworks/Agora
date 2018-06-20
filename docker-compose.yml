@@ -1,18 +1,29 @@
-version: '3'
+version: '2.3'
 services:
   mongodb:
     image: 'mongo'
     ports:
       - 27017:27017
+    networks:
+      - front_wot
   mongo_seed:
     build:
       context: ../data
       dockerfile: ../WallOfTargets/mongo-seed/Dockerfile
     links:
       - mongodb
+    networks:
+      - front_wot
   mongo_seed_links:
     build:
       context: ../data
       dockerfile: ../WallOfTargets/mongo-seed/Dockerfile-links
     links:
       - mongodb
+    networks:
+      - front_wot
+
+networks:
+  front_wot:
+    driver: bridge
+    name: wot_network

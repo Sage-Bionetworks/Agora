@@ -1,28 +1,21 @@
+import { Gene, GeneLink } from '../../app/models';
+import { Genes } from '../../app/schemas/gene';
+import { GenesLinks } from '../../app/schemas/geneLink';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-
-import { Gene, GeneLink } from '../../app/models';
 
 mongoose.set('debug', true);
 
 const router = express.Router();
 const database = { url: '' };
-
-import { Genes } from '../../app/schemas/gene';
-import { GenesLinks } from '../../app/schemas/geneLink';
+const env = process.env.NODE_ENV || 'development';
 
 // Set the database url
-const env = process.env.NODE_ENV || 'development';
 if (process.env.Docker) {
+    // Service name here, not the localhost
     database.url = 'mongodb://mongodb/walloftargets';
 } else {
-    if (env === 'development') {
-        database.url = 'mongodb://localhost:27017/walloftargets';
-    } else {
-        database.url = 'mongodb://wotadmin:2w3o5t8@' +
-            + 'ec2-34-237-52-244.compute-1.amazonaws.com:'
-            + '27017/walloftargets';
-    }
+    database.url = 'mongodb://localhost/walloftargets';
 }
 
 // Connect to mongoDB database, local or remotely
@@ -118,7 +111,10 @@ Genes.aggregate(
 
 // Routes to get genes information
 router.get('/genes', (req, res, next) => {
-    console.log('Get all genes');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all genes');
+    }
 
     const resObj = {
         items: [],
@@ -146,8 +142,11 @@ router.get('/genes', (req, res, next) => {
 
 // Use mongoose to get one page of genes
 router.get('/genes/page', (req, res, next) => {
-    console.log('Get a page of genes');
-    console.log(req.query);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a page of genes');
+        console.log(req.query);
+    }
 
     // Convert the strings
     const skip = (+req.query.first) ? +req.query.first : 0;
@@ -180,14 +179,17 @@ router.get('/genes/page', (req, res, next) => {
 
 // Get all genes that match an id, currently hgnc_symbol
 router.get('/genes/:id', (req, res, next) => {
-    console.log('Get the genes that match an id');
-    console.log(req.params.id);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get the genes that match an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: []}); }
 
     // Get one array or the other depending on the list column we want to sort by
     const genes: Gene[] = [];
-    console.log('gene id pass');
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
@@ -202,18 +204,24 @@ router.get('/genes/:id', (req, res, next) => {
 
 // Get a gene by id, currently hgnc_symbol
 router.get('/gene/:id', (req, res, next) => {
-    console.log('Get a gene with an id');
-    console.log(req.params.id);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a gene with an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) {
-        console.log('no id');
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('no id');
+        }
         res.json({ item: null });
     }
 
     // Find all the Genes with the current id
     Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
         if (err) {
-            console.log(err);
             next(err);
         } else {
             geneEntries = genes.slice();
@@ -247,9 +255,13 @@ router.get('/gene/:id', (req, res, next) => {
 });
 
 // Get a gene list by id
-router.get('/genelist/:id', function(req, res, next) {
-    console.log('Get a gene list with an id');
-    console.log(req.params.id);
+router.get('/genelist/:id', (req, res, next) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a gene list with an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: [] }); }
     GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
@@ -272,7 +284,10 @@ router.get('/genelist/:id', function(req, res, next) {
 
 // Get all the tissues
 router.get('/tissues', (req, res, next) => {
-    console.log('Get all tissues');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all tissues');
+    }
 
     // Return an empty array in case we don't have tissues
     if (!allTissues.length) { res.json({ items: null }); }
@@ -282,7 +297,10 @@ router.get('/tissues', (req, res, next) => {
 
 // Get all the models
 router.get('/models', (req, res, next) => {
-    console.log('Get all models');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all models');
+    }
 
     // Return an empty array in case we don't have models
     if (!allModels.length) { res.json({ items: null }); }

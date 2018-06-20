@@ -23,11 +23,10 @@ const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
 const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-
-
 function getUglifyOptions (supportES2015) {
   const uglifyCompressOptions = {
     pure_getters: true, /* buildOptimizer */
+    drop_console: true,
     // PURE comments work best with 3 passes.
     // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
     passes: 3         /* buildOptimizer */
@@ -50,12 +49,15 @@ module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
   const Docker = process.env.Docker || false;
+  const Analyzer = process.env.Analyzer || false;
+
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
     port: process.env.PORT || 8080,
     ENV: ENV,
     HMR: false,
-    Docker: Docker
+    Docker: Docker,
+    Analyzer: Analyzer
   });
 
   // set environment suffix so these environments are loaded.

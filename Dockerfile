@@ -25,16 +25,15 @@ RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
 
 WORKDIR /ng-app
 
-ADD . .
+COPY . .
 
 RUN npm run webdriver:update
 
-##RUN npm run build:aot:prod
+## The ci:travis script already runs the AoT build, so these two lines build the client and server
 RUN npm run ci:travis
+RUN npm run build:server:docker
 
-ADD start-server.sh /ng-app/start-server.sh
-RUN chmod +x /ng-app/start-server.sh
-
-EXPOSE 3000
+COPY ./start-server.sh /ng-app/start-server.sh
+RUN chmod +x ./start-server.sh
 
 CMD ["bash", "/ng-app/start-server.sh"]
