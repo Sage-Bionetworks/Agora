@@ -171,7 +171,13 @@ export class ForceChartViewComponent implements AfterViewInit {
                     (d: any) =>  'translate(' + (d.x - 22) + ',' + (d.y - 22) + ')');
                     textElements
                         .attr('x', (node: any) => node.x)
-                        .attr('y', (node: any) => node.y);
+                        .attr('y', (node: any) => node.y)
+                        .attr('dx', (node: any) => {
+                            if (this.width / 2 < node.x ) {
+                                return -Math.abs(node.hgnc_symbol.length * 6) - 32;
+                            }
+                            return '23';
+                        });
                     linkElements
                         .attr('x1', (link: any) => link.source.x)
                         .attr('y1', (link: any) => link.source.y)
