@@ -7,7 +7,7 @@ const helpers = require('./helpers');
 /**
  * Webpack Plugins
  */
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
@@ -180,6 +180,10 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
+      new SourceMapDevToolPlugin({
+        filename: null, // if no value is provided the sourcemap is inlined
+        test: /\.(ts|js)($|\?)/i // process .js and .ts files only
+      }),
 
       /**
        * Plugin: DefinePlugin
