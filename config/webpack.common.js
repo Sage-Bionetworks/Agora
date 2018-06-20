@@ -31,10 +31,8 @@ const buildUtils = require('./build-utils');
  */
 module.exports = function (options) {
     const isProd = options.env === 'production';
-    const APP_CONFIG = require(process.env.ANGULAR_CONF_FILE || (isProd ? './config.prod.json' : './config.dev.json'));
 
     const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA,options.metadata || {});
-    const GTM_API_KEY = process.env.GTM_API_KEY || APP_CONFIG.gtmKey;
 
     const ngcWebpackConfig = buildUtils.ngcWebpackSetup(isProd, METADATA);
     const supportES2015 = buildUtils.supportES2015(METADATA.tsConfigPath);

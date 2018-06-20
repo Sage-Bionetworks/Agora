@@ -24,6 +24,7 @@ module.exports = function (options) {
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 3000;
   const Docker = process.env.Docker || false;
+  const Analyzer = process.env.Analyzer || false;
 
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: HOST,
@@ -31,7 +32,8 @@ module.exports = function (options) {
     ENV: ENV,
     HMR: helpers.hasProcessFlag('hot'),
     PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT,
-    Docker: Docker
+    Docker: Docker,
+    Analyzer: Analyzer
   });
 
   return webpackMerge(commonConfig({ env: ENV, metadata: METADATA  }), {

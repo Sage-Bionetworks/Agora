@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as http from 'http';
+import * as helmet from 'helmet';
 
 // Get our api routes
 import api from './routes/api';
@@ -15,17 +16,25 @@ import api from './routes/api';
 import * as debug from 'debug';
 debug('wot:server');
 
+const env = process.env.NODE_ENV || 'development';
 const app = express();
 app.use(compression());
 app.use(cors());
 
-// app.use(helmet());
+app.use(helmet());
 
 // Serve static files from public folder
 app.use(express.static(__dirname));
 
 // Parse application/json
 app.use(bodyParser.json({limit: '50mb'}));
+// For parsing application/x-www-form-unlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// We are behind a proxy now so set a trsut proxy variable here
+// http://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', true);
+app.set('trust proxy', 'loopback');
 
 // Set our api routes
 app.use('/api', api);
@@ -65,8 +74,15 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+if (env === 'development') {
+    console.log('NODE_ENV: ', process.env.NODE_ENV);
+    console.log('PORT: ', process.env.PORT);
+    console.log('Docker: ', process.env.Docker);
+}
+
 // Get port from environment and store in Express
-const port = normalizePort(process.env.npm_package_config_port || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 // Create HTTP server
@@ -126,9 +142,5 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
-/*if (express().get('env') === 'production') {
-    module.exports = app;
-}*/
 
 export default app;

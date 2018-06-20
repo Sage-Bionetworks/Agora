@@ -4,7 +4,6 @@
 
 const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
-const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 
 /**
  * Webpack Plugins
@@ -15,7 +14,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require( 'nodemon-webpack-plugin' );
 
-const ENV = process.env.NODE_ENV = process.env.ENV = 'development';
+const ENV = process.env.NODE_ENV || process.env.ENV || 'development';
 const Docker = process.env.Docker || false;
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
@@ -69,6 +68,8 @@ module.exports = {
         'ENV': JSON.stringify(METADATA.ENV),
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+        'process.env.HOST': JSON.stringify(METADATA.host),
+        'process.env.PORT': JSON.stringify(METADATA.port),
         'process.env.Docker': JSON.stringify(METADATA.Docker)
       })
     ],

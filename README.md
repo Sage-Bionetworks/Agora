@@ -396,6 +396,13 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 ```
 
+To remove all unused containers:
+
+```bash
+# Remove all containers with the Exited status
+docker rm $( docker ps -q -f status=exited)
+```
+
 ## Style Guide and Project Structure
 
 This project follows the directions provided by the official [angular style guide](https://angular.io/guide/styleguide). Things that the guide state to keep in mind:
@@ -419,8 +426,6 @@ WallOfTargets/
  ├──config/                        * our configuration
  |   ├──build-utils.js             * common config and shared functions for prod and dev
  |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html
- |   ├──config.dev.json            * config for devevlopment environment
- |   ├──config.prod.json           * config for production environment
  │   │                              (note: you can load your own config file, just set the evn ANGULAR_CONF_FILE with the path of your own file)
  |   ├──helpers.js                 * helper functions for our configuration files
  |   ├──spec-bundle.js             * ignore this magic that sets up our Angular testing environment
