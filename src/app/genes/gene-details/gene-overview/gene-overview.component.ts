@@ -42,7 +42,7 @@ export class GeneOverviewComponent implements OnInit {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneService.getModels().length ||
-            !this.geneService.getTissues().length) {
+            !this.geneService.getTissues().length || this.id !== this.gene.hgnc_symbol) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
