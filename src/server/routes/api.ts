@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
-import { Gene, GeneLink } from '../../app/models';
+import { Gene } from '../../app/models';
 
 mongoose.set('debug', true);
 

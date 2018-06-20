@@ -322,7 +322,8 @@ module.exports = function (options) {
       }) : null,
 
       new ProvidePlugin({
-        'dc': 'dc'
+        'dc': 'dc',
+        'd3': 'd3'
       })
     ].filter(Boolean),
 
