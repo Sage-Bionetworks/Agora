@@ -21,9 +21,7 @@ import { Gene } from '../../../models';
 import { ChartService } from '../../../charts/services';
 import { GeneService, DataService } from '../../../core/services';
 
-import { Observable } from 'rxjs/Observable';
 import { SelectItem } from 'primeng/api';
-import { entries, lab } from 'd3';
 
 @Component({
     selector: 'gene-rnaseq-de',
@@ -141,7 +139,7 @@ export class GeneRNASeqDEComponent implements OnInit {
         return this.geneService.getModels()[index];
     }
 
-    toggleTissue(event: any) {
+    async toggleTissue(event: any) {
         this.index = this.tissues.findIndex((t) => t.value === event.itemValue);
         const LIMIT_NUMBER = 1;
         const hasTissue = (this.currentTissues[this.index]) ? true : false;
@@ -156,6 +154,8 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }
             }
 
+            // Set the current tissue to the toggled value
+            this.geneService.setCurrentTissue(event.itemValue);
             const label1 = 'box-plot-' + this.index + '1';
             const label2 = 'box-plot-' + this.index + '2';
             const info1 = this.chartService.getChartInfo(label1);
@@ -181,6 +181,9 @@ export class GeneRNASeqDEComponent implements OnInit {
         } else {
             this.destroyComponent(this.index);
             this.currentTissues[this.index] = undefined;
+
+            // Set the current tissue to the toggled value
+            this.geneService.setCurrentTissue(undefined);
         }
 
         this.oldIndex = this.index;
@@ -205,11 +208,15 @@ export class GeneRNASeqDEComponent implements OnInit {
         );
     }
 
-    createComponent(index: number, info1: any, info2: any, label1: string, label2: string) {
+    async createComponent(index: number, info1: any, info2: any, label1: string, label2: string) {
         const eArray = this.entries.toArray();
         if (this.componentRefs[index]) { eArray[index].clear(); }
-        const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
-        this.componentRefs[index] = eArray[index].createComponent(factory);
+        this.componentRefs[index] = await new Promise((resolve) => {
+                setTimeout(() => {
+                    const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
+                    resolve(eArray[index].createComponent(factory));
+                }, 100);
+            }) as ComponentRef<BoxPlotsViewComponent>;
         this.componentRefs[index].instance.tissue = this.tissues[index].value;
         this.componentRefs[index].instance.label1 = label1;
         this.componentRefs[index].instance.label2 = label2;

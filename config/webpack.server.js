@@ -18,7 +18,7 @@ const ENV = process.env.NODE_ENV || process.env.ENV || 'development';
 const Docker = process.env.Docker || false;
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 3000,
     ENV: ENV,
     Docker: Docker
 });

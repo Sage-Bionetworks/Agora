@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { DecimalPipe } from '@angular/common';
-
-import { DataService } from './';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Gene } from '../../models';
-
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class GeneService {
@@ -24,9 +18,7 @@ export class GeneService {
     minAdjPValue: number = Math.pow(10, -20);
 
     constructor(
-        private http: HttpClient,
-        private decimalPipe: DecimalPipe,
-        private dataService: DataService
+        private http: HttpClient
     ) {}
 
     setCurrentGene(gene: Gene) {

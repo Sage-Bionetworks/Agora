@@ -150,8 +150,7 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene, filterTissues?: string[],
-                 filterModels?: string[]): CrossFilter.Dimension<any, any> {
+    getDimension(info: any, filterGene?: Gene): CrossFilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
         const dim = this.getNdx().dimension(function(d) {
