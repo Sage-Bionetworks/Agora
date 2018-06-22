@@ -94,7 +94,14 @@ module.exports = function (config) {
      * possible values: 'dots', 'progress'
      * available reporters: https://npmjs.org/browse/keyword/karma-reporter
      */
-    reporters: ['mocha', 'coverage', 'remap-coverage'],
+    //reporters: ['mocha', 'coverage', 'remap-coverage'],
+
+    reporters: ['coverage-istanbul'],
+
+    coverageIstanbulReporter: {
+        reports: ['text-summary', 'html'],
+        fixWebpackSourcePaths: true,
+    },
 
     /**
      * Web server port.

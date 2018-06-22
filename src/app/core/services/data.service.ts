@@ -150,7 +150,7 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene): CrossFilter.Dimension<any, any> {
+    getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
         const dim = this.getNdx().dimension(function(d) {
@@ -184,7 +184,7 @@ export class DataService {
         return info.dim;
     }
 
-    getGroup(info: any): CrossFilter.Group<any, any, any> {
+    getGroup(info: any): crossfilter.Group<any, any, any> {
         let group = info.dim.group();
 
         // If we want to reduce based on certain parameters
