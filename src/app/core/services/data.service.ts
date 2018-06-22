@@ -63,11 +63,26 @@ export class DataService {
                         dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
                         genes.links = [...genes.links,
                         dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
+                        if (dnodes[obj.geneA_ensembl_gene_id]
+                            .brainregions.indexOf(obj.brainRegion) === -1) {
+                            dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                        }
                     } else {
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
-                        .brainregions.push(obj.brainRegion);
-                        dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                        if (dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                            .brainregions.indexOf(obj.brainRegion) === -1) {
+                            dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
+                            dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                                .brainregions.push(obj.brainRegion);
+                            } else {
+                            console.log(`repeted brainRegion: ${obj.brainRegion} in
+                             ${obj.geneA_ensembl_gene_id} --> ${obj.geneA_ensembl_gene_id} link`);
+                            }
+                        if (dnodes[obj.geneA_ensembl_gene_id]
+                            .brainregions.indexOf(obj.brainRegion) === -1) {
+                            dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                        }
+                        dnodes[obj.geneB_ensembl_gene_id].hide = true;
+                        dnodes[obj.geneA_ensembl_gene_id].hide = true;
                     }
                     if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
                         && !dnodes[obj.geneB_ensembl_gene_id]) {

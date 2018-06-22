@@ -72,7 +72,7 @@ export class GeneNetworkComponent implements OnInit {
             this.dataLoaded = true;
             // this.eqtl = this.findEqtl();
             // this.variants = this.findVariant();
-            console.log(data);
+            // console.log(data);
         });
     }
 

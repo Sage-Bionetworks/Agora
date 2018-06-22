@@ -9,6 +9,8 @@ import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ForceChartViewComponent } from './force-chart/force-chart-view';
 
+import { FormsModule } from '@angular/forms';
+
 import { ChartService } from './services';
 
 import {
@@ -25,6 +27,7 @@ import {
     ],
     imports: [
         CommonModule,
+        FormsModule,
         AppSharedModule.forRoot(),
         // PrimeNG modules
         ButtonModule

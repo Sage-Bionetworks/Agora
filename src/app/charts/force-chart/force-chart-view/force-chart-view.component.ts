@@ -41,6 +41,9 @@ export class ForceChartViewComponent implements AfterViewInit {
     private force: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
     private pnode: any;
+    private filter = {
+        active: true
+    };
 
     constructor(
         private dataService: DataService,
@@ -99,17 +102,22 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .data(data.links)
                     .enter().append('line')
                     .attr('stroke-width', 3 )
-                    .attr('stroke', this.getLinkColor);
+                    .attr('stroke', this.getLinkColor)
+                    .attr('class', this.getLinkClass);
 
                 const nodeElements = svg.append('g')
                     .selectAll('.hex')
                     .data(data.nodes)
                     .enter()
-                    .append('g')
-                    .attr('class', 'hex');
+                    .append('g');
 
                 nodeElements.append('path')
-                    .attr('class', 'hex')
+                    .attr('class', (d: any) => {
+                        if (!d.hide) {
+                            return 'hex light';
+                        }
+                        return 'hex';
+                    })
                     .attr('d', this.hex)
                     .attr('transform', 'scale(1.75)')
                     .attr('r', 14)
@@ -158,6 +166,12 @@ export class ForceChartViewComponent implements AfterViewInit {
                     .enter().append('text')
                     .text((node: any) => node.hgnc_symbol)
                     .attr('font-size', 12)
+                    .attr('class', (d: any) => {
+                        if (!d.hide) {
+                            return 'light';
+                        }
+                        return '';
+                    })
                     .attr('dx', 23)
                     .attr('dy', 4);
 
@@ -254,6 +268,18 @@ export class ForceChartViewComponent implements AfterViewInit {
             return '#A7DDDF';
         }
         return '#BCC0CA';
+    }
+    private getLinkClass(link: GeneLink, index, arr) {
+        if (link.value >= 6) {
+            return 'darkest';
+        }
+        if (link.value >= 4) {
+            return 'darker';
+        }
+        if (link.value >= 2) {
+            return 'medium';
+        }
+        return 'light';
     }
 
     private tooltipFill(gene: Gene, tooltip) {
