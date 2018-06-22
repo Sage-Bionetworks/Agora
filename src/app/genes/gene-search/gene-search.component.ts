@@ -82,7 +82,7 @@ export class GeneSearchComponent implements OnInit {
             this.gene = data['item'];
             this.router.navigate([
                 '/genes',
-                { outlets: {'genes-router': [ 'gene-details', data['item'].hgnc_symbol ] }}
+                { outlets: {'genes-router': [ 'gene-details', data['item'].ensembl_gene_id ] }}
             ]);
         });
     }

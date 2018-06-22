@@ -65,7 +65,7 @@ export class GenesListComponent implements OnInit {
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
             this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigate(
-                ['../gene-details', this.selectedGene.hgnc_symbol],
+                ['../gene-details', this.selectedGene.ensembl_gene_id],
                 {relativeTo: this.route}
             );
         });
@@ -75,7 +75,7 @@ export class GenesListComponent implements OnInit {
         this.msgs = [{
             severity: 'info',
             summary: 'Gene Unselected',
-            detail: 'Gene: ' + event.data.hgnc_symbol
+            detail: 'Gene: ' + event.data.ensembl_gene_id
         }];
         this.geneService.setCurrentGene(null);
     }
