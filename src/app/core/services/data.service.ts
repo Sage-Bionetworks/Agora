@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
 
-import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter2';
 
 @Injectable()
@@ -132,32 +131,6 @@ export class DataService {
         });
     }
 
-    loadGenesFile(fname: string): Promise<boolean> {
-        const self = this;
-        return new Promise((resolve, reject) => {
-            // This will be done once at the server
-            d3.csv(`/assets/data/${fname}`).then((data) => {
-                data.forEach((d) => {
-                    // Separate the columns we need
-                    d['logfc'] = self.decimalPipe.transform(+d['logfc'], '1.1-5');
-                    d['adj_p_val'] = d['adj_p_val'];
-                    d['hgnc_symbol'] = d['hgnc_symbol'];
-                    d['model'] = d['model'];
-                    d['study'] = d['study'];
-                    d['tissue'] = d['tissue'];
-                });
-                this.ndx = crossfilter(data);
-                this.data = data;
-
-                this.hgncDim = this.ndx.dimension((d) => {
-                    return d.hgnc_symbol;
-                });
-
-                resolve(true);
-            });
-        });
-    }
-
     getTableData(paramsObj?: LazyLoadEvent): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
@@ -192,8 +165,7 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene, filterTissues?: string[],
-                 filterModels?: string[]): CrossFilter.Dimension<any, any> {
+    getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
         const dim = this.getNdx().dimension(function(d) {
@@ -227,7 +199,7 @@ export class DataService {
         return info.dim;
     }
 
-    getGroup(info: any): CrossFilter.Group<any, any, any> {
+    getGroup(info: any): crossfilter.Group<any, any, any> {
         let group = info.dim.group();
 
         // If we want to reduce based on certain parameters

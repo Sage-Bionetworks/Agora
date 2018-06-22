@@ -220,7 +220,7 @@ router.get('/gene/:id', (req, res, next) => {
     }
 
     // Find all the Genes with the current id
-    Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
+    Genes.find({ ensembl_gene_id: req.params.id}).exec((err, genes) => {
         if (err) {
             next(err);
         } else {

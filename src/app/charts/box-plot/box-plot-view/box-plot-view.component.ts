@@ -50,7 +50,6 @@ export class BoxPlotViewComponent implements OnInit {
     }
 
     initChart() {
-        const self = this;
         this.geneEntries = this.dataService.getGeneEntries();
         if (!this.info) {
             this.info = this.chartService.getChartInfo(this.label);
@@ -63,61 +62,56 @@ export class BoxPlotViewComponent implements OnInit {
 
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
         this.chart
-            .title((d) => {
-                return d.value;
-            })
             .dimension(this.dim)
             .group(this.group)
             .renderDataPoints(true)
             .renderTitle(true)
-            .boldOutlier(true)
             .yAxisLabel(this.info.yAxisLabel)
-            .dataWidthPortion(1)
-            .boldOutlier(true)
+            .dataWidthPortion(0.1)
+            .dataOpacity(0)
             .colors('black')
             .transitionDuration(0)
             .on('preRender', (chart) => {
-                if (this.info.attr !== 'logfc') {
-                    let newMax = chart.group().all()[0].value.reduce(function(a, b) {
-                        return Math.max(a, b);
-                    });
-                    let accum = 1;
-                    while (newMax * accum < 1) {
-                        accum *= 10;
-                    }
-                    newMax = Math.ceil(newMax * accum) / accum;
-                    this.chart
-                        .y(d3.scaleLog().domain([Math.pow(10, -20), newMax]).clamp(true))
-                        .tickFormat(d3.format('.5f'));
-                }
+                // Adjust the Y axis on preRender
+                this.setYScale(chart, this.info.attr);
             })
             .on('preRedraw', (chart) => {
-                if (this.info.attr !== 'logfc') {
-                    let newMax = chart.group().all()[0].value.reduce(function(a, b) {
-                        return Math.max(a, b);
-                    });
-                    let accum = 1;
-                    while (newMax * accum < 1) {
-                        accum *= 10;
-                    }
-                    newMax = Math.ceil(newMax * accum) / accum;
-                    this.chart
-                        .y(d3.scaleLog().domain([Math.pow(10, -20), newMax]).clamp(true))
-                        .tickFormat(d3.format('.5f'));
-                }
+                // Adjust the Y axis on preRedraw
+                this.setYScale(chart, this.info.attr);
             });
 
-        if (this.info.attr === 'logfc') {
-            this.chart
-                .y(d3.scaleLinear().domain(this.geneService.getLogFC()))
-                .tickFormat(d3.format('.5f'))
-                .elasticY(true);
-        }
+        // Define the initial Y scale, or adjust it
+        this.setYScale(this.chart, this.info.attr);
+        // Remove filtering for these charts
+        this.chart.filter = function() {
+            //
+        };
 
         this.registerChartEvent(this.chart, 'postRedraw');
         this.registerChartEvent(this.chart, 'postRender');
 
         this.chart.render();
+    }
+
+    setYScale(chart: dc.BoxPlot, attr: string) {
+        if (attr === 'logfc') {
+            chart
+                .y(d3.scaleLinear().domain(this.geneService.getLogFC()))
+                .tickFormat(d3.format('.3f'))
+                .elasticY(true);
+        } else {
+            let newMax = chart.group().all()[0].value.reduce(function(a, b) {
+                return Math.max(a, b);
+            });
+            let accum = 1;
+            while (newMax * accum < 1) {
+                accum *= 10;
+            }
+            newMax = Math.ceil(newMax * accum) / accum;
+            chart
+                .y(d3.scaleLog().domain([Math.pow(10, -20), newMax]).clamp(true))
+                .tickFormat(d3.format('.3f'));
+        }
     }
 
     // A custom renderlet function for this chart, allows us to change
@@ -143,36 +137,33 @@ export class BoxPlotViewComponent implements OnInit {
                 }
             });
 
-            const filteredGenes = self.geneEntries.slice().filter((g) => {
-                return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol;
+            // Not using getCurrentGene for all the checks for now
+            const filteredGene = self.geneEntries.slice().find((g) => {
+                return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol &&
+                    g.tissue === self.geneService.getCurrentTissue() &&
+                    g.model === self.geneService.getCurrentModel();
             });
-            let found = false;
-            let foundIndex = -1;
-            const foundCircles = chart.selectAll('circle')
-                .filter((c, i) => {
-                    const cfound = filteredGenes.some((g) => {
-                        return (chart.group().all()[0].value[i] || !cfound) ?
-                            chart.group().all()[0].value[i] === +g[self.info.attr] : false;
-                    });
-                    if (cfound) {
-                        found = cfound;
-                        foundIndex = i;
-                    }
-                    return cfound;
-                })
+            let foundIndex;
+            const foundCircles = chart.selectAll('circle').filter((c, i) => {
+                if (chart.group().all()[0].value[i] === +filteredGene[self.info.attr]) {
+                    foundIndex = i;
+                }
+                return chart.group().all()[0].value[i] === +filteredGene[self.info.attr];
+            });
+            foundCircles
                 .style('fill', '#FCA79A')
                 .style('stroke', '#F47E6C')
                 .style('stroke-width', 3)
                 .style('r', 13.6)
                 .style('opacity', 1);
 
-            chart.selectAll('circle')
-                .filter((c, i) => {
-                    return i !== foundIndex;
-                })
-                .style('fill', '#8D919E')
-                .style('stroke', 'none')
-                .style('r', 4.6);
+            if (foundIndex) {
+                chart.selectAll('circle')
+                    .filter((c, i) => {
+                        return i !== foundIndex;
+                    })
+                    .style('opacity', 0);
+            }
 
             // Move the red circles to front
             foundCircles.each(function() {

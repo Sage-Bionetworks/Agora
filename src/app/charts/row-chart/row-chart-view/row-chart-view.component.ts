@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import { Gene } from '../../../models';
-
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
 

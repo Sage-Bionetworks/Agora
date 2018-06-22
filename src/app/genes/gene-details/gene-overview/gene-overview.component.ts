@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Gene } from '../../../models';
 
 import {
-    BreadcrumbService,
     GeneService,
     DataService
 } from '../../../core/services';
@@ -28,7 +27,6 @@ export class GeneOverviewComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private breadcrumb: BreadcrumbService,
         private geneService: GeneService,
         private dataService: DataService,
         private location: Location

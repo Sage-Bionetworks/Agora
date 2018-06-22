@@ -91,7 +91,7 @@ mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\
 mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
 ```
 
-* convert mongo value types
+* Convert mongo value types
 
 csvtojson and mongoimport doesn't support valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
 
@@ -166,7 +166,7 @@ The Express server will route the app for us and will communicate to MongoDB thr
 npm run build:dev
 # production (jit)
 npm run build:prod
-# AoT
+# production AoT
 npm run build:aot
 ```
 
@@ -175,10 +175,10 @@ npm run build:aot
 # development
 npm start
 # production
-npm run watch:server:prod
+npm run start:prod
 ```
 
-go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser
+go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser. If you are running in production mode change from `3000` to `8080`.
 
 ## Other commands
 
@@ -226,7 +226,17 @@ npm run e2e:live
 npm run build:docker
 ```
 
-## run load tests, so you can stress test the application
+### run Docker
+```bash
+npm run docker:up
+```
+
+### build and run Docker
+```bash
+npm run docker
+```
+
+## run load tests, so you can stress test the application (uses a EC2 URL for now)
 ```bash
 npm run test:load
 ```
@@ -377,17 +387,36 @@ Go to the project root and run `npm run build:docker`. This command will build a
 # Building for the first time or rebuilding
 npm run build:docker
 # Using cached versions
+npm run docker:up
+# Building and running
 npm run docker
 ```
 
-Now go to `localhost:3000` and you should see the application up. If you run into the following error:
+Now go to `localhost` and you should see the application up. If you run into the following errorr:
 
 ```bash
 ...Cannot start service mongodb: driver failed programming external connectivity on endpoint...
 Error starting userland proxy: mkdir /port/tcp:0.0.0.0:27017:tcp:172.19.0.2:27017: input/output error
 ```
 
-Try to restart Docker and see if the error goes away. To remove all images and containers (to restart the whole Docker process) you can run the following commands:
+```bash
+mongodb: forward host lookup failed: Unknown host
+# or
+server can't find mongodb: NXDOMAIN
+```
+
+Try to restart or even reopen Docker and see if the error goes away. If Docker started without enough RAM it might error out.
+
+```bash
+ERROR: The Compose file '././docker-compose.yml' is invalid because:
+networks.front_wot value Additional properties are not allowed ('name' was unexpected)
+# or
+Exception: Unknown docker network 'wot_network'. Did you create it with 'docker network create wot_network'
+```
+
+You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create wot_network` if the network does not exist.
+
+To remove all images and containers (to restart the whole Docker process) you can run the following commands:
 
 ```bash
 # Delete all containers
@@ -401,6 +430,13 @@ To remove all unused containers:
 ```bash
 # Remove all containers with the Exited status
 docker rm $( docker ps -q -f status=exited)
+```
+
+To remove all images and containers:
+
+```bash
+# Remove eveything
+docker system prune
 ```
 
 ## Style Guide and Project Structure
