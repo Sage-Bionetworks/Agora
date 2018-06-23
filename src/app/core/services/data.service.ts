@@ -112,6 +112,7 @@ export class DataService {
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
                     d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
+                    d.fc = +this.decimalPipe.transform(+d.fc, '1.1-5');
                     d.adj_p_val = +d.adj_p_val;
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.model = d.model;
@@ -156,11 +157,11 @@ export class DataService {
         return this.http.get('/api/gene/' + id, { headers });
     }
 
-    getGeneEntries() {
+    getGeneEntries(): Gene[] {
         return this.geneEntries;
     }
 
-    getGenesDimension() {
+    getGenesDimension(): crossfilter.Dimension<any, any> {
         return this.hgncDim;
     }
 
@@ -275,7 +276,7 @@ export class DataService {
     }
 
     reduceInit() {
-        return {count: 0, sum: 0, logfc: 0, adj_p_val: 0};
+        return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
     }
 
     // Box-plot uses a different function name in dc.js

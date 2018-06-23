@@ -77,6 +77,7 @@ export class GeneSearchComponent implements OnInit {
         this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
+            this.geneService.setFC(data['minFC'], data['maxFC']);
             this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
             this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.gene = data['item'];

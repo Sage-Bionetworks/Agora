@@ -39,18 +39,18 @@ export class GeneOverviewComponent implements OnInit {
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneService.getModels().length ||
-            !this.geneService.getTissues().length || this.id !== this.gene.hgnc_symbol) {
+        if (!this.gene || !this.geneService.getGeneModels().length ||
+            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
-                this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+                this.geneService.setLogFC(data['minFC'], data['maxFC']);
                 this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
                 this.gene = data['item'];
 
-                this.geneService.loadTissues().then((tstatus) => {
+                this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {
-                        this.geneService.loadModels().then((mstatus) => {
+                        this.geneService.loadGeneModels().then((mstatus) => {
                             if (mstatus) {
                                 this.initDetails();
                             }

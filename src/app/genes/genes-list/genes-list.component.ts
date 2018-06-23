@@ -62,7 +62,7 @@ export class GenesListComponent implements OnInit {
         this.dataService.getGene(this.selectedGene.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
-            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+            this.geneService.setLogFC(data['minFC'], data['maxFC']);
             this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigate(
                 ['../gene-details', this.selectedGene.ensembl_gene_id],

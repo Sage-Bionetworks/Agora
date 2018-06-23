@@ -72,7 +72,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             ]);
         } else {
             this.loadChartData().then((status) => {
-                this.geneService.getTissues().forEach((t) => {
+                this.geneService.getGeneTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
                 this.dataLoaded = status;
@@ -132,11 +132,11 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     getTissue(index: number) {
-        return this.geneService.getTissues()[index];
+        return this.geneService.getGeneTissues()[index];
     }
 
     getModel(index: number) {
-        return this.geneService.getModels()[index];
+        return this.geneService.getGeneModels()[index];
     }
 
     async toggleTissue(event: any) {
@@ -165,7 +165,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                     'box-plot-' + this.index + '1',
                     [this.currentTissues[this.index]],
                     'log2(fold change)',
-                    'logfc'
+                    'fc'
                 );
             }
             if (!info2) {

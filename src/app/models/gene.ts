@@ -12,6 +12,7 @@ export interface Gene {
     gene_length?: number;
     hgnc_symbol: string;
     logfc: number;
+    fc: number;
     model?: string;
     percentage_gc_content?: number;
     p_value?: string;

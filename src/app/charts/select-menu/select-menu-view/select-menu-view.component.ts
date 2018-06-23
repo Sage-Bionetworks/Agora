@@ -24,8 +24,8 @@ export class SelectMenuViewComponent implements OnInit {
     @Input() filterStrings: string[] = [];
     @Input() defaultValue: string;
     @Input() currentGene = this.geneService.getCurrentGene();
-    @Input() tissues = this.geneService.getTissues();
-    @Input() models = this.geneService.getModels();
+    @Input() tissues = this.geneService.getGeneTissues();
+    @Input() models = this.geneService.getGeneModels();
     @Input() dim: any;
     @Input() group: any;
 

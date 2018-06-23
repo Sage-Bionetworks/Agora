@@ -103,7 +103,7 @@ export class GeneNetworkComponent implements OnInit {
                 return;
             }
             this.geneService.setCurrentGene(data['item']);
-            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
+            this.geneService.setLogFC(data['minFC'], data['maxFC']);
             this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigateByUrl(currentUrl)
                 .then(() => {

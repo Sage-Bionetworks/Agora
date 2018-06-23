@@ -71,6 +71,10 @@ export class BoxPlotViewComponent implements OnInit {
             .dataOpacity(0)
             .colors('black')
             .transitionDuration(0)
+            .on('filtered', (chart) => {
+                // Adjust the Y axis on preRender
+                this.setYScale(chart, this.info.attr);
+            })
             .on('preRender', (chart) => {
                 // Adjust the Y axis on preRender
                 this.setYScale(chart, this.info.attr);
@@ -96,7 +100,7 @@ export class BoxPlotViewComponent implements OnInit {
     setYScale(chart: dc.BoxPlot, attr: string) {
         if (attr === 'logfc') {
             chart
-                .y(d3.scaleLinear().domain(this.geneService.getLogFC()))
+                .y(d3.scaleLinear().domain(this.geneService.getFC()))
                 .tickFormat(d3.format('.3f'))
                 .elasticY(true);
         } else {

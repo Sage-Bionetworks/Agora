@@ -1,5 +1,5 @@
-import { Document, Schema, Model, model } from 'mongoose';
-import { Gene, GeneDocument } from '../models';
+import { Schema, Model, model } from 'mongoose';
+import { GeneDocument } from '../models';
 
 export let GeneSchema: Schema = new Schema({
     ensembl_gene_id: {
@@ -11,6 +11,10 @@ export let GeneSchema: Schema = new Schema({
         type: String,
     },
     logfc: {
+        required: false,
+        type: Number
+    },
+    fc: {
         required: false,
         type: Number
     },

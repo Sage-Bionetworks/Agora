@@ -11,7 +11,11 @@ export class GeneService {
     currentTissue: string;
     currentModel: string;
     models: string[] = [];
+    geneModels: string[] = [];
     tissues: string[] = [];
+    geneTissues: string[] = [];
+    minFC: number = 0;
+    maxFC: number = 10;
     minLogFC: number = 0;
     maxLogFC: number = 10;
     maxAdjPValue: number = 1e-50;
@@ -49,8 +53,32 @@ export class GeneService {
         return this.tissues;
     }
 
+    setTissues(tissues: string[]) {
+        this.tissues = tissues;
+    }
+
+    getGeneTissues(): string[] {
+        return this.geneTissues;
+    }
+
+    setGeneTissues(tissues: string[]) {
+        this.geneTissues = tissues;
+    }
+
     getModels(): string[] {
         return this.models;
+    }
+
+    setModels(models: string[]) {
+        this.models = models;
+    }
+
+    getGeneModels(): string[] {
+        return this.geneModels;
+    }
+
+    setGeneModels(models: string[]) {
+        this.geneModels = models;
     }
 
     setLogFC(min: number, max: number) {
@@ -58,8 +86,17 @@ export class GeneService {
         this.maxLogFC = max;
     }
 
+    setFC(min: number, max: number) {
+        this.minFC = min;
+        this.maxFC = max;
+    }
+
     getLogFC(): number[] {
         return [this.minLogFC, this.maxLogFC];
+    }
+
+    getFC(): number[] {
+        return [this.minFC, this.maxFC];
     }
 
     setAdjPValue(min: number, max: number) {
@@ -82,11 +119,33 @@ export class GeneService {
         });
     }
 
+    loadGeneTissues(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
+                this.geneTissues = data['items'];
+
+                resolve(true);
+            });
+        });
+    }
+
     loadModels(): Promise<any> {
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/models', { headers }).subscribe((data) => {
                 this.models = data['items'];
+
+                resolve(true);
+            });
+        });
+    }
+
+    loadGeneModels(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+            this.http.get('/api/models/gene', { headers }).subscribe((data) => {
+                this.geneModels = data['items'];
 
                 resolve(true);
             });

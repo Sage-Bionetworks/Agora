@@ -109,7 +109,7 @@ describe('Component: GenesList', () => {
         expect(router.navigate).toHaveBeenCalledWith(
             [
                 '../gene-details',
-                component.selectedGene.hgnc_symbol
+                component.selectedGene.ensembl_gene_id
             ],
             { relativeTo: activatedRoute }
         );

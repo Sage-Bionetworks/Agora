@@ -419,6 +419,8 @@ You may be running out of space, run `docker system prune` press `y`. If that do
 To remove all images and containers (to restart the whole Docker process) you can run the following commands:
 
 ```bash
+# Stop all containers
+docker stop $(docker ps -a -q)
 # Delete all containers
 docker rm $(docker ps -a -q)
 # Delete all images
@@ -430,6 +432,12 @@ To remove all unused containers:
 ```bash
 # Remove all containers with the Exited status
 docker rm $( docker ps -q -f status=exited)
+```
+
+To remove all unused volumes (good to prevent out of space problems):
+```bash
+# Removed all dangling volumes
+docker volume rm $(docker volume ls -qf dangling=true)
 ```
 
 To remove all images and containers:

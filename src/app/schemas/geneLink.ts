@@ -1,5 +1,5 @@
-import { Document, Schema, Model, model } from 'mongoose';
-import { GeneLink, GeneLinkDocument } from '../models';
+import { Schema, Model, model } from 'mongoose';
+import { GeneLinkDocument } from '../models';
 
 export let GeneLinkSchema: Schema = new Schema({
     geneA_ensembl_gene_id: {
