@@ -25,10 +25,13 @@ import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
 export class ForceChartViewComponent implements AfterViewInit {
     @Output('updategene') updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
     @Input() name: string;
-    @Input()  private currentGene = this.geneService.getCurrentGene();
+    @Input() currentGene = this.geneService.getCurrentGene();
 
-    @ViewChild('chart') private forceChart: ElementRef;
+    @ViewChild('chart') forceChart: ElementRef;
 
+    filter = {
+        active: true
+    };
     private pathways: GeneNode[] = [];
     private nodes: GeneNode[];
     private links: GeneLink[];
@@ -41,9 +44,6 @@ export class ForceChartViewComponent implements AfterViewInit {
     private force: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
     private pnode: any;
-    private filter = {
-        active: true
-    };
 
     constructor(
         private dataService: DataService,
