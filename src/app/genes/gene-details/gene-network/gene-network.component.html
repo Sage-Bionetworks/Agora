@@ -4,14 +4,18 @@
     </div>
     <div class="col-md-4 ">
         <div class="row nopadding currentGene">
-            <h3>{{currentGene.hgnc_symbol}}</h3>
+            <h2>{{currentGene.hgnc_symbol}}</h2>
             <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
             <div>AMP-AD target <span class="true"> True</span></div>
             <div>Brain eQTL <span [ngClass]="{'true':eqtl,'false':!eqtl}"> {{eqtl}}</span></div>
             <!-- <div>Protein Precense <span class="false"> False</span></div> -->
         </div>
         <div class="row brainregions nopadding">
-            <div>BrainRegions:</div>
+            <h2>
+                Brain Regions
+                <span class="icon-spacing"></span>
+                <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
+            </h2>
             <div *ngFor="let path of pathways;" class="pathbox">
                 <div (click)="viewGene(path)">{{path.hgnc_symbol}}</div>
                 <span *ngFor="let region of path.brainregions; last as isLast">
@@ -20,10 +24,23 @@
             </div>
         </div>
         <div class="row brainregions nopadding">
-        <div>Similar Genes:</div>
+        <h2>Similar Genes</h2>
         <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
             <div (click)="viewGene(node)">{{node.hgnc_symbol}}</div>
         </div>
         </div>
     </div>
+</div>
+
+<!-- Dialogs section -->
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="Brain Regions" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        <span dir="ltr">
+                FP: Lorem ipsum <br>
+                IFG: Lorem ipsum <br>
+                PHG: Lorem ipsum <br>
+                STG: Lorem ipsum <br>
+        </span>
+    </p-dialog>
 </div>

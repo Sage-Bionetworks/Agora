@@ -3,9 +3,15 @@
         <div class="col-md-12 col-sm-12 col-12">
             <h2>
                 Filter by Tissue
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle"></i>
             </h2>
+            <div class="section-thin st-desc no-side-padding">
+                <p class="black-paragraph">
+                    The seven brain regions from the AMP-AD studies include Temporal Cortex (TCX),
+                    Cerebellum (CBE), Dorsolateral Prefrontal Cortex (DLPFC), Parahippocampal Gyrus
+                    (PHG), Frontal Pole (FP), Superior Temporal Gyrus (STG), and Inferior Frontal
+                    Gyrus (IFG).
+                </p>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -30,8 +36,6 @@
 <div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <h2>
         Box Plots
-        <span class="icon-spacing"></span>
-        <i class="fa fa-info-circle"></i>
     </h2>
     <p class="black-paragraph">
         These box plots show the distribution of the effect size (log fold change) and
@@ -48,9 +52,16 @@
         <div class="col-md-12 col-sm-12 col-12">
             <h2>
                 Filter by Model
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle"></i>
             </h2>
+            <div class="section-thin st-desc no-side-padding">
+                <p class="black-paragraph">
+                    We tested for differences in RNA expression between Alzheimer's disease
+                    cases and controls using a variety of statistical models. These include
+                    looking for both differences in the mean expression of genes between
+                    cases and controls, as well as testing for sex specific disease interactions,
+                    as well as age of death (AOD) specific interactions.
+                </p>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -70,14 +81,10 @@
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Log Change Forest Plot
-        <span class="icon-spacing"></span>
-        <i class="fa fa-info-circle"></i>
     </h2>
     <p class="black-paragraph">
         A log forest plot indicates the estimate of the log fold change with standard errors
         across the tissues and studies where the model was fit.
     </p>
-    <div class="row plot-content">
-        <row-chart></row-chart>
-    </div>
+    <row-chart></row-chart>
 </div>

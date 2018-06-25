@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneNetwork, GeneNode } from '../../../models';
@@ -18,6 +17,7 @@ export class GeneNetworkComponent implements OnInit {
     @Input() gene: Gene;
     @Input() id: string;
     dataLoaded: boolean = false;
+    displayBRDia: boolean = false;
 
     private pathways: GeneNode[] = [];
     private currentGene = this.geneService.getCurrentGene();
@@ -29,8 +29,7 @@ export class GeneNetworkComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
-        private dataService: DataService,
-        private location: Location
+        private dataService: DataService
     ) { }
 
     ngOnInit() {
@@ -119,7 +118,7 @@ export class GeneNetworkComponent implements OnInit {
         });
     }
 
-    goBack() {
-        this.location.back();
+    showDialog(dialogString: string) {
+        this[dialogString] = true;
     }
 }

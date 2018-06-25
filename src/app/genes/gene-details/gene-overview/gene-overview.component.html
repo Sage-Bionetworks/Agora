@@ -23,7 +23,7 @@
         <h2>
             Relevance
             <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle"></i>
+            <i class="fa fa-info-circle" (click)="showDialog('displayRelDia')"></i>
         </h2>
         <!-- TODO: Improve this part -->
         <div class="row">
@@ -98,12 +98,32 @@
 
     <div class="overview-link">
         <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+            <div class="section-thin st-desc">
+                <p class="black-paragraph">
+                    RNA-Seq data was generated on over 2100 post-mortem brains from over 1100 individuals for seven
+                    distinct brain regions (DLPFC, TCX, CBE, PHG, IFG, STG, FP) from three studies (ROSMAP, Mayo, and MSBB).
+                    Here we show a harmonized analysis of genes that are differentially expressed between AD cases and controls,
+                    and indicate the summary statistics from this analysis in the below plots. The analyses that were performed
+                    included models testing for mean differences in expression between cases and controls, along with interaction
+                    effects between other variables such as sex or age of death (AOD) and AD case control status.  Median expression
+                    is provided as a reference to interpret the magnitude of the differential expression effect.
+                </p>
+            </div>
             <gene-rnaseq-de></gene-rnaseq-de>
         </p-panel>
     </div>
 
     <div class="overview-link">
         <p-panel header="Gene Co-Expression Network" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+            <div class="section-thin st-desc">
+                <p class="black-paragraph">
+                    RNA-Seq data was generated on over 2100 post-mortem brains from over 1100 individuals for seven distinct
+                    brain regions (DLPFC, TCX, CBE, PHG, IFG, STG, FP) from three studies (ROSMAP, Mayo, and MSBB). Here we show
+                    results of a coexpression network analysis that uses an ensemble methodology to identify networks of genes
+                    that show similar coexpression across patients.  The more frequent an edge (coexpression association) was
+                    identified with the selected gene, the darker the edge and node in the graph.
+                </p>
+            </div>
             <gene-network></gene-network>
         </p-panel>
     </div>
@@ -112,7 +132,7 @@
         <h2>
             Actions
             <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle"></i>
+            <i class="fa fa-info-circle" (click)="showDialog('displayActDia')"></i>
         </h2>
         <!-- TODO: Improve this part -->
         <div class="row">
@@ -159,9 +179,9 @@
 
     <div class="section-thin overview-sdata">
         <h2>
-            Source Data
+            AMP-AD Analysis Source Data
             <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle"></i>
+            <i class="fa fa-info-circle" (click)="showDialog('displaySDDia')"></i>
         </h2>
         <!-- TODO: Improve this part -->
         <div class="row">
@@ -242,3 +262,36 @@
     </div>
 </div>
 
+<!-- Dialogs section -->
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="Relevance" [(visible)]="displayRelDia" [modal]="true" [responsive]="true"
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        <span dir="ltr">
+            A summary of evidence for a gene's association with Alzheimer's disease and related
+            information concerning gene function and activity.
+        </span>
+    </p-dialog>
+</div>
+
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="Actions" [(visible)]="displayActDia" [modal]="true" [responsive]="true"
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        <span dir="ltr">
+            External resources for understanding the biology of the gene, target validation
+            resources, and further information for users interested in studying this particular
+            gene. Things you might take into account to do preclinical evaluations or drug
+            discovery.
+        </span>
+    </p-dialog>
+</div>
+
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="AMP-AD Analysis Source Data" [(visible)]="displaySDDia" [modal]="true"
+        [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        <span dir="ltr">
+            Data used from the AMP-AD consortia.  This includes the Religious Order Study/
+            Memory Aging Project (ROSMAP), Mount Sinai Brain Bank (MSBB), and Mayo RNAseq
+            study (MayoRNAseq).
+        </span>
+    </p-dialog>
+</div>

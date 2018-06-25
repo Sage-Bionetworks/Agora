@@ -23,7 +23,7 @@ import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
     encapsulation: ViewEncapsulation.None
 })
 export class ForceChartViewComponent implements AfterViewInit {
-    @Output('updategene') updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
+    @Output() updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
     @Input() name: string;
     @Input() currentGene = this.geneService.getCurrentGene();
 

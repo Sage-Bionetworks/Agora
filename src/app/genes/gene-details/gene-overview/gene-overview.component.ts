@@ -24,6 +24,10 @@ export class GeneOverviewComponent implements OnInit {
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
 
+    displayRelDia: boolean = false;
+    displaySDDia: boolean = false;
+    displayActDia: boolean = false;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -83,6 +87,10 @@ export class GeneOverviewComponent implements OnInit {
 
     getCoExpNetLink(): string[] {
         return ['gene-coexp-network', this.gene.hgnc_symbol];
+    }
+
+    showDialog(dialogString: string) {
+        this[dialogString] = true;
     }
 
     goToRoute(path: string, outlets?: any) {
