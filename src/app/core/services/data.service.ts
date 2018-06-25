@@ -52,6 +52,30 @@ export class DataService {
                 };
                 genes.nodes = [...genes.nodes, dnodes[sgene.ensembl_gene_id]];
                 data['items'].forEach((obj: any) => {
+                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
+                        && !dnodes[obj.geneB_ensembl_gene_id]) {
+                        const node = {
+                            id: obj.geneB_ensembl_gene_id,
+                            ensembl_gene_id: obj.geneB_ensembl_gene_id,
+                            group: 1,
+                            hgnc_symbol: obj.geneB_external_gene_name,
+                            brainregions: [obj.brainRegion]
+                        };
+                        dnodes[obj.geneB_ensembl_gene_id] = node;
+                        genes.nodes = [...genes.nodes, dnodes[obj.geneB_ensembl_gene_id]];
+                    }
+                    if (obj.geneB_ensembl_gene_id === sgene.ensembl_gene_id
+                        && !dnodes[obj.geneA_ensembl_gene_id]) {
+                        const node = {
+                            id: obj.geneA_ensembl_gene_id,
+                            ensembl_gene_id: obj.geneA_ensembl_gene_id,
+                            group: 1,
+                            hgnc_symbol: obj.geneA_external_gene_name,
+                            brainregions: [obj.brainRegion]
+                        };
+                        dnodes[obj.geneA_ensembl_gene_id] = node;
+                        genes.nodes = [...genes.nodes, dnodes[obj.geneA_ensembl_gene_id]];
+                    }
                     if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
                         const link: any = {
                             value: 1,
@@ -82,18 +106,6 @@ export class DataService {
                         }
                         dnodes[obj.geneB_ensembl_gene_id].hide = true;
                         dnodes[obj.geneA_ensembl_gene_id].hide = true;
-                    }
-                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
-                        && !dnodes[obj.geneB_ensembl_gene_id]) {
-                        const node = {
-                            id: obj.geneB_ensembl_gene_id,
-                            ensembl_gene_id: obj.geneB_ensembl_gene_id,
-                            group: 1,
-                            hgnc_symbol: obj.geneB_external_gene_name,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dnodes[obj.geneB_ensembl_gene_id] = node;
-                        genes.nodes = [...genes.nodes, dnodes[obj.geneB_ensembl_gene_id]];
                     }
                 });
                 resolve(genes);

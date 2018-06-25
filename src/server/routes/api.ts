@@ -271,16 +271,18 @@ router.get('/genelist/:id', (req, res, next) => {
         const arr = links.slice().map((slink) => {
             return slink.toJSON()['geneB_ensembl_gene_id'];
         });
-        GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
-            .where('geneB_ensembl_gene_id')
-            .in(arr)
-            .exec((errB, linksC) => {
-                if (err) {
-                next(err);
-            } else {
-                    const flinks = [...links, ...linksC];
-                    res.json({ items: flinks });
-            }
+        GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
+            GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
+                .where('geneB_ensembl_gene_id')
+                .in(arr)
+                .exec((errC, linksC) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        const flinks = [...links, ...linkB, ...linksC];
+                        res.json({ items: flinks });
+                    }
+            });
         });
     });
 });

@@ -55,7 +55,7 @@ export class GeneNetworkComponent implements OnInit {
 
     updategene(event) {
         this.dataService.loadNodes(event).then((data: GeneNetwork) => {
-            data.nodes.shift();
+            // data.nodes.shift();
             this.pathways = data.nodes;
         });
     }
@@ -95,7 +95,7 @@ export class GeneNetworkComponent implements OnInit {
     // }
 
     viewGene(gene: GeneNode) {
-        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+        this.dataService.getGene(gene.ensembl_gene_id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
@@ -112,7 +112,7 @@ export class GeneNetworkComponent implements OnInit {
                         {
                             outlets:
                                 {
-                                    'genes-router': ['gene-details', data['item'].hgnc_symbol]
+                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
                                 }
                         }]);
                 });
