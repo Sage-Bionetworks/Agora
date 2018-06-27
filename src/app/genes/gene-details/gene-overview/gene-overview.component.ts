@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene } from '../../../models';
+import { Gene, GeneInfo } from '../../../models';
 
 import {
     GeneService,
@@ -19,6 +19,7 @@ export class GeneOverviewComponent implements OnInit {
     @Input() styleClass: string = 'overview-panel';
     @Input() style: any;
     @Input() gene: Gene;
+    @Input() geneInfo: GeneInfo;
     @Input() id: string;
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
@@ -39,18 +40,22 @@ export class GeneOverviewComponent implements OnInit {
     ngOnInit() {
         // Get the current clicked gene
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneService.getGeneModels().length ||
+        if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
             this.dataService.getGene(this.id).subscribe((data) => {
+                console.log(data);
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
+                this.geneService.setCurrentInfo(data['geneInfo']);
                 this.geneService.setLogFC(data['minFC'], data['maxFC']);
                 this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
                 this.gene = data['item'];
+                this.geneInfo = data['geneInfo'];
 
                 this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {
@@ -76,9 +81,26 @@ export class GeneOverviewComponent implements OnInit {
         });
     }
 
-    getTextColor(state: boolean, normal?: boolean) {
+    getTextColor(state: boolean, normal?: boolean): string {
         const colorClass = (state) ? 'green-text' : 'red-text';
         return (normal) ? colorClass + ' normal-heading' : '';
+    }
+
+    getSummary(body: boolean): string {
+        const summaryArray = this.geneInfo.summary.split(' [provided by ');
+        if (body) {
+            return summaryArray[0];
+        } else {
+            // Use a minus 2 instead of minus 1 because of the final dot in the string
+            return summaryArray[1].substring(0, summaryArray[1].length - 2);
+        }
+    }
+
+    getAlias() {
+        if (this.geneInfo.alias.length > 0) {
+            return this.geneInfo.alias.join(', ');
+        }
+        return '';
     }
 
     getRNASeqLink(): string[] {

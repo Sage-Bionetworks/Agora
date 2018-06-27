@@ -17,7 +17,15 @@ services:
   mongo_seed_links:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/Dockerfile-links
+      dockerfile: ../WallOfTargets/mongo-seed/links.Dockerfile
+    links:
+      - mongodb
+    networks:
+      - front_wot
+  mongo_seed_info:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/info.Dockerfile
     links:
       - mongodb
     networks:

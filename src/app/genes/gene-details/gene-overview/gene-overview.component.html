@@ -1,21 +1,40 @@
 <div *ngIf="dataLoaded">
-    <div class="row back-home-wrapper no-gutter">
-        <div class="row back-home-row no-gutter">
+    <div class="row back-home-wrapper no-gutters">
+        <div class="row back-home-row no-gutters">
         </div>
     </div>
     <div class="section-thin overview-header">
-        <h1>{{gene.hgnc_symbol}}</h1>
-        <p>
-            Longer name
-        </p>
+        <div class="row no-gutters">
+            <div *ngIf="geneInfo" class="col-md-7">
+                <h1>{{gene.hgnc_symbol}}</h1>
+                <p>
+                    {{geneInfo.name}}
+                </p>
+            </div>
+            <div *ngIf="geneInfo && geneInfo.nominations" class="col-md-5">
+                <button class="btn nom-button"
+                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
+                    <i class="fa fa-star fa-lg"></i>
+                    <span>AMP-AD Nominated</span>
+                    <i class="fa fa-angle-right fa-lg"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="section-thin overview-desc">
+    <div *ngIf="geneInfo" class="section-thin overview-desc">
         <h2>
             Description
         </h2>
         <p class="black-paragraph">
-            Description
+            {{getSummary(true)}}
+        </p>
+        <p class="italic-paragraph">
+            {{getSummary()}}
+        </p>
+        <h3>Also known as</h3>
+        <p class="black-paragraph">
+            {{getAlias()}}
         </p>
     </div>
 
@@ -29,68 +48,70 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Network &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
+                    AD Genetic Association &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(false, true)">False</span>
                 </h3>
             </div>
             <div class="col-md-6">
-                <h3>AD Relevance &nbsp;&nbsp;&nbsp; Lorem Ipsum</h3>
+                <h3>
+                    Distribution in Body &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Gene in Normal Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(true, true)">On</span>
+                    AD Relevance &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
-            <div class="col-md-6">
-                <h3>
-                    Clinical Outcomes &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 <h3>
                     Gene in AD Brain &nbsp;&nbsp;&nbsp;
                     <span [ngClass]="getTextColor(false, true)">Off</span>
                 </h3>
             </div>
-            <div class="col-md-6">
-                <h3>
-                    Distribution in Body &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Reactome Pathways &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
+                    Brain eQTL &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(false, true)">False</span>
                 </h3>
             </div>
-            <div class="col-md-6">
-                <h3>
-                    Cell Types &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 <h3>
                     Gene Ontology &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
+                    <span class="normal-heading">13</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Cell Types &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
             <div class="col-md-6">
                 <h3>
-                    Consistency among cohorts from <br>
-                    differential expresion analyses &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">No</span>
+                    Network &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Clinical Outcomes &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Reactome Pathways &nbsp;&nbsp;&nbsp;
+                    <span class="normal-heading">14</span>
                 </h3>
             </div>
         </div>
@@ -128,53 +149,14 @@
         </p-panel>
     </div>
 
-    <div class="section-thin overview-actions">
-        <h2>
-            Actions
-            <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle" (click)="showDialog('displayActDia')"></i>
-        </h2>
-        <!-- TODO: Improve this part -->
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Tractable &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(true, true)">Yes</span>
-                </h3>
+    <div class="overview-link">
+        <p-panel header="Next Steps" [toggleable]="false" [style]="{'margin-bottom':'20px'}">
+            <div class="section-thin st-desc">
+                <p class="italic-paragraph">
+                    Coming soon
+                </p>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Studiable Models &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Drugability &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(true, true)">Yes</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Drug categories &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    ODDI &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
+        </p-panel>
     </div>
 
     <div class="section-thin overview-sdata">
