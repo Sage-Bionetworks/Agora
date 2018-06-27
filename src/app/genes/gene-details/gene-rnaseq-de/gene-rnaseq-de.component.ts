@@ -163,7 +163,16 @@ export class GeneRNASeqDEComponent implements OnInit {
             if (!info1) {
                 this.registerBoxPlot(
                     'box-plot-' + this.index + '1',
-                    [this.currentTissues[this.index]],
+                    [
+                        {
+                            name: this.currentTissues[this.index],
+                            attr: 'tissue'
+                        },
+                        {
+                            name: this.geneService.getCurrentModel(),
+                            attr: 'model'
+                        }
+                    ],
                     'log2(fold change)',
                     'fc'
                 );
@@ -171,7 +180,16 @@ export class GeneRNASeqDEComponent implements OnInit {
             if (!info2) {
                 this.registerBoxPlot(
                     'box-plot-' + this.index + '2',
-                    [this.currentTissues[this.index]],
+                    [
+                        {
+                            name: this.currentTissues[this.index],
+                            attr: 'tissue'
+                        },
+                        {
+                            name: this.geneService.getCurrentModel(),
+                            attr: 'model'
+                        }
+                    ],
                     '-log10(adjusted p-value)',
                     'adj_p_val'
                 );
@@ -190,11 +208,11 @@ export class GeneRNASeqDEComponent implements OnInit {
         if (event.value.length > LIMIT_NUMBER) { event.value.splice(0, 1); }
     }
 
-    registerBoxPlot(label: string, constraintNames: string[], yAxisLabel: string, attr: string) {
+    registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
         this.chartService.addChartInfo(
             label,
             {
-                dimension: ['tissue'],
+                dimension: ['tissue', 'model'],
                 group: 'self',
                 type: 'box-plot',
                 title: '',
@@ -203,7 +221,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 yAxisLabel,
                 format: 'array',
                 attr,
-                constraintNames
+                constraints
             }
         );
     }

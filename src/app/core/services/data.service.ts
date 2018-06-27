@@ -197,7 +197,7 @@ export class DataService {
 
                     return [x, y, d[dimValue[2]]];
                 case 'box-plot':
-                    return (info.constraintNames.some((t) => t === d[dimValue[0]])) ? 1 : '';
+                    return 1;
                 case 'select-menu':
                     return d[dimValue[0]];
                 default:
@@ -216,18 +216,18 @@ export class DataService {
         let group = info.dim.group();
 
         // If we want to reduce based on certain parameters
-        if (info.attr || info.constraint || info.format) {
+        if (info.attr || info.format) {
             group.reduce(
                 // callback for when data is added to the current filter results
                 this.reduceAdd(
                     info.attr,
-                    (info.constraint) ? info.constraint : null,
-                    (info.format) ? info.format : null
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
                 ),
                 this.reduceRemove(
                     info.attr,
-                    (info.constraint) ? info.constraint : null,
-                    (info.format) ? info.format : null
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
                 ),
                 (info.format) ? this.reduceInitial : this.reduceInit
             );
@@ -241,20 +241,15 @@ export class DataService {
     }
 
     // Reduce functions for constraint charts
-    reduceAdd(attr: string, constraint?: any, format?: string) {
+    reduceAdd(attr: string, format?: string, constraints?: any[]) {
         return (p, v) => {
-            let val = 0;
-            // Using tissue constraint for the forest and box plots
-            if (constraint) {
-                if (constraint.names.some((t) => t === v[constraint.attr])) {
-                    val = +v[attr];
-                }
-            } else {
-                val = +v[attr];
-            }
+            let val = +v[attr];
 
             if (format && format === 'array') {
-                p.push(val);
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.push(val); }
+                }
                 return p;
             } else {
                 p[attr] += val;
@@ -264,20 +259,15 @@ export class DataService {
         };
     }
 
-    reduceRemove(attr: string, constraint?: any, format?: string) {
+    reduceRemove(attr: string, format?: string, constraints?: any[]) {
         return (p, v) => {
-            let val = 0;
-            // Using tissue constraint for the forest and box plots
-            if (constraint) {
-                if (constraint && constraint.names.some((t) => t === v[constraint.attr])) {
-                    val = +v[attr];
-                }
-            } else {
-                val = +v[attr];
-            }
+            let val = +v[attr];
 
             if (format && format === 'array') {
-                if (val) { p.splice(p.indexOf(val), 1); }
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.splice(p.indexOf(val), 1); }
+                }
                 return p;
             } else {
                 p[attr] -= val;
