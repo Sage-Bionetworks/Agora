@@ -4,7 +4,7 @@
     </div>
     <div class="col-md-4 ">
         <div class="row nopadding currentGene">
-            <h2>{{currentGene.hgnc_symbol}}</h2>
+            <h2>{{geneInfo.hgnc_symbol}}</h2>
             <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
             <div>AMP-AD target <span class="true"> True</span></div>
             <div>Brain eQTL <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span></div>

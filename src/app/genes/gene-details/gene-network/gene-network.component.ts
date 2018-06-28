@@ -57,7 +57,7 @@ export class GeneNetworkComponent implements OnInit {
     updategene(event) {
         this.dataService.getGene(event.id).subscribe((data) => {
             console.log(data['geneInfo']);
-            this.currentGene = data['geneInfo'];
+            this.geneInfo = data['geneInfo'];
         });
         this.dataService.loadNodes(event).then((data: any) => {
             this.forceService.processSelectedNode(event, data).then((network) => {
