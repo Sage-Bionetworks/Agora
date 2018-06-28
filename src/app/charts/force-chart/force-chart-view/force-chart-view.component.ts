@@ -1,13 +1,15 @@
 import {
     Component,
-    OnInit,
     ViewEncapsulation,
     ViewChild,
     ElementRef,
     Input,
     AfterViewInit,
     Output,
-    EventEmitter
+    EventEmitter,
+    OnChanges,
+    SimpleChange,
+    SimpleChanges
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService, GeneService } from '../../../core/services';
@@ -22,42 +24,44 @@ import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
     styleUrls: ['./force-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ForceChartViewComponent implements AfterViewInit {
+export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     @Output() updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
     @Input() name: string;
     @Input() currentGene = this.geneService.getCurrentGene();
-
+    @Input() networkData: GeneNetwork;
     @ViewChild('chart') forceChart: ElementRef;
 
     filter = {
         active: true
     };
+    private svg;
+    private loaded: boolean = false;
     private pathways: GeneNode[] = [];
     private nodes: GeneNode[];
     private links: GeneLink[];
-    private d3: any;
-    private cachedGene: Gene = this.currentGene;
     private width: any;
     private height: any;
     private simulation: any;
-    private simulationData: GeneNetwork;
-    private force: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
-    private pnode: any;
-
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
         private router: Router,
         private route: ActivatedRoute
-    ) {
-        this.d3 = d3;
-        console.log(this.currentGene);
+    ) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        const data: SimpleChange = changes.networkData;
+        if (data.previousValue !== data.currentValue) {
+            this.updateChart();
+        }
     }
 
     ngAfterViewInit() {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
         this.height = this.forceChart.nativeElement.offsetHeight;
+        this.loaded = true;
+        console.log(this.networkData);
         this.renderChart();
     }
 
@@ -66,17 +70,15 @@ export class ForceChartViewComponent implements AfterViewInit {
         this.height = this.forceChart.nativeElement.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
         this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
+
         this.simulation.force('center', d3.forceCenter(this.width / 2, this.height / 2));
-        this.simulation.force('link', d3.forceLink(this.simulationData.links)
-            .links(this.simulationData.links).id((d: any) => d.id)
-            .strength(.001)
-            .distance(90)
-            .iterations(16))
-            .force('collide',
-                d3.forceCollide()
-                    .radius(12 * 3)
-                    .strength(0.7)
-                    .iterations(16))
+        this.simulation.force('charge', d3.forceManyBody());
+        this.simulation.force('link', d3.forceLink(this.networkData.links)
+            .links(this.networkData.links).id((d: any) => d.id)
+            .distance(this.width / 3.5))
+            .force('collide', d3.forceCollide()
+                .radius(18)
+                .strength(0.5))
             .alpha(0.3)
             .restart();
     }
@@ -86,41 +88,35 @@ export class ForceChartViewComponent implements AfterViewInit {
     }
 
     private renderChart() {
-        const svg = d3.select(this.forceChart.nativeElement)
+        if (!this.loaded) {
+            return;
+        }
+        this.svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
             .attr('width', this.width)
             .attr('height', this.height);
 
         this.simulation = d3.forceSimulation()
-            .force('charge', d3.forceManyBody().strength(-100))
+            .force('charge', d3.forceManyBody().strength(-10))
             .force('center', d3.forceCenter(this.width / 2, this.height / 2));
-        this.dataService.loadNodes(this.currentGene)
-            .then((data) => {
-                this.simulationData = data;
-                const linkElements = svg.append('g')
-                    .selectAll('line')
-                    .data(data.links)
-                    .enter().append('line')
-                    .attr('stroke-width', 3 )
-                    .attr('stroke', this.getLinkColor)
-                    .attr('class', this.getLinkClass);
 
-                const nodeElements = svg.append('g')
+        const linkElements = this.svg.append('g')
+                    .selectAll('line')
+                    .data(this.networkData.links)
+                    .enter().append('line')
+                    .attr('stroke-width', 2 )
+                    .attr('stroke', this.getLinkColor);
+
+        const nodeElements = this.svg.append('g')
                     .selectAll('.hex')
-                    .data(data.nodes)
+                    .data(this.networkData.nodes)
                     .enter()
                     .append('g');
 
-                nodeElements.append('path')
-                    .attr('class', (d: any) => {
-                        if (!d.hide) {
-                            return 'hex light';
-                        }
-                        return 'hex';
-                    })
+        nodeElements.append('path')
                     .attr('d', this.hex)
                     .attr('transform', 'scale(1.75)')
-                    .attr('r', 14)
+                    .attr('r', 4)
                     .attr('fill', this.getNodeColor)
                     .on('mouseover', (d: GeneNode) => {
                         // tooltip.transition()
@@ -160,22 +156,16 @@ export class ForceChartViewComponent implements AfterViewInit {
                         this.buildPath(d);
                     });
 
-                const textElements = svg.append('g')
+        const textElements = this.svg.append('g')
                     .selectAll('text')
-                    .data(data.nodes)
+                    .data(this.networkData.nodes)
                     .enter().append('text')
                     .text((node: any) => node.hgnc_symbol)
                     .attr('font-size', 12)
-                    .attr('class', (d: any) => {
-                        if (!d.hide) {
-                            return 'light';
-                        }
-                        return '';
-                    })
-                    .attr('dx', 23)
+                    .attr('dx', 13)
                     .attr('dy', 4);
 
-                this.simulation.nodes(data.nodes).on('tick', () => {
+        this.simulation.nodes(this.networkData.nodes).on('tick', () => {
                     nodeElements
                         .attr('cx', (node: any) => node.x = Math.max(24,
                             Math.min(this.width - 24, node.x)))
@@ -199,19 +189,18 @@ export class ForceChartViewComponent implements AfterViewInit {
                         .attr('y2', (link: any) => link.target.y);
                 });
 
-                this.simulation.force('link', d3.forceLink(data.links)
-                .links(data.links).id((d: any) => d.id)
-                    .strength(.001)
-                    .distance(90)
-                    .iterations(16))
-                    .force('collide',
-                        d3.forceCollide()
-                            .radius(12 * 3)
-                            .strength(0.7)
-                            .iterations(16));
+        this.simulation.force('link', d3.forceLink(this.networkData.links)
+            .links(this.networkData.links).id((d: GeneNode) => d.id)
+            .distance(this.width / 3.5))
+            .force('collide', d3.forceCollide()
+                .radius(18)
+                .strength(0.5));
 
-                const dragDrop = d3.drag()
+        const dragDrop = d3.drag()
                     .on('start', (node: any) => {
+                        if (!d3.event.active) {
+                            this.simulation.alphaTarget(0.3).restart();
+                        }
                         node.fx = node.x;
                         node.fy = node.y;
                         tooltip.transition()
@@ -219,7 +208,7 @@ export class ForceChartViewComponent implements AfterViewInit {
                             .style('opacity', 0);
                     })
                     .on('drag', (node: any) => {
-                        this.simulation.alphaTarget(0.001).restart();
+                        this.simulation.alphaTarget(0.01).restart();
                         node.fx = d3.event.x;
                         node.fy = d3.event.y;
                         tooltip
@@ -227,17 +216,44 @@ export class ForceChartViewComponent implements AfterViewInit {
                     })
                     .on('end', (node: any) => {
                         if (!d3.event.active) {
-                            this.simulation.alphaTarget(0);
+                            this.simulation.alphaTarget(.01);
                         }
                         node.fx = null;
                         node.fy = null;
                     });
-                nodeElements.call(dragDrop);
-                const tooltip = d3.select(this.forceChart.nativeElement).append('div')
+        nodeElements.call(dragDrop);
+        const tooltip = d3.select(this.forceChart.nativeElement).append('div')
                     .attr('class', 'tooltip')
                     .style('opacity', 0);
-            })
-            .catch((err) => { console.log(err); });
+    }
+
+    private updateChart() {
+        if (!this.loaded) {
+            return;
+        }
+
+        // linkElements
+        const linkElements = this.svg.select('g')
+            .selectAll('line')
+            .data(this.networkData.links);
+        linkElements.exit().remove();
+
+        // node elements
+        const nodeElements = this.svg.select('g')
+            .selectAll('.hex')
+            .data(this.networkData.nodes);
+        nodeElements.exit().remove();
+
+        // text elements
+        const textElements = this.svg.select('g')
+            .selectAll('text')
+            .data(this.networkData.nodes);
+        textElements.exit().remove();
+        textElements.enter().append('text')
+            .text((node: any) => node.hgnc_symbol)
+            .attr('font-size', 12)
+            .attr('dx', 23)
+            .attr('dy', 4);
     }
 
     private getNodeColor(node: GeneNode , index, arr) {
@@ -268,18 +284,6 @@ export class ForceChartViewComponent implements AfterViewInit {
             return '#A7DDDF';
         }
         return '#BCC0CA';
-    }
-    private getLinkClass(link: GeneLink, index, arr) {
-        if (link.value >= 6) {
-            return 'darkest';
-        }
-        if (link.value >= 4) {
-            return 'darker';
-        }
-        if (link.value >= 2) {
-            return 'medium';
-        }
-        return 'light';
     }
 
     private tooltipFill(gene: Gene, tooltip) {

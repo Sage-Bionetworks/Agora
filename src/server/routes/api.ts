@@ -268,10 +268,15 @@ router.get('/genelist/:id', (req, res, next) => {
     if (!req.params || !req.params.id) { res.json({ items: [] }); }
 
     GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
-        const arr = links.slice().map((slink) => {
+        const arrA = links.slice().map((slink) => {
             return slink.toJSON()['geneB_ensembl_gene_id'];
         });
+
         GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
+            const arrB = linkB.slice().map((slink) => {
+                return slink.toJSON()['geneA_ensembl_gene_id'];
+            });
+            const arr = [...arrA, ...arrB];
             GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
                 .where('geneB_ensembl_gene_id')
                 .in(arr)

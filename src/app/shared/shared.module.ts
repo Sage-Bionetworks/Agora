@@ -8,7 +8,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { AlertService } from './services';
+import { AlertService, ForceService } from './services';
 
 import { NumbersPipe, MyArraySortPipe } from './pipes';
 
@@ -41,7 +41,8 @@ export class AppSharedModule {
         return {
             ngModule: AppSharedModule,
             providers: [
-                AlertService
+                AlertService,
+                ForceService
             ]
         };
     }

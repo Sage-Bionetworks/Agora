@@ -9,10 +9,10 @@ export interface GeneNode {
 }
 
 export interface GeneLink {
-    brainRegion: string[];
+    value: number;
     source: string;
     target: string;
-    value: number;
+    brainregions: string[];
 }
 
 export interface GeneNetwork {

@@ -1,6 +1,6 @@
 <div *ngIf="dataLoaded" class="row network-content">
     <div class="col-md-8 network-container">
-        <force-chart (updategene)="updategene($event)"></force-chart>
+        <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
     </div>
     <div class="col-md-4 ">
         <div class="row nopadding currentGene">

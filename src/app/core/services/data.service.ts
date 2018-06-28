@@ -33,82 +33,8 @@ export class DataService {
 
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            const params = new HttpParams();
-            const dic = [];
-
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
-                const dnodes = [];
-                const genes: any = {
-                    links: [],
-                    nodes: []
-                };
-                dnodes[sgene.ensembl_gene_id] = {
-                    id: sgene.ensembl_gene_id,
-                    ensembl_gene_id: sgene.ensembl_gene_id,
-                    group: 1,
-                    hgnc_symbol: sgene.hgnc_symbol,
-                    brainregions: []
-                };
-                genes.nodes = [...genes.nodes, dnodes[sgene.ensembl_gene_id]];
-                data['items'].forEach((obj: any) => {
-                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
-                        && !dnodes[obj.geneB_ensembl_gene_id]) {
-                        const node = {
-                            id: obj.geneB_ensembl_gene_id,
-                            ensembl_gene_id: obj.geneB_ensembl_gene_id,
-                            group: 1,
-                            hgnc_symbol: obj.geneB_external_gene_name,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dnodes[obj.geneB_ensembl_gene_id] = node;
-                        genes.nodes = [...genes.nodes, dnodes[obj.geneB_ensembl_gene_id]];
-                    }
-                    if (obj.geneB_ensembl_gene_id === sgene.ensembl_gene_id
-                        && !dnodes[obj.geneA_ensembl_gene_id]) {
-                        const node = {
-                            id: obj.geneA_ensembl_gene_id,
-                            ensembl_gene_id: obj.geneA_ensembl_gene_id,
-                            group: 1,
-                            hgnc_symbol: obj.geneA_external_gene_name,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dnodes[obj.geneA_ensembl_gene_id] = node;
-                        genes.nodes = [...genes.nodes, dnodes[obj.geneA_ensembl_gene_id]];
-                    }
-                    if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
-                        const link: any = {
-                            value: 1,
-                            source: obj.geneA_ensembl_gene_id,
-                            target: obj.geneB_ensembl_gene_id,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
-                        genes.links = [...genes.links,
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
-                        if (dnodes[obj.geneA_ensembl_gene_id]
-                            .brainregions.indexOf(obj.brainRegion) === -1) {
-                            dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                        }
-                    } else {
-                        if (dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
-                            .brainregions.indexOf(obj.brainRegion) === -1) {
-                            dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
-                            dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
-                                .brainregions.push(obj.brainRegion);
-                            } else {
-                            console.log(`repeted brainRegion: ${obj.brainRegion} in
-                             ${obj.geneA_ensembl_gene_id} --> ${obj.geneA_ensembl_gene_id} link`);
-                            }
-                        if (dnodes[obj.geneA_ensembl_gene_id]
-                            .brainregions.indexOf(obj.brainRegion) === -1) {
-                            dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                        }
-                        dnodes[obj.geneB_ensembl_gene_id].hide = true;
-                        dnodes[obj.geneA_ensembl_gene_id].hide = true;
-                    }
-                });
-                resolve(genes);
+                resolve(data);
             });
         });
     }

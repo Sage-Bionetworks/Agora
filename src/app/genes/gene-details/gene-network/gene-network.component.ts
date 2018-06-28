@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneNode } from '../../../models';
+import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
 
 import { GeneService, DataService } from '../../../core/services';
+import { ForceService } from '../../../shared/services';
 
 @Component({
     selector: 'gene-network',
@@ -19,17 +20,19 @@ export class GeneNetworkComponent implements OnInit {
     dataLoaded: boolean = false;
     displayBRDia: boolean = false;
 
-    private pathways: GeneNode[] = [];
+    private pathways: GeneLink[] = [];
     private currentGene = this.geneService.getCurrentGene();
-    private currentGeneData: Gene[] = [];
+    private currentGeneData = [];
     private variants: boolean = false;
     private eqtl: boolean = false;
+    private networkData: GeneNetwork;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
-        private dataService: DataService
+        private dataService: DataService,
+        private forceService: ForceService
     ) { }
 
     ngOnInit() {
@@ -41,9 +44,9 @@ export class GeneNetworkComponent implements OnInit {
                 {
                     outlets: {
                         'genes-router':
-                        [
-                            'gene-details', this.id
-                        ]
+                            [
+                                'gene-details', this.id
+                            ]
                     }
                 }
             ]);
@@ -53,10 +56,10 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     updategene(event) {
-        this.dataService.loadNodes(event).then((data: GeneNetwork) => {
-            // data.nodes.shift();
-            this.pathways = data.nodes;
-        });
+        // this.dataService.loadNodes(event).then((data: GeneNetwork) => {
+        //     // data.nodes.shift();
+        //     this.pathways = data.nodes;
+        // });
     }
 
     goToRoute(path: string, outlets?: any) {
@@ -66,10 +69,15 @@ export class GeneNetworkComponent implements OnInit {
 
     loadGenes() {
         this.dataService.loadNodes(this.currentGene).then((data: any) => {
-            data.nodes.shift();
-            this.currentGeneData = data.nodes;
-            this.dataLoaded = true;
-            // this.eqtl = this.findEqtl();
+            this.forceService.setData(data);
+            this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
+                this.networkData = dn;
+                this.currentGeneData = dn.nodes.slice(1);
+                this.pathways = dn.links;
+                this.dataLoaded = true;
+                console.log(this.currentGene);
+            });
+            // // this.eqtl = this.findEqtl();
             // this.variants = this.findVariant();
             // console.log(data);
         });
