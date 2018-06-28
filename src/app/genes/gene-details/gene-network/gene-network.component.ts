@@ -22,10 +22,6 @@ export class GeneNetworkComponent implements OnInit {
 
     private pathways: GeneLink[] = [];
     private currentGene = this.geneService.getCurrentGene();
-    private currentGeneData = [];
-    private variants: boolean = false;
-    private eqtl: boolean = false;
-    private networkData: GeneNetwork;
     private geneInfo: any;
 
     constructor(
@@ -59,10 +55,15 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     updategene(event) {
-        // this.dataService.loadNodes(event).then((data: GeneNetwork) => {
-        //     // data.nodes.shift();
-        //     this.pathways = data.nodes;
-        // });
+        this.dataService.getGene(event.id).subscribe((data) => {
+            console.log(data['geneInfo']);
+            this.currentGene = data['geneInfo'];
+        });
+        this.dataService.loadNodes(event).then((data: any) => {
+            this.forceService.processSelectedNode(event, data).then((network) => {
+                this.pathways = network.links;
+            });
+        });
     }
 
     goToRoute(path: string, outlets?: any) {

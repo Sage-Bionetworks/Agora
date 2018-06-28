@@ -35,6 +35,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         active: true
     };
     private svg;
+    private pnode: any;
     private loaded: boolean = false;
     private pathways: GeneNode[] = [];
     private nodes: GeneNode[];
@@ -118,6 +119,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                     .attr('transform', 'scale(1.75)')
                     .attr('r', 4)
                     .attr('fill', this.getNodeColor)
+                    .attr('class', 'hex')
                     .on('mouseover', (d: GeneNode) => {
                         // tooltip.transition()
                         //     .duration(200)
@@ -145,14 +147,14 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                         //     .style('opacity', 0);
                     })
                     .on('click', (d: any, i, nodes ) => {
-                        // if (this.pnode) {
-                        //     d3.select(this.pnode.node[this.pnode.index])
-                        //     .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.index],
-                        //             this.pnode.index,
-                        //             []));
-                        // }
-                        // this.pnode = {node: nodes, index: i};
-                        // d3.select(nodes[i]).attr('fill', '#14656A');
+                        if (this.pnode) {
+                            d3.select(nodes[this.pnode.index])
+                            .attr('fill', this.getNodeColor(this.pnode.node,
+                                    this.pnode.index,
+                                    []));
+                        }
+                        this.pnode = {index: i, node: d};
+                        d3.select(nodes[i]).attr('fill', '#4F6FC3');
                         this.buildPath(d);
                     });
 
