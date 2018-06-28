@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Gene } from '../../models';
 
 import { Observable } from 'rxjs/Observable';
@@ -6,6 +6,8 @@ import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/
 
 @Injectable()
 export class ForceService {
+
+    datachange: EventEmitter<number> = new EventEmitter();
 
     private dicNodes = [];
     private dicLinks = [];
@@ -28,8 +30,12 @@ export class ForceService {
         };
     }
 
+    emitDataChangeEvent(data: GeneNetwork) {
+        this.datachange.emit(data);
+    }
+
     getGenes() {
-        return this.genes;
+        return this.datachange;
     }
 
     processNode(obj: GeneNetworkLinks) {
@@ -151,6 +157,10 @@ export class ForceService {
             this.genes.links.sort((a, b) => {
                 return a['value'] - b['value'];
             });
+
+            // TODO: is a waste to return a promise and emit an event.
+            // update network component to use events.
+            this.emitDataChangeEvent(this.genes);
             resolve(this.genes);
         });
     }

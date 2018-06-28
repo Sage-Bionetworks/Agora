@@ -26,6 +26,7 @@ export class GeneNetworkComponent implements OnInit {
     private variants: boolean = false;
     private eqtl: boolean = false;
     private networkData: GeneNetwork;
+    geneInfo: any;
 
     constructor(
         private router: Router,
@@ -37,6 +38,8 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
+        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        console.log(this.geneInfo);
         if (!this.dataService.getNdx()) {
             this.id = this.route.snapshot.paramMap.get('id');
             this.router.navigate([
@@ -129,4 +132,6 @@ export class GeneNetworkComponent implements OnInit {
     showDialog(dialogString: string) {
         this[dialogString] = true;
     }
+
+
 }

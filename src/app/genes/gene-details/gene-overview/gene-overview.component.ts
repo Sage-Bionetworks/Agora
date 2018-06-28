@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { ForceService } from '../../../shared/services';
     styleUrls: [ './gene-overview.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneOverviewComponent implements OnInit {
+export class GeneOverviewComponent implements OnInit, OnDestroy {
     @Input() styleClass: string = 'overview-panel';
     @Input() style: any;
     @Input() gene: Gene;
@@ -30,6 +30,7 @@ export class GeneOverviewComponent implements OnInit {
     displaySDDia: boolean = false;
     displayActDia: boolean = false;
     currentGeneData = [];
+    subscription: any;
 
     constructor(
         private router: Router,
@@ -41,6 +42,8 @@ export class GeneOverviewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.subscription = this.forceService.getGenes()
+            .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         // Get the current clicked gene
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
@@ -125,5 +128,9 @@ export class GeneOverviewComponent implements OnInit {
 
     goBack() {
         this.location.back();
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }
