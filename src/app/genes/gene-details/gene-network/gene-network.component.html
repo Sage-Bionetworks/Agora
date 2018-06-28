@@ -7,7 +7,7 @@
             <h2>{{currentGene.hgnc_symbol}}</h2>
             <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
             <div>AMP-AD target <span class="true"> True</span></div>
-            <div>Brain eQTL <span [ngClass]="{'true':eqtl,'false':!eqtl}"> {{eqtl}}</span></div>
+            <div>Brain eQTL <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span></div>
             <!-- <div>Protein Precense <span class="false"> False</span></div> -->
         </div>
         <div class="row brainregions nopadding">
