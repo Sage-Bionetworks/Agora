@@ -26,7 +26,7 @@ export class GeneNetworkComponent implements OnInit {
     private variants: boolean = false;
     private eqtl: boolean = false;
     private networkData: GeneNetwork;
-    geneInfo: any;
+    private geneInfo: any;
 
     constructor(
         private router: Router,
@@ -132,6 +132,4 @@ export class GeneNetworkComponent implements OnInit {
     showDialog(dialogString: string) {
         this[dialogString] = true;
     }
-
-
 }

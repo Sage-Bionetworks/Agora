@@ -7,7 +7,7 @@ import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/
 @Injectable()
 export class ForceService {
 
-    datachange: EventEmitter<number> = new EventEmitter();
+    datachange: EventEmitter<GeneNetwork> = new EventEmitter();
 
     private dicNodes = [];
     private dicLinks = [];
