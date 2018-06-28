@@ -258,7 +258,12 @@ router.get('/gene/:id', (req, res, next) => {
                 if (errB) {
                     next(errB);
                 } else {
-                    console.log(geneInfo);
+                    // Adding this condition because UglifyJS can't handle ES2015, only needed
+                    // for the server
+                    if (env === 'development') {
+                        console.log('The gene info');
+                        console.log(geneInfo);
+                    }
                     res.json({
                         geneInfo,
                         item: genes[0],
