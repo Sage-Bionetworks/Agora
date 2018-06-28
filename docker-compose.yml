@@ -1,23 +1,37 @@
-version: '3'
+version: '2.3'
 services:
-  wall-of-targets:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: wall-of-targets
-    environment:
-      - MONGO_URI=mongodb://mongodb/walloftargets
-    links:
-      - mongodb
-    ports:
-     - '3000:3000'
   mongodb:
     image: 'mongo'
     ports:
       - 27017:27017
+    networks:
+      - front_wot
   mongo_seed:
     build:
       context: ../data
       dockerfile: ../WallOfTargets/mongo-seed/Dockerfile
     links:
       - mongodb
+    networks:
+      - front_wot
+  mongo_seed_links:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/links.Dockerfile
+    links:
+      - mongodb
+    networks:
+      - front_wot
+  mongo_seed_info:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/info.Dockerfile
+    links:
+      - mongodb
+    networks:
+      - front_wot
+
+networks:
+  front_wot:
+    driver: bridge
+    name: wot_network

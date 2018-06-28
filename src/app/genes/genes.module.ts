@@ -11,6 +11,7 @@ import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
+import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -22,6 +23,7 @@ import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
+import { TeamsPageComponent } from './gene-details/teams-page';
 import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
 
 @NgModule({
@@ -33,6 +35,7 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         GeneOverviewComponent,
         GeneRNASeqDEComponent,
         GeneNetworkComponent,
+        TeamsPageComponent,
         BoxPlotsViewComponent
     ],
     imports: [
@@ -47,6 +50,7 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         PanelModule,
         ButtonModule,
         TableModule,
+        DialogModule,
         CardModule,
         TabViewModule,
         ProgressBarModule,

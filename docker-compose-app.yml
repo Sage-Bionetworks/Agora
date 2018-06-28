@@ -1,0 +1,31 @@
+version: '2'
+services:
+  wall-of-targets:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URI=mongodb://mongodb/walloftargets
+    restart: always
+    expose:
+      - '5000'
+    networks:
+      - front-tier
+  # NGINX will reverse proxy the express application
+  nginx:
+    build:
+      # Look for the Dockerfile inside the "nginx" folder
+      context: .
+      dockerfile: nginx.Dockerfile
+    restart: always
+
+    # Bind port 80 in the service to port 80 on the host
+    ports:
+      - '80:80'
+    networks:
+      - front-tier
+
+networks:
+  front-tier:
+    external:
+      name: wot_network

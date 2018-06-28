@@ -60,8 +60,7 @@ declare module 'modern-lru' {
 declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
-// declare const FIREBASE_CONFIG: FirebaseConfig;
-declare var Analyser: boolean;
+declare var Analyzer: boolean;
 declare var Docker: boolean;
 
 interface FirebaseConfig {
@@ -82,8 +81,7 @@ interface GlobalEnvironment {
   HMR: boolean;
   SystemJS: SystemJS;
   System: SystemJS;
-  // FIREBASE_CONFIG: FirebaseConfig;
-  Analyser: boolean;
+  Analyzer: boolean;
   Docker: boolean;
 }
 

@@ -21,9 +21,7 @@ import { Gene } from '../../../models';
 import { ChartService } from '../../../charts/services';
 import { GeneService, DataService } from '../../../core/services';
 
-import { Observable } from 'rxjs/Observable';
 import { SelectItem } from 'primeng/api';
-import { entries, lab } from 'd3';
 
 @Component({
     selector: 'gene-rnaseq-de',
@@ -40,7 +38,10 @@ export class GeneRNASeqDEComponent implements OnInit {
     dataLoaded: boolean = false;
     tissues: SelectItem[] = [];
     currentTissues: string[] = [];
+    selectedTissues: string[] = [];
     componentRefs: any[] = [];
+    oldIndex: number = -1;
+    index: number = -1;
 
     constructor(
         private router: Router,
@@ -71,7 +72,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             ]);
         } else {
             this.loadChartData().then((status) => {
-                this.geneService.getTissues().forEach((t) => {
+                this.geneService.getGeneTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
                 this.dataLoaded = status;
@@ -84,20 +85,20 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'volcano-plot',
                 {
-                    dimension: ['logfc', 'neg_log10_adj_p_val', 'hgnc_symbol'],
+                    dimension: ['logfc', 'adj_p_val', 'hgnc_symbol'],
                     group: 'self',
                     type: 'scatter-plot',
                     title: 'Volcano Plot',
                     xAxisLabel: 'Log Fold Change',
                     yAxisLabel: '-log10(Adjusted p-value)',
                     x: ['logfc'],
-                    y: ['neg_log10_adj_p_val']
+                    y: ['adj_p_val']
                 }
             );
             this.chartService.addChartInfo(
                 'forest-plot',
                 {
-                    dimension: ['tissue_study_pretty'],
+                    dimension: ['tissue'],
                     group: 'self',
                     type: 'forest-plot',
                     title: 'Log fold forest plot',
@@ -108,7 +109,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'select-tissue',
                 {
-                    dimension: ['tissue_study_pretty'],
+                    dimension: ['tissue'],
                     group: 'self',
                     type: 'select-menu',
                     title: '',
@@ -118,7 +119,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.chartService.addChartInfo(
                 'select-model',
                 {
-                    dimension: ['comparison_model_sex_pretty'],
+                    dimension: ['model'],
                     group: 'self',
                     type: 'select-menu',
                     title: '',
@@ -131,52 +132,87 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     getTissue(index: number) {
-        return this.geneService.getTissues()[index];
+        return this.geneService.getGeneTissues()[index];
     }
 
     getModel(index: number) {
-        return this.geneService.getModels()[index];
+        return this.geneService.getGeneModels()[index];
     }
 
-    toggleTissue(event: any) {
-        const oldIndex = this.currentTissues.indexOf(event.itemValue);
-        const index = this.tissues.findIndex((t) => t.value === event.itemValue);
-        const hasTissue = (this.currentTissues[index]) ? true : false;
+    async toggleTissue(event: any) {
+        this.index = this.tissues.findIndex((t) => t.value === event.itemValue);
+        const LIMIT_NUMBER = 1;
+        const hasTissue = (this.currentTissues[this.index]) ? true : false;
         // Create or destroy the box plots for this tissue
         if (!hasTissue) {
-            this.currentTissues[index] = event.itemValue;
-            const label1 = 'box-plot-' + index + '1';
-            const label2 = 'box-plot-' + index + '2';
+            this.currentTissues[this.index] = event.itemValue;
+            // Remove the old box plot and erase the index
+            if (this.oldIndex !== -1) {
+                this.destroyComponent(this.oldIndex);
+                if (this.index !== this.oldIndex) {
+                    this.currentTissues[this.oldIndex] = undefined;
+                }
+            }
+
+            // Set the current tissue to the toggled value
+            this.geneService.setCurrentTissue(event.itemValue);
+            const label1 = 'box-plot-' + this.index + '1';
+            const label2 = 'box-plot-' + this.index + '2';
             const info1 = this.chartService.getChartInfo(label1);
             const info2 = this.chartService.getChartInfo(label2);
             if (!info1) {
                 this.registerBoxPlot(
-                    'box-plot-' + index + '1',
-                    [this.currentTissues[index]],
+                    'box-plot-' + this.index + '1',
+                    [
+                        {
+                            name: this.currentTissues[this.index],
+                            attr: 'tissue'
+                        },
+                        {
+                            name: this.geneService.getCurrentModel(),
+                            attr: 'model'
+                        }
+                    ],
                     'log2(fold change)',
-                    'logfc'
+                    'fc'
                 );
             }
             if (!info2) {
                 this.registerBoxPlot(
-                    'box-plot-' + index + '2',
-                    [this.currentTissues[index]],
+                    'box-plot-' + this.index + '2',
+                    [
+                        {
+                            name: this.currentTissues[this.index],
+                            attr: 'tissue'
+                        },
+                        {
+                            name: this.geneService.getCurrentModel(),
+                            attr: 'model'
+                        }
+                    ],
                     '-log10(adjusted p-value)',
-                    'neg_log10_adj_p_val'
+                    'adj_p_val'
                 );
             }
-            this.createComponent(index, info1, info2, label1, label2);
+
+            this.createComponent(this.index, info1, info2, label1, label2);
         } else {
-            this.currentTissues[index] = undefined;
-            this.destroyComponent(oldIndex);
+            this.destroyComponent(this.index);
+            this.currentTissues[this.index] = undefined;
+
+            // Set the current tissue to the toggled value
+            this.geneService.setCurrentTissue(undefined);
         }
+
+        this.oldIndex = this.index;
+        if (event.value.length > LIMIT_NUMBER) { event.value.splice(0, 1); }
     }
 
-    registerBoxPlot(label: string, constraintNames: string[], yAxisLabel: string, attr: string) {
+    registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
         this.chartService.addChartInfo(
             label,
             {
-                dimension: ['tissue_study_pretty'],
+                dimension: ['tissue', 'model'],
                 group: 'self',
                 type: 'box-plot',
                 title: '',
@@ -185,16 +221,20 @@ export class GeneRNASeqDEComponent implements OnInit {
                 yAxisLabel,
                 format: 'array',
                 attr,
-                constraintNames
+                constraints
             }
         );
     }
 
-    createComponent(index: number, info1: any, info2: any, label1: string, label2: string) {
+    async createComponent(index: number, info1: any, info2: any, label1: string, label2: string) {
         const eArray = this.entries.toArray();
         if (this.componentRefs[index]) { eArray[index].clear(); }
-        const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
-        this.componentRefs[index] = eArray[index].createComponent(factory);
+        this.componentRefs[index] = await new Promise((resolve) => {
+                setTimeout(() => {
+                    const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
+                    resolve(eArray[index].createComponent(factory));
+                }, 100);
+            }) as ComponentRef<BoxPlotsViewComponent>;
         this.componentRefs[index].instance.tissue = this.tissues[index].value;
         this.componentRefs[index].instance.label1 = label1;
         this.componentRefs[index].instance.label2 = label2;

@@ -1,6 +1,49 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
+p-dialog {
+    .ui-dialog {
+        width: 80% !important;
+        max-width: 80% !important;
+        top: 109px !important;
+    }
+
+    .ui-dialog-titlebar {
+        padding-top: 85px !important;
+        text-align-last: center;
+        background: white;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 24px;
+        color: #1A1C29;
+    }
+
+    .ui-dialog-content {
+        padding-bottom: 85px !important;
+        padding-left: 10% !important;
+        padding-right: 10% !important;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
+        text-align: center;
+        color: #000000;
+    }
+
+    .fa-close:before {
+        color: #5BB0B5;
+    }
+
+    a {
+        position: absolute;
+        left: 1%;
+        top: 10%;
+    }
+}
+
 .back-home-wrapper {
     width: 100%;
     height: 63px;
@@ -33,7 +76,64 @@
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 
     p {
-        text-align: left;
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .fa-star::before {
+        color: #FACFAF;
+    }
+
+    .row {
+        align-items: center;
+    }
+
+    p-button {
+        @include respond-to('ex-small') {
+            width: 70%;
+        }
+        width: 100%;
+        height: 100%;
+
+        button {
+            width: 100%;
+            height: 100%;
+        }
+
+        span {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            @include respond-to('ex-small') {
+                font-size: 18px;
+            }
+            font-size: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+            color: #1A1C29;
+        }
+    }
+}
+
+.nom-button {
+    background: #F89C55 !important;
+    border: 0px !important;
+    border-radius: 100px;
+    height: 68px;
+    width: 100%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 24px;
+    color: #0D1C38 !important;
+    vertical-align: middle;
+    cursor: pointer;
+
+    span {
+        margin-left: 2%;
+        margin-right: 2%;
     }
 }
 
@@ -42,7 +142,8 @@
     margin-bottom: 2%;
 
     p {
-        text-align: left;
+        text-align: justify;
+        text-align-last: left;
     }
 }
 
@@ -61,6 +162,10 @@
 
     h3 {
         margin-bottom: 0px;
+    }
+
+    i:hover {
+        cursor: pointer;
     }
 }
 
@@ -158,6 +263,15 @@
     }
 }
 
+.st-desc {
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    padding-top: 0px;
+}
+
 .overview-actions {
     padding-bottom: 4em;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
@@ -173,6 +287,10 @@
 
     h3 {
         margin-bottom: 0px;
+    }
+
+    i:hover {
+        cursor: pointer;
     }
 }
 
@@ -191,6 +309,10 @@
 
     h3 {
         margin-bottom: 0px;
+    }
+
+    i:hover {
+        cursor: pointer;
     }
 }
 

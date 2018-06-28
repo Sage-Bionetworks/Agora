@@ -1,12 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene } from '../../../models';
+import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
 
 import { GeneService, DataService } from '../../../core/services';
-
-import { Observable } from 'rxjs/Observable';
+import { ForceService } from '../../../shared/services';
 
 @Component({
     selector: 'gene-network',
@@ -20,22 +18,28 @@ export class GeneNetworkComponent implements OnInit {
     @Input() gene: Gene;
     @Input() id: string;
     dataLoaded: boolean = false;
+    displayBRDia: boolean = false;
 
-    private pathways: any[] = [];
+    private pathways: GeneLink[] = [];
     private currentGene = this.geneService.getCurrentGene();
+    private currentGeneData = [];
+    private variants: boolean = false;
+    private eqtl: boolean = false;
+    private networkData: GeneNetwork;
+    private geneInfo: any;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
         private dataService: DataService,
-        private location: Location
+        private forceService: ForceService
     ) { }
 
     ngOnInit() {
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
-
         // The data wasn't loaded yet, redirect for now
+        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        console.log(this.geneInfo);
         if (!this.dataService.getNdx()) {
             this.id = this.route.snapshot.paramMap.get('id');
             this.router.navigate([
@@ -43,21 +47,22 @@ export class GeneNetworkComponent implements OnInit {
                 {
                     outlets: {
                         'genes-router':
-                        [
-                            'gene-details', this.id
-                        ]
+                            [
+                                'gene-details', this.id
+                            ]
                     }
                 }
             ]);
         } else {
-            this.dataLoaded = true;
+            this.loadGenes();
         }
     }
 
     updategene(event) {
-        this.dataService.loadNodes(event).then((data: any) => {
-            this.pathways = data.nodes;
-        });
+        // this.dataService.loadNodes(event).then((data: GeneNetwork) => {
+        //     // data.nodes.shift();
+        //     this.pathways = data.nodes;
+        // });
     }
 
     goToRoute(path: string, outlets?: any) {
@@ -65,8 +70,42 @@ export class GeneNetworkComponent implements OnInit {
             this.router.navigate([path], { relativeTo: this.route });
     }
 
-    viewGene(gene: Gene) {
-        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+    loadGenes() {
+        this.dataService.loadNodes(this.currentGene).then((data: any) => {
+            this.forceService.setData(data);
+            this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
+                this.networkData = dn;
+                this.currentGeneData = dn.nodes.slice(1);
+                this.pathways = dn.links.slice().reverse();
+                this.dataLoaded = true;
+                console.log(this.currentGene);
+            });
+            // // this.eqtl = this.findEqtl();
+            // this.variants = this.findVariant();
+            // console.log(data);
+        });
+    }
+
+    // findVariant() {
+    //     this.variantsJson.find( (variant: any) => {
+    //         if (variant.ENSEMBL === this.currentGene.ensembl_gene_id) {
+    //             return true;
+    //         }
+    //     });
+    //     return false;
+    // }
+
+    // findEqtl() {
+    //     this.eqtlJson.find( (eqtl: any) => {
+    //         if (eqtl.ensembl_gene_id === this.currentGene.ensembl_gene_id) {
+    //             return true;
+    //         }
+    //     });
+    //     return false;
+    // }
+
+    viewGene(id: string) {
+        this.dataService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
@@ -74,8 +113,8 @@ export class GeneNetworkComponent implements OnInit {
                 return;
             }
             this.geneService.setCurrentGene(data['item']);
-            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setNegAdjPValue(data['maxNegLogPValue']);
+            this.geneService.setLogFC(data['minFC'], data['maxFC']);
+            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigateByUrl(currentUrl)
                 .then(() => {
                     this.router.navigated = false;
@@ -83,14 +122,14 @@ export class GeneNetworkComponent implements OnInit {
                         {
                             outlets:
                                 {
-                                    'genes-router': ['gene-details', data['item'].hgnc_symbol]
+                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
                                 }
                         }]);
                 });
         });
     }
 
-    goBack() {
-        this.location.back();
+    showDialog(dialogString: string) {
+        this[dialogString] = true;
     }
 }

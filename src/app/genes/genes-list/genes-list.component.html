@@ -1,6 +1,5 @@
-<div class="row back-home-wrapper no-gutter">
-    <div class="row back-home-row no-gutter">
-        <i class="fa-inverse fa fa-arrow-left fa-2x" (click)="goBack()"></i>
+<div class="row back-home-wrapper no-gutters">
+    <div class="row back-home-row no-gutters">
     </div>
 </div>
 <div class="section nomlist-intro center-justified">
@@ -12,8 +11,8 @@
 </div>
 <div class="nomlist-list center-justified">
     <p-table #gl
-        [columns]="cols" [value]="genes" selectionMode="single"
-        [(selection)]="selectedGene" dataKey="ensembl_gene_id"
+        [columns]="cols" [value]="genesInfo" selectionMode="single"
+        [(selection)]="selectedInfo" dataKey="ensembl_gene_id"
         [paginator]="true"
         [rows]="14"
         [lazy]="true"
@@ -40,7 +39,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns; let i = index;">
-                    {{isNaN(rowData[col.field]) ? rowData[col.field] : (rowData[col.field] | number:'1.2-5')}}
+                    {{rowData[col.field]}}
                 </td>
             </tr>
         </ng-template>

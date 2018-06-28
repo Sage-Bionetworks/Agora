@@ -1,11 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-
-import { Gene } from '../../../../models';
-
-import { GeneService } from '../../../../core/services';
-
-import { Observable } from 'rxjs/Observable';
-import { SelectItem } from 'primeng/api';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'box-plots-view',

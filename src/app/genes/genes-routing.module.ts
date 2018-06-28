@@ -6,8 +6,7 @@ import { GenesListComponent } from './genes-list';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
-import { ScatterPlotViewComponent } from '../charts/scatter-plot/scatter-plot-view';
-import { RowChartViewComponent } from '../charts/row-chart/row-chart-view';
+import { TeamsPageComponent } from './gene-details/teams-page';
 
 export const routes: Routes = [
     { path: 'genes', component: GenesViewComponent, children: [
@@ -16,7 +15,8 @@ export const routes: Routes = [
         { path: 'genes-list', component: GenesListComponent, outlet: 'genes-router' },
         { path: 'gene-details/:id', component: GeneOverviewComponent, outlet: 'genes-router' },
         { path: 'gene-rna-seq/:id', component: GeneRNASeqDEComponent, outlet: 'genes-router' },
-        { path: 'gene-coexp-network/:id', component: GeneNetworkComponent, outlet: 'genes-router' }
+        { path: 'gene-coexp-network/:id', component: GeneNetworkComponent, outlet: 'genes-router' },
+        { path: 'teams-page/:id', component: TeamsPageComponent, outlet: 'genes-router' }
     ] },
     { path: '**', redirectTo: 'genes', pathMatch: 'full' }
 ];

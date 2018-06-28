@@ -21,8 +21,34 @@ div.tooltip {
 }
 
 .hex:hover{
-    path{
-        fill:#5dafb4 !important;
+    stroke-width: 1px;
+    stroke: rgb(7, 75, 243);
+    stroke-opacity: 0.5;
 
+    // path{
+    //     fill:#5dafb4 !important;
+
+    // }
+}
+ .darkest {
+    .darkest {
+    display: none;
     }
 }
+ .darker {
+   .darker {
+     display: none;
+   }
+ }
+
+ .medium {
+   .meduim {
+     display: none;
+   }
+ }
+
+ .light {
+   .light {
+     display: none;
+   }
+ }

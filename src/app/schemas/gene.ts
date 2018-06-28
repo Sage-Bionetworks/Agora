@@ -1,5 +1,5 @@
-import { Document, Schema, Model, model } from 'mongoose';
-import { Gene, GeneDocument } from '../models';
+import { Schema, Model, model } from 'mongoose';
+import { GeneDocument } from '../models';
 
 export let GeneSchema: Schema = new Schema({
     ensembl_gene_id: {
@@ -14,7 +14,7 @@ export let GeneSchema: Schema = new Schema({
         required: false,
         type: Number
     },
-    aveexpr: {
+    fc: {
         required: false,
         type: Number
     },
@@ -30,15 +30,15 @@ export let GeneSchema: Schema = new Schema({
         required: false,
         type: Number
     },
-    neg_log10_adj_p_val: {
-        required: false,
-        type: Number
-    },
-    tissue_study_pretty: {
+    tissue: {
         required: false,
         type: String
     },
-    comparison_model_sex_pretty: {
+    study: {
+        required: false,
+        type: String
+    },
+    model: {
         required: false,
         type: String
     }

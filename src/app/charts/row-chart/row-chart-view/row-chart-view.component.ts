@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import { Gene } from '../../../models';
-
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
 
@@ -37,6 +35,9 @@ export class RowChartViewComponent implements OnInit {
 
     changedLabels: boolean = false;
     display: boolean = false;
+    colors: string[] = [
+        '#7692D9', '#699FD2', '#5CADCA', '#42C7BB', '#9FC995', '#CECA82', '#FCCB6F'
+    ];
 
     private resizeTimer;
 
@@ -75,13 +76,18 @@ export class RowChartViewComponent implements OnInit {
                 return d.key;
             })
             .othersGrouper(null)
-            .ordinalColors(['#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'])
+            .ordinalColors(this.colors)
             .dimension(this.dim)
             .group(this.group)
             .transitionDuration(0);
 
         // Add this number of ticks so the x axis don't get cluttered with text
-        this.chart.xAxis().ticks(5);
+        this.chart.xAxis().scale(this.chart.x()).ticks(5);
+
+        // Removes the click event for the rowChart to prevent filtering
+        this.chart.onClick = () => {
+            //
+        };
 
         // Register the row chart renderlet
         this.registerChartEvent(this.chart);
@@ -96,7 +102,7 @@ export class RowChartViewComponent implements OnInit {
         // Using a different name for the chart variable here so it's not shadowed
         chartEl.on(type, function(chart) {
             const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
-            const squareSize = 10;
+            const squareSize = 18;
             const lineWidth = 60;
 
             // Test if we should display the chart. Using this variable so we don't see
@@ -108,9 +114,6 @@ export class RowChartViewComponent implements OnInit {
 
                 // Insert a line for each row of the chart
                 self.insertLinesInRows(chart);
-
-                // Draw the inserted lines in each row
-                self.drawLines(chart, rectHeight / 2, lineWidth);
             } else {
                 // This part will be called on redraw after filtering, so at this point
                 // we just need to move the lines to the correct position again. First
@@ -121,10 +124,10 @@ export class RowChartViewComponent implements OnInit {
                         return 'translate(' + d.value.logfc + ')';
                     });
                 });
-
-                // Finally redraw the lines in each row
-                self.drawLines(chart, rectHeight / 2, lineWidth);
             }
+
+            // Finally redraw the lines in each row
+            self.drawLines(chart, rectHeight / 2, lineWidth);
 
             // Change the row rectangles into small squares, this happens on
             // every render or redraw
@@ -169,7 +172,6 @@ export class RowChartViewComponent implements OnInit {
         });
 
         // Move the text to the correct position in the new svg
-        const stdColHeight = chart.height();
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
         const step = svgEl.getBBox().height / (removed['nodes']().length);
 
@@ -192,22 +194,39 @@ export class RowChartViewComponent implements OnInit {
             .insert('line');
     }
 
-    // Draw the lines through the chart rows
+    // Draw the lines through the chart rows and a vertical line at
+    // x = 0
     drawLines(chart: dc.RowChart, yPos: number, lineWidth: number) {
+        const self = this;
+        // Hide all vertical lines except one at x = 0
+        chart.selectAll('g.axis g.tick').each(function() {
+            if (parseFloat(d3.select(this).select('text').text())) {
+                d3.select(this).select('.grid-line').style('opacity', 0);
+            } else {
+                d3.select(this).select('.grid-line')
+                    .style('stroke', '#BCC0CA')
+                    .style('stroke-width', '2px')
+                    .style('opacity', 1);
+            }
+        });
+
+        // Draw the horizontal lines
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
-            .attr('stroke', 'wheat')
+            .attr('stroke', (d, i) => {
+                return self.colors[i];
+            })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
                 return chart.x()(d.value.logfc) - lineWidth / 2;
             })
-            .attr('y1', (d) => {
+            .attr('y1', () => {
                 return yPos;
             })
             .attr('x2', (d) => {
                 return chart.x()(d.value.logfc) + lineWidth / 2;
             })
-            .attr('y2', (d) => {
+            .attr('y2', () => {
                 return yPos;
             });
     }
@@ -233,7 +252,7 @@ export class RowChartViewComponent implements OnInit {
         return { opacity: (this.display) ? 1 : 0 };
     }
 
-    onResize(event) {
+    onResize() {
         const self = this;
 
         clearTimeout(this.resizeTimer);

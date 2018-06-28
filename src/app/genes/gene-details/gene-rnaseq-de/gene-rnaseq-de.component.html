@@ -3,19 +3,16 @@
         <div class="col-md-12 col-sm-12 col-12">
             <h2>
                 Filter by Tissue
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle"></i>
             </h2>
+            <div class="section-thin st-desc no-side-padding">
+                <p class="black-paragraph">
+                    The seven brain regions from the AMP-AD studies include Temporal Cortex (TCX),
+                    Cerebellum (CBE), Dorsolateral Prefrontal Cortex (DLPFC), Parahippocampal Gyrus
+                    (PHG), Frontal Pole (FP), Superior Temporal Gyrus (STG), and Inferior Frontal
+                    Gyrus (IFG).
+                </p>
+            </div>
         </div>
-        <!--<div class="col-md-5 col-sm-5 col-5">
-            <h3>
-                Model
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle"></i>
-            </h3>
-        </div>
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>-->
     </div>
     <div class="row">
         <div class="col-md-6 col-sm-6 col-12">
@@ -31,18 +28,6 @@
         </div>
     </div>
     <div class="row">
-        <!--<div class="col-md-5 col-sm-5 col-5">
-            <select-menu [promptText]="'All'"
-                [label]="'select-tissue'"
-                [defaultValue]="getTissue(1)">
-            </select-menu>
-        </div>
-        <div class="col-md-5 col-sm-5 col-5">
-            <select-menu [promptText]="'All'"
-                [label]="'select-model'"
-                [defaultValue]="getModel(1)">
-            </select-menu>
-        </div>-->
         <div class="col-md-2 col-sm-2 col-2">
         </div>
     </div>
@@ -51,8 +36,6 @@
 <div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <h2>
         Box Plots
-        <span class="icon-spacing"></span>
-        <i class="fa fa-info-circle"></i>
     </h2>
     <p class="black-paragraph">
         These box plots show the distribution of the effect size (log fold change) and
@@ -60,32 +43,48 @@
         all genes of the selected tissue and model. The selected gene is shown as the
         larger red dot.
     </p>
-    <ng-template *ngFor="let tissue of tissues" #t></ng-template>
-    <!--<div *ngFor="let tissue of tissues" class="row plot-content" [hidden]="!showBoxPlot(tissue)">
-        <div class="col-md-2">
+    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+    </ng-template>
+</div>
+
+<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12">
+            <h2>
+                Filter by Model
+            </h2>
+            <div class="section-thin st-desc no-side-padding">
+                <p class="black-paragraph">
+                    We tested for differences in RNA expression between Alzheimer's disease
+                    cases and controls using a variety of statistical models. These include
+                    looking for both differences in the mean expression of genes between
+                    cases and controls, as well as testing for sex specific disease interactions,
+                    as well as age of death (AOD) specific interactions.
+                </p>
+            </div>
         </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <box-plot [label]="'box-plot'"></box-plot>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-12">
+            <select-menu [promptText]="'All'"
+                [label]="'select-model'"
+                [defaultValue]="getModel(1)">
+            </select-menu>
         </div>
-        <div class="col-md-4 col-sm-6 col-12">
-            <box-plot [label]="'box-plot2'"></box-plot>
+    </div>
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-2">
         </div>
-        <div class="col-md-2">
-        </div>
-    </div>-->
+    </div>
 </div>
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Log Change Forest Plot
-        <span class="icon-spacing"></span>
-        <i class="fa fa-info-circle"></i>
     </h2>
     <p class="black-paragraph">
         A log forest plot indicates the estimate of the log fold change with standard errors
         across the tissues and studies where the model was fit.
     </p>
-    <div class="row plot-content">
-        <!--<row-chart></row-chart>-->
-    </div>
+    <row-chart></row-chart>
 </div>

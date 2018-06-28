@@ -1,28 +1,20 @@
+import { Gene, GeneInfo } from '../../app/models';
+import { Genes, GenesInfo, GenesLinks } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-
-import { Gene, GeneLink } from '../../app/models';
 
 mongoose.set('debug', true);
 
 const router = express.Router();
 const database = { url: '' };
-
-import { Genes } from '../../app/schemas/gene';
-import { GenesLinks } from '../../app/schemas/geneLink';
+const env = process.env.NODE_ENV || 'development';
 
 // Set the database url
-const env = process.env.NODE_ENV || 'development';
 if (process.env.Docker) {
+    // Service name here, not the localhost
     database.url = 'mongodb://mongodb/walloftargets';
 } else {
-    if (env === 'development') {
-        database.url = 'mongodb://localhost:27017/walloftargets';
-    } else {
-        database.url = 'mongodb://wotadmin:2w3o5t8@' +
-            + 'ec2-34-237-52-244.compute-1.amazonaws.com:'
-            + '27017/walloftargets';
-    }
+    database.url = 'mongodb://localhost/walloftargets';
 }
 
 // Connect to mongoDB database, local or remotely
@@ -42,54 +34,32 @@ router.get('/', (req, res) => {
 
 // Get the genes collection size
 let genesById: Gene[] = [];
-let genesByScore: Gene[] = [];
+let tableGenesById: GeneInfo[] = [];
+let tableGenesByNom: GeneInfo[] = [];
 let geneEntries: Gene[] = [];
 let allGenes: Gene[] = [];
 let totalRecords = 0;
 const allTissues: string[] = [];
 const allModels: string[] = [];
+let geneTissues: string[] = [];
+let geneModels: string[] = [];
 
 // Group by id and sort by hgnc_symbol
 Genes.aggregate(
     [
         {
-            $match: {
-                $or: [
-                    {
-                        $or: [
-                            {
-                                logfc: {
-                                    $lte: -0.5
-                                }
-                            },
-                            {
-                                logfc: {
-                                    $gte: 0.5
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        neg_log10_adj_P_Val: {
-                            $gte: 10
-                        }
-                    }
-                ],
-            }
-        },
-        {
             $group: {
                 _id: '$_id',
                 hgnc_symbol: { $first: '$hgnc_symbol' },
-                aveexpr : { $first: '$aveexpr' },
                 ensembl_gene_id : { $first: '$ensembl_gene_id' },
                 logfc : { $first: '$logfc' },
+                fc : { $first: '$fc' },
                 ci_l : { $first: '$ci_l' },
                 ci_r : { $first: '$ci_r' },
                 adj_p_val : { $first: '$adj_p_val' },
-                neg_log10_adj_p_val : { $first: '$neg_log10_adj_p_val' },
-                tissue_study_pretty : { $first: '$tissue_study_pretty' },
-                comparison_model_sex_pretty : { $first: '$comparison_model_sex_pretty' }
+                tissue : { $first: '$tissue' },
+                study : { $first: '$study' },
+                model : { $first: '$model' }
             }
         },
         {
@@ -104,27 +74,39 @@ Genes.aggregate(
     // Unique genes, ordered by hgnc_symbol
     const seen = {};
     genesById = genes.slice().filter((g) => {
-        if (allTissues.indexOf(g['tissue_study_pretty']) === -1) {
-            allTissues.push(g['tissue_study_pretty']);
+        if (allTissues.indexOf(g['tissue']) === -1) {
+            allTissues.push(g['tissue']);
         }
-        if (allModels.indexOf(g['comparison_model_sex_pretty']) === -1) {
-            allModels.push(g['comparison_model_sex_pretty']);
+        if (allModels.indexOf(g['model']) === -1) {
+            allModels.push(g['model']);
         }
         if (seen[g['hgnc_symbol']]) { return; }
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
     });
-    // Unique genes, ordered by score
-    genesByScore = genesById.slice().sort((a, b) => {
-        return (a.aveexpr > b.aveexpr) ? 1 : ((b.aveexpr > a.aveexpr) ? -1 : 0);
-    });
+});
 
-    totalRecords = genesById.length;
+GenesInfo.find({ nominations: { $gt: 0 } }).sort({ hgnc_symbol: 1 }).exec((err, genes, next) => {
+    if (err) {
+        next(err);
+    } else {
+        tableGenesById = genes.slice();
+        // Table genes ordered by nominations
+        tableGenesByNom = genes.slice().sort((a, b) => {
+            return (a.nominations > b.nominations) ? 1 :
+                ((b.nominations > a.nominations) ? -1 : 0);
+        });
+
+        totalRecords = tableGenesById.length;
+    }
 });
 
 // Routes to get genes information
 router.get('/genes', (req, res, next) => {
-    console.log('Get all genes');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all genes');
+    }
 
     const resObj = {
         items: [],
@@ -137,8 +119,8 @@ router.get('/genes', (req, res, next) => {
             // If the current entry does not exist in the all genes array
             if (!allGenes.some((g) => {
                 return (g.hgnc_symbol === ge.hgnc_symbol) &&
-                       (g.tissue_study_pretty === ge.tissue_study_pretty) &&
-                       (g.comparison_model_sex_pretty === ge.comparison_model_sex_pretty);
+                       (g.tissue === ge.tissue) &&
+                       (g.model === ge.model);
             })) {
                 chartGenes.push(ge);
             }
@@ -152,18 +134,22 @@ router.get('/genes', (req, res, next) => {
 
 // Use mongoose to get one page of genes
 router.get('/genes/page', (req, res, next) => {
-    console.log('Get a page of genes');
-    console.log(req.query);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a page of genes');
+        console.log(req.query);
+    }
 
     // Convert the strings
     const skip = (+req.query.first) ? +req.query.first : 0;
     const limit = (+req.query.rows) ? +req.query.rows : 10;
 
     // Get one array or the other depending on the list column we want to sort by
-    let genes: Gene[] = [];
+    let genes: GeneInfo[] = [];
 
     if (req.query.globalFilter !== 'null' && req.query.globalFilter) {
-        ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).forEach((g) => {
+        ((req.query.sortField === 'nominations') ? tableGenesByNom : tableGenesById).forEach(
+            (g) => {
             // If we typed into the search above the list
             if (g.hgnc_symbol.includes(req.query.globalFilter.trim().toUpperCase()))  {
                 // Do not use a shallow copy here
@@ -171,7 +157,8 @@ router.get('/genes/page', (req, res, next) => {
             }
         });
     } else {
-        genes = ((req.query.sortField === 'aveexpr') ? genesByScore : genesById).slice();
+        genes = ((req.query.sortField === 'nominations') ? tableGenesByNom :
+            tableGenesById).slice();
     }
     // Updates the global length based on the filter
     totalRecords = genes.length;
@@ -184,20 +171,25 @@ router.get('/genes/page', (req, res, next) => {
     res.json({ items: genes.slice(skip, skip + limit), totalRecords });
 });
 
-// Get all genes that match an id, currently hgnc_symbol
+// Get all genes that match an id, currently ensembl_gene_id
 router.get('/genes/:id', (req, res, next) => {
-    console.log('Get the genes that match an id');
-    console.log(req.params.id);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get the genes that match an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: []}); }
 
+    const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+
     // Get one array or the other depending on the list column we want to sort by
     const genes: Gene[] = [];
-    console.log('gene id pass');
     // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
     // https://jsperf.com/array-filter-performance
     genesById.forEach((g) => {
-        if (g.hgnc_symbol.includes(req.params.id.trim().toUpperCase())) {
+        if (g[fieldName].includes(req.params.id.trim().toUpperCase())) {
             // Do not use a shallow copy here
             genes.push(JSON.parse(JSON.stringify(g)));
         }
@@ -206,73 +198,130 @@ router.get('/genes/:id', (req, res, next) => {
     res.json({ items: genes });
 });
 
-// Get a gene by id, currently hgnc_symbol
+// Get a gene by id, can be hgnc_symbol or ensembl_gene_id
 router.get('/gene/:id', (req, res, next) => {
-    console.log('Get a gene with an id');
-    console.log(req.params.id);
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a gene with an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) {
-        console.log('no id');
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('no id');
+        }
         res.json({ item: null });
     }
 
+    const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+    const queryObj = {[fieldName]: req.params.id};
+
     // Find all the Genes with the current id
-    Genes.find({ hgnc_symbol: req.params.id}).exec((err, genes) => {
+    Genes.find(queryObj).exec((err, genes) => {
         if (err) {
-            console.log(err);
             next(err);
         } else {
             geneEntries = genes.slice();
-            let minLogFC = +Infinity;
-            let maxLogFC = -Infinity;
-            let maxNegLogPValue = -Infinity;
+            let minFC: number = +Infinity;
+            let maxFC: number = -Infinity;
+            let minLogFC: number = +Infinity;
+            let maxLogFC: number = -Infinity;
+            let maxAdjPValue: number = -Infinity;
+            let minAdjPValue: number = Infinity;
+            geneTissues = [];
+            geneModels = [];
             genes.forEach((g) => {
+                if (+g.fc > maxFC) { maxFC = (+g.fc); }
+                if (+g.fc < minFC) { minFC = (+g.fc); }
                 if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
                 if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                if (+g.neg_log10_adj_p_val > maxNegLogPValue) {
-                    maxNegLogPValue = (+g.neg_log10_adj_p_val);
+                const adjPVal: number = +g.adj_p_val;
+                if (+g.adj_p_val) {
+                    if (adjPVal > maxAdjPValue) {
+                        maxAdjPValue = adjPVal;
+                    }
+                    if (adjPVal < minAdjPValue) {
+                        minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                    }
+                }
+                if (geneTissues.indexOf(g.tissue) === -1) {
+                    geneTissues.push(g.tissue);
+                }
+                if (geneModels.indexOf(g.model) === -1) {
+                    geneModels.push(g.model);
                 }
             });
 
-            res.json({
-                item: genes[0],
-                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
-                maxLogFC,
-                maxNegLogPValue
+            GenesInfo.findOne(queryObj).exec((errB, geneInfo) => {
+                if (errB) {
+                    next(errB);
+                } else {
+                    // Adding this condition because UglifyJS can't handle ES2015, only needed
+                    // for the server
+                    if (env === 'development') {
+                        console.log('The gene info');
+                        console.log(geneInfo);
+                    }
+                    res.json({
+                        geneInfo,
+                        item: genes[0],
+                        minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                        maxFC,
+                        minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
+                        maxLogFC,
+                        minAdjPValue,
+                        maxAdjPValue
+                    });
+                }
             });
         }
     });
 });
 
 // Get a gene list by id
-router.get('/genelist/:id', function(req, res, next) {
-    console.log('Get a gene list with an id');
-    console.log(req.params.id);
+router.get('/genelist/:id', (req, res, next) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a gene list with an id');
+        console.log(req.params.id);
+    }
+
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: [] }); }
+
     GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
-        console.log(links);
-        const arr = links.slice().map((slink) => {
+        const arrA = links.slice().map((slink) => {
             return slink.toJSON()['geneB_ensembl_gene_id'];
         });
-        console.log(arr);
-        GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
-            .where('geneB_ensembl_gene_id')
-            .in(arr)
-            .exec((errB, linksC) => {
-                if (err) {
-                next(err);
-            } else {
-                    const flinks = [...links, ...linksC];
-                    res.json({ items: flinks });
-            }
+
+        GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
+            const arrB = linkB.slice().map((slink) => {
+                return slink.toJSON()['geneA_ensembl_gene_id'];
+            });
+            const arr = [...arrA, ...arrB];
+            GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
+                .where('geneB_ensembl_gene_id')
+                .in(arr)
+                .exec((errC, linksC) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        const flinks = [...links, ...linkB, ...linksC];
+                        res.json({ items: flinks });
+                    }
+            });
         });
     });
 });
 
 // Get all the tissues
 router.get('/tissues', (req, res, next) => {
-    console.log('Get all tissues');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all tissues');
+    }
 
     // Return an empty array in case we don't have tissues
     if (!allTissues.length) { res.json({ items: null }); }
@@ -280,14 +329,43 @@ router.get('/tissues', (req, res, next) => {
     res.json({ items: allTissues });
 });
 
+// Get all the gene tissues
+router.get('/tissues/gene', (req, res, next) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all tissues');
+    }
+
+    // Return an empty array in case we don't have tissues
+    if (!geneTissues.length) { res.json({ items: null }); }
+
+    res.json({ items: geneTissues });
+});
+
 // Get all the models
 router.get('/models', (req, res, next) => {
-    console.log('Get all models');
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all models');
+    }
 
     // Return an empty array in case we don't have models
     if (!allModels.length) { res.json({ items: null }); }
 
     res.json({ items: allModels });
+});
+
+// Get all the models
+router.get('/models/gene', (req, res, next) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get all models');
+    }
+
+    // Return an empty array in case we don't have models
+    if (!geneModels.length) { res.json({ items: null }); }
+
+    res.json({ items: geneModels });
 });
 
 export default router;

@@ -1,15 +1,6 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
-.plot-content {
-    min-height: 450px;
-    margin-top: 2%;
-
-    row-chart {
-        width: 100%;
-    }
-}
-
 .section-overview-header {
     padding-top: 2em;
     padding-left: 10%;
@@ -20,7 +11,8 @@
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 
     p {
-        text-align: left;
+        text-align: justify;
+        text-align-last: left;
     }
 }
 
@@ -231,7 +223,8 @@
 
 .rna-seq-bplot {
     p {
-        text-align: left;
+        text-align: justify;
+        text-align-last: left;
     }
 
     .fa-info-circle:before {
@@ -245,7 +238,8 @@
 
 .rna-seq-fplot {
     p {
-        text-align: left;
+        text-align: justify;
+        text-align-last: left;
     }
 
     .fa-info-circle:before {
@@ -255,4 +249,27 @@
     .icon-spacing {
         margin-right: 5px;
     }
+}
+
+.show-box-plot {
+    display: inline;
+}
+
+.hide-box-plot {
+    display: none;
+}
+
+.st-desc {
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    padding-top: 0px;
+}
+
+.no-side-padding {
+    background: rgba(245, 245, 245, 0.5);
+    padding-left: 0px;
+    padding-right: 0px;
 }

@@ -1,5 +1,5 @@
-import { Injectable, Input } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../models';
@@ -7,11 +7,8 @@ import { Gene } from '../../models';
 import { LazyLoadEvent } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
 
-import * as d3 from 'd3';
 import * as crossfilter from 'crossfilter2';
-import colorbrewer from 'colorbrewer';
 
 @Injectable()
 export class DataService {
@@ -36,55 +33,8 @@ export class DataService {
 
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            const params = new HttpParams();
-            const dic = [];
-
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
-                const dnodes = [];
-                const genes: any = {
-                    links: [],
-                    nodes: []
-                };
-                dnodes[sgene.ensembl_gene_id] = {
-                    id: sgene.ensembl_gene_id,
-                    ensembl_gene_id: sgene.ensembl_gene_id,
-                    group: 1,
-                    hgnc_symbol: sgene.hgnc_symbol,
-                    brainregions: []
-                };
-                genes.nodes = [...genes.nodes, dnodes[sgene.ensembl_gene_id]];
-                data['items'].forEach((obj: any) => {
-                    if (!dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]) {
-                        const link: any = {
-                            value: 1,
-                            source: obj.geneA_ensembl_gene_id,
-                            target: obj.geneB_ensembl_gene_id,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
-                        genes.links = [...genes.links,
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
-                    } else {
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value++;
-                        dic[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
-                        .brainregions.push(obj.brainRegion);
-                        dnodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                    }
-                    if (obj.geneA_ensembl_gene_id === sgene.ensembl_gene_id
-                        && !dnodes[obj.geneB_ensembl_gene_id]) {
-                        const node = {
-                            id: obj.geneB_ensembl_gene_id,
-                            ensembl_gene_id: obj.geneB_ensembl_gene_id,
-                            group: 1,
-                            hgnc_symbol: obj.geneB_external_gene_name,
-                            brainregions: [obj.brainRegion]
-                        };
-                        dnodes[obj.geneB_ensembl_gene_id] = node;
-                        genes.nodes = [...genes.nodes, dnodes[obj.geneB_ensembl_gene_id]];
-                    }
-                });
-                resolve(genes);
+                resolve(data);
             });
         });
     }
@@ -100,47 +50,16 @@ export class DataService {
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
                     d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.neg_log10_adj_p_val = +this.decimalPipe.transform(
-                        +d.neg_log10_adj_p_val,
-                        '1.1-5'
-                    );
-                    d.aveexpr = +this.decimalPipe.transform(+d.aveexpr, '1.1-5');
+                    d.fc = +this.decimalPipe.transform(+d.fc, '1.1-5');
+                    d.adj_p_val = +d.adj_p_val;
                     d.hgnc_symbol = d.hgnc_symbol;
-                    d.comparison_model_sex_pretty = d.comparison_model_sex_pretty;
-                    d.tissue_study_pretty = d.tissue_study_pretty;
+                    d.model = d.model;
+                    d.study = d.study;
+                    d.tissue = d.tissue;
                 });
 
                 this.ndx = crossfilter(data['items']);
                 this.data = data['items'];
-
-                this.hgncDim = this.ndx.dimension((d) => {
-                    return d.hgnc_symbol;
-                });
-
-                resolve(true);
-            });
-        });
-    }
-
-    loadGenesFile(fname: string): Promise<boolean> {
-        const self = this;
-        return new Promise((resolve, reject) => {
-            // This will be done once at the server
-            d3.csv(`/assets/data/${fname}`).then((data) => {
-                data.forEach((d) => {
-                    // Separate the columns we need
-                    d['logfc'] = self.decimalPipe.transform(+d['logfc'], '1.1-5');
-                    d['neg_log10_adj_p_val'] = self.decimalPipe.transform(
-                        +d['neg_log10_adj_p_val'],
-                        '1.1-5'
-                    );
-                    d['aveexpr'] = self.decimalPipe.transform(+d['aveexpr'], '1.1-5');
-                    d['hgnc_symbol'] = d['hgnc_symbol'];
-                    d['comparison_model_sex_pretty'] = d['comparison_model_sex_pretty'];
-                    d['tissue_study_pretty'] = d['tissue_study_pretty'];
-                });
-                this.ndx = crossfilter(data);
-                this.data = data;
 
                 this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
@@ -176,17 +95,16 @@ export class DataService {
         return this.http.get('/api/gene/' + id, { headers });
     }
 
-    getGeneEntries() {
+    getGeneEntries(): Gene[] {
         return this.geneEntries;
     }
 
-    getGenesDimension() {
+    getGenesDimension(): crossfilter.Dimension<any, any> {
         return this.hgncDim;
     }
 
     // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene, filterTissues?: string[],
-                 filterModels?: string[]): CrossFilter.Dimension<any, any> {
+    getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
         const dim = this.getNdx().dimension(function(d) {
@@ -205,7 +123,7 @@ export class DataService {
 
                     return [x, y, d[dimValue[2]]];
                 case 'box-plot':
-                    return (info.constraintNames.some((t) => t === d[dimValue[0]])) ? 1 : '';
+                    return 1;
                 case 'select-menu':
                     return d[dimValue[0]];
                 default:
@@ -220,22 +138,22 @@ export class DataService {
         return info.dim;
     }
 
-    getGroup(info: any): CrossFilter.Group<any, any, any> {
+    getGroup(info: any): crossfilter.Group<any, any, any> {
         let group = info.dim.group();
 
         // If we want to reduce based on certain parameters
-        if (info.attr || info.constraint || info.format) {
+        if (info.attr || info.format) {
             group.reduce(
                 // callback for when data is added to the current filter results
                 this.reduceAdd(
                     info.attr,
-                    (info.constraint) ? info.constraint : null,
-                    (info.format) ? info.format : null
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
                 ),
                 this.reduceRemove(
                     info.attr,
-                    (info.constraint) ? info.constraint : null,
-                    (info.format) ? info.format : null
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
                 ),
                 (info.format) ? this.reduceInitial : this.reduceInit
             );
@@ -249,20 +167,15 @@ export class DataService {
     }
 
     // Reduce functions for constraint charts
-    reduceAdd(attr: string, constraint?: any, format?: string) {
+    reduceAdd(attr: string, format?: string, constraints?: any[]) {
         return (p, v) => {
-            let val = 0;
-            // Using tissue constraint for the forest and box plots
-            if (constraint) {
-                if (constraint.names.some((t) => t === v[constraint.attr])) {
-                    val = +v[attr];
-                }
-            } else {
-                val = +v[attr];
-            }
+            let val = +v[attr];
 
             if (format && format === 'array') {
-                p.push(val);
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.push(val); }
+                }
                 return p;
             } else {
                 p[attr] += val;
@@ -272,20 +185,15 @@ export class DataService {
         };
     }
 
-    reduceRemove(attr: string, constraint?: any, format?: string) {
+    reduceRemove(attr: string, format?: string, constraints?: any[]) {
         return (p, v) => {
-            let val = 0;
-            // Using tissue constraint for the forest and box plots
-            if (constraint) {
-                if (constraint && constraint.names.some((t) => t === v[constraint.attr])) {
-                    val = +v[attr];
-                }
-            } else {
-                val = +v[attr];
-            }
+            let val = +v[attr];
 
             if (format && format === 'array') {
-                if (val) { p.splice(p.indexOf(val), 1); }
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.splice(p.indexOf(val), 1); }
+                }
                 return p;
             } else {
                 p[attr] -= val;
@@ -296,7 +204,7 @@ export class DataService {
     }
 
     reduceInit() {
-        return {count: 0, sum: 0, logfc: 0, neg_log10_adj_p_val: 0};
+        return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
     }
 
     // Box-plot uses a different function name in dc.js

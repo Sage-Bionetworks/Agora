@@ -31,3 +31,9 @@ h3 {
 .normal-heading {
     font-weight: normal;
 }
+
+.italic-heading {
+    font-weight: normal;
+    font-style: italic;
+    color: #8D919E;
+}

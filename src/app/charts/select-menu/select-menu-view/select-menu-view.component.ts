@@ -24,8 +24,8 @@ export class SelectMenuViewComponent implements OnInit {
     @Input() filterStrings: string[] = [];
     @Input() defaultValue: string;
     @Input() currentGene = this.geneService.getCurrentGene();
-    @Input() tissues = this.geneService.getTissues();
-    @Input() models = this.geneService.getModels();
+    @Input() tissues = this.geneService.getGeneTissues();
+    @Input() models = this.geneService.getGeneModels();
     @Input() dim: any;
     @Input() group: any;
 
@@ -56,12 +56,15 @@ export class SelectMenuViewComponent implements OnInit {
     initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.label, this.info);
+        this.dim = this.dataService.getDimension(this.info);
 
         this.chart = dc.selectMenu(this.selectMenu.nativeElement)
             .dimension(this.dim)
             .group(this.dim.group())
             .controlsUseVisibility(true)
+            .title((d) => {
+                return d.key;
+            })
             .on('filtered', function(chart, filter) {
                 if (self.label === 'select-tissue') { self.geneService.setCurrentTissue(filter); }
                 if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }

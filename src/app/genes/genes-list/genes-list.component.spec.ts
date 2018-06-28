@@ -2,28 +2,21 @@ import {
     async,
     ComponentFixture,
     TestBed,
-    inject,
     fakeAsync,
     tick
 } from '@angular/core/testing';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Location } from '@angular/common';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     ActivatedRouteStub,
     RouterStub,
     RouterOutletStubComponent,
-    RouterLinkStubDirective,
     DataServiceStub,
     GeneServiceStub,
-    mockGene1,
-    mockGene2
+    mockGene1
 } from '../../../app/testing';
-
-import { routes } from '../genes-routing.module';
-import { Gene } from '../../models';
 
 import { GenesListComponent } from './genes-list.component';
 
@@ -78,7 +71,7 @@ describe('Component: GenesList', () => {
     });
 
     it('should load the table', fakeAsync(() => {
-        const res = { items: [mockGene1, mockGene2] };
+        const res = { items: [mockGene1] };
         const loadEvent = {
             filters: {},
             first: 0,
@@ -108,14 +101,14 @@ describe('Component: GenesList', () => {
 
         component.onRowSelect({ data: mockGene1 }); // trigger click on row
         fixture.detectChanges();
-        expect(component.selectedGene).toEqual(mockGene1);
+        expect(component.selectedInfo).toEqual(mockGene1);
         expect(dsSpy.calls.any()).toEqual(true);
 
         // Expecting to navigate to hgnc_symbol of the selected gene
         expect(router.navigate).toHaveBeenCalledWith(
             [
                 '../gene-details',
-                component.selectedGene.hgnc_symbol
+                component.selectedInfo.ensembl_gene_id
             ],
             { relativeTo: activatedRoute }
         );
