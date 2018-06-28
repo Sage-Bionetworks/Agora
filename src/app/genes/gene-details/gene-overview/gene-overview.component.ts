@@ -2,12 +2,13 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneInfo } from '../../../models';
+import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 
 import {
     GeneService,
     DataService
 } from '../../../core/services';
+import { ForceService } from '../../../shared/services';
 
 @Component({
     selector: 'gene-overview',
@@ -28,13 +29,15 @@ export class GeneOverviewComponent implements OnInit {
     displayRelDia: boolean = false;
     displaySDDia: boolean = false;
     displayActDia: boolean = false;
+    currentGeneData = [];
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService,
         private dataService: DataService,
-        private location: Location
+        private location: Location,
+        private forceService: ForceService
     ) { }
 
     ngOnInit() {
@@ -76,6 +79,7 @@ export class GeneOverviewComponent implements OnInit {
         this.dataService.loadGenes().then((genesLoaded) => {
             if (genesLoaded) {
                 this.dataLoaded = genesLoaded;
+                // this.currentGeneData = this.forceService.getGenes().nodes;
             }
             // Handle error later
         });

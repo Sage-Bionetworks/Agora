@@ -13,6 +13,8 @@ export interface GeneLink {
     source: string;
     target: string;
     brainregions: string[];
+    hgnc_symbolA: string;
+    hgnc_symbolB: string;
 }
 
 export interface GeneNetwork {

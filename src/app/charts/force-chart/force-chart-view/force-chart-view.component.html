@@ -5,9 +5,9 @@
         </div>
     </div>
     <label for="filter">Filter: </label>
-    <input type="checkbox"
+    <!-- <input type="checkbox"
         [(ngModel)]="filter.active"
-        name="filter">
+        name="filter"> -->
     <div class="row" (window:resize)="onResize($event)">
         <div #chart class="fc" [ngClass]="{'light': filter.active}">
         </div>

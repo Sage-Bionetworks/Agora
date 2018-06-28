@@ -28,6 +28,10 @@ export class ForceService {
         };
     }
 
+    getGenes() {
+        return this.genes;
+    }
+
     processNode(obj: GeneNetworkLinks) {
         // Nodes from selected Gene
         if (!this.dicNodes[obj.geneB_ensembl_gene_id]) {
@@ -108,7 +112,9 @@ export class ForceService {
                 value: 1,
                 source: obj.geneA_ensembl_gene_id,
                 target: obj.geneB_ensembl_gene_id,
-                brainregions: [obj.brainRegion]
+                brainregions: [obj.brainRegion],
+                hgnc_symbolA: obj.geneA_external_gene_name,
+                hgnc_symbolB: obj.geneB_external_gene_name
             };
             this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
             this.genes.links = [...this.genes.links,

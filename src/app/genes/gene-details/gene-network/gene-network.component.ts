@@ -73,7 +73,7 @@ export class GeneNetworkComponent implements OnInit {
             this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
                 this.networkData = dn;
                 this.currentGeneData = dn.nodes.slice(1);
-                this.pathways = dn.links;
+                this.pathways = dn.links.slice().reverse();
                 this.dataLoaded = true;
                 console.log(this.currentGene);
             });
@@ -101,8 +101,8 @@ export class GeneNetworkComponent implements OnInit {
     //     return false;
     // }
 
-    viewGene(gene: GeneNode) {
-        this.dataService.getGene(gene.ensembl_gene_id).subscribe((data) => {
+    viewGene(id: string) {
+        this.dataService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
