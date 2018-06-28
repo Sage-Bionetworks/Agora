@@ -15,8 +15,7 @@ import {
     RouterOutletStubComponent,
     DataServiceStub,
     GeneServiceStub,
-    mockGene1,
-    mockGene2
+    mockGene1
 } from '../../../app/testing';
 
 import { GenesListComponent } from './genes-list.component';
@@ -72,7 +71,7 @@ describe('Component: GenesList', () => {
     });
 
     it('should load the table', fakeAsync(() => {
-        const res = { items: [mockGene1, mockGene2] };
+        const res = { items: [mockGene1] };
         const loadEvent = {
             filters: {},
             first: 0,
@@ -102,14 +101,14 @@ describe('Component: GenesList', () => {
 
         component.onRowSelect({ data: mockGene1 }); // trigger click on row
         fixture.detectChanges();
-        expect(component.selectedGene).toEqual(mockGene1);
+        expect(component.selectedInfo).toEqual(mockGene1);
         expect(dsSpy.calls.any()).toEqual(true);
 
         // Expecting to navigate to hgnc_symbol of the selected gene
         expect(router.navigate).toHaveBeenCalledWith(
             [
                 '../gene-details',
-                component.selectedGene.ensembl_gene_id
+                component.selectedInfo.ensembl_gene_id
             ],
             { relativeTo: activatedRoute }
         );

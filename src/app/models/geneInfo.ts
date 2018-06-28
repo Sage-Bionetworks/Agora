@@ -2,10 +2,10 @@ import { Document } from 'mongoose';
 
 export interface GoMF {
     category: string;
-    MF: string;
+    MF?: string;
     evidence: string;
     id: string;
-    pubmed: number;
+    pubmed: number[] | any;
     term: string;
 }
 
@@ -21,7 +21,7 @@ export interface GeneInfo {
     isIGAP: boolean;
     haseqtl: boolean;
     medianexpression: MedianExpression[];
-    nominatedtarget: NominatedTarget;
+    nominatedtarget: NominatedTarget[];
     nominations: number;
 }
 

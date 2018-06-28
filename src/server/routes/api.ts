@@ -1,5 +1,5 @@
-import { Gene } from '../../app/models';
-import { Genes, GeneInfo, GenesLinks } from '../../app/schemas';
+import { Gene, GeneInfo } from '../../app/models';
+import { Genes, GenesInfo, GenesLinks } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
@@ -34,7 +34,8 @@ router.get('/', (req, res) => {
 
 // Get the genes collection size
 let genesById: Gene[] = [];
-let genesByScore: Gene[] = [];
+let tableGenesById: GeneInfo[] = [];
+let tableGenesByNom: GeneInfo[] = [];
 let geneEntries: Gene[] = [];
 let allGenes: Gene[] = [];
 let totalRecords = 0;
@@ -83,12 +84,21 @@ Genes.aggregate(
         seen[g['hgnc_symbol']] = true;
         return g['hgnc_symbol'];
     });
-    // Unique genes, ordered by score
-    genesByScore = genesById.slice().sort((a, b) => {
-        return (a.logfc > b.logfc) ? 1 : ((b.logfc > a.logfc) ? -1 : 0);
-    });
+});
 
-    totalRecords = genesById.length;
+GenesInfo.find({ nominations: { $gt: 0 } }).sort({ hgnc_symbol: 1 }).exec((err, genes, next) => {
+    if (err) {
+        next(err);
+    } else {
+        tableGenesById = genes.slice();
+        // Table genes ordered by nominations
+        tableGenesByNom = genes.slice().sort((a, b) => {
+            return (a.nominations > b.nominations) ? 1 :
+                ((b.nominations > a.nominations) ? -1 : 0);
+        });
+
+        totalRecords = tableGenesById.length;
+    }
 });
 
 // Routes to get genes information
@@ -135,10 +145,11 @@ router.get('/genes/page', (req, res, next) => {
     const limit = (+req.query.rows) ? +req.query.rows : 10;
 
     // Get one array or the other depending on the list column we want to sort by
-    let genes: Gene[] = [];
+    let genes: GeneInfo[] = [];
 
     if (req.query.globalFilter !== 'null' && req.query.globalFilter) {
-        ((req.query.sortField === 'logfc') ? genesByScore : genesById).forEach((g) => {
+        ((req.query.sortField === 'nominations') ? tableGenesByNom : tableGenesById).forEach(
+            (g) => {
             // If we typed into the search above the list
             if (g.hgnc_symbol.includes(req.query.globalFilter.trim().toUpperCase()))  {
                 // Do not use a shallow copy here
@@ -146,7 +157,8 @@ router.get('/genes/page', (req, res, next) => {
             }
         });
     } else {
-        genes = ((req.query.sortField === 'logfc') ? genesByScore : genesById).slice();
+        genes = ((req.query.sortField === 'nominations') ? tableGenesByNom :
+            tableGenesById).slice();
     }
     // Updates the global length based on the filter
     totalRecords = genes.length;
@@ -242,7 +254,7 @@ router.get('/gene/:id', (req, res, next) => {
                 }
             });
 
-            GeneInfo.findOne(queryObj).exec((errB, geneInfo) => {
+            GenesInfo.findOne(queryObj).exec((errB, geneInfo) => {
                 if (errB) {
                     next(errB);
                 } else {

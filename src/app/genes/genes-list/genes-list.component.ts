@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
-import { DecimalPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -8,13 +7,12 @@ import {
     DataService
 } from 'app/core/services';
 
-import { Gene } from '../../models';
+import { GeneInfo } from '../../models';
 
 import {
     Message,
     SortEvent,
-    LazyLoadEvent,
-    FilterMetadata
+    LazyLoadEvent
 } from 'primeng/primeng';
 
 @Component({
@@ -24,11 +22,11 @@ import {
     encapsulation: ViewEncapsulation.None
 })
 export class GenesListComponent implements OnInit {
-    @Input() genes: Gene[];
+    @Input() genesInfo: GeneInfo[];
 
-    datasource: Gene[];
+    datasource: GeneInfo[];
     msgs: Message[] = [];
-    selectedGene: Gene;
+    selectedInfo: GeneInfo;
     totalRecords: number;
     cols: any[];
     loading: boolean = true;
@@ -44,7 +42,7 @@ export class GenesListComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'logfc', header: 'Nominations' }
+            { field: 'nominations', header: 'Nominations' }
         ];
     }
 
@@ -58,14 +56,16 @@ export class GenesListComponent implements OnInit {
             summary: 'Gene Selected',
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
-        if (!this.selectedGene) { this.selectedGene = event.data; }
-        this.dataService.getGene(this.selectedGene.hgnc_symbol).subscribe((data) => {
+        if (!this.selectedInfo) { this.selectedInfo = event.data; }
+        this.dataService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentGene(data['item']);
+            this.geneService.setCurrentInfo(data['info']);
+            this.geneService.setFC(data['minFC'], data['maxFC']);
             this.geneService.setLogFC(data['minFC'], data['maxFC']);
             this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
             this.router.navigate(
-                ['../gene-details', this.selectedGene.ensembl_gene_id],
+                ['../gene-details', this.selectedInfo.ensembl_gene_id],
                 {relativeTo: this.route}
             );
         });
@@ -119,8 +119,9 @@ export class GenesListComponent implements OnInit {
 
         // Use a promise when doing remotely
         this.dataService.getTableData(event).subscribe((data) => {
-            this.datasource = (data['items']) ? data['items'] as Gene[] : [];
-            this.genes = this.datasource;
+            console.log(data);
+            this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
+            this.genesInfo = this.datasource;
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
             this.loading = false;
         });

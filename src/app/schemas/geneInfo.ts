@@ -135,5 +135,5 @@ export let GeneInfoSchema: Schema = new Schema(
 );
 
 // Mongoose forces a lowcase name for collections when using the queries
-export const GeneInfo: Model<GeneInfoDocument> =
+export const GenesInfo: Model<GeneInfoDocument> =
                 model<GeneInfoDocument>('geneinfo', GeneInfoSchema);
