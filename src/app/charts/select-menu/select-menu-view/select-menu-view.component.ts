@@ -62,6 +62,9 @@ export class SelectMenuViewComponent implements OnInit {
             .dimension(this.dim)
             .group(this.dim.group())
             .controlsUseVisibility(true)
+            .title((d) => {
+                return d.key;
+            })
             .on('filtered', function(chart, filter) {
                 if (self.label === 'select-tissue') { self.geneService.setCurrentTissue(filter); }
                 if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }

@@ -81,6 +81,15 @@ p {
     color: black;
 }
 
+.italic-paragraph {
+    font-family: Lato;
+    font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    color: #8D919E;
+}
+
 .no-gutters {
     margin-right: 0;
     margin-left: 0;
@@ -90,6 +99,11 @@ p {
         padding-right: 0;
         padding-left: 0;
     }
+}
+
+.no-padding {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .center-justified {

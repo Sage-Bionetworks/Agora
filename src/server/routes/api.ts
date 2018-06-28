@@ -1,6 +1,5 @@
 import { Gene } from '../../app/models';
-import { Genes } from '../../app/schemas/gene';
-import { GenesLinks } from '../../app/schemas/geneLink';
+import { Genes, GeneInfo, GenesLinks } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
@@ -243,14 +242,22 @@ router.get('/gene/:id', (req, res, next) => {
                 }
             });
 
-            res.json({
-                item: genes[0],
-                minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                maxFC,
-                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
-                maxLogFC,
-                minAdjPValue,
-                maxAdjPValue
+            GeneInfo.findOne(queryObj).exec((errB, geneInfo) => {
+                if (errB) {
+                    next(errB);
+                } else {
+                    console.log(geneInfo);
+                    res.json({
+                        geneInfo,
+                        item: genes[0],
+                        minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                        maxFC,
+                        minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ? -maxLogFC : minLogFC,
+                        maxLogFC,
+                        minAdjPValue,
+                        maxAdjPValue
+                    });
+                }
             });
         }
     });

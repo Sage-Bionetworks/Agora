@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Gene } from '../../models';
+import { Gene, GeneInfo } from '../../models';
 
 @Injectable()
 export class GeneService {
     // Add the new #[field] from TypeScript when it's out
     // https://github.com/Microsoft/TypeScript/issues/24418
     currentGene: Gene;
+    currentInfo: GeneInfo;
     currentTissue: string;
     currentModel: string;
     models: string[] = [];
@@ -29,8 +30,16 @@ export class GeneService {
         this.currentGene = gene;
     }
 
-    getCurrentGene() {
+    getCurrentGene(): Gene {
         return this.currentGene;
+    }
+
+    setCurrentInfo(geneInfo: GeneInfo) {
+        this.currentInfo = geneInfo;
+    }
+
+    getCurrentInfo(): GeneInfo {
+        return this.currentInfo;
     }
 
     setCurrentTissue(tissue: string) {

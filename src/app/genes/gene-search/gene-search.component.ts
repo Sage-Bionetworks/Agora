@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 import 'rxjs/add/operator/debounceTime';
@@ -11,7 +11,6 @@ import { Observable } from 'rxjs/Observable';
 import { Gene } from '../../models';
 
 import {
-    BreadcrumbService,
     GeneService,
     DataService
 } from '../../core/services';
@@ -35,7 +34,6 @@ export class GeneSearchComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService
     ) { }
