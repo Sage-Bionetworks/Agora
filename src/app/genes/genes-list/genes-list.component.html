@@ -11,8 +11,8 @@
 </div>
 <div class="nomlist-list center-justified">
     <p-table #gl
-        [columns]="cols" [value]="genes" selectionMode="single"
-        [(selection)]="selectedGene" dataKey="ensembl_gene_id"
+        [columns]="cols" [value]="genesInfo" selectionMode="single"
+        [(selection)]="selectedInfo" dataKey="ensembl_gene_id"
         [paginator]="true"
         [rows]="14"
         [lazy]="true"
@@ -39,7 +39,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns; let i = index;">
-                    {{isNaN(rowData[col.field]) ? rowData[col.field] : (rowData[col.field] | number:'1.2-5')}}
+                    {{rowData[col.field]}}
                 </td>
             </tr>
         </ng-template>

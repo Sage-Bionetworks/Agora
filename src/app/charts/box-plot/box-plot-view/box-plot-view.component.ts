@@ -89,7 +89,8 @@ export class BoxPlotViewComponent implements OnInit {
                 chart.y(this.getYScale(this.info.attr));
             })*/
             // .y(this.getYScale(this.info.attr))
-            .tickFormat(d3.format('.3f'));
+            // .tickFormat(d3.format('.3f'));
+            .tickFormat(() => '');
 
         if (this.info.attr !== 'fc') { this.chart.yAxis().tickFormat(d3.format('.1e')); }
         // Remove filtering for these charts
