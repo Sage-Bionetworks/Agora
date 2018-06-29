@@ -1,6 +1,6 @@
 {
   "name": "wall-of-targets",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular",
