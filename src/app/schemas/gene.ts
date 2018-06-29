@@ -1,50 +1,52 @@
 import { Schema, Model, model } from 'mongoose';
 import { GeneDocument } from '../models';
 
-export let GeneSchema: Schema = new Schema({
-    ensembl_gene_id: {
-        required: true,
-        type: String,
-    },
-    hgnc_symbol: {
-        required: true,
-        type: String,
-    },
-    logfc: {
-        required: false,
-        type: Number
-    },
-    fc: {
-        required: false,
-        type: Number
-    },
-    ci_l: {
-        required: false,
-        type: Number
-    },
-    ci_r: {
-        required: false,
-        type: Number
-    },
-    adj_p_val: {
-        required: false,
-        type: Number
-    },
-    tissue: {
-        required: false,
-        type: String
-    },
-    study: {
-        required: false,
-        type: String
-    },
-    model: {
-        required: false,
-        type: String
+export let GeneSchema: Schema = new Schema(
+    {
+        ensembl_gene_id: {
+            required: true,
+            type: String,
+        },
+        hgnc_symbol: {
+            required: true,
+            type: String,
+        },
+        logfc: {
+            required: false,
+            type: Number
+        },
+        fc: {
+            required: false,
+            type: Number
+        },
+        ci_l: {
+            required: false,
+            type: Number
+        },
+        ci_r: {
+            required: false,
+            type: Number
+        },
+        adj_p_val: {
+            required: false,
+            type: Number
+        },
+        tissue: {
+            required: false,
+            type: String
+        },
+        study: {
+            required: false,
+            type: String
+        },
+        model: {
+            required: false,
+            type: String
+        }
+    }, {
+        timestamps: true
     }
-}, {
-    timestamps: true
-});
+);
 
 // Add methods here, if needed e.g.
 /*GeneSchema.methods.fullName = () => {

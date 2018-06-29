@@ -1,5 +1,5 @@
 import { Gene, GeneInfo } from '../../app/models';
-import { Genes, GenesInfo, GenesLinks } from '../../app/schemas';
+import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
@@ -313,6 +313,27 @@ router.get('/genelist/:id', (req, res, next) => {
                     }
             });
         });
+    });
+});
+
+// Get a team by team field
+router.get('/teams', (req, res, next) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a team from a nominated gene');
+        console.log(req.query);
+    }
+
+    // Return an empty array in case no id was passed or no params
+    if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
+    const arr = req.query.teams.split(', ');
+
+    TeamsInfo.find({team: { $in: arr } }).exec((err, team) => {
+        if (err) {
+            next(err);
+        } else {
+            res.json({ items: team });
+        }
     });
 });
 

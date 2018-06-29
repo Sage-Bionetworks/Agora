@@ -1,7 +1,7 @@
 .nav-row {
     //background: black;
-    height: 87px;
-    max-height: 87px;
+    height: 80px;
+    max-height: 80px;
     padding-left: 1%;
     padding-right: 1%;
     margin-right: 0px;
@@ -25,12 +25,12 @@
 }
 
 .logo-bg {
+    background: #FFFFFF;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
     line-height: normal;
-    font-size: 30px;
-    color: #C4C4C4;
+    color: #3C4A63 !important;
     text-align: center;
     min-width: 180px;
     height: 58px;
@@ -38,4 +38,8 @@
     background: url('/assets/img/AgoraLogo-R.png');
     background-image: url('/assets/img/AgoraLogo-R.svg'),none;
     background-repeat: no-repeat;
+}
+
+.icon-spacing {
+    margin-right: 5px;
 }

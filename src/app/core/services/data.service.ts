@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
-import { Gene } from '../../models';
+import { Gene, GeneInfo } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
@@ -93,6 +93,16 @@ export class DataService {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
         return this.http.get('/api/gene/' + id, { headers });
+    }
+
+    getTeam(info: GeneInfo): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const params = new HttpParams().set(
+            'teams', info.nominatedtarget.map((e) => e.team).join(', ')
+        );
+        console.log(params);
+
+        return this.http.get('/api/teams', { headers, params });
     }
 
     getGeneEntries(): Gene[] {

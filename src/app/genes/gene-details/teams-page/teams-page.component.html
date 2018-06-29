@@ -5,7 +5,50 @@
 <div class="section-thin overview-header">
     <div class="row no-gutters">
         <div class="col-md-7">
-            <h1>To be added</h1>
+            <h1>AMP-AD Evidence in Support of MSN</h1>
+            <p>
+                The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
+                AD targets. For selected targets, teams have performed further experimental model system validation.
+                Because these target hypotheses are not yet fully validated, we are seeking input from the community
+                to help in their evalutation.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="dataLoaded">
+    <div *ngFor="let team of teams" class="section-thin overview-desc">
+        <h2>
+            {{team.team}}
+        </h2>
+        <p class="black-paragraph">
+            {{team.description}}
+        </p>
+        <h3>
+            Why was the target selected?
+        </h3>
+        <p class="black-paragraph">
+            To be added
+        </p>
+        <h3>
+            Predicted therapeutic drection
+        </h3>
+        <p class="black-paragraph">
+            To be added
+        </p>
+        <h3>
+            The type of data used and analyses done to identify target
+        </h3>
+        <p class="black-paragraph">
+            To be added
+        </p>
+        <a>
+            Website link
+        </a>
+        <div class="row">
+            <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-xs-4">
+                <span>{{member.name}}</span>
+            </div>
         </div>
     </div>
 </div>

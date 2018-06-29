@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Gene, GeneInfo } from '../../models';
+import { Gene, GeneInfo, TeamInfo } from '../../models';
 
 @Injectable()
 export class GeneService {
@@ -9,6 +9,7 @@ export class GeneService {
     // https://github.com/Microsoft/TypeScript/issues/24418
     currentGene: Gene;
     currentInfo: GeneInfo;
+    currentTeams: TeamInfo[];
     currentTissue: string;
     currentModel: string;
     models: string[] = [];
@@ -40,6 +41,14 @@ export class GeneService {
 
     getCurrentInfo(): GeneInfo {
         return this.currentInfo;
+    }
+
+    setCurrentTeams(teams: TeamInfo[]) {
+        this.currentTeams = teams;
+    }
+
+    getCurrentTeams(): TeamInfo[] {
+        return this.currentTeams;
     }
 
     setCurrentTissue(tissue: string) {
