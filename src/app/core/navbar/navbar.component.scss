@@ -25,14 +25,17 @@
 }
 
 .logo-bg {
-    background: #C4C4C4;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
     line-height: normal;
     font-size: 30px;
-    color: #FFFFFF;
+    color: #C4C4C4;
     text-align: center;
-    max-width: 180px;
+    min-width: 180px;
+    height: 58px;
     cursor: pointer;
+    background: url('/assets/img/AgoraLogo-R.png');
+    background-image: url('/assets/img/AgoraLogo-R.svg'),none;
+    background-repeat: no-repeat;
 }
