@@ -38,7 +38,7 @@ export class ForceService {
         return this.datachange;
     }
 
-    processNode(obj: GeneNetworkLinks, dic) {
+    processNode(obj: GeneNetworkLinks, dic, genes) {
         // Nodes from selected Gene
         if (!dic[obj.geneB_ensembl_gene_id]) {
             const node: GeneNode = {
@@ -49,7 +49,7 @@ export class ForceService {
                 brainregions: [obj.brainRegion]
             };
             dic[obj.geneB_ensembl_gene_id] = node;
-            this.genes.nodes = [...this.genes.nodes,
+            genes.nodes = [...genes.nodes,
             dic[obj.geneB_ensembl_gene_id]];
             this.processBrainRegion(dic[obj.geneB_ensembl_gene_id], dic);
         }
@@ -63,7 +63,7 @@ export class ForceService {
                 brainregions: [obj.brainRegion]
             };
             dic[obj.geneA_ensembl_gene_id] = node;
-            this.genes.nodes = [...this.genes.nodes,
+            genes.nodes = [...genes.nodes,
             dic[obj.geneA_ensembl_gene_id]];
             this.processBrainRegion(dic[obj.geneA_ensembl_gene_id], dic);
         }
@@ -155,7 +155,7 @@ export class ForceService {
             };
             genes.nodes = [dicNodesC[gene.ensembl_gene_id]];
             data['items'].forEach((obj: any) => {
-                this.processNode(obj, dicNodesC);
+                this.processNode(obj, dicNodesC, genes);
                 this.processLink(obj, dicLinksC, dicNodesC, genes);
             });
             resolve(genes);
@@ -175,7 +175,7 @@ export class ForceService {
             this.genes.nodes = [...this.genes.nodes,
                 this.dicNodes[this.currentGene.ensembl_gene_id]];
             this.rawData['items'].forEach((obj: any) => {
-                this.processNode(obj, this.dicNodes);
+                this.processNode(obj, this.dicNodes, this.genes);
                 this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);
             });
             this.genes.links.sort((a, b) => {

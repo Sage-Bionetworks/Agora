@@ -19,8 +19,12 @@ export class GeneNetworkComponent implements OnInit {
     @Input() id: string;
     dataLoaded: boolean = false;
     displayBRDia: boolean = false;
+    networkData: GeneNetwork;
+    selectedGeneData: GeneNetwork = {
+        nodes: [],
+        links: []
+    };
 
-    private pathways: GeneLink[] = [];
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
 
@@ -61,7 +65,8 @@ export class GeneNetworkComponent implements OnInit {
         });
         this.dataService.loadNodes(event).then((data: any) => {
             this.forceService.processSelectedNode(event, data).then((network) => {
-                this.pathways = network.links;
+                this.selectedGeneData.links = network.links;
+                this.selectedGeneData.nodes = network.nodes;
             });
         });
     }
@@ -76,8 +81,8 @@ export class GeneNetworkComponent implements OnInit {
             this.forceService.setData(data);
             this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
                 this.networkData = dn;
-                this.currentGeneData = dn.nodes.slice(1);
-                this.pathways = dn.links.slice().reverse();
+                this.selectedGeneData.nodes = dn.nodes.slice(1);
+                this.selectedGeneData.links = dn.links.slice().reverse();
                 this.dataLoaded = true;
                 console.log(this.currentGene);
             });

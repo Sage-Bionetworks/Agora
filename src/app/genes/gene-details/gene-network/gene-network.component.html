@@ -4,34 +4,47 @@
     </div>
     <div class="col-md-4 ">
         <div class="row nopadding currentGene">
-            <h2>{{geneInfo.hgnc_symbol}}</h2>
-            <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
-            <div>AMP-AD target <span class="true"> True</span></div>
-            <div>Brain eQTL <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span></div>
-            <!-- <div>Protein Precense <span class="false"> False</span></div> -->
-        </div>
-        <div class="row brainregions nopadding">
-            <h2>
-                Brain Regions
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
-            </h2>
-            <div *ngFor="let path of pathways;" class="pathbox">
-                <div>
-                <span (click)="viewGene(path.source.id)">{{path.hgnc_symbolA}}</span>
-                -&nbsp;
-                <span (click)="viewGene(path.target.id)">{{path.hgnc_symbolB}}</span>
-            </div>
-                <span *ngFor="let region of path.brainregions; last as isLast">
-                {{region}}{{isLast ? '' : ', '}}
-                </span>
+            <div class="container">
+                <h2>{{geneInfo.hgnc_symbol}}</h2>
+                <p>{{geneInfo.summary}}</p>
+                <div>Known AD Gene Variant
+                    <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span>
+                </div>
+                <div>AMP-AD target
+                    <span class="true"> True</span>
+                </div>
+                <div>Brain eQTL
+                    <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span>
+                </div>
+                <!-- <div>Protein Precense <span class="false"> False</span></div> -->
             </div>
         </div>
         <div class="row brainregions nopadding">
-        <h2>Similar Genes</h2>
-        <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
-            <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+            <div class="container">
+                <h2>
+                    Brain Regions
+                    <span class="icon-spacing"></span>
+                    <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
+                </h2>
+                <div *ngFor="let link of selectedGeneData.links;" class="pathbox">
+                    <div>
+                        <span (click)="viewGene(link.source.id)">{{link.hgnc_symbolA}}</span>
+                        -&nbsp;
+                        <span (click)="viewGene(link.target.id)">{{link.hgnc_symbolB}}</span>
+                    </div>
+                    <span *ngFor="let region of link.brainregions; last as isLast">
+                        {{region}}{{isLast ? '' : ', '}}
+                    </span>
+                </div>
+            </div>
         </div>
+        <div class="row brainregions nopadding">
+            <div class="container">
+                <h2>Similar Genes</h2>
+                <div *ngFor="let node of selectedGeneData.nodes | myArraySort: 'brainregions' : true;" class="pathbox">
+                    <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

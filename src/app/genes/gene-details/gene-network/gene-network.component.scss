@@ -53,10 +53,18 @@
     div{
         width: 100%;
     }
+    .container {
+      p {
+        color: #000000;
+        padding-top: 0px;
+        text-align: left;
+        font-size: 16px;
+      }
+    }
     border-top: 1px solid #DDD;
 }
 .brainregions {
-  height: 200px;
+  height: 284px;
   overflow-y: scroll;
   border-top: 1px solid #DDD;
   border-bottom: 1px solid #DDD;
