@@ -70,7 +70,7 @@ Go back to Compass and create a database called `walloftargets`. In the Create D
 
 # Downloading the data
 
-Go to the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download three files: `geneExprData.json`, `network.json`, `gene_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json` and `dataInfo.json` respectively.
+Go to the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download four files: `geneExprData.json`, `network.json`, `gene_info.json`, `team_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json`, `dataInfo.json`, and `teamInfo.json` respectively.
 
 Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following commands:
 
@@ -78,6 +78,7 @@ Now go back to the Mongo binary folder directory (same folder you issued the `mo
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
 mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
 mongoimport --db walloftargets --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
+mongoimport --db walloftargets --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json"
 ```
 
 * Convert mongo value types
@@ -381,7 +382,7 @@ npm run docker:up
 npm run docker
 ```
 
-Now go to `localhost` and you should see the application up. If you run into the following errorr:
+Now go to `localhost` and you should see the application up. If you run into the following errors:
 
 ```bash
 ...Cannot start service mongodb: driver failed programming external connectivity on endpoint...
@@ -420,7 +421,7 @@ To remove all unused containers:
 
 ```bash
 # Remove all containers with the Exited status
-docker rm $( docker ps -q -f status=exited)
+docker rm $(docker ps -q -f status=exited)
 ```
 
 To remove all unused volumes (good to prevent out of space problems):

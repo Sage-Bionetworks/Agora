@@ -12,7 +12,7 @@ const env = process.env.NODE_ENV || 'development';
 // Set the database url
 if (process.env.Docker) {
     // Service name here, not the localhost
-    database.url = 'mongodb://mongodb/walloftargets';
+    database.url = 'mongodb://mongodb:27017/walloftargets';
 } else {
     database.url = 'mongodb://localhost/walloftargets';
 }
