@@ -11,6 +11,10 @@
     text-align: center;
     color: #0D1C38;
     z-index: 2;
+
+    span {
+        cursor: pointer;
+    }
 }
 
 .align-left {

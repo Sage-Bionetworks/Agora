@@ -57,6 +57,7 @@ import '../../styles/headings.css';
     ],
     exports: [
         // Exported components
+        AboutComponent,
         BreadcrumbComponent,
         NavbarComponent,
         MenubarComponent,

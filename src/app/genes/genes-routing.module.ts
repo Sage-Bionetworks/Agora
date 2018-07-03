@@ -18,7 +18,7 @@ export const routes: Routes = [
         { path: 'gene-coexp-network/:id', component: GeneNetworkComponent, outlet: 'genes-router' },
         { path: 'teams-page/:id', component: TeamsPageComponent, outlet: 'genes-router' }
     ] },
-    { path: '**', redirectTo: 'genes', pathMatch: 'full' }
+    { path: '', redirectTo: 'genes', pathMatch: 'full' }
 ];
 
 @NgModule({
