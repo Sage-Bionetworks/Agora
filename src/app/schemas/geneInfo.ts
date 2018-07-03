@@ -134,6 +134,14 @@ export let GeneInfoSchema: Schema = new Schema(
     }
 );
 
+GeneInfoSchema.set('autoIndex', false);
+GeneInfoSchema.index(
+    {
+        hgnc_symbol: 'text',
+        ensembl_gene_id: 'text'
+    }
+);
+
 // Mongoose forces a lowcase name for collections when using the queries
 export const GenesInfo: Model<GeneInfoDocument> =
                 model<GeneInfoDocument>('geneinfo', GeneInfoSchema);

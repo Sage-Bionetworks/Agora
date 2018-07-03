@@ -8,7 +8,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/empty';
 import { Observable } from 'rxjs/Observable';
 
-import { Gene } from '../../models';
+import { Gene, GeneInfo } from '../../models';
 
 import {
     GeneService,
@@ -25,9 +25,9 @@ export class GeneSearchComponent implements OnInit {
     @Input() fname: string;
     @Input() styleClass: string = '';
     @Input() style: any;
-    @Input() genes: Gene[];
+    @Input() infos: Gene[];
     queryField: FormControl = new FormControl();
-    results: Gene[] = [];
+    results: GeneInfo[] = [];
     hasFocus: boolean = false;
 
     private gene: Gene;
@@ -51,7 +51,7 @@ export class GeneSearchComponent implements OnInit {
                 }
             })
             .subscribe((data) => {
-                this.results = (data['items']) ? data['items'] as Gene[] : [];
+                this.results = (data['items']) ? data['items'] as GeneInfo[] : [];
             });
     }
 

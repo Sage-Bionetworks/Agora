@@ -7,7 +7,7 @@ import {
     DataService
 } from 'app/core/services';
 
-import { GeneInfo } from '../../models';
+import { GeneInfo, NominatedTarget } from '../../models';
 
 import {
     Message,
@@ -42,11 +42,19 @@ export class GenesListComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'nominations', header: 'Nominations' }
+            { field: 'nominations', header: 'Nominations' },
+            { field: 'nominatedtarget', header: 'Teams' }
         ];
+
+        this.dataService.getTableData().subscribe((data) => {
+            this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
+            this.genesInfo = this.datasource;
+            this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
+            this.loading = false;
+        });
     }
 
-    getAlignment(i: number, max: number) {
+    getAlignment(i: number, max: number): string {
         return (i < max) ? 'left' : 'right';
     }
 
@@ -80,14 +88,18 @@ export class GenesListComponent implements OnInit {
         this.geneService.setCurrentGene(null);
     }
 
-    isNaN(input: any) {
+    isNaN(input: any): boolean {
         return isNaN(input);
     }
 
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
-            const value1 = data1[event.field];
-            const value2 = data2[event.field];
+            const value1 = (Array.isArray(data1[event.field])) ?
+                data1[event.field].map((nt) => nt.team).join(', ') :
+                data1[event.field];
+            const value2 = (Array.isArray(data2[event.field])) ?
+                data2[event.field].map((nt) => nt.team).join(', ') :
+                data2[event.field];
             let result = null;
 
             if (value1 == null && value2 != null) {
@@ -118,13 +130,18 @@ export class GenesListComponent implements OnInit {
         // matchMode as value
 
         // Use a promise when doing remotely
-        this.dataService.getTableData(event).subscribe((data) => {
-            console.log(data);
-            this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
-            this.genesInfo = this.datasource;
-            this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
-            this.loading = false;
-        });
+        if (this.loading) {
+            this.dataService.getPageData(event).subscribe((data) => {
+                this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
+                this.genesInfo = this.datasource;
+                this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
+                this.loading = false;
+            });
+        }
+    }
+
+    getTeams(nomTargets: NominatedTarget[]): string {
+        return nomTargets.map((nt) => nt.team).join(', ');
     }
 
     goBack() {

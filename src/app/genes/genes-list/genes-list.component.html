@@ -12,16 +12,15 @@
 <div class="nomlist-list center-justified">
     <p-table #gl
         [columns]="cols" [value]="genesInfo" selectionMode="single"
-        [(selection)]="selectedInfo" dataKey="ensembl_gene_id"
+        [(selection)]="selectedInfo"
         [paginator]="true"
         [rows]="14"
-        [lazy]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
-        (onLazyLoad)="loadGenesLazy($event)">
+        [customSort]="true">
         <ng-template pTemplate="caption">
             <input type="text" pInputText size="50" placeholder="Gene Filter"
                 (input)="gl.filterGlobal($event.target.value, 'contains')">
@@ -38,8 +37,17 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
-                <td *ngFor="let col of columns; let i = index;">
+                <!--<td *ngFor="let col of columns; let i = index;">
                     {{rowData[col.field]}}
+                </td>-->
+                <td>
+                    {{rowData[columns[0].field]}}
+                </td>
+                <td>
+                    {{rowData[columns[1].field]}}
+                </td>
+                <td>
+                    {{getTeams(rowData[columns[2].field])}}
                 </td>
             </tr>
         </ng-template>

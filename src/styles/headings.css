@@ -37,3 +37,10 @@ h3 {
     font-style: italic;
     color: #8D919E;
 }
+
+.link-heading {
+    color: #86C4C7;
+    text-decoration: underline;
+    font-weight: normal;
+    cursor: pointer;
+}

@@ -3,7 +3,7 @@
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
             <input type="text" [formControl]="queryField" id="keyword"
-                (blur)="closeSearchList($event.target)"  placeholder="Search by gene"/>
+                (blur)="closeSearchList($event.target)"  placeholder="Search by HGNC symbol"/>
             <i class="fa fa-search fa-lg"></i>
         </div>
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
@@ -11,6 +11,7 @@
                 <p class="gene-name">
                     {{result.hgnc_symbol}}
                 </p>
+                <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>
             </li>
         </ul>
     </section>

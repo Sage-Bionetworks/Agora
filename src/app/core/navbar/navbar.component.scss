@@ -1,10 +1,9 @@
 .nav-row {
-    //background: black;
     height: 80px;
     max-height: 80px;
-    padding-left: 1%;
-    padding-right: 1%;
     margin-right: 0px;
+    flex-wrap: nowrap;
+    margin-left: 10px;
 
     span {
         color: white;

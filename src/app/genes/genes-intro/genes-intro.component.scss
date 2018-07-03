@@ -20,7 +20,27 @@
     }
 }
 
+gene-search {
+    box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.35);
+    margin-bottom: 2%;
+    padding-top: 0px;
+
+    @include respond-to('ex-small') {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    @include respond-to('small') {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
 .intro-nomlist-desc {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%;
+}
+
+.intro-contrib-desc {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
 }
@@ -41,7 +61,7 @@ p-button {
     @include respond-to('ex-small') {
         width: 70%;
     }
-    width: 60%;
+    width: 64%;
     height: 100%;
 
     button {

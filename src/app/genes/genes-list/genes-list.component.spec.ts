@@ -72,21 +72,11 @@ describe('Component: GenesList', () => {
 
     it('should load the table', fakeAsync(() => {
         const res = { items: [mockGene1] };
-        const loadEvent = {
-            filters: {},
-            first: 0,
-            globalFilter: null,
-            multiSortMeta: undefined,
-            rows: 14,
-            sortField: undefined,
-            sortOrder: 1
-        };
 
         const dsSpy = spyOn(dataService, 'getTableData').and.returnValue(
             Observable.of(res)
         );
-        spyOn(component, 'loadGenesLazy').and.callThrough(); // mock event object to load the table
-        component.loadGenesLazy(loadEvent);
+        spyOn(component, 'ngOnInit').and.callThrough(); // mock event object to load the table
         fixture.detectChanges();
         tick(1);
         expect(component.datasource).toEqual(res.items);

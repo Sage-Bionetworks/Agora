@@ -33,9 +33,9 @@ router.get('/', (req, res) => {
 // Preprocess the data when the server goes up
 
 // Get the genes collection size
-let genesById: Gene[] = [];
 let tableGenesById: GeneInfo[] = [];
 let tableGenesByNom: GeneInfo[] = [];
+let genesById: Gene[] = [];
 let geneEntries: Gene[] = [];
 let allGenes: Gene[] = [];
 let totalRecords = 0;
@@ -133,7 +133,7 @@ router.get('/genes', (req, res, next) => {
 });
 
 // Use mongoose to get one page of genes
-router.get('/genes/page', (req, res, next) => {
+router.get('/genes/page', (req, res) => {
     // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
     if (env === 'development') {
         console.log('Get a page of genes');
@@ -171,7 +171,18 @@ router.get('/genes/page', (req, res, next) => {
     res.json({ items: genes.slice(skip, skip + limit), totalRecords });
 });
 
-// Get all genes that match an id, currently ensembl_gene_id
+// Use mongoose to get all pages for the table
+router.get('/genes/table', (req, res) => {
+    // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+    if (env === 'development') {
+        console.log('Get a page of genes');
+        console.log(req.query);
+    }
+
+    res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
+});
+
+// Get all genes that match an id, currently hgnc_symbol
 router.get('/genes/:id', (req, res, next) => {
     // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
     if (env === 'development') {
@@ -182,20 +193,14 @@ router.get('/genes/:id', (req, res, next) => {
     // Return an empty array in case no id was passed or no params
     if (!req.params || !req.params.id) { res.json({ items: []}); }
 
-    const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-
-    // Get one array or the other depending on the list column we want to sort by
-    const genes: Gene[] = [];
-    // Filter the map using a for loop. For arrays it is Twice as fast as a native filter
-    // https://jsperf.com/array-filter-performance
-    genesById.forEach((g) => {
-        if (g[fieldName].includes(req.params.id.trim().toUpperCase())) {
-            // Do not use a shallow copy here
-            genes.push(JSON.parse(JSON.stringify(g)));
+    GenesInfo.find({ hgnc_symbol: { $regex: req.params.id.trim(), $options: 'i' }}).exec(
+        (err, geneInfos) => {
+        if (err) {
+            next(err);
+        } else {
+            res.json({ items: geneInfos });
         }
     });
-
-    res.json({ items: genes });
 });
 
 // Get a gene by id, can be hgnc_symbol or ensembl_gene_id

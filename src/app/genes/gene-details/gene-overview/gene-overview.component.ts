@@ -54,7 +54,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
             this.dataService.getGene(this.id).subscribe((data) => {
-                console.log(data);
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
                 this.geneService.setCurrentInfo(data['geneInfo']);
@@ -128,6 +127,16 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     goBack() {
         this.location.back();
+    }
+
+    viewPathaways() {
+        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
+            this.gene.ensembl_gene_id, '_blank');
+    }
+
+    viewGeneOntology() {
+        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=' +
+            this.gene.ensembl_gene_id, '_blank');
     }
 
     ngOnDestroy() {

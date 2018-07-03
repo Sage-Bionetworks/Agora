@@ -72,12 +72,16 @@ p-dialog {
     }
 }
 
+.info-header {
+    padding-right: 5% !important;
+}
+
 .overview-header {
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 
     p {
-        text-align: justify;
         text-align-last: left;
+        text-align: left;
     }
 
     .fa-star::before {
@@ -126,7 +130,23 @@ p-dialog {
     font-style: normal;
     font-weight: bold;
     line-height: normal;
-    font-size: 24px;
+
+    @include respond-to('ex-small') {
+        font-size: 18px;
+    }
+    @include respond-to('small') {
+        font-size: 21px;
+    }
+    @include respond-to('medium') {
+        font-size: 24px;
+    }
+    @include respond-to('large') {
+        font-size: 24px;
+    }
+    @include respond-to('ex-large') {
+        font-size: 24px;
+    }
+
     color: #0D1C38 !important;
     vertical-align: middle;
     cursor: pointer;

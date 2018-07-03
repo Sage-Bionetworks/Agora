@@ -143,26 +143,46 @@
                 padding-left: 4%;
                 text-align-last: left;
             }
+
+            .ui-sortable-column {
+                font-size: 14px;
+            }
         }
         @include respond-to('small') {
             >tr>th:first-child {
                 padding-left: 4%;
                 text-align-last: left;
             }
+
+            .ui-sortable-column {
+                font-size: 16px;
+            }
         }
         @include respond-to('medium') {
             >tr>th:first-child {
                 text-align-last: center;
+            }
+
+            .ui-sortable-column {
+                font-size: 18px;
             }
         }
         @include respond-to('large') {
             >tr>th:first-child {
                 text-align-last: center;
             }
+
+            .ui-sortable-column {
+                font-size: 18px;
+            }
         }
         @include respond-to('ex-large') {
             >tr>th:first-child {
                 text-align-last: center;
+            }
+
+            .ui-sortable-column {
+                font-size: 18px;
             }
         }
     }
@@ -177,7 +197,23 @@
             font-style: normal;
             font-weight: normal;
             line-height: 40px;
-            font-size: 18px;
+
+            @include respond-to('ex-small') {
+                font-size: 14px;
+            }
+            @include respond-to('small') {
+                font-size: 16px;
+            }
+            @include respond-to('medium') {
+                font-size: 18px;
+            }
+            @include respond-to('large') {
+                font-size: 18px;
+            }
+            @include respond-to('ex-large') {
+                font-size: 18px;
+            }
+
             color: #1A1C29;
             height: 40px;
         }

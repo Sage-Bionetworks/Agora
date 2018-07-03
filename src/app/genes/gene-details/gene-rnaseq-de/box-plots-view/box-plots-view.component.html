@@ -1,17 +1,15 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-12 bplot-heading">
         <h2>{{tissue.toUpperCase()}}</h2>
+        <h3>log 2 fold change</h3>
     </div>
 </div>
-<div class="row plot-content">
-    <div class="col-md-1 d-none d-md-block">
+<div class="row bp-plot-content">
+    <div class="col-md-3 d-none d-md-block">
     </div>
-    <div class="col-md-5 col-sm-6 col-12">
+    <div class="col-md-6 col-sm-12 col-12">
         <box-plot [label]="label1" [info]="info1"></box-plot>
     </div>
-    <div class="col-md-5 col-sm-6 col-12">
-        <box-plot [label]="label2" [info]="info2"></box-plot>
-    </div>
-    <div class="col-md-1 d-none d-md-block">
+    <div class="col-md-3 d-none d-md-block">
     </div>
 </div>

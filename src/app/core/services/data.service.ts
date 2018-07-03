@@ -70,7 +70,7 @@ export class DataService {
         });
     }
 
-    getTableData(paramsObj?: LazyLoadEvent): Observable<object> {
+    getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
 
@@ -81,6 +81,13 @@ export class DataService {
         }
 
         return this.http.get('/api/genes/page', { headers, params });
+    }
+
+    getTableData(): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const params = new HttpParams();
+
+        return this.http.get('/api/genes/table', { headers, params });
     }
 
     getGenesMatchId(id: string): Observable<object> {

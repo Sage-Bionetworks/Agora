@@ -1,11 +1,6 @@
-.dc-chart {
-    width: 100%;
-    height: 100%;
-}
-
 .bp-tooltip {
-    width: 80px;
-    height: 40px;
+    width: 200px;
+    height: 140px;
     position: absolute;
     padding: 14px;
     text-align: center;
@@ -21,15 +16,43 @@
     pointer-events: none;
 }
 
-.dc-chart g.row text {
-    fill: black;
-}
-
 .bp {
     svg {
         width: 100%;
         height: 100%;
     }
 
+    g.row text {
+        fill: black;
+    }
+
+    path.domain {
+        stroke: #EDEDED;
+        stroke-width: 4px;
+    }
+
+    .axis line {
+        stroke: white;
+    }
+
+    g.axis text {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 16px;
+        color: #6D7078;
+        fill: #6D7078;
+    }
+
+    width: 100%;
+    height: 100%;
+
+    .box > line, rect {
+        stroke: #BCC0CA !important;
+        stroke-width: 3px !important;
+    }
+
+    min-height: 450px;
     max-height: 450px;
 }

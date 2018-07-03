@@ -81,9 +81,6 @@ export class RowChartViewComponent implements OnInit {
             .group(this.group)
             .transitionDuration(0);
 
-        // Add this number of ticks so the x axis don't get cluttered with text
-        this.chart.xAxis().scale(this.chart.x()).ticks(5);
-
         // Removes the click event for the rowChart to prevent filtering
         this.chart.onClick = () => {
             //
@@ -133,8 +130,22 @@ export class RowChartViewComponent implements OnInit {
             // every render or redraw
             self.rectToSquares(chart, squareSize, rectHeight);
 
+            // Only show the 0, min and max values on the xAxis ticks
+            self.updateXTicks(chart);
+
             // Finally show the chart
             self.display = true;
+        });
+    }
+
+    updateXTicks(chart: dc.RowChart) {
+        const allTicks = chart.selectAll('g.axis g.tick');
+        allTicks.each(function(t, i) {
+            if (i > 0 && i < allTicks.size() - 1) {
+                if (parseFloat(d3.select(this).select('text').text())) {
+                    d3.select(this).select('text').style('opacity', 0);
+                }
+            }
         });
     }
 
