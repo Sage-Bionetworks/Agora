@@ -1,0 +1,23 @@
+<div class="row back-home-wrapper no-gutters">
+  <div class="row back-home-row no-gutters">
+  </div>
+</div>
+<div class="section-thin overview-header">
+  <div class="row no-gutters">
+    <div class="col-md-7">
+      <h1>Similar Genes</h1>
+    </div>
+  </div>
+</div>
+
+<div class="center-justified linkstable">
+<table>
+    <tr *ngFor="let node of selectedGeneData.nodes" class="pathbox">
+        <td>
+            <span class="genes">
+            <span (click)="viewGene(node.is)">{{node.hgnc_symbol}}</span>
+        </span>
+        </td>
+    </tr>
+</table>
+</div>

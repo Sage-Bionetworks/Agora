@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Gene } from '.';
 
 export interface GeneNode {
     id: string;
@@ -20,6 +21,7 @@ export interface GeneLink {
 export interface GeneNetwork {
     nodes: GeneNode[];
     links: GeneLink[];
+    origin: Gene;
 }
 
 export interface GeneNetworkLinks {

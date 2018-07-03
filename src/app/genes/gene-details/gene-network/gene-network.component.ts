@@ -22,7 +22,8 @@ export class GeneNetworkComponent implements OnInit {
     networkData: GeneNetwork;
     selectedGeneData: GeneNetwork = {
         nodes: [],
-        links: []
+        links: [],
+        origin: undefined
     };
 
     private currentGene = this.geneService.getCurrentGene();
@@ -40,33 +41,33 @@ export class GeneNetworkComponent implements OnInit {
         // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         console.log(this.geneInfo);
-        if (!this.dataService.getNdx()) {
-            this.id = this.route.snapshot.paramMap.get('id');
-            this.router.navigate([
-                '/genes',
-                {
-                    outlets: {
-                        'genes-router':
-                            [
-                                'gene-details', this.id
-                            ]
-                    }
-                }
-            ]);
+        if (this.forceService.getGeneOriginalList()) {
+            const dn = this.forceService.getGeneOriginalList();
+            this.networkData = dn;
+            this.selectedGeneData.nodes = dn.nodes.slice(1);
+            this.selectedGeneData.links = dn.links.slice().reverse();
+            this.selectedGeneData.origin = dn.origin;
+            this.dataLoaded = true;
+            console.log(this.currentGene);
         } else {
             this.loadGenes();
         }
     }
 
     updategene(event) {
-        this.dataService.getGene(event.id).subscribe((data) => {
-            console.log(data['geneInfo']);
-            this.geneInfo = data['geneInfo'];
-        });
-        this.dataService.loadNodes(event).then((data: any) => {
-            this.forceService.processSelectedNode(event, data).then((network) => {
+        this.dataService.loadNodes(event).then((datanetwork: any) => {
+            this.forceService.processSelectedNode(event, datanetwork).then((network) => {
                 this.selectedGeneData.links = network.links;
                 this.selectedGeneData.nodes = network.nodes;
+                this.selectedGeneData.origin = network.origin;
+                this.dataService.getGene(event.id).subscribe((data) => {
+                    console.log(data);
+                    if (data['geneInfo']) {
+                        this.geneInfo = data['geneInfo'];
+                    } else {
+                        this.geneInfo = { hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol };
+                    }
+                });
             });
         });
     }
@@ -83,6 +84,7 @@ export class GeneNetworkComponent implements OnInit {
                 this.networkData = dn;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
+                this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
                 console.log(this.currentGene);
             });

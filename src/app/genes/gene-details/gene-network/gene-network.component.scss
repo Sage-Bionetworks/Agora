@@ -18,6 +18,13 @@
     .icon-spacing {
         margin-right: 5px;
     }
+    .info{
+        color: #9DA3B3;
+        font-style: italic;
+        position: absolute;
+        top: 42px;
+        font-size: 13px;
+    }
 }
 
 .network-container {
@@ -28,7 +35,7 @@
 .pathbox {
     padding: 0 10px 10px 10px;
     width: 100%;
-  div {
+  .genes {
     span{
         color: #86C4C7;
         text-decoration: underline;
@@ -65,9 +72,17 @@
 }
 .brainregions {
   height: 284px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   border-top: 1px solid #DDD;
   border-bottom: 1px solid #DDD;
+  position: relative;
+  .brainregion-button{
+      position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 32px;
+  }
 }
 
 .nopadding{

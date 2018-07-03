@@ -222,11 +222,18 @@
         <h2>
             Similar Genes
         </h2>
-        <!-- TODO: Improve this part -->
         <div class="row">
-            <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
+            <div class="col-md-7">
+            <div *ngFor="let node of currentGeneData | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
                 <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
             </div>
+        </div>
+        <div class="col-md-5">
+            <button class="btn nom-button"
+            (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', gene.ensembl_gene_id ]} })">
+                <span>Show more</span>
+            </button>
+        </div>
         </div>
     </div>
 </div>

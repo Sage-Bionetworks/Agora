@@ -26,24 +26,33 @@
                     <span class="icon-spacing"></span>
                     <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
                 </h2>
-                <div *ngFor="let link of selectedGeneData.links;" class="pathbox">
-                    <div>
+                <span class="info"> 6 of {{selectedGeneData.links.length}} genes</span>
+                <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
+                    <span class="genes">
                         <span (click)="viewGene(link.source.id)">{{link.hgnc_symbolA}}</span>
-                        -&nbsp;
+                        <i class="fa fa-arrow-right"></i>&nbsp;
                         <span (click)="viewGene(link.target.id)">{{link.hgnc_symbolB}}</span>
-                    </div>
+                    </span>
                     <span *ngFor="let region of link.brainregions; last as isLast">
                         {{region}}{{isLast ? '' : ', '}}
                     </span>
                 </div>
+                <span class="btn brainregion-button"
+                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-brainregions', selectedGeneData.origin.ensembl_gene_id ]} })">
+                    <i class="fa fa-angle-right fa-lg"></i>
+                </span>
             </div>
         </div>
         <div class="row brainregions nopadding">
             <div class="container">
                 <h2>Similar Genes</h2>
-                <div *ngFor="let node of selectedGeneData.nodes | myArraySort: 'brainregions' : true;" class="pathbox">
+                <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
                     <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
                 </div>
+                <span class="btn brainregion-button"
+                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', selectedGeneData.origin.ensembl_gene_id ]} })">
+                    <i class="fa fa-angle-right fa-lg"></i>
+                </span>
             </div>
         </div>
     </div>

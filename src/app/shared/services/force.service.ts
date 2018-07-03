@@ -15,7 +15,13 @@ export class ForceService {
     private rawData = [];
     private genes: GeneNetwork = {
         links: [],
-        nodes: []
+        nodes: [],
+        origin: undefined
+    };
+    private genesClicked: GeneNetwork = {
+        links: [],
+        nodes: [],
+        origin: undefined
     };
     private currentGene: Gene;
 
@@ -26,7 +32,8 @@ export class ForceService {
         this.dicGroup = [];
         this.genes = {
             links: [],
-            nodes: []
+            nodes: [],
+            origin: undefined
         };
     }
 
@@ -36,6 +43,20 @@ export class ForceService {
 
     getGenes() {
         return this.datachange;
+    }
+
+    getGeneOriginalList() {
+        if (this.genes.links.length && this.genes.nodes.length) {
+            return this.genes;
+        }
+        return null;
+    }
+
+    getGeneClickedList() {
+        if (this.genesClicked.links.length && this.genesClicked.nodes.length) {
+            return this.genesClicked;
+        }
+        return null;
     }
 
     processNode(obj: GeneNetworkLinks, dic, genes) {
@@ -149,16 +170,17 @@ export class ForceService {
                 hgnc_symbol: gene.hgnc_symbol,
                 brainregions: []
             };
-            const genes: GeneNetwork = {
+            this.genesClicked = {
                 links: [],
-                nodes: []
+                nodes: [],
+                origin: gene
             };
-            genes.nodes = [dicNodesC[gene.ensembl_gene_id]];
+            this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
             data['items'].forEach((obj: any) => {
-                this.processNode(obj, dicNodesC, genes);
-                this.processLink(obj, dicLinksC, dicNodesC, genes);
+                this.processNode(obj, dicNodesC, this.genesClicked);
+                this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
             });
-            resolve(genes);
+            resolve(this.genesClicked);
         });
     }
 
@@ -181,7 +203,8 @@ export class ForceService {
             this.genes.links.sort((a, b) => {
                 return a['value'] - b['value'];
             });
-
+            this.genes.origin = gene;
+            this.genesClicked = this.genes;
             // TODO: is a waste to return a promise and emit an event.
             // update network component to use events.
             this.emitDataChangeEvent(this.genes);
