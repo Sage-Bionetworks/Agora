@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
 
@@ -23,8 +23,7 @@ export class BreadcrumbComponent implements OnInit {
 
     constructor(
         private breadcrumb: BreadcrumbService,
-        private router: Router,
-        private route: ActivatedRoute
+        private router: Router
     ) {}
 
     ngOnInit() {

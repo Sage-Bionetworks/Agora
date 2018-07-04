@@ -23,7 +23,7 @@ export const routes: Routes = [
         { path: 'gene-brainregions/:id',
         component: GeneBrainRegionsComponent, outlet: 'genes-router' }
     ] },
-    { path: '**', redirectTo: 'genes', pathMatch: 'full' }
+    { path: '', redirectTo: 'genes', pathMatch: 'full' }
 ];
 
 @NgModule({

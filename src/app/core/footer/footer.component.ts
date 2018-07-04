@@ -10,5 +10,11 @@ import { Router } from '@angular/router';
 export class FooterComponent {
     constructor(
         private router: Router
-    ) { }
+    ) {
+        //
+    }
+
+    goToRoute(path: string) {
+        this.router.navigate(['/' + path]);
+    }
 }
