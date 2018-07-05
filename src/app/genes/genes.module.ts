@@ -24,7 +24,7 @@ import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
 import { TeamsPageComponent } from './gene-details/teams-page';
-import { GeneBrainRegionsComponent } from './gene-details/gene-brainregions';
+import { GeneBRComponent } from './gene-details/gene-brainregions';
 import { GeneSimilarComponent } from './gene-details/gene-similar';
 import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
 
@@ -38,7 +38,7 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         GeneRNASeqDEComponent,
         GeneNetworkComponent,
         TeamsPageComponent,
-        GeneBrainRegionsComponent,
+        GeneBRComponent,
         GeneSimilarComponent,
         BoxPlotsViewComponent
     ],

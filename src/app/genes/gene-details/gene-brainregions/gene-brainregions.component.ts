@@ -12,7 +12,7 @@ import { ForceService } from '../../../shared/services';
     styleUrls: ['./gene-brainregions.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneBrainRegionsComponent implements OnInit {
+export class GeneBRComponent implements OnInit {
     @Input() id: string;
     dataLoaded: boolean = false;
     displayBRDia: boolean = false;
