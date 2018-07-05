@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Gene } from '../../models';
 
-import { Observable } from 'rxjs/Observable';
 import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/geneLink';
 
 @Injectable()

@@ -6,7 +6,7 @@ import { Gene, GeneInfo } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import * as crossfilter from 'crossfilter2';
 

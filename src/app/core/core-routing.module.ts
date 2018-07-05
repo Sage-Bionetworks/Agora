@@ -5,7 +5,7 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
 export const routes: Routes = [
-    { path: '', loadChildren: '../genes#GenesModule'},
+    { path: '', loadChildren: '../genes/genes.module#GenesModule'},
     { path: 'about', component: AboutComponent },
     { path: '**', component: NoContentComponent }
 ];
@@ -14,8 +14,7 @@ export const routes: Routes = [
     imports: [RouterModule.forRoot(routes, {
         useHash: Boolean(history.pushState) === false,
         preloadingStrategy: PreloadAllModules,
-        onSameUrlNavigation: 'reload',
-        enableTracing: true
+        onSameUrlNavigation: 'reload'
     })],
     exports: [RouterModule]
 })

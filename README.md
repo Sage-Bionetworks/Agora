@@ -1,4 +1,4 @@
-# Wall of Targets
+# Agora BETA
 
 ## Getting Started
 ```bash

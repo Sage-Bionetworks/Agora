@@ -5,8 +5,7 @@ import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/empty';
-import { Observable } from 'rxjs/Observable';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 import { Gene, GeneInfo } from '../../models';
 
@@ -47,7 +46,7 @@ export class GeneSearchComponent implements OnInit {
                     return this.search(query);
                 } else {
                     this.results = [];
-                    return Observable.empty<Response>();
+                    return new EmptyObservable<Response>();
                 }
             })
             .subscribe((data) => {

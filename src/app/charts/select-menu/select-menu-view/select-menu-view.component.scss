@@ -1,5 +1,11 @@
 .select-column {
     width: 100%;
+
+    select {
+        background: url(/assets/icon/arrow_down.png) no-repeat 97.5% center;
+        box-shadow: 0px 0px 4px #C7C5C5;
+        border: 0;
+    }
 }
 
 .dc-select-menu {

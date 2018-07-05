@@ -9,7 +9,7 @@ describe('App', () => {
 
   it('should have a title', async () => {
     const subject = await browser.getTitle();
-    const result  = 'Wall of Targets';
+    const result  = 'Agora BETA';
     expect(subject).toEqual(result);
   });
 

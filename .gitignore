@@ -71,3 +71,7 @@ dll/
 *.css.shim.ts
 *.ngsummary.json
 *.shim.ngstyle.ts
+
+# Webpack #
+/webpack-cache/
+/webpack-cache/**

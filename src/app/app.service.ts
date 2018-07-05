@@ -1,45 +1,46 @@
 import { Injectable } from '@angular/core';
 
 export interface InternalStateType {
-    [key: string]: any;
+  [key: string]: any;
 }
 
 @Injectable()
 export class AppState {
-    _state: InternalStateType = { };
 
+  public _state: InternalStateType = { };
+
+  /**
+   * Already return a clone of the current state.
+   */
+  public get state() {
+    return this._state = this._clone(this._state);
+  }
+  /**
+   * Never allow mutation
+   */
+  public set state(value) {
+    throw new Error('do not mutate the `.state` directly');
+  }
+
+  public get(prop?: any) {
     /**
-     * Already return a clone of the current state.
+     * Use our state getter for the clone.
      */
-    get state() {
-        return this._state = this._clone(this._state);
-    }
+    const state = this.state;
+    return state.hasOwnProperty(prop) ? state[prop] : state;
+  }
+
+  public set(prop: string, value: any) {
     /**
-     * Never allow mutation
+     * Internally mutate our state.
      */
-    set state(value) {
-        throw new Error('do not mutate the `.state` directly');
-    }
+    return this._state[prop] = value;
+  }
 
-    get(prop?: any) {
-        /**
-         * Use our state getter for the clone.
-         */
-        const state = this.state;
-        return state.hasOwnProperty(prop) ? state[prop] : state;
-    }
-
-    set(prop: string, value: any) {
-        /**
-         * Internally mutate our state.
-         */
-        return this._state[prop] = value;
-    }
-
-    private _clone(object: InternalStateType) {
-        /**
-         * Simple object clone.
-         */
-        return JSON.parse(JSON.stringify( object ));
-    }
+  private _clone(object: InternalStateType) {
+    /**
+     * Simple object clone.
+     */
+    return JSON.parse(JSON.stringify( object ));
+  }
 }

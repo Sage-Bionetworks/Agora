@@ -18,6 +18,10 @@ p-dialog {
         line-height: normal;
         font-size: 24px;
         color: #1A1C29;
+
+        .pi-times:before {
+            color: #5BB0B5;
+        }
     }
 
     .ui-dialog-content {
