@@ -16,28 +16,31 @@ const commonConfig = require('./webpack.common.js');
 /**
  * Webpack Plugins
  */
-const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
-const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
-const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin');
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-function getUglifyOptions (supportES2015) {
+/***
+ * Ref: https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
+ * @param supportES2015
+ * @param enableCompress disabling compress could improve the performance, see https://github.com/webpack/webpack/issues/4558#issuecomment-352255789
+ * @returns {{ecma: number, warnings: boolean, ie8: boolean, mangle: boolean, compress: {pure_getters: boolean, passes: number}, output: {ascii_only: boolean, comments: boolean}}}
+ */
+function getUglifyOptions(supportES2015, enableCompress) {
   const uglifyCompressOptions = {
-    pure_getters: true, /* buildOptimizer */
-    drop_console: true,
+    pure_getters: true /* buildOptimizer */,
     // PURE comments work best with 3 passes.
     // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
-    passes: 3         /* buildOptimizer */
+    passes: 2 /* buildOptimizer */
   };
 
   return {
     ecma: supportES2015 ? 6 : 5,
-    warnings: false,    // TODO verbose based on option?
+    warnings: false, // TODO verbose based on option?
     ie8: false,
     mangle: true,
-    compress: uglifyCompressOptions,
+    compress: enableCompress ? uglifyCompressOptions : false,
     output: {
       ascii_only: true,
       comments: false
@@ -46,8 +49,9 @@ function getUglifyOptions (supportES2015) {
 }
 
 module.exports = function (env) {
-  const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+  const ENV = (process.env.NODE_ENV = process.env.ENV = 'production');
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
+  const sourceMapEnabled = process.env.SOURCE_MAP === '1';
   const Docker = process.env.Docker || false;
   const Analyzer = process.env.Analyzer || false;
 
@@ -64,6 +68,9 @@ module.exports = function (env) {
   METADATA.envFileSuffix = METADATA.E2E ? 'e2e.prod' : 'prod';
 
   return webpackMerge(commonConfig({ env: ENV, metadata: METADATA }), {
+    mode: 'production',
+
+    devtool: 'source-map',
 
     /**
      * Options affecting the output of the compilation.
@@ -114,10 +121,7 @@ module.exports = function (env) {
          */
         {
           test: /\.css$/,
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader'
-          }),
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
           include: [helpers.root('src', 'styles')]
         },
 
@@ -126,15 +130,33 @@ module.exports = function (env) {
          */
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader!sass-loader'
-          }),
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
           include: [helpers.root('src', 'styles')]
         },
-
       ]
+    },
 
+    optimization: {
+      minimizer: [
+        /**
+         * Plugin: UglifyJsPlugin
+         * Description: Minimize all JavaScript output of chunks.
+         * Loaders are switched into minimizing mode.
+         *
+         * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
+         *
+         * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
+         */
+        new UglifyJsPlugin({
+          sourceMap: sourceMapEnabled,
+          parallel: true,
+          cache: helpers.root('webpack-cache/uglify-cache'),
+          uglifyOptions: getUglifyOptions(supportES2015, true)
+        })
+      ],
+      splitChunks: {
+        chunks: 'all'
+      }
     },
 
     /**
@@ -143,42 +165,8 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-
-      new SourceMapDevToolPlugin({
-        filename: '[file].map[query]',
-        moduleFilenameTemplate: '[resource-path]',
-        fallbackModuleFilenameTemplate: '[resource-path]?[hash]',
-        sourceRoot: 'webpack:///'
-      }),
-
-
-      /**
-       * Plugin: ExtractTextPlugin
-       * Description: Extracts imported CSS files into external stylesheet
-       *
-       * See: https://github.com/webpack/extract-text-webpack-plugin
-       */
-      new ExtractTextPlugin('[name].[contenthash].css'),
-
-      new PurifyPlugin(), /* buildOptimizer */
-
-      new HashedModuleIdsPlugin(),
-      new ModuleConcatenationPlugin(),
-
-      /**
-       * Plugin: UglifyJsPlugin
-       * Description: Minimize all JavaScript output of chunks.
-       * Loaders are switched into minimizing mode.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-       *
-       * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-       */
-      new UglifyJsPlugin({
-        sourceMap: true,
-        uglifyOptions: getUglifyOptions(supportES2015)
-      })
-
+      new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
+      new HashedModuleIdsPlugin()
     ],
 
     /**
@@ -193,8 +181,8 @@ module.exports = function (env) {
       process: false,
       module: false,
       clearImmediate: false,
-      setImmediate: false
+      setImmediate: false,
+      fs: 'empty'
     }
-
   });
 }

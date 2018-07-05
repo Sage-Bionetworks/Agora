@@ -46,9 +46,9 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        ChartsModule,
         AppSharedModule.forRoot(),
         GenesRoutingModule,
-        ChartsModule,
         // PrimeNG modules
         SharedModule,
         PanelModule,

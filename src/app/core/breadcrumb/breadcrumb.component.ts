@@ -5,7 +5,7 @@ import { MenuItem } from 'primeng/primeng';
 
 import { BreadcrumbService } from '../services';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'breadcrumb',

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,7 +16,7 @@
     ],
     "baseUrl": "./src",
     "paths": {
-      "@angular/*": ["node_modules/@angular/*"]
+      "@angular/*": ["../node_modules/@angular/*"]
     },
     "typeRoots": [
       "node_modules/@types"
@@ -30,8 +30,7 @@
     "node_modules",
     "dist",
     "src/**/*.spec.ts",
-    "src/**/*.e2e.ts",
-    "src/app/testing/**/*"
+    "src/**/*.e2e.ts"
   ],
   "angularCompilerOptions": {
     "skipMetadataEmit": true

@@ -15,14 +15,14 @@ import {
     RouterOutletStubComponent,
     DataServiceStub,
     GeneServiceStub,
-    mockGene1
+    mockInfo1
 } from '../../../app/testing';
 
 import { GenesListComponent } from './genes-list.component';
 
 import { DataService, GeneService } from '../../core/services';
 
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 
 describe('Component: GenesList', () => {
     let component: GenesListComponent;
@@ -61,7 +61,7 @@ describe('Component: GenesList', () => {
         dataService = fixture.debugElement.injector.get(DataService);
         geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockGene1.hgnc_symbol });
+        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
         component = fixture.componentInstance; // Component test instance
     }));
@@ -71,10 +71,10 @@ describe('Component: GenesList', () => {
     });
 
     it('should load the table', fakeAsync(() => {
-        const res = { items: [mockGene1] };
+        const res = { items: [mockInfo1] };
 
         const dsSpy = spyOn(dataService, 'getTableData').and.returnValue(
-            Observable.of(res)
+            of(res)
         );
         spyOn(component, 'ngOnInit').and.callThrough(); // mock event object to load the table
         fixture.detectChanges();
@@ -85,13 +85,13 @@ describe('Component: GenesList', () => {
 
     it('should tell ROUTER to navigate when selecting gene', fakeAsync(() => {
         const dsSpy = spyOn(dataService, 'getGene').and.returnValue(
-            Observable.of(mockGene1)
+            of(mockInfo1)
         );
         spyOn(router, 'navigate').and.callThrough();
 
-        component.onRowSelect({ data: mockGene1 }); // trigger click on row
+        component.onRowSelect({ data: mockInfo1 }); // trigger click on row
         fixture.detectChanges();
-        expect(component.selectedInfo).toEqual(mockGene1);
+        expect(component.selectedInfo).toEqual(mockInfo1);
         expect(dsSpy.calls.any()).toEqual(true);
 
         // Expecting to navigate to hgnc_symbol of the selected gene
@@ -107,7 +107,7 @@ describe('Component: GenesList', () => {
     it('should unselect gene', fakeAsync(() => {
         const gsSpy = spyOn(geneService, 'setCurrentGene');
 
-        component.onRowUnselect({ data: mockGene1 }); // trigger click on row
+        component.onRowUnselect({ data: mockInfo1 }); // trigger click on row
         fixture.detectChanges();
         expect(gsSpy.calls.any()).toEqual(true);
     }));

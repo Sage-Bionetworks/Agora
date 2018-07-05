@@ -85,37 +85,39 @@ interface GlobalEnvironment {
   Docker: boolean;
 }
 
-type Es6PromiseLoader = (id: string) => (exportName?: string) => Promise<any>;
+interface Es6PromiseLoader {
+  (id: string): (exportName?: string) => Promise<any>;
+}
 
 type FactoryEs6PromiseLoader = () => Es6PromiseLoader;
 type FactoryPromise = () => Promise<any>;
 
-interface AsyncRoutes {
+type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-                           (() => void) |
+                               Function |
                 FactoryEs6PromiseLoader |
                          FactoryPromise ;
-}
+};
 
 type IdleCallbacks = Es6PromiseLoader |
-                         (() => void) |
+                             Function |
               FactoryEs6PromiseLoader |
                        FactoryPromise ;
 
 interface WebpackModule {
-  hot: {
-    data?: any,
-    idle: any,
-    accept(dependencies?: string | string[], callback?: (updatedDependencies?: any) => void): void;
-    decline(deps?: any | string | string[]): void;
-    dispose(callback?: (data?: any) => void): void;
-    addDisposeHandler(callback?: (data?: any) => void): void;
-    removeDisposeHandler(callback?: (data?: any) => void): void;
-    check(autoApply?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
-    apply(options?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
-    status(callback?: (status?: string) => void): void | string;
-    removeStatusHandler(callback?: (status?: string) => void): void;
-  };
+hot: {
+  data?: any,
+  idle: any,
+  accept(dependencies?: string | string[], callback?: (updatedDependencies?: any) => void): void;
+  decline(deps?: any | string | string[]): void;
+  dispose(callback?: (data?: any) => void): void;
+  addDisposeHandler(callback?: (data?: any) => void): void;
+  removeDisposeHandler(callback?: (data?: any) => void): void;
+  check(autoApply?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
+  apply(options?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
+  status(callback?: (status?: string) => void): void | string;
+  removeStatusHandler(callback?: (status?: string) => void): void;
+};
 }
 
 interface WebpackRequire {
@@ -130,12 +132,12 @@ interface WebpackContext extends WebpackRequire {
 }
 
 interface ErrorStackTraceLimit {
-  stackTraceLimit: number;
+stackTraceLimit: number;
 }
 
 // Extend typings
-export type NodeRequire = WebpackRequire;
-export type ErrorConstructor = ErrorStackTraceLimit;
-export type NodeRequireFunction = Es6PromiseLoader;
-export type NodeModule = WebpackModule;
-export type Global = GlobalEnvironment;
+interface NodeRequire extends WebpackRequire {}
+interface ErrorConstructor extends ErrorStackTraceLimit {}
+interface NodeRequireFunction extends Es6PromiseLoader  {}
+interface NodeModule extends WebpackModule {}
+interface Global extends GlobalEnvironment  {}

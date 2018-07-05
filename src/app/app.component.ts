@@ -5,6 +5,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from 'environments/environment';
 import { AppState } from './app.service';
 
+export const ROOT_SELECTOR = 'app';
+
 /**
  * App Component
  * Top Level Component
@@ -16,7 +18,7 @@ import { AppState } from './app.service';
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
-    name = 'Wall of Targets';
+    name = 'Agora BETA';
     showDevModule: boolean = environment.showDevModule;
 
     constructor(

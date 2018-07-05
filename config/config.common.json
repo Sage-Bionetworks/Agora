@@ -1,4 +1,4 @@
 {
-    "title": "Wall of Targets",
-    "description": "Wall of Targets is an application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium."
+    "title": "Agora BETA",
+    "description": "The wall of targets is designed for users to discover and explore evidence linking gene's to Alzheimer's disease based on molecular signatures of dementia.  Data is derived from multiple human and model system cohorts in the AMP-AD, M2OVE-AD, MODEL-AD, and Resilience-AD consortia that include genome sequencing, RNA-sequencing, proteomics, metabolomic, and more."
 }

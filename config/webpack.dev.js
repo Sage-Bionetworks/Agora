@@ -11,8 +11,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  * Webpack Plugins
  */
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
-const EvalSourceMapDevToolPlugin = require('webpack/lib/EvalSourceMapDevToolPlugin');
 
 /**
  * Webpack configuration
@@ -20,7 +18,7 @@ const EvalSourceMapDevToolPlugin = require('webpack/lib/EvalSourceMapDevToolPlug
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+  const ENV = (process.env.ENV = process.env.NODE_ENV = 'development');
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 3000;
   const Docker = process.env.Docker || false;
@@ -37,6 +35,9 @@ module.exports = function (options) {
   });
 
   return webpackMerge(commonConfig({ env: ENV, metadata: METADATA  }), {
+    mode: 'development',
+    devtool: 'inline-source-map',
+
     /**
      * Options affecting the output of the compilation.
      *
@@ -109,19 +110,6 @@ module.exports = function (options) {
     },
 
     plugins: [
-      new EvalSourceMapDevToolPlugin({
-        moduleFilenameTemplate: '[resource-path]',
-        sourceRoot: 'webpack:///'
-      }),
-
-      /**
-       * Plugin: NamedModulesPlugin (experimental)
-       * Description: Uses file names as module name.
-       *
-       * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
-       */
-      new NamedModulesPlugin(),
-
       /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
@@ -129,10 +117,8 @@ module.exports = function (options) {
        */
       new LoaderOptionsPlugin({
         debug: true,
-        options: { }
+        options: {}
       })
-
-      // TODO: HMR
     ],
 
     /**
@@ -200,7 +186,8 @@ module.exports = function (options) {
       process: true,
       module: false,
       clearImmediate: false,
-      setImmediate: false
+      setImmediate: false,
+      fs: 'empty'
     }
 
   });

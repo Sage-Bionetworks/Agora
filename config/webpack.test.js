@@ -7,7 +7,7 @@ const helpers = require('./helpers');
 /**
  * Webpack Plugins
  */
-const SourceMapDevToolPlugin = require('webpack/lib/SourceMapDevToolPlugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
@@ -15,7 +15,7 @@ const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
+const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
 
 /**
  * Webpack configuration
@@ -24,7 +24,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
  */
 module.exports = function (options) {
   return {
-
+    mode: 'development',
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
      *
@@ -39,7 +39,6 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#resolve
      */
     resolve: {
-
       /**
        * An array of extensions that should be used to resolve modules.
        *
@@ -51,7 +50,6 @@ module.exports = function (options) {
        * Make sure root is src
        */
       modules: [helpers.root('src'), 'node_modules']
-
     },
 
     /**
@@ -63,9 +61,7 @@ module.exports = function (options) {
      * See: https://github.com/AngularClass/angular-starter/issues/1188#issuecomment-262872034
      */
     module: {
-
       rules: [
-
         /**
          * Source map loader support for *.js files
          * Extracts SourceMaps for source files that as added as sourceMappingURL comment.
@@ -127,7 +123,7 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          loader: ['to-string-loader', 'css-loader'],
+          loader: ['to-string-loader', { loader: 'css-loader', options: { url: false } }],
           exclude: [helpers.root('src/index.html')]
         },
 
@@ -137,9 +133,9 @@ module.exports = function (options) {
          * See: https://github.com/webpack/raw-loader
          */
         {
-            test: /\.scss$/,
-            loader: ['raw-loader', 'sass-loader'],
-            exclude: [helpers.root('src/index.html')]
+          test: /\.scss$/,
+          loader: ['raw-loader', 'sass-loader'],
+          exclude: [helpers.root('src/index.html')]
         },
 
         /**
@@ -165,12 +161,8 @@ module.exports = function (options) {
           test: /\.(js|ts)$/,
           loader: 'istanbul-instrumenter-loader',
           include: helpers.root('src'),
-          exclude: [
-            /\.(e2e|spec)\.ts$/,
-            /node_modules/
-          ]
+          exclude: [/\.(e2e|spec)\.ts$/, /node_modules/]
         }
-
       ]
     },
 
@@ -233,8 +225,7 @@ module.exports = function (options) {
            * legacy options go here
            */
         }
-      }),
-
+      })
     ],
 
     /**
@@ -258,7 +249,8 @@ module.exports = function (options) {
       crypto: 'empty',
       module: false,
       clearImmediate: false,
-      setImmediate: false
+      setImmediate: false,
+      fs: 'empty'
     }
 
   };

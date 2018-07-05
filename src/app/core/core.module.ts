@@ -3,6 +3,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 
 import { GenesModule } from '../genes';
 import { ChartsModule } from '../charts';
+import { AppSharedModule } from '../shared';
 
 import { CoreRoutingModule } from './core-routing.module';
 
@@ -34,6 +35,7 @@ import '../../styles/headings.css';
 
 @NgModule({
     imports: [
+        AppSharedModule.forRoot(),
         CommonModule,
         CoreRoutingModule,
         // PrimeNG modules
@@ -42,10 +44,7 @@ import '../../styles/headings.css';
         MenubarModule,
         TieredMenuModule,
         PanelMenuModule,
-        BreadcrumbModule,
-        // Feature Modules
-        GenesModule,
-        ChartsModule
+        BreadcrumbModule
     ],
     declarations: [
         AboutComponent,
