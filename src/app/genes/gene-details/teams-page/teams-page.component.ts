@@ -49,10 +49,14 @@ export class TeamsPageComponent implements OnInit {
                 this.gene = data['item'];
                 this.geneInfo = data['info'];
                 this.ntInfoArray = this.geneInfo.nominatedtarget;
-
+                console.log(this.ntInfoArray);
+            }, (error) => {
+                console.log('Error loading gene: ' + error.message);
+            }, () => {
                 this.loadTeams();
             });
         } else {
+            this.ntInfoArray = this.geneInfo.nominatedtarget;
             this.loadTeams();
         }
     }
@@ -63,7 +67,9 @@ export class TeamsPageComponent implements OnInit {
             if (!data['items']) { this.router.navigate(['/genes']); }
             this.geneService.setCurrentTeams(data['items']);
             this.teams = data['items'];
-
+        }, (error) => {
+            console.log('Error loading gene: ' + error.message);
+        }, () => {
             this.loadMembers();
         });
     }
