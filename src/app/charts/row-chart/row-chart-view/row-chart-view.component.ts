@@ -67,10 +67,10 @@ export class RowChartViewComponent implements OnInit {
             .elasticX(true)
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.1-5');
+                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.3');
             })
             .valueAccessor((d) => {
-                return +self.decimalPipe.transform(+d.value.logfc, '1.1-5');
+                return +self.decimalPipe.transform(+d.value.logfc, '1.3');
             })
             .label((d) => {
                 return d.key;
@@ -222,6 +222,9 @@ export class RowChartViewComponent implements OnInit {
         });
 
         // Draw the horizontal lines
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
@@ -229,13 +232,31 @@ export class RowChartViewComponent implements OnInit {
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
-                return chart.x()(d.value.logfc) - lineWidth / 2;
+                const gene = currentGenes.slice().find((g) => {
+                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
+                        === g.logfc;
+                });
+
+                if (gene) {
+                    return chart.x()(gene.ci_l);
+                } else {
+                    return chart.x()(d.value.logfc) - lineWidth / 2;
+                }
             })
             .attr('y1', () => {
                 return yPos;
             })
             .attr('x2', (d) => {
-                return chart.x()(d.value.logfc) + lineWidth / 2;
+                const gene = currentGenes.slice().find((g) => {
+                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
+                        === g.logfc;
+                });
+
+                if (gene) {
+                    return chart.x()(gene.ci_r);
+                } else {
+                    return chart.x()(d.value.logfc) + lineWidth / 2;
+                }
             })
             .attr('y2', () => {
                 return yPos;
@@ -256,7 +277,9 @@ export class RowChartViewComponent implements OnInit {
                 ')';
             })
             .attr('width', squareSize)
-            .attr('height', squareSize);
+            .attr('height', squareSize)
+            .attr('rx', squareSize / 2)
+            .attr('ry', squareSize / 2);
     }
 
     displayChart() {

@@ -4,7 +4,6 @@ import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
-import * as ss from 'stream-stream';
 
 mongoose.set('debug', true);
 
@@ -213,23 +212,31 @@ connection.once('open', () => {
     });
 
     // Get a gene by id, can be hgnc_symbol or ensembl_gene_id
-    router.get('/gene/:id', (req, res, next) => {
+    router.get('/gene', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get a gene with an id');
-            console.log(req.params.id);
+            console.log(req.query.id);
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) {
+        if (!req.params || !Object.keys(req.query).length) {
             if (env === 'development') {
                 console.log('no id');
             }
             res.json({ item: null });
         }
 
-        const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-        const queryObj = {[fieldName]: req.params.id};
+        const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+        const queryObj = {[fieldName]: req.query.id};
+
+        console.log(req.query);
+        if (req.query.tissue) {
+            queryObj['tissue'] = req.query.tissue;
+        }
+        if (req.query.model) {
+            queryObj['model'] = req.query.model;
+        }
 
         // Find all the Genes with the current id
         Genes.find(queryObj).exec((err, genes) => {

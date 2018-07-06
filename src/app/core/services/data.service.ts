@@ -96,10 +96,25 @@ export class DataService {
         return this.http.get('/api/genes/' + id, { headers });
     }
 
-    getGene(id: string): Observable<object> {
+    getGene(id: string, tissue?: string, model?: string): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set(
+            'id', id
+        );
+        console.log(tissue);
+        console.log(model);
+        if (tissue) {
+            params = params.set(
+                'tissue', tissue
+            );
+        }
+        if (model) {
+            params = params.set(
+                'model', model
+            );
+        }
 
-        return this.http.get('/api/gene/' + id, { headers });
+        return this.http.get('/api/gene/', { headers, params });
     }
 
     getTeams(info: GeneInfo): Observable<object> {

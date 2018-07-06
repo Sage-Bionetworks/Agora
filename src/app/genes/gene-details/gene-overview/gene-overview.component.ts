@@ -58,7 +58,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                 this.geneService.updateGeneData(data);
                 this.gene = data['item'];
                 this.geneInfo = data['info'];
-                console.log(this.gene);
 
                 this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {

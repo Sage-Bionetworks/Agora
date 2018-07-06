@@ -126,7 +126,6 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
     "rxjs-compat": "^6.2.1",
-    "stream-stream": "^1.2.6",
     "ts-loader": "~3.5.0",
     "zone.js": "^0.8.19"
   },
