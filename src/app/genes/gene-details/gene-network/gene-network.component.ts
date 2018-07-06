@@ -120,9 +120,7 @@ export class GeneNetworkComponent implements OnInit {
                 this.router.navigate(['/genes']);
                 return;
             }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setLogFC(data['minFC'], data['maxFC']);
-            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+            this.geneService.updateGeneData(data);
             this.router.navigateByUrl(currentUrl)
                 .then(() => {
                     this.router.navigated = false;

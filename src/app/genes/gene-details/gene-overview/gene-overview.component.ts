@@ -55,12 +55,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.setCurrentGene(data['item']);
-                this.geneService.setCurrentInfo(data['geneInfo']);
-                this.geneService.setLogFC(data['minFC'], data['maxFC']);
-                this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+                this.geneService.updateGeneData(data);
                 this.gene = data['item'];
-                this.geneInfo = data['geneInfo'];
+                this.geneInfo = data['info'];
+                console.log(this.gene);
 
                 this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {

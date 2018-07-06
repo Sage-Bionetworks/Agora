@@ -102,14 +102,27 @@ export class DataService {
         return this.http.get('/api/gene/' + id, { headers });
     }
 
-    getTeam(info: GeneInfo): Observable<object> {
+    getTeams(info: GeneInfo): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const params = new HttpParams().set(
             'teams', info.nominatedtarget.map((e) => e.team).join(', ')
         );
-        console.log(params);
 
         return this.http.get('/api/teams', { headers, params });
+    }
+
+    getTeamMemberImage(name: string): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
+            'Accept': 'image/jpg',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        });
+        const params = new HttpParams().set(
+            'name', name
+        );
+
+        return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
     }
 
     getGeneEntries(): Gene[] {

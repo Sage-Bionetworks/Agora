@@ -48,6 +48,7 @@ After you downloaded it, go to the root of your `C` drive and create a `data` fo
 Mongo knows to go to this folder automatically to retrieve and store data. To run MongoDB, you need to start the process at the installation location, e.g. go to:
 
 ```bash
+# If you added mongo to your path, you can issue this from anywhere
 C:\\Users\\YOUR_USER>cd "C:\Program Files\MongoDB\Server\3.6\bin"
 
 C:\\Program Files\\MongoDB\\Server\\3.6\\bin>mongod
@@ -60,19 +61,54 @@ our Express server through Mongoose (a framework that allows us to define object
 [initandlisten] waiting for connections on port 27017
 ```
 
-If you also installed MongoDB Compass along with the main installation (a GUI to manage your MongoDB databases), just open it and connect to your localhost (use the default values). You'll notice a few connections opened in the cmd prompt with the database running (the one open with MongoDB listening on port `27017`). You should see something like:
+If you also installed `MongoDB Compass` along with the main installation (a GUI to manage your `MongoDB` databases), just open it and connect to your localhost (use the default values). You'll notice a few connections opened in the cmd prompt with the database running (the one open with `MongoDB` listening on port `27017`). You should see something like:
 
 ```bash
 [listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
 ```
 
-Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it's time to load the data into our collections.
+Go back to `MongoDB Compass` and create a database called `agora`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it's time to load the data into our collections.
 
 # Downloading the data
 
-Go to the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download four files: `geneExprData.json`, `network.json`, `gene_info.json`, `team_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json`, `dataInfo.json`, and `teamInfo.json` respectively.
+Go to the `Synapse` repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download four files: `geneExprData.json`, `network.json`, `gene_info.json`, `team_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json`, `dataInfo.json`, and `teamInfo.json` respectively. You will also need the teams images from `Synapse` [here](https://www.synapse.org/#!Synapse:syn12861877). You can download all of them using the `synapseclient` or `Python`. If you choose to use `Python`, install it according to your OS, then get and install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
 
-Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following commands:
+```bash
+pip install synapseclient[pandas,pysftp]
+```
+
+Create a new `Python` script and paste the following inside:
+
+```bash
+import synapseclient
+import synapseutils
+
+syn = synapseclient.Synapse()
+syn.login('synapse_username','password')
+files = synapseutils.syncFromSynapse(syn, 'syn12861877'. 'PATH/TO/DESIRED/FOLDER')
+```
+
+In the same folder you created the `Python` script above run the following command:
+
+```bash
+python your_script_name.py
+```
+
+You should see all the nominated targets teams members pictures in the folder created by the script above. In the images directory run:
+
+```bash
+# Removes spaces and dashes from the filenames
+rename 's/[ -]/_/g' *
+```
+
+To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following command:
+
+```bash
+# Read all the jpg files and pipe them to the mongo database
+ls -1r *.jpg | while read x; do mongofiles -d walloftargets put $x; done
+```
+
+Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
 
 ```bash
 mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"

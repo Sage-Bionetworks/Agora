@@ -35,6 +35,15 @@ export class GeneServiceStub {
         this.currentInfo = geneInfo;
     }
 
+    // To be used everytime a new gene data arrives from the server
+    updateGeneData(data: any) {
+        this.setCurrentGene(data['item']);
+        this.setCurrentInfo(data['info']);
+        this.setFC(data['minFC'], data['maxFC']);
+        this.setLogFC(data['minFC'], data['maxFC']);
+        this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+    }
+
     setAdjPValue(max: number, min?: number) {
         this.maxAdjPValue = max;
         this.minAdjPValue = (min) ? min : 0;

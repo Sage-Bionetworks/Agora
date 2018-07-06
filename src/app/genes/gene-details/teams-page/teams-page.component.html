@@ -5,7 +5,7 @@
 <div class="section-thin overview-header">
     <div class="row no-gutters">
         <div class="col-md-7">
-            <h1>AMP-AD Evidence in Support of MSN</h1>
+            <h1 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h1>
             <p>
                 The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
                 AD targets. For selected targets, teams have performed further experimental model system validation.
@@ -17,7 +17,7 @@
 </div>
 
 <div *ngIf="dataLoaded">
-    <div *ngFor="let team of teams" class="section-thin overview-desc">
+    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc">
         <h2>
             {{team.team}}
         </h2>
@@ -28,26 +28,29 @@
             Why was the target selected?
         </h3>
         <p class="black-paragraph">
-            To be added
+            {{ntInfoArray[i].target_choice_justification}}
         </p>
         <h3>
             Predicted therapeutic drection
         </h3>
         <p class="black-paragraph">
-            To be added
+            {{toTitleCase(i, 'predicted_therapeutic_direction')}}
         </p>
         <h3>
             The type of data used and analyses done to identify target
         </h3>
         <p class="black-paragraph">
-            To be added
+            {{ntInfoArray[i].data_used_to_support_target_selection}}
         </p>
-        <a>
-            Website link
-        </a>
-        <div class="row">
-            <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-xs-4">
-                <span>{{member.name}}</span>
+        <div class="website-row">
+            <a>
+                Website link
+            </a>
+        </div>
+        <div class="row members-row">
+            <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
+                <img class="member-img" [src]="getMemberImg(member.name)">
+                <h3>{{member.name}}</h3>
             </div>
         </div>
     </div>

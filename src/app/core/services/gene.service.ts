@@ -35,6 +35,15 @@ export class GeneService {
         return this.currentGene;
     }
 
+    // To be used everytime a new gene data arrives from the server
+    updateGeneData(data: any) {
+        this.setCurrentGene(data['item']);
+        this.setCurrentInfo(data['info']);
+        this.setFC(data['minFC'], data['maxFC']);
+        this.setLogFC(data['minFC'], data['maxFC']);
+        this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+    }
+
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
     }
