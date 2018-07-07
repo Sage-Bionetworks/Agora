@@ -42,6 +42,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     componentRefs: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
+    dropdownIconClass: string = 'fa fa-caret-down';
 
     constructor(
         private router: Router,
@@ -240,6 +241,19 @@ export class GeneRNASeqDEComponent implements OnInit {
 
     destroyComponent(index: number) {
         this.componentRefs[index].destroy();
+    }
+
+    openDropdown() {
+        this.dropdownIconClass = 'fa fa-caret-up';
+    }
+
+    closeDropdown() {
+        console.log('test');
+        this.dropdownIconClass = 'fa fa-caret-down';
+    }
+
+    getDropdownIcon() {
+        return this.dropdownIconClass;
     }
 
     goBack() {

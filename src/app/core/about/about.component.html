@@ -71,14 +71,14 @@
 
 <div class="section-thin synapse-desc">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 synapse-img-col">
             <img class="synapse-img" src="/assets/img/synapse.png">
         </div>
     </div>
     <h2>
         What is Synapse?
     </h2>
-    <p class="black-paragraph">
+    <p class="black-paragraph synapse-desc-paragraph">
         Content here
     </p>
     <h2>
@@ -130,6 +130,12 @@
             <p class="black-paragraph">
                 Complete Data Use Certificate (DUC) steps if neccessary.
             </p>
+        </div>
+        <div class="col-md-12 col-sm-12 col-12 reg-button-col">
+            <p-button (click)="viewSynapseReg()"
+                label="Create Synapse Account"
+                [styleClass]="'synapse-reg-button'">
+            </p-button>
         </div>
     </div>
 </div>

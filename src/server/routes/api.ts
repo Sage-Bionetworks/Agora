@@ -14,9 +14,9 @@ const env = process.env.NODE_ENV || 'development';
 // Set the database url
 if (process.env.Docker) {
     // Service name here, not the localhost
-    database.url = 'mongodb://mongodb:27017/walloftargets';
+    database.url = 'mongodb://mongodb:27017/agora';
 } else {
-    database.url = 'mongodb://localhost/walloftargets';
+    database.url = 'mongodb://localhost/agora';
 }
 
 // Connect to mongoDB database, local or remotely

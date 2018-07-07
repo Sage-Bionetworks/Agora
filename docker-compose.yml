@@ -38,6 +38,14 @@ services:
       - mongodb
     networks:
       - front_wot
+  mongo_seed_team_images:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/team_images.Dockerfile
+    links:
+      - mongodb
+    networks:
+      - front_wot
 
 networks:
   front_wot:

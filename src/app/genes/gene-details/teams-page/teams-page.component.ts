@@ -22,6 +22,7 @@ export class TeamsPageComponent implements OnInit {
     @Input() id: string;
     @Input() teams: TeamInfo[] = [];
     @Input() ntInfoArray: NominatedTarget[] = [];
+    @Input() placeholderUrl: string = '/assets/img/placeholder_member.png';
 
     dataLoaded: boolean = false;
     memberImages: any[] = [];
@@ -109,8 +110,7 @@ export class TeamsPageComponent implements OnInit {
         const memberImg = this.memberImages.find((mi) => {
             return mi.name === name;
         });
-        const placeholderUrl = '/assets/img/placeholder_male.jpg';
-        return (memberImg && memberImg.imgUrl) ? memberImg.imgUrl : placeholderUrl;
+        return (memberImg && memberImg.imgUrl) ? memberImg.imgUrl : this.placeholderUrl;
     }
 
     toTitleCase(index: number, field: string): string {

@@ -101,8 +101,6 @@ export class DataService {
         let params = new HttpParams().set(
             'id', id
         );
-        console.log(tissue);
-        console.log(model);
         if (tissue) {
             params = params.set(
                 'tissue', tissue

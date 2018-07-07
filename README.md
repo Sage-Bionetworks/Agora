@@ -105,16 +105,16 @@ To add those images to our database, we are going to use the `mongofiles` execut
 
 ```bash
 # Read all the jpg files and pipe them to the mongo database
-ls -1r *.jpg | while read x; do mongofiles -d walloftargets put $x; done
+ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
 ```
 
 Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
 
 ```bash
-mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
-mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
-mongoimport --db walloftargets --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
-mongoimport --db walloftargets --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json"
+mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
+mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
+mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
+mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json"
 ```
 
 * Convert mongo value types
@@ -394,6 +394,7 @@ Before using Docker go one level above the root folder of the project and create
 ```bash
 PATH_TO_PROJECT\WallOfTargets> cd ..
 PATH_TO_PROJECT> mkdir data
+PATH_TO_PROJECT> mkdir data/team_images
 ```
 
 This folder will be used to load the data into MongoDB when we build the DOcker image. Go ahead and grab the latest data files from the [Downloading the data](#downloading-the-data) section. Copy all the `.json` files described in the download section to the `data` folder you just created.

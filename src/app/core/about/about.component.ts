@@ -17,6 +17,10 @@ export class AboutComponent implements OnInit {
         //
     }
 
+    viewSynapseReg() {
+        window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
+    }
+
     goToRoute(path: string) {
         this.router.navigate(['/' + path]);
     }

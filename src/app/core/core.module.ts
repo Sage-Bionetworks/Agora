@@ -5,6 +5,7 @@ import { AppSharedModule } from '../shared';
 import { CoreRoutingModule } from './core-routing.module';
 
 // PrimeNG modules
+import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
@@ -29,29 +30,32 @@ import '../../styles/headings.css';
 
 @NgModule({
     imports: [
-        AppSharedModule.forRoot(),
+        // Angular modules
         CommonModule,
-        CoreRoutingModule,
         // PrimeNG modules
+        ButtonModule,
         SplitButtonModule,
         MenuModule,
         MenubarModule,
         TieredMenuModule,
-        PanelMenuModule
+        PanelMenuModule,
+        // Shared and route modules
+        AppSharedModule.forRoot(),
+        CoreRoutingModule
     ],
     declarations: [
-        AboutComponent,
         NavbarComponent,
         MenubarComponent,
         FooterComponent,
-        NoContentComponent
+        NoContentComponent,
+        AboutComponent
     ],
     exports: [
         // Exported components
-        AboutComponent,
         NavbarComponent,
         MenubarComponent,
-        FooterComponent
+        FooterComponent,
+        AboutComponent
     ],
     providers: [
         AuthenticationService,

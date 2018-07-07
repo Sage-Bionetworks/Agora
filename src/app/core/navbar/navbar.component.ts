@@ -3,9 +3,6 @@ import { Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/primeng';
 
-// Dummy user for now
-// import { User } from '../../models';
-
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',

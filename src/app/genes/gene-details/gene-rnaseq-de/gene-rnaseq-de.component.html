@@ -2,14 +2,11 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <h2>
-                Filter by Tissue
+                Filter by Tissue and Model
             </h2>
             <div class="section-thin st-desc no-side-padding">
                 <p class="black-paragraph">
-                    The seven brain regions from the AMP-AD studies include Temporal Cortex (TCX),
-                    Cerebellum (CBE), Dorsolateral Prefrontal Cortex (DLPFC), Parahippocampal Gyrus
-                    (PHG), Frontal Pole (FP), Superior Temporal Gyrus (STG), and Inferior Frontal
-                    Gyrus (IFG).
+                    To view differential expression results, select a tissue and statistical model.
                 </p>
             </div>
         </div>
@@ -23,48 +20,12 @@
                 [showHeader]="false"
                 [panelStyle]="{minWidth:'12em'}"
                 [defaultLabel]="'Choose tissues...'"
+                [dropdownIcon]="getDropdownIcon()"
+                (onPanelShow)="openDropdown()"
+                (onPanelHide)="closeDropdown()"
                 (onChange)="toggleTissue($event)">
             </p-multiSelect>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>
-    </div>
-</div>
-
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
-    <h2>
-        Box Plots
-    </h2>
-    <p class="black-paragraph">
-        These box plots show the distribution of the effect size (log fold change) and
-        significance (-log10 adjusted p-value) of the selected gene in the context of
-        all genes of the selected tissue and model. The selected gene is shown as the
-        larger red dot.
-    </p>
-    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-    </ng-template>
-</div>
-
-<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12">
-            <h2>
-                Filter by Model
-            </h2>
-            <div class="section-thin st-desc no-side-padding">
-                <p class="black-paragraph">
-                    We tested for differences in RNA expression between Alzheimer's disease
-                    cases and controls using a variety of statistical models. These include
-                    looking for both differences in the mean expression of genes between
-                    cases and controls, as well as testing for sex specific disease interactions,
-                    as well as age of death (AOD) specific interactions.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6 col-sm-6 col-12">
             <select-menu [promptText]="'All'"
                 [label]="'select-model'"
@@ -72,19 +33,32 @@
             </select-menu>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>
-    </div>
+</div>
+
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+    <h2>
+        Differential Expression of Selected Gene within Selected Tissue
+    </h2>
+    <p class="black-paragraph">
+        Box plot depicts how the differential expression of the selected gene of interest
+        (red dot) compares with expression of other genes in the tissue.
+    </p>
+    <p class="black-paragraph">
+        {{'{'}}gene{{'}'}} {{'{'}}isDE{{'}'}} differentially expressed (log fold change = {{'{'}}lfc{{'}'}}; adjusted p-value
+        = {{'{'}}pval{{'}'}}) in the {{'{'}}tissue{{'}'}} when comparing {{'{'}}model{{'}'}}.
+    </p>
+    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+    </ng-template>
 </div>
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
-        Log Change Forest Plot
+        Consistency of Change in Expression
     </h2>
     <p class="black-paragraph">
-        A log forest plot indicates the estimate of the log fold change with standard errors
-        across the tissues and studies where the model was fit.
+        A forest plot indicates the estimate of the log fold change with standard errors
+        across the tissues in the chosen model. Genes that show consistent patterns of
+        differential expression will have similar log-fold change value across tissues.
     </p>
     <row-chart></row-chart>
 </div>

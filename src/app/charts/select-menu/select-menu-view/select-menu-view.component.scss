@@ -1,11 +1,150 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .select-column {
     width: 100%;
+    background: white;
+    position: relative;
 
     select {
+        cursor: pointer;
         background: url(/assets/icon/arrow_down.png) no-repeat 97.5% center;
         box-shadow: 0px 0px 4px #C7C5C5;
         border: 0;
+
+        /*.dc-select-option {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            padding-left: 10%;
+            line-height: 44px;
+            color: #1A1C29;
+            border: 0 none;
+            cursor: pointer;
+            font-weight: normal;
+            margin: 1px 0;
+            padding: .125em .25em;
+            text-align: left;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid #EDEDED !important;
+            height: 51px;
+            vertical-align: middle;
+        }
+
+        .dc-select-option::before {
+            padding-left: 10%;
+        }
+
+        .dc-select-option::after {
+            padding-left: 10%;
+        }*/
+
+        @include respond-to('ex-small') {
+            font-size: 16px;
+        }
+        @include respond-to('small') {
+            font-size: 16px;
+        }
+        @include respond-to('medium') {
+            font-size: 18px;
+        }
+        @include respond-to('large') {
+            font-size: 18px;
+        }
+        @include respond-to('ex-large') {
+            font-size: 18px;
+        }
     }
+
+    select-menu {
+        height: 100%;
+    }
+
+    .select-selected {
+        color: #1A1C29;
+        height: 52px;
+        line-height: 52px;
+        padding-left: 15px;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 4px #C7C5C5;
+        cursor: pointer;
+
+        @include respond-to('ex-small') {
+            font-size: 16px;
+        }
+        @include respond-to('small') {
+            font-size: 16px;
+        }
+        @include respond-to('medium') {
+            font-size: 18px;
+        }
+        @include respond-to('large') {
+            font-size: 18px;
+        }
+        @include respond-to('ex-large') {
+            font-size: 18px;
+        }
+    }
+
+    /*style the arrow inside the select element:*/
+    .select-selected:after {
+        width: 24px;
+        position: absolute;
+        content: "";
+        top: 40%;
+        right: 10px;
+        height: 24px;
+        border: 12px solid transparent;
+        border-color: #5BB0B5 transparent transparent transparent;
+    }
+
+    // Point the arrow upwards when the select box is open (active):
+    .select-selected.select-arrow-active:after {
+        border-color: transparent transparent #5BB0B5 transparent;
+        top: 7px;
+    }
+
+    // Style the items (options)
+    .select-items div {
+        color: #1A1C29;
+        cursor: pointer;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        color: #1A1C29;
+        padding-left: 30px;
+        height: 52px;
+        line-height: 52px;
+        border-bottom: 1px solid #EDEDED !important;
+    }
+
+    /*style items (options):*/
+    .select-items {
+        position: absolute;
+        background-color: white;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        box-shadow: inset 0px 0px 4px rgba(199, 197, 197, 0.5);
+    }
+
+    /*hide the items when the select box is closed:*/
+    .select-hide {
+        display: none;
+    }
+
+    .select-items div:hover, .same-as-selected {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.ori-sel-chart {
+    display: none; /*hide original SELECT element:*/
 }
 
 .dc-select-menu {
