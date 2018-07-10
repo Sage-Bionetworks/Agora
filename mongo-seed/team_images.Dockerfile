@@ -1,9 +1,11 @@
 FROM mongo
 
-COPY ./team_images /team_images
-
 EXPOSE 27017
 
-WORKDIR /team_images
+RUN mkdir /images
 
-CMD ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
+COPY ./team_images /images
+
+WORKDIR /images
+
+CMD ls -1r *.jpg | while read x; do mongofiles -d agora -v put $x; echo $x; done

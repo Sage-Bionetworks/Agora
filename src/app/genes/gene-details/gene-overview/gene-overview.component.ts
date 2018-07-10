@@ -52,13 +52,16 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
-            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
+            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
+            || !this.gene.ensembl_gene_id) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.updateGeneData(data);
                 this.gene = data['item'];
                 this.geneInfo = data['info'];
-
+            }, (error) => {
+                console.log('Error loading gene overview! ' + error.message);
+            }, () => {
                 this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {
                         this.geneService.loadGeneModels().then((mstatus) => {
@@ -78,7 +81,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.dataService.loadGenes().then((genesLoaded) => {
             if (genesLoaded) {
                 this.dataLoaded = genesLoaded;
-                // this.currentGeneData = this.forceService.getGenes().nodes;
             }
             // Handle error later
         });

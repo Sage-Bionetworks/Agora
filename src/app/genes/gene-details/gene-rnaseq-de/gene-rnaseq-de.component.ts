@@ -168,7 +168,6 @@ export class GeneRNASeqDEComponent implements OnInit {
                     if (!data['item']) { this.router.navigate(['/genes']); }
                     this.geneService.updateGeneData(data);
                     this.gene = data['item'];
-                    console.log(this.gene);
                 }, (error) => {
                     console.log('Error getting gene: ' + error.message);
                 }, () => {

@@ -140,7 +140,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues', { headers }).subscribe((data) => {
                 this.tissues = data['items'];
-
+            }, (error) => {
+                console.log('Error loading tissues! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -151,7 +153,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
                 this.geneTissues = data['items'];
-
+            }, (error) => {
+                console.log('Error loading tissues! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -162,7 +166,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/models', { headers }).subscribe((data) => {
                 this.models = data['items'];
-
+            }, (error) => {
+                console.log('Error loading models! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -173,7 +179,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/models/gene', { headers }).subscribe((data) => {
                 this.geneModels = data['items'];
-
+            }, (error) => {
+                console.log('Error loading models! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });

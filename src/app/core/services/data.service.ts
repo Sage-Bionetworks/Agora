@@ -33,8 +33,13 @@ export class DataService {
 
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
+            let dataLinks: any;
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
-                resolve(data);
+                dataLinks = data;
+            }, (error) => {
+                console.log('Error loading genes! ' + error.message);
+            }, () => {
+                resolve(dataLinks);
             });
         });
     }
@@ -64,7 +69,9 @@ export class DataService {
                 this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
-
+            }, (error) => {
+                console.log('Error loading genes! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });

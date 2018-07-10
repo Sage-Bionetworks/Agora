@@ -1,4 +1,4 @@
-FROM mongo
+FROM khezen/mongo:latest
 
 RUN echo "Starting Mongo"
 RUN mongod --fork --bind_ip_all --logpath /var/log/mongodb.log

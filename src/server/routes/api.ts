@@ -16,11 +16,11 @@ if (process.env.Docker) {
     // Service name here, not the localhost
     database.url = 'mongodb://mongodb:27017/agora';
 } else {
-    database.url = 'mongodb://localhost/agora';
+    database.url = 'mongodb://localhost:27017/agora';
 }
 
 // Connect to mongoDB database, local or remotely
-mongoose.connect(database.url);
+mongoose.connect(database.url, { useNewUrlParser: true });
 // Get the default connection
 const connection = mongoose.connection;
 
@@ -230,7 +230,6 @@ connection.once('open', () => {
         const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
         const queryObj = {[fieldName]: req.query.id};
 
-        console.log(req.query);
         if (req.query.tissue) {
             queryObj['tissue'] = req.query.tissue;
         }
@@ -281,12 +280,14 @@ connection.once('open', () => {
                         // Adding this condition because UglifyJS can't handle ES2015, only needed
                         // for the server
                         if (env === 'development') {
-                            console.log('The gene info');
+                            console.log('The gene info and item');
                             console.log(info);
+                            console.log(geneEntries[0]);
                         }
+
                         res.json({
                             info,
-                            item: genes[0],
+                            item: geneEntries[0],
                             minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
                             maxFC,
                             minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
@@ -370,6 +371,10 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
         const name = req.query.name.toLowerCase().replace(' ', '_') + '.jpg';
         gfs.exist({ filename: name }, (err, file) => {
+            if (env === 'development') {
+                console.log('The team file exists');
+                console.log(file);
+            }
             if (!err) {
                 if (file) {
                     const stream = gfs.createReadStream(name);
@@ -388,6 +393,7 @@ connection.once('open', () => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all tissues');
+            console.log(allTissues);
         }
 
         // Return an empty array in case we don't have tissues
@@ -401,6 +407,7 @@ connection.once('open', () => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all tissues');
+            console.log(allTissues);
         }
 
         // Return an empty array in case we don't have tissues
@@ -414,6 +421,7 @@ connection.once('open', () => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all models');
+            console.log(allModels);
         }
 
         // Return an empty array in case we don't have models
@@ -427,6 +435,7 @@ connection.once('open', () => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all models');
+            console.log(allModels);
         }
 
         // Return an empty array in case we don't have models

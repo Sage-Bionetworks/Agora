@@ -7,7 +7,6 @@ const helpers = require('./helpers');
 /**
  * Webpack Plugins
  */
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
@@ -15,14 +14,14 @@ const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 /**
  * Webpack Constants
  */
-const ENV = (process.env.ENV = process.env.NODE_ENV = 'test');
+const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'test');
 
 /**
  * Webpack configuration
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
-module.exports = function (options) {
+module.exports = function () {
   return {
     mode: 'development',
     /**
