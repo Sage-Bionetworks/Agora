@@ -1,6 +1,6 @@
 version: '2'
 services:
-  wall-of-targets:
+  agora:
     build:
       context: .
       dockerfile: Dockerfile

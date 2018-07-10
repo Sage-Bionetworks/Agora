@@ -1,10 +1,9 @@
 config:
   target: 'http://ec2-54-234-198-188.compute-1.amazonaws.com'
   http:
-    tls:
-      rejectUnauthorized: false
-    # Responses have to be sent within 10 seconds or the request will be aborted
+    # Responses have to be sent within 300 seconds or the request will be aborted
     timeout: 300
+    pool: 10 # All HTTP requests from all virtual users will be sent over the same 10 connections
   phases:
     - duration: 100
       arrivalRate: 5
@@ -15,3 +14,5 @@ scenarios:
   - flow:
     - get:
         url: '/api/genes/'
+        headers:
+          Content-Type: 'application/json'
