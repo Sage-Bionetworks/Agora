@@ -92,12 +92,51 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     }
 
     getSummary(body: boolean): string {
-        const summaryArray = this.geneInfo.summary.split(' [provided by ');
-        if (body) {
-            return summaryArray[0];
+        if (this.geneInfo.summary) {
+            let finalString = '';
+            const parenthesisArr = this.geneInfo.summary.split(/\(([^)]+)\)/g);
+            if (parenthesisArr.length) {
+                parenthesisArr.forEach((p, i, a) => {
+                    // Add the parenthesis back
+                    let auxString = '';
+                    if (i > 0) {
+                        auxString += (i % 2 === 1) ? '(' : ')';
+                    }
+                    if (i < a.length - 1) {
+                        // Replace brackets with a space except the last one
+                        finalString += auxString + p.replace(/\[[^)]*\]/g, ' ');
+                    } else {
+                        finalString += auxString + p;
+                    }
+                });
+            }
+            if (!finalString) { finalString = this.geneInfo.summary; }
+            const bracketsArr = finalString.split(/\[([^)]+)\]/g);
+            if (bracketsArr.length && bracketsArr.length > 1) {
+                // We have brackets so get the description and ref back
+                if (body) {
+                    // Replace the spaces before and where the brackets were
+                    // with nothing
+                    return bracketsArr[0].replace(/  /g, '');
+                } else {
+                    // Return the last bracket string
+                    return bracketsArr[1];
+                }
+            } else {
+                // We dont have brackets so just get the description back
+                if (body) {
+                    return finalString;
+                } else {
+                    return '';
+                }
+            }
         } else {
-            // Use a minus 2 instead of minus 1 because of the final dot in the string
-            return summaryArray[1].substring(0, summaryArray[1].length - 2);
+            // If we don't have a summary, return a placeholder description and an empty ref
+            if (body) {
+                return 'No description';
+            } else {
+                return '';
+            }
         }
     }
 

@@ -370,7 +370,7 @@ connection.once('open', () => {
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
         const name = req.query.name.toLowerCase().replace(/ /g, '_') + '.jpg';
-        gfs.exist({ filename: name }, (err, file) => {
+        gfs.exist({ filename: { $regex: '/' + name + '/', options: 'i' } }, (err, file) => {
             if (env === 'development') {
                 console.log('The team file exists');
                 console.log(file);
