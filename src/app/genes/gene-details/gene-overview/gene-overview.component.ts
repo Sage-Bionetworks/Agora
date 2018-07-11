@@ -42,18 +42,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        // Get the current clicked gene, always update
         this.subscription = this.forceService.getGenes()
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
-        // Get the current clicked gene
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
-        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        this.gene = this.geneService.getCurrentGene();
+        this.geneInfo = this.geneService.getCurrentInfo();
+        this.id = this.route.snapshot.paramMap.get('id');
 
-        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
-            || !this.gene.ensembl_gene_id) {
+            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
+            this.geneService.getCurrentGene().hgnc_symbol) {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.updateGeneData(data);

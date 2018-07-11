@@ -1,3 +1,30 @@
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+    <h2>
+        Overall Expression of Selected Gene Across Tissues
+    </h2>
+    <p class="black-paragraph">
+        Plot depicts the median expression of the selected gene across tissues in the dataset, as measured by RNA-seq read
+        counts per million reads.
+    </p>
+    <median-chart [geneinfo]="geneInfo"></median-chart>
+</div>
+
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+    <h2>
+        Differential Expression of Selected Gene within Selected Tissue
+    </h2>
+    <p class="black-paragraph">
+        Box plot depicts how the differential expression of the selected gene of interest
+        (red dot) compares with expression of other genes in the tissue.
+    </p>
+    <p class="black-paragraph">
+        {{'{'}}gene{{'}'}} {{'{'}}isDE{{'}'}} differentially expressed (log fold change = {{'{'}}lfc{{'}'}}; adjusted p-value
+        = {{'{'}}pval{{'}'}}) in the {{'{'}}tissue{{'}'}} when comparing {{'{'}}model{{'}'}}.
+    </p>
+    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+    </ng-template>
+</div>
+
 <div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
@@ -33,22 +60,6 @@
             </select-menu>
         </div>
     </div>
-</div>
-
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
-    <h2>
-        Differential Expression of Selected Gene within Selected Tissue
-    </h2>
-    <p class="black-paragraph">
-        Box plot depicts how the differential expression of the selected gene of interest
-        (red dot) compares with expression of other genes in the tissue.
-    </p>
-    <p class="black-paragraph">
-        {{'{'}}gene{{'}'}} {{'{'}}isDE{{'}'}} differentially expressed (log fold change = {{'{'}}lfc{{'}'}}; adjusted p-value
-        = {{'{'}}pval{{'}'}}) in the {{'{'}}tissue{{'}'}} when comparing {{'{'}}model{{'}'}}.
-    </p>
-    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-    </ng-template>
 </div>
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">

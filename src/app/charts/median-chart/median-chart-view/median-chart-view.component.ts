@@ -52,6 +52,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         const width = this.medianChart.nativeElement.parentElement.offsetWidth;
         this.barchart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM');
+        this.barchart.margins().top = 50;
         this.barchart
             .width(width)
             .height(620)

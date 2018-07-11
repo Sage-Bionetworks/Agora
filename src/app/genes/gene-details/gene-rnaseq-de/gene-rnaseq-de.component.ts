@@ -3,12 +3,10 @@ import {
     OnInit,
     Input,
     ViewEncapsulation,
-    ViewChild,
     ViewChildren,
     ViewContainerRef,
     ComponentFactoryResolver,
     ComponentRef,
-    ComponentFactory,
     QueryList
 } from '@angular/core';
 import { Location } from '@angular/common';
@@ -16,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
 
-import { Gene } from '../../../models';
+import { Gene, GeneInfo } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
 import { GeneService, DataService } from '../../../core/services';
@@ -33,6 +31,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
+    @Input() geneInfo: GeneInfo;
     @Input() id: string;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
     dataLoaded: boolean = false;
@@ -55,7 +54,8 @@ export class GeneRNASeqDEComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+        this.gene = this.geneService.getCurrentGene();
+        this.geneInfo = this.geneService.getCurrentInfo();
 
         // The data wasn't loaded yet, redirect for now
         if (!this.dataService.getNdx()) {

@@ -148,14 +148,17 @@ export class RowChartViewComponent implements OnInit {
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
-        let minCIL = +Infinity;
+        let max = -Infinity;
         currentGenes.forEach((g) => {
-            if (+g.ci_l < minCIL) {
-                minCIL = +g.ci_l;
+            if (Math.abs(+g.ci_l) > max) {
+                max = Math.abs(+g.ci_l);
+            }
+            if (Math.abs(+g.ci_r) > max) {
+                max = Math.abs(+g.ci_r);
             }
         });
-        if (minCIL !== +Infinity) {
-            chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([minCIL, -minCIL]));
+        if (max !== +Infinity) {
+            chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([-max, max]));
             chart.xAxis().scale(chart.x());
         }
     }

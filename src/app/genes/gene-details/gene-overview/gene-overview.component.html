@@ -40,7 +40,7 @@
 
     <div class="section-thin overview-rel">
         <h2>
-            Relevance
+            Summary of Relevance
             <span class="icon-spacing"></span>
             <i class="fa fa-info-circle" (click)="showDialog('displayRelDia')"></i>
         </h2>
@@ -48,8 +48,8 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Network &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
+                    Gene in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColor(false, true)">Off</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -62,27 +62,13 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Gene in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">Off</span>
-                </h3>
-            </div>
-            <div class="col-md-6">
-                <h3>
-                    Distribution in Body &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    Reactome Pathways &nbsp;&nbsp;&nbsp;
+                    Reactome Pathaways &nbsp;&nbsp;&nbsp;
                     <span class="link-heading" (click)="viewPathaways()">View pathaways</span>
                 </h3>
             </div>
             <div class="col-md-6">
                 <h3>
-                    Cell Types &nbsp;&nbsp;&nbsp;
+                    Distribution in Body &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
@@ -96,19 +82,9 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Consistency among cohorts from differential expression analyses &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">No</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    AD Relevance &nbsp;&nbsp;&nbsp;
+                    Cell Types &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
-            </div>
-            <div class="col-md-6">
             </div>
         </div>
     </div>
@@ -128,16 +104,6 @@
                 </p>
             </div>
             <gene-rnaseq-de></gene-rnaseq-de>
-        </p-panel>
-    </div>
-
-    <div class="overview-link">
-        <p-panel header="Overall Expression of Selected Gene Across Tissues">
-             <div class="section-thin st-desc">
-                 <p class="black-paragraph">
-                     Plot depicts the median expression of the selected gene across tissues in the dataset, as measured by<br> RNA-seq read counts per million reads.</p>
-             </div>
-            <median-chart [geneinfo]="geneInfo"></median-chart>
         </p-panel>
     </div>
 
