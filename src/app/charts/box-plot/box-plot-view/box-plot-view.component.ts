@@ -130,7 +130,6 @@ export class BoxPlotViewComponent implements OnInit {
             chart.selectAll('rect.box')
                 .attr('rx', 9);
 
-            console.log(type);
             // Renders the selected gene circle
             (type === 'postRender') ? self.renderRedCircle(chart) :
                 self.renderRedCircle(chart, true);
@@ -146,11 +145,13 @@ export class BoxPlotViewComponent implements OnInit {
         const val = self.currentGene[self.info.attr];
         let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
         logVal = +this.decimalPipe.transform(logVal, '1.3');
+        const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
 
         if (!translate) {
-            const phrase = self.currentGene.hgnc_symbol + ' is significantly differentially ' +
-                'expressed in ' + self.geneService.getCurrentTissue() + ' with a log fold ' +
-                'change value of ' + logVal + ' and an adjusted p-value of ' +
+            const phrase = self.currentGene.hgnc_symbol + ' is' + significanceText +
+                'significantly differentially expressed in ' +
+                self.geneService.getCurrentTissue() +
+                ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +
                 self.currentGene.adj_p_val + '.';
             chart.selectAll('g.box')
                 .append('circle')

@@ -178,6 +178,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             this.gene.ensembl_gene_id, '_blank');
     }
 
+    isNominatedTarget() {
+        return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
+    }
+
     ngOnDestroy() {
         if (this.subscription) {
             this.subscription.unsubscribe();
