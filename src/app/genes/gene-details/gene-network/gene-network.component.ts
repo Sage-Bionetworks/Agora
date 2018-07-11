@@ -39,9 +39,14 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
-        if (this.geneService.getCurrentInfo()) {
-            this.geneInfo = this.geneService.getCurrentInfo();
+        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        if (this.forceService.getGeneOriginalList()) {
+            const dn = this.forceService.getGeneOriginalList();
+            this.networkData = dn;
+            this.selectedGeneData.nodes = dn.nodes.slice(1);
+            this.selectedGeneData.links = dn.links.slice().reverse();
+            this.selectedGeneData.origin = dn.origin;
+            this.dataLoaded = true;
         } else {
             this.geneInfo = {
                 hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol,
@@ -77,9 +82,8 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.nodes = network.nodes;
                 this.selectedGeneData.origin = network.origin;
                 this.dataService.getGene(event.id).subscribe((data) => {
-                    console.log(data);
-                    if (data['geneInfo']) {
-                        this.geneInfo = data['geneInfo'];
+                    if (data['info']) {
+                        this.geneInfo = data['info'];
                     } else {
                         this.geneInfo = { hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol };
                     }
@@ -102,7 +106,6 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
-                console.log(this.currentGene);
             });
         });
     }
@@ -115,9 +118,7 @@ export class GeneNetworkComponent implements OnInit {
                 this.router.navigate(['/genes']);
                 return;
             }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setLogFC(data['minFC'], data['maxFC']);
-            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+            this.geneService.updateGeneData(data);
             this.router.navigateByUrl(currentUrl)
                 .then(() => {
                     this.router.navigated = false;

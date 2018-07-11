@@ -14,7 +14,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require( 'nodemon-webpack-plugin' );
 
-const ENV = (process.env.NODE_ENV || process.env.ENV || 'development');
+const ENV = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 const Docker = process.env.Docker || false;
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',

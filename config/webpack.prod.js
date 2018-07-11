@@ -49,7 +49,7 @@ function getUglifyOptions(supportES2015, enableCompress) {
 }
 
 module.exports = function (env) {
-  const ENV = (process.env.NODE_ENV = process.env.ENV = 'production');
+  const ENV = (process.env.mode = process.env.NODE_ENV = process.env.ENV = 'production');
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
   const sourceMapEnabled = process.env.SOURCE_MAP === '1';
   const Docker = process.env.Docker || false;

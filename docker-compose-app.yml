@@ -1,11 +1,11 @@
 version: '2'
 services:
-  wall-of-targets:
+  agora:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - MONGO_URI=mongodb://mongodb/walloftargets
+      - MONGO_URI=mongodb://mongodb/agora
     restart: always
     expose:
       - '5000'

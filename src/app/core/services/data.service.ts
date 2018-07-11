@@ -33,8 +33,13 @@ export class DataService {
 
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
+            let dataLinks: any;
             this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
-                resolve(data);
+                dataLinks = data;
+            }, (error) => {
+                console.log('Error loading genes! ' + error.message);
+            }, () => {
+                resolve(dataLinks);
             });
         });
     }
@@ -64,7 +69,9 @@ export class DataService {
                 this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
-
+            }, (error) => {
+                console.log('Error loading genes! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -96,20 +103,46 @@ export class DataService {
         return this.http.get('/api/genes/' + id, { headers });
     }
 
-    getGene(id: string): Observable<object> {
+    getGene(id: string, tissue?: string, model?: string): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set(
+            'id', id
+        );
+        if (tissue) {
+            params = params.set(
+                'tissue', tissue
+            );
+        }
+        if (model) {
+            params = params.set(
+                'model', model
+            );
+        }
 
-        return this.http.get('/api/gene/' + id, { headers });
+        return this.http.get('/api/gene/', { headers, params });
     }
 
-    getTeam(info: GeneInfo): Observable<object> {
+    getTeams(info: GeneInfo): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const params = new HttpParams().set(
             'teams', info.nominatedtarget.map((e) => e.team).join(', ')
         );
-        console.log(params);
 
         return this.http.get('/api/teams', { headers, params });
+    }
+
+    getTeamMemberImage(name: string): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
+            'Accept': 'image/jpg',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        });
+        const params = new HttpParams().set(
+            'name', name
+        );
+
+        return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
     }
 
     getGeneEntries(): Gene[] {

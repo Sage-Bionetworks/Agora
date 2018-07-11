@@ -82,3 +82,34 @@
         text-align-last: left;
     }
 }
+
+.website-row {
+    a {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 18px;
+        text-decoration-line: underline;
+        color: #5BB0B5;
+    }
+
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.members-row {
+    margin-bottom: 20px;
+    text-align-last: center;
+
+    h3 {
+        text-align: center;
+    }
+}
+
+.member-img {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    object-fit: cover;
+}

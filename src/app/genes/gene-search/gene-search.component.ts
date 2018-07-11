@@ -28,8 +28,7 @@ export class GeneSearchComponent implements OnInit {
     queryField: FormControl = new FormControl();
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
-
-    private gene: Gene;
+    gene: Gene;
 
     constructor(
         private router: Router,
@@ -70,18 +69,21 @@ export class GeneSearchComponent implements OnInit {
         return this.gene.hgnc_symbol;
     }
 
-    viewGene(gene: Gene) {
-        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+    viewGene(info: GeneInfo) {
+        let geneData: any;
+        this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setCurrentInfo(data['info']);
-            this.geneService.setFC(data['minFC'], data['maxFC']);
-            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
-            this.gene = data['item'];
+            console.log(data);
+            geneData = data;
+        }, (error) => {
+            console.log('Routing error! ' + error.message);
+        }, () => {
+            console.log(geneData);
+            this.geneService.updateGeneData(geneData);
+            this.gene = geneData['item'];
             this.router.navigate([
                 '/genes',
-                { outlets: {'genes-router': [ 'gene-details', data['item'].ensembl_gene_id ] }}
+                { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
             ]);
         });
     }

@@ -98,7 +98,7 @@
 
             color: #1A1C29;
             height: 52px;
-            line-height: 44px;
+            line-height: 52px;
             background: #FFFFFF;
             box-shadow: 0px 0px 4px #C7C5C5;
         }
@@ -133,7 +133,7 @@
 
         li {
             width: 100%;
-            line-height: 44px;
+            line-height: 52px;
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
@@ -213,28 +213,22 @@
                 transform: scale(2.4, 2.4);
             }
 
+            .pi-caret-up {
+                transform: scale(2.4, 2.4);
+            }
+
+            .fa-caret-down {
+                transform: scale(2.4, 2.4);
+            }
+
+            .fa-caret-up {
+                transform: scale(2.4, 2.4);
+            }
+
             .ui-clickable {
                 margin-top: 1.2em;
             }
         }
-    }
-
-    .dc-select-option {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 18px;
-        color: #1A1C29;
-        padding-left: 10%;
-    }
-
-    .dc-select-option::before {
-        padding-left: 10%;
-    }
-
-    .dc-select-option::after {
-        padding-left: 10%;
     }
 }
 
@@ -251,6 +245,9 @@
     .icon-spacing {
         margin-right: 5px;
     }
+
+    box-shadow: 0px 2px 6px rgba(224, 224, 224, 1.0);
+    margin-bottom: 2%;
 }
 
 .rna-seq-fplot {

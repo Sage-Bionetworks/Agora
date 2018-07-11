@@ -4,13 +4,13 @@
 /* This file is for setting global styles  */
 
 // 1. Vendor files
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/utilities/flex";
+@import "~dc/style/dc.scss";
 @import "~primeicons/primeicons.css";
 @import "~font-awesome/css/font-awesome.min.css";
 @import "~primeng/resources/themes/omega/theme.css";
 @import "~primeng/resources/primeng.min.css";
-@import "~bootstrap/scss/bootstrap-grid";
-@import "~bootstrap/scss/utilities/flex";
-@import "~dc/style/dc.scss";
 @import "~lato-font/css/lato-font.css";
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
@@ -34,6 +34,7 @@
 // 5. Custom Global Styles
 html, body{
     height: 100%;
+    max-height: 100%;
     width: 100%;
     min-width: 367px;
     font-family: Lato;

@@ -18,7 +18,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  const ENV = (process.env.ENV = process.env.NODE_ENV = 'development');
+  const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'development');
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 3000;
   const Docker = process.env.Docker || false;

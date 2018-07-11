@@ -7,8 +7,8 @@ LABEL description="NGINX running on the Alpine image (5MB)"
 RUN mkdir -p /run/nginx
 
 # Grab the latest NGINX apk, remove the apk cache, and allow permissions
-RUN echo "http://dl-4.alpinelinux.org/alpine/v3.3/main" >> /etc/apk/repositories && \
-    apk add --update nginx=1.12.2-r3 && \
+RUN echo "http://dl-3.alpinelinux.org/alpine/v3.5/main" >> /etc/apk/repositories && \
+    apk add --update nginx=1.14.0-r0 && \
     rm -rf /var/cache/apk/* && \
     chown -R nginx:www-data /var/lib/nginx
 

@@ -62,18 +62,23 @@ export class RowChartViewComponent implements OnInit {
         this.group = this.dataService.getGroup(this.info);
 
         this.title = this.info.title;
-        this.chart = dc.rowChart(this.rowChart.nativeElement)
-            .x(d3.scaleLinear().domain(this.geneService.getLogFC()))
-            .elasticX(true)
+        this.chart = dc.rowChart(this.rowChart.nativeElement);
+        this.chart
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.1-5');
+                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.3');
             })
             .valueAccessor((d) => {
-                return +self.decimalPipe.transform(+d.value.logfc, '1.1-5');
+                return +self.decimalPipe.transform(+d.value.logfc, '1.3');
             })
             .label((d) => {
                 return d.key;
+            })
+            .on('preRender', (chart) => {
+                self.updateXDomain(chart);
+            })
+            .on('preRedraw', (chart) => {
+                self.updateXDomain(chart);
             })
             .othersGrouper(null)
             .ordinalColors(this.colors)
@@ -97,7 +102,7 @@ export class RowChartViewComponent implements OnInit {
     registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
         const self = this;
         // Using a different name for the chart variable here so it's not shadowed
-        chartEl.on(type, function(chart) {
+        chartEl.on(type, (chart) => {
             const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
             const squareSize = 18;
             const lineWidth = 60;
@@ -136,6 +141,23 @@ export class RowChartViewComponent implements OnInit {
             // Finally show the chart
             self.display = true;
         });
+    }
+
+    updateXDomain(chart: dc.RowChart) {
+        // Draw the horizontal lines
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+        let minCIL = +Infinity;
+        currentGenes.forEach((g) => {
+            if (+g.ci_l < minCIL) {
+                minCIL = +g.ci_l;
+            }
+        });
+        if (minCIL !== +Infinity) {
+            chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([minCIL, -minCIL]));
+            chart.xAxis().scale(chart.x());
+        }
     }
 
     updateXTicks(chart: dc.RowChart) {
@@ -222,6 +244,9 @@ export class RowChartViewComponent implements OnInit {
         });
 
         // Draw the horizontal lines
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
@@ -229,13 +254,31 @@ export class RowChartViewComponent implements OnInit {
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
-                return chart.x()(d.value.logfc) - lineWidth / 2;
+                const gene = currentGenes.slice().find((g) => {
+                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
+                        === g.logfc;
+                });
+
+                if (gene) {
+                    return chart.x()(gene.ci_l);
+                } else {
+                    return chart.x()(d.value.logfc) - lineWidth / 2;
+                }
             })
             .attr('y1', () => {
                 return yPos;
             })
             .attr('x2', (d) => {
-                return chart.x()(d.value.logfc) + lineWidth / 2;
+                const gene = currentGenes.slice().find((g) => {
+                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
+                        === g.logfc;
+                });
+
+                if (gene) {
+                    return chart.x()(gene.ci_r);
+                } else {
+                    return chart.x()(d.value.logfc) + lineWidth / 2;
+                }
             })
             .attr('y2', () => {
                 return yPos;
@@ -256,7 +299,9 @@ export class RowChartViewComponent implements OnInit {
                 ')';
             })
             .attr('width', squareSize)
-            .attr('height', squareSize);
+            .attr('height', squareSize)
+            .attr('rx', squareSize / 2)
+            .attr('ry', squareSize / 2);
     }
 
     displayChart() {

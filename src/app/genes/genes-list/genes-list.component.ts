@@ -67,11 +67,7 @@ export class GenesListComponent implements OnInit {
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
         this.dataService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setCurrentInfo(data['info']);
-            this.geneService.setFC(data['minFC'], data['maxFC']);
-            this.geneService.setLogFC(data['minFC'], data['maxFC']);
-            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+            this.geneService.updateGeneData(data);
             this.router.navigate(
                 ['../gene-details', this.selectedInfo.ensembl_gene_id],
                 {relativeTo: this.route}
