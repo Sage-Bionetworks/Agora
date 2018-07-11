@@ -39,6 +39,9 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         console.log(this.geneinfo); // medianlogcpm: 5.6357, tissue: "DLPFC"
+        if (!this.geneinfo) {
+            return;
+        }
         this.ndx = crossfilter(this.geneinfo.medianexpression);
         this.group = this.ndx.groupAll();
         this.dimension = this.ndx.dimension( (d) =>  d.tissue );
@@ -85,7 +88,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                     .merge(path);
                 path.attr('d', line);
             });
-        dc.renderAll();
+        this.barchart.render();
     }
 
     onResize(event) {
