@@ -168,7 +168,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.location.back();
     }
 
-    viewPathaways() {
+    viewPathways() {
         window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
             this.gene.ensembl_gene_id, '_blank');
     }
