@@ -12,36 +12,6 @@
         box-shadow: 0px 0px 4px #C7C5C5;
         border: 0;
 
-        /*.dc-select-option {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 18px;
-            padding-left: 10%;
-            line-height: 44px;
-            color: #1A1C29;
-            border: 0 none;
-            cursor: pointer;
-            font-weight: normal;
-            margin: 1px 0;
-            padding: .125em .25em;
-            text-align: left;
-            white-space: nowrap;
-            position: relative;
-            width: 100%;
-            border-bottom: 1px solid #EDEDED !important;
-            height: 51px;
-            vertical-align: middle;
-        }
-
-        .dc-select-option::before {
-            padding-left: 10%;
-        }
-
-        .dc-select-option::after {
-            padding-left: 10%;
-        }*/
-
         @include respond-to('ex-small') {
             font-size: 16px;
         }

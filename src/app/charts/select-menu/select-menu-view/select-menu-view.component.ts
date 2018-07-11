@@ -65,7 +65,7 @@ export class SelectMenuViewComponent implements OnInit {
             .title((d) => {
                 return d.key;
             })
-            .on('filtered', function(chart, filter) {
+            .on('filtered', (chart, filter) => {
                 if (self.label === 'select-tissue') { self.geneService.setCurrentTissue(filter); }
                 if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }
                 self.isDisabled = (filter) ? false : true;
@@ -118,6 +118,7 @@ export class SelectMenuViewComponent implements OnInit {
             const c: HTMLDivElement = document.createElement('DIV') as HTMLDivElement;
             c.innerHTML = oriSelEl.options[j].innerHTML;
             c['index'] = j - 1;
+            if (j === 1) { c.setAttribute('class', 'same-as-selected'); }
             c.addEventListener('click', function(e) {
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
@@ -135,9 +136,7 @@ export class SelectMenuViewComponent implements OnInit {
                         s.selectedIndex = i;
                         h['innerHTML'] = this.innerHTML;
                         const y = this.parentNode['getElementsByClassName']('same-as-selected');
-                        y.forEach((k) => {
-                            k.removeAttribute('class');
-                        });
+                        y[0].removeAttribute('class');
                         this.setAttribute('class', 'same-as-selected');
                         break;
                     }

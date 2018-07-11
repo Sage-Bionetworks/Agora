@@ -40,7 +40,6 @@ export class GeneNetworkComponent implements OnInit {
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
-        console.log(this.geneInfo);
         if (this.forceService.getGeneOriginalList()) {
             const dn = this.forceService.getGeneOriginalList();
             this.networkData = dn;
@@ -48,7 +47,6 @@ export class GeneNetworkComponent implements OnInit {
             this.selectedGeneData.links = dn.links.slice().reverse();
             this.selectedGeneData.origin = dn.origin;
             this.dataLoaded = true;
-            console.log(this.currentGene);
         } else {
             this.loadGenes();
         }
@@ -61,9 +59,8 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.nodes = network.nodes;
                 this.selectedGeneData.origin = network.origin;
                 this.dataService.getGene(event.id).subscribe((data) => {
-                    console.log(data);
-                    if (data['geneInfo']) {
-                        this.geneInfo = data['geneInfo'];
+                    if (data['info']) {
+                        this.geneInfo = data['info'];
                     } else {
                         this.geneInfo = { hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol };
                     }
@@ -86,7 +83,6 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
-                console.log(this.currentGene);
             });
             // // this.eqtl = this.findEqtl();
             // this.variants = this.findVariant();

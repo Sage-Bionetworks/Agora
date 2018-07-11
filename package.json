@@ -37,7 +37,7 @@
     "ci": "npm run ci:testall",
     "clean:all": "npm run rimraf -- doc coverage dist compiled webpack-cache",
     "clean:cache": "npm run rimraf -- webpack-cache",
-    "clean:docker": "docker system prune -a && docker-compose -f ./docker-compose.yml rm && docker-compose -f ./docker-compose-app.yml rm",
+    "clean:docker": "docker-compose -f ./docker-compose.yml rm && docker-compose -f ./docker-compose-app.yml rm && docker system prune -a",
     "clean:aot": "npm run rimraf -- compiled",
     "clean:dist": "npm run rimraf -- \"dist/**/!(server.js)\"",
     "clean:server": "npm run rimraf dist/server.js",
