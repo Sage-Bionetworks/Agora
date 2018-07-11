@@ -39,19 +39,35 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
-        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
-        console.log(this.geneInfo);
-        if (this.forceService.getGeneOriginalList()) {
-            const dn = this.forceService.getGeneOriginalList();
-            this.networkData = dn;
-            this.selectedGeneData.nodes = dn.nodes.slice(1);
-            this.selectedGeneData.links = dn.links.slice().reverse();
-            this.selectedGeneData.origin = dn.origin;
-            this.dataLoaded = true;
-            console.log(this.currentGene);
+        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+        if (this.geneService.getCurrentInfo()) {
+            this.geneInfo = this.geneService.getCurrentInfo();
         } else {
-            this.loadGenes();
+            this.geneInfo = {
+                hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol,
+                nominatedtarget: [],
+                isIGAP: false,
+                haseqtl: false
+             };
         }
+        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+        if (this.gene && this.forceService.getGeneOriginalList() &&
+        this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
+            this.loadGenes();
+            } else {
+                if (this.forceService.getGeneOriginalList()) {
+                    const dn = this.forceService.getGeneOriginalList();
+                    this.networkData = dn;
+                    this.selectedGeneData.nodes = dn.nodes.slice(1);
+                    this.selectedGeneData.links = dn.links.slice().reverse();
+                    this.selectedGeneData.origin = dn.origin;
+                    this.dataLoaded = true;
+                    console.log(this.currentGene);
+                } else {
+                    this.loadGenes();
+                }
+            }
+        console.log(this.geneInfo);
     }
 
     updategene(event) {
@@ -88,29 +104,8 @@ export class GeneNetworkComponent implements OnInit {
                 this.dataLoaded = true;
                 console.log(this.currentGene);
             });
-            // // this.eqtl = this.findEqtl();
-            // this.variants = this.findVariant();
-            // console.log(data);
         });
     }
-
-    // findVariant() {
-    //     this.variantsJson.find( (variant: any) => {
-    //         if (variant.ENSEMBL === this.currentGene.ensembl_gene_id) {
-    //             return true;
-    //         }
-    //     });
-    //     return false;
-    // }
-
-    // findEqtl() {
-    //     this.eqtlJson.find( (eqtl: any) => {
-    //         if (eqtl.ensembl_gene_id === this.currentGene.ensembl_gene_id) {
-    //             return true;
-    //         }
-    //     });
-    //     return false;
-    // }
 
     viewGene(id: string) {
         this.dataService.getGene(id).subscribe((data) => {

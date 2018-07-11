@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input,
+    AfterViewInit } from '@angular/core';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -23,9 +30,6 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     group: any;
     dimension: any;
     tissuecoresGroup: any;
-    colors: string[] = [
-        '#7692D9', '#699FD2', '#5CADCA', '#42C7BB', '#9FC995', '#CECA82', '#FCCB6F'
-    ];
 
     constructor(
         private dataService: DataService,
@@ -44,21 +48,56 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         const width = this.medianChart.nativeElement.parentElement.offsetWidth;
         this.barchart = dc.barChart(this.medianChart.nativeElement)
-            .xAxisLabel('Tissue')
             .yAxisLabel('LOG CPM');
         this.barchart
             .width(width)
             .height(620)
             .gap(50)
+            .brushOn(false)
+            .renderLabel(true)
             .dimension(this.dimension)
             .group(this.tissuecoresGroup)
             .elasticY(true)
             .x(d3.scaleBand())
             .xUnits(dc.units.ordinal)
-            .colors(['#E0585D', '#F89C55', '#FCCB6F'])
-            .ordinalColors(['#E0585D', '#F89C55', '#FCCB6F'])
-            .yAxis().ticks(5);
+            .colors(['#5171C0'])
+            // .yAxis().ticks(6)
+            .on('renderlet', (chart) => {
+                chart.selectAll('rect').on('click', (d) => {
+                    console.log('click!', d);
+                });
+                const lefty = 10;
+                const righty = 70; // use real statistics here!
+                const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
+                { x: chart.x().range()[1], y: chart.y()(righty) }];
+                const line = d3.line()
+                    .x((d: any) =>  d.x)
+                    .y((d: any) => d.y)
+                    .curve(d3.curveLinear);
+                const chartBody = chart.select('g.chart-body');
+                let path = chartBody.selectAll('path.extra').data([extradata]);
+                path = path
+                    .enter()
+                    .append('path')
+                    .attr('class', 'extra')
+                    .attr('stroke', 'red')
+                    .attr('id', 'extra-line')
+                    .merge(path);
+                path.attr('d', line);
+            });
         dc.renderAll();
+    }
+
+    onResize(event) {
+        const width = this.medianChart.nativeElement.parentElement.offsetWidth;
+        this.barchart
+            .width(width)
+            .height(620)
+            .x(d3.scaleBand())
+            .renderLabel(true)
+            .xUnits(dc.units.ordinal)
+            .gap(50)
+            .redraw();
     }
 
 }
