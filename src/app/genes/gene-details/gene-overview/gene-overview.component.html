@@ -224,7 +224,7 @@
         <div class="row">
             <div class="col-md-7">
             <div *ngFor="let node of currentGeneData | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
-                <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+                <div (click)="viewGene(node.ensembl_gene_id)" class="genelink">{{node.hgnc_symbol}}</div>
             </div>
         </div>
         <div class="col-md-5">

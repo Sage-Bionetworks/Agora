@@ -27,7 +27,7 @@
     <tr *ngFor="let node of selectedGeneData.nodes" class="pathbox">
         <td>
             <span class="genes">
-            <span (click)="viewGene(node.is)">{{node.hgnc_symbol}}</span>
+            <span (click)="viewGene(node.ensembl_gene_id)">{{node.hgnc_symbol}}</span>
         </span>
         </td>
     </tr>

@@ -67,4 +67,27 @@ export class GeneSimilarComponent implements OnInit {
             });
         }
     }
+
+    viewGene(id: string) {
+        this.dataService.getGene(id).subscribe((data) => {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            const currentUrl = this.router.url + '?';
+            if (!data['item']) {
+                this.router.navigate(['/genes']);
+                return;
+            }
+            this.geneService.updateGeneData(data);
+            this.router.navigateByUrl(currentUrl)
+                .then(() => {
+                    this.router.navigated = false;
+                    this.router.navigate(['/genes',
+                        {
+                            outlets:
+                            {
+                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
+                            }
+                        }]);
+                });
+        });
+    }
 }
