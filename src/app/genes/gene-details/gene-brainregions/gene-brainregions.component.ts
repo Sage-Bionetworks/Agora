@@ -41,11 +41,11 @@ export class GeneBRComponent implements OnInit {
         if (!!this.forceService.getGeneClickedList() &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneClickedList();
+            console.log(this.selectedGeneData.links);
             this.dataLoaded = true;
             console.log('preloaded data');
         } else {
             this.dataService.getGene(this.id).subscribe((data) => {
-                console.log(data);
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
                 this.geneService.setCurrentInfo(data['geneInfo']);
@@ -55,10 +55,40 @@ export class GeneBRComponent implements OnInit {
                     this.forceService.setData(datalinks);
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                         this.selectedGeneData.links = dn.links.slice().reverse();
+                        console.log(this.selectedGeneData.links);
                         this.dataLoaded = true;
                     });
                 });
             });
         }
+    }
+
+    viewGene(link, pos) {
+        let id = '';
+        if (link[pos].ensembl_gene_id) {
+            id = link[pos].ensembl_gene_id;
+        } else {
+            id = link[pos];
+        }
+        this.dataService.getGene(id).subscribe((data) => {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            const currentUrl = this.router.url + '?';
+            if (!data['item']) {
+                this.router.navigate(['/genes']);
+                return;
+            }
+            this.geneService.updateGeneData(data);
+            this.router.navigateByUrl(currentUrl)
+                .then(() => {
+                    this.router.navigated = false;
+                    this.router.navigate(['/genes',
+                        {
+                            outlets:
+                            {
+                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
+                            }
+                        }]);
+                });
+        });
     }
 }

@@ -27,9 +27,9 @@
     <tr *ngFor="let link of selectedGeneData.links" class="pathbox">
         <td>
             <span class="genes">
-            <span (click)="viewGene(link.source.id)">{{link.hgnc_symbolA}}</span>
+            <span (click)="viewGene(link, 'source')">{{link.hgnc_symbolA}}</span>
             <i class="fa fa-arrow-right"></i>&nbsp;
-            <span (click)="viewGene(link.target.id)">{{link.hgnc_symbolB}}</span>
+            <span (click)="viewGene(link, 'target')">{{link.hgnc_symbolB}}</span>
         </span>
         <span *ngFor="let region of link.brainregions; last as isLast">
             {{region}}{{isLast ? '' : ', '}}

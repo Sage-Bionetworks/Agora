@@ -95,7 +95,13 @@ export class GeneNetworkComponent implements OnInit {
         });
     }
 
-    viewGene(id: string) {
+    viewGene(link, pos) {
+        let id = '';
+        if (link[pos].ensembl_gene_id) {
+            id = link[pos].ensembl_gene_id;
+        } else {
+            id = link[pos];
+        }
         this.dataService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';

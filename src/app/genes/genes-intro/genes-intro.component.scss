@@ -91,7 +91,8 @@ p-button {
     color: black !important;
     border-radius: 100px;
     width: 64%;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
 }
 
 .list-control-row {
