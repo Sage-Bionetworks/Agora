@@ -11,4 +11,4 @@ wait_for_db() {
 wait_for_db
 
 npm run build:server:docker
-node --max_old_space_size=2000  /ng-app/dist/server.js
+env NODE_ENV=production node --max_old_space_size=2000  /ng-app/dist/server.js

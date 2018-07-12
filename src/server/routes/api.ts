@@ -273,7 +273,7 @@ connection.once('open', () => {
                     }
                 });
 
-                GenesInfo.findOne(queryObj).exec((errB, info) => {
+                GenesInfo.findOne({[fieldName]: req.query.id}).exec((errB, info) => {
                     if (errB) {
                         next(errB);
                     } else {
