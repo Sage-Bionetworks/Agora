@@ -71,35 +71,31 @@ Go back to `MongoDB Compass` and create a database called `agora`. In the Create
 
 # Downloading the data
 
-Go to the `Synapse` repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download four files: `geneExprData.json`, `network.json`, `gene_info.json`, `team_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json`, `dataInfo.json`, and `teamInfo.json` respectively. You will also need the teams images from `Synapse` [here](https://www.synapse.org/#!Synapse:syn12861877). You can download all of them using the `synapseclient` or `Python`. If you choose to use `Python`, install it according to your OS, then get and install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
+The following commands will download four data files (`rnaseq_differential_expression.json`, `network.json`, `gene_info.json`, `team_info.json`) and all of the team images. You can download all of them using the `synapseclient`. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
 
 ```bash
-pip install synapseclient[pandas,pysftp]
+pip install synapseclient
 ```
 
-Create a new `Python` script and paste the following inside:
+To get the data files using credentials provided by AWS, run:
 
 ```bash
-import synapseclient
-import synapseutils
-
-syn = synapseclient.Synapse()
-syn.login('synapse_username','password')
-files = synapseutils.syncFromSynapse(syn, 'syn12861877'. 'PATH/TO/DESIRED/FOLDER')
+npm run data:local-aws
 ```
 
-In the same folder you created the `Python` script above run the following command:
+If you have your own Synapse credentials, you can run:
 
 ```bash
-python your_script_name.py
+npm run data:local
 ```
 
-You should see all the nominated targets teams members pictures in the folder created by the script above. In the images directory run:
+If you are on an AWS EC2 that has been granted access (e.g., for deployment) you can run:
 
 ```bash
-# Removes spaces and dashes from the filenames
-rename 's/[ -]/_/g' *
+npm run data:aws
 ```
+
+You should see all of the data files and teams members pictures in the folders created by the script above.
 
 To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following command:
 
