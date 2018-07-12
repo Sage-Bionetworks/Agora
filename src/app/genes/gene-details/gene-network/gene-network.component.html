@@ -2,59 +2,65 @@
     <div class="col-md-8 network-container">
         <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
     </div>
-    <div class="col-md-4 ">
-        <div class="row nopadding currentGene">
-            <div class="container">
-                <h2>{{geneInfo.hgnc_symbol}}</h2>
-                <p>{{geneInfo.summary}}</p>
-                <div>Known AD Gene Variant
-                    <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
-                </div>
-                <div>AMP-AD target
-                    <span [ngClass]="{'true':geneInfo.nominatedtarget.length,'false':!geneInfo.nominatedtarget.length}">
-                         {{geneInfo.nominatedtarget.length?'true':'false'}}
-                    </span>
-                </div>
-                <div>Brain eQTL
-                    <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span>
-                </div>
-                <!-- <div>Protein Precense <span class="false"> False</span></div> -->
+    <div class="col-md-4 currentGene">
+        <div class="container">
+            <h2>{{geneInfo.hgnc_symbol}}</h2>
+            <p>{{geneInfo.summary}}</p>
+            <div>Known AD Gene Variant
+                <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
             </div>
-        </div>
-        <div class="row brainregions nopadding">
-            <div class="container">
-                <h2>
-                    Brain Regions
-                    <span class="icon-spacing"></span>
-                    <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
-                </h2>
-                <span class="info"> 6 of {{selectedGeneData.links.length}} genes</span>
-                <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
-                    <span class="genes">
-                        <span (click)="viewGene(link.source.ensembl_gene_id)">{{link.hgnc_symbolA}}</span>
-                        <i class="fa fa-arrow-right"></i>&nbsp;
-                        <span (click)="viewGene(link.target.ensembl_gene_id)">{{link.hgnc_symbolB}}</span>
-                    </span>
-                    <span *ngFor="let region of link.brainregions; last as isLast">
-                        {{region}}{{isLast ? '' : ', '}}
-                    </span>
-                </div>
-                <span class="btn brainregion-button"
-                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-brainregions', selectedGeneData.origin.ensembl_gene_id ]} })">
-                    <i class="fa fa-angle-right fa-lg"></i>
+            <div>AMP-AD target
+                <span [ngClass]="{'true':geneInfo.nominatedtarget.length,'false':!geneInfo.nominatedtarget.length}">
+                        {{geneInfo.nominatedtarget.length?'true':'false'}}
                 </span>
             </div>
+            <div>Brain eQTL
+                <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span>
+            </div>
+            <!-- <div>Protein Presence <span class="false"> False</span></div> -->
         </div>
-        <div class="row brainregions nopadding">
-            <div class="container">
-                <h2>Similar Genes</h2>
-                <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
-                    <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+        <div class="container">
+            <h2 class="br-heading">
+                Brain Regions
+                <span class="icon-spacing"></span>
+                <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
+            </h2>
+            <span class="info"> 6 of {{selectedGeneData.links.length}} genes</span>
+            <div class="row pathboxes-row">
+                <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+                    <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
+                        <span class="genes">
+                            <span (click)="viewGene(link.source.ensembl_gene_id)">{{link.hgnc_symbolA}}</span>
+                            <i class="fa fa-arrow-right"></i>&nbsp;
+                            <span (click)="viewGene(link.target.ensembl_gene_id)">{{link.hgnc_symbolB}}</span>
+                        </span>
+                        <span *ngFor="let region of link.brainregions; last as isLast">
+                            {{region}}{{isLast ? '' : ', '}}
+                        </span>
+                    </div>
                 </div>
-                <span class="btn brainregion-button"
-                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', selectedGeneData.origin.ensembl_gene_id ]} })">
-                    <i class="fa fa-angle-right fa-lg"></i>
-                </span>
+                <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+                    <span class="btn brainregion-button"
+                        (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-brainregions', selectedGeneData.origin.ensembl_gene_id ]} })">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h2>Similar Genes</h2>
+            <div class="row pathboxes-row">
+                <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+                    <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
+                        <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+                    <span class="btn brainregion-button"
+                        (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', selectedGeneData.origin.ensembl_gene_id ]} })">
+                        <i class="fa fa-angle-right fa-lg"></i>
+                    </span>
+                </div>
             </div>
         </div>
     </div>

@@ -1,22 +1,33 @@
-<div class="row back-home-wrapper no-gutters">
-    <div class="row back-home-row no-gutters">
-    </div>
-</div>
-<div class="section-thin overview-header">
-    <div class="row no-gutters">
-        <div class="col-md-7">
-            <h1 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h1>
-            <p>
-                The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
-                AD targets. For selected targets, teams have performed further experimental model system validation.
-                Because these target hypotheses are not yet fully validated, we are seeking input from the community
-                to help in their evalutation.
-            </p>
+<div *ngIf="dataLoaded">
+    <div class="row back-home-wrapper no-gutters">
+        <div class="row back-home-wrapper no-gutters">
+            <div class="row back-home-row no-gutters">
+                <div class="col-md-12 col-sm-12 col-12 coming-soon">
+                    <p-button label="BETA" [styleClass]="'beta-button'">
+                    </p-button>
+                    <span>
+                        Agora is a new service. See what is
+                    </span>
+                    <span class="beta-underline">
+                        coming soon!
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<div *ngIf="dataLoaded">
+    <div class="section-thin overview-header">
+        <div class="row no-gutters">
+            <div class="col-md-7">
+                <h1 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h1>
+                <p>
+                    The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
+                    AD targets. For selected targets, teams have performed further experimental model system validation.
+                    Because these target hypotheses are not yet fully validated, we are seeking input from the community
+                    to help in their evalutation.
+                </p>
+            </div>
+        </div>
+    </div>
     <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc">
         <h2>
             {{team.team}}
@@ -52,6 +63,13 @@
                 <img class="member-img" [src]="getMemberImg(member.name)">
                 <h3>{{member.name}}</h3>
             </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!dataLoaded" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <p-progressBar mode="indeterminate"></p-progressBar>
         </div>
     </div>
 </div>

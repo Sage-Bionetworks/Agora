@@ -369,21 +369,17 @@ connection.once('open', () => {
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
-        const name = req.query.name.toLowerCase().split(' ').join('_') + '.jpg';
-        gfs.exist({ filename: name }, (err, file) => {
+        const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
+        gfs.exist({ filename: name }, (err, hasFile) => {
             if (env === 'development') {
                 console.log('The team file exists');
-                console.log(file);
+                console.log(hasFile);
             }
-            if (!err) {
-                if (file) {
-                    const stream = gfs.createReadStream(name);
-                    stream.pipe(res);
-                } else {
-                    res.status(500).send('Could not find member!');
-                }
+            if (hasFile) {
+                const stream = gfs.createReadStream(name);
+                stream.pipe(res);
             } else {
-                next(err);
+                res.status(500).send('Could not find member!');
             }
         });
     });

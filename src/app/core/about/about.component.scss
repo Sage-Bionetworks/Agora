@@ -1,34 +1,6 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.back-home-wrapper {
-    width: 100%;
-    height: 63px;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-}
-
-.back-home-row {
-    width: 100%;
-    height: 100%;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: rgba(0, 0, 0, 0.15);
-    background-blend-mode: darken;
-    position: relative;
-
-    i {
-        top: 25%;
-        left: 2%;
-        position: absolute;
-    }
-
-    i:hover {
-        cursor: pointer !important;
-    }
-}
-
 .info-header {
     padding-right: 5% !important;
 }

@@ -1,6 +1,9 @@
 .network-content {
     min-height: 600px;
     overflow-y: hidden;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
 
     force-chart {
         width: 100%;
@@ -21,10 +24,13 @@
     .info{
         color: #9DA3B3;
         font-style: italic;
-        position: absolute;
         top: 42px;
         font-size: 13px;
     }
+}
+
+.br-heading {
+    margin-bottom: 10px;
 }
 
 .network-container {
@@ -33,21 +39,23 @@
 }
 
 .pathbox {
-    padding: 0 10px 10px 10px;
+    padding: 0px;
     width: 100%;
-  .genes {
-    span{
-        color: #86C4C7;
-        text-decoration: underline;
-        cursor: pointer;
-        font-weight: 600;
-        width: 100%;
+
+    .genes {
+        span{
+            color: #86C4C7;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
     }
-  }
-  span {
-    margin-right: 5px;
-  }
+    span {
+        margin-right: 5px;
+    }
 }
+
 .genelink{
     color: #86C4C7;
     text-decoration: underline;
@@ -61,34 +69,53 @@
         width: 100%;
     }
     .container {
-      p {
-        color: #000000;
-        padding-top: 0px;
-        text-align: left;
-        font-size: 16px;
-      }
+        p {
+            color: #000000;
+            padding-top: 0px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        padding-bottom: 10%;
+        padding-left: 10%;
+        padding-right: 10%;
+        border-bottom: 1px solid #E0E0E0;
     }
+
     border-top: 1px solid #DDD;
+    padding: 0px;
 }
+
 .brainregions {
-  height: 284px;
-  overflow-y: hidden;
-  border-top: 1px solid #DDD;
-  border-bottom: 1px solid #DDD;
-  position: relative;
-  .brainregion-button{
-      position: absolute;
-          right: 15px;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 32px;
-  }
+    height: 284px;
+    overflow-y: hidden;
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    position: relative;
+}
+
+.brainregion-button{
+    font-size: 32px;
+}
+
+.brainregion-col {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pathboxes-row {
+    margin: 0px;
 }
 
 .nopadding{
     padding-left: 0;
     padding-right: 0;
 }
+
+.nopadding-left {
+    padding-left: 0;
+}
+
 .true{
     color:green;
 }

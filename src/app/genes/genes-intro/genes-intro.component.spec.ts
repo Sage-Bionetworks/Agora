@@ -64,9 +64,9 @@ describe('Component: GenesIntro', () => {
     it('should tell that the list button was clicked', fakeAsync(() => {
         const gtrSpy = spyOn(component, 'goToRoute');
         const buttons = fixture.debugElement.nativeElement.querySelectorAll('p-button');
-        expect(buttons.length).toBe(2);
+        expect(buttons.length).toBe(3);
 
-        const pButton = fixture.debugElement.query(By.css('p-button'));
+        const pButton = fixture.debugElement.queryAll(By.css('p-button'))[1];
         const pButtonElem = pButton.nativeElement;
         const leftclickevent = new MouseEvent('click', {button: 0});
         pButtonElem.dispatchEvent(leftclickevent);

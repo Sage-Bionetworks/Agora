@@ -2,8 +2,8 @@
     height: 80px;
     max-height: 80px;
     margin-right: 0px;
-    flex-wrap: nowrap;
-    margin-left: 10px;
+    //flex-wrap: nowrap;
+    //margin-left: 10px;
 
     span {
         color: white;
@@ -25,18 +25,18 @@
 
 .logo-bg {
     background: #FFFFFF;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    color: #3C4A63 !important;
-    text-align: center;
-    min-width: 180px;
-    height: 58px;
+    width: 169px;
+    height: 80px;
     cursor: pointer;
-    background: url('/assets/img/AgoraLogo-R.png');
-    background-image: url('/assets/img/AgoraLogo-R.svg'),none;
-    background-repeat: no-repeat;
+
+    > img {
+        height: 80px;
+        width: 169px;
+        margin: auto;
+        display: block;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
 }
 
 .icon-spacing {
