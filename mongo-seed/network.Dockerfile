@@ -1,7 +1,7 @@
 FROM mongo
 
-COPY /dataLinks.json /dataLinks.json
+COPY /network.json /network.json
 
 EXPOSE 27017
 
-CMD mongoimport --host mongodb --db agora --collection geneslinks --type json --file /dataLinks.json --jsonArray
+CMD mongoimport --host mongodb --db agora --collection geneslinks --type json --file /network.json --jsonArray
