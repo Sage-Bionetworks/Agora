@@ -55,13 +55,11 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         this.barchart.margins().top = 50;
         this.barchart
             .width(width)
-            .height(620)
+            .height(320)
             .gap(50)
-            .brushOn(false)
             .renderLabel(true)
             .dimension(this.dimension)
             .group(this.tissuecoresGroup)
-            .elasticY(true)
             .x(d3.scaleBand())
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
@@ -70,24 +68,23 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                 chart.selectAll('rect').on('click', (d) => {
                     console.log('click!', d);
                 });
-                const lefty = 10;
-                const righty = 70; // use real statistics here!
-                const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
-                { x: chart.x().range()[1], y: chart.y()(righty) }];
-                const line = d3.line()
-                    .x((d: any) =>  d.x)
-                    .y((d: any) => d.y)
-                    .curve(d3.curveLinear);
-                const chartBody = chart.select('g.chart-body');
-                let path = chartBody.selectAll('path.extra').data([extradata]);
-                path = path
-                    .enter()
-                    .append('path')
-                    .attr('class', 'extra')
-                    .attr('stroke', 'red')
-                    .attr('id', 'extra-line')
-                    .merge(path);
-                path.attr('d', line);
+                // const lefty = 0;
+                // const righty = 0; // use real statistics here!
+                // const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
+                // { x: chart.x().range()[1], y: chart.y()(righty) }];
+                // const line = d3.line()
+                //     .x((d: any) =>  d.x)
+                //     .y((d: any) => 210);
+                // const chartBody = chart.select('g.chart-body');
+                // let path = chartBody.selectAll('path.extra').data([extradata]);
+                // path = path
+                //     .enter()
+                //     .append('path')
+                //     .attr('class', 'extra')
+                //     .attr('stroke', 'red')
+                //     .attr('id', 'extra-line')
+                //     .merge(path);
+                // path.attr('d', line);
             });
         this.barchart.render();
     }
@@ -96,7 +93,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         const width = this.medianChart.nativeElement.parentElement.offsetWidth;
         this.barchart
             .width(width)
-            .height(620)
+            .height(320)
             .x(d3.scaleBand())
             .renderLabel(true)
             .xUnits(dc.units.ordinal)
