@@ -57,9 +57,7 @@ export class BoxPlotViewComponent implements OnInit {
 
     initChart() {
         this.geneEntries = this.dataService.getGeneEntries();
-        if (!this.info) {
-            this.info = this.chartService.getChartInfo(this.label);
-        }
+        this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
             this.currentGene
@@ -67,8 +65,10 @@ export class BoxPlotViewComponent implements OnInit {
         this.group = this.dataService.getGroup(this.info);
 
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
+
         this.chart
             .dimension(this.dim)
+            .elasticY(true)
             .group(this.group)
             .renderTitle(true)
             .showOutliers(false)
@@ -148,7 +148,7 @@ export class BoxPlotViewComponent implements OnInit {
         const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
 
         if (!translate) {
-            const phrase = self.currentGene.hgnc_symbol + ' is' + significanceText +
+            const phrase = self.currentGene.hgnc_symbol + ' is ' + significanceText +
                 'significantly differentially expressed in ' +
                 self.geneService.getCurrentTissue() +
                 ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +

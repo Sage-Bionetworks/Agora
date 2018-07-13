@@ -6,12 +6,22 @@ services:
       - 27017:27017
     networks:
       - front_wot
-  mongo_seed:
+  mongod:
     build:
-      context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/Dockerfile
+      context: ./mongo-seed
+      dockerfile: ./mongod.Dockerfile
     links:
       - mongodb
+    networks:
+      - front_wot
+  mongo_data:
+    build:
+      context: ../data
+      dockerfile: ../WallOfTargets/mongo-seed/data.Dockerfile
+    links:
+      - mongodb
+    depends_on:
+      - mongod
     networks:
       - front_wot
   mongo_seed_links:
@@ -20,6 +30,8 @@ services:
       dockerfile: ../WallOfTargets/mongo-seed/links.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_data
     networks:
       - front_wot
   mongo_seed_info:
@@ -28,6 +40,8 @@ services:
       dockerfile: ../WallOfTargets/mongo-seed/info.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_seed_links
     networks:
       - front_wot
   mongo_seed_team:
@@ -36,6 +50,8 @@ services:
       dockerfile: ../WallOfTargets/mongo-seed/team.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_seed_info
     networks:
       - front_wot
   mongo_seed_team_images:
@@ -44,6 +60,8 @@ services:
       dockerfile: ../WallOfTargets/mongo-seed/team_images.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_seed_team
     networks:
       - front_wot
 
