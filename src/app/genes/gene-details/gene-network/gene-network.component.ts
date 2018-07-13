@@ -39,7 +39,7 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
-        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         if (!!this.forceService.getGeneOriginalList() &&
         this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
@@ -97,10 +97,12 @@ export class GeneNetworkComponent implements OnInit {
 
     viewGene(link, pos) {
         let id = '';
-        if (link[pos].ensembl_gene_id) {
+        if (link[pos] && link[pos].ensembl_gene_id) {
             id = link[pos].ensembl_gene_id;
-        } else {
+        } else if (link[pos]) {
             id = link[pos];
+        } else {
+            id = link;
         }
         this.dataService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;

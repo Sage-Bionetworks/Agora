@@ -10,8 +10,8 @@
                 <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
             </div>
             <div>AMP-AD target
-                <span [ngClass]="{'true':geneInfo.nominatedtarget.length,'false':!geneInfo.nominatedtarget.length}">
-                        {{geneInfo.nominatedtarget.length?'true':'false'}}
+                <span [ngClass]="{'true':geneInfo.nominations,'false':!geneInfo.nominations}">
+                        {{geneInfo.nominations?'true':'false'}}
                 </span>
             </div>
             <div>Brain eQTL
