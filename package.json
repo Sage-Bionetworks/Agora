@@ -43,7 +43,7 @@
     "clean:server": "npm run rimraf dist/server.js",
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist compiled dll",
-    "clean:data": "rm ../data/*.json || true",
+    "clean:data": "rm ../data/*.json || true && rm ../data/team_images/*.jpg || true",
     "data:local": "npm run clean:data && sh get-data-local.sh",
     "data:local-aws": "npm run clean:data && sh get-data-local-aws.sh",
     "data:aws": "npm run clean:data && sh get-data-local.sh",
