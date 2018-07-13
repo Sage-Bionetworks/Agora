@@ -95,7 +95,17 @@ If you are on an AWS EC2 that has been granted access (e.g., for deployment) you
 npm run data:aws
 ```
 
-You should see all of the data files and teams members pictures in the folders created by the script above.
+If the `aws` command fails in any of the scripts, you might be running the wrong version. To use `aws secretsmanager` you need the `aws cli` version to be `1.15.8` and upwards
+
+```bash
+aws --version
+# Exemple of incorrect version
+aws-cli/1.14.65 Python/2.7.9 Windows/8 botocore/1.9.18
+```
+
+To manually update your version go to [this](https://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html) link.
+
+You should see all of the data files and teams members pictures in the folders created by any of the scripts above.
 
 To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following command:
 
@@ -107,10 +117,10 @@ ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
 Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
 
 ```bash
-mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
-mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
-mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
-mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json"
+mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json" --mode upsert
+mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json" --mode upsert
+mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json" --mode upsert
+mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json" --mode upsert
 ```
 
 * Convert mongo value types
