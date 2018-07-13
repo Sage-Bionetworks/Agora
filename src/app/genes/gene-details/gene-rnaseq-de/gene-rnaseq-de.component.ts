@@ -247,7 +247,6 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     closeDropdown() {
-        console.log('test');
         this.dropdownIconClass = 'fa fa-caret-down';
     }
 
