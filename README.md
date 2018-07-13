@@ -71,35 +71,41 @@ Go back to `MongoDB Compass` and create a database called `agora`. In the Create
 
 # Downloading the data
 
-Go to the `Synapse` repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download four files: `geneExprData.json`, `network.json`, `gene_info.json`, `team_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json`, `dataInfo.json`, and `teamInfo.json` respectively. You will also need the teams images from `Synapse` [here](https://www.synapse.org/#!Synapse:syn12861877). You can download all of them using the `synapseclient` or `Python`. If you choose to use `Python`, install it according to your OS, then get and install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
+The following commands will download four data files (`rnaseq_differential_expression.json`, `network.json`, `gene_info.json`, `team_info.json`) and all of the team images. You can download all of them using the `synapseclient`. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
 
 ```bash
-pip install synapseclient[pandas,pysftp]
+pip install synapseclient
 ```
 
-Create a new `Python` script and paste the following inside:
+To get the data files using credentials provided by AWS, run:
 
 ```bash
-import synapseclient
-import synapseutils
-
-syn = synapseclient.Synapse()
-syn.login('synapse_username','password')
-files = synapseutils.syncFromSynapse(syn, 'syn12861877'. 'PATH/TO/DESIRED/FOLDER')
+npm run data:local-aws
 ```
 
-In the same folder you created the `Python` script above run the following command:
+If you have your own Synapse credentials, you can run:
 
 ```bash
-python your_script_name.py
+npm run data:local
 ```
 
-You should see all the nominated targets teams members pictures in the folder created by the script above. In the images directory run:
+If you are on an AWS EC2 that has been granted access (e.g., for deployment) you can run:
 
 ```bash
-# Removes spaces and dashes from the filenames
-rename 's/[ -]/_/g' *
+npm run data:aws
 ```
+
+If the `aws` command fails in any of the scripts, you might be running the wrong version. To use `aws secretsmanager` you need the `aws cli` version to be `1.15.8` and upwards
+
+```bash
+aws --version
+# Exemple of incorrect version
+aws-cli/1.14.65 Python/2.7.9 Windows/8 botocore/1.9.18
+```
+
+To manually update your version go to [this](https://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html) link.
+
+You should see all of the data files and teams members pictures in the folders created by any of the scripts above.
 
 To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following command:
 
@@ -111,10 +117,10 @@ ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
 Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
 
 ```bash
-mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
-mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
-mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
-mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json"
+mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json" --mode upsert
+mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json" --mode upsert
+mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json" --mode upsert
+mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json" --mode upsert
 ```
 
 * Convert mongo value types
