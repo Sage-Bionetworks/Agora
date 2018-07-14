@@ -1,3 +1,6 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .network-content {
     min-height: 600px;
     overflow-y: hidden;
@@ -67,7 +70,12 @@
     div{
         width: 100%;
     }
-    .container {
+
+    .cg-row {
+        margin: 0px;
+    }
+
+    .cg-col {
         p {
             color: #000000;
             padding-top: 0px;
@@ -75,10 +83,13 @@
             font-size: 16px;
         }
 
-        padding-bottom: 10%;
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-bottom: 15px;
         border-bottom: 1px solid #E0E0E0;
+
+        @include respond-to('ex-small') {
+            padding-right: 3.5%;
+            padding-left: 3.5%;
+        }
     }
 
     border-top: 1px solid #DDD;
@@ -122,45 +133,9 @@
     color:red;
 }
 
-p-dialog {
-    .ui-dialog {
-        width: 80% !important;
-        max-width: 80% !important;
-        top: 109px !important;
-    }
-
-    .ui-dialog-titlebar {
-        padding-top: 85px !important;
-        text-align-last: center;
-        background: white;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        font-size: 24px;
-        color: #1A1C29;
-    }
-
-    .ui-dialog-content {
-        padding-bottom: 85px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 18px;
-        text-align: center;
-        color: #000000;
-    }
-
-    .fa-close:before {
-        color: #5BB0B5;
-    }
-
-    a {
-        position: absolute;
-        left: 1%;
-        top: 10%;
-    }
+.cg-container {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
 }

@@ -103,13 +103,15 @@
 }
 
 .filter-select {
+    font-size: 0.9em;
+    top: calc(50% + 23px);
+    left: 0px;
+    z-index: 10000;
     width: 100%;
     list-style: none;
     border-top: none;
     /*so things don't jump around*/
     position: absolute;
-    /*Since we know the wrapper will always be 100% height, we can use half of 100% + half the height of the input*/
-    top: calc(50% + 28.5px);
     /*for a better calculation use JS.  I'm calculating half of the body height - half the height of the input - li padding*/
     //max-height: calc(50% - 15px);
     overflow-y: auto;
@@ -124,6 +126,7 @@
     color: #1A1C29;
     max-height: 250px;
     overflow-y: auto;
+    padding-left: 0px;
 }
 
 .filter-select-list img {
@@ -190,10 +193,4 @@
     @include respond-to('ex-large') {
         width: 100%;
     }
-}
-
-.filter-select {
-    font-size: 0.9em;
-    top: calc(50% + 23px);
-    left: 0%;
 }

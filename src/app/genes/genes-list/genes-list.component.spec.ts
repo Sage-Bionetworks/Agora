@@ -16,7 +16,7 @@ import {
     DataServiceStub,
     GeneServiceStub,
     mockInfo1
-} from '../../../app/testing';
+} from '../../testing';
 
 import { GenesListComponent } from './genes-list.component';
 

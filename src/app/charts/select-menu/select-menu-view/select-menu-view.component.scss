@@ -41,22 +41,7 @@
         background: #FFFFFF;
         box-shadow: 0px 0px 4px #C7C5C5;
         cursor: pointer;
-
-        @include respond-to('ex-small') {
-            font-size: 16px;
-        }
-        @include respond-to('small') {
-            font-size: 16px;
-        }
-        @include respond-to('medium') {
-            font-size: 18px;
-        }
-        @include respond-to('large') {
-            font-size: 18px;
-        }
-        @include respond-to('ex-large') {
-            font-size: 18px;
-        }
+        font-size: 18px;
     }
 
     /*style the arrow inside the select element:*/

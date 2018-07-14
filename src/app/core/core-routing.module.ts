@@ -3,10 +3,14 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
+import { SynapseAccountComponent } from './synapse-account';
+import { ContribTeamsPageComponent } from './contrib-teams';
 
 export const routes: Routes = [
     { path: '', loadChildren: '../genes/genes.module#GenesModule'},
     { path: 'about', component: AboutComponent },
+    { path: 'teams-contributing', component: ContribTeamsPageComponent },
+    { path: 'synapse-account', component: SynapseAccountComponent },
     { path: '**', component: NoContentComponent }
 ];
 

@@ -360,7 +360,47 @@ connection.once('open', () => {
         });
     });
 
+    // Get all team infos
+    router.get('/teams/all', (req, res, next) => {
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('Get all team infos');
+        }
+
+        TeamsInfo.find({}).exec((err, teams) => {
+            if (err) {
+                next(err);
+            } else {
+                res.json({ items: teams });
+            }
+        });
+    });
+
     router.get('/team/image', async (req, res, next) => {
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('Get a team member image');
+            console.log(req.query);
+        }
+
+        // Return an empty array in case no id was passed or no params
+        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
+        const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
+        gfs.exist({ filename: name }, (err, hasFile) => {
+            if (env === 'development') {
+                console.log('The team file exists');
+                console.log(hasFile);
+            }
+            if (hasFile) {
+                const stream = gfs.createReadStream(name);
+                stream.pipe(res);
+            } else {
+                res.status(204).send('Could not find member!');
+            }
+        });
+    });
+
+    router.get('/teams/images', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get a team member image');

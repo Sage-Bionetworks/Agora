@@ -40,6 +40,8 @@ export class BoxPlotViewComponent implements OnInit {
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
         .attr('class', 'bp-tooltip')
+        .style('width', 200)
+        .style('height', 160)
         .style('opacity', 0);
 
     private resizeTimer;
@@ -141,11 +143,15 @@ export class BoxPlotViewComponent implements OnInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.y().domain()[1] - chart.y().domain()[0]);
         const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
+        console.log(svgEl);
         const mult = (svgEl.getBBox().height - 10) / yDomainLength;
         const val = self.currentGene[self.info.attr];
         let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
         logVal = +this.decimalPipe.transform(logVal, '1.3');
         const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
+        console.log('pos');
+        console.log(lineCenter.attr('x1'));
+        console.log(Math.abs(chart.y().domain()[1] - logVal) * mult);
 
         if (!translate) {
             const phrase = self.currentGene.hgnc_symbol + ' is ' + significanceText +
@@ -155,13 +161,13 @@ export class BoxPlotViewComponent implements OnInit {
                 self.currentGene.adj_p_val + '.';
             chart.selectAll('g.box')
                 .append('circle')
-                .style('cx', lineCenter.attr('x1'))
-                .style('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
-                .style('fill', '#FCA79A')
+                .attr('cx', lineCenter.attr('x1'))
+                .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
+                .attr('fill', '#FCA79A')
                 .style('stroke', '#F47E6C')
                 .style('stroke-width', 3)
-                .style('r', 13.6)
-                .style('opacity', 1)
+                .attr('r', 13.6)
+                .attr('opacity', 1)
                 .on('mouseover', function() {
                     self.div.transition()
                         .duration(200)

@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
     GeneService,
     DataService
-} from 'app/core/services';
+} from '../../core/services';
 
 import { GeneInfo, NominatedTarget } from '../../models';
 

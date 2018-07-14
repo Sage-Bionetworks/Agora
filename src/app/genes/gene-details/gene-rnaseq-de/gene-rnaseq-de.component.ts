@@ -42,6 +42,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     oldIndex: number = -1;
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
+    displayBPDia: boolean = false;
 
     constructor(
         private router: Router,
@@ -252,6 +253,10 @@ export class GeneRNASeqDEComponent implements OnInit {
 
     getDropdownIcon() {
         return this.dropdownIconClass;
+    }
+
+    showDialog(dialogString: string) {
+        this[dialogString] = true;
     }
 
     goBack() {

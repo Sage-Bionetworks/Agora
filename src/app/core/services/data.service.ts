@@ -131,6 +131,13 @@ export class DataService {
         return this.http.get('/api/teams', { headers, params });
     }
 
+    getAllTeams(): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const params = new HttpParams();
+
+        return this.http.get('/api/teams/all', { headers, params });
+    }
+
     getTeamMemberImage(name: string): Observable<object> {
         const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
             'Accept': 'image/jpg',

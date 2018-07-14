@@ -11,7 +11,7 @@ import { By } from '@angular/platform-browser';
 
 import {
     RouterStub
-} from '../../../app/testing';
+} from '../../testing';
 
 import { GenesIntroComponent } from './genes-intro.component';
 import { GeneSearchComponent } from '../gene-search';

@@ -164,6 +164,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    viewSynapseReg() {
+        this.goToRoute('/synapse-account');
+    }
+
     getAlias() {
         if (this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
@@ -181,6 +185,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     showDialog(dialogString: string) {
         this[dialogString] = true;
+    }
+
+    showDruggability() {
+        window.open('https://www.synapse.org/#!Synapse:syn13363443', '_blank');
     }
 
     goToRoute(path: string, outlets?: any) {

@@ -40,6 +40,10 @@ html, body{
     font-family: Lato;
 }
 
+html {
+    overflow-y: hidden;
+}
+
 .wrapper {
     min-height: 100%;
     margin-bottom: -100px;
@@ -77,6 +81,72 @@ p {
     font-size: 18px;
     text-align: center;
     color: white;
+}
+
+p-dialog {
+    .ui-dialog {
+        width: 80% !important;
+        max-width: 80% !important;
+        top: 109px !important;
+        max-height: 80% !important;
+        overflow: auto;
+    }
+
+    .ui-dialog-titlebar {
+        padding-top: 85px !important;
+        text-align-last: center;
+        background: white;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 24px;
+        color: #1A1C29;
+        text-align: center;
+        padding-top: 10% !important;
+
+        .pi-times:before {
+            color: #5BB0B5;
+        }
+    }
+
+    .ui-dialog-content {
+        padding-bottom: 85px !important;
+        padding-left: 10% !important;
+        padding-right: 10% !important;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
+        text-align: left;
+        text-align-last: left;
+        color: #000000;
+        height: 100% !important;
+        padding-bottom: 10%;
+
+        .content-row {
+            margin-bottom: 20px;
+
+            .content-vspacing {
+                margin-bottom: 40px;
+            }
+        }
+
+        .header-span {
+            font-weight: bold;
+        }
+    }
+
+    .fa-close:before {
+        color: #5BB0B5;
+    }
+
+    a {
+        position: absolute;
+        left: 1%;
+        top: 10%;
+    }
 }
 
 .black-paragraph {
@@ -179,41 +249,41 @@ p {
     font-family: Lato;
     @include respond-to('ex-small') {
         padding-top: 2em;
-        padding-left: 4.5%;
+        padding-left: 3.5%;
         padding-bottom: 2em;
-        padding-right: 4.5%;
+        padding-right: 3.5%;
         color: #000000;
         background-color: #ffffff;
     }
     @include respond-to('small') {
         padding-top: 2em;
+        padding-left: 4.0%;
+        padding-bottom: 2em;
+        padding-right: 4.0%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('medium') {
+        padding-top: 2em;
         padding-left: 4.5%;
         padding-bottom: 2em;
         padding-right: 4.5%;
         color: #000000;
         background-color: #ffffff;
     }
-    @include respond-to('medium') {
-        padding-top: 2em;
-        padding-left: 7.5%;
-        padding-bottom: 2em;
-        padding-right: 7.5%;
-        color: #000000;
-        background-color: #ffffff;
-    }
     @include respond-to('large') {
         padding-top: 2em;
-        padding-left: 10.5%;
+        padding-left: 5.5%;
         padding-bottom: 2em;
-        padding-right: 10.5%;
+        padding-right: 5.5%;
         color: #000000;
         background-color: #ffffff;
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
-        padding-left: 13.8%;
+        padding-left: 7.5%;
         padding-bottom: 2em;
-        padding-right: 13.8%;
+        padding-right: 7.5%;
         color: #000000;
         background-color: #ffffff;
     }

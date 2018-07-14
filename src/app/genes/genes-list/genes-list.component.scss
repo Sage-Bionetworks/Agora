@@ -1,19 +1,6 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.beta-button {
-    background: #FFFFFF !important;
-    border-radius: 100px !important;
-    font-family: Lato !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    line-height: normal !important;
-    font-size: 18px !important;
-    color: #73C8CC !important;
-    border: 1px solid #73C8CC !important;
-    margin-right: 10px !important;
-}
-
 .nomlist-intro {
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
@@ -128,6 +115,9 @@
                 padding-left: 4%;
                 text-align-last: left;
             }
+            >tr>th:not(:first-child) {
+                text-align-last: left;
+            }
 
             .ui-sortable-column {
                 font-size: 14px;
@@ -136,6 +126,9 @@
         @include respond-to('small') {
             >tr>th:first-child {
                 padding-left: 4%;
+                text-align-last: left;
+            }
+            >tr>th:not(:first-child) {
                 text-align-last: left;
             }
 
@@ -147,6 +140,9 @@
             >tr>th:first-child {
                 text-align-last: center;
             }
+            >tr>th:not(:first-child) {
+                text-align-last: left;
+            }
 
             .ui-sortable-column {
                 font-size: 18px;
@@ -156,6 +152,9 @@
             >tr>th:first-child {
                 text-align-last: center;
             }
+            >tr>th:not(:first-child) {
+                text-align-last: left;
+            }
 
             .ui-sortable-column {
                 font-size: 18px;
@@ -164,6 +163,9 @@
         @include respond-to('ex-large') {
             >tr>th:first-child {
                 text-align-last: center;
+            }
+            >tr>th:not(:first-child) {
+                text-align-last: left;
             }
 
             .ui-sortable-column {
@@ -178,10 +180,13 @@
         }
 
         >tr>td {
+            border: 0px;
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
             line-height: 40px;
+
+            padding: .25em .5em;
 
             @include respond-to('ex-small') {
                 font-size: 14px;
@@ -204,30 +209,55 @@
         }
         @include respond-to('ex-small') {
             >tr>td:first-child {
-                padding-left: 3.8%;
+                padding-left: 4%;
                 text-align-last: left;
+            }
+            >tr>td:not(:first-child) {
+                text-align-last: left;
+            }
+            >tr>td:last-child {
+                padding-right: 4%;
             }
         }
         @include respond-to('small') {
             >tr>td:first-child {
-                padding-left: 3.8%;
+                padding-left: 4%;
                 text-align-last: left;
+            }
+            >tr>td:not(:first-child) {
+                text-align-last: left;
+            }
+            >tr>td:last-child {
+                padding-right: 4%;
             }
         }
         @include respond-to('medium') {
             >tr>td:first-child {
                 text-align-last: center;
             }
+            >tr>td:not(:first-child) {
+                text-align-last: left;
+            }
         }
         @include respond-to('large') {
             >tr>td:first-child {
                 text-align-last: center;
+            }
+            >tr>td:not(:first-child) {
+                text-align-last: left;
             }
         }
         @include respond-to('ex-large') {
             >tr>td:first-child {
                 text-align-last: center;
             }
+            >tr>td:not(:first-child) {
+                text-align-last: left;
+            }
         }
+    }
+
+    .ui-sortable-column-icon {
+        color: #5BB0B5 !important;
     }
 }

@@ -1,0 +1,32 @@
+<div *ngIf="dataLoaded">
+    <div class="section-thin overview-header">
+        <div class="row no-gutters">
+            <div class="col-md-7">
+                <h1>Contributing Teams</h1>
+                <p>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc">
+        <h2>
+            {{team.team}}
+        </h2>
+        <p class="black-paragraph">
+            {{team.description}}
+        </p>
+        <div class="row members-row">
+            <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
+                <img class="member-img" [src]="getMemberImg(member.name)">
+                <h3>{{member.name}}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!dataLoaded" class="container-fluid">
+    <div class="row small-padding-top">
+        <div class="col-md-12">
+            <p-progressBar mode="indeterminate"></p-progressBar>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,8 @@ import {
 } from './services';
 
 import { AboutComponent } from './about';
+import { SynapseAccountComponent } from './synapse-account';
+import { BetaBannerComponent } from './beta-banner';
 import { NavbarComponent } from './navbar';
 import { MenubarComponent } from './menubar';
 import { FooterComponent } from './footer';
@@ -27,6 +29,8 @@ import { NoContentComponent } from './no-content';
 
 import '../../styles/styles.scss';
 import '../../styles/headings.css';
+import { ContribTeamsPageComponent } from './contrib-teams';
+import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
 
 @NgModule({
     imports: [
@@ -34,6 +38,7 @@ import '../../styles/headings.css';
         CommonModule,
         // PrimeNG modules
         ButtonModule,
+        ProgressBarModule,
         SplitButtonModule,
         MenuModule,
         MenubarModule,
@@ -48,14 +53,20 @@ import '../../styles/headings.css';
         MenubarComponent,
         FooterComponent,
         NoContentComponent,
-        AboutComponent
+        AboutComponent,
+        ContribTeamsPageComponent,
+        SynapseAccountComponent,
+        BetaBannerComponent
     ],
     exports: [
         // Exported components
         NavbarComponent,
         MenubarComponent,
         FooterComponent,
-        AboutComponent
+        AboutComponent,
+        ContribTeamsPageComponent,
+        SynapseAccountComponent,
+        BetaBannerComponent
     ],
     providers: [
         AuthenticationService,

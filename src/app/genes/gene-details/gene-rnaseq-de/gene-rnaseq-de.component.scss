@@ -26,6 +26,40 @@
     .icon-spacing {
         margin-right: 5px;
     }
+}
+
+.rna-seq-me {
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .fa-info-circle:before {
+        color: #9DA3B3;
+    }
+
+    .icon-spacing {
+        margin-right: 5px;
+    }
+
+    border-top: 1px solid #E0E0E0;
+}
+
+.rna-seq-bplot {
+    padding-right: 0px;
+
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .fa-info-circle:before {
+        color: #9DA3B3;
+    }
+
+    .icon-spacing {
+        margin-right: 5px;
+    }
 
     select {
         width: 100%;
@@ -206,7 +240,7 @@
 
             .ui-multiselect-trigger-icon {
                 top: 0%;
-                width: 24px;
+                width: 12px;
             }
 
             .pi-caret-down {
@@ -230,37 +264,77 @@
             }
         }
     }
+
+    .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
+        margin-bottom: 40px;
+    }
+
+    .filters-header {
+        .fa-info-circle:before {
+            color: #9DA3B3;
+        }
+
+        .icon-spacing {
+            margin-right: 5px;
+        }
+
+        h3 {
+            margin-bottom: 0px;
+        }
+
+        i:hover {
+            cursor: pointer;
+        }
+    }
+
+    .bplot-l-col {
+        padding-right: 7%;
+    }
+
+    .bplot-col {
+        background: rgba(245, 245, 245, 0.5);
+
+        @include respond-to('ex-small') {
+            padding-right: 15px;
+        }
+        @include respond-to('small') {
+            padding-right: 0px;
+        }
+        @include respond-to('medium') {
+            padding-right: 0px;
+        }
+        @include respond-to('large') {
+            padding-right: 0px;
+        }
+        @include respond-to('ex-large') {
+            padding-right: 0px;
+        }
+    }
 }
 
-.rna-seq-me {
-    p {
-        text-align: justify;
-        text-align-last: left;
+.btm-dialog {
+    .ui-dialog {
+        max-height: 90% !important;
     }
 
-    .fa-info-circle:before {
-        color: #9DA3B3;
+    .ui-dialog-titlebar {
+        padding: 2.25% !important;
     }
 
-    .icon-spacing {
-        margin-right: 5px;
+    .ui-dialog-content {
+        padding-top: 0% !important;
+        padding-bottom: 4.5% !important;
     }
 
-    border-top: 1px solid #E0E0E0;
-}
+    .ui-dialog-titlebar-icon {
 
-.rna-seq-bplot {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
+        cursor: pointer;
 
-    .fa-info-circle:before {
-        color: #9DA3B3;
-    }
-
-    .icon-spacing {
-        margin-right: 5px;
+        :hover {
+            border-color: #c0c0c0;
+            background-color: #eeeeee;
+            color: #212121;
+        }
     }
 }
 
