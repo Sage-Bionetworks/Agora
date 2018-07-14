@@ -6,6 +6,8 @@ import { routes } from '../core-routing.module';
 import { AboutComponent } from '../about/about.component';
 import { NoContentComponent } from '../no-content/no-content.component';
 import { NavbarComponent } from './navbar.component';
+import { ContribTeamsPageComponent } from '../contrib-teams';
+import { SynapseAccountComponent } from '../synapse-account';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -19,6 +21,8 @@ describe('NavbarComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             declarations: [
                 AboutComponent,
+                ContribTeamsPageComponent,
+                SynapseAccountComponent,
                 NoContentComponent,
                 NavbarComponent
             ]
