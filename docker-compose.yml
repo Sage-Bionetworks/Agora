@@ -17,7 +17,7 @@ services:
   mongo_data:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/data.Dockerfile
+      dockerfile: ../WallOfTargets/mongo-seed/rnaseq_differential_expression.Dockerfile
     links:
       - mongodb
     depends_on:
@@ -27,7 +27,7 @@ services:
   mongo_seed_links:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/links.Dockerfile
+      dockerfile: ../WallOfTargets/mongo-seed/network.Dockerfile
     links:
       - mongodb
     depends_on:
@@ -37,7 +37,7 @@ services:
   mongo_seed_info:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/info.Dockerfile
+      dockerfile: ../WallOfTargets/mongo-seed/gene_info.Dockerfile
     links:
       - mongodb
     depends_on:
@@ -47,7 +47,7 @@ services:
   mongo_seed_team:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/team.Dockerfile
+      dockerfile: ../WallOfTargets/mongo-seed/team_info.Dockerfile
     links:
       - mongodb
     depends_on:
