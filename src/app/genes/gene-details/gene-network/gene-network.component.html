@@ -7,12 +7,12 @@
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2>{{geneInfo.hgnc_symbol}}</h2>
                 <p>{{geneInfo.summary}}</p>
-                <div>Known AD Gene Variant
-                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}" class='normal-heading'> {{geneInfo.isIGAP?'True':'False'}}</span>
+                <div>AD Genetic Association
+                    <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
                 </div>
-                <div>AMP-AD target
-                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
-                            {{geneInfo.nominations?'True':'False'}}
+                <div>Nominated Target
+                    <span [ngClass]="{'true':geneInfo.nominations,'false':!geneInfo.nominations}">
+                            {{geneInfo.nominations?'true':'false'}}
                     </span>
                 </div>
                 <div>Brain eQTL
@@ -23,7 +23,7 @@
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2 class="br-heading">
-                    Brain Regions
+                    Tissue Specificity of Gene Connections
                     <span class="icon-spacing"></span>
                     <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
                 </h2>
@@ -75,11 +75,82 @@
 <div class="ui-rtl" dir="rtl">
     <p-dialog header="Brain Regions" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
         [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-                FP: Lorem ipsum <br>
-                IFG: Lorem ipsum <br>
-                PHG: Lorem ipsum <br>
-                STG: Lorem ipsum <br>
-        </span>
-    </p-dialog>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Brain Tissues
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    DLPFC:
+                </span>
+                <span dir="ltr">
+                    Dorsolateral Prefrontal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    TCX:
+                </span>
+                <span dir="ltr">
+                    Temporal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    CBE:
+                </span>
+                <span dir="ltr">
+                    Cerebellum
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    PHG:
+                </span>
+                <span dir="ltr">
+                    Parahippocampal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    STG:
+                </span>
+                <span dir="ltr">
+                    Superior Temporal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    FP:
+                </span>
+                <span dir="ltr">
+                    Frontal Pole
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    IFG:
+                </span>
+                <span dir="ltr">
+                    Inferior Frontal Gyrus
+                </span>
+            </div>
+        </div>
+          </p-dialog>
 </div>
