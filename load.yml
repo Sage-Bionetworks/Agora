@@ -1,5 +1,5 @@
 config:
-  target: 'http://ec2-54-234-198-188.compute-1.amazonaws.com'
+  target: 'http://agora.ampadportal.org'
   http:
     # Responses have to be sent within 300 seconds or the request will be aborted
     timeout: 300

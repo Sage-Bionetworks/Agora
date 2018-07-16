@@ -16,7 +16,7 @@ import api from './routes/api';
 
 debug('wot:server');
 
-const env = process.env.NODE_ENV || 'development';
+const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 const app: express.Express = express();
 
 // We are behind a proxy now so set a trsut proxy variable here
