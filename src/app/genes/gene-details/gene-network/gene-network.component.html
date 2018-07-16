@@ -7,10 +7,10 @@
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2>{{geneInfo.hgnc_symbol}}</h2>
                 <p>{{geneInfo.summary}}</p>
-                <div>Known AD Gene Variant
+                <div>AD Genetic Association
                     <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
                 </div>
-                <div>AMP-AD target
+                <div>Nominated Target
                     <span [ngClass]="{'true':geneInfo.nominations,'false':!geneInfo.nominations}">
                             {{geneInfo.nominations?'true':'false'}}
                     </span>
