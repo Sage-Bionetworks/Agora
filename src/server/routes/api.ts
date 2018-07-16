@@ -5,11 +5,13 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
 
-mongoose.set('debug', true);
-
 const router = express.Router();
 const database = { url: '' };
-const env = process.env.NODE_ENV || 'development';
+const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
+
+if (env === 'development') {
+    mongoose.set('debug', true);
+}
 
 // Set the database url
 if (process.env.Docker) {
