@@ -412,9 +412,9 @@ $ docker --version
 Docker version 18.03.1-ce, build 9ee9f40
 ```
 
-The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL will be the public ip address of that machine.
+The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL can be the public ip address of that machine or a domain name (this project uses the name `agora.ampadportal.org` in the `Nginx` configuration).
 
-Go to the project root and run `npm run build:docker`. This command will build an image called `agora` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker`.
+Start `Docker`, go to the project root and run `npm run build:docker`. This command will build an image called `agora` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker:up`. If you need to use parts of the cache when building and skip rebuilding everything, you can use `npm run docker:app -- build` or `npm run docker:mongo -- build`.
 
 ```bash
 # Building for the first time or rebuilding

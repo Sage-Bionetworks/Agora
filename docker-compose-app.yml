@@ -18,12 +18,13 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     restart: always
-
-    # Bind port 80 in the service to port 80 on the host
     ports:
       - '80:80'
+      - '443:443'
     networks:
       - front-tier
+    volumes:
+      - ./config/snippets:/snippets
 
 networks:
   front-tier:

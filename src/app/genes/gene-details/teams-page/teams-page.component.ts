@@ -66,8 +66,15 @@ export class TeamsPageComponent implements OnInit {
         const info = this.geneService.getCurrentInfo();
         this.dataService.getTeams(info).subscribe((data) => {
             if (!data['items']) { this.router.navigate(['/genes']); }
-            this.geneService.setCurrentTeams(data['items']);
-            this.teams = data['items'];
+            this.teams.length = data['items'].length;
+            const ntTeamsArray = this.ntInfoArray.slice().map((nti) => nti.team);
+            data['items'].forEach((item) => {
+                const index = ntTeamsArray.indexOf(item.team);
+                this.teams[index] = item;
+            });
+            console.log(this.teams);
+
+            this.geneService.setCurrentTeams(this.teams);
         }, (error) => {
             console.log('Error loading gene: ' + error.message);
         }, () => {

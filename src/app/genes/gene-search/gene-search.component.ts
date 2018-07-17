@@ -73,12 +73,10 @@ export class GeneSearchComponent implements OnInit {
         let geneData: any;
         this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
-            console.log(data);
             geneData = data;
         }, (error) => {
             console.log('Routing error! ' + error.message);
         }, () => {
-            console.log(geneData);
             this.geneService.updateGeneData(geneData);
             this.gene = geneData['item'];
             this.router.navigate([
