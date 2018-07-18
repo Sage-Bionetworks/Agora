@@ -3,10 +3,10 @@
 ## Getting Started
 ```bash
 # clone our repo
-git clone https://github.com/Sage-Bionetworks/WallOfTargets.git
+git clone https://github.com/Sage-Bionetworks/Agora.git
 
 # change directory to our repo
-cd WallOfTargets
+cd Agora
 
 # WINDOWS only. In terminal as administrator
 npm install -g node-pre-gyp
@@ -398,7 +398,7 @@ import * as _ from 'lodash';
 Before using Docker go one level above the root folder of the project and create a folder called `data`:
 
 ```bash
-PATH_TO_PROJECT\WallOfTargets> cd ..
+PATH_TO_PROJECT\Agora> cd ..
 PATH_TO_PROJECT> mkdir data
 PATH_TO_PROJECT> mkdir data/team_images
 ```
@@ -499,7 +499,7 @@ This project follows the directions provided by the official [angular style guid
 * For the file structure this project uses the component approach. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
 
 ```
-WallOfTargets/
+Agora/
  ├──config/                        * our configuration
  |   ├──build-utils.js             * common config and shared functions for prod and dev
  |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html
