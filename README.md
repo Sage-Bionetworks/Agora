@@ -117,10 +117,10 @@ ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
 Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
 
 ```bash
-mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json" --mode upsert
-mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json" --mode upsert
-mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json" --mode upsert
-mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\teamInfo.json" --mode upsert
+mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\rnaseq_differential_expression.json" --mode upsert
+mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\network.json" --mode upsert
+mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\gene_info.json" --mode upsert
+mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\team_info.json" --mode upsert
 ```
 
 * Convert mongo value types
