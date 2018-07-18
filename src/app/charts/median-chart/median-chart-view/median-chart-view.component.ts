@@ -82,6 +82,13 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                         tree[i].setAttribute('height', 0);
                     }
                  });
+                chart.selectAll('text').each((el, i, tree) => {
+                    if (el && el['data'] && el['data'].value < 0) {
+                        el['data'].value = '';
+                        el.y = '';
+                        tree[i].innerHTML = '';
+                    }
+                });
                 // const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
                 const mult = 240 / yDomainLength;
                 const lefty = 0;
