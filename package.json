@@ -14,7 +14,7 @@
     "alzheimer"
   ],
   "author": "Renan Dembogurski <renan.augusto@toptal.com>",
-  "homepage": "https://github.com/Sage-Bionetworks/WallOfTargets",
+  "homepage": "https://github.com/Sage-Bionetworks/Agora",
   "license": "MIT",
   "scripts": {
     "analyze:aot:prod": "cross-env Analyzer=true npm run build:aot:prod",
@@ -233,10 +233,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sage-Bionetworks/WallOfTargets.git"
+    "url": "https://github.com/Sage-Bionetworks/Agora.git"
   },
   "bugs": {
-    "url": "https://github.com/Sage-Bionetworks/WallOfTargets/issues"
+    "url": "https://github.com/Sage-Bionetworks/Agora/issues"
   },
   "engines": {
     "node": ">= 8.0.0",
