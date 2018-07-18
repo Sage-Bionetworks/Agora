@@ -3,7 +3,7 @@ synapsepassword=`aws secretsmanager --region us-east-1 --output text --profile a
 
 [ -d ../data/ ] || mkdir ../data/
 
-synapse -u ${synapseusername} -p ${synapsepassword} cat syn13363290 | tail -n +2 | while IFS=, read -r id version; do
+synapse -u ${synapseusername} -p ${synapsepassword} cat --version ${1} syn13363290 | tail -n +2 | while IFS=, read -r id version; do
   synapse -u ${synapseusername} -p ${synapsepassword} get --downloadLocation ../data/ -v $version $id ;
 done
 
