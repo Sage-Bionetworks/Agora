@@ -77,8 +77,12 @@
 
 <!-- Dialogs section -->
 <div class="ui-rtl" dir="rtl">
-    <p-dialog header="Brain Regions" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
+    <p-dialog header="Tissue Specificity of Gene Connections" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
         [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        <div class="row content-row" dir="ltr">
+            The tissue types in which the RNA-seq gene coexpression connection was observed.
+        </div>
+
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
