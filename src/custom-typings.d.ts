@@ -62,6 +62,8 @@ declare var HMR: boolean;
 declare var System: SystemJS;
 declare var Analyzer: boolean;
 declare var Docker: boolean;
+declare var VERSION: string;
+declare var DATA_VERSION: string;
 
 interface FirebaseConfig {
   apiKey: string;
@@ -83,6 +85,8 @@ interface GlobalEnvironment {
   System: SystemJS;
   Analyzer: boolean;
   Docker: boolean;
+  VERSION: string;
+  DATA_VERSION: string;
 }
 
 interface Es6PromiseLoader {

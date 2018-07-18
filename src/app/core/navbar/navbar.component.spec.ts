@@ -8,6 +8,7 @@ import { NoContentComponent } from '../no-content/no-content.component';
 import { NavbarComponent } from './navbar.component';
 import { ContribTeamsPageComponent } from '../contrib-teams';
 import { SynapseAccountComponent } from '../synapse-account';
+import { TermsComponent } from '../terms';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -21,6 +22,7 @@ describe('NavbarComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             declarations: [
                 AboutComponent,
+                TermsComponent,
                 ContribTeamsPageComponent,
                 SynapseAccountComponent,
                 NoContentComponent,
