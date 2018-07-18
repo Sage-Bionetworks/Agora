@@ -1,6 +1,7 @@
 {
   "name": "agora",
   "version": "3.0.0",
+  "data-version": "5",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular",
@@ -44,9 +45,9 @@
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist compiled dll",
     "clean:data": "npm run rimraf ../data/*.json || true && npm run rimraf ../data/team_images/*.jpg || true",
-    "data:local": "npm run clean:data && sh get-data-local.sh",
-    "data:local-aws": "npm run clean:data && sh get-data-local-aws.sh",
-    "data:aws": "npm run clean:data && sh get-data-local.sh",
+    "data:local": "npm run clean:data && sh get-data-local.sh $(cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[ \",]//g')",
+    "data:local-aws": "npm run clean:data && sh get-data-local-aws.sh $(cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[ \",]//g')",
+    "data:aws": "npm run clean:data && sh get-data-local.sh $(cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[ \",]//g')",
     "docker": "npm run build:docker && npm run docker:up",
     "docker:app": "docker-compose -f ./docker-compose-app.yml",
     "docker:mongo": "docker-compose -f ./docker-compose.yml",
