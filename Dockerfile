@@ -21,11 +21,13 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
 COPY package.json ./
 
 ## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
-RUN npm i && npm run webdriver:update && mkdir /ng-app && mv ./node_modules ./ng-app
+RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
 
 WORKDIR /ng-app
 
 COPY . .
+
+RUN npm run webdriver:update
 
 ## The ci:travis script already runs the AoT build, so these two lines build the client and server
 RUN npm run ci:travis

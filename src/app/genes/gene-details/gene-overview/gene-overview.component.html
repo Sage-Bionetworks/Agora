@@ -114,14 +114,10 @@
         <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                    The top plot shows overall expression of the selected gene across all sampled tissues.
+                These differential expression results are based on harmonized RNA-seq data from three independent studies, which include post-mortem samples from over 1100 individuals and seven distinct brain regions. Note that only genes with significant differential expression in at least one tissue and model are visible.<br><br>
                 </p>
                 <p class="black-paragraph">
-                    After selecting a tissue and statistical model, users can view differential expression of
-                    the selected gene between AD cases and controls, harmonized across multiple studies. <br><br>
-                </p>
-                <p class="black-paragraph">
-                    <span class="link-heading">Where does the data come from?</span>
+                    <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
                 </p>
             </div>
             <gene-rnaseq-de></gene-rnaseq-de>
@@ -129,37 +125,17 @@
     </div>
 
     <div class="overview-link">
-        <p-panel header="Gene Co-Expression Network" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        <p-panel header="Similarly Expressed Genes" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                    RNA-Seq data was generated on over 2100 post-mortem brains from over 1100 individuals for seven distinct
-                    brain regions (DLPFC, TCX, CBE, PHG, IFG, STG, FP) from three studies (ROSMAP, Mayo, and MSBB). Here we show
-                    results of a coexpression network analysis that uses an ensemble methodology to identify networks of genes
-                    that show similar coexpression across patients.  The more frequent an edge (coexpression association) was
-                    identified with the selected gene, the darker the edge and node in the graph.
+                  Here we show results of a coexpression network analysis based on the RNA-seq data. The network analysis uses an ensemble methodology to identify networks of genes that show similar coexpression across patients. In the network diagram below, the color of the edge and nodes indicates how frequently significant coexpression was identified across brain regions. Darker edges indicate significant coexpression in more brain regions.
+                </p>
+                <p class="black-paragraph">
+                    <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
                 </p>
             </div>
             <gene-network></gene-network>
         </p-panel>
-    </div>
-
-    <div class="section-thin overview-sgenes">
-        <h2>
-            Similarly Expressed Genes
-        </h2>
-        <div class="row">
-            <div class="col-md-7 col-sm-7 col-12 nodes-col">
-                <div *ngFor="let node of currentGeneData | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
-                    <div (click)="viewGene(node.ensembl_gene_id)" class="genelink">{{node.hgnc_symbol}}</div>
-                </div>
-            </div>
-            <div class="col-md-5 col-sm-5 col-12 show-more-col">
-                <button class="btn show-more-button"
-                (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', gene.ensembl_gene_id ]} })">
-                    <span>Show more</span>
-                </button>
-            </div>
-        </div>
     </div>
 
     <div class="overview-link">
@@ -255,7 +231,7 @@
                     Reactome Pathways:
                 </span>
                 <span dir="ltr">
-                    Provides a link out to reactome pathway information in Ensembl.]
+                    Provides a link out to reactome pathway information in Ensembl.
                 </span>
             </div>
         </div>
