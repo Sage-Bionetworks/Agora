@@ -44,13 +44,13 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Gene in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}" class='normal-heading'> {{geneInfo.isIGAP?'On':'Off'}}</span>
+                    AD Genetic Association &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}" class='normal-heading'> {{geneInfo.isIGAP?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
                 <h3>
-                    Clinical Outcomes &nbsp;&nbsp;&nbsp;
+                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
@@ -58,39 +58,54 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Reactome Pathways &nbsp;&nbsp;&nbsp;
-                    <span class="link-heading" (click)="viewPathways()">View pathways</span>
+                    Brain eQTL &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'> {{geneInfo.haseqtl?'True':'False'}}</span>
                 </h3>
             </div>
-            <div class="col-md-6">
-                <h3>
-                    Distribution in Body &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-6">
                 <h3>
                     Gene Ontology &nbsp;&nbsp;&nbsp;
                     <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
                 </h3>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Cell Types &nbsp;&nbsp;&nbsp;
+                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Reactome Pathways &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewPathways()">View pathways</span>
                 </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Is nominated target &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(true, true)">{{isNominatedTarget()}}</span>
+                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
             <div class="col-md-6">
+                <h3>
+                    Nominated target &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
+                            {{geneInfo.nominations?'True':'False'}}
+                    </span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <h3>
+                    Druggability &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
             </div>
         </div>
     </div>
