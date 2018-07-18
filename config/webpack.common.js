@@ -21,6 +21,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 const buildUtils = require('./build-utils');
 
+const VERSION = JSON.stringify(require('../package.json')['version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
 
 /**
  * Webpack configuration
@@ -189,6 +191,8 @@ module.exports = function (options) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
+        'VERSION': VERSION,
+        'DATA_VERSION': DATA_VERSION,
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,

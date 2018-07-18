@@ -20,6 +20,7 @@ import {
 } from './services';
 
 import { AboutComponent } from './about';
+import { TermsComponent } from './terms';
 import { SynapseAccountComponent } from './synapse-account';
 import { BetaBannerComponent } from './beta-banner';
 import { NavbarComponent } from './navbar';
@@ -54,6 +55,7 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         FooterComponent,
         NoContentComponent,
         AboutComponent,
+        TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent,
         BetaBannerComponent
@@ -64,6 +66,7 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         MenubarComponent,
         FooterComponent,
         AboutComponent,
+        TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent,
         BetaBannerComponent

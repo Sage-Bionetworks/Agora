@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,6 +12,10 @@ export class FooterComponent {
         private router: Router
     ) {
         //
+    }
+
+    getVersion(data?: boolean) {
+        return (data) ? DATA_VERSION : VERSION;
     }
 
     goToRoute(path: string) {

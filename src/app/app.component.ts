@@ -4,6 +4,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from 'environments/environment';
 import { AppState } from './app.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 export const ROOT_SELECTOR = 'app';
 
@@ -22,10 +23,18 @@ export class AppComponent implements OnInit {
     showDevModule: boolean = environment.showDevModule;
 
     constructor(
-        private appState: AppState
+        private appState: AppState,
+        private router: Router
     ) {}
 
     ngOnInit() {
         console.log('Initial App State', this.appState.state);
+
+        this.router.events.subscribe((evt) => {
+            if (!(evt instanceof NavigationEnd)) {
+                return;
+            }
+            window.scrollTo(0, 0);
+        });
     }
 }
