@@ -50,8 +50,8 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
+                    Gene Ontology &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
                 </h3>
             </div>
         </div>
@@ -64,8 +64,8 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Gene Ontology &nbsp;&nbsp;&nbsp;
-                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
+                    Reactome Pathways &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewPathways()">View pathways</span>
                 </h3>
             </div>
         </div>
@@ -78,8 +78,10 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Reactome Pathways &nbsp;&nbsp;&nbsp;
-                    <span class="link-heading" (click)="viewPathways()">View pathways</span>
+                    Nominated target &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
+                        {{geneInfo.nominations?'True':'False'}}
+                    </span>
                 </h3>
             </div>
         </div>
@@ -92,21 +94,19 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Nominated target &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
-                            {{geneInfo.nominations?'True':'False'}}
-                    </span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
-                <h3>
                     Druggability &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
+                </h3>
+            </div>
+            <div class="col-md-6"></div>
         </div>
     </div>
 
@@ -114,7 +114,10 @@
         <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                These differential expression results are based on harmonized RNA-seq data from three independent studies, which include post-mortem samples from over 1100 individuals and seven distinct brain regions. Note that only genes with significant differential expression in at least one tissue and model are visible.<br><br>
+                    These differential expression results are based on harmonized RNA-seq data
+                    from three independent studies, which include post-mortem samples from over
+                    1100 individuals and seven distinct brain regions. Note that only genes with
+                    significant differential expression in at least one tissue and model are visible.<br><br>
                 </p>
                 <p class="black-paragraph">
                     <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
@@ -128,7 +131,12 @@
         <p-panel header="Similarly Expressed Genes" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                  Here we show results of a coexpression network analysis based on the RNA-seq data. The network analysis uses an ensemble methodology to identify networks of genes that show similar coexpression across patients. In the network diagram below, the color of the edge and nodes indicates how frequently significant coexpression was identified across brain regions. Darker edges indicate significant coexpression in more brain regions.
+                    Here we show results of a coexpression network analysis based on the RNA-seq
+                    data. The network analysis uses an ensemble methodology to identify networks
+                    of genes that show similar coexpression across patients. In the network
+                    diagram below, the color of the edge and nodes indicates how frequently
+                    significant coexpression was identified across brain regions. Darker edges
+                    indicate significant coexpression in more brain regions.
                 </p>
                 <p class="black-paragraph">
                     <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
