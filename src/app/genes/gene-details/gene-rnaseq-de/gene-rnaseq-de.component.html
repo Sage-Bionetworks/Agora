@@ -1,6 +1,8 @@
 <div class="section-thin rna-seq-me" *ngIf="dataLoaded">
-    <h2>
+<h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
+        <span class="icon-spacing"></span>
+        <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
     </h2>
     <p class="black-paragraph">
         This plot depicts the median expression of the selected gene across tissues (brain regions) in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be anything greater than five CPM (referenced by red line in the plot).
@@ -236,5 +238,25 @@
                 </span>
             </div>
         </div>
+    </p-dialog>
+<p-dialog header="" [(visible)]="displayBRDia2" [modal]="true" [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000"
+    [dismissableMask]="true" [styleClass]="'btm-dialog'">
+
+    <div class="row content-row" dir="ltr">
+        <div class="col-md-12 col-sm-12 col-12">
+        <span class="header-span" dir="ltr">
+            Brain Tissues: <br>
+        </span>
+        <span dir="ltr">
+            DLPFC: Dorsolateral Prefrontal Cortex <br>
+            TCX: Temporal Cortex <br>
+            CBE: Cerebellum <br>
+            PHG: Parahippocampal Gyrus <br>
+            STG:Superior Temporal Gyrus <br>
+            FP: Frontal Pole <br>
+            IFG: Inferior Frontal Gyrus <br>
+        </span>
+        </div>
+    </div>
     </p-dialog>
 </div>

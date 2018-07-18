@@ -43,6 +43,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
     displayBPDia: boolean = false;
+    displayBRDia2: boolean = false;
 
     constructor(
         private router: Router,
