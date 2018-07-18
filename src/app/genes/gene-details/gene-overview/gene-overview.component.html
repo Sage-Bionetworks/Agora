@@ -51,7 +51,7 @@
             <div class="col-md-6">
                 <h3>
                     Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
+                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
                 </h3>
             </div>
         </div>
