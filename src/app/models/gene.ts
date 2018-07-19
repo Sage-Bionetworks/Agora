@@ -1,5 +1,3 @@
-import { GeneInfo } from './';
-
 import { Document } from 'mongoose';
 
 export interface Gene {

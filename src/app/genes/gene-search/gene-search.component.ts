@@ -5,10 +5,9 @@ import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/empty';
-import { Observable } from 'rxjs/Observable';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
-import { Gene } from '../../models';
+import { Gene, GeneInfo } from '../../models';
 
 import {
     GeneService,
@@ -25,12 +24,11 @@ export class GeneSearchComponent implements OnInit {
     @Input() fname: string;
     @Input() styleClass: string = '';
     @Input() style: any;
-    @Input() genes: Gene[];
+    @Input() infos: Gene[];
     queryField: FormControl = new FormControl();
-    results: Gene[] = [];
+    results: GeneInfo[] = [];
     hasFocus: boolean = false;
-
-    private gene: Gene;
+    gene: Gene;
 
     constructor(
         private router: Router,
@@ -47,11 +45,11 @@ export class GeneSearchComponent implements OnInit {
                     return this.search(query);
                 } else {
                     this.results = [];
-                    return Observable.empty<Response>();
+                    return new EmptyObservable<Response>();
                 }
             })
             .subscribe((data) => {
-                this.results = (data['items']) ? data['items'] as Gene[] : [];
+                this.results = (data['items']) ? data['items'] as GeneInfo[] : [];
             });
     }
 
@@ -71,18 +69,19 @@ export class GeneSearchComponent implements OnInit {
         return this.gene.hgnc_symbol;
     }
 
-    viewGene(gene: Gene) {
-        this.dataService.getGene(gene.hgnc_symbol).subscribe((data) => {
+    viewGene(info: GeneInfo) {
+        let geneData: any;
+        this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setCurrentInfo(data['info']);
-            this.geneService.setFC(data['minFC'], data['maxFC']);
-            this.geneService.setLogFC(data['minLogFC'], data['maxLogFC']);
-            this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
-            this.gene = data['item'];
+            geneData = data;
+        }, (error) => {
+            console.log('Routing error! ' + error.message);
+        }, () => {
+            this.geneService.updateGeneData(geneData);
+            this.gene = geneData['item'];
             this.router.navigate([
                 '/genes',
-                { outlets: {'genes-router': [ 'gene-details', data['item'].ensembl_gene_id ] }}
+                { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
             ]);
         });
     }

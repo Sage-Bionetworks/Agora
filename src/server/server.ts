@@ -9,15 +9,21 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as http from 'http';
 import * as helmet from 'helmet';
+import * as debug from 'debug';
 
 // Get our api routes
 import api from './routes/api';
 
-import * as debug from 'debug';
-debug('wot:server');
+debug('agora:server');
 
-const env = process.env.NODE_ENV || 'development';
-const app = express();
+const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
+const app: express.Express = express();
+
+// We are behind a proxy now so set a trsut proxy variable here
+// http://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', true);
+app.set('trust proxy', 'loopback');
+
 app.use(compression());
 app.use(cors());
 
@@ -30,11 +36,6 @@ app.use(express.static(__dirname));
 app.use(bodyParser.json({limit: '50mb'}));
 // For parsing application/x-www-form-unlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// We are behind a proxy now so set a trsut proxy variable here
-// http://expressjs.com/en/guide/behind-proxies.html
-app.set('trust proxy', true);
-app.set('trust proxy', 'loopback');
 
 // Set our api routes
 app.use('/api', api);
@@ -143,4 +144,4 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
-export default app;
+export { app };

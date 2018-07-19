@@ -1,6 +1,12 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .network-content {
     min-height: 600px;
     overflow-y: hidden;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
 
     force-chart {
         width: 100%;
@@ -18,29 +24,40 @@
     .icon-spacing {
         margin-right: 5px;
     }
+    .info{
+        color: #9DA3B3;
+        font-style: italic;
+        top: 42px;
+        font-size: 13px;
+    }
+}
+
+.br-heading {
+    margin-bottom: 10px;
 }
 
 .network-container {
-    padding: 4%;
     background: rgba(245, 245, 245, 0.5);
 }
 
 .pathbox {
-    padding: 0 10px 10px 10px;
+    padding: 0px;
     width: 100%;
-  div {
-    span{
-        color: #86C4C7;
-        text-decoration: underline;
-        cursor: pointer;
-        font-weight: 600;
-        width: 100%;
+
+    .genes {
+        span{
+            color: #86C4C7;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+        }
     }
-  }
-  span {
-    margin-right: 5px;
-  }
+    span {
+        margin-right: 5px;
+    }
 }
+
 .genelink{
     color: #86C4C7;
     text-decoration: underline;
@@ -53,19 +70,62 @@
     div{
         width: 100%;
     }
+
+    .cg-row {
+        margin: 0px;
+    }
+
+    .cg-col {
+        p {
+            color: #000000;
+            padding-top: 0px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        padding-bottom: 15px;
+        border-bottom: 1px solid #E0E0E0;
+
+        @include respond-to('ex-small') {
+            padding-right: 3.5%;
+            padding-left: 3.5%;
+        }
+    }
+
     border-top: 1px solid #DDD;
+    padding: 0px;
 }
+
 .brainregions {
-  height: 200px;
-  overflow-y: scroll;
-  border-top: 1px solid #DDD;
-  border-bottom: 1px solid #DDD;
+    height: 284px;
+    overflow-y: hidden;
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    position: relative;
+}
+
+.brainregion-button{
+    font-size: 32px;
+}
+
+.brainregion-col {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pathboxes-row {
+    margin: 0px;
 }
 
 .nopadding{
     padding-left: 0;
     padding-right: 0;
 }
+
+.nopadding-left {
+    padding-left: 0;
+}
+
 .true{
     color:green;
 }
@@ -73,45 +133,9 @@
     color:red;
 }
 
-p-dialog {
-    .ui-dialog {
-        width: 80% !important;
-        max-width: 80% !important;
-        top: 109px !important;
-    }
-
-    .ui-dialog-titlebar {
-        padding-top: 85px !important;
-        text-align-last: center;
-        background: white;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        font-size: 24px;
-        color: #1A1C29;
-    }
-
-    .ui-dialog-content {
-        padding-bottom: 85px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 18px;
-        text-align: center;
-        color: #000000;
-    }
-
-    .fa-close:before {
-        color: #5BB0B5;
-    }
-
-    a {
-        position: absolute;
-        left: 1%;
-        top: 10%;
-    }
+.cg-container {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
 }

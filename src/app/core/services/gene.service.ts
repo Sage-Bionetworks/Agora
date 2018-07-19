@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Gene, GeneInfo } from '../../models';
+import { Gene, GeneInfo, TeamInfo } from '../../models';
 
 @Injectable()
 export class GeneService {
@@ -9,6 +9,7 @@ export class GeneService {
     // https://github.com/Microsoft/TypeScript/issues/24418
     currentGene: Gene;
     currentInfo: GeneInfo;
+    currentTeams: TeamInfo[];
     currentTissue: string;
     currentModel: string;
     models: string[] = [];
@@ -34,12 +35,29 @@ export class GeneService {
         return this.currentGene;
     }
 
+    // To be used everytime a new gene data arrives from the server
+    updateGeneData(data: any) {
+        this.setCurrentGene(data['item']);
+        this.setCurrentInfo(data['info']);
+        this.setFC(data['minFC'], data['maxFC']);
+        this.setLogFC(data['minFC'], data['maxFC']);
+        this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+    }
+
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
     }
 
     getCurrentInfo(): GeneInfo {
         return this.currentInfo;
+    }
+
+    setCurrentTeams(teams: TeamInfo[]) {
+        this.currentTeams = teams;
+    }
+
+    getCurrentTeams(): TeamInfo[] {
+        return this.currentTeams;
     }
 
     setCurrentTissue(tissue: string) {
@@ -122,7 +140,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues', { headers }).subscribe((data) => {
                 this.tissues = data['items'];
-
+            }, (error) => {
+                console.log('Error loading tissues! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -133,7 +153,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
                 this.geneTissues = data['items'];
-
+            }, (error) => {
+                console.log('Error loading tissues! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -144,7 +166,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/models', { headers }).subscribe((data) => {
                 this.models = data['items'];
-
+            }, (error) => {
+                console.log('Error loading models! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });
@@ -155,7 +179,9 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/models/gene', { headers }).subscribe((data) => {
                 this.geneModels = data['items'];
-
+            }, (error) => {
+                console.log('Error loading models! ' + error.message);
+            }, () => {
                 resolve(true);
             });
         });

@@ -8,9 +8,15 @@ import { Router } from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class GenesIntroComponent {
+    display: boolean = false;
+
     constructor(
         private router: Router
     ) {}
+
+    showDialog() {
+        this.display = true;
+    }
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);

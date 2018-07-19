@@ -8,6 +8,7 @@ import { BoxPlotViewComponent } from './box-plot/box-plot-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ForceChartViewComponent } from './force-chart/force-chart-view';
+import { MedianChartViewComponent } from './median-chart/median-chart-view';
 
 import { FormsModule } from '@angular/forms';
 
@@ -23,7 +24,8 @@ import {
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,
-        ForceChartViewComponent
+        ForceChartViewComponent,
+        MedianChartViewComponent
     ],
     imports: [
         CommonModule,
@@ -37,7 +39,8 @@ import {
         ScatterPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,
-        ForceChartViewComponent
+        ForceChartViewComponent,
+        MedianChartViewComponent
     ],
     providers: [
         ChartService

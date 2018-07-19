@@ -1,0 +1,37 @@
+.beta-button {
+    background: #FFFFFF !important;
+    border-radius: 100px !important;
+    font-family: Lato !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    line-height: normal !important;
+    font-size: 18px !important;
+    color: #73C8CC !important;
+    border: 1px solid #73C8CC !important;
+    margin-right: 10px !important;
+    cursor: context-menu;
+}
+
+p-button {
+    button .beta-button {
+        background: #FFFFFF !important;
+        border-radius: 100px !important;
+        font-family: Lato !important;
+        font-style: normal !important;
+        font-weight: bold !important;
+        line-height: normal !important;
+        font-size: 18px !important;
+        color: #73C8CC !important;
+        border: 1px solid #73C8CC !important;
+        margin-right: 10px !important;
+    }
+}
+
+.beta-contact-us {
+    color: black;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+}

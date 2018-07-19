@@ -8,7 +8,7 @@ import {
     RouterStub,
     RouterOutletStubComponent,
     RouterLinkStubDirective
-} from '../../../app/testing';
+} from '../../testing';
 
 import { GenesViewComponent } from './genes-view.component';
 

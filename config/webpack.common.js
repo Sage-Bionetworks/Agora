@@ -10,19 +10,19 @@ const helpers = require('./helpers');
  * problem with copy-webpack-plugin
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ngcWebpack = require('ngc-webpack');
 
 const buildUtils = require('./build-utils');
 
+const VERSION = JSON.stringify(require('../package.json')['version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
 
 /**
  * Webpack configuration
@@ -46,6 +46,16 @@ module.exports = function (options) {
       tsConfigPath: METADATA.tsConfigPath,
       mainPath: entry.main
     });
+
+    /**
+     * Plugin: BundleAnalyzerPlugin
+     * Visualize size of webpack output files with an interactive zoomable treemap
+     *
+     * https://github.com/webpack-contrib/webpack-bundle-analyzer
+     */
+    const baPlugin = (METADATA.Analyzer === true) ? [new BundleAnalyzerPlugin({
+      openAnalyzer: false
+    })] : [];
 
   return {
     /**
@@ -166,7 +176,7 @@ module.exports = function (options) {
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
-    plugins: [
+    plugins: [...baPlugin, ...[
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.
@@ -181,35 +191,13 @@ module.exports = function (options) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'AOT': METADATA.AOT,
+        'VERSION': VERSION,
+        'DATA_VERSION': DATA_VERSION,
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
         'Analyzer': JSON.stringify(METADATA.Analyzer),
         'process.env.Docker': JSON.stringify(METADATA.Docker)
-      }),
-
-      /**
-       * Plugin: CommonsChunkPlugin
-       * Description: Shares common code between the pages.
-       * It identifies common modules and put them into a commons chunk.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-       */
-      new CommonsChunkPlugin({
-        name: 'polyfills',
-        chunks: ['polyfills']
-      }),
-
-      new CommonsChunkPlugin({
-        minChunks: Infinity,
-        name: 'inline'
-      }),
-      new CommonsChunkPlugin({
-        name: 'main',
-        async: 'common',
-        children: true,
-        minChunks: 2
       }),
 
       /**
@@ -220,11 +208,9 @@ module.exports = function (options) {
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
-      new CopyWebpackPlugin([
-        { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta' }
-      ],
-        isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
+      new CopyWebpackPlugin(
+        [{ from: 'src/assets', to: 'assets' }, { from: 'src/meta' }],
+        isProd ? { ignore: ['mock-data/**/*'] } : undefined
       ),
 
       /*
@@ -245,11 +231,13 @@ module.exports = function (options) {
         metadata: METADATA,
         inject: 'body',
         xhtml: true,
-        minify: isProd ? {
-          caseSensitive: true,
-          collapseWhitespace: true,
-          keepClosingSlash: true
-        } : false
+        minify: isProd
+          ? {
+              caseSensitive: true,
+              collapseWhitespace: true,
+              keepClosingSlash: true
+            }
+          : false
       }),
 
        /**
@@ -292,37 +280,20 @@ module.exports = function (options) {
         headTags: require('./head-config.common')
       }),
 
-      /**
-       * Plugin LoaderOptionsPlugin (experimental)
-       *
-       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
-       */
-      new LoaderOptionsPlugin({}),
-
-      new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+      new AngularCompilerPlugin(ngcWebpackConfig.plugin),
 
       /**
-       * Plugin: InlineManifestWebpackPlugin
+       * Plugin: WebpackInlineManifestPlugin
        * Inline Webpack's manifest.js in index.html
        *
-       * https://github.com/szrenwei/inline-manifest-webpack-plugin
+       * https://github.com/almothafar/webpack-inline-manifest-plugin
        */
-      new InlineManifestWebpackPlugin(),
-
-      /**
-       * Plugin: BundleAnalyzerPlugin
-       * Visualize size of webpack output files with an interactive zoomable treemap
-       *
-       * https://github.com/webpack-contrib/webpack-bundle-analyzer
-       */
-      (METADATA.Analyzer) ? new BundleAnalyzerPlugin({
-        openAnalyzer: false
-      }) : null,
+      new WebpackInlineManifestPlugin(),
 
       new ProvidePlugin({
         'dc': 'dc'
       })
-    ].filter(Boolean),
+    ]],
 
     /**
      * Include polyfills or mocks for various node stuff

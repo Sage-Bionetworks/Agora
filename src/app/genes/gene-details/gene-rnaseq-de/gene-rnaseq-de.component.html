@@ -1,15 +1,73 @@
-<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+<h2 class="filters-header">
+        Overall Expression of Selected Gene Across Tissues
+        <span class="icon-spacing"></span>
+        <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
+    </h2>
+    <p class="black-paragraph">
+        This plot depicts the median expression of the selected gene across tissues (brain regions) in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be anything greater than five CPM (referenced by red line in the plot).
+    </p>
+    <median-chart [geneinfo]="geneInfo"></median-chart>
+</div>
+
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+    <div class="row">
+        <div class="col-md-8 col-sm-8 col-12 bplot-l-col">
+            <h2 class="de-header">
+                Differential Expression of Selected Gene within Selected Tissue
+            </h2>
+            <p class="black-paragraph de-paragraph">
+                After selecting a tissue and statistical model, you will be able to see whether the selected gene is
+                differentially expressed between AD cases and controls The box plot depicts how the differential expression
+                of the selected gene of interest (red dot) compares with expression of other genes in the tissue.
+            </p>
+            <h2 class="filters-header">
+                Filter by Tissue and Model
+                <span class="icon-spacing"></span>
+                <i class="fa fa-info-circle" (click)="showDialog('displayBPDia')"></i>
+            </h2>
+            <div class="row multi-sel-row">
+                <div class="col-md-10 col-sm-12 col-12">
+                    <p-multiSelect
+                        [options]="tissues"
+                        [(ngModel)]="selectedTissues"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="tissues[0].value"
+                        [dropdownIcon]="getDropdownIcon()"
+                        (onPanelShow)="openDropdown()"
+                        (onPanelHide)="closeDropdown()"
+                        (onChange)="toggleTissue($event)">
+                    </p-multiSelect>
+                </div>
+            </div>
+            <div class="row sm-row">
+                <div class="col-md-10 col-sm-12 col-12">
+                    <select-menu [promptText]="'All'"
+                        [label]="'select-model'"
+                        [defaultValue]="getModel(1)">
+                    </select-menu>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-12 bplot-col">
+            <!-- BoxPlots component-->
+            <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<!--<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <h2>
-                Filter by Tissue
+                Filter by Tissue and Model
             </h2>
             <div class="section-thin st-desc no-side-padding">
                 <p class="black-paragraph">
-                    The seven brain regions from the AMP-AD studies include Temporal Cortex (TCX),
-                    Cerebellum (CBE), Dorsolateral Prefrontal Cortex (DLPFC), Parahippocampal Gyrus
-                    (PHG), Frontal Pole (FP), Superior Temporal Gyrus (STG), and Inferior Frontal
-                    Gyrus (IFG).
+                    To view differential expression results, select a tissue and statistical model.
                 </p>
             </div>
         </div>
@@ -23,48 +81,12 @@
                 [showHeader]="false"
                 [panelStyle]="{minWidth:'12em'}"
                 [defaultLabel]="'Choose tissues...'"
+                [dropdownIcon]="getDropdownIcon()"
+                (onPanelShow)="openDropdown()"
+                (onPanelHide)="closeDropdown()"
                 (onChange)="toggleTissue($event)">
             </p-multiSelect>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>
-    </div>
-</div>
-
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
-    <h2>
-        Box Plots
-    </h2>
-    <p class="black-paragraph">
-        These box plots show the distribution of the effect size (log fold change) and
-        significance (-log10 adjusted p-value) of the selected gene in the context of
-        all genes of the selected tissue and model. The selected gene is shown as the
-        larger red dot.
-    </p>
-    <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-    </ng-template>
-</div>
-
-<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12">
-            <h2>
-                Filter by Model
-            </h2>
-            <div class="section-thin st-desc no-side-padding">
-                <p class="black-paragraph">
-                    We tested for differences in RNA expression between Alzheimer's disease
-                    cases and controls using a variety of statistical models. These include
-                    looking for both differences in the mean expression of genes between
-                    cases and controls, as well as testing for sex specific disease interactions,
-                    as well as age of death (AOD) specific interactions.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-6 col-sm-6 col-12">
             <select-menu [promptText]="'All'"
                 [label]="'select-model'"
@@ -72,19 +94,169 @@
             </select-menu>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-2">
-        </div>
-    </div>
-</div>
+</div>-->
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
-        Log Change Forest Plot
+        Consistency of Change in Expression
     </h2>
     <p class="black-paragraph">
-        A log forest plot indicates the estimate of the log fold change with standard errors
-        across the tissues and studies where the model was fit.
+        This forest plot indicates the estimate of the log fold change with standard errors across the
+        tissues in the chosen model. Genes that show consistent patterns of differential expression will
+        have similar log-fold change value across tissues.
     </p>
     <row-chart></row-chart>
+</div>
+
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="" [(visible)]="displayBPDia" [modal]="true"
+        [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true"
+        [styleClass]="'btm-dialog'">
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Brain Tissues
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    DLPFC:
+                </span>
+                <span dir="ltr">
+                    Dorsolateral Prefrontal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    TCX:
+                </span>
+                <span dir="ltr">
+                    Temporal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    CBE:
+                </span>
+                <span dir="ltr">
+                    Cerebellum
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    PHG:
+                </span>
+                <span dir="ltr">
+                    Parahippocampal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    STG:
+                </span>
+                <span dir="ltr">
+                    Superior Temporal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    FP:
+                </span>
+                <span dir="ltr">
+                    Frontal Pole
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    IFG:
+                </span>
+                <span dir="ltr">
+                    Inferior Frontal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row content-vspace" dir="ltr">
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Models
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    AD Diagnosis (males and females):
+                </span>
+                <span dir="ltr">
+                    This is the base model which compares gene expression in AD patients with controls.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    AD Diagnosis x AOD (males and females):
+                </span>
+                <span dir="ltr">
+                    This model evaluates the difference between female AD patients and female controls.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    AD Diagnosis x Sex (females only):
+                </span>
+                <span dir="ltr">
+                    This model evaluates the difference between male AD patients and male controls.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    AD Diagnosis x Sex (males only):
+                </span>
+                <span dir="ltr">
+                    This model compares gene expression in AD patients and controls, and whether that association is influenced by Age of Death (AOD).
+                </span>
+            </div>
+        </div>
+    </p-dialog>
+<p-dialog header="" [(visible)]="displayBRDia2" [modal]="true" [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000"
+    [dismissableMask]="true" [styleClass]="'btm-dialog'">
+
+    <div class="row content-row" dir="ltr">
+        <div class="col-md-12 col-sm-12 col-12">
+        <span class="header-span" dir="ltr">
+            Brain Tissues: <br>
+        </span>
+        <span dir="ltr">
+            DLPFC: Dorsolateral Prefrontal Cortex <br>
+            TCX: Temporal Cortex <br>
+            CBE: Cerebellum <br>
+            PHG: Parahippocampal Gyrus <br>
+            STG:Superior Temporal Gyrus <br>
+            FP: Frontal Pole <br>
+            IFG: Inferior Frontal Gyrus <br>
+        </span>
+        </div>
+    </div>
+    </p-dialog>
 </div>

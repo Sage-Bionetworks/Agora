@@ -1,46 +1,61 @@
+<p-dialog header="Gene not listed?" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200" [minY]="70"
+        [baseZIndex]="10000">
+    <span>
+        Only genes that show differential expression in AD brains are currently visible in Agora.
+        Information on additional genes is coming soon.
+    </span>
+</p-dialog>
 <div class="section intro-desc center-justified">
     <h1>
         Welcome!
     </h1>
-    <p>
-        The wall of targets is designed for users to discover and explore evidence linking gene's
-        to Alzheimer's disease based on molecular signatures of dementia.  Data is derived from
-        multiple human and model system cohorts in the AMP-AD, M2OVE-AD, MODEL-AD, and
-        Resilience-AD consortia that include genome sequencing, RNA-sequencing, proteomics,
-        metabolomic, and more.
+    <p class="intro-paragraph">
+        Agora is an open space to discover and evaluate the results from the AMP-AD consortium.
+        Explore evidence for your favorite gene or evaluate the dynamic list of genes that have
+        been nominated by the consortium as nascent AD associated drug targets.
     </p>
-</div>
-
-<div class="section center-justified">
-    <h2>
-        Search for a gene
-    </h2>
-    <p class="black-paragraph">
-        Please type a gene symbol in the search box below.
-    </p>
-</div>
-<div class="section intro-search center-justified">
     <gene-search></gene-search>
-    <!-- Add popular genes here -->
-    <!--<p>
-        Popular community searches.
-    </p>-->
+    <div class="row no-gutters">
+        <div class="col-md-9 col-sm-8 col-7"></div>
+        <div class="col-md-3 col-sm-4 col-5">
+            <p class="not-listed" (click)="showDialog()">
+                Gene not listed?
+            </p>
+        </div>
+    </div>
 </div>
-
 <div class="section intro-nomlist-desc center-justified">
     <h2>
-        View nominated target list
+        Nominated Targets
     </h2>
     <p class="black-paragraph">
-        A list of genes nominated by AMP-AD groups as targets of interest.  Each AMP-AD
-        team has deployed state of the art systems biology methods to integrate across genomic,
-        transcriptomic, and proteomic data from over 2000 participant brains.  Each target
-        represents a gene with multiple lines of evidence and is a candidate driver of Alzheimer
-        disease etiology.
+        <span>
+            Explore the current list of AMP-AD nominated targets.
+        </span>
+        <span class="beta-underline" (click)="goToRoute('/about')">
+            Learn more
+        </span>
+        <span>
+            about how these early AD signals were found.
+        </span>
     </p>
     <div class="row list-control-row">
         <p-button (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }})"
             label="View all nominated targets"
+            [styleClass]="'list-button'">
+        </p-button>
+    </div>
+</div>
+<div class="section intro-contrib-desc center-justified">
+    <h2>
+        Contributing Teams
+    </h2>
+    <p class="black-paragraph">
+        Seven teams have nominated targets. See their profiles.
+    </p>
+    <div class="row list-control-row">
+        <p-button (click)="goToRoute('teams-contributing')"
+            label="View all contributing teams"
             [styleClass]="'list-button'">
         </p-button>
     </div>

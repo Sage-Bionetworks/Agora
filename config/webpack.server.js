@@ -14,7 +14,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require( 'nodemon-webpack-plugin' );
 
-const ENV = process.env.NODE_ENV || process.env.ENV || 'development';
+const ENV = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 const Docker = process.env.Docker || false;
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
@@ -81,39 +81,53 @@ module.exports = {
     },
     module: {
         rules: [
+            /**
+             * Source map loader support for *.js files
+             * Extracts SourceMaps for source files that as added as sourceMappingURL comment.
+             *
+             * See: https://github.com/webpack/source-map-loader
+             */
             {
+                enforce: 'pre',
                 test: /\.js$/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['es2015']
-                }
+                loader: 'source-map-loader',
+                exclude: [
+                    /**
+                     * These packages have problems with their sourcemaps
+                     */
+                    helpers.root('node_modules/@angular')
+                ]
             },
+            /**
+             * Typescript loader support for .ts and Angular 2 async routes via .async.ts
+             *
+             * See: https://github.com/s-panferov/awesome-typescript-loader
+             */
             {
                 test: /\.ts$/,
                 use: [
-                    {
-                        loader: 'awesome-typescript-loader',
-                        query: {
-                            /**
-                             * Use inline sourcemaps for "karma-remap-coverage" reporter
-                             */
-                            configFileName: helpers.root('tsconfig.server.json'),
-                            sourceMap: false,
-                            inlineSourceMap: true,
-                            compilerOptions: {
-
-                                /**
-                                 * Remove TypeScript helpers to be injected
-                                 * below by DefinePlugin
-                                 */
-                                removeComments: true
-
-                            }
-                        },
+                {
+                    loader: 'awesome-typescript-loader',
+                    query: {
+                    /**
+                     * Use inline sourcemaps for "karma-remap-coverage" reporter
+                     */
+                    configFileName: helpers.root('tsconfig.server.json'),
+                    sourceMap: false,
+                    inlineSourceMap: true,
+                    compilerOptions: {
+                        /**
+                         * Remove TypeScript helpers to be injected
+                         * below by DefinePlugin
+                         */
+                        removeComments: true
                     }
+                    }
+                },
+                'angular2-template-loader'
                 ],
-                exclude: [/\.e2e\.ts$/]
-            }
+                exclude: [/\.(e2e|spec)\.ts$/]
+            },
         ]
     }
 }

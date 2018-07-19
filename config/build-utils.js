@@ -112,6 +112,12 @@ function ngcWebpackSetup(prod, metadata) {
       use: buildOptimizer ? [ buildOptimizerLoader, '@ngtools/webpack' ] : [ '@ngtools/webpack' ],
       exclude: [helpers.root('src/app/testing/**/*')]
     },
+    {
+      // Mark files inside `@angular/core` as using SystemJS style dynamic imports.
+      // Removing this will cause deprecation warnings to appear.
+      test: /[\/\\]@angular[\/\\]core[\/\\].+\.js$/,
+      parser: { system: true },
+    },
     ...buildOptimizer
       ? [ { test: /\.js$/, use: [ buildOptimizerLoader ] } ]
       : []

@@ -4,12 +4,13 @@
 /* This file is for setting global styles  */
 
 // 1. Vendor files
-@import "~font-awesome/css/font-awesome.min.css";
-@import "~primeng/resources/themes/omega/theme.css";
-@import "~primeng/resources/primeng.min.css";
 @import "~bootstrap/scss/bootstrap-grid";
 @import "~bootstrap/scss/utilities/flex";
 @import "~dc/style/dc.scss";
+@import "~primeicons/primeicons.css";
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~primeng/resources/themes/omega/theme.css";
+@import "~primeng/resources/primeng.min.css";
 @import "~lato-font/css/lato-font.css";
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
@@ -33,9 +34,14 @@
 // 5. Custom Global Styles
 html, body{
     height: 100%;
+    max-height: 100%;
     width: 100%;
     min-width: 367px;
     font-family: Lato;
+}
+
+html {
+    overflow-y: hidden;
 }
 
 .wrapper {
@@ -75,6 +81,72 @@ p {
     font-size: 18px;
     text-align: center;
     color: white;
+}
+
+p-dialog {
+    .ui-dialog {
+        width: 80% !important;
+        max-width: 80% !important;
+        top: 109px !important;
+        max-height: 80% !important;
+        overflow: auto;
+    }
+
+    .ui-dialog-titlebar {
+        padding-top: 85px !important;
+        text-align-last: center;
+        background: white;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 24px;
+        color: #1A1C29;
+        text-align: center;
+        padding-top: 10% !important;
+
+        .pi-times:before {
+            color: #5BB0B5;
+        }
+    }
+
+    .ui-dialog-content {
+        padding-bottom: 85px !important;
+        padding-left: 10% !important;
+        padding-right: 10% !important;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
+        text-align: left;
+        text-align-last: left;
+        color: #000000;
+        height: 100% !important;
+        padding-bottom: 10%;
+
+        .content-row {
+            margin-bottom: 20px;
+
+            .content-vspacing {
+                margin-bottom: 40px;
+            }
+        }
+
+        .header-span {
+            font-weight: bold;
+        }
+    }
+
+    .fa-close:before {
+        color: #5BB0B5;
+    }
+
+    a {
+        position: absolute;
+        left: 1%;
+        top: 10%;
+    }
 }
 
 .black-paragraph {
@@ -177,13 +249,21 @@ p {
     font-family: Lato;
     @include respond-to('ex-small') {
         padding-top: 2em;
-        padding-left: 4.5%;
+        padding-left: 3.5%;
         padding-bottom: 2em;
-        padding-right: 4.5%;
+        padding-right: 3.5%;
         color: #000000;
         background-color: #ffffff;
     }
     @include respond-to('small') {
+        padding-top: 2em;
+        padding-left: 4.0%;
+        padding-bottom: 2em;
+        padding-right: 4.0%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('medium') {
         padding-top: 2em;
         padding-left: 4.5%;
         padding-bottom: 2em;
@@ -191,7 +271,15 @@ p {
         color: #000000;
         background-color: #ffffff;
     }
-    @include respond-to('medium') {
+    @include respond-to('large') {
+        padding-top: 2em;
+        padding-left: 5.5%;
+        padding-bottom: 2em;
+        padding-right: 5.5%;
+        color: #000000;
+        background-color: #ffffff;
+    }
+    @include respond-to('ex-large') {
         padding-top: 2em;
         padding-left: 7.5%;
         padding-bottom: 2em;
@@ -199,22 +287,63 @@ p {
         color: #000000;
         background-color: #ffffff;
     }
-    @include respond-to('large') {
-        padding-top: 2em;
-        padding-left: 10.5%;
-        padding-bottom: 2em;
-        padding-right: 10.5%;
-        color: #000000;
-        background-color: #ffffff;
+}
+
+.coming-soon {
+    text-align-last: center;
+    margin-bottom: auto;
+    margin-top: auto;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    color: #1A1C29;
+}
+
+.beta-underline {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.back-home-wrapper {
+    width: 100%;
+    height: 63px;
+    margin-right: 0px;
+    margin-left: 0px;
+    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
+}
+
+.back-home-row {
+    width: 100%;
+    height: 100%;
+    margin-right: 0px;
+    margin-left: 0px;
+    background: #73C8CC;
+    position: relative;
+
+    i {
+        top: 25%;
+        left: 2%;
+        position: absolute;
     }
-    @include respond-to('ex-large') {
-        padding-top: 2em;
-        padding-left: 13.8%;
-        padding-bottom: 2em;
-        padding-right: 13.8%;
-        color: #000000;
-        background-color: #ffffff;
+
+    i:hover {
+        cursor: pointer !important;
     }
+}
+
+.beta-button {
+    background: #FFFFFF !important;
+    border-radius: 100px !important;
+    font-family: Lato !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    line-height: normal !important;
+    font-size: 18px !important;
+    color: #73C8CC !important;
+    border: 1px solid #73C8CC !important;
+    margin-right: 10px !important;
 }
 
 [hidden] { display: none !important; }

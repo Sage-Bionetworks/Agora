@@ -1,6 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
-  inject,
   async,
   TestBed,
   ComponentFixture
@@ -51,8 +50,8 @@ describe(`App`, () => {
         expect(comp).toBeDefined();
     });
 
-    it(`should be @Wall of Targets`, () => {
-        expect(comp.name).toEqual('Wall of Targets');
+    it(`should be @Agora BETA`, () => {
+        expect(comp.name).toEqual('Agora BETA');
     });
 
     it('should log ngOnInit', () => {

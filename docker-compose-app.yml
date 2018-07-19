@@ -1,11 +1,11 @@
 version: '2'
 services:
-  wall-of-targets:
+  agora:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - MONGO_URI=mongodb://mongodb/walloftargets
+      - MONGO_URI=mongodb://mongodb/agora
     restart: always
     expose:
       - '5000'
@@ -18,14 +18,15 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
     restart: always
-
-    # Bind port 80 in the service to port 80 on the host
     ports:
       - '80:80'
+      - '443:443'
     networks:
       - front-tier
+    volumes:
+      - ./config/snippets:/snippets
 
 networks:
   front-tier:
     external:
-      name: wot_network
+      name: agora_network

@@ -1,0 +1,166 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.info-header {
+    padding-right: 5% !important;
+}
+
+.overview-header {
+    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
+
+    p {
+        text-align-last: left;
+        text-align: left;
+    }
+
+    .row {
+        align-items: center;
+    }
+}
+
+.amp-ad-desc {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%;
+
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .brain-img {
+        width: 90px;
+    }
+
+    .brain-img-col {
+        padding-right: 0px;
+
+        @include respond-to('ex-small') {
+            margin-right: 0px;
+        }
+        @include respond-to('small') {
+            margin-right: -30px;
+        }
+        @include respond-to('medium') {
+            margin-right: -30px;
+        }
+        @include respond-to('large') {
+            margin-right: -30px;
+        }
+        @include respond-to('ex-large') {
+            margin-right: -30px;
+        }
+    }
+
+    .brain-header-col {
+        padding-left: 0px;
+
+        h2 {
+            @include respond-to('ex-small') {
+                font-size: 22px;
+            }
+            @include respond-to('small') {
+                font-size: 24px;
+            }
+            @include respond-to('medium') {
+                font-size: 24px;
+            }
+            @include respond-to('large') {
+                font-size: 24px;
+            }
+            @include respond-to('ex-large') {
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.synapse-desc {
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%;
+
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .synapse-img {
+        width: 243px;
+    }
+
+    h1 {
+        font-size: 42px;
+        color: #BCC0CA;
+    }
+
+    .col-md-11, .col-sm-10, .col-10,
+    .col-md-1, .col-sm-2, .col-2 {
+        margin-bottom: auto;
+        margin-top: auto;
+    }
+
+    .reg-button-col {
+        height: 52px;
+        line-height: 52px;
+        margin-top: 2%;
+        margin-bottom: 2%;
+
+        p-button {
+            width: 100%;
+            height: 100%;
+
+            button {
+                height: 100%;
+            }
+
+            @include respond-to('ex-small') {
+                width: 70%;
+            }
+
+            span {
+                font-family: Lato;
+                font-style: normal;
+                font-weight: bold;
+                line-height: normal;
+                @include respond-to('ex-small') {
+                    font-size: 18px;
+                }
+                font-size: 20px;
+                text-align: center;
+                letter-spacing: 1px;
+                color: #1A1C29;
+            }
+
+            cursor: pointer;
+        }
+    }
+
+    .synapse-img-col {
+        margin-bottom: 25px;
+    }
+
+    .synapse-desc-paragraph {
+        margin-bottom: 38px;
+
+        span-vspacing {
+            margin-bottom: 30px;
+        }
+    }
+}
+
+.synapse-reg-button {
+    background: #FCCB6F !important;
+    border: 0px !important;
+    color: black !important;
+    border-radius: 100px;
+}
+
+.about-control-row {
+    display: block;
+    height: 52px;
+    margin-top: 8%;
+    margin-bottom: 2%;
+}
+
+.link-us {
+  color: #5BB0B5;
+}

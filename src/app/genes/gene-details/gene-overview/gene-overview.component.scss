@@ -1,83 +1,16 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
-p-dialog {
-    .ui-dialog {
-        width: 80% !important;
-        max-width: 80% !important;
-        top: 109px !important;
-    }
-
-    .ui-dialog-titlebar {
-        padding-top: 85px !important;
-        text-align-last: center;
-        background: white;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        font-size: 24px;
-        color: #1A1C29;
-    }
-
-    .ui-dialog-content {
-        padding-bottom: 85px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 18px;
-        text-align: center;
-        color: #000000;
-    }
-
-    .fa-close:before {
-        color: #5BB0B5;
-    }
-
-    a {
-        position: absolute;
-        left: 1%;
-        top: 10%;
-    }
-}
-
-.back-home-wrapper {
-    width: 100%;
-    height: 63px;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-}
-
-.back-home-row {
-    width: 100%;
-    height: 100%;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: rgba(0, 0, 0, 0.15);
-    background-blend-mode: darken;
-    position: relative;
-
-    i {
-        top: 25%;
-        left: 2%;
-        position: absolute;
-    }
-
-    i:hover {
-        cursor: pointer !important;
-    }
+.info-header {
+    padding-right: 5% !important;
 }
 
 .overview-header {
     background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 
     p {
-        text-align: justify;
         text-align-last: left;
+        text-align: left;
     }
 
     .fa-star::before {
@@ -126,12 +59,127 @@ p-dialog {
     font-style: normal;
     font-weight: bold;
     line-height: normal;
-    font-size: 24px;
+
+    @include respond-to('ex-small') {
+        font-size: 18px;
+    }
+    @include respond-to('small') {
+        font-size: 21px;
+    }
+    @include respond-to('medium') {
+        font-size: 24px;
+    }
+    @include respond-to('large') {
+        font-size: 24px;
+    }
+    @include respond-to('ex-large') {
+        font-size: 24px;
+    }
+
     color: #0D1C38 !important;
     vertical-align: middle;
     cursor: pointer;
 
     span {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+}
+
+.show-more-col {
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+.show-more-button {
+    background: #FCCB6F !important;
+    border: 0px !important;
+    border-radius: 100px;
+    height: 52px;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+
+    @include respond-to('ex-small') {
+        width: 70%;
+        font-size: 22px;
+    }
+    @include respond-to('small') {
+        width: 100%;
+        font-size: 22px;
+    }
+    @include respond-to('medium') {
+        width: 85%;
+        font-size: 24px;
+    }
+    @include respond-to('large') {
+        width: 70%;
+        font-size: 24px;
+    }
+    @include respond-to('ex-large') {
+        width: 70%;
+        font-size: 24px;
+    }
+
+    color: #0D1C38 !important;
+    vertical-align: middle;
+    cursor: pointer;
+
+    span {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+}
+
+.synapse-button {
+    background: #FCCB6F !important;
+    border: 0px !important;
+    border-radius: 100px;
+    height: 52px;
+
+    @include respond-to('ex-small') {
+        width: 70%;
+    }
+    @include respond-to('small') {
+        width: 55%;
+    }
+    @include respond-to('medium') {
+        width: 50%;
+    }
+    @include respond-to('large') {
+        width: 34%;
+    }
+    @include respond-to('ex-large') {
+        width: 34%;
+    }
+
+    color: #0D1C38 !important;
+    vertical-align: middle;
+    cursor: pointer;
+
+    span {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+
+        @include respond-to('ex-small') {
+            font-size: 22px;
+        }
+        @include respond-to('small') {
+            font-size: 22px;
+        }
+        @include respond-to('medium') {
+            font-size: 24px;
+        }
+        @include respond-to('large') {
+            font-size: 24px;
+        }
+        @include respond-to('ex-large') {
+            font-size: 24px;
+        }
+
         margin-left: 2%;
         margin-right: 2%;
     }
@@ -170,17 +218,6 @@ p-dialog {
 }
 
 .overview-link {
-    @include respond-to('ex-small') {
-        h2 {
-            font-size: 19px;
-        }
-    }
-    @include respond-to('small') {
-        h2 {
-            font-size: 22px;
-        }
-    }
-
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
 
@@ -200,42 +237,41 @@ p-dialog {
 
         @include respond-to('ex-small') {
             padding-top: 2em;
-            padding-left: 4.5%;
+            padding-left: 3.5%;
             padding-bottom: 2em;
-            padding-right: 4.5%;
+            padding-right: 3.5%;
             color: #000000;
             background-color: #ffffff;
-            font-size: 20px;
         }
         @include respond-to('small') {
             padding-top: 2em;
-            padding-left: 4.5%;
+            padding-left: 4.0%;
             padding-bottom: 2em;
-            padding-right: 4.5%;
+            padding-right: 4.0%;
             color: #000000;
             background-color: #ffffff;
         }
         @include respond-to('medium') {
             padding-top: 2em;
-            padding-left: 7.5%;
+            padding-left: 4.5%;
             padding-bottom: 2em;
-            padding-right: 7.5%;
+            padding-right: 4.5%;
             color: #000000;
             background-color: #ffffff;
         }
         @include respond-to('large') {
             padding-top: 2em;
-            padding-left: 10.5%;
+            padding-left: 5.5%;
             padding-bottom: 2em;
-            padding-right: 10.5%;
+            padding-right: 5.5%;
             color: #000000;
             background-color: #ffffff;
         }
         @include respond-to('ex-large') {
             padding-top: 2em;
-            padding-left: 13.8%;
+            padding-left: 7.5%;
             padding-bottom: 2em;
-            padding-right: 13.8%;
+            padding-right: 7.5%;
             color: #000000;
             background-color: #ffffff;
         }
@@ -261,12 +297,22 @@ p-dialog {
         background-color: white;
         color: #FCCB6F;
     }
+
+    .druggability-span {
+        color: #86C4C7;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 }
 
 .st-desc {
     p {
         text-align: justify;
         text-align-last: left;
+    }
+
+    .ns-paragraph {
+        margin-bottom: 40px;
     }
 
     padding-top: 0px;
@@ -341,6 +387,10 @@ p-dialog {
         font-size: 18px;
         text-decoration-line: underline;
         color: #5BB0B5;
+    }
+
+    .nodes-col {
+        margin-bottom: 40px;
     }
 }
 

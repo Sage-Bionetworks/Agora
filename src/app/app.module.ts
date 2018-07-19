@@ -35,7 +35,6 @@ interface StoreType {
         AppComponent
     ],
     imports: [
-        // BrowserModule.withServerTransition({ appId: }),
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule,

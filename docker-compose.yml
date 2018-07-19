@@ -5,33 +5,67 @@ services:
     ports:
       - 27017:27017
     networks:
-      - front_wot
-  mongo_seed:
+      - front_agora
+  mongod:
     build:
-      context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/Dockerfile
+      context: ./mongo-seed
+      dockerfile: ./mongod.Dockerfile
     links:
       - mongodb
     networks:
-      - front_wot
+      - front_agora
+  mongo_data:
+    build:
+      context: ../data
+      dockerfile: ../Agora/mongo-seed/rnaseq_differential_expression.Dockerfile
+    links:
+      - mongodb
+    depends_on:
+      - mongod
+    networks:
+      - front_agora
   mongo_seed_links:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/links.Dockerfile
+      dockerfile: ../Agora/mongo-seed/network.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_data
     networks:
-      - front_wot
+      - front_agora
   mongo_seed_info:
     build:
       context: ../data
-      dockerfile: ../WallOfTargets/mongo-seed/info.Dockerfile
+      dockerfile: ../Agora/mongo-seed/gene_info.Dockerfile
     links:
       - mongodb
+    depends_on:
+      - mongo_seed_links
     networks:
-      - front_wot
+      - front_agora
+  mongo_seed_team:
+    build:
+      context: ../data
+      dockerfile: ../Agora/mongo-seed/team_info.Dockerfile
+    links:
+      - mongodb
+    depends_on:
+      - mongo_seed_info
+    networks:
+      - front_agora
+  mongo_seed_team_images:
+    build:
+      context: ../data
+      dockerfile: ../Agora/mongo-seed/team_images.Dockerfile
+    links:
+      - mongodb
+    depends_on:
+      - mongo_seed_team
+    networks:
+      - front_agora
 
 networks:
-  front_wot:
+  front_agora:
     driver: bridge
-    name: wot_network
+    name: agora_network

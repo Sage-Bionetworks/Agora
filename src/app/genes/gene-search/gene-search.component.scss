@@ -3,6 +3,7 @@
 
 .search-row {
     display: block;
+    height: 63px;
 }
 
 .filter-wrapper,
@@ -13,7 +14,7 @@
 }
 
 .filter-wrapper {
-    min-height: 100%;
+    height: 63px;
     flex-flow: column wrap;
     position: relative;
 }
@@ -32,19 +33,19 @@
         top: 35%;
 
         @include respond-to('ex-small') {
-            left: 89.5%;
+            left: 88.5%;
         }
         @include respond-to('small') {
             left: 93%;
         }
         @include respond-to('medium') {
-            left: 78.5%;
+            left: 93.5%;
         }
         @include respond-to('large') {
-            left: 74%;
+            left: 92.5%;
         }
         @include respond-to('ex-large') {
-            left: 69.5%;
+            left: 91.5%;
         }
     }
 }
@@ -52,23 +53,23 @@
 #keyword {
     @include respond-to('ex-small') {
         padding-left: 8%;
-        padding-right: 8%;
+        //padding-right: 8%;
     }
     @include respond-to('small') {
         padding-left: 5%;
-        padding-right: 5%;
+        //padding-right: 5%;
     }
     @include respond-to('medium') {
-        padding-left: 2%;
-        padding-right: 2%;
+        padding-left: 4%;
+        //padding-right: 4%;
     }
     @include respond-to('large') {
-        padding-left: 2%;
-        padding-right: 2%;
+        padding-left: 4%;
+        //padding-right: 4%;
     }
     @include respond-to('ex-large') {
-        padding-left: 2%;
-        padding-right: 2%;
+        padding-left: 4%;
+        //padding-right: 4%;
     }
 
     width: 100%;
@@ -81,15 +82,15 @@
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
-    line-height: 55px;
-    font-size: 18px;
+    line-height: 63px;
+    font-size: 16px;
     border-color: rgba(197,199,196,0.5);
     border: 2px;
 
     ::-moz-placeholder,
     ::-ms-input-placeholder,
     ::-webkit-input-placeholder {
-        color: #BDBDBD;
+        color: #6C7489;
     }
 
 }
@@ -101,27 +102,16 @@
     border: 2px;
 }
 
-#keyword-button {
-    position: absolute;
-    right: 26%;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.7em;
-    color: #8DB9ED
-}
-
-#keyword-button:hover {
-    color: #ccc
-}
-
 .filter-select {
+    font-size: 0.9em;
+    top: calc(50% + 23px);
+    left: 0px;
+    z-index: 10000;
     width: 100%;
     list-style: none;
     border-top: none;
     /*so things don't jump around*/
     position: absolute;
-    /*Since we know the wrapper will always be 100% height, we can use half of 100% + half the height of the input*/
-    top: calc(50% + 28.5px);
     /*for a better calculation use JS.  I'm calculating half of the body height - half the height of the input - li padding*/
     //max-height: calc(50% - 15px);
     overflow-y: auto;
@@ -136,6 +126,7 @@
     color: #1A1C29;
     max-height: 250px;
     overflow-y: auto;
+    padding-left: 0px;
 }
 
 .filter-select-list img {
@@ -153,16 +144,22 @@
     line-height: normal;
     font-size: 16px;
     color: #1A1C29;
-    padding-left: 7.5%;
+    padding-left: 6%;
     box-shadow: inset 0px 0px 4px #C7C5C5;
 
     p {
         color: #1A1C29;
     }
+
+    .fa-star {
+        position: relative;
+        left: 44%;
+        top: 37%;
+        color: #F89C55;
+    }
 }
 
 .gene-name {
-    display: inline-block;
     position: absolute;
 }
 
@@ -188,41 +185,12 @@
         width: 100%;
     }
     @include respond-to('medium') {
-        width: 65%;
+        width: 100%;
     }
     @include respond-to('large') {
-        width: 55%;
+        width: 100%;
     }
     @include respond-to('ex-large') {
-        width: 45%;
+        width: 100%;
     }
-}
-
-#keyword {
-    font-size: 1.3em
-}
-
-.filter-select {
-    font-size: 0.9em;
-    top: calc(50% + 23px);
-
-    @include respond-to('ex-small') {
-        left: 0%;
-    }
-    @include respond-to('small') {
-        left: 0%;
-    }
-    @include respond-to('medium') {
-        left: 17.5%;
-    }
-    @include respond-to('large') {
-        left: 22.5%;
-    }
-    @include respond-to('ex-large') {
-        left: 27.5%;
-    }
-}
-
-#keyword-button {
-    right: 11%
 }

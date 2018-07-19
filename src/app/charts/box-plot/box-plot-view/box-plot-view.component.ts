@@ -40,6 +40,8 @@ export class BoxPlotViewComponent implements OnInit {
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
         .attr('class', 'bp-tooltip')
+        .style('width', 200)
+        .style('height', 160)
         .style('opacity', 0);
 
     private resizeTimer;
@@ -57,9 +59,7 @@ export class BoxPlotViewComponent implements OnInit {
 
     initChart() {
         this.geneEntries = this.dataService.getGeneEntries();
-        if (!this.info) {
-            this.info = this.chartService.getChartInfo(this.label);
-        }
+        this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
             this.currentGene
@@ -67,12 +67,12 @@ export class BoxPlotViewComponent implements OnInit {
         this.group = this.dataService.getGroup(this.info);
 
         this.chart = dc.boxPlot(this.boxPlot.nativeElement);
+
         this.chart
             .dimension(this.dim)
+            .elasticY(true)
             .group(this.group)
-            // .renderDataPoints(true)
             .renderTitle(true)
-            .yAxisLabel(this.info.yAxisLabel)
             .showOutliers(false)
             .dataWidthPortion(0.1)
             .dataOpacity(0)
@@ -80,19 +80,11 @@ export class BoxPlotViewComponent implements OnInit {
             .on('filtered', (chart) => {
                 this.renderRedCircle(chart, true);
             })
-            /*.on('preRender', (chart) => {
-                // Adjust the Y axis on preRender
-                chart.y(this.getYScale(this.info.attr));
-            })
-            .on('preRedraw', (chart) => {
-                // Adjust the Y axis on preRedraw
-                chart.y(this.getYScale(this.info.attr));
-            })*/
-            // .y(this.getYScale(this.info.attr))
-            // .tickFormat(d3.format('.3f'));
             .tickFormat(() => '');
 
         if (this.info.attr !== 'fc') { this.chart.yAxis().tickFormat(d3.format('.1e')); }
+        this.chart.xAxis().tickFormat('');
+
         // Remove filtering for these charts
         this.chart.filter = function() {
             //
@@ -118,7 +110,7 @@ export class BoxPlotViewComponent implements OnInit {
         return (upper) ? num : (num / multpl);
     }
 
-    getYScale(attr: string): d3.ScaleContinuousNumeric<number, number> {
+    getYScale(): d3.ScaleContinuousNumeric<number, number> {
         const minMaxArray = this.group.all()[0].value.slice();
         const max = minMaxArray.reduce(function(a, b) {
             return Math.max(a, b);
@@ -126,9 +118,6 @@ export class BoxPlotViewComponent implements OnInit {
         const min = minMaxArray.reduce(function(a, b) {
             return Math.min(a, b);
         });
-        // const multpl = (attr === 'fc') ? 2 : 10;
-        // max = this.getNearestPot(max, multpl, true);
-        // min = this.getNearestPot(min, multpl);
 
         // return d3.scaleLog().base(multpl).domain([min, max]);
         return d3.scaleLinear().domain([min, max]);
@@ -139,61 +128,13 @@ export class BoxPlotViewComponent implements OnInit {
     registerChartEvent(chartEl: dc.BoxPlot, type: string = 'renderlet') {
         const self = this;
         // Using a different name for the chart variable here so it's not shadowed
-        chartEl.on(type, function(chart, typeEl) {
+        chartEl.on(type, function(chart) {
             chart.selectAll('rect.box')
-                .append('title')
-                .text(function() {
-                    return 'src: log2(fold change)';
-                });
+                .attr('rx', 9);
 
             // Renders the selected gene circle
-            (typeEl === 'postRender') ? self.renderRedCircle(chart, true) :
-                self.renderRedCircle(chart);
-
-            /*
-            const lineCenter = chart.selectAll('line.center');
-            chart.selectAll('circle')
-                .attr('cx', lineCenter.attr('x1'));
-
-            chart.selectAll('g.axis').each(function() {
-                const firstChild = this.parentNode.firstChild;
-                if (firstChild) {
-                    this.parentNode.insertBefore(this, firstChild);
-                }
-            });
-
-            // Not using getCurrentGene for all the checks for now
-            const filteredGene = self.geneEntries.slice().find((g) => {
-                return g.hgnc_symbol === self.geneService.getCurrentGene().hgnc_symbol &&
-                    g.tissue === self.geneService.getCurrentTissue() &&
-                    g.model === self.geneService.getCurrentModel();
-            });
-            let foundIndex;
-            const foundCircles = chart.selectAll('circle').filter((c, i) => {
-                if (chart.group().all()[0].value[i] === +filteredGene[self.info.attr]) {
-                    foundIndex = i;
-                }
-                return chart.group().all()[0].value[i] === +filteredGene[self.info.attr];
-            });
-            foundCircles
-                .style('fill', '#FCA79A')
-                .style('stroke', '#F47E6C')
-                .style('stroke-width', 3)
-                .style('r', 13.6)
-                .style('opacity', 1);
-
-            if (foundIndex) {
-                chart.selectAll('circle')
-                    .filter((c, i) => {
-                        return i !== foundIndex;
-                    })
-                    .style('opacity', 0);
-            }
-
-            // Move the red circles to front
-            foundCircles.each(function() {
-                this.parentNode.appendChild(this);
-            });*/
+            (type === 'postRender') ? self.renderRedCircle(chart) :
+                self.renderRedCircle(chart, true);
         });
     }
 
@@ -202,30 +143,40 @@ export class BoxPlotViewComponent implements OnInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.y().domain()[1] - chart.y().domain()[0]);
         const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
+        console.log(svgEl);
         const mult = (svgEl.getBBox().height - 10) / yDomainLength;
+        const val = self.currentGene[self.info.attr];
+        let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
+        logVal = +this.decimalPipe.transform(logVal, '1.3');
+        const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
+        console.log('pos');
+        console.log(lineCenter.attr('x1'));
+        console.log(Math.abs(chart.y().domain()[1] - logVal) * mult);
 
         if (!translate) {
-            const val = self.currentGene[self.info.attr];
-            let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
-            logVal = +this.decimalPipe.transform(logVal, '1.3');
+            const phrase = self.currentGene.hgnc_symbol + ' is ' + significanceText +
+                'significantly differentially expressed in ' +
+                self.geneService.getCurrentTissue() +
+                ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +
+                self.currentGene.adj_p_val + '.';
             chart.selectAll('g.box')
                 .append('circle')
-                .style('cx', lineCenter.attr('x1'))
-                .style('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
-                .style('fill', '#FCA79A')
+                .attr('cx', lineCenter.attr('x1'))
+                .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
+                .attr('fill', '#FCA79A')
                 .style('stroke', '#F47E6C')
                 .style('stroke-width', 3)
-                .style('r', 13.6)
-                .style('opacity', 1)
-                .on('mouseover', function(d) {
+                .attr('r', 13.6)
+                .attr('opacity', 1)
+                .on('mouseover', function() {
                     self.div.transition()
                         .duration(200)
                         .style('opacity', .9);
-                    self.div.html(logVal)
-                        .style('left', (d3.event.pageX) + 'px')
-                        .style('top', (d3.event.pageY - 28) + 'px');
-                    })
-                .on('mouseout', function(d) {
+                    self.div.html(phrase)
+                        .style('left', (d3.event.pageX - 60) + 'px')
+                        .style('top', (d3.event.pageY + 20) + 'px');
+                })
+                .on('mouseout', function() {
                     self.div.transition()
                         .duration(500)
                         .style('opacity', 0);
@@ -233,11 +184,11 @@ export class BoxPlotViewComponent implements OnInit {
         } else {
             chart.selectAll('circle')
                 .style('cx', lineCenter.attr('x1'))
-                .style('cy', this.currentGene[this.info.attr] * mult);
+                .style('cy', Math.abs(chart.y().domain()[1] - logVal) * mult);
         }
     }
 
-    onResize(event) {
+    onResize() {
         const self = this;
 
         clearTimeout(this.resizeTimer);

@@ -26,6 +26,40 @@
     .icon-spacing {
         margin-right: 5px;
     }
+}
+
+.rna-seq-me {
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .fa-info-circle:before {
+        color: #9DA3B3;
+    }
+
+    .icon-spacing {
+        margin-right: 5px;
+    }
+
+    border-top: 1px solid #E0E0E0;
+}
+
+.rna-seq-bplot {
+    padding-right: 0px;
+
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .fa-info-circle:before {
+        color: #9DA3B3;
+    }
+
+    .icon-spacing {
+        margin-right: 5px;
+    }
 
     select {
         width: 100%;
@@ -33,9 +67,13 @@
         font-style: normal;
         font-weight: normal;
         line-height: normal;
-        font-size: 16px;
+        font-size: 18px;
         color: #1A1C29;
         padding-left: 3%;
+
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
 
     p-multiselect {
@@ -94,7 +132,7 @@
 
             color: #1A1C29;
             height: 52px;
-            line-height: 44px;
+            line-height: 52px;
             background: #FFFFFF;
             box-shadow: 0px 0px 4px #C7C5C5;
         }
@@ -109,6 +147,17 @@
             height: 32px;
             width: 32px;
             vertical-align: middle;
+
+            .ui-chkbox-icon {
+                top: 18%;
+            }
+
+            span {
+                position: relative;
+                width: 32px;
+                height: 32px;
+                vertical-align: middle;
+            }
         }
 
         ul {
@@ -118,7 +167,7 @@
 
         li {
             width: 100%;
-            line-height: 44px;
+            line-height: 52px;
             font-family: Lato;
             font-style: normal;
             font-weight: normal;
@@ -176,13 +225,6 @@
             color: #1A1C29;
         }
 
-        span {
-            position: relative;
-            width: 32px;
-            height: 32px;
-            vertical-align: middle;
-        }
-
         .fa-check:before {
             z-index: 1000;
             position: absolute;
@@ -196,43 +238,103 @@
             color: #5BB0B5;
             width: 32px;
 
+            .ui-multiselect-trigger-icon {
+                top: 0%;
+                width: 12px;
+            }
+
+            .pi-caret-down {
+                transform: scale(2.4, 2.4);
+            }
+
+            .pi-caret-up {
+                transform: scale(2.4, 2.4);
+            }
+
+            .fa-caret-down {
+                transform: scale(2.4, 2.4);
+            }
+
+            .fa-caret-up {
+                transform: scale(2.4, 2.4);
+            }
+
             .ui-clickable {
                 margin-top: 1.2em;
             }
         }
     }
 
-    .dc-select-option {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 18px;
-        color: #1A1C29;
-        padding-left: 10%;
+    .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
+        margin-bottom: 40px;
     }
 
-    .dc-select-option::before {
-        padding-left: 10%;
+    .filters-header {
+        .fa-info-circle:before {
+            color: #9DA3B3;
+        }
+
+        .icon-spacing {
+            margin-right: 5px;
+        }
+
+        h3 {
+            margin-bottom: 0px;
+        }
+
+        i:hover {
+            cursor: pointer;
+        }
     }
 
-    .dc-select-option::after {
-        padding-left: 10%;
+    .bplot-l-col {
+        padding-right: 7%;
+    }
+
+    .bplot-col {
+        background: rgba(245, 245, 245, 0.5);
+
+        @include respond-to('ex-small') {
+            padding-right: 15px;
+        }
+        @include respond-to('small') {
+            padding-right: 0px;
+        }
+        @include respond-to('medium') {
+            padding-right: 0px;
+        }
+        @include respond-to('large') {
+            padding-right: 0px;
+        }
+        @include respond-to('ex-large') {
+            padding-right: 0px;
+        }
     }
 }
 
-.rna-seq-bplot {
-    p {
-        text-align: justify;
-        text-align-last: left;
+.btm-dialog {
+    .ui-dialog {
+        max-height: 90% !important;
     }
 
-    .fa-info-circle:before {
-        color: #9DA3B3;
+    .ui-dialog-titlebar {
+        padding: 2.25% !important;
     }
 
-    .icon-spacing {
-        margin-right: 5px;
+    .ui-dialog-content {
+        padding-top: 0% !important;
+        padding-bottom: 4.5% !important;
+    }
+
+    .ui-dialog-titlebar-icon {
+
+        cursor: pointer;
+
+        :hover {
+            border-color: #c0c0c0;
+            background-color: #eeeeee;
+            color: #212121;
+        }
     }
 }
 
@@ -269,7 +371,11 @@
 }
 
 .no-side-padding {
-    background: rgba(245, 245, 245, 0.5);
+    background: rgba(245, 245, 245, 0);
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.fa-info-circle {
+  cursor: pointer
 }

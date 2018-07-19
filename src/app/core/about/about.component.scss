@@ -1,0 +1,48 @@
+.info-header {
+    padding-right: 5% !important;
+}
+
+.overview-header {
+    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
+
+    p {
+        text-align-last: left;
+        text-align: left;
+    }
+
+    .row {
+        align-items: center;
+    }
+}
+
+.about-desc {
+    margin-bottom: 2%;
+
+    p {
+        text-align: justify;
+        text-align-last: left;
+    }
+
+    .about-paragraph {
+        margin-bottom: 40px;
+    }
+}
+
+.about-anchor {
+    color: #5BB0B5;
+}
+
+.about-link-span {
+    color: #5BB0B5;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.contact-us {
+    color: #5BB0B5;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+}

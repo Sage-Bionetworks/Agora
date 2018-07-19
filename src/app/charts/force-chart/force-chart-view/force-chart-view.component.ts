@@ -35,6 +35,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         active: true
     };
     private svg;
+    private pnode: any;
     private loaded: boolean = false;
     private pathways: GeneNode[] = [];
     private nodes: GeneNode[];
@@ -59,15 +60,14 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit() {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        this.height = this.forceChart.nativeElement.offsetHeight;
+        this.height = this.forceChart.nativeElement.offsetParent.offsetHeight;
         this.loaded = true;
-        console.log(this.networkData);
         this.renderChart();
     }
 
     onResize(event) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        this.height = this.forceChart.nativeElement.offsetHeight;
+        this.height = this.forceChart.nativeElement.offsetParent.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
         this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
 
@@ -75,7 +75,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         this.simulation.force('charge', d3.forceManyBody());
         this.simulation.force('link', d3.forceLink(this.networkData.links)
             .links(this.networkData.links).id((d: any) => d.id)
-            .distance(this.width / 3.5))
+            .distance(this.width / 3))
             .force('collide', d3.forceCollide()
                 .radius(18)
                 .strength(0.5))
@@ -118,6 +118,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                     .attr('transform', 'scale(1.75)')
                     .attr('r', 4)
                     .attr('fill', this.getNodeColor)
+                    .attr('class', 'hex')
                     .on('mouseover', (d: GeneNode) => {
                         // tooltip.transition()
                         //     .duration(200)
@@ -145,14 +146,14 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                         //     .style('opacity', 0);
                     })
                     .on('click', (d: any, i, nodes ) => {
-                        // if (this.pnode) {
-                        //     d3.select(this.pnode.node[this.pnode.index])
-                        //     .attr('fill', this.getNodeColor(this.pnode.node[this.pnode.index],
-                        //             this.pnode.index,
-                        //             []));
-                        // }
-                        // this.pnode = {node: nodes, index: i};
-                        // d3.select(nodes[i]).attr('fill', '#14656A');
+                        if (this.pnode) {
+                            d3.select(nodes[this.pnode.index])
+                            .attr('fill', this.getNodeColor(this.pnode.node,
+                                    this.pnode.index,
+                                    []));
+                        }
+                        this.pnode = {index: i, node: d};
+                        d3.select(nodes[i]).attr('fill', '#4F6FC3');
                         this.buildPath(d);
                     });
 
@@ -191,7 +192,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
         this.simulation.force('link', d3.forceLink(this.networkData.links)
             .links(this.networkData.links).id((d: GeneNode) => d.id)
-            .distance(this.width / 3.5))
+            .distance(this.width / 3))
             .force('collide', d3.forceCollide()
                 .radius(18)
                 .strength(0.5));
@@ -199,7 +200,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         const dragDrop = d3.drag()
                     .on('start', (node: any) => {
                         if (!d3.event.active) {
-                            this.simulation.alphaTarget(0.3).restart();
+                            this.simulation.alphaTarget(0).restart();
                         }
                         node.fx = node.x;
                         node.fy = node.y;
@@ -208,7 +209,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                             .style('opacity', 0);
                     })
                     .on('drag', (node: any) => {
-                        this.simulation.alphaTarget(0.01).restart();
+                        this.simulation.alphaTarget(0).restart();
                         node.fx = d3.event.x;
                         node.fy = d3.event.y;
                         tooltip
@@ -216,7 +217,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                     })
                     .on('end', (node: any) => {
                         if (!d3.event.active) {
-                            this.simulation.alphaTarget(.01);
+                            this.simulation.alphaTarget(0);
                         }
                         node.fx = null;
                         node.fy = null;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,5 +10,15 @@ import { Router } from '@angular/router';
 export class FooterComponent {
     constructor(
         private router: Router
-    ) { }
+    ) {
+        //
+    }
+
+    getVersion(data?: boolean) {
+        return (data) ? DATA_VERSION : VERSION;
+    }
+
+    goToRoute(path: string) {
+        this.router.navigate(['/' + path]);
+    }
 }

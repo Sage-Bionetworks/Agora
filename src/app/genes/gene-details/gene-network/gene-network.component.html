@@ -1,50 +1,173 @@
 <div *ngIf="dataLoaded" class="row network-content">
-    <div class="col-md-8 network-container">
+    <div class="col-md-8 col-sm-12 col-12 network-container">
         <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
     </div>
-    <div class="col-md-4 ">
-        <div class="row nopadding currentGene">
-            <h2>{{currentGene.hgnc_symbol}}</h2>
-            <div>Known AD Gene Variant <span [ngClass]="{'true':variants,'false':!variants}"> {{variants}}</span></div>
-            <div>AMP-AD target <span class="true"> True</span></div>
-            <div>Brain eQTL <span [ngClass]="{'true':geneInfo.haseqtl,'false':!geneInfo.haseqtl}"> {{geneInfo.haseqtl}}</span></div>
-            <!-- <div>Protein Precense <span class="false"> False</span></div> -->
-        </div>
-        <div class="row brainregions nopadding">
-            <h2>
-                Brain Regions
-                <span class="icon-spacing"></span>
-                <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
-            </h2>
-            <div *ngFor="let path of pathways;" class="pathbox">
-                <div>
-                <span (click)="viewGene(path.source.id)">{{path.hgnc_symbolA}}</span>
-                -&nbsp;
-                <span (click)="viewGene(path.target.id)">{{path.hgnc_symbolB}}</span>
-            </div>
-                <span *ngFor="let region of path.brainregions; last as isLast">
-                {{region}}{{isLast ? '' : ', '}}
-                </span>
+    <div class="col-md-4 col-sm-12 col-12 currentGene">
+        <div class="row cg-row">
+            <div class="col-md-12 col-sm-12 col-12 cg-col">
+                <h2>{{geneInfo.hgnc_symbol}}</h2>
+                <p>{{geneInfo.summary}}</p>
+                <div>AD Genetic Association
+                    <span [ngClass]="{'true':geneInfo.isIGAP,'false':!geneInfo.isIGAP}"> {{geneInfo.isIGAP}}</span>
+                </div>
+                <div>Nominated Target
+                    <span [ngClass]="{'true':geneInfo.nominations,'false':!geneInfo.nominations}">
+                            {{geneInfo.nominations?'true':'false'}}
+                    </span>
+                </div>
+                <div>Brain eQTL
+                    <span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'> {{geneInfo.haseqtl?'True':'False'}}</span>
+                </div>
             </div>
         </div>
-        <div class="row brainregions nopadding">
-        <h2>Similar Genes</h2>
-        <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
-            <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+        <div class="row cg-row">
+            <div class="col-md-12 col-sm-12 col-12 cg-col">
+                <h2 class="br-heading">
+                    Tissue Specificity of Gene Connections
+                    <span class="icon-spacing"></span>
+                    <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
+                </h2>
+                <span class="info"> 6 of {{selectedGeneData.links.length}} genes</span>
+                <div class="row pathboxes-row">
+                    <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+                        <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
+                            <span class="genes">
+                                <span (click)="viewGene(link, 'source')">{{link.hgnc_symbolA}}</span>
+                                <i class="fa fa-arrow-right"></i>&nbsp;
+                                <span (click)="viewGene(link, 'target')">{{link.hgnc_symbolB}}</span>
+                            </span>
+                            <span *ngFor="let region of link.brainregions; last as isLast">
+                                {{region}}{{isLast ? '' : ', '}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+                        <span class="btn brainregion-button"
+                            (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-brainregions', selectedGeneData.origin.ensembl_gene_id ]} })">
+                            <i class="fa fa-angle-right fa-lg"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="row cg-row">
+            <div class="col-md-12 col-sm-12 col-12 cg-col">
+              <h2 class="br-heading">
+                  Similar Genes
+                  <span class="icon-spacing"></span>
+                  <i class="fa fa-info-circle" (click)="showDialog('displaySimilarGenesDialog')"></i>
+              </h2>
+                <div class="row pathboxes-row">
+                    <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+                        <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
+                            <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+                        <span class="btn brainregion-button"
+                            (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', selectedGeneData.origin.ensembl_gene_id ]} })">
+                            <i class="fa fa-angle-right fa-lg"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Dialogs section -->
 <div class="ui-rtl" dir="rtl">
-    <p-dialog header="Brain Regions" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
+    <p-dialog header="Tissue Specificity of Gene Connections" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
         [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-                FP: Lorem ipsum <br>
-                IFG: Lorem ipsum <br>
-                PHG: Lorem ipsum <br>
-                STG: Lorem ipsum <br>
-        </span>
-    </p-dialog>
+        <div class="row content-row" dir="ltr">
+            The tissue types in which the RNA-seq gene coexpression connection was observed.
+        </div>
+
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Brain Tissues
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    DLPFC:
+                </span>
+                <span dir="ltr">
+                    Dorsolateral Prefrontal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    TCX:
+                </span>
+                <span dir="ltr">
+                    Temporal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    CBE:
+                </span>
+                <span dir="ltr">
+                    Cerebellum
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    PHG:
+                </span>
+                <span dir="ltr">
+                    Parahippocampal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    STG:
+                </span>
+                <span dir="ltr">
+                    Superior Temporal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    FP:
+                </span>
+                <span dir="ltr">
+                    Frontal Pole
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    IFG:
+                </span>
+                <span dir="ltr">
+                    Inferior Frontal Gyrus
+                </span>
+            </div>
+        </div>
+          </p-dialog>
+</div>
+
+<div class="ui-rtl" dir="rtl">
+  <p-dialog header="Similar Genes" [(visible)]="displaySimilarGenesDialog" [modal]="true" [responsive]="true"
+  [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+  <span dir="ltr">
+  List of similar genes ranked based on how close they are in the network to the selected gene.
+  </span>
+</p-dialog>
 </div>

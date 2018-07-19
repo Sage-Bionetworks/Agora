@@ -1,16 +1,94 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .footer-row {
     background: #EDEDED;
     height: 100px;
     margin-right: 0px;
-    text-align: center;
     font-family: Lato;
     font-style: normal;
     font-weight: normal;
     line-height: normal;
     font-size: 16px;
-    text-align: center;
     color: #0D1C38;
     z-index: 2;
+    align-items: center;
+
+    span {
+        cursor: pointer;
+    }
+
+    a.contact-us-footer {
+        color: #0D1C38;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        text-decoration: none;
+        font-size: 16px;
+        margin-right: 5%;
+    }
+
+    @include respond-to('ex-small') {
+        padding-left: 3.5%;
+        padding-right: 3.5%;
+        padding-bottom: 3.5%;
+        padding-top: 3.5%;
+    }
+    @include respond-to('small') {
+        padding-left: 4.0%;
+        padding-right: 4.0%;
+        padding-bottom: 3.5%;
+        padding-top: 3.5%;
+    }
+    @include respond-to('medium') {
+        padding-left: 4.5%;
+        padding-right: 4.5%;
+    }
+    @include respond-to('large') {
+        padding-left: 5.5%;
+        padding-right: 5.5%;
+    }
+    @include respond-to('ex-large') {
+        padding-left: 7.5%;
+        padding-right: 7.5%;
+    }
+
+    .links-col {
+        @include respond-to('ex-small') {
+            text-align: center;
+        }
+        @include respond-to('small') {
+            text-align: center;
+        }
+        @include respond-to('medium') {
+            text-align: left;
+        }
+        @include respond-to('large') {
+            text-align: left;
+        }
+        @include respond-to('ex-large') {
+            text-align: left;
+        }
+    }
+
+    .version-col {
+        @include respond-to('ex-small') {
+            text-align: center;
+        }
+        @include respond-to('small') {
+            text-align: center;
+        }
+        @include respond-to('medium') {
+            text-align: right;
+        }
+        @include respond-to('large') {
+            text-align: right;
+        }
+        @include respond-to('ex-large') {
+            text-align: right;
+        }
+    }
 }
 
 .align-left {
@@ -22,6 +100,19 @@
 }
 
 .footer-span {
-    margin-left: 5%;
     margin-right: 5%;
 }
+
+.version-span {
+    margin-left: 5%;
+}
+
+.dark-grey-span {
+    color: #BCC0CA;
+}
+
+.footer-span:hover {
+    text-decoration: underline;
+}
+
+

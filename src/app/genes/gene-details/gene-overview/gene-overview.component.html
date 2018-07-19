@@ -1,17 +1,13 @@
 <div *ngIf="dataLoaded">
-    <div class="row back-home-wrapper no-gutters">
-        <div class="row back-home-row no-gutters">
-        </div>
-    </div>
     <div class="section-thin overview-header">
         <div class="row no-gutters">
-            <div *ngIf="geneInfo" class="col-md-7">
+            <div *ngIf="geneInfo" class="col-md-7 col-sm-7 col-6 info-header">
                 <h1>{{gene.hgnc_symbol}}</h1>
                 <p>
                     {{geneInfo.name}}
                 </p>
             </div>
-            <div *ngIf="geneInfo && geneInfo.nominations" class="col-md-5">
+            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-5 col-sm-5 col-6">
                 <button class="btn nom-button"
                     (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
                     <i class="fa fa-star fa-lg"></i>
@@ -40,7 +36,7 @@
 
     <div class="section-thin overview-rel">
         <h2>
-            Relevance
+            Summary of Evidence
             <span class="icon-spacing"></span>
             <i class="fa fa-info-circle" (click)="showDialog('displayRelDia')"></i>
         </h2>
@@ -49,27 +45,13 @@
             <div class="col-md-6">
                 <h3>
                     AD Genetic Association &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">False</span>
+                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}" class='normal-heading'> {{geneInfo.isIGAP?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
                 <h3>
-                    Distribution in Body &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    AD Relevance &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-            <div class="col-md-6">
-                <h3>
-                    Gene in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">Off</span>
+                    Gene Ontology &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
                 </h3>
             </div>
         </div>
@@ -77,43 +59,54 @@
             <div class="col-md-6">
                 <h3>
                     Brain eQTL &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColor(false, true)">False</span>
-                </h3>
-            </div>
-            <div class="col-md-6">
-                <h3>
-                    Gene Ontology &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">13</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    Cell Types &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-            <div class="col-md-6">
-                <h3>
-                    Network &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    Clinical Outcomes &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
+                    <span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'> {{geneInfo.haseqtl?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
                 <h3>
                     Reactome Pathways &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">14</span>
+                    <span class="link-heading" (click)="viewPathways()">View pathways</span>
                 </h3>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Nominated target &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
+                        {{geneInfo.nominations?'True':'False'}}
+                    </span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    Druggability &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
+                </h3>
+            </div>
+            <div class="col-md-6"></div>
         </div>
     </div>
 
@@ -121,13 +114,13 @@
         <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                    RNA-Seq data was generated on over 2100 post-mortem brains from over 1100 individuals for seven
-                    distinct brain regions (DLPFC, TCX, CBE, PHG, IFG, STG, FP) from three studies (ROSMAP, Mayo, and MSBB).
-                    Here we show a harmonized analysis of genes that are differentially expressed between AD cases and controls,
-                    and indicate the summary statistics from this analysis in the below plots. The analyses that were performed
-                    included models testing for mean differences in expression between cases and controls, along with interaction
-                    effects between other variables such as sex or age of death (AOD) and AD case control status.  Median expression
-                    is provided as a reference to interpret the magnitude of the differential expression effect.
+                    These differential expression results are based on harmonized RNA-seq data
+                    from three independent studies, which include post-mortem samples from over
+                    1100 individuals and seven distinct brain regions. Note that only genes with
+                    significant differential expression in at least one tissue and model are visible.<br><br>
+                </p>
+                <p class="black-paragraph">
+                    <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
                 </p>
             </div>
             <gene-rnaseq-de></gene-rnaseq-de>
@@ -135,14 +128,18 @@
     </div>
 
     <div class="overview-link">
-        <p-panel header="Gene Co-Expression Network" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+        <p-panel header="Similarly Expressed Genes" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
                 <p class="black-paragraph">
-                    RNA-Seq data was generated on over 2100 post-mortem brains from over 1100 individuals for seven distinct
-                    brain regions (DLPFC, TCX, CBE, PHG, IFG, STG, FP) from three studies (ROSMAP, Mayo, and MSBB). Here we show
-                    results of a coexpression network analysis that uses an ensemble methodology to identify networks of genes
-                    that show similar coexpression across patients.  The more frequent an edge (coexpression association) was
-                    identified with the selected gene, the darker the edge and node in the graph.
+                    Here we show results of a coexpression network analysis based on the RNA-seq
+                    data. The network analysis uses an ensemble methodology to identify networks
+                    of genes that show similar coexpression across patients. In the network
+                    diagram below, the color of the edge and nodes indicates how frequently
+                    significant coexpression was identified across brain regions. Darker edges
+                    indicate significant coexpression in more brain regions.
+                </p>
+                <p class="black-paragraph">
+                    <span class="link-heading" (click)="goToRoute('/about')">Learn more about the analysis</span>
                 </p>
             </div>
             <gene-network></gene-network>
@@ -152,88 +149,16 @@
     <div class="overview-link">
         <p-panel header="Next Steps" [toggleable]="false" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc">
-                <p class="italic-paragraph">
-                    Coming soon
+                <p class="black-paragraph ns-paragraph">
+                    To learn more about the druggability of the nominated nascent targets, please access a summary of their druggability
+                    <span class="druggability-span" (click)="showDruggability()">here</span>. To access this data you will need a Synapse account. To
+                    sign up for a Synapse account, please click the button below.
                 </p>
+                <button class="btn synapse-button" (click)="viewSynapseReg()">
+                    <span>Create Synapse Account</span>
+                </button>
             </div>
         </p-panel>
-    </div>
-
-    <div class="section-thin overview-sdata">
-        <h2>
-            AMP-AD Analysis Source Data
-            <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle" (click)="showDialog('displaySDDia')"></i>
-        </h2>
-        <!-- TODO: Improve this part -->
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Data Generation &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Population &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    ROSMAP &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Brain Sources &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    Other Sources &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    MSBB &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>
-                    MayoRNAseq &nbsp;&nbsp;&nbsp;
-                    <span class="normal-heading">Lorem Ipsum</span>
-                </h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="section-thin overview-sgenes">
-        <h2>
-            Similar Genes
-        </h2>
-        <!-- TODO: Improve this part -->
-        <div class="row">
-            <div *ngFor="let node of currentGeneData | myArraySort: 'brainregions' : true;" class="pathbox">
-                <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
-            </div>
-        </div>
     </div>
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid">
@@ -246,12 +171,98 @@
 
 <!-- Dialogs section -->
 <div class="ui-rtl" dir="rtl">
-    <p-dialog header="Relevance" [(visible)]="displayRelDia" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-            A summary of evidence for a gene's association with Alzheimer's disease and related
-            information concerning gene function and activity.
-        </span>
+    <p-dialog header="Summary of Evidence" [(visible)]="displayRelDia" [modal]="true" [responsive]="true"
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true" [styleClass]="'se-dialog'">
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    AD Genetic Association:
+                </span>
+                <span>
+                    Significant genetic association with based on the International Genomics of Alzheimer's Project (IGAP) genome-wide association study.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Brain eQTL:
+                </span>
+                <span dir="ltr">
+                    Significant expression Quantitative Trait Locus (eQTL) based on AMP-AD consortium unpublished work.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Cell Type Specificity:
+                </span>
+                <span dir="ltr">
+                    Coming soon.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Association with Hallmarks of AD:
+                </span>
+                <span dir="ltr">
+                    Coming soon.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Expression Change in AD Brain:
+                </span>
+                <span dir="ltr">
+                    Significant differential expression based on AMP-AD consortium work detailed on Agora under “RNA-seq Differential Expression”.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Gene Ontology:
+                </span>
+                <span dir="ltr">
+                    Provides a link out to gene ontology information in Ensembl.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Reactome Pathways:
+                </span>
+                <span dir="ltr">
+                    Provides a link out to reactome pathway information in Ensembl.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Nominated Target:
+                </span>
+                <span dir="ltr">
+                    Indicates whether this gene has been nominated by the AMP-AD consortia as a nascent target for AD treatment.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Druggability:
+                </span>
+                <span dir="ltr">
+                    Coming Soon.
+                </span>
+            </div>
+        </div>
     </p-dialog>
 </div>
 

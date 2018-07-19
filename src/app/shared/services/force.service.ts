@@ -1,7 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Gene } from '../../models';
 
-import { Observable } from 'rxjs/Observable';
 import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/geneLink';
 
 @Injectable()
@@ -15,7 +14,13 @@ export class ForceService {
     private rawData = [];
     private genes: GeneNetwork = {
         links: [],
-        nodes: []
+        nodes: [],
+        origin: undefined
+    };
+    private genesClicked: GeneNetwork = {
+        links: [],
+        nodes: [],
+        origin: undefined
     };
     private currentGene: Gene;
 
@@ -26,7 +31,8 @@ export class ForceService {
         this.dicGroup = [];
         this.genes = {
             links: [],
-            nodes: []
+            nodes: [],
+            origin: undefined
         };
     }
 
@@ -38,9 +44,23 @@ export class ForceService {
         return this.datachange;
     }
 
-    processNode(obj: GeneNetworkLinks) {
+    getGeneOriginalList() {
+        if (this.genes.links.length && this.genes.nodes.length) {
+            return this.genes;
+        }
+        return null;
+    }
+
+    getGeneClickedList() {
+        if (this.genesClicked.links.length && this.genesClicked.nodes.length) {
+            return this.genesClicked;
+        }
+        return null;
+    }
+
+    processNode(obj: GeneNetworkLinks, dic, genes) {
         // Nodes from selected Gene
-        if (!this.dicNodes[obj.geneB_ensembl_gene_id]) {
+        if (!dic[obj.geneB_ensembl_gene_id]) {
             const node: GeneNode = {
                 id: obj.geneB_ensembl_gene_id,
                 ensembl_gene_id: obj.geneB_ensembl_gene_id,
@@ -48,13 +68,13 @@ export class ForceService {
                 hgnc_symbol: obj.geneB_external_gene_name,
                 brainregions: [obj.brainRegion]
             };
-            this.dicNodes[obj.geneB_ensembl_gene_id] = node;
-            this.genes.nodes = [...this.genes.nodes,
-            this.dicNodes[obj.geneB_ensembl_gene_id]];
-            this.processBrainRegion(this.dicNodes[obj.geneB_ensembl_gene_id]);
+            dic[obj.geneB_ensembl_gene_id] = node;
+            genes.nodes = [...genes.nodes,
+            dic[obj.geneB_ensembl_gene_id]];
+            this.processBrainRegion(dic[obj.geneB_ensembl_gene_id], dic);
         }
         // Nodes to selected Gene
-        if (!this.dicNodes[obj.geneA_ensembl_gene_id]) {
+        if (!dic[obj.geneA_ensembl_gene_id]) {
             const node: GeneNode = {
                 id: obj.geneA_ensembl_gene_id,
                 ensembl_gene_id: obj.geneA_ensembl_gene_id,
@@ -62,56 +82,56 @@ export class ForceService {
                 hgnc_symbol: obj.geneA_external_gene_name,
                 brainregions: [obj.brainRegion]
             };
-            this.dicNodes[obj.geneA_ensembl_gene_id] = node;
-            this.genes.nodes = [...this.genes.nodes,
-            this.dicNodes[obj.geneA_ensembl_gene_id]];
-            this.processBrainRegion(this.dicNodes[obj.geneA_ensembl_gene_id]);
+            dic[obj.geneA_ensembl_gene_id] = node;
+            genes.nodes = [...genes.nodes,
+            dic[obj.geneA_ensembl_gene_id]];
+            this.processBrainRegion(dic[obj.geneA_ensembl_gene_id], dic);
         }
     }
 
-    processBrainRegion(node: GeneNode) {
+    processBrainRegion(node: GeneNode, dic) {
         node.brainregions.sort();
         const groupStr = node.brainregions.join('');
         if (!this.dicGroup[groupStr]) {
             this.dicGroup[groupStr] = {};
             this.dicGroup[groupStr].value = Object.keys(this.dicGroup).length + 1;
         }
-        this.dicNodes[node.id].group = this.dicGroup[groupStr].value;
+        dic[node.id].group = this.dicGroup[groupStr].value;
     }
 
-    processLink(obj: GeneNetworkLinks) {
-        if (!!this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] ||
-            !!this.dicLinks[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]) {
+    processLink(obj: GeneNetworkLinks, dicL, dicN, genes) {
+        if (!!dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] ||
+            !!dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]) {
             // check A - B link and add region.
-            if (!!this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] &&
-                this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+            if (!!dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] &&
+                dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                     .value++;
-                this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
+                dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
             }
 
             // check B - A link and add region.
-            if (!!this.dicLinks[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id] &&
-                this.dicLinks[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
+            if (!!dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id] &&
+                dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicLinks[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
+                dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
                     .value++;
-                this.dicLinks[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
+                dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
             }
 
             // check both nodes and add brainregion
-            if (this.dicNodes[obj.geneA_ensembl_gene_id]
+            if (dicN[obj.geneA_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicNodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                this.processBrainRegion(this.dicNodes[obj.geneA_ensembl_gene_id]);
+                dicN[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                this.processBrainRegion(dicN[obj.geneA_ensembl_gene_id], dicN);
             }
-            if (this.dicNodes[obj.geneB_ensembl_gene_id]
+            if (dicN[obj.geneB_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicNodes[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                this.processBrainRegion(this.dicNodes[obj.geneB_ensembl_gene_id]);
+                dicN[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
             }
         } else {
             const link: GeneLink = {
@@ -122,20 +142,45 @@ export class ForceService {
                 hgnc_symbolA: obj.geneA_external_gene_name,
                 hgnc_symbolB: obj.geneB_external_gene_name
             };
-            this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
-            this.genes.links = [...this.genes.links,
-            this.dicLinks[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
-            if (this.dicNodes[obj.geneA_ensembl_gene_id]
+            dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
+            genes.links = [...genes.links,
+            dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
+            if (dicN[obj.geneA_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicNodes[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                this.processBrainRegion(this.dicNodes[obj.geneA_ensembl_gene_id]);
+                dicN[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                this.processBrainRegion(dicN[obj.geneA_ensembl_gene_id], dicN);
             }
-            if (this.dicNodes[obj.geneB_ensembl_gene_id]
+            if (dicN[obj.geneB_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
-                this.dicNodes[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
-                this.processBrainRegion(this.dicNodes[obj.geneB_ensembl_gene_id]);
+                dicN[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
+                this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
             }
         }
+    }
+
+    processSelectedNode(gene: Gene, data): Promise<GeneNetwork> {
+        return new Promise((resolve, reject) => {
+            const dicNodesC = [];
+            const dicLinksC = [];
+            dicNodesC[gene.ensembl_gene_id] = {
+                id: gene.ensembl_gene_id,
+                ensembl_gene_id: gene.ensembl_gene_id,
+                group: 1,
+                hgnc_symbol: gene.hgnc_symbol,
+                brainregions: []
+            };
+            this.genesClicked = {
+                links: [],
+                nodes: [],
+                origin: gene
+            };
+            this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
+            data['items'].forEach((obj: any) => {
+                this.processNode(obj, dicNodesC, this.genesClicked);
+                this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
+            });
+            resolve(this.genesClicked);
+        });
     }
 
     processNodes(gene: Gene): Promise<GeneNetwork> {
@@ -151,13 +196,14 @@ export class ForceService {
             this.genes.nodes = [...this.genes.nodes,
                 this.dicNodes[this.currentGene.ensembl_gene_id]];
             this.rawData['items'].forEach((obj: any) => {
-                this.processNode(obj);
-                this.processLink(obj);
+                this.processNode(obj, this.dicNodes, this.genes);
+                this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);
             });
             this.genes.links.sort((a, b) => {
                 return a['value'] - b['value'];
             });
-
+            this.genes.origin = gene;
+            this.genesClicked = this.genes;
             // TODO: is a waste to return a promise and emit an event.
             // update network component to use events.
             this.emitDataChangeEvent(this.genes);

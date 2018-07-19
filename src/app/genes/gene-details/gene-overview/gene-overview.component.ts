@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 
@@ -42,27 +42,33 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        // Get the current clicked gene, always update
+        this.router.events.subscribe((evt) => {
+            if (!(evt instanceof NavigationEnd)) {
+                return;
+            }
+            document.body.scrollTop = 0;
+        });
         this.subscription = this.forceService.getGenes()
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
-        // Get the current clicked gene
-        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
-        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        this.gene = this.geneService.getCurrentGene();
+        this.geneInfo = this.geneService.getCurrentInfo();
+        this.id = this.route.snapshot.paramMap.get('id');
 
-        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
-            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id) {
+            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
+            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
+            this.geneService.getCurrentGene().hgnc_symbol) {
             this.dataService.getGene(this.id).subscribe((data) => {
-                console.log(data);
                 if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.setCurrentGene(data['item']);
-                this.geneService.setCurrentInfo(data['geneInfo']);
-                this.geneService.setLogFC(data['minFC'], data['maxFC']);
-                this.geneService.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+                this.geneService.updateGeneData(data);
                 this.gene = data['item'];
-                this.geneInfo = data['geneInfo'];
-
+                this.geneInfo = data['info'];
+            }, (error) => {
+                console.log('Error loading gene overview! ' + error.message);
+            }, () => {
                 this.geneService.loadGeneTissues().then((tstatus) => {
                     if (tstatus) {
                         this.geneService.loadGeneModels().then((mstatus) => {
@@ -82,7 +88,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.dataService.loadGenes().then((genesLoaded) => {
             if (genesLoaded) {
                 this.dataLoaded = genesLoaded;
-                // this.currentGeneData = this.forceService.getGenes().nodes;
             }
             // Handle error later
         });
@@ -93,14 +98,80 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         return (normal) ? colorClass + ' normal-heading' : '';
     }
 
+    viewGene(id: string) {
+        this.dataService.getGene(id).subscribe((data) => {
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            const currentUrl = this.router.url + '?';
+            if (!data['item']) {
+                this.router.navigate(['/genes']);
+                return;
+            }
+            this.geneService.updateGeneData(data);
+            this.router.navigateByUrl(currentUrl)
+                .then(() => {
+                    this.router.navigated = false;
+                    this.router.navigate(['/genes',
+                        {
+                            outlets:
+                            {
+                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
+                            }
+                        }]);
+                });
+        });
+    }
+
     getSummary(body: boolean): string {
-        const summaryArray = this.geneInfo.summary.split(' [provided by ');
-        if (body) {
-            return summaryArray[0];
+        if (this.geneInfo.summary) {
+            let finalString = '';
+            const parenthesisArr = this.geneInfo.summary.split(/\(([^)]+)\)/g);
+            if (parenthesisArr.length) {
+                parenthesisArr.forEach((p, i, a) => {
+                    // Add the parenthesis back
+                    let auxString = '';
+                    if (i > 0) {
+                        auxString += (i % 2 === 1) ? '(' : ')';
+                    }
+                    if (i < a.length - 1) {
+                        // Replace brackets with a space except the last one
+                        finalString += auxString + p.replace(/\[[^)]*\]/g, ' ');
+                    } else {
+                        finalString += auxString + p;
+                    }
+                });
+            }
+            if (!finalString) { finalString = this.geneInfo.summary; }
+            const bracketsArr = finalString.split(/\[([^)]+)\]/g);
+            if (bracketsArr.length && bracketsArr.length > 1) {
+                // We have brackets so get the description and ref back
+                if (body) {
+                    // Replace the spaces before and where the brackets were
+                    // with nothing
+                    return bracketsArr[0].replace(/  /g, '');
+                } else {
+                    // Return the last bracket string
+                    return bracketsArr[1];
+                }
+            } else {
+                // We dont have brackets so just get the description back
+                if (body) {
+                    return finalString;
+                } else {
+                    return '';
+                }
+            }
         } else {
-            // Use a minus 2 instead of minus 1 because of the final dot in the string
-            return summaryArray[1].substring(0, summaryArray[1].length - 2);
+            // If we don't have a summary, return a placeholder description and an empty ref
+            if (body) {
+                return 'No description';
+            } else {
+                return '';
+            }
         }
+    }
+
+    viewSynapseReg() {
+        this.goToRoute('/synapse-account');
     }
 
     getAlias() {
@@ -122,6 +193,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this[dialogString] = true;
     }
 
+    showDruggability() {
+        window.open('https://www.synapse.org/#!Synapse:syn13363443', '_blank');
+    }
+
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
@@ -130,7 +205,23 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.location.back();
     }
 
+    viewPathways() {
+        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
+            this.gene.ensembl_gene_id, '_blank');
+    }
+
+    viewGeneOntology() {
+        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=' +
+            this.gene.ensembl_gene_id, '_blank');
+    }
+
+    isNominatedTarget() {
+        return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
+    }
+
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

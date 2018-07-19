@@ -1,12 +1,12 @@
-# Wall of Targets
+# Agora BETA
 
 ## Getting Started
 ```bash
 # clone our repo
-git clone https://github.com/Sage-Bionetworks/WallOfTargets.git
+git clone https://github.com/Sage-Bionetworks/Agora.git
 
 # change directory to our repo
-cd WallOfTargets
+cd Agora
 
 # WINDOWS only. In terminal as administrator
 npm install -g node-pre-gyp
@@ -48,6 +48,7 @@ After you downloaded it, go to the root of your `C` drive and create a `data` fo
 Mongo knows to go to this folder automatically to retrieve and store data. To run MongoDB, you need to start the process at the installation location, e.g. go to:
 
 ```bash
+# If you added mongo to your path, you can issue this from anywhere
 C:\\Users\\YOUR_USER>cd "C:\Program Files\MongoDB\Server\3.6\bin"
 
 C:\\Program Files\\MongoDB\\Server\\3.6\\bin>mongod
@@ -60,62 +61,60 @@ our Express server through Mongoose (a framework that allows us to define object
 [initandlisten] waiting for connections on port 27017
 ```
 
-If you also installed MongoDB Compass along with the main installation (a GUI to manage your MongoDB databases), just open it and connect to your localhost (use the default values). You'll notice a few connections opened in the cmd prompt with the database running (the one open with MongoDB listening on port `27017`). You should see something like:
+If you also installed `MongoDB Compass` along with the main installation (a GUI to manage your `MongoDB` databases), just open it and connect to your localhost (use the default values). You'll notice a few connections opened in the cmd prompt with the database running (the one open with `MongoDB` listening on port `27017`). You should see something like:
 
 ```bash
 [listener] connection accepted from 127.0.0.1:57948 #2 (2 connections now open)
 ```
 
-Go back to Compass and create a database called `walloftargets`. In the Create Database form, use `genes` and `geneslinks` for the collection names. Now that we are all set, it's time to load the data into our collections.
+Go back to `MongoDB Compass` and create a database called `agora`. In the Create Database form, use `genes` for the collection name. Now that we are all set, it's time to load the data into our collections.
 
 # Downloading the data
 
-Go to the Synapse repository [here](https://www.synapse.org/#!Synapse:syn12177492) and download three files: `geneExprData.json`, `network.json`, `gene_info.json`. After downloading the files rename them to `data.json`, `dataLinks.json` and `dataInfo.json` respectively.
-
-Now go back to the Mongo binary folder directory (same folder you issued the `mongod` command). In that folder just use the following commands:
+The following commands will download four data files (`rnaseq_differential_expression.json`, `network.json`, `gene_info.json`, `team_info.json`) and all of the team images. You can download all of them using the `synapseclient`. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
 
 ```bash
-mongoimport --db walloftargets --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\data.json"
-mongoimport --db walloftargets --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\dataLinks.json"
-mongoimport --db walloftargets --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\dataInfo.json"
+pip install synapseclient
 ```
 
-* Convert mongo value types
+To get the data files using credentials provided by AWS, run:
 
-csvtojson and mongoimport doesn't support valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
-
-```mongo
-var requests = [];
-db.genes.find().toArray().forEach(document => {
-    requests.push({
-        'updateOne': {
-            'filter': { '_id': document._id },
-            'update': { '$set': {
-                'logFC': +document.logFC,
-                'adj_p_val': document.adj_p_val,
-                'gene_length': +document.gene_length,
-                'percentage_gc_content': +document.percentage_gc_content,
-                'b': +document.b,
-                't': +document.t,
-                'ci_l': +document.ci_l,
-                'ci_r': +document.ci_r,
-                'p_value': +document.p_value,
-                'percentage_gc_content': +document.percentage_gc_content
-        } }
-        }
-    });
-    if (requests.length === 500) {
-        //Execute per 500 operations and re-init
-        db.genes.bulkWrite(requests);
-        requests = [];
-    }
-});
-if (requests.length > 0) {
-    db.genes.bulkWrite(requests);
-}
+```bash
+npm run data:local-aws
 ```
 
-We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
+If you have your own Synapse credentials, you can run:
+
+```bash
+npm run data:local
+```
+
+If you are on an AWS EC2 that has been granted access (e.g., for deployment) you can run:
+
+```bash
+npm run data:aws
+```
+
+If the `aws` command fails in any of the scripts, you might be running the wrong version. To use `aws secretsmanager` you need the `aws cli` version to be `1.15.8` and upwards
+
+```bash
+aws --version
+# Exemple of incorrect version
+aws-cli/1.14.65 Python/2.7.9 Windows/8 botocore/1.9.18
+```
+
+To manually update your version go to [this](https://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html) link.
+
+You should see all of the data files and teams members pictures in the folders created by any of the scripts above.
+
+To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following script command:
+
+```bash
+# Imports all data files and team images
+npm run mongo:import
+```
+
+You'll need `Linux` to run the previous script. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` (e.g. `Ubuntu`).
 
 * Remote production environment
 
@@ -355,8 +354,9 @@ import * as _ from 'lodash';
 Before using Docker go one level above the root folder of the project and create a folder called `data`:
 
 ```bash
-PATH_TO_PROJECT\WallOfTargets> cd ..
+PATH_TO_PROJECT\Agora> cd ..
 PATH_TO_PROJECT> mkdir data
+PATH_TO_PROJECT> mkdir data/team_images
 ```
 
 This folder will be used to load the data into MongoDB when we build the DOcker image. Go ahead and grab the latest data files from the [Downloading the data](#downloading-the-data) section. Copy all the `.json` files described in the download section to the `data` folder you just created.
@@ -368,9 +368,9 @@ $ docker --version
 Docker version 18.03.1-ce, build 9ee9f40
 ```
 
-The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL will be the public ip address of that machine.
+The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL can be the public ip address of that machine or a domain name (this project uses the name `agora.ampadportal.org` in the `Nginx` configuration).
 
-Go to the project root and run `npm run build:docker`. This command will build an image called `wall-of-targets` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker`.
+Start `Docker`, go to the project root and run `npm run build:docker`. This command will build an image called `agora` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker:up`. If you need to use parts of the cache when building and skip rebuilding everything, you can use `npm run docker:app -- build` or `npm run docker:mongo -- build`.
 
 ```bash
 # Building for the first time or rebuilding
@@ -381,7 +381,7 @@ npm run docker:up
 npm run docker
 ```
 
-Now go to `localhost` and you should see the application up. If you run into the following errorr:
+Now go to `localhost` and you should see the application up. If you run into the following errors:
 
 ```bash
 ...Cannot start service mongodb: driver failed programming external connectivity on endpoint...
@@ -398,12 +398,12 @@ Try to restart or even reopen Docker and see if the error goes away. If Docker s
 
 ```bash
 ERROR: The Compose file '././docker-compose.yml' is invalid because:
-networks.front_wot value Additional properties are not allowed ('name' was unexpected)
+networks.front_agora value Additional properties are not allowed ('name' was unexpected)
 # or
-Exception: Unknown docker network 'wot_network'. Did you create it with 'docker network create wot_network'
+Exception: Unknown docker network 'agora_network'. Did you create it with 'docker network create agora_network'
 ```
 
-You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create wot_network` if the network does not exist.
+You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create agora_network` if the network does not exist.
 
 To remove all images and containers (to restart the whole Docker process) you can run the following commands:
 
@@ -420,7 +420,7 @@ To remove all unused containers:
 
 ```bash
 # Remove all containers with the Exited status
-docker rm $( docker ps -q -f status=exited)
+docker rm $(docker ps -q -f status=exited)
 ```
 
 To remove all unused volumes (good to prevent out of space problems):
@@ -455,7 +455,7 @@ This project follows the directions provided by the official [angular style guid
 * For the file structure this project uses the component approach. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
 
 ```
-WallOfTargets/
+Agora/
  ├──config/                        * our configuration
  |   ├──build-utils.js             * common config and shared functions for prod and dev
  |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html

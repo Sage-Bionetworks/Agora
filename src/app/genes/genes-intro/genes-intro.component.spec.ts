@@ -5,16 +5,13 @@ import {
     fakeAsync,
     tick
 } from '@angular/core/testing';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 
 import {
     RouterStub
-} from '../../../app/testing';
-
-import { routes } from '../genes-routing.module';
+} from '../../testing';
 
 import { GenesIntroComponent } from './genes-intro.component';
 import { GeneSearchComponent } from '../gene-search';
@@ -22,7 +19,6 @@ import { GeneSearchComponent } from '../gene-search';
 import { Button } from 'primeng/button';
 
 import { MockComponent } from 'ng-mocks';
-import { Observable } from 'rxjs/Observable';
 
 describe('Component: GenesIntro', () => {
     let component: GenesIntroComponent;
@@ -68,9 +64,9 @@ describe('Component: GenesIntro', () => {
     it('should tell that the list button was clicked', fakeAsync(() => {
         const gtrSpy = spyOn(component, 'goToRoute');
         const buttons = fixture.debugElement.nativeElement.querySelectorAll('p-button');
-        expect(buttons.length).toBe(1);
+        expect(buttons.length).toBe(2);
 
-        const pButton = fixture.debugElement.query(By.css('p-button'));
+        const pButton = fixture.debugElement.queryAll(By.css('p-button'))[1];
         const pButtonElem = pButton.nativeElement;
         const leftclickevent = new MouseEvent('click', {button: 0});
         pButtonElem.dispatchEvent(leftclickevent);
