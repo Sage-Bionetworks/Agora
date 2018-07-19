@@ -75,3 +75,7 @@ dll/
 # Webpack #
 /webpack-cache/
 /webpack-cache/**
+
+# Mongo #
+/mongodump/
+/mongodump/**
