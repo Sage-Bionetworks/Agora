@@ -34,7 +34,7 @@
                         [showToggleAll]="false"
                         [showHeader]="false"
                         [panelStyle]="{minWidth:'12em'}"
-                        [defaultLabel]="'Choose tissues...'"
+                        [defaultLabel]="tissues[0].value"
                         [dropdownIcon]="getDropdownIcon()"
                         (onPanelShow)="openDropdown()"
                         (onPanelHide)="closeDropdown()"
