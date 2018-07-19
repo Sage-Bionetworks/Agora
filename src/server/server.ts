@@ -14,7 +14,7 @@ import * as debug from 'debug';
 // Get our api routes
 import api from './routes/api';
 
-debug('wot:server');
+debug('agora:server');
 
 const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 const app: express.Express = express();

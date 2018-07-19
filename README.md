@@ -107,58 +107,14 @@ To manually update your version go to [this](https://docs.aws.amazon.com/cli/lat
 
 You should see all of the data files and teams members pictures in the folders created by any of the scripts above.
 
-To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following command:
+To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following script command:
 
 ```bash
-# Read all the jpg files and pipe them to the mongo database
-ls -1r *.jpg | while read x; do mongofiles -d agora put $x; done
+# Imports all data files and team images
+npm run mongo:import
 ```
 
-Both the previous commands are from `Linux`. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` and get an `Ubuntu` terminal up and running. To add our data files to the database run the following commands:
-
-```bash
-mongoimport --db agora --collection genes --drop --jsonArray --file "C:\PATH\TO\FILE\rnaseq_differential_expression.json" --mode upsert
-mongoimport --db agora --collection geneslinks --drop --jsonArray --file "C:\PATH\TO\FILE\network.json" --mode upsert
-mongoimport --db agora --collection geneinfo --drop --jsonArray --file "C:\PATH\TO\FILE\gene_info.json" --mode upsert
-mongoimport --db agora --collection teaminfo --drop --jsonArray --file "C:\PATH\TO\FILE\team_info.json" --mode upsert
-```
-
-* Convert mongo value types
-
-csvtojson and mongoimport doesn't support valutypes and turn every right side value into a string, the following script is an example on how to convert the genes collection number types. this will avoid issues with some unix systems.
-
-```mongo
-var requests = [];
-db.genes.find().toArray().forEach(document => {
-    requests.push({
-        'updateOne': {
-            'filter': { '_id': document._id },
-            'update': { '$set': {
-                'logFC': +document.logFC,
-                'adj_p_val': document.adj_p_val,
-                'gene_length': +document.gene_length,
-                'percentage_gc_content': +document.percentage_gc_content,
-                'b': +document.b,
-                't': +document.t,
-                'ci_l': +document.ci_l,
-                'ci_r': +document.ci_r,
-                'p_value': +document.p_value,
-                'percentage_gc_content': +document.percentage_gc_content
-        } }
-        }
-    });
-    if (requests.length === 500) {
-        //Execute per 500 operations and re-init
-        db.genes.bulkWrite(requests);
-        requests = [];
-    }
-});
-if (requests.length > 0) {
-    db.genes.bulkWrite(requests);
-}
-```
-
-We will be using lowercase name for the collection because Mongoose uses lowercase names for collections (even if you try to use an uppercase one).
+You'll need `Linux` to run the previous script. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` (e.g. `Ubuntu`).
 
 * Remote production environment
 
@@ -442,12 +398,12 @@ Try to restart or even reopen Docker and see if the error goes away. If Docker s
 
 ```bash
 ERROR: The Compose file '././docker-compose.yml' is invalid because:
-networks.front_wot value Additional properties are not allowed ('name' was unexpected)
+networks.front_agora value Additional properties are not allowed ('name' was unexpected)
 # or
-Exception: Unknown docker network 'wot_network'. Did you create it with 'docker network create wot_network'
+Exception: Unknown docker network 'agora_network'. Did you create it with 'docker network create agora_network'
 ```
 
-You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create wot_network` if the network does not exist.
+You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create agora_network` if the network does not exist.
 
 To remove all images and containers (to restart the whole Docker process) you can run the following commands:
 

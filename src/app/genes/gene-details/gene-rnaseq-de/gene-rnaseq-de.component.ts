@@ -79,7 +79,10 @@ export class GeneRNASeqDEComponent implements OnInit {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
                 this.selectedTissues = this.tissues.slice(0, 1).map((a) => a.value);
-                this.toggleTissue({ itemValue: this.selectedTissues[0]});
+                this.toggleTissue({
+                    itemValue: this.selectedTissues[0],
+                    value: [this.selectedTissues[0]]
+                });
                 this.dataLoaded = status;
             });
         }

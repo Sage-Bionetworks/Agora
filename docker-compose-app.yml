@@ -29,4 +29,4 @@ services:
 networks:
   front-tier:
     external:
-      name: wot_network
+      name: agora_network

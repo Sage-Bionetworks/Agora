@@ -58,7 +58,6 @@ export class GeneNetworkComponent implements OnInit {
                 this.loadGenes();
             }
         }
-        console.log(this.geneInfo);
     }
 
     updategene(event) {

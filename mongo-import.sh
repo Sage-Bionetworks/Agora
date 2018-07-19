@@ -8,4 +8,4 @@ mongoimport --db agora --collection geneinfo --jsonArray --drop --file ./gene_in
 mongoimport --db agora --collection teaminfo --jsonArray --drop --file ./team_info.json
 
 cd ./team_images
-ls -1r *.jpg | while read x; do mongofiles -d agora -v put $x; echo $x; done
+ls -1r *.jpg | while read x; do mongofiles -d agora -v put $x --replace; echo $x; done

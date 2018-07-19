@@ -38,7 +38,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit() {
-        console.log(this.geneinfo); // medianlogcpm: 5.6357, tissue: "DLPFC"
+        // console.log(this.geneinfo); // medianlogcpm: 5.6357, tissue: "DLPFC"
         if (!this.geneinfo) {
             return;
         }
