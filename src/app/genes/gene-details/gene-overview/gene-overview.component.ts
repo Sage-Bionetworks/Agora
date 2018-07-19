@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 
@@ -43,6 +43,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // Get the current clicked gene, always update
+        this.router.events.subscribe((evt) => {
+            if (!(evt instanceof NavigationEnd)) {
+                return;
+            }
+            document.body.scrollTop = 0;
+        });
         this.subscription = this.forceService.getGenes()
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
