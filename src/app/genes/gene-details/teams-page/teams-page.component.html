@@ -37,11 +37,11 @@
         <p class="black-paragraph">
             {{ntInfoArray[i].data_used_to_support_target_selection}}
         </p>
-        <div class="website-row">
-            <!--<a>
+        <!--<div class="website-row">
+            <a>
                 Website link
-            </a>-->
-        </div>
+            </a>
+        </div>-->
         <div class="row members-row">
             <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
                 <img class="member-img" [src]="getMemberImg(member.name)">
@@ -50,10 +50,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="!dataLoaded" class="container-fluid">
-    <div class="row small-padding-top">
-        <div class="col-md-12">
-            <p-progressBar mode="indeterminate"></p-progressBar>
-        </div>
-    </div>
+<div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
+    <p-progressBar mode="indeterminate"></p-progressBar>
 </div>

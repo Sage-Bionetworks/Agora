@@ -102,7 +102,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
                     <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
                 </h3>
             </div>
@@ -161,12 +161,8 @@
         </p-panel>
     </div>
 </div>
-<div *ngIf="!dataLoaded" class="container-fluid">
-    <div class="row small-padding-top">
-        <div class="col-md-12">
-            <p-progressBar mode="indeterminate"></p-progressBar>
-        </div>
-    </div>
+<div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
+    <p-progressBar mode="indeterminate"></p-progressBar>
 </div>
 
 <!-- Dialogs section -->
@@ -216,10 +212,20 @@
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
-                    Expression Change in AD Brain:
+                    RNA Expression Change in AD Brain:
                 </span>
                 <span dir="ltr">
                     Significant differential expression based on AMP-AD consortium work detailed on Agora under “RNA-seq Differential Expression”.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Protein Expression Change in AD Brain:
+                </span>
+                <span dir="ltr">
+                    Coming soon.
                 </span>
             </div>
         </div>
