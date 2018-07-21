@@ -50,8 +50,8 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Gene Ontology &nbsp;&nbsp;&nbsp;
-                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
+                    Protein Expression Change in AD Brain: &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
         </div>
@@ -64,6 +64,20 @@
             </div>
             <div class="col-md-6">
                 <h3>
+                    Gene Ontology &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
                     Reactome Pathways &nbsp;&nbsp;&nbsp;
                     <span class="link-heading" (click)="viewPathways()">View pathways</span>
                 </h3>
@@ -72,7 +86,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
+                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
@@ -88,8 +102,8 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
+                    RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -98,15 +112,6 @@
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
-                </h3>
-            </div>
-            <div class="col-md-6"></div>
         </div>
     </div>
 
