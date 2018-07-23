@@ -4,7 +4,7 @@ FROM alpine:latest
 LABEL version="1.0"
 LABEL description="NGINX running on the Alpine image (5MB)"
 
-RUN mkdir -p /etc/nginx
+RUN mkdir -p /run/nginx
 
 # Grab the latest NGINX apk, remove the apk cache, and allow permissions
 RUN echo "http://dl-3.alpinelinux.org/alpine/v3.5/main" >> /etc/apk/repositories && \
