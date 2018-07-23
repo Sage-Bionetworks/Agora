@@ -48,8 +48,18 @@ export class GenesListComponent implements OnInit {
 
         this.dataService.getTableData().subscribe((data) => {
             this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
+            console.log(this.datasource);
             this.genesInfo = this.datasource;
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
+
+            // Starts table with the nominations columns sorted in descending order
+            this.customSort({
+                data: this.datasource,
+                field: 'nominations',
+                mode: 'single',
+                order: -1
+            } as SortEvent);
+
             this.loading = false;
         });
     }
@@ -89,6 +99,7 @@ export class GenesListComponent implements OnInit {
     }
 
     customSort(event: SortEvent) {
+        console.log(event);
         event.data.sort((data1, data2) => {
             const value1 = (Array.isArray(data1[event.field])) ?
                 data1[event.field].map((nt) => nt.team).join(', ') :
@@ -112,28 +123,6 @@ export class GenesListComponent implements OnInit {
 
             return (event.order * result);
         });
-    }
-
-    loadGenesLazy(event: LazyLoadEvent) {
-        this.loading = true;
-
-        // Make a remote request to load data using state metadata from event
-        // event.first = First row offset
-        // event.rows = Number of rows per page
-        // event.sortField = Field name to sort with
-        // event.sortOrder = Sort order as number, 1 for asc and -1 for dec
-        // filters: FilterMetadata object having field as key and filter value, filter
-        // matchMode as value
-
-        // Use a promise when doing remotely
-        if (this.loading) {
-            this.dataService.getPageData(event).subscribe((data) => {
-                this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
-                this.genesInfo = this.datasource;
-                this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
-                this.loading = false;
-            });
-        }
     }
 
     getTeams(nomTargets: NominatedTarget[]): string {

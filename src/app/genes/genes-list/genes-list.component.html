@@ -1,17 +1,15 @@
-<div class="section nomlist-intro center-justified">
-    <h1>Nominated Target List</h1>
-    <p>
-        Please select a gene from the list of nascent AD targets to view details and evidence.
-        You can find a gene by typing in a gene symbol (e.g. “VGF”).
-    </p>
-</div>
-<div class="nomlist-list center-justified">
+<div class="nomlist-list section-hero center-justified">
+    <div class="section center-justified">
+        <h1>Nominated Target List</h1>
+        <p>
+            Please select a gene from the list of nascent AD targets to view details and evidence.
+            You can find a gene by typing in a gene symbol (e.g. “VGF”).
+        </p>
+    </div>
     <p-table #gl
         [columns]="cols" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="true"
-        sortField="nominations"
-        sortOrder="-1"
         [rows]="14"
         [totalRecords]="totalRecords"
         [loading]="loading"

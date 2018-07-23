@@ -1,21 +1,6 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
-.section-overview-header {
-    padding-top: 2em;
-    padding-left: 10%;
-    padding-bottom: 2em;
-    padding-right: 10%;
-    color: #000000;
-    background-color: #ffffff;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-}
-
 .rna-seq-sel {
     background: rgba(245, 245, 245, 0.5);
 

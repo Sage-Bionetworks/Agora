@@ -4,7 +4,7 @@ FROM alpine:latest
 LABEL version="1.0"
 LABEL description="NGINX running on the Alpine image (5MB)"
 
-RUN mkdir -p /run/nginx
+RUN mkdir -p /etc/nginx
 
 # Grab the latest NGINX apk, remove the apk cache, and allow permissions
 RUN echo "http://dl-3.alpinelinux.org/alpine/v3.5/main" >> /etc/apk/repositories && \
@@ -20,17 +20,17 @@ ENV SUBJ "/C=US/ST=Washington/L=Seattle/O=SageBionetworks/CN=agora.ampadportal.o
 # Remove the default NGINX configurations
 RUN rm -v /etc/nginx/nginx.conf
 
-RUN mkdir -p /etc/ssl/certs
-RUN mkdir -p /etc/ssl/private
-RUN mkdir /run/nginx/snippets
+#RUN mkdir -p /etc/ssl/certs
+#RUN mkdir -p /etc/ssl/private
+#RUN mkdir -p /etc/nginx/snippets
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj $SUBJ
-RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+#RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj $SUBJ
+#RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 # Add our custom configuration file to replace the original one
 ADD ./config/nginx.conf /etc/nginx/
-ADD ./config/snippets/self-signed.conf /etc/nginx/snippets/
-ADD ./config/snippets/ssl-params.conf /etc/nginx/snippets/
+#ADD ./config/snippets/self-signed.conf /etc/nginx/snippets/
+#ADD ./config/snippets/ssl-params.conf /etc/nginx/snippets/
 
 # "The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime"
 # https://docs.docker.com/engine/reference/builder/#expose

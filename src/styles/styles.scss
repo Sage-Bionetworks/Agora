@@ -19,6 +19,8 @@
 @import "../assets/css/common/viewport-workaround";
 @import "../assets/css/common/global";
 @import "../assets/css/common/components";
+// 4. Sanitizer library to fix things
+@import "~sanitize.css";
 
 *::after,
 *::before {
@@ -38,10 +40,6 @@ html, body{
     width: 100%;
     min-width: 367px;
     font-family: Lato;
-}
-
-html {
-    overflow-y: hidden;
 }
 
 .wrapper {
@@ -209,7 +207,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 9%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('small') {
         padding-top: 2em;
@@ -217,7 +215,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 9%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('medium') {
         padding-top: 2em;
@@ -225,7 +223,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 15%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('large') {
         padding-top: 2em;
@@ -233,7 +231,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 21%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
@@ -241,7 +239,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 27.7%;
         color: #000000;
-        background-color: #ffffff;
+       //background-color: #ffffff;
     }
 }
 
@@ -289,16 +287,9 @@ p-dialog {
     }
 }
 
-.coming-soon {
-    text-align-last: center;
-    margin-bottom: auto;
-    margin-top: auto;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-    color: #1A1C29;
+.section-hero {
+    background-image: url('/assets/img/hero_bg.jpg');
+    background-size: cover;
 }
 
 .beta-underline {
@@ -306,21 +297,23 @@ p-dialog {
     cursor: pointer;
 }
 
-.back-home-wrapper {
+.beta-wrapper {
     width: 100%;
-    height: 63px;
+    min-height: 63px;
     margin-right: 0px;
     margin-left: 0px;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
 }
 
-.back-home-row {
+.beta-row {
     width: 100%;
     height: 100%;
     margin-right: 0px;
     margin-left: 0px;
+    min-height: 63px;
     background: #73C8CC;
     position: relative;
+    padding-top: 1%;
+    padding-bottom: 1%;
 
     i {
         top: 25%;

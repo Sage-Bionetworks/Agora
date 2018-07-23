@@ -1,15 +1,14 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.nomlist-intro {
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-}
-
 .nomlist-list {
     margin-top: -0.1em;
+    background-color: transparent !important;
+    background-size: contain !important;
 
     .ui-table-caption {
-        background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
+        background-color: transparent;
+        background: none;
         border: none;
         padding-bottom: 4%;
         position: relative;
@@ -107,7 +106,7 @@
             font-weight: bold;
             line-height: 40px;
             font-size: 18px;
-            color: #0D1C38;
+            color: #0D1C38 !important;
         }
 
         @include respond-to('ex-small') {
@@ -204,7 +203,7 @@
                 font-size: 18px;
             }
 
-            color: #1A1C29;
+            color: #1A1C29 !important;
             height: 40px;
         }
         @include respond-to('ex-small') {

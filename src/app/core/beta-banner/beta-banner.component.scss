@@ -1,3 +1,6 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .beta-button {
     background: #FFFFFF !important;
     border-radius: 100px !important;
@@ -34,4 +37,16 @@ p-button {
     font-weight: normal;
     line-height: normal;
     font-size: 18px;
+}
+
+.beta-coming-soon {
+    margin-bottom: auto;
+    margin-top: auto;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 33px;
+    font-size: 18px;
+    color: #1A1C29;
+    text-align-last: center;
 }
