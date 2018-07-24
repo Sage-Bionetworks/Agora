@@ -1,13 +1,13 @@
 <div *ngIf="dataLoaded">
     <div class="section-thin section-hero overview-header">
         <div class="row no-gutters">
-            <div *ngIf="geneInfo" class="col-md-7 col-sm-7 col-6 info-header">
+            <div *ngIf="geneInfo" class="col-md-5 col-sm-12 col-12 info-header">
                 <h1>{{gene.hgnc_symbol}}</h1>
                 <p>
                     {{geneInfo.name}}
                 </p>
             </div>
-            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-5 col-sm-5 col-6">
+            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
                 <button class="btn nom-button"
                     (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
                     <i class="fa fa-star fa-lg"></i>

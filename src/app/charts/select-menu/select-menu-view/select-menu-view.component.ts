@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
 
 import {
-    ActivatedRoute
+    ActivatedRoute, Router
 } from '@angular/router';
 
 import { ChartService } from '../../services';
@@ -36,6 +36,7 @@ export class SelectMenuViewComponent implements OnInit {
     menuSelection: any;
 
     constructor(
+        private router: Router,
         private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,
@@ -70,6 +71,50 @@ export class SelectMenuViewComponent implements OnInit {
                 if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }
                 self.isDisabled = (filter) ? false : true;
             });
+
+        this.chart.filterHandler((dimension, filters) => {
+            if (filters.length === 0) {
+                // The empty case (no filtering)
+                dimension.filter(null);
+            } else if (filters.length === 1 && !filters[0].isFiltered) {
+                // Single value and not a function-based filter
+                // Before filters are applied, update the gene
+                if (self.label === 'select-tissue') {
+                    self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                        .slice().find((g) => {
+                            return g.tissue === filters[0] &&
+                                g.model === self.geneService.getCurrentModel();
+                        })
+                    );
+                }
+                if (self.label === 'select-model') {
+                    self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                        .slice().find((g) => {
+                            return g.model === filters[0] &&
+                                g.tissue === self.geneService.getCurrentTissue();
+                        })
+                    );
+                }
+
+                dimension.filterExact(filters[0]);
+            } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
+                // Single range-based filter
+                dimension.filterRange(filters[0]);
+            } else {
+                // An array of values, or an array of filter objects
+                dimension.filterFunction((d) => {
+                    filters.forEach((filter) => {
+                        if (filter.isFiltered && filter.isFiltered(d)) {
+                            return true;
+                        } else if (filter <= d && filter >= d) {
+                            return true;
+                        }
+                    });
+                    return false;
+                });
+            }
+            return filters;
+        });
         this.chart.promptText(this.promptText);
 
         this.chart.on('postRender', function(chart) {

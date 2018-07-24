@@ -12,7 +12,7 @@
 
 <div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <div class="row">
-        <div class="col-md-8 col-sm-8 col-12 bplot-l-col">
+        <div class="col-md-8 col-sm-12 col-12 bplot-l-col">
             <h2 class="de-header">
                 Differential Expression of Selected Gene within Selected Tissue
             </h2>
@@ -51,50 +51,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-4 col-12 bplot-col">
+        <div class="col-md-4 col-sm-12 col-12 bplot-col">
             <!-- BoxPlots component-->
             <ng-template *ngFor="let tissue of tissues; let i = index" #t>
             </ng-template>
         </div>
     </div>
 </div>
-
-<!--<div class="section-thin rna-seq-sel" *ngIf="dataLoaded">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12">
-            <h2>
-                Filter by Tissue and Model
-            </h2>
-            <div class="section-thin st-desc no-side-padding">
-                <p class="black-paragraph">
-                    To view differential expression results, select a tissue and statistical model.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-12">
-            <p-multiSelect
-                [options]="tissues"
-                [(ngModel)]="selectedTissues"
-                [showToggleAll]="false"
-                [showHeader]="false"
-                [panelStyle]="{minWidth:'12em'}"
-                [defaultLabel]="'Choose tissues...'"
-                [dropdownIcon]="getDropdownIcon()"
-                (onPanelShow)="openDropdown()"
-                (onPanelHide)="closeDropdown()"
-                (onChange)="toggleTissue($event)">
-            </p-multiSelect>
-        </div>
-        <div class="col-md-6 col-sm-6 col-12">
-            <select-menu [promptText]="'All'"
-                [label]="'select-model'"
-                [defaultValue]="getModel(1)">
-            </select-menu>
-        </div>
-    </div>
-</div>-->
 
 <div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>

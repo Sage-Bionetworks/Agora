@@ -45,33 +45,99 @@
             color: #1A1C29;
         }
     }
+
+    .nom-button-col {
+        @include respond-to('ex-small') {
+            margin-top: 20px;
+        }
+        @include respond-to('small') {
+            margin-top: 20px;
+        }
+        @include respond-to('medium') {
+            text-align: right;
+        }
+        @include respond-to('large') {
+            text-align: right;
+        }
+        @include respond-to('ex-large') {
+            text-align: right;
+        }
+    }
 }
 
 .nom-button {
     background: #F89C55 !important;
     border: 0px !important;
     border-radius: 100px;
-    height: 68px;
-    width: 100%;
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
     line-height: normal;
 
     @include respond-to('ex-small') {
-        font-size: 18px;
+        height: 48px;
+        width: 272px;
+        font-size: 20px;
+
+        .fa-star {
+            font-size: 31px;
+        }
+
+        .fa-angle-right {
+            font-size: 31px;
+        }
     }
     @include respond-to('small') {
-        font-size: 21px;
+        height: 48px;
+        width: 272px;
+        font-size: 20px;
+
+        .fa-star {
+            font-size: 31px;
+        }
+
+        .fa-angle-right {
+            font-size: 31px;
+        }
     }
     @include respond-to('medium') {
+        height: 68px;
+        width: 366px;
         font-size: 24px;
+
+        .fa-star {
+            font-size: 43px;
+        }
+
+        .fa-angle-right {
+            font-size: 43px;
+        }
     }
     @include respond-to('large') {
+        height: 68px;
+        width: 366px;
         font-size: 24px;
+
+        .fa-star {
+            font-size: 43px;
+        }
+
+        .fa-angle-right {
+            font-size: 43px;
+        }
     }
     @include respond-to('ex-large') {
+        height: 68px;
+        width: 366px;
         font-size: 24px;
+
+        .fa-star {
+            font-size: 43px;
+        }
+
+        .fa-angle-right {
+            font-size: 43px;
+        }
     }
 
     color: #0D1C38 !important;
@@ -79,8 +145,14 @@
     cursor: pointer;
 
     span {
-        margin-left: 2%;
-        margin-right: 2%;
+        margin-left: 4%;
+        margin-right: 4%;
+        vertical-align: middle;
+    }
+
+    .fa-angle-right {
+        -webkit-text-stroke: 1.25px;
+        vertical-align: -12%;
     }
 }
 

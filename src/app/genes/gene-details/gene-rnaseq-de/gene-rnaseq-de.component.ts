@@ -241,6 +241,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }, 100);
             }) as ComponentRef<BoxPlotsViewComponent>;
         this.componentRefs[index].instance.tissue = this.tissues[index].value;
+        this.componentRefs[index].instance.model = this.geneService.getCurrentModel();
         this.componentRefs[index].instance.label1 = label1;
         this.componentRefs[index].instance.info1 = info1;
     }

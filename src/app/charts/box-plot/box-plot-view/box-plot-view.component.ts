@@ -70,7 +70,7 @@ export class BoxPlotViewComponent implements OnInit {
 
         this.chart
             .dimension(this.dim)
-            .elasticY(true)
+            .yAxisLabel('log 2 fold change', 20)
             .group(this.group)
             .renderTitle(true)
             .showOutliers(false)
@@ -80,7 +80,8 @@ export class BoxPlotViewComponent implements OnInit {
             .on('filtered', (chart) => {
                 this.renderRedCircle(chart, true);
             })
-            .tickFormat(() => '');
+            .tickFormat(() => '')
+            .elasticY(true);
 
         if (this.info.attr !== 'fc') { this.chart.yAxis().tickFormat(d3.format('.1e')); }
         this.chart.xAxis().tickFormat('');
@@ -143,15 +144,13 @@ export class BoxPlotViewComponent implements OnInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.y().domain()[1] - chart.y().domain()[0]);
         const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
-        console.log(svgEl);
         const mult = (svgEl.getBBox().height - 10) / yDomainLength;
+        // Update the component gene copy everytime
+        self.currentGene = self.geneService.getCurrentGene();
         const val = self.currentGene[self.info.attr];
         let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
         logVal = +this.decimalPipe.transform(logVal, '1.3');
         const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
-        console.log('pos');
-        console.log(lineCenter.attr('x1'));
-        console.log(Math.abs(chart.y().domain()[1] - logVal) * mult);
 
         if (!translate) {
             const phrase = self.currentGene.hgnc_symbol + ' is ' + significanceText +
@@ -182,9 +181,9 @@ export class BoxPlotViewComponent implements OnInit {
                         .style('opacity', 0);
                 });
         } else {
-            chart.selectAll('circle')
-                .style('cx', lineCenter.attr('x1'))
-                .style('cy', Math.abs(chart.y().domain()[1] - logVal) * mult);
+            chart.select('circle')
+                .attr('cx', lineCenter.attr('x1'))
+                .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult);
         }
     }
 

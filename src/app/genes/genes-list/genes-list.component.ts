@@ -48,7 +48,6 @@ export class GenesListComponent implements OnInit {
 
         this.dataService.getTableData().subscribe((data) => {
             this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
-            console.log(this.datasource);
             this.genesInfo = this.datasource;
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
 
@@ -99,7 +98,6 @@ export class GenesListComponent implements OnInit {
     }
 
     customSort(event: SortEvent) {
-        console.log(event);
         event.data.sort((data1, data2) => {
             const value1 = (Array.isArray(data1[event.field])) ?
                 data1[event.field].map((nt) => nt.team).join(', ') :

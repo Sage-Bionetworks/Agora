@@ -31,7 +31,30 @@
 }
 
 .rna-seq-bplot {
-    padding-right: 0px;
+    @include respond-to('medium') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
+    }
+    @include respond-to('large') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
+    }
+    @include respond-to('ex-large') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
+    }
 
     p {
         text-align: justify;
@@ -272,28 +295,10 @@
         }
     }
 
-    .bplot-l-col {
-        padding-right: 7%;
-    }
+
 
     .bplot-col {
         background: rgba(245, 245, 245, 0.5);
-
-        @include respond-to('ex-small') {
-            padding-right: 15px;
-        }
-        @include respond-to('small') {
-            padding-right: 0px;
-        }
-        @include respond-to('medium') {
-            padding-right: 0px;
-        }
-        @include respond-to('large') {
-            padding-right: 0px;
-        }
-        @include respond-to('ex-large') {
-            padding-right: 0px;
-        }
     }
 }
 

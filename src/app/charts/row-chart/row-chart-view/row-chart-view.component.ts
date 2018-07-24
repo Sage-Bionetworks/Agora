@@ -29,15 +29,15 @@ export class RowChartViewComponent implements OnInit {
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() dim: any;
     @Input() group: any;
+    @Input() paddingLR: number = 15;
+    @Input() paddingUD: number = 0;
 
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
 
     changedLabels: boolean = false;
     display: boolean = false;
-    colors: string[] = [
-        '#7692D9', '#699FD2', '#5CADCA', '#42C7BB', '#9FC995', '#CECA82', '#FCCB6F'
-    ];
+    colors: string[] = ['#5171C0'];
 
     private resizeTimer;
 
@@ -253,7 +253,7 @@ export class RowChartViewComponent implements OnInit {
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
-                return self.colors[i];
+                return self.colors[0];
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
@@ -315,10 +315,12 @@ export class RowChartViewComponent implements OnInit {
         const self = this;
 
         clearTimeout(this.resizeTimer);
-        this.resizeTimer = setTimeout(function() {
+        this.resizeTimer = setTimeout(() => {
             self.chart
-                .width(self.rowChart.nativeElement.parentElement.offsetWidth)
-                .height(self.rowChart.nativeElement.offsetHeight);
+                .width(
+                    self.rowChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
+                )
+                .height(self.rowChart.nativeElement.offsetHeight  - (self.paddingUD * 2));
 
             if (self.chart.rescale) {
                 self.chart.rescale();

@@ -50,7 +50,6 @@ export class TeamsPageComponent implements OnInit {
                 this.gene = data['item'];
                 this.geneInfo = data['info'];
                 this.ntInfoArray = this.geneInfo.nominatedtarget;
-                console.log(this.ntInfoArray);
             }, (error) => {
                 console.log('Error loading gene: ' + error.message);
             }, () => {
@@ -72,7 +71,6 @@ export class TeamsPageComponent implements OnInit {
                 const index = ntTeamsArray.indexOf(item.team);
                 this.teams[index] = item;
             });
-            console.log(this.teams);
 
             this.geneService.setCurrentTeams(this.teams);
         }, (error) => {

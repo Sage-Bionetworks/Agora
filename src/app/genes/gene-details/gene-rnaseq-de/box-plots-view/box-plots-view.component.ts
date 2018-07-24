@@ -8,6 +8,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 })
 export class BoxPlotsViewComponent {
     @Input() tissue: string = '';
+    @Input() model: string = '';
     @Input() label1: string = '';
     @Input() label2: string = '';
     @Input() info1: any;
