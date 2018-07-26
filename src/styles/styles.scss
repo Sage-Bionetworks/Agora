@@ -29,10 +29,6 @@
     box-sizing: border-box;
 }
 
-*:focus {
-    outline: none;
-}
-
 // 5. Custom Global Styles
 html {
     position: relative;
@@ -186,7 +182,12 @@ p-dialog {
 }
 
 .vertical-align {
-    display: flex;
+    display: block;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
+    display: -webkit-box;  /* Safari 3.1 - 6, Chrome < 21 (2009 Spec), UCBrowser Android */
+    display: -moz-box;     /* Firefox 2 - 27 (2009 Spec), UCMini Android */
+    display: -ms-flexbox;  /* IE10 (2012 Syntax) */
+    display: -webkit-flex; /* Safari 6.1 - 8, Android < 4.4, BB < 10, Chrome 21 - 28 */
+    display: flex;         /* Edge 12+, Firefox 28+, Blink, Safari 9+, Opera Mini 8+ */
     align-items: center;
 }
 
@@ -199,6 +200,8 @@ p-dialog {
 }
 
 .row-shadow {
+    -moz-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -332,6 +335,9 @@ p-dialog {
 .beta-button {
     background: #FFFFFF !important;
     border-radius: 100px !important;
+    -moz-border-radius: 100px !important;
+    -webkit-border-radius: 100px !important;
+    -o-border-radius: 100px !important;
     font-family: Lato !important;
     font-style: normal !important;
     font-weight: bold !important;

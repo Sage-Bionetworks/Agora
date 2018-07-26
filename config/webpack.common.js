@@ -18,6 +18,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const buildUtils = require('./build-utils');
 
@@ -292,6 +293,14 @@ module.exports = function (options) {
 
       new ProvidePlugin({
         'dc': 'dc'
+      }),
+
+      new StyleLintPlugin({
+        configFile: '.stylelintrc',
+        context: 'src',
+        files: '**/*.s?(a|c)ss',
+        failOnError: false,
+        quiet: false
       })
     ]],
 
