@@ -5,7 +5,9 @@
         <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
     </h2>
     <p class="black-paragraph">
-        This plot depicts the median expression of the selected gene across tissues (brain regions) in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be anything greater than five CPM (referenced by red line in the plot).
+        This plot depicts the median expression of the selected gene across tissues (brain regions)
+        in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful
+        expression is considered to be anything greater than five CPM (referenced by red line in the plot).
     </p>
     <median-chart [geneinfo]="geneInfo"></median-chart>
 </div>
@@ -17,9 +19,11 @@
                 Differential Expression of Selected Gene within Selected Tissue
             </h2>
             <p class="black-paragraph de-paragraph">
-                After selecting a tissue and statistical model, you will be able to see whether the selected gene is
-                differentially expressed between AD cases and controls The box plot depicts how the differential expression
-                of the selected gene of interest (red dot) compares with expression of other genes in the tissue.
+                After selecting a tissue and statistical model, you will be able to see whether the
+                selected gene is differentially expressed between AD cases and controls The box
+                plot depicts how the differential expression of the selected gene of interest
+                (red dot) compares with expression of other genes in the tissue. Summary statistics
+                can be viewed by hovering over the red dot.
             </p>
             <h2 class="filters-header">
                 Filter by Tissue and Model
