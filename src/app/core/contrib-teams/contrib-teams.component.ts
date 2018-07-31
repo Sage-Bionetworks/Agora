@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../models';
 
@@ -29,7 +29,6 @@ export class ContribTeamsPageComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private geneService: GeneService,
         private dataService: DataService,
         private titleCase: TitleCasePipe,
@@ -65,11 +64,11 @@ export class ContribTeamsPageComponent implements OnInit {
                     this.memberImages[index].name = m.name;
                     if (data) {
                         this.memberImages[index].imgUrl =
-                            this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(
+                            this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
                                 new Blob([data], {
                                     type: 'image/jpg'
                                 })
-                            ));
+                            )}`);
                     }
                 }, (error) => {
                     console.log('Error loading member image: ' + error.message);
@@ -83,11 +82,15 @@ export class ContribTeamsPageComponent implements OnInit {
         });
     }
 
-    getMemberImg(name: string) {
+    getMemberImg(name: string): SafeStyle {
         const memberImg = this.memberImages.find((mi) => {
             return mi.name === name;
         });
-        return (memberImg && memberImg.imgUrl) ? memberImg.imgUrl : this.placeholderUrl;
+        if (memberImg && memberImg.imgUrl) {
+            return memberImg.imgUrl;
+        } else {
+            return this.sanitizer.bypassSecurityTrustStyle(`url(${this.placeholderUrl})`);
+        }
     }
 
     toTitleCase(index: number, field: string): string {

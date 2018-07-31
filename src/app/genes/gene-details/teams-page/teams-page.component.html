@@ -37,14 +37,9 @@
         <p class="black-paragraph">
             {{ntInfoArray[i].data_used_to_support_target_selection}}
         </p>
-        <!--<div class="website-row">
-            <a>
-                Website link
-            </a>
-        </div>-->
         <div class="row members-row">
             <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
-                <img class="member-img" [src]="getMemberImg(member.name)">
+                <div class="member-img" [style.background-image]="getMemberImg(member.name)"></div>
                 <h3>{{member.name}}</h3>
             </div>
         </div>

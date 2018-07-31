@@ -4,7 +4,7 @@
   ],
   "rules": {
     "plugin/no-unsupported-browser-features": [true, {
-      "browsers": ["> 1%", "Last 2 versions", "not op_mini all"],
+      "browsers": ["> 1%", "Last 2 versions"],
       "ignore": ["rem", "border-radius", "css-boxshadow", "background-img-opts"],
       "severity": "warning"
     }]

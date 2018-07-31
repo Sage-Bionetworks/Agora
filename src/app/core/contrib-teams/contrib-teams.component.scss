@@ -53,21 +53,6 @@
     }
 }
 
-.website-row {
-    a {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        font-size: 18px;
-        text-decoration: underline;
-        color: #5BB0B5;
-    }
-
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
 .members-row {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -82,5 +67,8 @@
     width: 86px;
     height: 86px;
     border-radius: 50%;
-    object-fit: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    display: inline-table;
 }

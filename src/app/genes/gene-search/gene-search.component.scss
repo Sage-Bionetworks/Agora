@@ -115,10 +115,8 @@
     width: 100%;
     list-style: none;
     border-top: none;
-    /*so things don't jump around*/
+    // So things don't jump around
     position: absolute;
-    /*for a better calculation use JS.  I'm calculating half of the body height - half the height of the input - li padding*/
-    //max-height: calc(50% - 15px);
     overflow-y: auto;
     background: #fff;
     -webkit-padding-start: 0px;

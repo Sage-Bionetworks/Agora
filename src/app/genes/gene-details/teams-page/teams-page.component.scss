@@ -2,8 +2,6 @@
 @import "../../../../assets/css/helpers/mixins";
 
 .overview-header {
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-
     p {
         text-align: justify;
         text-align-last: left;
@@ -55,21 +53,6 @@
     }
 }
 
-.website-row {
-    a {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        font-size: 18px;
-        text-decoration-line: underline;
-        color: #5BB0B5;
-    }
-
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
 .members-row {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -84,5 +67,8 @@
     width: 86px;
     height: 86px;
     border-radius: 50%;
-    object-fit: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    display: inline-table;
 }
