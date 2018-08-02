@@ -29,6 +29,10 @@
     box-sizing: border-box;
 }
 
+:focus {
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
 // 5. Custom Global Styles
 html {
     position: relative;
@@ -330,22 +334,6 @@ p-dialog {
     i:hover {
         cursor: pointer !important;
     }
-}
-
-.beta-button {
-    background: #FFFFFF !important;
-    border-radius: 100px !important;
-    -moz-border-radius: 100px !important;
-    -webkit-border-radius: 100px !important;
-    -o-border-radius: 100px !important;
-    font-family: Lato !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    line-height: normal !important;
-    font-size: 18px !important;
-    color: #73C8CC !important;
-    border: 1px solid #73C8CC !important;
-    margin-right: 10px !important;
 }
 
 [hidden] { display: none !important; }

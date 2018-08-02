@@ -6,9 +6,18 @@
         margin-bottom: 60px;
     }
 
-    .not-listed {
+    .not-listed-col {
         text-align-last: right;
+        margin-top: 6px;
+        margin-bottom: 9px;
+    }
+
+    .not-listed {
         font-style: italic;
+        font-family: Lato;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
         text-decoration: underline;
         cursor: pointer;
     }

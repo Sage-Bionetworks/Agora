@@ -78,7 +78,6 @@
     }
 
     width: 100%;
-    outline: none !important;
     background: #FFFFFF;
     -moz-box-shadow: inset 0 0 4px #C7C5C5;
     -webkit-box-shadow: inset 0 0 4px #C7C5C5;
@@ -92,6 +91,10 @@
     border-color: rgba(197,199,196,0.5);
     border: 2px;
 
+    // Opera Mini workaround
+    outline-offset:-2px;
+    outline: none;
+
     ::-moz-placeholder,
     ::-ms-input-placeholder,
     ::-webkit-input-placeholder {
@@ -101,15 +104,19 @@
 }
 
 #keyword:focus {
-    outline: none !important;
-    box-shadow: 0px 0px 4px #5BB0B5;
+    box-shadow: 0px 0px 4px 2px #5BB0B5;
     border-radius: 6px;
-    border: 2px;
+
+    // Opera Mini workaround
+    outline-offset:-2px;
+    outline: none;
 }
 
 .filter-select {
     font-size: 0.9em;
-    top: calc(50% + 23px);
+    top: 95%;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     left: 0px;
     z-index: 10000;
     width: 100%;

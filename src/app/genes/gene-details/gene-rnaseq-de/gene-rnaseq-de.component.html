@@ -1,4 +1,4 @@
-<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded" tabindex="0">
 <h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
@@ -12,7 +12,7 @@
     <median-chart [geneinfo]="geneInfo"></median-chart>
 </div>
 
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded" tabindex="0">
     <div class="row">
         <div class="col-md-8 col-sm-12 col-12 bplot-l-col">
             <h2 class="de-header">
@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded" tabindex="0">
     <h2>
         Consistency of Change in Expression
     </h2>

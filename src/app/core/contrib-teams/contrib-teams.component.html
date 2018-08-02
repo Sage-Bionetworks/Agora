@@ -1,5 +1,5 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin section-hero overview-header">
+    <div class="section-thin section-hero overview-header" tabindex="0">
         <div class="row no-gutters">
             <div class="col-md-7">
                 <h1>Contributing Teams</h1>
@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc">
+    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc" tabindex="0">
         <h2>
             {{team.team}}
         </h2>
