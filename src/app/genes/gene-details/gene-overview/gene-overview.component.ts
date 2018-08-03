@@ -31,6 +31,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     displayActDia: boolean = false;
     currentGeneData = [];
     subscription: any;
+    iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
 
     constructor(
         private router: Router,

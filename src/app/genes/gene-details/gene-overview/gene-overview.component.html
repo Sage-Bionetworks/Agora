@@ -11,7 +11,7 @@
                 <button class="btn nom-button"
                     (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
                     <i class="fa fa-star fa-lg"></i>
-                    <span>AMP-AD Nominated</span>
+                    <span  [ngClass]="{'fixIOS': iOS}">AMP-AD Nominated</span>
                     <i class="fa fa-angle-right fa-lg"></i>
                 </button>
             </div>

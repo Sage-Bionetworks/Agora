@@ -133,6 +133,9 @@
         margin-left: 4%;
         margin-right: 4%;
         vertical-align: middle;
+        &.fixIOS {
+            vertical-align: top;
+        }
     }
 
     .fa-angle-right {
