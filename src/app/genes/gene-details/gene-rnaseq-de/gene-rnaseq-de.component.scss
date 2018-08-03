@@ -239,7 +239,10 @@
             left: 21.5%;
             top: 15%;
             margin: 0 auto;
-            transform: scale(1.2,1);
+            -moz-transform: scale(1.2,1); /* Firefox */
+            -o-transform: scale(1.2,1); /* Opera */
+            -webkit-transform: scale(1.2,1); /* Safari And Chrome */
+            transform: scale(1.2,1); /* Standard Property */
         }
 
         .ui-multiselect-trigger {
@@ -251,20 +254,11 @@
                 width: 12px;
             }
 
-            .pi-caret-down {
-                transform: scale(2.4, 2.4);
-            }
-
-            .pi-caret-up {
-                transform: scale(2.4, 2.4);
-            }
-
-            .fa-caret-down {
-                transform: scale(2.4, 2.4);
-            }
-
-            .fa-caret-up {
-                transform: scale(2.4, 2.4);
+            .pi-caret-down, .pi-caret-up, .fa-caret-down, .fa-caret-up {
+                -moz-transform: scale(2.4, 2.4); /* Firefox */
+                -o-transform: scale(2.4, 2.4); /* Opera */
+                -webkit-transform: scale(2.4, 2.4); /* Safari And Chrome */
+                transform: scale(2.4, 2.4); /* Standard Property */
             }
 
             .ui-clickable {

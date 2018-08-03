@@ -68,9 +68,7 @@
     line-height: normal;
     white-space: nowrap;
     padding: 10px;
-    .fa-lg {
-        line-height: 0px;
-    }
+
     @include respond-to('ex-small') {
         height: 48px;
         width: 272px;
@@ -130,10 +128,13 @@
     color: #0D1C38 !important;
     vertical-align: middle;
     cursor: pointer;
+
     span {
         margin-left: 4%;
         margin-right: 4%;
+        vertical-align: middle;
     }
+
     .fa-angle-right {
         -webkit-text-stroke: 1.25px;
         vertical-align: -12%;
@@ -258,7 +259,10 @@
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
     .fa-angle-right:before {
-        transform: scale(1.6, 1);
+        -moz-transform: scale(1.6,1); /* Firefox */
+        -o-transform: scale(1.6,1); /* Opera */
+        -webkit-transform: scale(1.6,1); /* Safari And Chrome */
+        transform: scale(1.6,1); /* Standard Property */
         color: #FCCB6F;
     }
     .ui-panel.ui-widget .ui-panel-titlebar.ui-corner-all {

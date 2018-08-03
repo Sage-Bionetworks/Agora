@@ -9,11 +9,6 @@
 .filter-wrapper,
 .keyword-wrapper {
     display: block;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
-    display: -webkit-box;  /* Safari 3.1 - 6, Chrome < 21 (2009 Spec), UCBrowser Android */
-    display: -moz-box;     /* Firefox 2 - 27 (2009 Spec), UCMini Android */
-    display: -ms-flexbox;  /* IE10 (2012 Syntax) */
-    display: -webkit-flex; /* Safari 6.1 - 8, Android < 4.4, BB < 10, Chrome 21 - 28 */
-    display: flex;         /* Edge 12+, Firefox 28+, Blink, Safari 9+, Opera Mini 8+ */
     justify-content: center;
     text-align: left;
 }
