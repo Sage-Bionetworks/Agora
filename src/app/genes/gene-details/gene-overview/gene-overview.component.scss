@@ -1,5 +1,6 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
+
 .info-header {
     padding-right: 5% !important;
 }
@@ -191,7 +192,7 @@
     border-radius: 100px;
     height: 52px;
     @include respond-to('ex-small') {
-        width: 70%;
+        width: 75%;
     }
     @include respond-to('small') {
         width: 55%;

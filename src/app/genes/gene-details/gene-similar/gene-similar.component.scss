@@ -1,3 +1,64 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
+.info-header {
+    padding-right: 5% !important;
+}
+
+.overview-header {
+    p {
+        text-align-last: left;
+        text-align: left;
+    }
+    .fa-star::before {
+        color: #FACFAF;
+    }
+    .row {
+        align-items: center;
+    }
+    p-button {
+        @include respond-to('ex-small') {
+            width: 70%;
+        }
+        width: 100%;
+        height: 100%;
+        button {
+            width: 100%;
+            height: 100%;
+        }
+        span {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            @include respond-to('ex-small') {
+                font-size: 18px;
+            }
+            font-size: 20px;
+            text-align: center;
+            letter-spacing: 1px;
+            color: #1A1C29;
+        }
+    }
+    .nom-button-col {
+        @include respond-to('ex-small') {
+            margin-top: 20px;
+        }
+        @include respond-to('small') {
+            margin-top: 20px;
+        }
+        @include respond-to('medium') {
+            text-align: right;
+        }
+        @include respond-to('large') {
+            text-align: right;
+        }
+        @include respond-to('ex-large') {
+            text-align: right;
+        }
+    }
+}
+
 .pathbox{
     width: 100%;
     .genes {
@@ -15,11 +76,6 @@
     }
 }
 .linkstable{
-    table,
-    th,
-    td {
-      border: 1px solid grey;
-    }
     table {
       border-collapse: collapse;
     }

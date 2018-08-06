@@ -12,6 +12,7 @@ export class GeneService {
     currentTeams: TeamInfo[];
     currentTissue: string;
     currentModel: string;
+    defaultTissue: string = 'DLPFC';
     models: string[] = [];
     geneModels: string[] = [];
     tissues: string[] = [];
@@ -74,6 +75,14 @@ export class GeneService {
 
     getCurrentModel() {
         return this.currentModel;
+    }
+
+    getDefaultTissue(): string {
+        return this.defaultTissue;
+    }
+
+    setDefaultTissue(tissue: string) {
+        this.defaultTissue = tissue;
     }
 
     getTissues(): string[] {

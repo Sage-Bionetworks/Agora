@@ -56,6 +56,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.geneInfo = this.geneService.getCurrentInfo();
         this.id = this.route.snapshot.paramMap.get('id');
 
+        // ALways reset the models and tissues
+        this.geneService.setGeneModels([]);
+        this.geneService.setGeneTissues([]);
+
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
