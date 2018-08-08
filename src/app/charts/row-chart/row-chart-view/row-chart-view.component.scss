@@ -48,6 +48,16 @@ g.textGroup text {
         fill-opacity: 1 !important;
     }
 
+    .x-axis-label {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 16px;
+        text-align: center;
+        color: #6D7078;
+    }
+
     min-height: 450px;
     max-height: 450px;
 }

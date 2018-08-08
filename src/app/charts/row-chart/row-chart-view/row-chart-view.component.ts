@@ -146,7 +146,7 @@ export class RowChartViewComponent implements OnInit {
                 self.insertLinesInRows(chart);
 
                 // Add a label to the x axis
-                self.addXLabel(this.chart, 'log fold change');
+                self.addXLabel(this.chart, 'LOG FOLD CHANGE');
             } else {
                 // This part will be called on redraw after filtering, so at this point
                 // we just need to move the lines to the correct position again. First

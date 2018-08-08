@@ -27,17 +27,13 @@
     <h2>
         Nominated Targets
     </h2>
-    <p class="black-paragraph">
-        <span tabindex="-1">
-            Explore the current list of AMP-AD nominated targets.
-        </span>
+    <h3 class="nom-targets-heading" tabindex="-1">
+        Explore the current list of AMP-AD nominated targets.
         <span class="beta-underline" (click)="goToRoute('/about')" tabindex="0">
             Learn more
         </span>
-        <span  tabindex="-1">
-            about how these early AD signals were found.
-        </span>
-    </p>
+        about how these early AD signals were found.
+    </h3>
     <div class="row list-control-row">
         <p-button (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }})"
             label="View all nominated targets"

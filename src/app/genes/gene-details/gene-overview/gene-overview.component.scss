@@ -6,10 +6,6 @@
 }
 
 .overview-header {
-    p {
-        text-align-last: left;
-        text-align: left;
-    }
     .fa-star::before {
         color: #FACFAF;
     }
@@ -25,19 +21,6 @@
         button {
             width: 100%;
             height: 100%;
-        }
-        span {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: bold;
-            line-height: normal;
-            @include respond-to('ex-small') {
-                font-size: 18px;
-            }
-            font-size: 20px;
-            text-align: center;
-            letter-spacing: 1px;
-            color: #1A1C29;
         }
     }
     .nom-button-col {
@@ -70,10 +53,40 @@
     white-space: nowrap;
     padding: 10px;
 
+    span {
+        margin-left: 4%;
+        margin-right: 4%;
+        vertical-align: middle;
+        &.fixIOS {
+            vertical-align: top;
+        }
+
+        @include respond-to('ex-small') {
+            font-size: 20px;
+        }
+        @include respond-to('small') {
+            font-size: 20px;
+        }
+        @include respond-to('medium') {
+            font-size: 24px;
+        }
+        @include respond-to('large') {
+            font-size: 24px;
+        }
+        @include respond-to('ex-large') {
+            font-size: 24px;
+        }
+
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+
+        color: #0D1C38;
+    }
+
     @include respond-to('ex-small') {
         height: 48px;
-        width: 272px;
-        font-size: 20px;
+        width: 292px;
         .fa-star {
             font-size: 31px;
         }
@@ -83,8 +96,7 @@
     }
     @include respond-to('small') {
         height: 48px;
-        width: 272px;
-        font-size: 20px;
+        width: 292px;
         .fa-star {
             font-size: 31px;
         }
@@ -95,7 +107,6 @@
     @include respond-to('medium') {
         height: 68px;
         width: 366px;
-        font-size: 24px;
         .fa-star {
             font-size: 43px;
         }
@@ -106,7 +117,6 @@
     @include respond-to('large') {
         height: 68px;
         width: 366px;
-        font-size: 24px;
         .fa-star {
             font-size: 43px;
         }
@@ -117,7 +127,6 @@
     @include respond-to('ex-large') {
         height: 68px;
         width: 366px;
-        font-size: 24px;
         .fa-star {
             font-size: 43px;
         }
@@ -129,15 +138,6 @@
     color: #0D1C38 !important;
     vertical-align: middle;
     cursor: pointer;
-
-    span {
-        margin-left: 4%;
-        margin-right: 4%;
-        vertical-align: middle;
-        &.fixIOS {
-            vertical-align: top;
-        }
-    }
 
     .fa-angle-right {
         -webkit-text-stroke: 1.25px;
@@ -192,7 +192,7 @@
     border-radius: 100px;
     height: 52px;
     @include respond-to('ex-small') {
-        width: 75%;
+        width: 85%;
     }
     @include respond-to('small') {
         width: 55%;
@@ -237,10 +237,6 @@
 .overview-desc {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
 }
 .overview-rel {
     padding-bottom: 4em;
@@ -277,6 +273,7 @@
         line-height: normal;
         color: #1A1C29;
         font-size: 24px;
+
         @include respond-to('ex-small') {
             padding-top: 2em;
             padding-left: 3.5%;
@@ -335,17 +332,35 @@
         background-color: white;
         color: #FCCB6F;
     }
+    .ui-panel-titlebar {
+        padding-bottom: 20px !important;
+
+        a > span {
+            color: #FCCB6F;
+            font-size: 41px;
+            -moz-transform: scale(1,0.5); /* Firefox */
+            -o-transform: scale(1,0.5); /* Opera */
+            -webkit-transform: scale(1,0.5); /* Safari And Chrome */
+            transform: scale(1,0.5); /* Standard Property */
+        }
+    }
+    .ui-panel-title {
+        text-align: left;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        color: #1A1C29;
+        font-size: 24px;
+    }
     .druggability-span {
         color: #86C4C7;
         text-decoration: underline;
+        font-size: 18px;
         cursor: pointer;
     }
 }
 .st-desc {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
     .ns-paragraph {
         margin-bottom: 40px;
     }

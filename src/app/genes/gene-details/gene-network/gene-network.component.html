@@ -6,28 +6,31 @@
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2>{{geneInfo.hgnc_symbol}}</h2>
-                <p>{{geneInfo.summary}}</p>
-                <div>AD Genetic Association
-                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}">{{geneInfo.isIGAP?'True':'False'}}</span>
-                </div>
-                <div>Nominated Target
-                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}">
+                <p class="cg-col-p">{{geneInfo.summary}}</p>
+                <h3 class="cg-col-span">
+                    AD Genetic Association
+                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}">{{geneInfo.isIGAP?'True':'False'}}</span>
+                </h3>
+                <h3 class="cg-col-span">
+                    Nominated Target
+                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}">
                         {{geneInfo.nominations?'True':'False'}}
                     </span>
-                </div>
-                <div>Brain eQTL
-                    <span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'>{{geneInfo.haseqtl?'True':'False'}}</span>
-                </div>
+                </h3>
+                <h3 class="cg-col-span">
+                    Brain eQTL
+                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'>{{geneInfo.haseqtl?'True':'False'}}</span>
+                </h3>
             </div>
         </div>
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2 class="br-heading">
+                <h2>
                     Tissue Specificity of Gene Connections
                     <span class="icon-spacing"></span>
                     <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
                 </h2>
-                <span class="info"> 6 of {{selectedGeneData.links.length}} genes</span>
+                <p class="italic-paragraph"> 6 of {{selectedGeneData.links.length}} genes</p>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
                         <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
@@ -52,7 +55,7 @@
         </div>
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-              <h2 class="br-heading">
+              <h2>
                   Similar Genes
                   <span class="icon-spacing"></span>
                   <i class="fa fa-info-circle" (click)="showDialog('displaySimilarGenesDialog')"></i>

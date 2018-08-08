@@ -14,11 +14,6 @@
 }
 
 .rna-seq-me {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     .fa-info-circle:before {
         color: #9DA3B3;
     }
@@ -54,11 +49,6 @@
         margin-top: 2em;
         margin-bottom: 2em;
         padding-right: 15px;
-    }
-
-    p {
-        text-align: justify;
-        text-align-last: left;
     }
 
     .fa-info-circle:before {
@@ -246,10 +236,11 @@
         }
 
         .ui-multiselect-trigger {
-            color: #5BB0B5;
+            color: #5BB0B5 !important;
             width: 32px;
 
             .ui-multiselect-trigger-icon {
+                color: #5BB0B5 !important;
                 top: 0%;
                 width: 12px;
             }
@@ -323,11 +314,6 @@
 }
 
 .rna-seq-fplot {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     .fa-info-circle:before {
         color: #9DA3B3;
     }
@@ -346,11 +332,6 @@
 }
 
 .st-desc {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     padding-top: 0px;
 }
 
