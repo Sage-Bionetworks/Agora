@@ -18,6 +18,28 @@ export interface GeneLink {
     hgnc_symbolB: string;
 }
 
+export interface GeneLinkP {
+    value: number;
+    source: GeneLinkDetail;
+    target: GeneLinkDetail;
+    brainregions: string[];
+    hgnc_symbolA: string;
+    hgnc_symbolB: string;
+}
+
+export interface GeneLinkDetail {
+    brainregions: string[];
+    ensembl_gene_id: string;
+    group: number;
+    hgnc_symbol: string;
+    id: string;
+    index: number;
+    vx: number;
+    vy: number;
+    x: number;
+    y: number;
+}
+
 export interface GeneNetwork {
     nodes: GeneNode[];
     links: GeneLink[];

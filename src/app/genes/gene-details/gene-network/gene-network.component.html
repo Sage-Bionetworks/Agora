@@ -5,7 +5,7 @@
     <div class="col-md-4 col-sm-12 col-12 currentGene">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2>{{geneInfo.hgnc_symbol}}</h2>
+                <h2 (click)="filterNodes()">{{geneInfo.hgnc_symbol}}</h2>
                 <p>{{geneInfo.summary}}</p>
                 <div>AD Genetic Association
                     <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}">{{geneInfo.isIGAP?'True':'False'}}</span>

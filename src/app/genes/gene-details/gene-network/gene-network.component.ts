@@ -21,6 +21,7 @@ export class GeneNetworkComponent implements OnInit {
     displayBRDia: boolean = false;
     displaySimilarGenesDialog: boolean = false;
     networkData: GeneNetwork;
+    filter: boolean;
     selectedGeneData: GeneNetwork = {
         nodes: [],
         links: [],
@@ -75,6 +76,25 @@ export class GeneNetworkComponent implements OnInit {
                 });
             });
         });
+    }
+
+    filterNodes() {
+        if (this.filter) {
+            this.filter = false;
+            this.networkData = this.forceService.getGeneOriginalList();
+            this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+            this.selectedGeneData.links = this.networkData.links.slice().reverse();
+            this.selectedGeneData.origin = this.networkData.origin;
+        } else {
+            this.forceService.filterLink(1).then((network) => {
+                this.networkData = network;
+                this.selectedGeneData.nodes = network.nodes.slice(1);
+                this.selectedGeneData.links = network.links.slice().reverse();
+                this.selectedGeneData.origin = network.origin;
+                this.filter = true;
+                console.log(network);
+            });
+        }
     }
 
     goToRoute(path: string, outlets?: any) {

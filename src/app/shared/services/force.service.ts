@@ -22,6 +22,11 @@ export class ForceService {
         nodes: [],
         origin: undefined
     };
+    private genesFiltered: GeneNetwork = {
+        links: [],
+        nodes: [],
+        origin: undefined
+    };
     private currentGene: Gene;
 
     setData(data: GeneNetworkLinks[]) {
@@ -156,6 +161,36 @@ export class ForceService {
                 this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
             }
         }
+    }
+
+    filterLink(lvl: number): Promise<GeneNetwork> {
+        this.genesFiltered = {
+            links: [],
+            nodes: [],
+            origin: undefined
+        };
+        return new Promise((resolve, reject) => {
+            const dicF = [];
+            this.genesFiltered.origin = this.genes.origin;
+            this.genes.links.forEach((link: any) => {
+                if (link.value > lvl) {
+                    this.genesFiltered.links.push(link);
+                    if (!dicF[link.source.ensembl_gene_id]) {
+                        dicF[link.source.ensembl_gene_id] =
+                        this.dicNodes[link.source.ensembl_gene_id];
+                        this.genesFiltered.nodes
+                        .push(this.dicNodes[link.source.ensembl_gene_id]);
+                    }
+                    if (!dicF[link.target.ensembl_gene_id]) {
+                        dicF[link.target.ensembl_gene_id] =
+                        this.dicNodes[link.target.ensembl_gene_id];
+                        this.genesFiltered.nodes
+                        .push(this.dicNodes[link.target.ensembl_gene_id]);
+                    }
+                }
+            });
+            resolve(this.genesFiltered);
+        });
     }
 
     processSelectedNode(gene: Gene, data): Promise<GeneNetwork> {
