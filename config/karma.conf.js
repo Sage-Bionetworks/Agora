@@ -65,6 +65,7 @@ module.exports = function (config) {
     remapCoverageReporter: {
       'text-summary': null,
       json: './coverage/coverage.json',
+      lcovonly: 'coverage/lcov.info',
       html: './coverage/html'
     },
 
@@ -96,7 +97,7 @@ module.exports = function (config) {
      */
     //reporters: ['mocha', 'coverage', 'remap-coverage'],
 
-    reporters: ['coverage-istanbul'],
+    reporters: ['coverage-istanbul', 'coverage', 'coveralls'],
 
     coverageIstanbulReporter: {
         reports: ['text-summary', 'html'],
