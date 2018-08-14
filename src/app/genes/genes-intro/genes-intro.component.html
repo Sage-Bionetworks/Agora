@@ -5,7 +5,7 @@
         Information on additional genes is coming soon.
     </span>
 </p-dialog>
-<div class="section intro-desc center-justified">
+<div class="section section-hero intro-desc center-justified">
     <h1>
         Welcome!
     </h1>
@@ -16,11 +16,10 @@
     </p>
     <gene-search></gene-search>
     <div class="row no-gutters">
-        <div class="col-md-9 col-sm-8 col-7"></div>
-        <div class="col-md-3 col-sm-4 col-5">
-            <p class="not-listed" (click)="showDialog()">
+        <div class="col-md-12 col-sm-12 col-12 not-listed-col">
+            <a class="not-listed" (click)="showDialog()" tabindex="0">
                 Gene not listed?
-            </p>
+            </a>
         </div>
     </div>
 </div>
@@ -28,21 +27,17 @@
     <h2>
         Nominated Targets
     </h2>
-    <p class="black-paragraph">
-        <span>
-            Explore the current list of AMP-AD nominated targets.
-        </span>
-        <span class="beta-underline" (click)="goToRoute('/about')">
+    <h3 class="nom-targets-heading" tabindex="-1">
+        Explore the current list of AMP-AD nominated targets.
+        <span class="beta-underline" (click)="goToRoute('/about')" tabindex="0">
             Learn more
         </span>
-        <span>
-            about how these early AD signals were found.
-        </span>
-    </p>
+        about how these early AD signals were found.
+    </h3>
     <div class="row list-control-row">
         <p-button (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }})"
             label="View all nominated targets"
-            [styleClass]="'list-button'">
+            [styleClass]="'list-button'" tabindex="0">
         </p-button>
     </div>
 </div>
@@ -56,7 +51,7 @@
     <div class="row list-control-row">
         <p-button (click)="goToRoute('teams-contributing')"
             label="View all contributing teams"
-            [styleClass]="'list-button'">
+            [styleClass]="'list-button'" tabindex="0">
         </p-button>
     </div>
 </div>

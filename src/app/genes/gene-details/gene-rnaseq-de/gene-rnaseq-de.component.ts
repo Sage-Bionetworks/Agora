@@ -78,7 +78,13 @@ export class GeneRNASeqDEComponent implements OnInit {
                 this.geneService.getGeneTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
-                this.selectedTissues = this.tissues.slice(0, 1).map((a) => a.value);
+                const index = this.tissues.findIndex((t) => {
+                    return t.value === this.geneService.getDefaultTissue();
+                });
+                this.selectedTissues = (index !== -1) ?
+                    this.tissues.slice(index, index + 1).map((a) => a.value) :
+                    this.tissues.slice(0, 1).map((a) => a.value);
+
                 this.toggleTissue({
                     itemValue: this.selectedTissues[0],
                     value: [this.selectedTissues[0]]
@@ -147,7 +153,13 @@ export class GeneRNASeqDEComponent implements OnInit {
         return this.geneService.getGeneModels()[index];
     }
 
+    getDefaultLabel(): string {
+        return this.geneService.getDefaultTissue() || this.tissues[0].value;
+    }
+
     async toggleTissue(event: any) {
+        // Update default tissue in case the user navigates away and comes back
+        this.geneService.setDefaultTissue(event.itemValue);
         this.index = this.tissues.findIndex((t) => t.value === event.itemValue);
         const LIMIT_NUMBER = 1;
         const hasTissue = (this.currentTissues[this.index]) ? true : false;
@@ -241,6 +253,7 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }, 100);
             }) as ComponentRef<BoxPlotsViewComponent>;
         this.componentRefs[index].instance.tissue = this.tissues[index].value;
+        this.componentRefs[index].instance.model = this.geneService.getCurrentModel();
         this.componentRefs[index].instance.label1 = label1;
         this.componentRefs[index].instance.info1 = info1;
     }

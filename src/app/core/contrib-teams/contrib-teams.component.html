@@ -1,5 +1,5 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin overview-header">
+    <div class="section-thin section-hero overview-header" tabindex="0">
         <div class="row no-gutters">
             <div class="col-md-7">
                 <h1>Contributing Teams</h1>
@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc">
+    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc" tabindex="0">
         <h2>
             {{team.team}}
         </h2>
@@ -17,16 +17,12 @@
         </p>
         <div class="row members-row">
             <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
-                <img class="member-img" [src]="getMemberImg(member.name)">
+                <div class="member-img" [style.background-image]="getMemberImg(member.name)"></div>
                 <h3>{{member.name}}</h3>
             </div>
         </div>
     </div>
 </div>
-<div *ngIf="!dataLoaded" class="container-fluid">
-    <div class="row small-padding-top">
-        <div class="col-md-12">
-            <p-progressBar mode="indeterminate"></p-progressBar>
-        </div>
-    </div>
+<div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
+    <p-progressBar mode="indeterminate"></p-progressBar>
 </div>

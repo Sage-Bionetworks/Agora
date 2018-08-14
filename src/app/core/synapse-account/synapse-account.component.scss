@@ -6,13 +6,6 @@
 }
 
 .overview-header {
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-
-    p {
-        text-align-last: left;
-        text-align: left;
-    }
-
     .row {
         align-items: center;
     }
@@ -21,11 +14,6 @@
 .amp-ad-desc {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
-
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
 
     .brain-img {
         width: 90px;
@@ -78,11 +66,6 @@
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
 
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     .synapse-img {
         width: 243px;
     }
@@ -113,21 +96,7 @@
             }
 
             @include respond-to('ex-small') {
-                width: 70%;
-            }
-
-            span {
-                font-family: Lato;
-                font-style: normal;
-                font-weight: bold;
-                line-height: normal;
-                @include respond-to('ex-small') {
-                    font-size: 18px;
-                }
-                font-size: 20px;
-                text-align: center;
-                letter-spacing: 1px;
-                color: #1A1C29;
+                width: 85%;
             }
 
             cursor: pointer;
@@ -152,6 +121,10 @@
     border: 0px !important;
     color: black !important;
     border-radius: 100px;
+
+    span {
+        font-weight: bold;
+    }
 }
 
 .about-control-row {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../../models';
 
@@ -50,7 +50,6 @@ export class TeamsPageComponent implements OnInit {
                 this.gene = data['item'];
                 this.geneInfo = data['info'];
                 this.ntInfoArray = this.geneInfo.nominatedtarget;
-                console.log(this.ntInfoArray);
             }, (error) => {
                 console.log('Error loading gene: ' + error.message);
             }, () => {
@@ -72,7 +71,6 @@ export class TeamsPageComponent implements OnInit {
                 const index = ntTeamsArray.indexOf(item.team);
                 this.teams[index] = item;
             });
-            console.log(this.teams);
 
             this.geneService.setCurrentTeams(this.teams);
         }, (error) => {
@@ -95,11 +93,11 @@ export class TeamsPageComponent implements OnInit {
                     this.memberImages[index].name = m.name;
                     if (data) {
                         this.memberImages[index].imgUrl =
-                            this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(
+                            this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
                                 new Blob([data], {
                                     type: 'image/jpg'
                                 })
-                            ));
+                            )}`);
                     }
                 }, (error) => {
                     console.log('Error loading member image: ' + error.message);
@@ -113,11 +111,15 @@ export class TeamsPageComponent implements OnInit {
         });
     }
 
-    getMemberImg(name: string) {
+    getMemberImg(name: string): SafeStyle {
         const memberImg = this.memberImages.find((mi) => {
             return mi.name === name;
         });
-        return (memberImg && memberImg.imgUrl) ? memberImg.imgUrl : this.placeholderUrl;
+        if (memberImg && memberImg.imgUrl) {
+            return memberImg.imgUrl;
+        } else {
+            return this.sanitizer.bypassSecurityTrustStyle(`url(${this.placeholderUrl})`);
+        }
     }
 
     toTitleCase(index: number, field: string): string {

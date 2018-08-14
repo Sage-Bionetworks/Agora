@@ -29,15 +29,15 @@ export class RowChartViewComponent implements OnInit {
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() dim: any;
     @Input() group: any;
+    @Input() paddingLR: number = 15;
+    @Input() paddingUD: number = 0;
 
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
 
     changedLabels: boolean = false;
     display: boolean = false;
-    colors: string[] = [
-        '#7692D9', '#699FD2', '#5CADCA', '#42C7BB', '#9FC995', '#CECA82', '#FCCB6F'
-    ];
+    colors: string[] = ['#5171C0'];
 
     private resizeTimer;
 
@@ -86,6 +86,9 @@ export class RowChartViewComponent implements OnInit {
             .group(this.group)
             .transitionDuration(0);
 
+        // Increase bottom margin by 20 to place a label there, default is 30
+        this.chart.margins().bottom = 50;
+
         // Removes the click event for the rowChart to prevent filtering
         this.chart.onClick = () => {
             //
@@ -95,6 +98,31 @@ export class RowChartViewComponent implements OnInit {
         this.registerChartEvent(this.chart);
 
         this.chart.render();
+    }
+
+    addXLabel(chart: dc.RowChart, text: string) {
+        const textSelection = chart.svg()
+                .append('text')
+                .attr('class', 'x-axis-label')
+                .attr('text-anchor', 'middle')
+                .attr('x', chart.width() / 2)
+                .attr('y', chart.height() - 10)
+                .text(text);
+
+        this.adjustXLabel(chart, textSelection);
+    }
+
+    adjustXLabel(chart: dc.RowChart, sel: any) {
+        const svgEl = (sel.node() as SVGGraphicsElement);
+        const textDims = svgEl.getBBox();
+
+        // Dynamically adjust positioning after reading text dimension from DOM
+        // The main svg gets translated by (30, 10) and the flex row has a margin
+        // of 15 pixels. We subtract them from the svg size, get the middle point
+        // then add back the left translate to get the correct center
+        sel
+            .attr('x', ((chart.width() - 45) / 2) + 30)
+            .attr('y', chart.height() - Math.ceil(textDims.height) / 2);
     }
 
     // A custom renderlet function for this chart, allows us to change
@@ -116,6 +144,9 @@ export class RowChartViewComponent implements OnInit {
 
                 // Insert a line for each row of the chart
                 self.insertLinesInRows(chart);
+
+                // Add a label to the x axis
+                self.addXLabel(this.chart, 'LOG FOLD CHANGE');
             } else {
                 // This part will be called on redraw after filtering, so at this point
                 // we just need to move the lines to the correct position again. First
@@ -126,6 +157,9 @@ export class RowChartViewComponent implements OnInit {
                         return 'translate(' + d.value.logfc + ')';
                     });
                 });
+
+                // Adjust the x label
+                this.adjustXLabel(chart, chart.select('text.x-axis-label'));
             }
 
             // Finally redraw the lines in each row
@@ -253,7 +287,7 @@ export class RowChartViewComponent implements OnInit {
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
-                return self.colors[i];
+                return self.colors[0];
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
@@ -315,10 +349,12 @@ export class RowChartViewComponent implements OnInit {
         const self = this;
 
         clearTimeout(this.resizeTimer);
-        this.resizeTimer = setTimeout(function() {
+        this.resizeTimer = setTimeout(() => {
             self.chart
-                .width(self.rowChart.nativeElement.parentElement.offsetWidth)
-                .height(self.rowChart.nativeElement.offsetHeight);
+                .width(
+                    self.rowChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
+                )
+                .height(self.rowChart.nativeElement.offsetHeight  - (self.paddingUD * 2));
 
             if (self.chart.rescale) {
                 self.chart.rescale();

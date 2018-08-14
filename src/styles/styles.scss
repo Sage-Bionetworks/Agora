@@ -19,43 +19,36 @@
 @import "../assets/css/common/viewport-workaround";
 @import "../assets/css/common/global";
 @import "../assets/css/common/components";
+// 4. Sanitizer library to fix things
+@import "~sanitize.css";
 
 *::after,
 *::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-*:focus {
-    outline: none;
+// Let the OS add the default outline to tabbable elements
+:focus {
+    outline: -webkit-focus-ring-color auto 5px;
 }
 
 // 5. Custom Global Styles
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 html, body{
-    height: 100%;
-    max-height: 100%;
-    width: 100%;
+    //width: 100%;
     min-width: 367px;
     font-family: Lato;
-}
-
-html {
-    overflow-y: hidden;
-}
-
-.wrapper {
-    min-height: 100%;
-    margin-bottom: -100px;
-    padding-bottom: 100px;
+    padding: 0;
+    margin: 0;
 }
 
 body {
-    margin: 0;
-    min-height: 100%;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
     line-height: 1.5;
     color: #212529;
     background-color: #fff;
@@ -63,6 +56,15 @@ body {
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
     font-family: Lato;
+    margin-bottom: 100px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
 }
 
 a {
@@ -79,8 +81,22 @@ p {
     font-weight: normal;
     line-height: normal;
     font-size: 18px;
-    text-align: center;
+    text-align: left;
     color: white;
+}
+
+span {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    @include respond-to('ex-small') {
+        font-size: 18px;
+    }
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #1A1C29;
 }
 
 p-dialog {
@@ -149,6 +165,10 @@ p-dialog {
     }
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .black-paragraph {
     color: black;
 }
@@ -185,7 +205,7 @@ p-dialog {
 }
 
 .vertical-align {
-    display: flex;
+    display: block;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
     align-items: center;
 }
 
@@ -198,6 +218,8 @@ p-dialog {
 }
 
 .row-shadow {
+    -moz-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -209,7 +231,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 9%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('small') {
         padding-top: 2em;
@@ -217,7 +239,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 9%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('medium') {
         padding-top: 2em;
@@ -225,7 +247,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 15%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('large') {
         padding-top: 2em;
@@ -233,7 +255,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 21%;
         color: #000000;
-        background-color: #ffffff;
+        //background-color: #ffffff;
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
@@ -241,7 +263,7 @@ p-dialog {
         padding-bottom: 2em;
         padding-right: 27.7%;
         color: #000000;
-        background-color: #ffffff;
+       //background-color: #ffffff;
     }
 }
 
@@ -289,16 +311,9 @@ p-dialog {
     }
 }
 
-.coming-soon {
-    text-align-last: center;
-    margin-bottom: auto;
-    margin-top: auto;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-    color: #1A1C29;
+.section-hero {
+    background-image: url('/assets/img/hero_bg.jpg');
+    background-size: cover;
 }
 
 .beta-underline {
@@ -306,44 +321,62 @@ p-dialog {
     cursor: pointer;
 }
 
-.back-home-wrapper {
+.pathbox {
     width: 100%;
-    height: 63px;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-}
+    margin-bottom: 10px;
 
-.back-home-row {
-    width: 100%;
-    height: 100%;
-    margin-right: 0px;
-    margin-left: 0px;
-    background: #73C8CC;
-    position: relative;
-
-    i {
-        top: 25%;
-        left: 2%;
-        position: absolute;
+    .genes {
+        span {
+            color: #5BB0B5;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            font-size: 18px;
+            width: 100%;
+        }
     }
 
-    i:hover {
-        cursor: pointer !important;
+    span {
+        margin-right: 5px;
     }
 }
 
-.beta-button {
-    background: #FFFFFF !important;
-    border-radius: 100px !important;
-    font-family: Lato !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    line-height: normal !important;
-    font-size: 18px !important;
-    color: #73C8CC !important;
-    border: 1px solid #73C8CC !important;
-    margin-right: 10px !important;
+.linkstable{
+    table {
+        border-collapse: collapse;
+    }
+
+    table{
+        width: 100%;
+
+        tr {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 40px;
+            color: #1A1C29;
+            height: 40px;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafb;
+        }
+
+        tr:nth-child(odd) {
+            background: #FFF
+        }
+    }
 }
 
 [hidden] { display: none !important; }
+
+.green-text {
+    color: #78B87A;
+}
+
+.red-text {
+    color: #E06672;
+}

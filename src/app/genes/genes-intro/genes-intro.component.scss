@@ -2,15 +2,23 @@
 @import "../../../assets/css/helpers/mixins";
 
 .intro-desc {
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-
     .intro-paragraph {
         margin-bottom: 60px;
+        text-align: center;
+    }
+
+    .not-listed-col {
+        text-align-last: right;
+        margin-top: 6px;
+        margin-bottom: 9px;
     }
 
     .not-listed {
-        text-align-last: right;
         font-style: italic;
+        font-family: Lato;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
         text-decoration: underline;
         cursor: pointer;
     }
@@ -49,6 +57,14 @@ gene-search {
 .intro-nomlist-desc {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
+
+    .nom-targets-heading {
+        font-weight: normal;
+
+        span {
+            font-size: 18px;
+        }
+    }
 }
 
 .intro-contrib-desc {
@@ -77,6 +93,10 @@ gene-search {
     border-radius: 100px;
     width: 64%;
 
+    span {
+        font-weight: bold;
+    }
+
     @include respond-to('ex-small') {
         width: 90%;
     }
@@ -100,20 +120,6 @@ gene-search {
 
         @include respond-to('ex-small') {
             width: 85%;
-        }
-
-        span {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: bold;
-            line-height: normal;
-            @include respond-to('ex-small') {
-                font-size: 18px;
-            }
-            font-size: 20px;
-            text-align: center;
-            letter-spacing: 1px;
-            color: #1A1C29;
         }
 
         cursor: pointer;

@@ -1,26 +1,26 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin overview-header">
+    <div class="section-thin section-hero overview-header" tabindex="0">
         <div class="row no-gutters">
-            <div *ngIf="geneInfo" class="col-md-7 col-sm-7 col-6 info-header">
+            <div *ngIf="geneInfo" class="col-md-5 col-sm-12 col-12 info-header">
                 <h1>{{gene.hgnc_symbol}}</h1>
                 <p>
                     {{geneInfo.name}}
                 </p>
             </div>
-            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-5 col-sm-5 col-6">
+            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
                 <button class="btn nom-button"
                     (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
                     <i class="fa fa-star fa-lg"></i>
-                    <span>AMP-AD Nominated</span>
+                    <span  [ngClass]="{'fixIOS': iOS}">AMP-AD Nominated</span>
                     <i class="fa fa-angle-right fa-lg"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <div *ngIf="geneInfo" class="section-thin overview-desc">
+    <div *ngIf="geneInfo" class="section-thin overview-desc" tabindex="0">
         <h2>
-            Description
+            Gene Description
         </h2>
         <p class="black-paragraph">
             {{getSummary(true)}}
@@ -34,7 +34,7 @@
         </p>
     </div>
 
-    <div class="section-thin overview-rel">
+    <div class="section-thin overview-rel" tabindex="0">
         <h2>
             Summary of Evidence
             <span class="icon-spacing"></span>
@@ -50,8 +50,8 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    Gene Ontology &nbsp;&nbsp;&nbsp;
-                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
+                    Protein Expression Change in AD Brain: &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
         </div>
@@ -64,6 +64,20 @@
             </div>
             <div class="col-md-6">
                 <h3>
+                    Gene Ontology &nbsp;&nbsp;&nbsp;
+                    <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>
+                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
+                    <span class="italic-heading">Coming soon</span>
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3>
                     Reactome Pathways &nbsp;&nbsp;&nbsp;
                     <span class="link-heading" (click)="viewPathways()">View pathways</span>
                 </h3>
@@ -72,7 +86,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Cell Type Specificity &nbsp;&nbsp;&nbsp;
+                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
                     <span class="italic-heading">Coming soon</span>
                 </h3>
             </div>
@@ -88,8 +102,8 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
-                    <span class="italic-heading">Coming soon</span>
+                    RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -99,20 +113,11 @@
                 </h3>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
-                </h3>
-            </div>
-            <div class="col-md-6"></div>
-        </div>
     </div>
 
     <div class="overview-link">
         <p-panel header="RNA-Seq Differential Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-            <div class="section-thin st-desc">
+            <div class="section-thin st-desc" tabindex="0">
                 <p class="black-paragraph">
                     These differential expression results are based on harmonized RNA-seq data
                     from three independent studies, which include post-mortem samples from over
@@ -129,7 +134,7 @@
 
     <div class="overview-link">
         <p-panel header="Similarly Expressed Genes" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-            <div class="section-thin st-desc">
+            <div class="section-thin st-desc" tabindex="0">
                 <p class="black-paragraph">
                     Here we show results of a coexpression network analysis based on the RNA-seq
                     data. The network analysis uses an ensemble methodology to identify networks
@@ -148,7 +153,7 @@
 
     <div class="overview-link">
         <p-panel header="Next Steps" [toggleable]="false" [style]="{'margin-bottom':'20px'}">
-            <div class="section-thin st-desc">
+            <div class="section-thin st-desc" tabindex="0">
                 <p class="black-paragraph ns-paragraph">
                     To learn more about the druggability of the nominated nascent targets, please access a summary of their druggability
                     <span class="druggability-span" (click)="showDruggability()">here</span>. To access this data you will need a Synapse account. To
@@ -161,12 +166,8 @@
         </p-panel>
     </div>
 </div>
-<div *ngIf="!dataLoaded" class="container-fluid">
-    <div class="row small-padding-top">
-        <div class="col-md-12">
-            <p-progressBar mode="indeterminate"></p-progressBar>
-        </div>
-    </div>
+<div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
+    <p-progressBar mode="indeterminate"></p-progressBar>
 </div>
 
 <!-- Dialogs section -->
@@ -216,10 +217,20 @@
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
-                    Expression Change in AD Brain:
+                    RNA Expression Change in AD Brain:
                 </span>
                 <span dir="ltr">
                     Significant differential expression based on AMP-AD consortium work detailed on Agora under “RNA-seq Differential Expression”.
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Protein Expression Change in AD Brain:
+                </span>
+                <span dir="ltr">
+                    Coming soon.
                 </span>
             </div>
         </div>

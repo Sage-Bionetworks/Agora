@@ -1,21 +1,6 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
-.section-overview-header {
-    padding-top: 2em;
-    padding-left: 10%;
-    padding-bottom: 2em;
-    padding-right: 10%;
-    color: #000000;
-    background-color: #ffffff;
-    background: linear-gradient(89.93deg, #5171C0 0.06%, #5BB0B5 99.94%);
-
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-}
-
 .rna-seq-sel {
     background: rgba(245, 245, 245, 0.5);
 
@@ -29,11 +14,6 @@
 }
 
 .rna-seq-me {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     .fa-info-circle:before {
         color: #9DA3B3;
     }
@@ -46,11 +26,29 @@
 }
 
 .rna-seq-bplot {
-    padding-right: 0px;
-
-    p {
-        text-align: justify;
-        text-align-last: left;
+    @include respond-to('medium') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
+    }
+    @include respond-to('large') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
+    }
+    @include respond-to('ex-large') {
+        border-right-color: rgba(245, 245, 245, 0.5);
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        padding-right: 15px;
     }
 
     .fa-info-circle:before {
@@ -231,32 +229,27 @@
             left: 21.5%;
             top: 15%;
             margin: 0 auto;
-            transform: scale(1.2,1);
+            -moz-transform: scale(1.2,1); /* Firefox */
+            -o-transform: scale(1.2,1); /* Opera */
+            -webkit-transform: scale(1.2,1); /* Safari And Chrome */
+            transform: scale(1.2,1); /* Standard Property */
         }
 
         .ui-multiselect-trigger {
-            color: #5BB0B5;
+            color: #5BB0B5 !important;
             width: 32px;
 
             .ui-multiselect-trigger-icon {
+                color: #5BB0B5 !important;
                 top: 0%;
                 width: 12px;
             }
 
-            .pi-caret-down {
-                transform: scale(2.4, 2.4);
-            }
-
-            .pi-caret-up {
-                transform: scale(2.4, 2.4);
-            }
-
-            .fa-caret-down {
-                transform: scale(2.4, 2.4);
-            }
-
-            .fa-caret-up {
-                transform: scale(2.4, 2.4);
+            .pi-caret-down, .pi-caret-up, .fa-caret-down, .fa-caret-up {
+                -moz-transform: scale(2.4, 2.4); /* Firefox */
+                -o-transform: scale(2.4, 2.4); /* Opera */
+                -webkit-transform: scale(2.4, 2.4); /* Safari And Chrome */
+                transform: scale(2.4, 2.4); /* Standard Property */
             }
 
             .ui-clickable {
@@ -287,28 +280,10 @@
         }
     }
 
-    .bplot-l-col {
-        padding-right: 7%;
-    }
+
 
     .bplot-col {
         background: rgba(245, 245, 245, 0.5);
-
-        @include respond-to('ex-small') {
-            padding-right: 15px;
-        }
-        @include respond-to('small') {
-            padding-right: 0px;
-        }
-        @include respond-to('medium') {
-            padding-right: 0px;
-        }
-        @include respond-to('large') {
-            padding-right: 0px;
-        }
-        @include respond-to('ex-large') {
-            padding-right: 0px;
-        }
     }
 }
 
@@ -339,11 +314,6 @@
 }
 
 .rna-seq-fplot {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     .fa-info-circle:before {
         color: #9DA3B3;
     }
@@ -362,11 +332,6 @@
 }
 
 .st-desc {
-    p {
-        text-align: justify;
-        text-align-last: left;
-    }
-
     padding-top: 0px;
 }
 

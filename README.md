@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/Sage-Bionetworks/Agora/badge.svg?branch=master)](https://coveralls.io/github/Sage-Bionetworks/Agora?branch=master)
+
 # Agora BETA
 
 ## Getting Started
