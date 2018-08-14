@@ -34,6 +34,9 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     filter = {
         active: true
     };
+    private linkElements: any;
+    private nodeElements: any;
+    private textElements: any;
     private svg;
     private pnode: any;
     private loaded: boolean = false;
@@ -100,18 +103,19 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .attr('width', this.width)
             .attr('height', this.height);
 
-        const linkElements = this.svg.append('g')
+        this.linkElements = this.svg.append('g')
                     .attr('class', 'line')
                     .selectAll('line')
-                    .data(this.networkData.links)
+                    .data(this.networkData.links,
+                     (d) =>  d.source.id + '-' + d.target.id)
                     .enter().append('line')
                     .attr('stroke-width', 2 )
                     .attr('stroke', this.getLinkColor);
 
-        const nodeElements = this.svg.append('g')
+        this.nodeElements = this.svg.append('g')
                     .attr('class', 'node')
                     .selectAll('.hex')
-                    .data(this.networkData.nodes)
+                    .data(this.networkData.nodes, (d) =>  d.id)
                     .enter()
                     .append('path')
                     .attr('d', this.hex)
@@ -156,10 +160,10 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                         this.buildPath(d);
                     });
 
-        const textElements = this.svg.append('g')
+        this.textElements = this.svg.append('g')
                     .attr('class', 'text')
                     .selectAll('text')
-                    .data(this.networkData.nodes)
+            .data(this.networkData.nodes, (d) =>  d.id)
                     .enter().append('text')
                     .text((node: any) => node.hgnc_symbol)
                     .attr('font-size', 12)
@@ -167,28 +171,30 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                     .attr('dy', 4);
 
         this.simulation.nodes(this.networkData.nodes).on('tick', () => {
-                    nodeElements
-                        .attr('cx', (node: any) => node.x = Math.max(24,
-                            Math.min(this.width - 24, node.x)))
-                        .attr('cy', (node: any) => node.y = Math.max(24,
-                            Math.min(this.height - 24, node.y)));
-                    nodeElements.attr('transform',
-                    (d: any) =>  'translate(' + (d.x - 22) + ',' + (d.y - 22) + ') scale(1.75)');
-                    textElements
-                        .attr('x', (node: any) => node.x)
-                        .attr('y', (node: any) => node.y)
-                        .attr('dx', (node: any) => {
-                            if (this.width / 2 < node.x ) {
-                                return -Math.abs(node.hgnc_symbol.length * 6) - 32;
-                            }
-                            return '23';
-                        });
-                    linkElements
-                        .attr('x1', (link: any) => link.source.x)
-                        .attr('y1', (link: any) => link.source.y)
-                        .attr('x2', (link: any) => link.target.x)
-                        .attr('y2', (link: any) => link.target.y);
+            this.nodeElements
+                .attr('cx', (node: any) => node.x = Math.max(24,
+                    Math.min(this.width - 24, node.x)))
+                .attr('cy', (node: any) => node.y = Math.max(24,
+                    Math.min(this.height - 24, node.y)))
+                .attr('transform',
+                    (d: any) => 'translate(' + (d.x - 22) + ',' + (d.y - 22) + ') scale(1.75)');
+
+            this.textElements
+                .attr('x', (node: any) => node.x)
+                .attr('y', (node: any) => node.y)
+                .attr('dx', (node: any) => {
+                    if (this.width / 2 < node.x) {
+                        return -Math.abs(node.hgnc_symbol.length * 6) - 32;
+                    }
+                    return '23';
                 });
+
+            this.linkElements
+                .attr('x1', (link: any) => link.source.x)
+                .attr('y1', (link: any) => link.source.y)
+                .attr('x2', (link: any) => link.target.x)
+                .attr('y2', (link: any) => link.target.y);
+        });
 
         this.simulation.force('link', d3.forceLink(this.networkData.links)
             .links(this.networkData.links).id((d: GeneNode) => d.id)
@@ -204,16 +210,11 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                         }
                         node.fx = node.x;
                         node.fy = node.y;
-                        tooltip.transition()
-                            .duration(500)
-                            .style('opacity', 0);
                     })
                     .on('drag', (node: any) => {
                         this.simulation.alphaTarget(0).restart();
                         node.fx = d3.event.x;
                         node.fy = d3.event.y;
-                        tooltip
-                            .style('opacity', 0);
                     })
                     .on('end', (node: any) => {
                         if (!d3.event.active) {
@@ -222,10 +223,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                         node.fx = null;
                         node.fy = null;
                     });
-        nodeElements.call(dragDrop);
-        const tooltip = d3.select(this.forceChart.nativeElement).append('div')
-                    .attr('class', 'tooltip')
-                    .style('opacity', 0);
+        this.nodeElements.call(dragDrop);
     }
 
     private updateChart() {
@@ -233,39 +231,42 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             return;
         }
         // linkElements
-        const linkElements = this.svg.select('.line')
-            .selectAll('line')
-            .data(this.networkData.links)
-            .exit().remove()''
-        linkElements.enter().append('line')
+        this.linkElements = this.linkElements
+            .data(this.networkData.links, (d) =>  d.source.id + '-' + d.target.id);
+        this.linkElements.exit().remove();
+        this.linkElements = this.linkElements.enter().append('line')
             .attr('stroke-width', 2)
-            .attr('stroke', this.getLinkColor);
+            .attr('stroke', this.getLinkColor)
+            .merge(this.linkElements);
 
         // node elements
-        const nodeElements = this.svg.select('.node')
-            .selectAll('path')
-            .data(this.networkData.nodes)
-            .exit().remove();
-        nodeElements.enter()
+        this.nodeElements = this.nodeElements
+            .data(this.networkData.nodes, (d) =>  d.id);
+        this.nodeElements.exit().remove();
+        this.nodeElements = this.nodeElements.enter()
             .append('path')
             .attr('d', this.hex)
             .attr('r', 4)
             .attr('fill', this.getNodeColor)
             .attr('class', 'hex')
-            .merge(nodeElements);
+            .merge(this.nodeElements);
 
         // text elements
-        const textElements = this.svg.select('.text')
-            .selectAll('text')
-            .data(this.networkData.nodes)
-            .exit().remove();
-        textElements.enter().append('text')
+        this.textElements = this.textElements
+            .data(this.networkData.nodes, (d) =>  d.id);
+        this.textElements.exit().remove();
+        this.textElements = this.textElements.enter().append('text')
             .text((node: any) => node.hgnc_symbol)
             .attr('font-size', 12)
             .attr('dx', 23)
-            .attr('dy', 4);
+            .attr('dy', 4)
+            .merge(this.textElements);
 
-        this.onResize();
+        this.simulation.nodes(this.networkData.nodes);
+        this.simulation.force('link').links(this.networkData.links);
+        this.simulation.alpha(1).restart();
+
+        // this.onResize();
     }
 
     private getNodeColor(node: GeneNode , index, arr) {
@@ -296,16 +297,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             return '#A7DDDF';
         }
         return '#BCC0CA';
-    }
-
-    private tooltipFill(gene: Gene, tooltip) {
-        tooltip.html(`
-            <h3>${gene.hgnc_symbol}</h3>
-            <div>Study: ${gene.study}</div>
-            <div>Tissue: ${gene.tissue}</div>
-            <div>Lenght ${gene.gene_length}</div>
-            <div>Sex: ${gene.sex}</div>
-        `);
     }
 
     private buildPath(gene: Gene) {

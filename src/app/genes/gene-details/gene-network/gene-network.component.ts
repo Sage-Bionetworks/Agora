@@ -86,7 +86,7 @@ export class GeneNetworkComponent implements OnInit {
             this.selectedGeneData.links = this.networkData.links.slice().reverse();
             this.selectedGeneData.origin = this.networkData.origin;
         } else {
-            this.forceService.filterLink(1).then((network) => {
+            this.forceService.filterLink(2).then((network) => {
                 this.networkData = network;
                 this.selectedGeneData.nodes = network.nodes.slice(1);
                 this.selectedGeneData.links = network.links.slice().reverse();
