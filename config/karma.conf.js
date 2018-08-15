@@ -59,14 +59,16 @@ module.exports = function (config) {
     webpack: testWebpackConfig,
 
     coverageReporter: {
-      type: 'in-memory'
+      reporters: [
+        { type: 'in-memory' }
+      ]
     },
 
     remapCoverageReporter: {
       'text-summary': null,
       json: './coverage/coverage.json',
-      lcovonly: '/coverage/lcov.info',
-      html: './coverage/html'
+      html: './coverage/html',
+      lcovonly: './coverage/lcov.info'
     },
 
     /**
@@ -95,9 +97,7 @@ module.exports = function (config) {
      * possible values: 'dots', 'progress'
      * available reporters: https://npmjs.org/browse/keyword/karma-reporter
      */
-    //reporters: ['mocha', 'coverage', 'remap-coverage'],
-
-    reporters: ['coverage-istanbul', 'coverage', 'coveralls'],
+    reporters: ['mocha', 'coverage', 'remap-coverage', 'coveralls'],
 
     coverageIstanbulReporter: {
         reports: ['text-summary', 'html'],
