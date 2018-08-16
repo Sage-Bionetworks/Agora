@@ -1,6 +1,6 @@
 {
   "name": "agora",
-  "version": "3.1.0",
+  "version": "0.0.1",
   "data-version": "5",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
