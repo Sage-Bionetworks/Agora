@@ -74,6 +74,11 @@
         appearance: none;
     }
 
+    // For older browsers like IE 10, 11
+    select::-ms-expand{
+        display: none;
+    }
+
     p-multiselect {
         width: 100%;
 

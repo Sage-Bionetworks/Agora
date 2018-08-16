@@ -99,6 +99,10 @@ span {
     color: #1A1C29;
 }
 
+input::-ms-clear {
+    display: none;
+}
+
 p-dialog {
     .ui-dialog {
         width: 80% !important;
@@ -200,7 +204,6 @@ p-dialog {
 
 .center-justified {
     text-align: justify;
-    -moz-text-align-last: center;
     text-align-last: center;
 }
 
@@ -259,9 +262,9 @@ p-dialog {
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
-        padding-left: 27.7%;
+        padding-left: 25%;
         padding-bottom: 2em;
-        padding-right: 27.7%;
+        padding-right: 25%;
         color: #000000;
        //background-color: #ffffff;
     }

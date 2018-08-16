@@ -54,7 +54,7 @@ export class SelectMenuViewComponent implements OnInit {
         }
     }
 
-    initChart() {
+    async initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
@@ -124,7 +124,8 @@ export class SelectMenuViewComponent implements OnInit {
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
                 const oldOptions = self.menuSelection.selectAll('option');
-                const newOptions = oldOptions.filter(function(d, i) { return i === 0; }).remove();
+                oldOptions.filter((d, i) => i === 0).remove();
+                const newOptions = oldOptions.filter((d, i) => i !== 0);
                 newOptions['_groups'][0][0]['selected'] = 'selected';
                 self.menuSelection.dispatch('change');
 

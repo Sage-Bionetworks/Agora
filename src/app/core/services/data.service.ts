@@ -31,6 +31,10 @@ export class DataService {
         return this.ndx;
     }
 
+    clearNdx() {
+        this.ndx.remove();
+    }
+
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             let dataLinks: any;
@@ -164,7 +168,7 @@ export class DataService {
     getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = this.getNdx().dimension(function(d) {
+        const dim = this.getNdx().dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned

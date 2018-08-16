@@ -149,6 +149,11 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues', { headers }).subscribe((data) => {
                 this.tissues = data['items'];
+                this.tissues.sort((a, b) => {
+                    if (a < b) { return -1; }
+                    if (a > b) { return 1; }
+                    return 0;
+                });
             }, (error) => {
                 console.log('Error loading tissues! ' + error.message);
             }, () => {
@@ -162,6 +167,11 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
                 this.geneTissues = data['items'];
+                this.geneTissues.sort((a, b) => {
+                    if (a < b) { return -1; }
+                    if (a > b) { return 1; }
+                    return 0;
+                });
             }, (error) => {
                 console.log('Error loading tissues! ' + error.message);
             }, () => {
