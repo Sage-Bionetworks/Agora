@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Gene, GeneInfo } from '../models';
-import { mockGene1, mockInfo1 } from './gene-mocks';
+import { mockGene1, mockInfo1, mockTissues, mockModels } from './gene-mocks';
 
 @Injectable()
 export class GeneServiceStub {
@@ -65,6 +65,20 @@ export class GeneServiceStub {
         this.setFC(data['minFC'], data['maxFC']);
         this.setLogFC(data['minFC'], data['maxFC']);
         this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+    }
+
+    loadGeneTissues(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.geneTissues = mockTissues;
+            resolve(true);
+        });
+    }
+
+    loadGeneModels(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.geneModels = mockModels;
+            resolve(true);
+        });
     }
 
     setAdjPValue(max: number, min?: number) {
