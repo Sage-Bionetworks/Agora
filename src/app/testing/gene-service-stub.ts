@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 
 import { Gene, GeneInfo } from '../models';
+import { mockGene1, mockInfo1 } from './gene-mocks';
 
 @Injectable()
 export class GeneServiceStub {
     currentGene: Gene;
     currentInfo: GeneInfo;
     currentTissue: string;
+    geneTissues: string[] = [];
     currentModel: string;
+    geneModels: string[] = [];
     models: string[] = [];
     tissues: string[] = [];
     minFC: number = 0;
@@ -16,6 +19,14 @@ export class GeneServiceStub {
     maxLogFC: number = 10;
     maxAdjPValue: number = 50;
     minAdjPValue: number = 0;
+
+    getCurrentGene(): Gene {
+        return mockGene1;
+    }
+
+    getCurrentInfo(): GeneInfo {
+        return mockInfo1;
+    }
 
     setLogFC(min: number, max: number) {
         this.minLogFC = min;
@@ -33,6 +44,18 @@ export class GeneServiceStub {
 
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
+    }
+
+    getGeneModels(): string[] {
+        return this.geneModels;
+    }
+
+    setGeneModels(models: string[]) {
+        this.geneModels = models;
+    }
+
+    setGeneTissues(tissues: string[]) {
+        this.geneTissues = tissues;
     }
 
     // To be used everytime a new gene data arrives from the server

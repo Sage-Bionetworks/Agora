@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
@@ -38,7 +37,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private geneService: GeneService,
         private dataService: DataService,
-        private location: Location,
         private forceService: ForceService
     ) { }
 
@@ -98,9 +96,20 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         });
     }
 
-    getTextColor(state: boolean, normal?: boolean): string {
-        const colorClass = (state) ? 'green-text' : 'red-text';
-        return (normal) ? colorClass + ' normal-heading' : '';
+    getTextColorClass(state: boolean, normal?: boolean): any {
+        const colorClassObj = {} as any;
+        if (state) {
+            colorClassObj['green-text'] = true;
+        } else {
+            colorClassObj['red-text'] = true;
+        }
+
+        if (normal) {
+            colorClassObj['normal-heading'] = true;
+        } else {
+            colorClassObj['italic-heading'] = true;
+        }
+        return colorClassObj;
     }
 
     viewGene(id: string) {
@@ -204,10 +213,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
-    }
-
-    goBack() {
-        this.location.back();
     }
 
     viewPathways() {

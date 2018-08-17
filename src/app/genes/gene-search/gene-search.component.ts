@@ -54,7 +54,11 @@ export class GeneSearchComponent implements OnInit {
     }
 
     search(queryString: string) {
-        if (queryString) { return this.dataService.getGenesMatchId(queryString); }
+        if (queryString) {
+            return this.dataService.getGenesMatchId(queryString);
+        } else {
+            return new EmptyObservable<Response>();
+        }
     }
 
     focusSearchList(state: boolean) {
@@ -79,10 +83,14 @@ export class GeneSearchComponent implements OnInit {
         }, () => {
             this.geneService.updateGeneData(geneData);
             this.gene = geneData['item'];
-            this.router.navigate([
+            this.goToRoute(
                 '/genes',
                 { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
-            ]);
+            );
         });
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

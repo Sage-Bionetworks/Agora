@@ -13,4 +13,8 @@ export class DataServiceStub {
     getTableData(): Observable<object> {
         return of([mockGene1, mockGene2]);
     }
+
+    getGenesMatchId(id?: string): Observable<object> {
+        return of([mockGene1]);
+    }
 }
