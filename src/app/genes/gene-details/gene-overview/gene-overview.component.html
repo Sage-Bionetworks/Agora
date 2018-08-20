@@ -20,7 +20,7 @@
 
     <div *ngIf="geneInfo" class="section-thin overview-desc" tabindex="0">
         <h2>
-            Description
+            Gene Description
         </h2>
         <p class="black-paragraph">
             {{getSummary(true)}}
@@ -45,7 +45,7 @@
             <div class="col-md-6">
                 <h3>
                     AD Genetic Association &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}" class='normal-heading'> {{geneInfo.isIGAP?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{geneInfo.isIGAP?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -59,7 +59,7 @@
             <div class="col-md-6">
                 <h3>
                     Brain eQTL &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'> {{geneInfo.haseqtl?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{geneInfo.haseqtl?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -93,9 +93,7 @@
             <div class="col-md-6">
                 <h3>
                     Nominated target &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}" class='normal-heading'>
-                        {{geneInfo.nominations?'True':'False'}}
-                    </span>
+                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{geneInfo.nominations?'True':'False'}}</span>
                 </h3>
             </div>
         </div>
@@ -103,7 +101,7 @@
             <div class="col-md-6">
                 <h3>
                     RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="{'green-text':geneInfo.isChangedInADBrain,'red-text':!geneInfo.isChangedInADBrain}" class='normal-heading'>{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.isChangedInADBrain, true)">{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
                 </h3>
             </div>
             <div class="col-md-6">

@@ -24,46 +24,23 @@
     .icon-spacing {
         margin-right: 5px;
     }
-    .info{
-        color: #9DA3B3;
-        font-style: italic;
-        top: 42px;
-        font-size: 13px;
-    }
-}
-
-.br-heading {
-    margin-bottom: 10px;
 }
 
 .network-container {
     background: rgba(245, 245, 245, 0.5);
 }
 
-.pathbox {
-    padding: 0px;
-    width: 100%;
-
-    .genes {
-        span{
-            color: #86C4C7;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-        }
-    }
-    span {
-        margin-right: 5px;
-    }
-}
-
 .genelink{
     color: #86C4C7;
-    text-decoration: underline;
     cursor: pointer;
-    font-weight: 600;
     width: 100%;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    font-size: 18px;
+    text-decoration: underline;
+    color: #5BB0B5;
 }
 
 .currentGene{
@@ -76,11 +53,20 @@
     }
 
     .cg-col {
-        p {
-            color: #000000;
-            padding-top: 0px;
-            text-align: left;
-            font-size: 16px;
+        .cg-col-p {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 18px;
+            color: #1A1C29;
+        }
+
+        span {
+            font-family: Lato;
+            font-style: normal;
+            line-height: normal;
+            font-size: 18px;
         }
 
         padding-bottom: 15px;
@@ -105,7 +91,7 @@
 }
 
 .brainregion-button{
-    font-size: 32px;
+    font-size: 32px !important;
 }
 
 .brainregion-col {

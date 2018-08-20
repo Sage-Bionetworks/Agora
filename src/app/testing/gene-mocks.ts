@@ -108,3 +108,12 @@ export const mockInfo1: GeneInfo = {
     ],
     'nominations': 1
 };
+
+export const mockTissues: string [] = ['DLPFC', 'CBE', 'TCX'];
+
+export const mockModels: string [] = [
+    'AD Diagnosis (males and females)',
+    'AD Diagnosis x AOD (males and females)',
+    'AD Diagnosis x Sex (females only)',
+    'AD Diagnosis x Sex (males only)'
+];

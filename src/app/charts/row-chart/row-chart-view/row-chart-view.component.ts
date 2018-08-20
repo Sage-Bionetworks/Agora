@@ -146,7 +146,7 @@ export class RowChartViewComponent implements OnInit {
                 self.insertLinesInRows(chart);
 
                 // Add a label to the x axis
-                self.addXLabel(this.chart, 'log fold change');
+                self.addXLabel(this.chart, 'LOG FOLD CHANGE');
             } else {
                 // This part will be called on redraw after filtering, so at this point
                 // we just need to move the lines to the correct position again. First
@@ -243,18 +243,21 @@ export class RowChartViewComponent implements OnInit {
 
         // Move the text to the correct position in the new svg
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
-        const step = svgEl.getBBox().height / (removed['nodes']().length);
+        // Need this condition when reloading in Edge
+        if (svgEl) {
+            const step = svgEl.getBBox().height / (removed['nodes']().length);
 
-        d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
-            const currentStep = step * i;
-            const transfX = parseFloat(newSvg.style('width')) -
-                parseFloat(d3.select(el).style('padding-right'));
-            d3.select(this)
-                .attr('text-anchor', 'end')
-                .attr('transform', () => {
-                    return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
-                });
-        });
+            d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+                const currentStep = step * i;
+                const transfX = parseFloat(newSvg.style('width')) -
+                    parseFloat(d3.select(el).style('padding-right'));
+                d3.select(this)
+                    .attr('text-anchor', 'end')
+                    .attr('transform', () => {
+                        return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
+                    });
+            });
+        }
     }
 
     insertLinesInRows(chart: dc.RowChart) {

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
@@ -38,7 +37,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private geneService: GeneService,
         private dataService: DataService,
-        private location: Location,
         private forceService: ForceService
     ) { }
 
@@ -55,6 +53,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
         this.id = this.route.snapshot.paramMap.get('id');
+
+        // ALways reset the models and tissues
+        this.geneService.setGeneModels([]);
+        this.geneService.setGeneTissues([]);
 
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
@@ -94,9 +96,20 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         });
     }
 
-    getTextColor(state: boolean, normal?: boolean): string {
-        const colorClass = (state) ? 'green-text' : 'red-text';
-        return (normal) ? colorClass + ' normal-heading' : '';
+    getTextColorClass(state: boolean, normal?: boolean): any {
+        const colorClassObj = {} as any;
+        if (state) {
+            colorClassObj['green-text'] = true;
+        } else {
+            colorClassObj['red-text'] = true;
+        }
+
+        if (normal) {
+            colorClassObj['normal-heading'] = true;
+        } else {
+            colorClassObj['italic-heading'] = true;
+        }
+        return colorClassObj;
     }
 
     viewGene(id: string) {
@@ -200,10 +213,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
-    }
-
-    goBack() {
-        this.location.back();
     }
 
     viewPathways() {

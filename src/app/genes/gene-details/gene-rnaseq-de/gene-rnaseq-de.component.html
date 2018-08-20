@@ -38,7 +38,7 @@
                         [showToggleAll]="false"
                         [showHeader]="false"
                         [panelStyle]="{minWidth:'12em'}"
-                        [defaultLabel]="tissues[0].value"
+                        [defaultLabel]="getDefaultLabel()"
                         [dropdownIcon]="getDropdownIcon()"
                         (onPanelShow)="openDropdown()"
                         (onPanelHide)="closeDropdown()"

@@ -1,21 +1,35 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.beta-button {
-    background: #FFFFFF !important;
-    border-radius: 100px !important;
-    font-family: Lato !important;
-    font-style: normal !important;
-    font-weight: bold !important;
-    line-height: normal !important;
-    font-size: 18px !important;
-    color: #73C8CC !important;
-    border: 1px solid #73C8CC !important;
-    //margin-right: 10px !important;
-}
+.beta-wrapper {
+    width: 100%;
+    min-height: 63px;
+    margin-right: 0px;
+    margin-left: 0px;
 
-p-button {
-    button .beta-button {
+    .beta-row {
+        width: 100%;
+        height: 100%;
+        margin-right: 0px;
+        margin-left: 0px;
+        min-height: 63px;
+        background: #73C8CC;
+        position: relative;
+        padding-top: 1%;
+        padding-bottom: 1%;
+
+        i {
+            top: 25%;
+            left: 2%;
+            position: absolute;
+        }
+
+        i:hover {
+            cursor: pointer !important;
+        }
+    }
+
+    .beta-button {
         background: #FFFFFF !important;
         border-radius: 100px !important;
         font-family: Lato !important;
@@ -25,27 +39,48 @@ p-button {
         font-size: 18px !important;
         color: #73C8CC !important;
         border: 1px solid #73C8CC !important;
-       //margin-right: 10px !important;
     }
-}
 
-.beta-contact-us {
-    color: black;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-}
+    p-button {
+        span {
+            background: #FFFFFF !important;
+            border-radius: 100px !important;
+            font-family: Lato !important;
+            font-style: normal !important;
+            font-weight: bold !important;
+            line-height: normal !important;
+            font-size: 18px !important;
+            color: #73C8CC !important;
+            border: 1px solid #73C8CC !important;
+        }
+    }
 
-.beta-coming-soon {
-    margin-bottom: auto;
-    margin-top: auto;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 33px;
-    font-size: 18px;
-    color: #1A1C29;
-    text-align-last: center;
+    .beta-contact-us {
+        color: black;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
+    }
+
+    .beta-coming-soon {
+        margin-bottom: auto;
+        margin-top: auto;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        color: #1A1C29;
+        text-align: center;
+
+        span {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 18px;
+            color: #1A1C29;
+        }
+    }
 }

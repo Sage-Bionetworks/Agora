@@ -81,8 +81,26 @@ p {
     font-weight: normal;
     line-height: normal;
     font-size: 18px;
-    text-align: center;
+    text-align: left;
     color: white;
+}
+
+span {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    @include respond-to('ex-small') {
+        font-size: 18px;
+    }
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #1A1C29;
+}
+
+input::-ms-clear {
+    display: none;
 }
 
 p-dialog {
@@ -151,6 +169,10 @@ p-dialog {
     }
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .black-paragraph {
     color: black;
 }
@@ -182,7 +204,6 @@ p-dialog {
 
 .center-justified {
     text-align: justify;
-    -moz-text-align-last: center;
     text-align-last: center;
 }
 
@@ -241,9 +262,9 @@ p-dialog {
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
-        padding-left: 27.7%;
+        padding-left: 25%;
         padding-bottom: 2em;
-        padding-right: 27.7%;
+        padding-right: 25%;
         color: #000000;
        //background-color: #ffffff;
     }
@@ -303,32 +324,53 @@ p-dialog {
     cursor: pointer;
 }
 
-.beta-wrapper {
+.pathbox {
     width: 100%;
-    min-height: 63px;
-    margin-right: 0px;
-    margin-left: 0px;
-}
+    margin-bottom: 10px;
 
-.beta-row {
-    width: 100%;
-    height: 100%;
-    margin-right: 0px;
-    margin-left: 0px;
-    min-height: 63px;
-    background: #73C8CC;
-    position: relative;
-    padding-top: 1%;
-    padding-bottom: 1%;
-
-    i {
-        top: 25%;
-        left: 2%;
-        position: absolute;
+    .genes {
+        span {
+            color: #5BB0B5;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            font-size: 18px;
+            width: 100%;
+        }
     }
 
-    i:hover {
-        cursor: pointer !important;
+    span {
+        margin-right: 5px;
+    }
+}
+
+.linkstable{
+    table {
+        border-collapse: collapse;
+    }
+
+    table{
+        width: 100%;
+
+        tr {
+            font-family: Lato;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 40px;
+            color: #1A1C29;
+            height: 40px;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafb;
+        }
+
+        tr:nth-child(odd) {
+            background: #FFF
+        }
     }
 }
 

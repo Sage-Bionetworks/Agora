@@ -158,6 +158,7 @@ export class BoxPlotViewComponent implements OnInit {
                 self.geneService.getCurrentTissue() +
                 ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +
                 self.currentGene.adj_p_val + '.';
+
             chart.selectAll('g.box')
                 .append('circle')
                 .attr('cx', lineCenter.attr('x1'))

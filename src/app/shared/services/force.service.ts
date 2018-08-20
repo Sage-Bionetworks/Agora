@@ -8,16 +8,18 @@ export class ForceService {
 
     datachange: EventEmitter<GeneNetwork> = new EventEmitter();
 
-    private dicNodes = [];
-    private dicLinks = [];
-    private dicGroup = [];
-    private rawData = [];
-    private genes: GeneNetwork = {
+    // Add the new #[field] from TypeScript when it's out
+    // https://github.com/Microsoft/TypeScript/issues/24418
+    dicNodes = [];
+    dicLinks = [];
+    dicGroup = [];
+    rawData = [];
+    genes: GeneNetwork = {
         links: [],
         nodes: [],
         origin: undefined
     };
-    private genesClicked: GeneNetwork = {
+    genesClicked: GeneNetwork = {
         links: [],
         nodes: [],
         origin: undefined
@@ -28,7 +30,6 @@ export class ForceService {
         origin: undefined
     };
     private currentGene: Gene;
-
     setData(data: GeneNetworkLinks[]) {
         this.rawData = data;
         this.dicNodes = [];

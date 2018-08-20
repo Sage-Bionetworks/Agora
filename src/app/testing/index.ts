@@ -1,5 +1,6 @@
 export * from './activated-route-stub';
 export * from './data-service-stub';
+export * from './force-service-stub';
 export * from './gene-service-stub';
 export * from './gene-mocks';
 export * from './router-stub';
