@@ -1,11 +1,19 @@
 <div *ngIf="dataLoaded" class="row network-content">
     <div class="col-md-8 col-sm-12 col-12 network-container">
+        Filter:
+        <a (click)="filterNodes(0)">0</a>
+        <a (click)="filterNodes(1)">1</a>
+        <a (click)="filterNodes(2)">2</a>
+        <a (click)="filterNodes(3)">3</a>
+        <a (click)="filterNodes(4)">4</a>
+        <a (click)="filterNodes(5)">5</a>
+        <a (click)="filterNodes(6)">6</a>
         <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
     </div>
     <div class="col-md-4 col-sm-12 col-12 currentGene">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2 (click)="filterNodes()">{{geneInfo.hgnc_symbol}}</h2>
+                <h2>{{geneInfo.hgnc_symbol}}</h2>
                 <p>{{geneInfo.summary}}</p>
                 <div>AD Genetic Association
                     <span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}">{{geneInfo.isIGAP?'True':'False'}}</span>

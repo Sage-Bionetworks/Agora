@@ -174,7 +174,6 @@ export class ForceService {
             this.genesFiltered.origin = this.genes.origin;
             this.genes.links.forEach((link: any) => {
                 if (link.value > lvl) {
-                    this.genesFiltered.links.push(link);
                     if (!dicF[link.source.ensembl_gene_id]) {
                         dicF[link.source.ensembl_gene_id] =
                         this.dicNodes[link.source.ensembl_gene_id];
@@ -188,6 +187,24 @@ export class ForceService {
                         .push(this.dicNodes[link.target.ensembl_gene_id]);
                     }
                 }
+            });
+            this.genes.links.forEach((link: any) => {
+                this.genesFiltered.nodes.forEach((n) => {
+                    if (n.ensembl_gene_id === link.target.id) {
+                        this.genesFiltered.nodes.forEach((t) => {
+                            if (t.ensembl_gene_id === link.source.id) {
+                                this.genesFiltered.links.push(link);
+                            }
+                        });
+                    }
+                    if (n.ensembl_gene_id === link.source.id) {
+                        this.genesFiltered.nodes.forEach((s) => {
+                            if (s.ensembl_gene_id === link.target.id) {
+                                this.genesFiltered.links.push(link);
+                            }
+                        });
+                    }
+                });
             });
             resolve(this.genesFiltered);
         });
