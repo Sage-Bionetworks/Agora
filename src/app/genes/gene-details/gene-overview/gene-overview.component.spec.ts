@@ -70,6 +70,32 @@ describe('Component: GeneSearch', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should get correct text', () => {
+        const gtSpy = spyOn(component, 'getText').and.callThrough();
+        let text;
+        const trueText = 'True';
+        const falseText = 'False';
+        const noDataText = 'No data';
+
+        text = component.getText(true);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(true);
+        expect(text).toEqual(trueText);
+
+        text = component.getText(false);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(false);
+        expect(text).toEqual(falseText);
+
+        text = component.getText(undefined);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(undefined);
+        expect(text).toEqual(noDataText);
+    });
+
     it('should get correct text color class', () => {
         const gtcSpy = spyOn(component, 'getTextColorClass').and.callThrough();
         let textColorClass;
