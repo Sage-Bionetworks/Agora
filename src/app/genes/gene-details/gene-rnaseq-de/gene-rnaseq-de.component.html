@@ -32,7 +32,7 @@
             </h2>
             <div class="row multi-sel-row">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <p-multiSelect
+                    <p-multiSelect *ngIf="!isEmptyGene"
                         [options]="tissues"
                         [(ngModel)]="selectedTissues"
                         [showToggleAll]="false"
@@ -44,21 +44,27 @@
                         (onPanelHide)="closeDropdown()"
                         (onChange)="toggleTissue($event)">
                     </p-multiSelect>
+                    <span *ngIf="isEmptyGene">Not enough data</span>
                 </div>
             </div>
             <div class="row sm-row">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <select-menu [promptText]="'All'"
+                    <select-menu  *ngIf="!isEmptyGene"
+                        [promptText]="'All'"
                         [label]="'select-model'"
                         [defaultValue]="getModel(1)">
                     </select-menu>
+                    <span *ngIf="isEmptyGene">Not enough data</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-12 col-12 bplot-col">
+        <div *ngIf="!isEmptyGene" class="col-md-4 col-sm-12 col-12 bplot-col">
             <!-- BoxPlots component-->
             <ng-template *ngFor="let tissue of tissues; let i = index" #t>
             </ng-template>
+        </div>
+        <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 bplot-col">
+            <img src="/assets/img/box_plot_placeholder.jpg">
         </div>
     </div>
 </div>

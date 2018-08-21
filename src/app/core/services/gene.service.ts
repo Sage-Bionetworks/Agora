@@ -144,6 +144,24 @@ export class GeneService {
         return [this.minAdjPValue, this.maxAdjPValue];
     }
 
+    getEmptyGene(ensemblGeneId?: string, hgncSymbol?: string): Gene {
+        const eGene = {
+            _id: '',
+            ensembl_gene_id: '',
+            hgnc_symbol: '',
+            logfc: 0,
+            ci_l: 0,
+            ci_r: 0,
+            adj_p_val: 0,
+            tissue: '',
+            study: '',
+            model: ''
+        } as Gene;
+        if (ensemblGeneId) { eGene.ensembl_gene_id = ensemblGeneId; }
+        if (hgncSymbol) { eGene.hgnc_symbol = hgncSymbol; }
+        return eGene;
+    }
+
     loadTissues(): Promise<any> {
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
