@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { mockGene1, mockGene2 } from './gene-mocks';
 
 import { Observable, of } from 'rxjs';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 @Injectable()
 export class DataServiceStub {
