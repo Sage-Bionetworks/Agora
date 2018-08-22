@@ -1,4 +1,4 @@
-FROM khezen/mongo:latest
+FROM amd64/mongo
 
 EXPOSE 27017
 

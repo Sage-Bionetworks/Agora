@@ -1,4 +1,4 @@
-FROM mongo
+FROM amd64/mongo
 
 COPY /gene_info.json /gene_info.json
 
