@@ -1,7 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed
+    TestBed,
+    fakeAsync,
+    tick
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +25,9 @@ import { DataService, GeneService } from '../../../core/services';
 import { Button } from 'primeng/button';
 
 import { MockComponent } from 'ng-mocks';
+
+import { of } from 'rxjs';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 describe('Component: GeneSearch', () => {
     let component: GeneOverviewComponent;
@@ -70,6 +75,32 @@ describe('Component: GeneSearch', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should get correct text', () => {
+        const gtSpy = spyOn(component, 'getText').and.callThrough();
+        let text;
+        const trueText = 'True';
+        const falseText = 'False';
+        const noDataText = 'No data';
+
+        text = component.getText(true);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(true);
+        expect(text).toEqual(trueText);
+
+        text = component.getText(false);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(false);
+        expect(text).toEqual(falseText);
+
+        text = component.getText(undefined);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(undefined);
+        expect(text).toEqual(noDataText);
+    });
+
     it('should get correct text color class', () => {
         const gtcSpy = spyOn(component, 'getTextColorClass').and.callThrough();
         let textColorClass;
@@ -102,4 +133,18 @@ describe('Component: GeneSearch', () => {
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
     });
+
+    it('should save the loaded genes state', fakeAsync(() => {
+        const dsSpy = spyOn(dataService, 'loadGenes').and.callFake(() =>
+            Promise.resolve(true)
+        );
+
+        spyOn(component, 'initDetails').and.callThrough();
+        component.initDetails();
+        tick(500);
+
+        fixture.detectChanges();
+        expect(component.dataLoaded).toEqual(true);
+        expect(dsSpy.calls.any()).toEqual(true);
+    }));
 });

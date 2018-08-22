@@ -114,9 +114,4 @@ describe('Component: GenesList', () => {
         fixture.detectChanges();
         expect(gsSpy.calls.any()).toEqual(true);
     }));
-
-    it ('goBack() function test', () => {
-        component.goBack();
-        expect(location.back).toHaveBeenCalled();
-    });
 });

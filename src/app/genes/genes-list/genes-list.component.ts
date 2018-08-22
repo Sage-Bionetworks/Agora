@@ -126,8 +126,4 @@ export class GenesListComponent implements OnInit {
     getTeams(nomTargets: NominatedTarget[]): string {
         return nomTargets.map((nt) => nt.team).join(', ');
     }
-
-    goBack() {
-        this.location.back();
-    }
 }

@@ -65,22 +65,39 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol) {
             this.dataService.getGene(this.id).subscribe((data) => {
-                if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.updateGeneData(data);
-                this.gene = data['item'];
-                this.geneInfo = data['info'];
+                console.log(data['item']);
+                if (!data['info']) {
+                    this.router.navigate(['/genes']);
+                } else {
+                    if (!data['item']) {
+                        // Fill in a new gene with the info attributes
+                        data['item'] = this.geneService.getEmptyGene(
+                            data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                        );
+                    }
+                    this.geneService.updateGeneData(data);
+                    this.gene = data['item'];
+                    this.geneInfo = data['info'];
+                }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
             }, () => {
-                this.geneService.loadGeneTissues().then((tstatus) => {
-                    if (tstatus) {
-                        this.geneService.loadGeneModels().then((mstatus) => {
-                            if (mstatus) {
-                                this.initDetails();
-                            }
-                        });
-                    }
-                });
+                // Check if we have a database id at this point
+                if (this.gene && this.gene._id) {
+                    this.geneService.loadGeneTissues().then((tstatus) => {
+                        if (tstatus) {
+                            this.geneService.loadGeneModels().then((mstatus) => {
+                                if (mstatus) {
+                                    this.initDetails();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.geneService.setGeneTissues([]);
+                    this.geneService.setGeneModels([]);
+                    this.initDetails();
+                }
             });
         } else {
             this.initDetails();
@@ -94,6 +111,20 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             }
             // Handle error later
         });
+    }
+
+    getText(state?: boolean): string {
+        let text = '';
+        if (state) {
+            text = 'True';
+        } else {
+            if (state === undefined) {
+                text = 'No data';
+            } else {
+                text = 'False';
+            }
+        }
+        return text;
     }
 
     getTextColorClass(state: boolean, normal?: boolean): any {

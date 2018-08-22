@@ -45,7 +45,7 @@
             <div class="col-md-6">
                 <h3>
                     AD Genetic Association &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{geneInfo.isIGAP?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -59,7 +59,7 @@
             <div class="col-md-6">
                 <h3>
                     Brain eQTL &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{geneInfo.haseqtl?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
@@ -93,7 +93,7 @@
             <div class="col-md-6">
                 <h3>
                     Nominated target &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{geneInfo.nominations?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText(geneInfo.nominations)}}</span>
                 </h3>
             </div>
         </div>
@@ -101,7 +101,7 @@
             <div class="col-md-6">
                 <h3>
                     RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColorClass(geneInfo.isChangedInADBrain, true)">{{geneInfo.isChangedInADBrain?'True':'False'}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.isChangedInADBrain, true)">{{getText(geneInfo.isChangedInADBrain)}}</span>
                 </h3>
             </div>
             <div class="col-md-6">
