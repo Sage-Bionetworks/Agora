@@ -155,7 +155,8 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     getDefaultLabel(): string {
-        return this.geneService.getDefaultTissue() || this.tissues[0].value;
+        return this.geneService.getDefaultTissue() ||
+            (this.tissues.length ? this.tissues[0].value : '');
     }
 
     async toggleTissue(event: any) {

@@ -17,21 +17,20 @@ import {
     mockInfo1
 } from '../../../testing';
 
-import { GeneOverviewComponent } from './gene-overview.component';
+import { GeneNetworkComponent } from './gene-network.component';
 
 import { ForceService } from '../../../shared/services';
 import { DataService, GeneService } from '../../../core/services';
-
-import { Button } from 'primeng/button';
 
 import { MockComponent } from 'ng-mocks';
 
 import { of } from 'rxjs';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { MyArraySortPipe } from '../../../shared/pipes';
 
-describe('Component: GeneOverview', () => {
-    let component: GeneOverviewComponent;
-    let fixture: ComponentFixture<GeneOverviewComponent>;
+describe('Component: GeneNetwork', () => {
+    let component: GeneNetworkComponent;
+    let fixture: ComponentFixture<GeneNetworkComponent>;
     let router: RouterStub;
     let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
@@ -41,9 +40,9 @@ describe('Component: GeneOverview', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GeneOverviewComponent,
-                MockComponent(Button),
-                MockComponent(GeneOverviewComponent)
+                GeneNetworkComponent,
+                MockComponent(GeneNetworkComponent),
+                MyArraySortPipe
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -59,7 +58,7 @@ describe('Component: GeneOverview', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(GeneOverviewComponent);
+        fixture = TestBed.createComponent(GeneNetworkComponent);
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
@@ -133,18 +132,4 @@ describe('Component: GeneOverview', () => {
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
     });
-
-    it('should save the loaded genes state', fakeAsync(() => {
-        const dsSpy = spyOn(dataService, 'loadGenes').and.callFake(() =>
-            Promise.resolve(true)
-        );
-
-        spyOn(component, 'initDetails').and.callThrough();
-        component.initDetails();
-        tick(500);
-
-        fixture.detectChanges();
-        expect(component.dataLoaded).toEqual(true);
-        expect(dsSpy.calls.any()).toEqual(true);
-    }));
 });

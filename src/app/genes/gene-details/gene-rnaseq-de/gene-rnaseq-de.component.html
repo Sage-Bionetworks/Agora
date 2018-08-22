@@ -14,7 +14,7 @@
 
 <div class="section-thin rna-seq-bplot" *ngIf="dataLoaded" tabindex="0">
     <div class="row">
-        <div class="col-md-8 col-sm-12 col-12 bplot-l-col">
+        <div class="col-md-8 col-sm-12 col-12">
             <h2 class="de-header">
                 Differential Expression of Selected Gene within Selected Tissue
             </h2>
@@ -63,8 +63,8 @@
             <ng-template *ngFor="let tissue of tissues; let i = index" #t>
             </ng-template>
         </div>
-        <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 bplot-col">
-            <img src="/assets/img/box_plot_placeholder.jpg">
+        <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
+            <h2 class="placeholder-text">Not enough data to render chart</h2>
         </div>
     </div>
 </div>
@@ -78,7 +78,10 @@
         tissues in the chosen model. Genes that show consistent patterns of differential expression will
         have similar log-fold change value across tissues.
     </p>
-    <row-chart></row-chart>
+    <row-chart *ngIf="!isEmptyGene"></row-chart>
+    <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
+        <h2 class="placeholder-text">Not enough data to render chart</h2>
+    </div>
 </div>
 
 <div class="ui-rtl" dir="rtl">

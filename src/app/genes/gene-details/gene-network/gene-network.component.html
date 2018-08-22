@@ -8,18 +8,16 @@
                 <h2>{{geneInfo.hgnc_symbol}}</h2>
                 <p class="cg-col-p">{{geneInfo.summary}}</p>
                 <h3 class="cg-col-span">
-                    AD Genetic Association
-                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.isIGAP,'red-text':!geneInfo.isIGAP}">{{geneInfo.isIGAP?'True':'False'}}</span>
+                    AD Genetic Association &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
                 </h3>
                 <h3 class="cg-col-span">
-                    Nominated Target
-                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.nominations,'red-text':!geneInfo.nominations}">
-                        {{geneInfo.nominations?'True':'False'}}
-                    </span>
+                    Nominated target &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText(geneInfo.nominations)}}</span>
                 </h3>
                 <h3 class="cg-col-span">
-                    Brain eQTL
-                    &nbsp;&nbsp;&nbsp;<span [ngClass]="{'green-text':geneInfo.haseqtl,'red-text':!geneInfo.haseqtl}" class='normal-heading'>{{geneInfo.haseqtl?'True':'False'}}</span>
+                    Brain eQTL &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
                 </h3>
             </div>
         </div>

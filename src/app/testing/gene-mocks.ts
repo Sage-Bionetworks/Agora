@@ -1,4 +1,4 @@
-import { Gene, GeneInfo } from '../models';
+import { Gene, GeneInfo, GeneNetworkLinks } from '../models';
 
 export const mockGene1: Gene = {
     _id: '5afa0be1310e7e82fde5112c',
@@ -107,6 +107,22 @@ export const mockInfo1: GeneInfo = {
         }
     ],
     'nominations': 1
+};
+
+export const mockDataLink1: GeneNetworkLinks = {
+    brainRegion: 'DLPFC',
+    geneA_ensembl_gene_id: 'ENSG00000128564',
+    geneA_external_gene_name: 'VGF',
+    geneB_ensembl_gene_id: 'ENSG00000169436',
+    geneB_external_gene_name: 'COL22A1'
+};
+
+export const mockDataLink2: GeneNetworkLinks = {
+    brainRegion: 'STG',
+    geneA_ensembl_gene_id: 'ENSG00000197106',
+    geneA_external_gene_name: 'SLC6A17',
+    geneB_ensembl_gene_id: 'ENSG00000152954',
+    geneB_external_gene_name: 'NRSN1'
 };
 
 export const mockTissues: string [] = ['DLPFC', 'CBE', 'TCX'];

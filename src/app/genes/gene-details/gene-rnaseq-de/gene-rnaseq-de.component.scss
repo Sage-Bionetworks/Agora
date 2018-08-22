@@ -285,10 +285,13 @@
         }
     }
 
-
-
     .bplot-col {
         background: rgba(245, 245, 245, 0.5);
+    }
+
+    .empty-bplot-col {
+        background: rgba(245, 245, 245, 0.5);
+        height: 450px;
     }
 }
 
@@ -325,6 +328,14 @@
 
     .icon-spacing {
         margin-right: 5px;
+    }
+
+    .rc-empty-plot-content {
+        height: 450px;
+        margin-top: 2%;
+        position: relative;
+        display: block;
+        background: rgba(245, 245, 245, 0.5);
     }
 }
 

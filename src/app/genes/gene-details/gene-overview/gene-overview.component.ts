@@ -65,7 +65,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol) {
             this.dataService.getGene(this.id).subscribe((data) => {
-                console.log(data['item']);
                 if (!data['info']) {
                     this.router.navigate(['/genes']);
                 } else {
