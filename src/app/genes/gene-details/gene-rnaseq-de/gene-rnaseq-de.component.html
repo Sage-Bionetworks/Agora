@@ -64,7 +64,7 @@
             </ng-template>
         </div>
         <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
-            <h2 class="placeholder-text">Not enough data to render chart</h2>
+            <h2 class="placeholder-text">No expression data is currently available</h2>
         </div>
     </div>
 </div>
@@ -80,7 +80,7 @@
     </p>
     <row-chart *ngIf="!isEmptyGene"></row-chart>
     <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
-        <h2 class="placeholder-text">Not enough data to render chart</h2>
+        <h2 class="placeholder-text">No expression data is currently available</h2>
     </div>
 </div>
 
