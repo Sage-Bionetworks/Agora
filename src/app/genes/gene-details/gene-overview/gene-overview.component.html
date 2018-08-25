@@ -28,10 +28,12 @@
         <p class="italic-paragraph">
             {{getSummary()}}
         </p>
-        <h3>Also known as</h3>
-        <p class="black-paragraph">
-            {{getAlias()}}
-        </p>
+        <div *ngIf="getAlias()">
+            <h3>Also known as</h3>
+            <p class="black-paragraph">
+                {{getAlias()}}
+            </p>
+        </div>
     </div>
 
     <div class="section-thin overview-rel" tabindex="0">

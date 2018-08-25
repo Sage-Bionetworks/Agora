@@ -34,7 +34,7 @@ g.textGroup text {
         stroke: white;
     }
 
-    g.axis text {
+    svg g, g.axis text, g.row g.confidence-text-left text, g.row g.confidence-text-right text {
         font-family: Lato;
         font-style: normal;
         font-weight: normal;
@@ -46,6 +46,10 @@ g.textGroup text {
 
     g.row rect {
         fill-opacity: 1 !important;
+    }
+
+    .confidence-text text {
+        display: none;
     }
 
     .x-axis-label {
