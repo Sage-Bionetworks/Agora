@@ -69,9 +69,23 @@
     </div>
 </div>
 
-<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded" tabindex="0">
+<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Consistency of Change in Expression
+        <span class="icon-spacing"></span>
+        <img class="download-img" src="/assets/img/download.jpg" (click)="op.toggle($event)">
+        <p-overlayPanel [styleClass]="'download-op'" #op>
+            <h3>Download as</h3>
+            <div *ngFor="let type of types" class="col-md-12 col-sm-12 col-12 chkbox-col">
+                <p-checkbox name="group1" value="{{type.value}}" label="{{type.label}}" [(ngModel)]="selectedTypes"></p-checkbox>
+            </div>
+            <div class="col-md-12 col-sm-12 col-12 button-col">
+                <p-button (click)="downloadWidget()"
+                    label="Download"
+                    [styleClass]="'download-button'" tabindex="0">
+                </p-button>
+            </div>
+        </p-overlayPanel>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the

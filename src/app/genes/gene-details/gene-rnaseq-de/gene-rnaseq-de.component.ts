@@ -9,7 +9,6 @@ import {
     ComponentRef,
     QueryList
 } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
@@ -34,14 +33,16 @@ export class GeneRNASeqDEComponent implements OnInit {
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
-    dataLoaded: boolean = false;
     tissues: SelectItem[] = [];
     currentTissues: string[] = [];
     selectedTissues: string[] = [];
     componentRefs: any[] = [];
+    selectedTypes: string[] = ['png'];
+    types: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
+    dataLoaded: boolean = false;
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = false;
@@ -52,11 +53,13 @@ export class GeneRNASeqDEComponent implements OnInit {
         private geneService: GeneService,
         private dataService: DataService,
         private chartService: ChartService,
-        private location: Location,
         private resolver: ComponentFactoryResolver
     ) { }
 
     ngOnInit() {
+        // Populate the options for our download menu
+        this.initDownloadMenu();
+
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
 
@@ -93,6 +96,17 @@ export class GeneRNASeqDEComponent implements OnInit {
                 this.dataLoaded = status;
             });
         }
+    }
+
+    initDownloadMenu() {
+        this.types.push({
+            value: 'png',
+            label: 'PNG'
+        });
+    }
+
+    downloadWidget() {
+        //
     }
 
     loadChartData(): Promise<any> {
@@ -292,9 +306,5 @@ export class GeneRNASeqDEComponent implements OnInit {
 
     showDialog(dialogString: string) {
         this[dialogString] = true;
-    }
-
-    goBack() {
-        this.location.back();
     }
 }

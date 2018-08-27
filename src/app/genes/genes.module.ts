@@ -8,6 +8,8 @@ import { AppSharedModule } from '../shared';
 
 import { SharedModule } from 'primeng/shared';
 import { PanelModule } from 'primeng/panel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
@@ -52,6 +54,8 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         // PrimeNG modules
         SharedModule,
         PanelModule,
+        OverlayPanelModule,
+        CheckboxModule,
         ButtonModule,
         TableModule,
         DialogModule,
