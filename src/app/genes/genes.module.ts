@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { GenesRoutingModule } from './genes-routing.module';
 import { ChartsModule } from '../charts';
@@ -8,8 +7,6 @@ import { AppSharedModule } from '../shared';
 
 import { SharedModule } from 'primeng/shared';
 import { PanelModule } from 'primeng/panel';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TabViewModule } from 'primeng/tabview';
@@ -45,8 +42,6 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         BoxPlotsViewComponent
     ],
     imports: [
-        CommonModule,
-        FormsModule,
         ReactiveFormsModule,
         ChartsModule,
         AppSharedModule.forRoot(),
@@ -54,8 +49,6 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         // PrimeNG modules
         SharedModule,
         PanelModule,
-        OverlayPanelModule,
-        CheckboxModule,
         ButtonModule,
         TableModule,
         DialogModule,

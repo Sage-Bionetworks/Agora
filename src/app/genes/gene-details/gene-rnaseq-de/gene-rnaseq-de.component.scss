@@ -251,6 +251,10 @@
         }
     }
 
+    .col-fixer {
+        display: table-row;
+    }
+
     .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
         margin-bottom: 40px;
     }
@@ -316,110 +320,6 @@
         position: relative;
         display: block;
         background: rgba(245, 245, 245, 0.5);
-    }
-
-    .download-op {
-        margin-top: 5px;
-
-        .fake-span {
-            height: 0px;
-            font-size: 0px;
-            vertical-align: top;
-        }
-
-        .ui-overlaypanel-content {
-            padding: 0px;
-
-            @include respond-to('ex-small') {
-                width: 200px;
-            }
-
-            width: 289px;
-        }
-
-        .chkbox-col {
-            height: 52px;
-            line-height: 52px;
-            border-bottom: 1px solid #EDEDED;
-        }
-
-        .button-col {
-            height: 87px;
-            line-height: 87px;
-            text-align: center;
-
-            p-button {
-                @include respond-to('ex-small') {
-                    width: 137px;
-                }
-
-                width: 226px;
-                height: 52px;
-
-                cursor: pointer;
-            }
-        }
-
-        h3 {
-            margin: 0px;
-            padding-left: 19px;
-            padding-right: 19px;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            color: #FFFFFF;
-            background: #5BB0B5;
-        }
-
-        p-checkbox {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 16px;
-            height: 32px;
-            color: #1A1C29;
-
-        }
-
-        .ui-chkbox {
-            margin-right: 17px;
-        }
-
-        .ui-chkbox-box {
-            background: #2F8E94;
-            border: 2px solid #73C8CC;
-            box-sizing: border-box;
-            border-radius: 6px;
-            width: 32px;
-            height: 32px;
-            margin-bottom: 5px;
-        }
-
-        .ui-chkbox-icon {
-            color: white;
-            margin-top: 2px;
-
-            span {
-                height: 100%;
-
-                .pi-check:before {
-                    font-size: 21px;
-                }
-            }
-        }
-
-        .download-button {
-            background: #FCCB6F !important;
-            border: 0px !important;
-            color: black !important;
-            border-radius: 100px;
-            width: 100%;
-            height: 100%;
-
-            span {
-                font-weight: bold;
-            }
-        }
     }
 }
 

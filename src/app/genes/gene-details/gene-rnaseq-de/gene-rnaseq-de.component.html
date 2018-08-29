@@ -1,8 +1,11 @@
-<div class="section-thin rna-seq-me" *ngIf="dataLoaded" tabindex="0">
-<h2 class="filters-header">
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+    <h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
         <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
+        <span class="icon-spacing"></span>
+        <span class="icon-spacing"></span>
+        <download></download>
     </h2>
     <p class="black-paragraph">
         This plot depicts the median expression of the selected gene across tissues (brain regions)
@@ -12,11 +15,13 @@
     <!--<median-chart [geneinfo]="geneInfo"></median-chart>-->
 </div>
 
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded" tabindex="0">
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <div class="row">
-        <div class="col-md-8 col-sm-12 col-12">
-            <h2 class="de-header">
+        <div class="col-md-8 col-sm-12 col-12 col-fixer">
+            <h2>
                 Differential Expression of Selected Gene within Selected Tissue
+                <span class="icon-spacing"></span>
+                <download></download>
             </h2>
             <p class="black-paragraph de-paragraph">
                 After selecting a tissue and statistical model, you will be able to see whether the
@@ -73,19 +78,7 @@
     <h2>
         Consistency of Change in Expression
         <span class="icon-spacing"></span>
-        <img class="download-img" src="/assets/img/download.jpg" (click)="op.toggle($event)">
-        <p-overlayPanel [styleClass]="'download-op'" #op>
-            <h3>Download as</h3>
-            <div *ngFor="let type of types" class="col-md-12 col-sm-12 col-12 chkbox-col">
-                <p-checkbox name="group1" value="{{type.value}}" label="{{type.label}}" [(ngModel)]="selectedTypes"></p-checkbox>
-            </div>
-            <div class="col-md-12 col-sm-12 col-12 button-col">
-                <p-button (click)="downloadWidget()"
-                    label="Download"
-                    [styleClass]="'download-button'" tabindex="0">
-                </p-button>
-            </div>
-        </p-overlayPanel>
+        <download></download>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the

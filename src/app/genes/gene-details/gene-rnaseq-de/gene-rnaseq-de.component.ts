@@ -37,8 +37,6 @@ export class GeneRNASeqDEComponent implements OnInit {
     currentTissues: string[] = [];
     selectedTissues: string[] = [];
     componentRefs: any[] = [];
-    selectedTypes: string[] = ['png'];
-    types: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
@@ -57,9 +55,6 @@ export class GeneRNASeqDEComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // Populate the options for our download menu
-        this.initDownloadMenu();
-
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
 
@@ -96,17 +91,6 @@ export class GeneRNASeqDEComponent implements OnInit {
                 this.dataLoaded = status;
             });
         }
-    }
-
-    initDownloadMenu() {
-        this.types.push({
-            value: 'png',
-            label: 'PNG'
-        });
-    }
-
-    downloadWidget() {
-        //
     }
 
     loadChartData(): Promise<any> {
