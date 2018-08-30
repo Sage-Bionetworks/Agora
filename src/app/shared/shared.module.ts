@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 
 import { DownloadComponent } from './components/download';
 
@@ -37,7 +39,9 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
         // PrimeNG modules
         ButtonModule,
         CheckboxModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+        DialogModule,
+        ToastModule
     ],
     exports: [
         // Angular modules

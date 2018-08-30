@@ -1,11 +1,11 @@
-<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+<div #stme class="section-thin rna-seq-me" *ngIf="dataLoaded">
     <h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
         <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
         <span class="icon-spacing"></span>
         <span class="icon-spacing"></span>
-        <download></download>
+        <download [target]="stme" [name]="'overall_exp_ac_tissues'"></download>
     </h2>
     <p class="black-paragraph">
         This plot depicts the median expression of the selected gene across tissues (brain regions)
@@ -15,13 +15,13 @@
     <!--<median-chart [geneinfo]="geneInfo"></median-chart>-->
 </div>
 
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+<div #stbp class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <div class="row">
         <div class="col-md-8 col-sm-12 col-12 col-fixer">
             <h2>
                 Differential Expression of Selected Gene within Selected Tissue
                 <span class="icon-spacing"></span>
-                <download></download>
+                <download [target]="stbp"  [name]="'dif_exp_tissue'"></download>
             </h2>
             <p class="black-paragraph de-paragraph">
                 After selecting a tissue and statistical model, you will be able to see whether the
@@ -74,11 +74,11 @@
     </div>
 </div>
 
-<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
+<div #stfp class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Consistency of Change in Expression
         <span class="icon-spacing"></span>
-        <download></download>
+        <download [target]="stfp"  [name]="'consistency_chg_in_exp'"></download>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the

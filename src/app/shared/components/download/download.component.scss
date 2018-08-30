@@ -104,3 +104,48 @@
         }
     }
 }
+
+.warn-toast {
+    @include respond-to('ex-small') {
+        width: 80%;
+    }
+    @include respond-to('small') {
+        width: 60%;
+    }
+    @include respond-to('medium') {
+        width: 50%;
+    }
+
+    .ui-toast-message {
+        color: #1A1C29;
+        background: #ffe399;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 18px;
+    }
+
+    .ui-toast-summary {
+        color: #1A1C29;
+        background: #ffe399;
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 20px;
+    }
+
+    .ui-toast-close-icon {
+        color: #1A1C29;
+        font-size: 24px;
+        border: none;
+        text-decoration: none;
+    }
+}
+
+.progress-dialog {
+    .ui-dialog-titlebar {
+        display: none !important;
+    }
+}

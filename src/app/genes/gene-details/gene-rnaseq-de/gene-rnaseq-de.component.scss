@@ -20,26 +20,20 @@
 .rna-seq-bplot {
     @include respond-to('medium') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('ex-large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
 

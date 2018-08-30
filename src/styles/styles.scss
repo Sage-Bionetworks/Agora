@@ -105,15 +105,15 @@ input::-ms-clear {
 
 p-dialog {
     .ui-dialog {
-        width: 80% !important;
-        max-width: 80% !important;
-        top: 109px !important;
-        max-height: 80% !important;
+        width: 80% ;
+        max-width: 80% ;
+        top: 109px ;
+        max-height: 80% ;
         overflow: auto;
     }
 
     .ui-dialog-titlebar {
-        padding-top: 85px !important;
+        padding-top: 85px ;
         text-align-last: center;
         background: white;
         font-family: Lato;
@@ -123,7 +123,7 @@ p-dialog {
         font-size: 24px;
         color: #1A1C29;
         text-align: center;
-        padding-top: 10% !important;
+        padding-top: 10% ;
 
         .pi-times:before {
             color: #5BB0B5;
@@ -131,9 +131,9 @@ p-dialog {
     }
 
     .ui-dialog-content {
-        padding-bottom: 85px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
+        padding-bottom: 85px ;
+        padding-left: 10% ;
+        padding-right: 10% ;
         font-family: Lato;
         font-style: normal;
         font-weight: normal;
@@ -142,7 +142,7 @@ p-dialog {
         text-align: left;
         text-align-last: left;
         color: #000000;
-        height: 100% !important;
+        height: 100% ;
         padding-bottom: 10%;
 
         .content-row {
