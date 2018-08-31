@@ -1,21 +1,16 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import {
-    RouterOutletStubComponent
-} from '../../testing';
+import { LoadingComponent } from './';
 
-import { GenesViewComponent } from './';
-
-describe('Component: GenesView', () => {
-    let component: GenesViewComponent;
-    let fixture: ComponentFixture<GenesViewComponent>;
+describe('Component: Loading', () => {
+    let component: LoadingComponent;
+    let fixture: ComponentFixture<LoadingComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GenesViewComponent,
-                RouterOutletStubComponent
+                LoadingComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -23,12 +18,18 @@ describe('Component: GenesView', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(GenesViewComponent);
+        fixture = TestBed.createComponent(LoadingComponent);
 
         component = fixture.componentInstance; // Component test instance
     }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have the video object', () => {
+        fixture.detectChanges();
+
+        expect(component.videoTag).not.toEqual(undefined);
     });
 });

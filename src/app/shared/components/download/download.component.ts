@@ -13,12 +13,17 @@ import { saveAs } from 'file-saver';
     providers: [ MessageService ],
     encapsulation: ViewEncapsulation.None
 })
-export class DownloadComponent implements OnInit {
+export class DownloadComponent {
     @Input() target: HTMLElement;
     @Input() name: string = 'example';
     @ViewChild('op') overlayPanel: OverlayPanel;
     selectedTypes: string[] = ['png'];
-    types: any[] = [];
+    types: any[] = [
+        {
+            value: 'png',
+            label: 'PNG'
+        }
+    ];
     displayDialog: boolean = false;
 
     private resizeTimer;
@@ -27,19 +32,8 @@ export class DownloadComponent implements OnInit {
         //
     }
 
-    ngOnInit() {
-        // Populate the options for our download menu
-        this.initDownloadMenu();
-    }
-
-    initDownloadMenu() {
-        this.types.push({
-            value: 'png',
-            label: 'PNG'
-        });
-    }
-
     hide() {
+        // Sets visible to false
         this.overlayPanel.hide();
     }
 

@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 
 import { DownloadComponent } from './components/download';
+import { LoadingComponent } from './components/loading';
 
 import {
     AlertComponent,
@@ -26,6 +27,7 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
     declarations: [
         AlertComponent,
         DownloadComponent,
+        LoadingComponent,
         FocusDirective,
         NumbersPipe,
         MyArraySortPipe
@@ -54,6 +56,7 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
         // Other declarations
         AlertComponent,
         DownloadComponent,
+        LoadingComponent,
         FocusDirective,
         NumbersPipe,
         MyArraySortPipe

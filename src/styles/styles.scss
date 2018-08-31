@@ -405,6 +405,13 @@ p-dialog {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
+    font-family: Lato;
+    font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+    color: #9DA3B3;
 }
 
 .icon-spacing {
@@ -413,4 +420,12 @@ p-dialog {
 
 .download-img {
     cursor: pointer;
+}
+
+.loading-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -100px;
+    pointer-events: none;
 }

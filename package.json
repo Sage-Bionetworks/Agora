@@ -67,7 +67,7 @@
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "postinstall": "npm run webdriver:update",
-    "postversion": "git push && git push --tags",
+    "postversion": "git push && git push --follow-tags",
     "preclean:install": "npm run clean",
     "preversion": "npm test",
     "protractor": "protractor",

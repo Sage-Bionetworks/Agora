@@ -49,17 +49,35 @@
                         (onPanelHide)="closeDropdown()"
                         (onChange)="toggleTissue($event)">
                     </p-multiSelect>
-                    <span *ngIf="isEmptyGene">Not enough data</span>
+                    <p-multiSelect #egms *ngIf="isEmptyGene"
+                        [options]="emptySelection"
+                        [(ngModel)]="selectedTissues"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="emptySelectionLabel"
+                        [dropdownIcon]="getDropdownIcon()"
+                        [disabled]="true">
+                    </p-multiSelect>
                 </div>
             </div>
             <div class="row sm-row">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <select-menu  *ngIf="!isEmptyGene"
+                    <select-menu *ngIf="!isEmptyGene"
                         [promptText]="'All'"
                         [label]="'select-model'"
                         [defaultValue]="getModel(1)">
                     </select-menu>
-                    <span *ngIf="isEmptyGene">Not enough data</span>
+                    <p-multiSelect #egmsc *ngIf="isEmptyGene"
+                        [options]="emptySelection"
+                        [(ngModel)]="selectedTissues"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="emptySelectionLabel"
+                        [dropdownIcon]="getDropdownIcon()"
+                        [disabled]="true">
+                    </p-multiSelect>
                 </div>
             </div>
         </div>
@@ -78,7 +96,7 @@
     <h2>
         Consistency of Change in Expression
         <span class="icon-spacing"></span>
-        <download [target]="stfp"  [name]="'consistency_chg_in_exp'"></download>
+        <download [target]="stfp" [name]="'consistency_chg_in_exp'"></download>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the
