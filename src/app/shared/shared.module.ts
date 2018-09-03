@@ -21,7 +21,7 @@ import {
 
 import { AlertService, ForceService } from './services';
 
-import { NumbersPipe, MyArraySortPipe } from './pipes';
+import { NumbersPipe, ArraySortPipe } from './pipes';
 
 @NgModule({
     declarations: [
@@ -30,7 +30,7 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
         LoadingComponent,
         FocusDirective,
         NumbersPipe,
-        MyArraySortPipe
+        ArraySortPipe
     ],
     imports: [
         // Angular modules
@@ -59,7 +59,7 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
         LoadingComponent,
         FocusDirective,
         NumbersPipe,
-        MyArraySortPipe
+        ArraySortPipe
     ]
 })
 // Changed the name so it does not conflict with primeng module

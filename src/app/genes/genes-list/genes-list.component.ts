@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -11,8 +10,7 @@ import { GeneInfo, NominatedTarget } from '../../models';
 
 import {
     Message,
-    SortEvent,
-    LazyLoadEvent
+    SortEvent
 } from 'primeng/primeng';
 
 @Component({
@@ -35,8 +33,7 @@ export class GenesListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private dataService: DataService,
-        private geneService: GeneService,
-        private location: Location
+        private geneService: GeneService
     ) { }
 
     ngOnInit() {

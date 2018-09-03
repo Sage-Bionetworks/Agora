@@ -14,7 +14,7 @@ export class FooterComponent {
         //
     }
 
-    getVersion(data?: boolean) {
+    getVersion(data?: boolean): string {
         return (data) ? DATA_VERSION : VERSION;
     }
 

@@ -65,7 +65,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         this.renderChart();
     }
 
-    onResize(event) {
+    onResize(event?: any) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
         this.height = this.forceChart.nativeElement.offsetParent.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
@@ -257,7 +257,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .attr('dy', 4);
     }
 
-    private getNodeColor(node: GeneNode , index, arr) {
+    private getNodeColor(node: GeneNode , index, arr): string {
         if (!index) {
             return '#F38070';
         }
@@ -271,10 +271,9 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             return '#A7DDDF';
         }
         return '#BCC0CA';
-        // return !index ? '#F5DAB4' : '#BCC0CA';
     }
 
-    private getLinkColor(link: GeneLink , index, arr) {
+    private getLinkColor(link: GeneLink , index, arr): string {
         if (link.value >= 6) {
             return '#11656A';
         }

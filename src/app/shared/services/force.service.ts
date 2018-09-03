@@ -42,18 +42,18 @@ export class ForceService {
         this.datachange.emit(data);
     }
 
-    getGenes() {
+    getGenes(): EventEmitter<GeneNetwork> {
         return this.datachange;
     }
 
-    getGeneOriginalList() {
+    getGeneOriginalList(): GeneNetwork {
         if (this.genes.links.length && this.genes.nodes.length) {
             return this.genes;
         }
         return null;
     }
 
-    getGeneClickedList() {
+    getGeneClickedList(): GeneNetwork {
         if (this.genesClicked.links.length && this.genesClicked.nodes.length) {
             return this.genesClicked;
         }

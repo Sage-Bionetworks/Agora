@@ -2,10 +2,9 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+// Updating to rxjs 6 import statement
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
 
 import { Gene, GeneInfo } from '../../models';
 
@@ -38,26 +37,28 @@ export class GeneSearchComponent implements OnInit {
 
     ngOnInit() {
         this.queryField.valueChanges
-            .debounceTime(300)
-            .distinctUntilChanged()
-            .switchMap((query) => {
-                if (query) {
-                    return this.search(query);
-                } else {
-                    this.results = [];
-                    return new EmptyObservable<Response>();
-                }
-            })
+            .pipe(
+                debounceTime(300),
+                distinctUntilChanged(),
+                switchMap((query) => {
+                    if (query) {
+                        return this.search(query);
+                    } else {
+                        this.results = [];
+                        return empty();
+                    }
+                })
+            )
             .subscribe((data) => {
                 this.results = (data['items']) ? data['items'] as GeneInfo[] : [];
             });
     }
 
-    search(queryString: string) {
+    search(queryString: string): Observable<any> {
         if (queryString) {
             return this.dataService.getGenesMatchId(queryString);
         } else {
-            return new EmptyObservable<Response>();
+            return empty();
         }
     }
 
@@ -69,12 +70,11 @@ export class GeneSearchComponent implements OnInit {
         if (!this.hasFocus) { this.results = []; }
     }
 
-    getGeneId() {
+    getGeneId(): string {
         return this.gene.hgnc_symbol;
     }
 
     viewGene(info: GeneInfo) {
-        let geneData: any;
         this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
             if (!data['info']) {
                 this.router.navigate(['/genes']);
@@ -88,7 +88,6 @@ export class GeneSearchComponent implements OnInit {
                 this.geneService.updateGeneData(data);
                 this.gene = data['item'];
             }
-            geneData = data;
         }, (error) => {
             console.log('Routing error! ' + error.message);
         }, () => {

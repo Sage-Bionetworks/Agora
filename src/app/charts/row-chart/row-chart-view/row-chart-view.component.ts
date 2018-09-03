@@ -420,7 +420,7 @@ export class RowChartViewComponent implements OnInit {
             .attr('ry', squareSize / 2);
     }
 
-    displayChart() {
+    displayChart(): any {
         return { opacity: (this.display) ? 1 : 0 };
     }
 

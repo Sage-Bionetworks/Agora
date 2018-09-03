@@ -94,7 +94,7 @@ export class TeamsPageComponent implements OnInit {
                     if (data) {
                         this.memberImages[index].imgUrl =
                             this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
-                                new Blob([data], {
+                                new Blob([data as Blob], {
                                     type: 'image/jpg'
                                 })
                             )}`);

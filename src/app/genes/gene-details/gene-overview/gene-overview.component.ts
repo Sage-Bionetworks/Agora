@@ -218,7 +218,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.goToRoute('/synapse-account');
     }
 
-    getAlias() {
+    getAlias(): string {
         if (this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
         }
@@ -255,7 +255,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             this.gene.ensembl_gene_id, '_blank');
     }
 
-    isNominatedTarget() {
+    isNominatedTarget(): string {
         return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
     }
 

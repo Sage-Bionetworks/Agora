@@ -188,7 +188,7 @@ export class BoxPlotViewComponent implements OnInit {
         }
     }
 
-    onResize() {
+    onResize(event?: any) {
         const self = this;
 
         clearTimeout(this.resizeTimer);

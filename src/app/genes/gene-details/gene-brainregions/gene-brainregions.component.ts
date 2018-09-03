@@ -41,9 +41,7 @@ export class GeneBRComponent implements OnInit {
         if (!!this.forceService.getGeneClickedList() &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneClickedList();
-            console.log(this.selectedGeneData.links);
             this.dataLoaded = true;
-            console.log('preloaded data');
         } else {
             this.dataService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
@@ -55,7 +53,6 @@ export class GeneBRComponent implements OnInit {
                     this.forceService.setData(datalinks);
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                         this.selectedGeneData.links = dn.links.slice().reverse();
-                        console.log(this.selectedGeneData.links);
                         this.dataLoaded = true;
                     });
                 });

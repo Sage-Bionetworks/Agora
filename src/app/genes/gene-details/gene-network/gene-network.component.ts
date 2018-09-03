@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
+import { Gene, GeneNetwork } from '../../../models';
 
 import { GeneService, DataService } from '../../../core/services';
 import { ForceService } from '../../../shared/services';

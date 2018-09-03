@@ -65,7 +65,7 @@ export class GeneService {
         this.currentTissue = tissue;
     }
 
-    getCurrentTissue() {
+    getCurrentTissue(): string {
         return this.currentTissue;
     }
 
@@ -73,7 +73,7 @@ export class GeneService {
         this.currentModel = model;
     }
 
-    getCurrentModel() {
+    getCurrentModel(): string {
         return this.currentModel;
     }
 
