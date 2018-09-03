@@ -1,5 +1,5 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin overview-header" tabindex="0">
+    <div class="section-thin overview-header section-hero" tabindex="0">
         <div class="row no-gutters">
             <div class="col-md-7">
                 <h1 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h1>
@@ -46,5 +46,5 @@
     </div>
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
-    <p-progressBar mode="indeterminate"></p-progressBar>
+    <loading></loading>
 </div>

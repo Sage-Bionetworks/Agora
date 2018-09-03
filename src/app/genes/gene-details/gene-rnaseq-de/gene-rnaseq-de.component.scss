@@ -7,19 +7,11 @@
     .fa-info-circle:before {
         color: #9DA3B3;
     }
-
-    .icon-spacing {
-        margin-right: 5px;
-    }
 }
 
 .rna-seq-me {
     .fa-info-circle:before {
         color: #9DA3B3;
-    }
-
-    .icon-spacing {
-        margin-right: 5px;
     }
 
     border-top: 1px solid #E0E0E0;
@@ -28,35 +20,25 @@
 .rna-seq-bplot {
     @include respond-to('medium') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('ex-large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
 
     .fa-info-circle:before {
         color: #9DA3B3;
-    }
-
-    .icon-spacing {
-        margin-right: 5px;
     }
 
     select {
@@ -263,6 +245,10 @@
         }
     }
 
+    .col-fixer {
+        display: table-row;
+    }
+
     .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
         margin-bottom: 40px;
     }
@@ -270,10 +256,6 @@
     .filters-header {
         .fa-info-circle:before {
             color: #9DA3B3;
-        }
-
-        .icon-spacing {
-            margin-right: 5px;
         }
 
         h3 {
@@ -285,10 +267,13 @@
         }
     }
 
-
-
     .bplot-col {
         background: rgba(245, 245, 245, 0.5);
+    }
+
+    .empty-bplot-col {
+        background: rgba(245, 245, 245, 0.5);
+        height: 450px;
     }
 }
 
@@ -323,8 +308,12 @@
         color: #9DA3B3;
     }
 
-    .icon-spacing {
-        margin-right: 5px;
+    .rc-empty-plot-content {
+        height: 450px;
+        margin-top: 2%;
+        position: relative;
+        display: block;
+        background: rgba(245, 245, 245, 0.5);
     }
 }
 

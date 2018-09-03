@@ -12,6 +12,8 @@ import { NgModuleRef } from '@angular/core';
 import { AppModule } from 'app';
 import { ROOT_SELECTOR } from 'app/app.component';
 
+import 'hammerjs';
+
 /**
  * Bootstrap our Angular app with a top level NgModule
  */

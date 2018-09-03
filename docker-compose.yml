@@ -1,7 +1,7 @@
 version: '2.3'
 services:
   mongodb:
-    image: 'mongo'
+    image: 'amd64/mongo'
     ports:
       - 27017:27017
     networks:

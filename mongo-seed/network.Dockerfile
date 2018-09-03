@@ -1,4 +1,4 @@
-FROM mongo
+FROM amd64/mongo
 
 COPY /network.json /network.json
 

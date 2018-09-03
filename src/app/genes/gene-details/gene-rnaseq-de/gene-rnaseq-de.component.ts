@@ -9,7 +9,6 @@ import {
     ComponentRef,
     QueryList
 } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
@@ -34,17 +33,20 @@ export class GeneRNASeqDEComponent implements OnInit {
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
-    dataLoaded: boolean = false;
     tissues: SelectItem[] = [];
+    emptySelection: SelectItem[] = [];
     currentTissues: string[] = [];
     selectedTissues: string[] = [];
     componentRefs: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
+    emptySelectionLabel: string = '- - -';
+    emptySelectionValue: string = '';
+    dataLoaded: boolean = false;
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
-    isEmptyGene: boolean = false;
+    isEmptyGene: boolean = true;
 
     constructor(
         private router: Router,
@@ -52,13 +54,16 @@ export class GeneRNASeqDEComponent implements OnInit {
         private geneService: GeneService,
         private dataService: DataService,
         private chartService: ChartService,
-        private location: Location,
         private resolver: ComponentFactoryResolver
     ) { }
 
     ngOnInit() {
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
+        this.emptySelection.push({
+            label: this.emptySelectionLabel,
+            value: this.emptySelectionValue
+        });
 
         // The data wasn't loaded yet, redirect for now
         if (!this.dataService.getNdx()) {
@@ -91,6 +96,9 @@ export class GeneRNASeqDEComponent implements OnInit {
                     value: [this.selectedTissues[0]]
                 });
                 this.dataLoaded = status;
+                if (this.gene && this.gene._id) {
+                    this.isEmptyGene = false;
+                }
             });
         }
     }
@@ -155,7 +163,8 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     getDefaultLabel(): string {
-        return this.geneService.getDefaultTissue() || this.tissues[0].value;
+        return this.geneService.getDefaultTissue() ||
+            (this.tissues.length ? this.tissues[0].value : '');
     }
 
     async toggleTissue(event: any) {
@@ -291,9 +300,5 @@ export class GeneRNASeqDEComponent implements OnInit {
 
     showDialog(dialogString: string) {
         this[dialogString] = true;
-    }
-
-    goBack() {
-        this.location.back();
     }
 }

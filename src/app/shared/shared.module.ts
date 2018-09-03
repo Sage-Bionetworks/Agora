@@ -1,7 +1,18 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+
+// PrimeNG modules
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
+
+import { DownloadComponent } from './components/download';
+import { LoadingComponent } from './components/loading';
 
 import {
     AlertComponent,
@@ -15,24 +26,40 @@ import { NumbersPipe, MyArraySortPipe } from './pipes';
 @NgModule({
     declarations: [
         AlertComponent,
+        DownloadComponent,
+        LoadingComponent,
         FocusDirective,
         NumbersPipe,
         MyArraySortPipe
     ],
     imports: [
-        CommonModule,
-        HttpClientModule,
-        RouterModule
-    ],
-    exports: [
-        AlertComponent,
-        FocusDirective,
-        NumbersPipe,
-        MyArraySortPipe,
         // Angular modules
         CommonModule,
+        FormsModule,
         HttpClientModule,
-        RouterModule
+        RouterModule,
+        // PrimeNG modules
+        ButtonModule,
+        CheckboxModule,
+        OverlayPanelModule,
+        DialogModule,
+        ToastModule
+    ],
+    exports: [
+        // Angular modules
+        CommonModule,
+        FormsModule,
+        HttpClientModule,
+        RouterModule,
+        // PrimeNG modules
+        CheckboxModule,
+        // Other declarations
+        AlertComponent,
+        DownloadComponent,
+        LoadingComponent,
+        FocusDirective,
+        NumbersPipe,
+        MyArraySortPipe
     ]
 })
 // Changed the name so it does not conflict with primeng module

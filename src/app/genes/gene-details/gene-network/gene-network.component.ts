@@ -72,6 +72,36 @@ export class GeneNetworkComponent implements OnInit {
         }
     }
 
+    getText(state?: boolean): string {
+        let text = '';
+        if (state) {
+            text = 'True';
+        } else {
+            if (state === undefined) {
+                text = 'No data';
+            } else {
+                text = 'False';
+            }
+        }
+        return text;
+    }
+
+    getTextColorClass(state: boolean, normal?: boolean): any {
+        const colorClassObj = {} as any;
+        if (state) {
+            colorClassObj['green-text'] = true;
+        } else {
+            colorClassObj['red-text'] = true;
+        }
+
+        if (normal) {
+            colorClassObj['normal-heading'] = true;
+        } else {
+            colorClassObj['italic-heading'] = true;
+        }
+        return colorClassObj;
+    }
+
     updategene(event) {
         this.dataService.loadNodes(event).then((datanetwork: any) => {
             this.forceService.processSelectedNode(event, datanetwork).then((network) => {

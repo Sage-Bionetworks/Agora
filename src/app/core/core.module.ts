@@ -36,8 +36,6 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
 
 @NgModule({
     imports: [
-        // Angular modules
-        CommonModule,
         // PrimeNG modules
         ButtonModule,
         ProgressBarModule,
