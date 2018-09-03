@@ -44,6 +44,7 @@ export interface GeneNetwork {
     nodes: GeneNode[];
     links: GeneLink[];
     origin: Gene;
+    filterLvl: number;
 }
 
 export interface GeneNetworkLinks {

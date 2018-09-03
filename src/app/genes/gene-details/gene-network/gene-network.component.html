@@ -1,14 +1,32 @@
 <div *ngIf="dataLoaded" class="row network-content">
     <div class="col-md-8 col-sm-12 col-12 network-container">
-        Filter:
-        <a (click)="filterNodes(0)">0</a>
-        <a (click)="filterNodes(1)">1</a>
-        <a (click)="filterNodes(2)">2</a>
-        <a (click)="filterNodes(3)">3</a>
-        <a (click)="filterNodes(4)">4</a>
-        <a (click)="filterNodes(5)">5</a>
-        <a (click)="filterNodes(6)">6</a>
-        <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
+        <div *ngIf="!noData; else noDataImage">
+            <div class="filter">
+                <div class="col-sm-2">
+                    <h4>Filter by number of brain regions</h4>
+                </div>
+                <div class="col-sm-10">
+                    <ul class="steps">
+                        <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
+                            <a (click)="filterNodes(i)" class="steps-marker"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div >
+                <force-chart  (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
+            </div>
+            <div class="network-legend">
+                <div><span class="dot current"></span> Current gene</div>
+                <div><span class="dot selected"></span> Selected gene</div>
+                <div><span class="dot first"></span> Nodes 2-3</div>
+                <div><span class="dot second"></span> Nodes 4-5</div>
+                <div><span class="dot third"></span> Nodes 6-7</div>
+            </div>
+        </div>
+        <ng-template #noDataImage>
+            <div class="no-expresion-data">No expression data is currently available.</div>
+        </ng-template>
     </div>
     <div class="col-md-4 col-sm-12 col-12 currentGene">
         <div class="row cg-row">
@@ -31,7 +49,7 @@
                 </h3>
             </div>
         </div>
-        <div class="row cg-row">
+        <div class="row cg-row" *ngIf="!noData;">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2>
                     Tissue Specificity of Gene Connections
@@ -61,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div class="row cg-row">
+        <div class="row cg-row" *ngIf="!noData;">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
               <h2>
                   Similar Genes

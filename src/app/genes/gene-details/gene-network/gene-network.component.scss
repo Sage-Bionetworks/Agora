@@ -28,6 +28,8 @@
 
 .network-container {
     background: rgba(245, 245, 245, 0.5);
+    position: relative;
+    min-height: 200px
 }
 
 .genelink{
@@ -112,16 +114,129 @@
     padding-left: 0;
 }
 
-.true{
-    color:green;
-}
-.false{
-    color:red;
-}
-
 .cg-container {
     margin-left: 0px;
     margin-right: 0px;
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.dot {
+  height: 17px;
+  width: 17px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  &.current{
+      background-color: #F38070
+  }
+  &.selected {
+    background-color: #4F6FC3
+  }
+  &.first {
+    background-color: #A7DDDF
+  }
+  &.second {
+    background-color: #5DAFB4
+  }
+  &.third {
+    background-color: #11656A
+  }
+}
+.network-legend {
+    padding: 20px;
+    div{
+        display: inline;
+        padding-right: 15px;
+        color: #8D919E;
+        font-size: 16px;
+    }
+}
+.no-expresion-data {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #9DA3B3;
+}
+.no-expresion-data-image {
+        margin-left: 50%;
+        transform: translate(-50%, 0);
+        opacity:0.3;
+}
+.steps {
+    .steps-marker {
+        height: 1rem;
+        width: 1rem;
+        align-items: center;
+        display: flex;
+        border-radius: 50%;
+        font-weight: 700;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+    }
+    a {
+        color: #FCCB6F;
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+.steps:not(.is-hollow) .steps-segment.is-active~.steps-segment .steps-marker:not(.is-hollow) {
+  background-color: #dbdbdb;
+  color: rgba(0, 0, 0, 0.7);
+}
+.steps:not(.is-hollow) .steps-marker:not(.is-hollow) {
+  background-color: #FCCB6F;
+  color: #fff;
+}
+.steps:not(.is-hollow) .steps-segment.is-active~.steps-segment .steps-marker:not(.is-hollow) {
+  background-color: #dbdbdb;
+  color: rgba(0, 0, 0, 0.7);
+}
+.steps:not(.is-vertical) .steps-segment:not(:last-child) {
+  flex-basis: 1rem;
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.steps .steps-segment {
+  position: relative;
+}
+.steps:not(.is-vertical) {
+  display: flex;
+}
+.steps:not(.is-vertical) .steps-segment:not(:last-child):after {
+  height: .2em;
+  left: 0.76rem;
+  right: -.24rem;
+  top: calc(1rem - (.6em));
+}
+
+.steps-segment.is-active~.steps-segment:after {
+  background-color: #dbdbdb;
+}
+
+.steps .steps-segment:not(:last-child):after {
+  content: " ";
+  display: block;
+  position: absolute;
+}
+
+.steps-segment:after {
+  background-color: #FCCB6F;
+}
+.steps-segment.is-active:after {
+  background-color: #dbdbdb;
+}
+ul {
+  list-style: none;
+}
+.filter{
+    display: flex;
+    div{
+        float: left;
+    }
 }

@@ -9,7 +9,12 @@
         in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful
         expression is considered to be anything greater than five CPM (referenced by red line in the plot).
     </p>
-    <median-chart [geneinfo]="geneInfo"></median-chart>
+    <span *ngIf="!isEmptyGene; else noDataMedian">
+        <median-chart [geneinfo]="geneInfo"></median-chart>
+    </span>
+    <ng-template #noDataMedian>
+        <div class="no-median-data">No enough data to render chart.</div>
+    </ng-template>
 </div>
 
 <div class="section-thin rna-seq-bplot" *ngIf="dataLoaded" tabindex="0">

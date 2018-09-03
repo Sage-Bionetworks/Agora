@@ -25,11 +25,15 @@ export class GeneNetworkComponent implements OnInit {
     selectedGeneData: GeneNetwork = {
         nodes: [],
         links: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
 
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
+    private noData: boolean = false;
+    private filterlvl: number = 0;
+    private filterlvlN: number = 0;
 
     constructor(
         private router: Router,
@@ -41,22 +45,29 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
+        this.geneService.getEmptyGene();
         this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-        if (!!this.forceService.getGeneOriginalList() &&
-        this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
-            this.loadGenes();
+        if (this.id === 'ENSG00000128564') {
+            this.noData = true;
+            this.dataLoaded = true;
         } else {
-            if (this.forceService.getGeneOriginalList()) {
-                const dn = this.forceService.getGeneOriginalList();
-                this.networkData = dn;
-                this.selectedGeneData.nodes = dn.nodes.slice(1);
-                this.selectedGeneData.links = dn.links.slice().reverse();
-                this.selectedGeneData.origin = dn.origin;
-                this.dataLoaded = true;
-                console.log(this.currentGene);
-            } else {
+            if (!!this.forceService.getGeneOriginalList() &&
+                this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
                 this.loadGenes();
+            } else {
+                if (this.forceService.getGeneOriginalList()) {
+                    const dn = this.forceService.getGeneOriginalList();
+                    this.networkData = dn;
+                    this.filterlvl = dn.filterLvl;
+                    this.selectedGeneData.nodes = dn.nodes.slice(1);
+                    this.selectedGeneData.links = dn.links.slice().reverse();
+                    this.selectedGeneData.origin = dn.origin;
+                    this.dataLoaded = true;
+                    console.log(this.currentGene);
+                } else {
+                    this.loadGenes();
+                }
             }
         }
     }
@@ -79,6 +90,7 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     filterNodes(lvl) {
+        this.filterlvlN = lvl;
         if (!lvl) {
             this.filter = false;
             this.networkData = this.forceService.getGeneOriginalList();
@@ -92,9 +104,12 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.links = network.links.slice().reverse();
                 this.selectedGeneData.origin = network.origin;
                 this.filter = true;
-                console.log(network);
             });
         }
+    }
+
+    filterLevel(n: number): number[] {
+        return Array(n);
     }
 
     goToRoute(path: string, outlets?: any) {
@@ -107,6 +122,7 @@ export class GeneNetworkComponent implements OnInit {
             this.forceService.setData(data);
             this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
                 this.networkData = dn;
+                this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;

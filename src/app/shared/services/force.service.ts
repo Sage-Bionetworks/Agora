@@ -17,17 +17,20 @@ export class ForceService {
     genes: GeneNetwork = {
         links: [],
         nodes: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
     genesClicked: GeneNetwork = {
         links: [],
         nodes: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
     private genesFiltered: GeneNetwork = {
         links: [],
         nodes: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
     private currentGene: Gene;
     setData(data: GeneNetworkLinks[]) {
@@ -38,7 +41,8 @@ export class ForceService {
         this.genes = {
             links: [],
             nodes: [],
-            origin: undefined
+            origin: undefined,
+            filterLvl: 0
         };
     }
 
@@ -116,6 +120,14 @@ export class ForceService {
                     .value++;
                 dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
+                if (this.genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
+                    || this.genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id) {
+                    if (dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value
+                        > this.genes.filterLvl) {
+                        this.genes.filterLvl =
+                            dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value;
+                    }
+                }
             }
 
             // check B - A link and add region.
@@ -126,6 +138,14 @@ export class ForceService {
                     .value++;
                 dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
+                if (this.genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
+                    || this.genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id ) {
+                    if (dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id].value
+                        > this.genes.filterLvl) {
+                        this.genes.filterLvl =
+                        dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id].value;
+                    }
+                }
             }
 
             // check both nodes and add brainregion
@@ -168,7 +188,8 @@ export class ForceService {
         this.genesFiltered = {
             links: [],
             nodes: [],
-            origin: undefined
+            origin: undefined,
+            filterLvl: 0
         };
         return new Promise((resolve, reject) => {
             const dicF = [];
@@ -225,7 +246,8 @@ export class ForceService {
             this.genesClicked = {
                 links: [],
                 nodes: [],
-                origin: gene
+                origin: gene,
+                filterLvl: 0
             };
             this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
             data['items'].forEach((obj: any) => {
@@ -239,6 +261,8 @@ export class ForceService {
     processNodes(gene: Gene): Promise<GeneNetwork> {
         return new Promise((resolve, reject) => {
             this.currentGene = gene;
+            this.genes.origin = gene;
+            this.genes.filterLvl = 0;
             this.dicNodes[this.currentGene.ensembl_gene_id] = {
                 id: this.currentGene.ensembl_gene_id,
                 ensembl_gene_id: this.currentGene.ensembl_gene_id,
@@ -255,7 +279,6 @@ export class ForceService {
             this.genes.links.sort((a, b) => {
                 return a['value'] - b['value'];
             });
-            this.genes.origin = gene;
             this.genesClicked = this.genes;
             // TODO: is a waste to return a promise and emit an event.
             // update network component to use events.
