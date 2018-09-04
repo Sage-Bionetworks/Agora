@@ -30,7 +30,7 @@ import { FooterComponent } from './footer';
 import { NoContentComponent } from './no-content';
 
 import '../../styles/styles.scss';
-import '../../styles/headings.css';
+import '../../styles/headings.scss';
 import { ContribTeamsPageComponent } from './contrib-teams';
 import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
 

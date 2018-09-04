@@ -111,6 +111,13 @@ module.exports = function () {
             },
             'angular2-template-loader'
           ],
+
+          /**
+         * To string and css loader support for *.css files (from Angular components)
+         * Returns file content as string
+         *
+         */
+
           exclude: [/\.e2e\.ts$/]
         },
 
@@ -133,7 +140,7 @@ module.exports = function () {
          */
         {
           test: /\.scss$/,
-          loader: ['raw-loader', 'sass-loader'],
+          loader: ['raw-loader', 'css-loader', 'sass-loader'],
           exclude: [helpers.root('src/index.html')]
         },
 
@@ -147,6 +154,14 @@ module.exports = function () {
           test: /\.html$/,
           loader: 'raw-loader',
           exclude: [helpers.root('src/index.html')]
+        },
+
+        /* File loader for supporting fonts, for example, in CSS files.
+        */
+        {
+          test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+          use: 'file-loader',
+          include: [helpers.root('node_modules/lato-font')]
         },
 
         /**

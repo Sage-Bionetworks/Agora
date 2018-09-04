@@ -42,10 +42,9 @@
     }
 
     select {
+        @include lato-font('normal');
+
         width: 100%;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         line-height: normal;
         font-size: 18px;
         color: #1A1C29;
@@ -94,9 +93,7 @@
 
         .ui-multiselect-label-container {
             padding-left: 10px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
             font-size: 18px;
 
             @include respond-to('ex-small') {
@@ -153,9 +150,7 @@
         li {
             width: 100%;
             line-height: 52px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
 
             @include respond-to('ex-small') {
                 font-size: 14px;

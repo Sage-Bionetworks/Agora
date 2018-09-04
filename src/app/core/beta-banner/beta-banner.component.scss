@@ -30,11 +30,13 @@
     }
 
     .beta-button {
+        @include lato-font('bold');
+
         background: #FFFFFF !important;
         border-radius: 100px !important;
-        font-family: Lato !important;
+        /*font-family: Lato !important;
         font-style: normal !important;
-        font-weight: bold !important;
+        font-weight: bold !important;*/
         line-height: normal !important;
         font-size: 18px !important;
         color: #73C8CC !important;
@@ -43,11 +45,13 @@
 
     p-button {
         span {
+            @include lato-font('bold');
+
             background: #FFFFFF !important;
             border-radius: 100px !important;
-            font-family: Lato !important;
+            /*font-family: Lato !important;
             font-style: normal !important;
-            font-weight: bold !important;
+            font-weight: bold !important;*/
             line-height: normal !important;
             font-size: 18px !important;
             color: #73C8CC !important;
@@ -56,28 +60,25 @@
     }
 
     .beta-contact-us {
+        @include lato-font('normal');
+
         color: black;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         line-height: normal;
         font-size: 18px;
     }
 
     .beta-coming-soon {
+        @include lato-font('normal');
+
         margin-bottom: auto;
         margin-top: auto;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         font-size: 18px;
         color: #1A1C29;
         text-align: center;
 
         span {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
+
             line-height: normal;
             font-size: 18px;
             color: #1A1C29;
