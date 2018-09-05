@@ -1,7 +1,7 @@
 <div *ngIf="dataLoaded" class="row network-content">
     <div class="col-md-8 col-sm-12 col-12 network-container">
         <div *ngIf="!noData; else noDataImage">
-            <div class="filter">
+            <div class="filter" *ngIf="filterlvl">
                 <div class="col-sm-4">
                     <h4 class="filter-title">Filter by number of brain regions</h4>
                 </div>

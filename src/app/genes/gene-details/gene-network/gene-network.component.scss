@@ -154,9 +154,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-    font-size: 24px;
     font-weight: bold;
     color: #9DA3B3;
+    font-family: Lato;
+    font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
 }
 .no-expresion-data-image {
         margin-left: 50%;
@@ -164,9 +169,10 @@
         opacity:0.3;
 }
 .steps {
+    margin-top: 25px;
     .steps-marker {
-        height: 1rem;
-        width: 1rem;
+        height: 0.5rem;
+        width: 0.5rem;
         align-items: center;
         display: flex;
         border-radius: 50%;
@@ -205,10 +211,10 @@
   display: flex;
 }
 .steps:not(.is-vertical) .steps-segment:not(:last-child):after {
-  height: .2em;
-  left: 0.76rem;
-  right: -.24rem;
-  top: calc(1rem - (.6em));
+  height: .15em;
+  left: 0.5rem;
+  right: -0.3rem;
+  top: calc(1rem - (.83em));
 }
 
 .steps-segment.is-active~.steps-segment:after {
@@ -231,8 +237,52 @@ ul {
   list-style: none;
 }
 .filter{
+    margin-top: 20px;
     display: flex;
     div{
         float: left;
+    }
+    .filter-title{
+        white-space: nowrap;
+    }
+    .filter-reference {
+        span{
+            color: #6D7078;
+            font-size: 16px;
+        }
+        width: 100%;
+        .left{
+            float: left;
+            padding-left: 40px;
+        }
+        .right{
+            float: right;
+        }
+    }
+}
+.tooltip {
+    display: none;
+    position: absolute;
+    background: #FFF;
+    padding: 5px 10px;
+    top: -40px;
+    font-size: 16px;
+    left: -10px;
+}
+.tooltip::after{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 10px 5px 0;
+    border-color: #FFFFFF transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    bottom: -7px;
+    left: 30%
+}
+.steps-segment:hover {
+    .tooltip {
+        display: block;
     }
 }

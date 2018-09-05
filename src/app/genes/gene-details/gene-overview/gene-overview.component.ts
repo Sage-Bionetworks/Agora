@@ -31,6 +31,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     currentGeneData = [];
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
+    noData: boolean = false;
 
     constructor(
         private router: Router,
@@ -73,6 +74,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                         data['item'] = this.geneService.getEmptyGene(
                             data['info'].ensembl_gene_id, data['info'].hgnc_symbol
                         );
+                        this.noData = true;
                     }
                     this.geneService.updateGeneData(data);
                     this.gene = data['item'];

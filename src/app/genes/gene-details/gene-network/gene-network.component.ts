@@ -17,6 +17,7 @@ export class GeneNetworkComponent implements OnInit {
     @Input() style: any;
     @Input() gene: Gene;
     @Input() id: string;
+    @Input() noData: boolean;
     dataLoaded: boolean = false;
     displayBRDia: boolean = false;
     displaySimilarGenesDialog: boolean = false;
@@ -31,7 +32,6 @@ export class GeneNetworkComponent implements OnInit {
 
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
-    private noData: boolean = false;
     private filterlvl: number = 0;
     private filterlvlN: number = 0;
 
@@ -45,31 +45,30 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         // The data wasn't loaded yet, redirect for now
-        this.geneService.getEmptyGene();
         this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-        if (this.id === 'ENSG00000128564') {
-            this.noData = true;
-            this.dataLoaded = true;
+        if (!!this.forceService.getGeneOriginalList() &&
+            this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
+            this.loadGenes();
         } else {
-            if (!!this.forceService.getGeneOriginalList() &&
-                this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
-                this.loadGenes();
+            if (this.forceService.getGeneOriginalList()) {
+                const dn = this.forceService.getGeneOriginalList();
+                this.networkData = dn;
+                this.filterlvl = dn.filterLvl;
+                this.selectedGeneData.nodes = dn.nodes.slice(1);
+                this.selectedGeneData.links = dn.links.slice().reverse();
+                this.selectedGeneData.origin = dn.origin;
+                this.dataLoaded = true;
+                console.log(this.currentGene);
             } else {
-                if (this.forceService.getGeneOriginalList()) {
-                    const dn = this.forceService.getGeneOriginalList();
-                    this.networkData = dn;
-                    this.filterlvl = dn.filterLvl;
-                    this.selectedGeneData.nodes = dn.nodes.slice(1);
-                    this.selectedGeneData.links = dn.links.slice().reverse();
-                    this.selectedGeneData.origin = dn.origin;
-                    this.dataLoaded = true;
-                    console.log(this.currentGene);
-                } else {
-                    this.loadGenes();
-                }
+                this.loadGenes();
             }
         }
+        // if (this.id === 'ENSG00000128564') {
+        //     this.noData = true;
+        //     this.dataLoaded = true;
+        // } else {
+        // }
     }
 
     getText(state?: boolean): string {

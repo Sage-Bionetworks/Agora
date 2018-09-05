@@ -20,7 +20,8 @@ export class GeneSimilarComponent implements OnInit {
     selectedGeneData: GeneNetwork = {
         nodes: [],
         links: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
 
     private gene = this.geneService.getCurrentGene();
