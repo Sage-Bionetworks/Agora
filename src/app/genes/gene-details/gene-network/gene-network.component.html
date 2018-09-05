@@ -2,15 +2,20 @@
     <div class="col-md-8 col-sm-12 col-12 network-container">
         <div *ngIf="!noData; else noDataImage">
             <div class="filter">
-                <div class="col-sm-2">
-                    <h4>Filter by number of brain regions</h4>
+                <div class="col-sm-4">
+                    <h4 class="filter-title">Filter by number of brain regions</h4>
                 </div>
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                     <ul class="steps">
                         <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
                             <a (click)="filterNodes(i)" class="steps-marker"></a>
+                            <span class="tooltip">{{i}}</span>
                         </li>
                     </ul>
+                    <div class="filter-reference">
+                        <span class="left">&gt;1</span>
+                        <span class="right">&lt;{{filterlvl-1}}</span>
+                    </div>
                 </div>
             </div>
             <div >
