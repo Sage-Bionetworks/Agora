@@ -1,7 +1,7 @@
 {
   "name": "agora",
   "version": "0.1.0",
-  "data-version": "6",
+  "data-version": "7",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular",
@@ -172,7 +172,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^0.28.11",
     "d3": "^5.5.0",
-    "dc": "^3.0.4",
+    "dc": "^3.0.6",
     "doiuse": "^4.1.0",
     "dom-to-image": "git://github.com/MichalBryxi/dom-to-image.git",
     "exports-loader": "^0.7.0",

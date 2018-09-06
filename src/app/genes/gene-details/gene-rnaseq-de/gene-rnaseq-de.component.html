@@ -16,7 +16,7 @@
         <median-chart [geneinfo]="geneInfo"></median-chart>
     </span>
     <ng-template #noDataMedian>
-        <div class="no-median-data">No enough data to render chart.</div>
+        <div class="no-median-data">No expression data is currently available.</div>
     </ng-template>
 </div>
 
@@ -92,7 +92,7 @@
             </ng-template>
         </div>
         <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
-            <h2 class="placeholder-text">No expression data is currently available</h2>
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </div>
 </div>
@@ -110,7 +110,7 @@
     </p>
     <row-chart *ngIf="!isEmptyGene"></row-chart>
     <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
-        <h2 class="placeholder-text">No expression data is currently available</h2>
+        <h2 class="placeholder-text">No expression data is currently available.</h2>
     </div>
 </div>
 

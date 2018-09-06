@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { NavbarComponent } from './navbar.component';
+import { HelpComponent } from './help.component';
 
 import {
     RouterStub,
@@ -13,14 +13,19 @@ import {
 
 import { DataService, GeneService } from '../services';
 
+import { MockComponent } from 'ng-mocks';
+
+import { Button } from 'primeng/button';
+
 describe('NavbarComponent', () => {
-    let component: NavbarComponent;
-    let fixture: ComponentFixture<NavbarComponent>;
+    let component: HelpComponent;
+    let fixture: ComponentFixture<HelpComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NavbarComponent
+                MockComponent(Button),
+                HelpComponent
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
@@ -32,7 +37,7 @@ describe('NavbarComponent', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NavbarComponent);
+        fixture = TestBed.createComponent(HelpComponent);
         component = fixture.componentInstance;
     }));
 

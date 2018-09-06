@@ -28,9 +28,9 @@ describe('Component: GenesIntro', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GenesIntroComponent,
                 MockComponent(Button),
-                MockComponent(GeneSearchComponent)
+                MockComponent(GeneSearchComponent),
+                GenesIntroComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

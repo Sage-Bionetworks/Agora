@@ -8,6 +8,8 @@ export class ForceServiceStub {
 
     // Add the new #[field] from TypeScript when it's out
     // https://github.com/Microsoft/TypeScript/issues/24418
+    // Avoid using private variables, related to this issue
+    // https://stackoverflow.com/questions/42260801/angular-2-mocking-private-properties
     dicNodes = [];
     dicLinks = [];
     dicGroup = [];

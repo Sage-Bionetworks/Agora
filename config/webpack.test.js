@@ -11,6 +11,9 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
+const VERSION = JSON.stringify(require('../package.json')['version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
+
 /**
  * Webpack Constants
  */
@@ -200,6 +203,8 @@ module.exports = function () {
       new DefinePlugin({
         'ENV': JSON.stringify(ENV),
         'HMR': false,
+        'VERSION': VERSION,
+        'DATA_VERSION': DATA_VERSION,
         'process.env': {
           'ENV': JSON.stringify(ENV),
           'NODE_ENV': JSON.stringify(ENV),

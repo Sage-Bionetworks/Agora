@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { NavbarComponent } from './navbar.component';
+import { ContribTeamsPageComponent } from './contrib-teams.component';
+import { LoadingComponent } from '../../shared/components/loading';
 
 import {
     RouterStub,
@@ -13,14 +14,17 @@ import {
 
 import { DataService, GeneService } from '../services';
 
+import { MockComponent } from 'ng-mocks';
+
 describe('NavbarComponent', () => {
-    let component: NavbarComponent;
-    let fixture: ComponentFixture<NavbarComponent>;
+    let component: ContribTeamsPageComponent;
+    let fixture: ComponentFixture<ContribTeamsPageComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NavbarComponent
+                MockComponent(LoadingComponent),
+                ContribTeamsPageComponent
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
@@ -32,7 +36,7 @@ describe('NavbarComponent', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NavbarComponent);
+        fixture = TestBed.createComponent(ContribTeamsPageComponent);
         component = fixture.componentInstance;
     }));
 

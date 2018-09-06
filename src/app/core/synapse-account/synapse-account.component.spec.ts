@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { NavbarComponent } from './navbar.component';
+import { SynapseAccountComponent } from './synapse-account.component';
 
 import {
     RouterStub,
@@ -14,13 +14,13 @@ import {
 import { DataService, GeneService } from '../services';
 
 describe('NavbarComponent', () => {
-    let component: NavbarComponent;
-    let fixture: ComponentFixture<NavbarComponent>;
+    let component: SynapseAccountComponent;
+    let fixture: ComponentFixture<SynapseAccountComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NavbarComponent
+                SynapseAccountComponent,
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
@@ -32,7 +32,7 @@ describe('NavbarComponent', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NavbarComponent);
+        fixture = TestBed.createComponent(SynapseAccountComponent);
         component = fixture.componentInstance;
     }));
 

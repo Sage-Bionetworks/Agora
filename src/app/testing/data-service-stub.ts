@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { mockGene1, mockGene2, mockDataLink1, mockDataLink2 } from './gene-mocks';
+import { mockTeam1 } from './team-info-mocks';
 
 import { Observable, of } from 'rxjs';
 import { Gene } from '../models';
@@ -32,5 +33,9 @@ export class DataServiceStub {
 
     getGenesMatchId(id?: string): Observable<object> {
         return of([mockGene1]);
+    }
+
+    getAllTeams(): Observable<object> {
+        return of([mockTeam1]);
     }
 }

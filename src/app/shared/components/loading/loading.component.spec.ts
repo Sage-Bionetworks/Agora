@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { LoadingComponent } from './';
 
@@ -27,9 +28,9 @@ describe('Component: Loading', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have the video object', () => {
+    it('should have the video object', inject([DomSanitizer], (domSanitizer: DomSanitizer) => {
         fixture.detectChanges();
 
         expect(component.videoTag).not.toEqual(undefined);
-    });
+    }));
 });

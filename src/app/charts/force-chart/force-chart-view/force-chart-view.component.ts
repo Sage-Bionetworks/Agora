@@ -91,7 +91,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     }
 
     private renderChart() {
-        console.log(this.networkData);
         if (!this.loaded) {
             return;
         }

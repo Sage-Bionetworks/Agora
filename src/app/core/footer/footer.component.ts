@@ -15,7 +15,7 @@ export class FooterComponent {
     }
 
     getVersion(data?: boolean): string {
-        return (data) ? DATA_VERSION : VERSION;
+        return ((data) ? DATA_VERSION : VERSION) || '0.0.0';
     }
 
     goToRoute(path: string) {

@@ -1,11 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { NavbarComponent } from './navbar.component';
+import { BetaBannerComponent } from './beta-banner.component';
 
 import {
+    ActivatedRouteStub,
     RouterStub,
     DataServiceStub,
     GeneServiceStub
@@ -13,18 +14,24 @@ import {
 
 import { DataService, GeneService } from '../services';
 
+import { MockComponent } from 'ng-mocks';
+
+import { Button } from 'primeng/button';
+
 describe('NavbarComponent', () => {
-    let component: NavbarComponent;
-    let fixture: ComponentFixture<NavbarComponent>;
+    let component: BetaBannerComponent;
+    let fixture: ComponentFixture<BetaBannerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NavbarComponent
+                MockComponent(Button),
+                BetaBannerComponent
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 TitleCasePipe
@@ -32,7 +39,7 @@ describe('NavbarComponent', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NavbarComponent);
+        fixture = TestBed.createComponent(BetaBannerComponent);
         component = fixture.componentInstance;
     }));
 

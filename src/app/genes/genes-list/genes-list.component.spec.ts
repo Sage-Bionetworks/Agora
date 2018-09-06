@@ -6,7 +6,6 @@ import {
     tick
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -18,6 +17,12 @@ import {
     mockInfo1
 } from '../../testing';
 
+import { AboutComponent } from '../../core/about';
+import { HelpComponent } from '../../core/help';
+import { TermsComponent } from '../../core/terms';
+import { ContribTeamsPageComponent } from '../../core/contrib-teams';
+import { SynapseAccountComponent } from '../../core/synapse-account';
+import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
 import { DataService, GeneService } from '../../core/services';
@@ -28,15 +33,19 @@ describe('Component: GenesList', () => {
     let component: GenesListComponent;
     let fixture: ComponentFixture<GenesListComponent>;
     let router: RouterStub;
-    let location: Location;
     let dataService: DataServiceStub;
     let geneService: GeneServiceStub;
     let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
+                AboutComponent,
+                HelpComponent,
+                TermsComponent,
+                ContribTeamsPageComponent,
+                SynapseAccountComponent,
+                NoContentComponent,
                 GenesListComponent,
                 RouterOutletStubComponent
             ],
@@ -47,8 +56,7 @@ describe('Component: GenesList', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: GeneService, useValue: new GeneServiceStub() }
             ]
         })
         .compileComponents();
@@ -57,7 +65,6 @@ describe('Component: GenesList', () => {
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
-        location = fixture.debugElement.injector.get(Location);
         dataService = fixture.debugElement.injector.get(DataService);
         geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
