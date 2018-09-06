@@ -28,13 +28,12 @@
     min-height: 200px
 }
 
-.genelink{
+.genelink {
+    @include lato-font('bold');
+
     color: #86C4C7;
     cursor: pointer;
     width: 100%;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
     line-height: normal;
     font-size: 18px;
     text-decoration: underline;
@@ -52,17 +51,16 @@
 
     .cg-col {
         .cg-col-p {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
+
             line-height: normal;
             font-size: 18px;
             color: #1A1C29;
         }
 
         span {
-            font-family: Lato;
-            font-style: normal;
+            @include lato-font('normal');
+
             line-height: normal;
             font-size: 18px;
         }

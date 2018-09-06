@@ -43,17 +43,18 @@
 }
 
 .nom-button {
+    @include lato-font('bold');
+
     background: #F89C55 !important;
     border: 0px !important;
     border-radius: 100px;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
     line-height: normal;
     white-space: nowrap;
     padding: 10px;
 
     span {
+        @include lato-font('bold');
+
         margin-left: 4%;
         margin-right: 4%;
         vertical-align: middle;
@@ -76,10 +77,6 @@
         @include respond-to('ex-large') {
             font-size: 24px;
         }
-
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
 
         color: #0D1C38;
     }
@@ -150,14 +147,8 @@
     margin-top: auto;
 }
 .show-more-button {
-    background: #FCCB6F !important;
-    border: 0px !important;
-    border-radius: 100px;
-    height: 52px;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    line-height: normal;
+    @include lato-font('bold');
+
     @include respond-to('ex-small') {
         width: 70%;
         font-size: 22px;
@@ -178,19 +169,24 @@
         width: 70%;
         font-size: 24px;
     }
+
+    background: #FCCB6F !important;
+    border: 0px !important;
+    border-radius: 100px;
+    height: 52px;
+    line-height: normal;
     color: #0D1C38 !important;
     vertical-align: middle;
+
     cursor: pointer;
+
     span {
         margin-left: 2%;
         margin-right: 2%;
     }
 }
+
 .synapse-button {
-    background: #FCCB6F !important;
-    border: 0px !important;
-    border-radius: 100px;
-    height: 52px;
     @include respond-to('ex-small') {
         width: 85%;
     }
@@ -206,14 +202,19 @@
     @include respond-to('ex-large') {
         width: 34%;
     }
+
+    background: #FCCB6F !important;
+    border: 0px !important;
+    border-radius: 100px;
+    height: 52px;
     color: #0D1C38 !important;
     vertical-align: middle;
+
     cursor: pointer;
+
     span {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
+        @include lato-font('bold');
+
         @include respond-to('ex-small') {
             font-size: 22px;
         }
@@ -229,6 +230,8 @@
         @include respond-to('ex-large') {
             font-size: 24px;
         }
+
+        line-height: normal;
         margin-left: 2%;
         margin-right: 2%;
     }
@@ -255,6 +258,7 @@
 .overview-link {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
+
     .fa-angle-right:before {
         -moz-transform: scale(1.6,1); /* Firefox */
         -o-transform: scale(1.6,1); /* Opera */
@@ -262,14 +266,9 @@
         transform: scale(1.6,1); /* Standard Property */
         color: #FCCB6F;
     }
+
     .ui-panel.ui-widget .ui-panel-titlebar.ui-corner-all {
-        text-align: left;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        line-height: normal;
-        color: #1A1C29;
-        font-size: 24px;
+        @include lato-font('bold');
 
         @include respond-to('ex-small') {
             padding-top: 2em;
@@ -311,24 +310,34 @@
             color: #000000;
             background-color: #ffffff;
         }
+
+        text-align: left;
+        line-height: normal;
+        color: #1A1C29;
+        font-size: 24px;
     }
+
     .ui-widget-header {
         background: white;
         border: none;
     }
+
     .ui-widget-content {
         padding: 0px;
         border: none;
     }
+
     .ui-state-default {
         border: none;
         background-color: white;
         color: #FCCB6F;
     }
+
     .ui-panel .ui-panel-titlebar .ui-panel-titlebar-icon:hover {
         background-color: white;
         color: #FCCB6F;
     }
+
     .ui-panel-titlebar {
         padding-bottom: 20px !important;
 
@@ -341,15 +350,16 @@
             transform: scale(1,0.5); /* Standard Property */
         }
     }
+
     .ui-panel-title {
+        @include lato-font('bold');
+
         text-align: left;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
         line-height: normal;
         color: #1A1C29;
         font-size: 24px;
     }
+
     .druggability-span {
         color: #86C4C7;
         text-decoration: underline;
@@ -402,9 +412,8 @@
         margin-bottom: 0px;
     }
     a {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
+        @include lato-font('bold');
+
         line-height: normal;
         font-size: 18px;
         text-decoration-line: underline;

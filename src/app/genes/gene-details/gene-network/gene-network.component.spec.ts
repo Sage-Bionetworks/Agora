@@ -26,7 +26,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { of } from 'rxjs';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-import { MyArraySortPipe } from '../../../shared/pipes';
+import { ArraySortPipe } from '../../../shared/pipes';
 
 describe('Component: GeneNetwork', () => {
     let component: GeneNetworkComponent;
@@ -42,7 +42,7 @@ describe('Component: GeneNetwork', () => {
             declarations: [
                 GeneNetworkComponent,
                 MockComponent(GeneNetworkComponent),
-                MyArraySortPipe
+                ArraySortPipe
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

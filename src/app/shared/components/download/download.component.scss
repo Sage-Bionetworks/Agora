@@ -54,9 +54,8 @@
     }
 
     p-checkbox {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
+        @include lato-font('normal');
+
         line-height: normal;
         font-size: 16px;
         height: 32px;
@@ -117,21 +116,19 @@
     }
 
     .ui-toast-message {
+        @include lato-font('normal');
+
         color: #1A1C29;
         background: #ffe399;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         line-height: normal;
         font-size: 18px;
     }
 
     .ui-toast-summary {
+        @include lato-font('bold');
+
         color: #1A1C29;
         background: #ffe399;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
         line-height: normal;
         font-size: 20px;
     }

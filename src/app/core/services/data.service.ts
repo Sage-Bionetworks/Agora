@@ -27,7 +27,7 @@ export class DataService {
         private decimalPipe: DecimalPipe
     ) {}
 
-    getNdx() {
+    getNdx(): any {
         return this.ndx;
     }
 
@@ -264,16 +264,16 @@ export class DataService {
         };
     }
 
-    reduceInit() {
+    reduceInit(): any {
         return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
     }
 
     // Box-plot uses a different function name in dc.js
-    reduceInitial() {
+    reduceInitial(): any[] {
         return [];
     }
 
-    rmEmptyBinsDefault = (sourceGroup) => {
+    rmEmptyBinsDefault = (sourceGroup): any => {
         return {
             all: () => {
                 return sourceGroup.all().filter(function(d) {

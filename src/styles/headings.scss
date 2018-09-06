@@ -1,7 +1,9 @@
+@import "../assets/css/helpers/variables";
+@import "../assets/css/helpers/mixins";
+
 h1 {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
+    @include lato-font('bold');
+
     line-height: normal;
     font-size: 30px;
     text-align: left;
@@ -9,20 +11,18 @@ h1 {
 }
 
 h2 {
+    @include lato-font('bold');
+
     text-align: left;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
     line-height: normal;
     color: #1A1C29;
     font-size: 24px;
 }
 
 h3 {
+    @include lato-font('bold');
+
     text-align: left;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
     line-height: normal;
     color: #1A1C29;
     font-size: 18px;

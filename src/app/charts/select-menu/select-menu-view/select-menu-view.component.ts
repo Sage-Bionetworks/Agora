@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
 
-import {
-    ActivatedRoute, Router
-} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { GeneService, DataService } from '../../../core/services';
@@ -36,7 +34,6 @@ export class SelectMenuViewComponent implements OnInit {
     menuSelection: any;
 
     constructor(
-        private router: Router,
         private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,

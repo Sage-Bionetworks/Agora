@@ -112,7 +112,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         this.barchart.render();
     }
 
-    onResize(event) {
+    onResize(event?: any) {
         const width = this.medianChart.nativeElement.parentElement.offsetWidth;
         this.barchart
             .width(width)

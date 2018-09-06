@@ -1,3 +1,6 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .rc-plot-content {
     min-height: 450px;
     margin-top: 2%;
@@ -13,9 +16,8 @@
 }
 
 g.textGroup text {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
+    @include lato-font('bold');
+
     line-height: normal;
     font-size: 18px;
     color: #1A1C29;
@@ -35,9 +37,8 @@ g.textGroup text {
     }
 
     svg g, g.axis text, g.row g.confidence-text-left text, g.row g.confidence-text-right text {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
+        @include lato-font('normal');
+
         line-height: normal;
         font-size: 16px;
         color: #6D7078;
@@ -53,9 +54,8 @@ g.textGroup text {
     }
 
     .x-axis-label {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
+        @include lato-font('normal');
+
         line-height: normal;
         font-size: 16px;
         text-align: center;

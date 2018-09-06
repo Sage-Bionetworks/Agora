@@ -1,3 +1,11 @@
+@import '~lato-font/scss/_public-api.scss';
+
+$lato-font-path: '~lato-font/fonts';
+
+@include lato-include-font('bold');
+@include lato-include-font('medium');
+@include lato-include-font('normal');
+
 $breakpoints: (
     'ex-small': (max-width: 600px),
     'small': (min-width: 600px),
@@ -11,5 +19,3 @@ $brand-color-background: transparent;
 $brand-color-content: black;
 
 $brand-color-lighter: lighten($brand-color-content, 50%);
-
-$font-family: Lato, Helvetica, sans-serif;

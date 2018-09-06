@@ -14,9 +14,8 @@
     }
 
     .not-listed {
-        font-style: italic;
-        font-family: Lato;
-        font-weight: normal;
+        @include lato-font('normal', italic);
+
         line-height: normal;
         font-size: 18px;
         text-decoration: underline;

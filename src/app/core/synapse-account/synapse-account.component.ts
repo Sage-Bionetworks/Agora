@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'synapse-account',
@@ -8,10 +7,9 @@ import { Router, ActivatedRoute } from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class SynapseAccountComponent implements OnInit {
-    constructor(
-        private router: Router,
-        public route: ActivatedRoute
-    ) {}
+    constructor() {
+        //
+    }
 
     ngOnInit() {
         //
@@ -19,9 +17,5 @@ export class SynapseAccountComponent implements OnInit {
 
     viewSynapseReg() {
         window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
-    }
-
-    goToRoute(path: string) {
-        this.router.navigate(['/' + path]);
     }
 }
