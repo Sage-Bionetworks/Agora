@@ -15,12 +15,14 @@ export class ForceServiceStub {
     genes: GeneNetwork = {
         links: [],
         nodes: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
     genesClicked: GeneNetwork = {
         links: [],
         nodes: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
     currentGene: Gene;
 
@@ -32,7 +34,8 @@ export class ForceServiceStub {
         this.genes = {
             links: [],
             nodes: [],
-            origin: undefined
+            origin: undefined,
+            filterLvl: 0
         };
     }
 
