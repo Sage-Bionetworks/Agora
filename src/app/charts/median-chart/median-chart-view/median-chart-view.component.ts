@@ -5,10 +5,10 @@ import {
     ViewChild,
     ElementRef,
     Input,
-    AfterViewInit } from '@angular/core';
+    AfterViewInit
+} from '@angular/core';
 
-import { ChartService } from '../../services';
-import { DataService, GeneService } from '../../../core/services';
+import { DataService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -24,6 +24,8 @@ import * as crossfilter from 'crossfilter2';
 export class MedianChartViewComponent implements OnInit, AfterViewInit {
     @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
+    @Input() paddingLR: number = 15;
+    @Input() paddingUD: number = 0;
 
     barchart: any;
     ndx: any;
@@ -31,14 +33,13 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     dimension: any;
     tissuecoresGroup: any;
 
+    private resizeTimer;
+
     constructor(
-        private dataService: DataService,
-        private geneService: GeneService,
-        private chartService: ChartService
+        private dataService: DataService
     ) {}
 
     ngOnInit() {
-        // console.log(this.geneinfo); // medianlogcpm: 5.6357, tissue: "DLPFC"
         if (!this.geneinfo) {
             return;
         }
@@ -46,32 +47,31 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         this.group = this.ndx.groupAll();
         this.dimension = this.ndx.dimension( (d) =>  d.tissue );
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
-        d.medianlogcpm); // > 0 ? d.medianlogcpm : 0);
+            d.medianlogcpm
+        );
     }
 
     ngAfterViewInit() {
-        const width = this.medianChart.nativeElement.parentElement.offsetWidth;
+        const self = this;
         this.barchart = dc.barChart(this.medianChart.nativeElement)
-            .yAxisLabel('LOG CPM');
+            .yAxisLabel('LOG CPM', 20);
         this.barchart.margins().top = 50;
+        this.barchart.margins().left = 70;
         this.barchart
-            .width(width)
-            .height(320)
-            .gap(50)
+            .barPadding(0.5)
             .renderLabel(true)
             .elasticY(false)
             .dimension(this.dimension)
             .group(this.tissuecoresGroup)
             .x(d3.scaleBand())
             .y(d3.scaleLinear().domain([0, this.tissuecoresGroup.top(1)[0].value]))
+            .valueAccessor((d) => {
+                return self.dataService.getSignificantValue(+d.value);
+            })
             .brushOn(false)
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
-            // .yAxis().ticks(6)
             .on('renderlet', (chart) => {
-                chart.selectAll('rect').on('click', (d) => {
-                    console.log('click!', d);
-                });
                 const yDomainLength = Math.abs(this.barchart.y().domain()[1]
                 - this.barchart.y().domain()[0]);
                 // if (chart.select('rect').attr('y') === '240' ) {
@@ -109,19 +109,29 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                     .merge(path);
                 path.attr('d', line);
             });
+
+        this.barchart.yAxis().ticks(3);
         this.barchart.render();
     }
 
     onResize(event?: any) {
-        const width = this.medianChart.nativeElement.parentElement.offsetWidth;
-        this.barchart
-            .width(width)
-            .height(320)
-            .x(d3.scaleBand())
-            .renderLabel(true)
-            .xUnits(dc.units.ordinal)
-            .gap(50)
-            .redraw();
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(() => {
+            self.barchart
+                .width(
+                    self.medianChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
+                )
+                .height(self.medianChart.nativeElement.offsetHeight - (self.paddingUD * 2));
+
+            if (self.barchart.rescale) {
+                self.barchart.rescale();
+            }
+
+            // Run code here, resizing has "stopped"
+            self.barchart.redraw();
+        }, 100);
     }
 
 }

@@ -6,7 +6,6 @@ import {
     ElementRef,
     Input
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { Gene } from '../../../models';
 
@@ -49,8 +48,7 @@ export class BoxPlotViewComponent implements OnInit {
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
-        private chartService: ChartService,
-        private decimalPipe: DecimalPipe
+        private chartService: ChartService
     ) { }
 
     ngOnInit() {
@@ -147,9 +145,9 @@ export class BoxPlotViewComponent implements OnInit {
         const mult = (svgEl.getBBox().height - 10) / yDomainLength;
         // Update the component gene copy everytime
         self.currentGene = self.geneService.getCurrentGene();
-        const val = self.currentGene[self.info.attr];
+        const val = +self.currentGene[self.info.attr];
         let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
-        logVal = +this.decimalPipe.transform(logVal, '1.3');
+        logVal = this.dataService.getSignificantValue(logVal);
         const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
 
         if (!translate) {

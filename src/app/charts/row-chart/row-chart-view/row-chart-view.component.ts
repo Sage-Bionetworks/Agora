@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
-import { resolve } from 'url';
 
 // Using a d3 v4 function to get all nodes
 d3.selection.prototype['nodes'] = function() {
@@ -45,8 +43,7 @@ export class RowChartViewComponent implements OnInit {
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
-        private chartService: ChartService,
-        private decimalPipe: DecimalPipe
+        private chartService: ChartService
     ) { }
 
     ngOnInit() {
@@ -67,10 +64,10 @@ export class RowChartViewComponent implements OnInit {
         this.chart
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.3');
+                return 'Log Fold Change: ' + self.dataService.getSignificantValue(+d.value.logfc);
             })
             .valueAccessor((d) => {
-                return +self.decimalPipe.transform(+d.value.logfc, '1.3');
+                return self.dataService.getSignificantValue(+d.value.logfc);
             })
             .label((d) => {
                 return d.key;
@@ -314,8 +311,7 @@ export class RowChartViewComponent implements OnInit {
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 if (gene) {
@@ -329,8 +325,7 @@ export class RowChartViewComponent implements OnInit {
             })
             .attr('x2', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 if (gene) {
@@ -358,8 +353,7 @@ export class RowChartViewComponent implements OnInit {
             // ES6 method shorthand for object literals
             .attr('x', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 let scaledX = 0;
@@ -388,8 +382,7 @@ export class RowChartViewComponent implements OnInit {
             .attr('text-anchor', 'middle')
             .text((d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 let ciValue = '0.0';
@@ -399,6 +392,11 @@ export class RowChartViewComponent implements OnInit {
 
                 return ciValue;
             });
+    }
+
+    // Compares the current value from a group to the gene expected value
+    compareAttributeValue(cValue: number, gValue: number): boolean {
+        return this.dataService.getSignificantValue(cValue, true) === gValue;
     }
 
     // Changes the chart row rects into squares of the square size

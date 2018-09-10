@@ -21,6 +21,15 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
+    // To be used by the DecimalPipe from Angular. This means
+    // a minimum of 1 digit will be shown before decimal point,
+    // at least, but not more than, 2 digits after decimal point
+    significantDigits: string = '1.2-2';
+    // This is a second configuration used because the adjusted
+    // p-val goes up to 4 significant digits. It is used to compare
+    // the log fold change with adjusted p-val for chart rendering
+    // methods
+    compSignificantDigits: string = '1.2-4';
 
     constructor(
         private http: HttpClient,
@@ -58,9 +67,9 @@ export class DataService {
                 if (data['geneEntries']) { this.geneEntries = data['geneEntries']; }
                 data['items'].forEach((d: Gene) => {
                     // Separate the columns we need
-                    d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.fc = +this.decimalPipe.transform(+d.fc, '1.1-5');
-                    d.adj_p_val = +d.adj_p_val;
+                    d.logfc = this.getSignificantValue(+d.logfc, true);
+                    d.fc = this.getSignificantValue(+d.fc, true);
+                    d.adj_p_val = this.getSignificantValue(+d.adj_p_val, true);
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.model = d.model;
                     d.study = d.study;
@@ -158,6 +167,18 @@ export class DataService {
 
     getGeneEntries(): Gene[] {
         return this.geneEntries;
+    }
+
+    getSignificantDigits(compare?: boolean): string {
+        return ((compare) ? this.compSignificantDigits : this.significantDigits) || '1.2-2';
+    }
+
+    getSignificantValue(value: number, compare?: boolean) {
+        return +this.decimalPipe.transform(value, this.getSignificantDigits(compare));
+    }
+
+    setSignificantDigits(sd: string) {
+        this.significantDigits = sd;
     }
 
     getGenesDimension(): crossfilter.Dimension<any, any> {
