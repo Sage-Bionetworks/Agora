@@ -183,6 +183,7 @@
 }
 .steps {
     margin-top: 25px;
+    -webkit-padding-start: 0px;
     .steps-marker {
         height: 0.5rem;
         width: 0.5rem;
@@ -251,7 +252,6 @@ ul {
 }
 .filter{
     margin-top: 20px;
-    display: flex;
     div{
         float: left;
     }
@@ -266,7 +266,6 @@ ul {
         width: 100%;
         .left{
             float: left;
-            padding-left: 40px;
         }
         .right{
             float: right;

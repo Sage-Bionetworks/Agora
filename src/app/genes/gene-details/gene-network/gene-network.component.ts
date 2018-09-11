@@ -53,22 +53,17 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             if (this.forceService.getGeneOriginalList()) {
                 const dn = this.forceService.getGeneOriginalList();
-                this.networkData = dn;
                 this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
+                this.networkData = dn;
                 console.log(this.currentGene);
             } else {
                 this.loadGenes();
             }
         }
-        // if (this.id === 'ENSG00000128564') {
-        //     this.noData = true;
-        //     this.dataLoaded = true;
-        // } else {
-        // }
     }
 
     getText(state?: boolean): string {
@@ -150,12 +145,12 @@ export class GeneNetworkComponent implements OnInit {
         this.dataService.loadNodes(this.currentGene).then((data: any) => {
             this.forceService.setData(data);
             this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
-                this.networkData = dn;
                 this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
+                this.networkData = dn;
             });
         });
     }

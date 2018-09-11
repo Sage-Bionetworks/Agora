@@ -59,18 +59,26 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit() {
-        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        this.height = this.forceChart.nativeElement.offsetParent.offsetHeight;
-        this.loaded = true;
-        this.simulation = d3.forceSimulation()
-            .force('charge', d3.forceManyBody().strength(-10))
-            .force('center', d3.forceCenter(this.width / 2, this.height / 2));
-        this.renderChart();
+        setTimeout(() => {
+            this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
+            this.height = this.forceChart.nativeElement.offsetHeight;
+            if (this.height < 500) {
+                this.height = 500;
+            }
+            this.loaded = true;
+            this.simulation = d3.forceSimulation()
+                .force('charge', d3.forceManyBody().strength(-10))
+                .force('center', d3.forceCenter(this.width / 2, this.height / 2));
+            this.renderChart();
+        }, 300);
     }
 
     onResize(event?: any) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        this.height = this.forceChart.nativeElement.offsetHeight;
+        this.height = this.forceChart.nativeElement.offsetHeight - 30;
+        if (this.height < 700) {
+            this.height = 500;
+        }
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
         this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
 
