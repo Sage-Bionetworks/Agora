@@ -70,7 +70,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     onResize(event?: any) {
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        // this.height = this.forceChart.nativeElement.offsetParent.offsetHeight;
+        this.height = this.forceChart.nativeElement.offsetHeight;
         this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
         this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
 

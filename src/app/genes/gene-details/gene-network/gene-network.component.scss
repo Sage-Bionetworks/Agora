@@ -25,7 +25,22 @@
 .network-container {
     background: rgba(245, 245, 245, 0.5);
     position: relative;
-    min-height: 200px
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    .force-chart-container {
+        height: 100%;
+        .container {
+          height: 100%;
+          div{
+              height: 100%;
+              div{
+                  height: 100%;
+              }
+          }
+        }
+    }
+
 }
 
 .genelink {

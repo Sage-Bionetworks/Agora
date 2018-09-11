@@ -1,38 +1,36 @@
 <div *ngIf="dataLoaded" class="row network-content">
-    <div class="col-md-8 col-sm-12 col-12 network-container">
-        <div *ngIf="!noData; else noDataImage">
-            <div class="filter" *ngIf="filterlvl">
-                <div class="col-sm-4">
-                    <h4 class="filter-title">Filter by number of brain regions</h4>
-                </div>
-                <div class="col-sm-8">
-                    <ul class="steps">
-                        <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
-                            <a (click)="filterNodes(i)" class="steps-marker"></a>
-                            <span class="tooltip">{{i}}</span>
-                        </li>
-                    </ul>
-                    <div class="filter-reference">
-                        <span class="left">&gt;1</span>
-                        <span class="right">&lt;{{filterlvl-1}}</span>
-                    </div>
-                </div>
+    <div class="col-md-8 col-sm-12 col-12 network-container"  *ngIf="!noData; else noDataImage">
+        <div class="filter" *ngIf="filterlvl">
+            <div class="col-sm-4">
+                <h4 class="filter-title">Filter by number of brain regions</h4>
             </div>
-            <div >
-                <force-chart  (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
-            </div>
-            <div class="network-legend">
-                <div><span class="dot current"></span> Current gene</div>
-                <div><span class="dot selected"></span> Selected gene</div>
-                <div><span class="dot first"></span> Nodes 2-3</div>
-                <div><span class="dot second"></span> Nodes 4-5</div>
-                <div><span class="dot third"></span> Nodes 6-7</div>
+            <div class="col-sm-8">
+                <ul class="steps">
+                    <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
+                        <a (click)="filterNodes(i)" class="steps-marker"></a>
+                        <span class="tooltip">{{i}}</span>
+                    </li>
+                </ul>
+                <div class="filter-reference">
+                    <span class="left">&gt;1</span>
+                    <span class="right">&lt;{{filterlvl-1}}</span>
+                </div>
             </div>
         </div>
-        <ng-template #noDataImage>
-            <div class="no-expresion-data">No expression data is currently available.</div>
-        </ng-template>
+        <div class="force-chart-container">
+            <force-chart  (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
+        </div>
+        <div class="network-legend">
+            <div><span class="dot current"></span> Current gene</div>
+            <div><span class="dot selected"></span> Selected gene</div>
+            <div><span class="dot first"></span> Nodes 2-3</div>
+            <div><span class="dot second"></span> Nodes 4-5</div>
+            <div><span class="dot third"></span> Nodes 6-7</div>
+        </div>
     </div>
+    <ng-template #noDataImage>
+        <div class="no-expresion-data">No expression data is currently available.</div>
+    </ng-template>
     <div class="col-md-4 col-sm-12 col-12 currentGene">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
