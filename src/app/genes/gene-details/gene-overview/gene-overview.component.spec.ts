@@ -9,6 +9,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
+    ApiServiceStub,
     ActivatedRouteStub,
     RouterStub,
     DataServiceStub,
@@ -20,7 +21,7 @@ import {
 import { GeneOverviewComponent } from './gene-overview.component';
 
 import { ForceService } from '../../../shared/services';
-import { DataService, GeneService } from '../../../core/services';
+import { ApiService, DataService, GeneService,  } from '../../../core/services';
 
 import { Button } from 'primeng/button';
 
@@ -33,6 +34,7 @@ describe('Component: GeneOverview', () => {
     let component: GeneOverviewComponent;
     let fixture: ComponentFixture<GeneOverviewComponent>;
     let router: RouterStub;
+    let apiService: ApiServiceStub;
     let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
@@ -50,6 +52,7 @@ describe('Component: GeneOverview', () => {
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
+                { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
@@ -63,6 +66,7 @@ describe('Component: GeneOverview', () => {
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
+        apiService = fixture.debugElement.injector.get(ApiService);
         dataService = fixture.debugElement.injector.get(DataService);
         forceService = fixture.debugElement.injector.get(ForceService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);

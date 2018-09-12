@@ -9,8 +9,8 @@ import { Observable, empty } from 'rxjs';
 import { Gene, GeneInfo } from '../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    GeneService
 } from '../../core/services';
 
 @Component({
@@ -31,7 +31,7 @@ export class GeneSearchComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private dataService: DataService,
+        private apiService: ApiService,
         private geneService: GeneService
     ) { }
 
@@ -56,7 +56,7 @@ export class GeneSearchComponent implements OnInit {
 
     search(queryString: string): Observable<any> {
         if (queryString) {
-            return this.dataService.getGenesMatchId(queryString);
+            return this.apiService.getGenesMatchId(queryString);
         } else {
             return empty();
         }
@@ -75,7 +75,7 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(info: GeneInfo) {
-        this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
+        this.apiService.getGene(info.hgnc_symbol).subscribe((data) => {
             if (!data['info']) {
                 this.router.navigate(['/genes']);
             } else {

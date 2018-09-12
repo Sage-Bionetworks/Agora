@@ -12,7 +12,7 @@ import {
     ActivatedRouteStub,
     RouterStub,
     RouterOutletStubComponent,
-    DataServiceStub,
+    ApiServiceStub,
     GeneServiceStub,
     mockInfo1
 } from '../../testing';
@@ -25,7 +25,7 @@ import { SynapseAccountComponent } from '../../core/synapse-account';
 import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
-import { DataService, GeneService } from '../../core/services';
+import { ApiService, GeneService } from '../../core/services';
 
 import { of } from 'rxjs';
 
@@ -33,7 +33,7 @@ describe('Component: GenesList', () => {
     let component: GenesListComponent;
     let fixture: ComponentFixture<GenesListComponent>;
     let router: RouterStub;
-    let dataService: DataServiceStub;
+    let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
     let activatedRoute: any;
 
@@ -55,7 +55,7 @@ describe('Component: GenesList', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
+                { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() }
             ]
         })
@@ -65,7 +65,7 @@ describe('Component: GenesList', () => {
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
-        dataService = fixture.debugElement.injector.get(DataService);
+        apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
@@ -80,7 +80,7 @@ describe('Component: GenesList', () => {
     it('should load the table', fakeAsync(() => {
         const res = { items: [mockInfo1] };
 
-        const dsSpy = spyOn(dataService, 'getTableData').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getTableData').and.returnValue(
             of(res)
         );
         spyOn(component, 'ngOnInit').and.callThrough(); // mock event object to load the table
@@ -91,7 +91,7 @@ describe('Component: GenesList', () => {
     }));
 
     it('should tell ROUTER to navigate when selecting gene', fakeAsync(() => {
-        const dsSpy = spyOn(dataService, 'getGene').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getGene').and.returnValue(
             of(mockInfo1)
         );
         const spy = spyOn(router, 'navigate').and.callThrough();

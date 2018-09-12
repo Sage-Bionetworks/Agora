@@ -6,8 +6,8 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    GeneService
 } from '../services';
 
 @Component({
@@ -30,7 +30,7 @@ export class ContribTeamsPageComponent implements OnInit {
     constructor(
         private router: Router,
         private geneService: GeneService,
-        private dataService: DataService,
+        private apiService: ApiService,
         private titleCase: TitleCasePipe,
         private sanitizer: DomSanitizer
     ) {}
@@ -40,8 +40,7 @@ export class ContribTeamsPageComponent implements OnInit {
     }
 
     loadTeams() {
-        const info = this.geneService.getCurrentInfo();
-        this.dataService.getAllTeams().subscribe((data) => {
+        this.apiService.getAllTeams().subscribe((data) => {
             if (!data['items']) { this.router.navigate(['/genes']); }
             this.teams = data['items'];
         }, (error) => {
@@ -60,7 +59,7 @@ export class ContribTeamsPageComponent implements OnInit {
         this.teams.forEach((t) => {
             t.members.forEach((m) => {
                 this.memberImages.push({ name: null, imgUrl: null });
-                this.dataService.getTeamMemberImage(m.name).subscribe((data) => {
+                this.apiService.getTeamMemberImage(m.name).subscribe((data) => {
                     this.memberImages[index].name = m.name;
                     if (data) {
                         this.memberImages[index].imgUrl =

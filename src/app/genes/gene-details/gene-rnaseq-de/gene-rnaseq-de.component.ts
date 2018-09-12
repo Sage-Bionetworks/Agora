@@ -16,7 +16,7 @@ import { BoxPlotsViewComponent } from './box-plots-view';
 import { Gene, GeneInfo } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 
 import { SelectItem } from 'primeng/api';
 
@@ -51,6 +51,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
         private chartService: ChartService,
@@ -188,7 +189,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.geneService.setCurrentTissue(event.itemValue);
 
             // Update the current gene for this tissue
-            this.dataService.getGene(
+            this.apiService.getGene(
                 this.gene.ensembl_gene_id,
                 this.geneService.getCurrentTissue(),
                 this.geneService.getCurrentModel()

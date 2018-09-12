@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
+import { GeneNetwork } from '../../../models';
 
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
 @Component({
@@ -30,8 +30,9 @@ export class GeneBRComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private geneService: GeneService,
+        private apiService: ApiService,
         private dataService: DataService,
+        private geneService: GeneService,
         private forceService: ForceService
     ) { }
 
@@ -44,7 +45,7 @@ export class GeneBRComponent implements OnInit {
             this.selectedGeneData = this.forceService.getGeneClickedList();
             this.dataLoaded = true;
         } else {
-            this.dataService.getGene(this.id).subscribe((data) => {
+            this.apiService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
                 this.geneService.setCurrentInfo(data['geneInfo']);
@@ -68,7 +69,7 @@ export class GeneBRComponent implements OnInit {
         } else {
             id = link[pos];
         }
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
