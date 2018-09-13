@@ -11,6 +11,9 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 
+const VERSION = JSON.stringify(require('../package.json')['version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
+
 /**
  * Webpack Constants
  */
@@ -111,6 +114,13 @@ module.exports = function () {
             },
             'angular2-template-loader'
           ],
+
+          /**
+         * To string and css loader support for *.css files (from Angular components)
+         * Returns file content as string
+         *
+         */
+
           exclude: [/\.e2e\.ts$/]
         },
 
@@ -133,7 +143,7 @@ module.exports = function () {
          */
         {
           test: /\.scss$/,
-          loader: ['raw-loader', 'sass-loader'],
+          loader: ['raw-loader', 'css-loader', 'sass-loader'],
           exclude: [helpers.root('src/index.html')]
         },
 
@@ -147,6 +157,14 @@ module.exports = function () {
           test: /\.html$/,
           loader: 'raw-loader',
           exclude: [helpers.root('src/index.html')]
+        },
+
+        /* File loader for supporting fonts, for example, in CSS files.
+        */
+        {
+          test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+          use: 'file-loader',
+          include: [helpers.root('node_modules/lato-font')]
         },
 
         /**
@@ -185,6 +203,8 @@ module.exports = function () {
       new DefinePlugin({
         'ENV': JSON.stringify(ENV),
         'HMR': false,
+        'VERSION': VERSION,
+        'DATA_VERSION': DATA_VERSION,
         'process.env': {
           'ENV': JSON.stringify(ENV),
           'NODE_ENV': JSON.stringify(ENV),

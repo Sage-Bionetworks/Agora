@@ -1,12 +1,14 @@
 version: '2.3'
 services:
   mongodb:
-    image: 'mongo'
+    container_name: mongodb
+    image: 'amd64/mongo'
     ports:
       - 27017:27017
     networks:
       - front_agora
   mongod:
+    container_name: mongod
     build:
       context: ./mongo-seed
       dockerfile: ./mongod.Dockerfile
@@ -15,6 +17,7 @@ services:
     networks:
       - front_agora
   mongo_data:
+    container_name: mongo_data
     build:
       context: ../data
       dockerfile: ../Agora/mongo-seed/rnaseq_differential_expression.Dockerfile
@@ -25,6 +28,7 @@ services:
     networks:
       - front_agora
   mongo_seed_links:
+    container_name: mongo_seed_links
     build:
       context: ../data
       dockerfile: ../Agora/mongo-seed/network.Dockerfile
@@ -35,6 +39,7 @@ services:
     networks:
       - front_agora
   mongo_seed_info:
+    container_name: mongo_seed_info
     build:
       context: ../data
       dockerfile: ../Agora/mongo-seed/gene_info.Dockerfile
@@ -45,6 +50,7 @@ services:
     networks:
       - front_agora
   mongo_seed_team:
+    container_name: mongo_seed_team
     build:
       context: ../data
       dockerfile: ../Agora/mongo-seed/team_info.Dockerfile
@@ -55,6 +61,7 @@ services:
     networks:
       - front_agora
   mongo_seed_team_images:
+    container_name: mongo_seed_team_images
     build:
       context: ../data
       dockerfile: ../Agora/mongo-seed/team_images.Dockerfile

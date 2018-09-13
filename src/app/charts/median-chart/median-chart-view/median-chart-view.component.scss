@@ -1,3 +1,57 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
+.median-content {
+    height: 350px;
+
+    .dc-chart {
+        width: 100%;
+
+        svg {
+            height: 100%;
+        }
+    }
+}
+
 .no-float{
     float:none!important;
+}
+
+.mc {
+    width: 100%;
+    height: 100%;
+
+    g > text.y-axis-label {
+        @include lato-font('bold');
+        font-size: $font-size-regular;
+        color: $text-color-axis;
+    }
+
+    g.axis.y, g.axis.x {
+        text {
+            @include lato-font('bold');
+            font-size: $font-size-x-regular;
+            color: $text-color-normal;
+        }
+    }
+
+    g.stack {
+        text.barLabel {
+            @include lato-font('normal');
+            font-size: $font-size-regular;
+            color: $text-color-chart-label;
+        }
+    }
+
+    path.domain {
+        stroke: #EDEDED;
+        stroke-width: 4px;
+    }
+
+    .axis line {
+        stroke: white;
+    }
+
+    min-height: 350px;
+    max-height: 350px;
 }

@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
     name: 'myArraySort'
 })
-export class MyArraySortPipe implements PipeTransform {
+export class ArraySortPipe implements PipeTransform {
     transform(array: any[], field: string, reverse: boolean = false): any[] {
         array.sort((a: any, b: any) => {
             if (a[field].length < b[field].length) {

@@ -1,14 +1,17 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { routes } from '../core-routing.module';
+import { TitleCasePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
-import { AboutComponent } from '../about/about.component';
-import { NoContentComponent } from '../no-content/no-content.component';
 import { NavbarComponent } from './navbar.component';
-import { ContribTeamsPageComponent } from '../contrib-teams';
-import { SynapseAccountComponent } from '../synapse-account';
-import { TermsComponent } from '../terms';
+
+import {
+    RouterStub,
+    DataServiceStub,
+    GeneServiceStub
+} from '../../testing';
+
+import { DataService, GeneService } from '../services';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -16,27 +19,22 @@ describe('NavbarComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                RouterTestingModule.withRoutes(routes)
+            declarations: [
+                NavbarComponent
             ],
             schemas: [NO_ERRORS_SCHEMA],
-            declarations: [
-                AboutComponent,
-                TermsComponent,
-                ContribTeamsPageComponent,
-                SynapseAccountComponent,
-                NoContentComponent,
-                NavbarComponent
+            providers: [
+                { provide: Router, useValue: new RouterStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
+                { provide: GeneService, useValue: new GeneServiceStub() },
+                TitleCasePipe
             ]
         })
         .compileComponents();
-    }));
 
-    beforeEach(() => {
         fixture = TestBed.createComponent(NavbarComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+    }));
 
     it('should create', () => {
         expect(component).toBeTruthy();

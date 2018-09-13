@@ -1,22 +1,34 @@
-<div class="section-thin rna-seq-me" *ngIf="dataLoaded" tabindex="0">
-<h2 class="filters-header">
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
+    <h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
         <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
+        <span class="icon-spacing"></span>
+        <span class="icon-spacing"></span>
+        <download *ngIf="!isEmptyGene" [target]="stme" [name]="'overall_exp_ac_tissues'"></download>
     </h2>
     <p class="black-paragraph">
-        This plot depicts the median expression of the selected gene across tissues (brain regions)
-        in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful
-        expression is considered to be anything greater than five CPM (referenced by red line in the plot).
+        This plot depicts the median expression of the selected gene across tissues (brain regions) in
+        the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression
+        is considered to be anything greater than 5 CPM.
     </p>
-    <median-chart [geneinfo]="geneInfo"></median-chart>
+    <div #stme>
+        <ng-container *ngIf="!isEmptyGene; else noDataMedian">
+            <median-chart [geneinfo]="geneInfo"></median-chart>
+        </ng-container>
+    </div>
+    <ng-template #noDataMedian>
+        <div class="no-median-data">No expression data is currently available.</div>
+    </ng-template>
 </div>
 
-<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded" tabindex="0">
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <div class="row">
-        <div class="col-md-8 col-sm-12 col-12 bplot-l-col">
-            <h2 class="de-header">
+        <div class="col-md-8 col-sm-12 col-12 col-fixer">
+            <h2>
                 Differential Expression of Selected Gene within Selected Tissue
+                <span class="icon-spacing"></span>
+                <download *ngIf="!isEmptyGene" [target]="stbp" [name]="'dif_exp_tissue'"></download>
             </h2>
             <p class="black-paragraph de-paragraph">
                 After selecting a tissue and statistical model, you will be able to see whether the
@@ -32,7 +44,7 @@
             </h2>
             <div class="row multi-sel-row">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <p-multiSelect
+                    <p-multiSelect *ngIf="!isEmptyGene"
                         [options]="tissues"
                         [(ngModel)]="selectedTissues"
                         [showToggleAll]="false"
@@ -44,35 +56,68 @@
                         (onPanelHide)="closeDropdown()"
                         (onChange)="toggleTissue($event)">
                     </p-multiSelect>
+                    <p-multiSelect #egms *ngIf="isEmptyGene"
+                        [options]="emptySelection"
+                        [(ngModel)]="selectedTissues"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="emptySelectionLabel"
+                        [dropdownIcon]="getDropdownIcon()"
+                        [disabled]="true">
+                    </p-multiSelect>
                 </div>
             </div>
             <div class="row sm-row">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <select-menu [promptText]="'All'"
+                    <select-menu *ngIf="!isEmptyGene"
+                        [promptText]="'All'"
                         [label]="'select-model'"
                         [defaultValue]="getModel(1)">
                     </select-menu>
+                    <p-multiSelect #egmsc *ngIf="isEmptyGene"
+                        [options]="emptySelection"
+                        [(ngModel)]="selectedTissues"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="emptySelectionLabel"
+                        [dropdownIcon]="getDropdownIcon()"
+                        [disabled]="true">
+                    </p-multiSelect>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-12 col-12 bplot-col">
-            <!-- BoxPlots component-->
-            <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-            </ng-template>
+        <div #stbp class="col-md-4 col-sm-12 col-12">
+            <ng-container *ngIf="!isEmptyGene">
+                <!-- BoxPlots component-->
+                <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+                </ng-template>
+            </ng-container>
+        </div>
+        <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </div>
 </div>
 
-<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded" tabindex="0">
+<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Consistency of Change in Expression
+        <span class="icon-spacing"></span>
+        <download *ngIf="!isEmptyGene" [target]="stfp" [name]="'consistency_chg_in_exp'"></download>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the
         tissues in the chosen model. Genes that show consistent patterns of differential expression will
         have similar log-fold change value across tissues.
     </p>
-    <row-chart></row-chart>
+    <div #stfp>
+        <row-chart *ngIf="!isEmptyGene"></row-chart>
+    </div>
+    <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
+        <h2 class="placeholder-text">No expression data is currently available.</h2>
+    </div>
 </div>
 
 <div class="ui-rtl" dir="rtl">

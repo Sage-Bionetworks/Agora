@@ -1,21 +1,15 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-import { routes } from '../genes-routing.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import {
-    RouterStub,
-    RouterOutletStubComponent,
-    RouterLinkStubDirective
+    RouterOutletStubComponent
 } from '../../testing';
 
-import { GenesViewComponent } from './genes-view.component';
+import { GenesViewComponent } from './';
 
 describe('Component: GenesView', () => {
     let component: GenesViewComponent;
     let fixture: ComponentFixture<GenesViewComponent>;
-    let router: RouterStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -25,17 +19,11 @@ describe('Component: GenesView', () => {
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [
-                { provide: Router, useValue: new RouterStub() }
-            ]
+            schemas: [ NO_ERRORS_SCHEMA ]
         })
         .compileComponents();
 
         fixture = TestBed.createComponent(GenesViewComponent);
-
-        // Get the injected instances
-        router = fixture.debugElement.injector.get(Router);
 
         component = fixture.componentInstance; // Component test instance
     }));

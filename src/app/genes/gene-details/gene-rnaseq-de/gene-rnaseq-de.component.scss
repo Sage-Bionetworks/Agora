@@ -7,19 +7,11 @@
     .fa-info-circle:before {
         color: #9DA3B3;
     }
-
-    .icon-spacing {
-        margin-right: 5px;
-    }
 }
 
 .rna-seq-me {
     .fa-info-circle:before {
         color: #9DA3B3;
-    }
-
-    .icon-spacing {
-        margin-right: 5px;
     }
 
     border-top: 1px solid #E0E0E0;
@@ -28,26 +20,20 @@
 .rna-seq-bplot {
     @include respond-to('medium') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
     @include respond-to('ex-large') {
         border-right-color: rgba(245, 245, 245, 0.5);
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-top: 2em;
-        margin-bottom: 2em;
+        padding-top: 2em;
+        padding-bottom: 2em;
         padding-right: 15px;
     }
 
@@ -55,15 +41,10 @@
         color: #9DA3B3;
     }
 
-    .icon-spacing {
-        margin-right: 5px;
-    }
-
     select {
+        @include lato-font('normal');
+
         width: 100%;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         line-height: normal;
         font-size: 18px;
         color: #1A1C29;
@@ -72,6 +53,11 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
+    }
+
+    // For older browsers like IE 10, 11
+    select::-ms-expand{
+        display: none;
     }
 
     p-multiselect {
@@ -107,9 +93,7 @@
 
         .ui-multiselect-label-container {
             padding-left: 10px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
             font-size: 18px;
 
             @include respond-to('ex-small') {
@@ -166,9 +150,7 @@
         li {
             width: 100%;
             line-height: 52px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
 
             @include respond-to('ex-small') {
                 font-size: 14px;
@@ -258,6 +240,10 @@
         }
     }
 
+    .col-fixer {
+        display: table-row;
+    }
+
     .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
         margin-bottom: 40px;
     }
@@ -265,10 +251,6 @@
     .filters-header {
         .fa-info-circle:before {
             color: #9DA3B3;
-        }
-
-        .icon-spacing {
-            margin-right: 5px;
         }
 
         h3 {
@@ -280,10 +262,13 @@
         }
     }
 
-
-
     .bplot-col {
         background: rgba(245, 245, 245, 0.5);
+    }
+
+    .empty-bplot-col {
+        background: rgba(245, 245, 245, 0.5);
+        height: 450px;
     }
 }
 
@@ -318,8 +303,11 @@
         color: #9DA3B3;
     }
 
-    .icon-spacing {
-        margin-right: 5px;
+    .rc-empty-plot-content {
+        height: 450px;
+        position: relative;
+        display: block;
+        background: rgba(245, 245, 245, 0.5);
     }
 }
 
@@ -343,4 +331,19 @@
 
 .fa-info-circle {
   cursor: pointer
+}
+
+.no-median-data {
+    min-height: 150px;
+    width: 100%;
+    background: rgba(245, 245, 245, 0.5);
+    text-align: center;
+    padding-top: 65px;
+    font-family: Lato;
+    font-style: italic;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+    color: #9DA3B3;
 }

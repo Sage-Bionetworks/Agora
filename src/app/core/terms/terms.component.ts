@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'terms',
@@ -7,17 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
     styleUrls: [ './terms.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class TermsComponent implements OnInit {
-    constructor(
-        private router: Router,
-        public route: ActivatedRoute
-    ) {}
-
-    ngOnInit() {
+export class TermsComponent {
+    constructor() {
         //
-    }
-
-    goToRoute(path: string) {
-        this.router.navigate(['/' + path]);
     }
 }

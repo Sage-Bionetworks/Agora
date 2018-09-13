@@ -1,4 +1,4 @@
-FROM mongo
+FROM amd64/mongo
 
 COPY /team_info.json /team_info.json
 

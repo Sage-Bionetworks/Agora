@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 
 import { AppSharedModule } from '../shared';
 import { CoreRoutingModule } from './core-routing.module';
@@ -13,6 +13,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 
 import {
+    ApiService,
     AuthGuardService,
     AuthenticationService,
     GeneService,
@@ -20,6 +21,7 @@ import {
 } from './services';
 
 import { AboutComponent } from './about';
+import { HelpComponent } from './help';
 import { TermsComponent } from './terms';
 import { SynapseAccountComponent } from './synapse-account';
 import { BetaBannerComponent } from './beta-banner';
@@ -29,14 +31,12 @@ import { FooterComponent } from './footer';
 import { NoContentComponent } from './no-content';
 
 import '../../styles/styles.scss';
-import '../../styles/headings.css';
+import '../../styles/headings.scss';
 import { ContribTeamsPageComponent } from './contrib-teams';
 import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
 
 @NgModule({
     imports: [
-        // Angular modules
-        CommonModule,
         // PrimeNG modules
         ButtonModule,
         ProgressBarModule,
@@ -55,6 +55,7 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         FooterComponent,
         NoContentComponent,
         AboutComponent,
+        HelpComponent,
         TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent,
@@ -66,12 +67,14 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         MenubarComponent,
         FooterComponent,
         AboutComponent,
+        HelpComponent,
         TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent,
         BetaBannerComponent
     ],
     providers: [
+        ApiService,
         AuthenticationService,
         AuthGuardService,
         DataService,

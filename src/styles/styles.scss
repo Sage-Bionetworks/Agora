@@ -11,7 +11,7 @@
 @import "~font-awesome/css/font-awesome.min.css";
 @import "~primeng/resources/themes/omega/theme.css";
 @import "~primeng/resources/primeng.min.css";
-@import "~lato-font/css/lato-font.css";
+// @import "~lato-font/css/lato-font.min.css";
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
 @import "../assets/css/helpers/mixins";
@@ -41,9 +41,9 @@ html {
 }
 
 html, body{
-    //width: 100%;
+    @include lato-font('normal');
+
     min-width: 367px;
-    font-family: Lato;
     padding: 0;
     margin: 0;
 }
@@ -55,7 +55,6 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
-    font-family: Lato;
     margin-bottom: 100px;
 }
 
@@ -76,9 +75,8 @@ a:hover {
 }
 
 p {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
+    @include lato-font('normal');
+
     line-height: normal;
     font-size: 18px;
     text-align: left;
@@ -86,40 +84,42 @@ p {
 }
 
 span {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
+    @include lato-font('normal');
     @include respond-to('ex-small') {
         font-size: 18px;
     }
+
+    line-height: normal;
     font-size: 20px;
     text-align: center;
     letter-spacing: 1px;
     color: #1A1C29;
 }
 
+input::-ms-clear {
+    display: none;
+}
+
 p-dialog {
     .ui-dialog {
-        width: 80% !important;
-        max-width: 80% !important;
-        top: 109px !important;
-        max-height: 80% !important;
+        width: 80% ;
+        max-width: 80% ;
+        top: 109px ;
+        max-height: 80% ;
         overflow: auto;
     }
 
     .ui-dialog-titlebar {
-        padding-top: 85px !important;
+        @include lato-font('bold');
+
+        padding-top: 85px ;
         text-align-last: center;
         background: white;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
         line-height: normal;
         font-size: 24px;
         color: #1A1C29;
         text-align: center;
-        padding-top: 10% !important;
+        padding-top: 10% ;
 
         .pi-times:before {
             color: #5BB0B5;
@@ -127,18 +127,17 @@ p-dialog {
     }
 
     .ui-dialog-content {
-        padding-bottom: 85px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
+        @include lato-font('normal');
+
+        padding-bottom: 85px ;
+        padding-left: 10% ;
+        padding-right: 10% ;
         line-height: normal;
         font-size: 18px;
         text-align: left;
         text-align-last: left;
         color: #000000;
-        height: 100% !important;
+        height: 100% ;
         padding-bottom: 10%;
 
         .content-row {
@@ -174,9 +173,8 @@ p-dialog {
 }
 
 .italic-paragraph {
-    font-family: Lato;
-    font-style: italic;
-    font-weight: normal;
+    @include lato-font('normal', italic);
+
     line-height: normal;
     font-size: 18px;
     color: #8D919E;
@@ -200,7 +198,6 @@ p-dialog {
 
 .center-justified {
     text-align: justify;
-    -moz-text-align-last: center;
     text-align-last: center;
 }
 
@@ -224,7 +221,8 @@ p-dialog {
 }
 
 .section {
-    font-family: Lato;
+    @include lato-font('normal');
+
     @include respond-to('ex-small') {
         padding-top: 2em;
         padding-left: 9%;
@@ -259,16 +257,17 @@ p-dialog {
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
-        padding-left: 27.7%;
+        padding-left: 25%;
         padding-bottom: 2em;
-        padding-right: 27.7%;
+        padding-right: 25%;
         color: #000000;
        //background-color: #ffffff;
     }
 }
 
 .section-thin {
-    font-family: Lato;
+    @include lato-font('normal');
+
     @include respond-to('ex-small') {
         padding-top: 2em;
         padding-left: 3.5%;
@@ -327,12 +326,11 @@ p-dialog {
 
     .genes {
         span {
+            @include lato-font('bold');
+
             color: #5BB0B5;
             text-decoration: underline;
             cursor: pointer;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: bold;
             line-height: normal;
             font-size: 18px;
             width: 100%;
@@ -353,9 +351,8 @@ p-dialog {
         width: 100%;
 
         tr {
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
+            @include lato-font('normal');
+
             line-height: 40px;
             color: #1A1C29;
             height: 40px;
@@ -379,4 +376,49 @@ p-dialog {
 
 .red-text {
     color: #E06672;
+}
+
+.placeholder-img {
+    max-height: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+    display: block;
+    width: 100%;
+}
+
+.placeholder-text {
+    @include lato-font('normal', italic);
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+    line-height: normal;
+    font-size: 18px;
+    text-align: center;
+    color: #9DA3B3;
+}
+
+.icon-spacing {
+    margin-right: 5px;
+}
+
+.download-img {
+    cursor: pointer;
+}
+
+.loading-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -100px;
+    pointer-events: none;
 }

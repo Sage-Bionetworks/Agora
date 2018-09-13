@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
+import { GeneNetwork } from '../../../models';
 
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
 @Component({
@@ -20,7 +20,8 @@ export class GeneSimilarComponent implements OnInit {
     selectedGeneData: GeneNetwork = {
         nodes: [],
         links: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
 
     private gene = this.geneService.getCurrentGene();
@@ -29,8 +30,9 @@ export class GeneSimilarComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private geneService: GeneService,
+        private apiService: ApiService,
         private dataService: DataService,
+        private geneService: GeneService,
         private forceService: ForceService
     ) { }
 
@@ -49,7 +51,7 @@ export class GeneSimilarComponent implements OnInit {
             this.dataLoaded = true;
             console.log('preloaded original');
         } else {
-            this.dataService.getGene(this.id).subscribe((data) => {
+            this.apiService.getGene(this.id).subscribe((data) => {
                 console.log(data);
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.setCurrentGene(data['item']);
@@ -69,7 +71,7 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     viewGene(id: string) {
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {

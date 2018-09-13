@@ -1,4 +1,4 @@
-FROM mongo
+FROM amd64/mongo
 
 COPY ./team_images/*.jpg /team_images/
 

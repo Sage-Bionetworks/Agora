@@ -1,6 +1,6 @@
 // Angular modules
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
@@ -45,7 +45,8 @@ interface StoreType {
      */
     providers: [
         environment.ENV_PROVIDERS,
-        APP_PROVIDERS
+        APP_PROVIDERS,
+        HammerGestureConfig
     ]
 })
 export class AppModule {}

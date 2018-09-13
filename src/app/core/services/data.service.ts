@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
-import { Gene, GeneInfo } from '../../models';
+import { ApiService } from '.';
 
-import { LazyLoadEvent } from 'primeng/primeng';
+import { Gene, GenesResponse, GeneListResponse } from '../../models';
 
 import { Observable } from 'rxjs';
 
@@ -21,139 +20,88 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
+    // To be used by the DecimalPipe from Angular. This means
+    // a minimum of 1 digit will be shown before decimal point,
+    // at least, but not more than, 2 digits after decimal point
+    significantDigits: string = '1.2-2';
+    // This is a second configuration used because the adjusted
+    // p-val goes up to 4 significant digits. It is used to compare
+    // the log fold change with adjusted p-val for chart rendering
+    // methods
+    compSignificantDigits: string = '1.2-4';
 
     constructor(
-        private http: HttpClient,
+        private apiService: ApiService,
         private decimalPipe: DecimalPipe
     ) {}
 
-    getNdx() {
+    getNdx(): any {
         return this.ndx;
+    }
+
+    clearNdx() {
+        this.ndx.remove();
     }
 
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             let dataLinks: any;
-            this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
+            this.apiService.getGeneList(sgene).subscribe((data: GeneListResponse) => {
                 dataLinks = data;
             }, (error) => {
                 console.log('Error loading genes! ' + error.message);
+                reject(null);
             }, () => {
                 resolve(dataLinks);
             });
         });
     }
 
+    // Requests all the genes to be loaded by Crossfilter
     loadGenes(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            const params = new HttpParams();
-
-            // Get all the genes to render the charts
-            this.http.get('/api/genes', { headers, params }).subscribe((data: Gene[]) => {
-                if (data['geneEntries']) { this.geneEntries = data['geneEntries']; }
-                data['items'].forEach((d: Gene) => {
+            this.apiService.getGenes().subscribe((data: GenesResponse) => {
+                if (data.geneEntries) { this.geneEntries = data.geneEntries; }
+                data.items.forEach((d: Gene) => {
                     // Separate the columns we need
-                    d.logfc = +this.decimalPipe.transform(+d.logfc, '1.1-5');
-                    d.fc = +this.decimalPipe.transform(+d.fc, '1.1-5');
-                    d.adj_p_val = +d.adj_p_val;
+                    d.logfc = this.getSignificantValue(+d.logfc, true);
+                    d.fc = this.getSignificantValue(+d.fc, true);
+                    d.adj_p_val = this.getSignificantValue(+d.adj_p_val, true);
                     d.hgnc_symbol = d.hgnc_symbol;
                     d.model = d.model;
                     d.study = d.study;
                     d.tissue = d.tissue;
                 });
 
-                this.ndx = crossfilter(data['items']);
-                this.data = data['items'];
+                this.ndx = crossfilter(data.items);
+                this.data = data.items;
 
                 this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
             }, (error) => {
                 console.log('Error loading genes! ' + error.message);
+                reject(false);
             }, () => {
                 resolve(true);
             });
         });
     }
 
-    getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams();
-
-        for (const key in paramsObj) {
-            if (paramsObj.hasOwnProperty(key)) {
-                params = params.append(key, paramsObj[key]);
-            }
-        }
-
-        return this.http.get('/api/genes/page', { headers, params });
-    }
-
-    getTableData(): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams();
-
-        return this.http.get('/api/genes/table', { headers, params });
-    }
-
-    getGenesMatchId(id: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        return this.http.get('/api/genes/' + id, { headers });
-    }
-
-    getGene(id: string, tissue?: string, model?: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams().set(
-            'id', id
-        );
-        if (tissue) {
-            params = params.set(
-                'tissue', tissue
-            );
-        }
-        if (model) {
-            params = params.set(
-                'model', model
-            );
-        }
-
-        return this.http.get('/api/gene/', { headers, params });
-    }
-
-    getTeams(info: GeneInfo): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams().set(
-            'teams', info.nominatedtarget.map((e) => e.team).join(', ')
-        );
-
-        return this.http.get('/api/teams', { headers, params });
-    }
-
-    getAllTeams(): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams();
-
-        return this.http.get('/api/teams/all', { headers, params });
-    }
-
-    getTeamMemberImage(name: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
-            'Accept': 'image/jpg',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        });
-        const params = new HttpParams().set(
-            'name', name
-        );
-
-        return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
-    }
-
     getGeneEntries(): Gene[] {
         return this.geneEntries;
+    }
+
+    getSignificantDigits(compare?: boolean): string {
+        return ((compare) ? this.compSignificantDigits : this.significantDigits) || '1.2-2';
+    }
+
+    getSignificantValue(value: number, compare?: boolean) {
+        return +this.decimalPipe.transform(value, this.getSignificantDigits(compare));
+    }
+
+    setSignificantDigits(sd: string) {
+        this.significantDigits = sd;
     }
 
     getGenesDimension(): crossfilter.Dimension<any, any> {
@@ -164,7 +112,7 @@ export class DataService {
     getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = this.getNdx().dimension(function(d) {
+        const dim = this.getNdx().dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned
@@ -260,16 +208,16 @@ export class DataService {
         };
     }
 
-    reduceInit() {
+    reduceInit(): any {
         return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
     }
 
     // Box-plot uses a different function name in dc.js
-    reduceInitial() {
+    reduceInitial(): any[] {
         return [];
     }
 
-    rmEmptyBinsDefault = (sourceGroup) => {
+    rmEmptyBinsDefault = (sourceGroup): any => {
         return {
             all: () => {
                 return sourceGroup.all().filter(function(d) {

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { GenesRoutingModule } from './genes-routing.module';
 import { ChartsModule } from '../charts';
@@ -15,6 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
@@ -43,8 +43,6 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         BoxPlotsViewComponent
     ],
     imports: [
-        CommonModule,
-        FormsModule,
         ReactiveFormsModule,
         ChartsModule,
         AppSharedModule.forRoot(),
@@ -58,7 +56,8 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         CardModule,
         TabViewModule,
         ProgressBarModule,
-        MultiSelectModule
+        MultiSelectModule,
+        BlockUIModule
     ],
     entryComponents: [
         BoxPlotsViewComponent

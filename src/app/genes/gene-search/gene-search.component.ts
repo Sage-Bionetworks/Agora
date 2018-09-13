@@ -2,16 +2,15 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+// Updating to rxjs 6 import statement
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
 
 import { Gene, GeneInfo } from '../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    GeneService
 } from '../../core/services';
 
 @Component({
@@ -32,29 +31,35 @@ export class GeneSearchComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private dataService: DataService,
+        private apiService: ApiService,
         private geneService: GeneService
     ) { }
 
     ngOnInit() {
         this.queryField.valueChanges
-            .debounceTime(300)
-            .distinctUntilChanged()
-            .switchMap((query) => {
-                if (query) {
-                    return this.search(query);
-                } else {
-                    this.results = [];
-                    return new EmptyObservable<Response>();
-                }
-            })
+            .pipe(
+                debounceTime(300),
+                distinctUntilChanged(),
+                switchMap((query) => {
+                    if (query) {
+                        return this.search(query);
+                    } else {
+                        this.results = [];
+                        return empty();
+                    }
+                })
+            )
             .subscribe((data) => {
                 this.results = (data['items']) ? data['items'] as GeneInfo[] : [];
             });
     }
 
-    search(queryString: string) {
-        if (queryString) { return this.dataService.getGenesMatchId(queryString); }
+    search(queryString: string): Observable<any> {
+        if (queryString) {
+            return this.apiService.getGenesMatchId(queryString);
+        } else {
+            return empty();
+        }
     }
 
     focusSearchList(state: boolean) {
@@ -65,24 +70,35 @@ export class GeneSearchComponent implements OnInit {
         if (!this.hasFocus) { this.results = []; }
     }
 
-    getGeneId() {
+    getGeneId(): string {
         return this.gene.hgnc_symbol;
     }
 
     viewGene(info: GeneInfo) {
-        let geneData: any;
-        this.dataService.getGene(info.hgnc_symbol).subscribe((data) => {
-            if (!data['item']) { this.router.navigate(['/genes']); }
-            geneData = data;
+        this.apiService.getGene(info.hgnc_symbol).subscribe((data) => {
+            if (!data['info']) {
+                this.router.navigate(['/genes']);
+            } else {
+                if (!data['item']) {
+                    // Fill in a new gene with the info attributes
+                    data['item'] = this.geneService.getEmptyGene(
+                        data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                    );
+                }
+                this.geneService.updateGeneData(data);
+                this.gene = data['item'];
+            }
         }, (error) => {
             console.log('Routing error! ' + error.message);
         }, () => {
-            this.geneService.updateGeneData(geneData);
-            this.gene = geneData['item'];
-            this.router.navigate([
+            this.goToRoute(
                 '/genes',
                 { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
-            ]);
+            );
         });
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

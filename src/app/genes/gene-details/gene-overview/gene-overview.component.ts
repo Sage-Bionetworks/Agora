@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    DataService,
+    GeneService
 } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
@@ -32,13 +32,14 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     currentGeneData = [];
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
+    noData: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
-        private location: Location,
         private forceService: ForceService
     ) { }
 
@@ -66,23 +67,40 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol) {
-            this.dataService.getGene(this.id).subscribe((data) => {
-                if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.updateGeneData(data);
-                this.gene = data['item'];
-                this.geneInfo = data['info'];
+            this.apiService.getGene(this.id).subscribe((data) => {
+                if (!data['info']) {
+                    this.router.navigate(['/genes']);
+                } else {
+                    if (!data['item']) {
+                        // Fill in a new gene with the info attributes
+                        data['item'] = this.geneService.getEmptyGene(
+                            data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                        );
+                        this.noData = true;
+                    }
+                    this.geneService.updateGeneData(data);
+                    this.gene = data['item'];
+                    this.geneInfo = data['info'];
+                }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
             }, () => {
-                this.geneService.loadGeneTissues().then((tstatus) => {
-                    if (tstatus) {
-                        this.geneService.loadGeneModels().then((mstatus) => {
-                            if (mstatus) {
-                                this.initDetails();
-                            }
-                        });
-                    }
-                });
+                // Check if we have a database id at this point
+                if (this.gene && this.gene._id) {
+                    this.geneService.loadGeneTissues().then((tstatus) => {
+                        if (tstatus) {
+                            this.geneService.loadGeneModels().then((mstatus) => {
+                                if (mstatus) {
+                                    this.initDetails();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.geneService.setGeneTissues([]);
+                    this.geneService.setGeneModels([]);
+                    this.initDetails();
+                }
             });
         } else {
             this.initDetails();
@@ -98,13 +116,38 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         });
     }
 
-    getTextColor(state: boolean, normal?: boolean): string {
-        const colorClass = (state) ? 'green-text' : 'red-text';
-        return (normal) ? colorClass + ' normal-heading' : '';
+    getText(state?: boolean): string {
+        let text = '';
+        if (state) {
+            text = 'True';
+        } else {
+            if (state === undefined) {
+                text = 'No data';
+            } else {
+                text = 'False';
+            }
+        }
+        return text;
+    }
+
+    getTextColorClass(state: boolean, normal?: boolean): any {
+        const colorClassObj = {} as any;
+        if (state) {
+            colorClassObj['green-text'] = true;
+        } else {
+            colorClassObj['red-text'] = true;
+        }
+
+        if (normal) {
+            colorClassObj['normal-heading'] = true;
+        } else {
+            colorClassObj['italic-heading'] = true;
+        }
+        return colorClassObj;
     }
 
     viewGene(id: string) {
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
@@ -179,7 +222,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.goToRoute('/synapse-account');
     }
 
-    getAlias() {
+    getAlias(): string {
         if (this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
         }
@@ -206,10 +249,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 
-    goBack() {
-        this.location.back();
-    }
-
     viewPathways() {
         window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
             this.gene.ensembl_gene_id, '_blank');
@@ -220,7 +259,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             this.gene.ensembl_gene_id, '_blank');
     }
 
-    isNominatedTarget() {
+    isNominatedTarget(): string {
         return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
     }
 

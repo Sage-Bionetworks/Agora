@@ -7,9 +7,11 @@ import {
     ViewContainerRef,
     ComponentFactoryResolver,
     ComponentRef,
-    QueryList
+    QueryList,
+    ViewChild,
+    ElementRef,
+    AfterViewInit
 } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
@@ -17,7 +19,7 @@ import { BoxPlotsViewComponent } from './box-plots-view';
 import { Gene, GeneInfo } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 
 import { SelectItem } from 'primeng/api';
 
@@ -27,37 +29,47 @@ import { SelectItem } from 'primeng/api';
     styleUrls: [ './gene-rnaseq-de.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneRNASeqDEComponent implements OnInit {
+export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
+    @ViewChild('noDataMedian') noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
-    dataLoaded: boolean = false;
     tissues: SelectItem[] = [];
+    emptySelection: SelectItem[] = [];
     currentTissues: string[] = [];
     selectedTissues: string[] = [];
     componentRefs: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
     dropdownIconClass: string = 'fa fa-caret-down';
+    emptySelectionLabel: string = '- - -';
+    emptySelectionValue: string = '';
+    dataLoaded: boolean = false;
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
+    isEmptyGene: boolean = true;
+    isViewReady: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
         private chartService: ChartService,
-        private location: Location,
         private resolver: ComponentFactoryResolver
     ) { }
 
     ngOnInit() {
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
+        this.emptySelection.push({
+            label: this.emptySelectionLabel,
+            value: this.emptySelectionValue
+        });
 
         // The data wasn't loaded yet, redirect for now
         if (!this.dataService.getNdx()) {
@@ -90,8 +102,15 @@ export class GeneRNASeqDEComponent implements OnInit {
                     value: [this.selectedTissues[0]]
                 });
                 this.dataLoaded = status;
+                if (this.gene && this.gene._id) {
+                    this.isEmptyGene = false;
+                }
             });
         }
+    }
+
+    ngAfterViewInit() {
+        this.isViewReady = true;
     }
 
     loadChartData(): Promise<any> {
@@ -154,7 +173,8 @@ export class GeneRNASeqDEComponent implements OnInit {
     }
 
     getDefaultLabel(): string {
-        return this.geneService.getDefaultTissue() || this.tissues[0].value;
+        return this.geneService.getDefaultTissue() ||
+            (this.tissues.length ? this.tissues[0].value : '');
     }
 
     async toggleTissue(event: any) {
@@ -178,39 +198,53 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.geneService.setCurrentTissue(event.itemValue);
 
             // Update the current gene for this tissue
-            this.dataService.getGene(
+            this.apiService.getGene(
                 this.gene.ensembl_gene_id,
                 this.geneService.getCurrentTissue(),
                 this.geneService.getCurrentModel()
             ).subscribe(
                 (data) => {
-                    if (!data['item']) { this.router.navigate(['/genes']); }
+                    if (!data['info']) {
+                        this.router.navigate(['/genes']);
+                    } else {
+                        if (!data['item']) {
+                            // Fill in a new gene with the info attributes
+                            data['item'] = this.geneService.getEmptyGene(
+                                data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                            );
+                        }
+                    }
                     this.geneService.updateGeneData(data);
                     this.gene = data['item'];
                 }, (error) => {
                     console.log('Error getting gene: ' + error.message);
                 }, () => {
-                    const label1 = 'box-plot-' + this.index + '1';
-                    const info1 = this.chartService.getChartInfo(label1);
-                    if (!info1) {
-                        this.registerBoxPlot(
-                            'box-plot-' + this.index + '1',
-                            [
-                                {
-                                    name: this.currentTissues[this.index],
-                                    attr: 'tissue'
-                                },
-                                {
-                                    name: this.geneService.getCurrentModel(),
-                                    attr: 'model'
-                                }
-                            ],
-                            'log2(fold change)',
-                            'fc'
-                        );
-                    }
+                    // Check if we have a database id at this point
+                    if (this.gene && this.gene._id) {
+                        const label1 = 'box-plot-' + this.index + '1';
+                        const info1 = this.chartService.getChartInfo(label1);
+                        if (!info1) {
+                            this.registerBoxPlot(
+                                'box-plot-' + this.index + '1',
+                                [
+                                    {
+                                        name: this.currentTissues[this.index],
+                                        attr: 'tissue'
+                                    },
+                                    {
+                                        name: this.geneService.getCurrentModel(),
+                                        attr: 'model'
+                                    }
+                                ],
+                                'log2(fold change)',
+                                'fc'
+                            );
+                        }
 
-                    this.createComponent(this.index, info1, label1);
+                        this.createComponent(this.index, info1, label1);
+                    } else {
+                        this.isEmptyGene = true;
+                    }
                 }
             );
         } else {
@@ -270,15 +304,11 @@ export class GeneRNASeqDEComponent implements OnInit {
         this.dropdownIconClass = 'fa fa-caret-down';
     }
 
-    getDropdownIcon() {
+    getDropdownIcon(): string {
         return this.dropdownIconClass;
     }
 
     showDialog(dialogString: string) {
         this[dialogString] = true;
-    }
-
-    goBack() {
-        this.location.back();
     }
 }

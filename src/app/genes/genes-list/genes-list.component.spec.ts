@@ -6,21 +6,26 @@ import {
     tick
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     ActivatedRouteStub,
     RouterStub,
     RouterOutletStubComponent,
-    DataServiceStub,
+    ApiServiceStub,
     GeneServiceStub,
     mockInfo1
 } from '../../testing';
 
+import { AboutComponent } from '../../core/about';
+import { HelpComponent } from '../../core/help';
+import { TermsComponent } from '../../core/terms';
+import { ContribTeamsPageComponent } from '../../core/contrib-teams';
+import { SynapseAccountComponent } from '../../core/synapse-account';
+import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
-import { DataService, GeneService } from '../../core/services';
+import { ApiService, GeneService } from '../../core/services';
 
 import { of } from 'rxjs';
 
@@ -28,15 +33,19 @@ describe('Component: GenesList', () => {
     let component: GenesListComponent;
     let fixture: ComponentFixture<GenesListComponent>;
     let router: RouterStub;
-    let location: Location;
-    let dataService: DataServiceStub;
+    let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
     let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
+                AboutComponent,
+                HelpComponent,
+                TermsComponent,
+                ContribTeamsPageComponent,
+                SynapseAccountComponent,
+                NoContentComponent,
                 GenesListComponent,
                 RouterOutletStubComponent
             ],
@@ -46,9 +55,8 @@ describe('Component: GenesList', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: ApiService, useValue: new ApiServiceStub() },
+                { provide: GeneService, useValue: new GeneServiceStub() }
             ]
         })
         .compileComponents();
@@ -57,8 +65,7 @@ describe('Component: GenesList', () => {
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
-        location = fixture.debugElement.injector.get(Location);
-        dataService = fixture.debugElement.injector.get(DataService);
+        apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
@@ -73,7 +80,7 @@ describe('Component: GenesList', () => {
     it('should load the table', fakeAsync(() => {
         const res = { items: [mockInfo1] };
 
-        const dsSpy = spyOn(dataService, 'getTableData').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getTableData').and.returnValue(
             of(res)
         );
         spyOn(component, 'ngOnInit').and.callThrough(); // mock event object to load the table
@@ -84,7 +91,7 @@ describe('Component: GenesList', () => {
     }));
 
     it('should tell ROUTER to navigate when selecting gene', fakeAsync(() => {
-        const dsSpy = spyOn(dataService, 'getGene').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getGene').and.returnValue(
             of(mockInfo1)
         );
         const spy = spyOn(router, 'navigate').and.callThrough();
@@ -114,9 +121,4 @@ describe('Component: GenesList', () => {
         fixture.detectChanges();
         expect(gsSpy.calls.any()).toEqual(true);
     }));
-
-    it ('goBack() function test', () => {
-        component.goBack();
-        expect(location.back).toHaveBeenCalled();
-    });
 });

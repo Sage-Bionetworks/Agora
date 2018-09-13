@@ -1,18 +1,16 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     GeneService,
-    DataService
+    ApiService
 } from '../../core/services';
 
 import { GeneInfo, NominatedTarget } from '../../models';
 
 import {
     Message,
-    SortEvent,
-    LazyLoadEvent
+    SortEvent
 } from 'primeng/primeng';
 
 @Component({
@@ -34,9 +32,8 @@ export class GenesListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private dataService: DataService,
-        private geneService: GeneService,
-        private location: Location
+        private apiService: ApiService,
+        private geneService: GeneService
     ) { }
 
     ngOnInit() {
@@ -46,7 +43,7 @@ export class GenesListComponent implements OnInit {
             { field: 'nominatedtarget', header: 'Teams' }
         ];
 
-        this.dataService.getTableData().subscribe((data) => {
+        this.apiService.getTableData().subscribe((data) => {
             this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
             this.genesInfo = this.datasource;
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
@@ -74,7 +71,7 @@ export class GenesListComponent implements OnInit {
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
-        this.dataService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
+        this.apiService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.updateGeneData(data);
             this.router.navigate(
@@ -125,9 +122,5 @@ export class GenesListComponent implements OnInit {
 
     getTeams(nomTargets: NominatedTarget[]): string {
         return nomTargets.map((nt) => nt.team).join(', ');
-    }
-
-    goBack() {
-        this.location.back();
     }
 }

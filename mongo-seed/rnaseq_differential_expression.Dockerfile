@@ -1,4 +1,4 @@
-FROM mongo
+FROM amd64/mongo
 
 COPY /rnaseq_differential_expression.json /rnaseq_differential_expression.json
 

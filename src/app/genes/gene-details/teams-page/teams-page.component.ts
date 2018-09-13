@@ -6,8 +6,8 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    GeneService
 } from '../../../core/services';
 
 @Component({
@@ -30,8 +30,8 @@ export class TeamsPageComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
-        private dataService: DataService,
         private titleCase: TitleCasePipe,
         private sanitizer: DomSanitizer
     ) {}
@@ -44,7 +44,7 @@ export class TeamsPageComponent implements OnInit {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id) {
-            this.dataService.getGene(this.id).subscribe((data) => {
+            this.apiService.getGene(this.id).subscribe((data) => {
                 if (!data['item']) { this.router.navigate(['/genes']); }
                 this.geneService.updateGeneData(data);
                 this.gene = data['item'];
@@ -63,7 +63,7 @@ export class TeamsPageComponent implements OnInit {
 
     loadTeams() {
         const info = this.geneService.getCurrentInfo();
-        this.dataService.getTeams(info).subscribe((data) => {
+        this.apiService.getTeams(info).subscribe((data) => {
             if (!data['items']) { this.router.navigate(['/genes']); }
             this.teams.length = data['items'].length;
             const ntTeamsArray = this.ntInfoArray.slice().map((nti) => nti.team);
@@ -89,12 +89,12 @@ export class TeamsPageComponent implements OnInit {
         this.teams.forEach((t) => {
             t.members.forEach((m) => {
                 this.memberImages.push({ name: null, imgUrl: null });
-                this.dataService.getTeamMemberImage(m.name).subscribe((data) => {
+                this.apiService.getTeamMemberImage(m.name).subscribe((data) => {
                     this.memberImages[index].name = m.name;
                     if (data) {
                         this.memberImages[index].imgUrl =
                             this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
-                                new Blob([data], {
+                                new Blob([data as Blob], {
                                     type: 'image/jpg'
                                 })
                             )}`);

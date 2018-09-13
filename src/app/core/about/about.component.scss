@@ -1,3 +1,6 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .info-header {
     padding-right: 5% !important;
 }
@@ -27,10 +30,9 @@
 }
 
 .contact-us {
+    @include lato-font('normal');
+
     color: #5BB0B5;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
     line-height: normal;
     font-size: 18px;
 }

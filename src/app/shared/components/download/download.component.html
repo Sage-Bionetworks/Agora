@@ -1,0 +1,23 @@
+<img class="download-img" src="/assets/img/download.jpg" (click)="op.toggle($event)">
+<p-overlayPanel [styleClass]="'download-op'" #op (rotate)="onRotate()" (window:resize)="onResize()">
+    <h3>Download as</h3>
+    <div *ngFor="let type of types" class="col-md-12 col-sm-12 col-12 chkbox-col">
+        <p-checkbox name="group1" value="{{type.value}}" label="{{type.label}}" [(ngModel)]="selectedTypes"></p-checkbox>
+    </div>
+    <div class="col-md-12 col-sm-12 col-12 button-col">
+        <p-button (click)="downloadWidget()"
+            label="Download"
+            [styleClass]="'download-button'" tabindex="0">
+        </p-button>
+    </div>
+</p-overlayPanel>
+<p-toast styleClass="warn-toast" [modal]="true" position="center"></p-toast>
+<p-dialog header=""
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [responsive]="true"
+    [width]="350" [height]="350" [minWidth]="200" [minY]="200"
+    [maximizable]="true" [baseZIndex]="10000"
+    [styleClass]="'progress-dialog'">
+    <loading></loading>
+</p-dialog>

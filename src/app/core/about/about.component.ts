@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'about',
@@ -9,8 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AboutComponent implements OnInit {
     constructor(
-        private router: Router,
-        public route: ActivatedRoute
+        private router: Router
     ) {}
 
     ngOnInit() {

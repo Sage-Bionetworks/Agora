@@ -1,10 +1,12 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .bp-tooltip {
+    @include lato-font('normal');
+
     position: absolute;
     padding: 14px;
     text-align: center;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
     line-height: normal;
     color: white;
     font-size: 16px;
@@ -33,9 +35,8 @@
     }
 
     g.axis text {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
+        @include lato-font('normal');
+
         line-height: normal;
         font-size: 16px;
         color: #6D7078;

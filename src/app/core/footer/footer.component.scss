@@ -2,12 +2,11 @@
 @import "../../../assets/css/helpers/mixins";
 
 .footer-row {
+    @include lato-font('normal');
+
     background: #EDEDED;
     height: 100px;
     margin-right: 0px;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
     line-height: normal;
     font-size: 16px;
     color: #0D1C38;
@@ -19,10 +18,9 @@
     }
 
     a.contact-us-footer {
+        @include lato-font('normal');
+
         color: #0D1C38;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: normal;
         line-height: normal;
         text-decoration: none;
         font-size: 16px;
@@ -104,10 +102,9 @@
 }
 
 .footer-span {
+    @include lato-font('normal');
+
     margin-right: 5%;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
     line-height: normal;
     font-size: 16px;
     color: #0D1C38;
@@ -122,9 +119,8 @@
 }
 
 .dark-grey-span {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: normal;
+    @include lato-font('normal');
+
     line-height: normal;
     font-size: 14px;
     text-align: right;

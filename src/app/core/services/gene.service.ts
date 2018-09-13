@@ -65,7 +65,7 @@ export class GeneService {
         this.currentTissue = tissue;
     }
 
-    getCurrentTissue() {
+    getCurrentTissue(): string {
         return this.currentTissue;
     }
 
@@ -73,7 +73,7 @@ export class GeneService {
         this.currentModel = model;
     }
 
-    getCurrentModel() {
+    getCurrentModel(): string {
         return this.currentModel;
     }
 
@@ -144,11 +144,34 @@ export class GeneService {
         return [this.minAdjPValue, this.maxAdjPValue];
     }
 
+    getEmptyGene(ensemblGeneId?: string, hgncSymbol?: string): Gene {
+        const eGene = {
+            _id: '',
+            ensembl_gene_id: '',
+            hgnc_symbol: '',
+            logfc: 0,
+            ci_l: 0,
+            ci_r: 0,
+            adj_p_val: 0,
+            tissue: '',
+            study: '',
+            model: ''
+        } as Gene;
+        if (ensemblGeneId) { eGene.ensembl_gene_id = ensemblGeneId; }
+        if (hgncSymbol) { eGene.hgnc_symbol = hgncSymbol; }
+        return eGene;
+    }
+
     loadTissues(): Promise<any> {
         return new Promise((resolve, reject) => {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues', { headers }).subscribe((data) => {
                 this.tissues = data['items'];
+                this.tissues.sort((a, b) => {
+                    if (a < b) { return -1; }
+                    if (a > b) { return 1; }
+                    return 0;
+                });
             }, (error) => {
                 console.log('Error loading tissues! ' + error.message);
             }, () => {
@@ -162,6 +185,11 @@ export class GeneService {
             const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
             this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
                 this.geneTissues = data['items'];
+                this.geneTissues.sort((a, b) => {
+                    if (a < b) { return -1; }
+                    if (a > b) { return 1; }
+                    return 0;
+                });
             }, (error) => {
                 console.log('Error loading tissues! ' + error.message);
             }, () => {

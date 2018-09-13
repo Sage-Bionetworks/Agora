@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -44,8 +43,7 @@ export class RowChartViewComponent implements OnInit {
     constructor(
         private dataService: DataService,
         private geneService: GeneService,
-        private chartService: ChartService,
-        private decimalPipe: DecimalPipe
+        private chartService: ChartService
     ) { }
 
     ngOnInit() {
@@ -66,10 +64,10 @@ export class RowChartViewComponent implements OnInit {
         this.chart
             .gap(4)
             .title(function(d) {
-                return 'Log Fold Change: ' + self.decimalPipe.transform(+d.value.logfc, '1.3');
+                return 'Log Fold Change: ' + self.dataService.getSignificantValue(+d.value.logfc);
             })
             .valueAccessor((d) => {
-                return +self.decimalPipe.transform(+d.value.logfc, '1.3');
+                return self.dataService.getSignificantValue(+d.value.logfc);
             })
             .label((d) => {
                 return d.key;
@@ -130,7 +128,7 @@ export class RowChartViewComponent implements OnInit {
     registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
         const self = this;
         // Using a different name for the chart variable here so it's not shadowed
-        chartEl.on(type, (chart) => {
+        chartEl.on(type, async (chart) => {
             const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
             const squareSize = 18;
             const lineWidth = 60;
@@ -140,19 +138,26 @@ export class RowChartViewComponent implements OnInit {
             if (!self.display) {
                 // Copy all vertical texts to another div, so they don't get hidden by
                 // the row chart svg after being translated
-                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+                await self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
                 // Insert a line for each row of the chart
                 self.insertLinesInRows(chart);
+
+                // Insert the texts for each row of the chart. At first we need to add
+                // empty texts so that the rowChart redraw does not move out confidence
+                // texts around
+                self.insertTextsInRows(chart);
+                self.insertTextsInRows(chart, 'confidence-text-left');
+                self.insertTextsInRows(chart, 'confidence-text-right');
 
                 // Add a label to the x axis
                 self.addXLabel(this.chart, 'LOG FOLD CHANGE');
             } else {
                 // This part will be called on redraw after filtering, so at this point
                 // we just need to move the lines to the correct position again. First
-                // translate the parent element
+                // translate the parent elements
                 const hlines = chart.selectAll('g.row g.hline');
-                hlines.each(function(p, i) {
+                hlines.each(function() {
                     d3.select(this).attr('transform', function(d: any) {
                         return 'translate(' + d.value.logfc + ')';
                     });
@@ -165,12 +170,16 @@ export class RowChartViewComponent implements OnInit {
             // Finally redraw the lines in each row
             self.drawLines(chart, rectHeight / 2, lineWidth);
 
-            // Change the row rectangles into small squares, this happens on
+            // Change the row rectangles into small circles, this happens on
             // every render or redraw
-            self.rectToSquares(chart, squareSize, rectHeight);
+            self.rectToCircles(chart, squareSize, rectHeight);
 
             // Only show the 0, min and max values on the xAxis ticks
             self.updateXTicks(chart);
+
+            // Redraw confidence text next to the lines in each row
+            self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth, true);
+            self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth);
 
             // Finally show the chart
             self.display = true;
@@ -243,25 +252,35 @@ export class RowChartViewComponent implements OnInit {
 
         // Move the text to the correct position in the new svg
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
-        const step = svgEl.getBBox().height / (removed['nodes']().length);
+        // Need this condition when reloading in Edge
+        if (svgEl) {
+            const step = svgEl.getBBox().height / (removed['nodes']().length);
 
-        d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
-            const currentStep = step * i;
-            const transfX = parseFloat(newSvg.style('width')) -
-                parseFloat(d3.select(el).style('padding-right'));
-            d3.select(this)
-                .attr('text-anchor', 'end')
-                .attr('transform', () => {
-                    return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
-                });
-        });
+            d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+                const currentStep = step * i;
+                const transfX = parseFloat(newSvg.style('width')) -
+                    parseFloat(d3.select(el).style('padding-right'));
+                d3.select(this)
+                    .attr('text-anchor', 'end')
+                    .attr('transform', () => {
+                        return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
+                    });
+            });
+        }
     }
 
     insertLinesInRows(chart: dc.RowChart) {
         chart.selectAll('g.row')
-            .insert('g', ':first-child')
+            .insert('g')
             .attr('class', 'hline')
             .insert('line');
+    }
+
+    insertTextsInRows(chart: dc.RowChart, textClass?: string) {
+        chart.selectAll('g.row')
+            .insert('g')
+            .attr('class', (textClass) ? textClass : 'confidence-text')
+            .insert('text');
     }
 
     // Draw the lines through the chart rows and a vertical line at
@@ -292,8 +311,7 @@ export class RowChartViewComponent implements OnInit {
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 if (gene) {
@@ -307,8 +325,7 @@ export class RowChartViewComponent implements OnInit {
             })
             .attr('x2', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return +self.decimalPipe.transform(+d.value.logfc, '1.3')
-                        === g.logfc;
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
                 });
 
                 if (gene) {
@@ -322,8 +339,68 @@ export class RowChartViewComponent implements OnInit {
             });
     }
 
+    // Renders the confidence interval values next to the horizontal lines
+    renderConfidenceTexts(chart: dc.RowChart, yPos: number, lineWidth: number, isNeg?: boolean) {
+        const self = this;
+
+        // Draw the confidence texts
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+        const posQueryString = (isNeg) ? '-left' : '-right';
+        const queryString = 'g.row g.confidence-text' + posQueryString + ' text';
+        chart.selectAll(queryString)
+            // ES6 method shorthand for object literals
+            .attr('x', (d) => {
+                const gene = currentGenes.slice().find((g) => {
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                });
+
+                let scaledX = 0;
+                // Two significant digits
+                let ciValue = 0.00;
+                // Move back 0.5 pixel for the dot and 5 for each number
+                let dotPixels = 0;
+                const mPixels = 5;
+
+                if (gene) {
+                    dotPixels = ((gene.ci_l.toPrecision(2).indexOf('.') !== -1) ? 0.5 : 0.0);
+                    ciValue = (isNeg) ? gene.ci_l : gene.ci_r;
+                    scaledX = chart.x()(ciValue);
+                } else {
+                    dotPixels = 0.5;
+                    ciValue = d.value.logfc;
+                    scaledX = chart.x()(d.value.logfc) - (lineWidth / 2);
+                }
+
+                return (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels + dotPixels) :
+                    scaledX + (ciValue.toPrecision(2).length * mPixels + dotPixels);
+            })
+            .attr('y', () => {
+                return yPos + 5;
+            })
+            .attr('text-anchor', 'middle')
+            .text((d) => {
+                const gene = currentGenes.slice().find((g) => {
+                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                });
+
+                let ciValue = '0.0';
+                if (gene) {
+                    ciValue = (isNeg) ? gene.ci_l.toPrecision(2) : gene.ci_r.toPrecision(2);
+                }
+
+                return ciValue;
+            });
+    }
+
+    // Compares the current value from a group to the gene expected value
+    compareAttributeValue(cValue: number, gValue: number): boolean {
+        return this.dataService.getSignificantValue(cValue, true) === gValue;
+    }
+
     // Changes the chart row rects into squares of the square size
-    rectToSquares(chart: dc.RowChart, squareSize: number, rectHeight: number) {
+    rectToCircles(chart: dc.RowChart, squareSize: number, rectHeight: number) {
         chart
             .selectAll('g.row rect')
             .attr('transform', function(d) {
@@ -341,7 +418,7 @@ export class RowChartViewComponent implements OnInit {
             .attr('ry', squareSize / 2);
     }
 
-    displayChart() {
+    displayChart(): any {
         return { opacity: (this.display) ? 1 : 0 };
     }
 

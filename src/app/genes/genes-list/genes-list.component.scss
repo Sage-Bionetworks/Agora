@@ -22,9 +22,8 @@
             padding-right: 0px;
         }
 
-        >input {
-            height: 50px;
-            line-height: 50px;
+        > input {
+            @include lato-font('normal');
 
             @include respond-to('ex-small') {
                 width: 100%;
@@ -50,11 +49,10 @@
                 padding-left: 2%;
             }
 
+            height: 50px;
+            line-height: 50px;
             box-shadow: inset 0px 0px 4px #C7C5C5;
             text-align-last: left;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
             font-size: 16px;
             border: 0px;
 
@@ -98,12 +96,11 @@
         }
 
         >tr>th {
+            @include lato-font('bold');
+
             background: #E1F4F5 !important;
             border: none;
             height: 63px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: bold;
             line-height: 40px;
             font-size: 18px;
             color: #0D1C38 !important;
@@ -179,10 +176,9 @@
         }
 
         >tr>td {
+            @include lato-font('normal');
+
             border: 0px;
-            font-family: Lato;
-            font-style: normal;
-            font-weight: normal;
             line-height: 40px;
 
             padding: .25em .5em;

@@ -1,4 +1,4 @@
-import { convertToParamMap, ParamMap, Params } from '@angular/router';
+import { convertToParamMap, ParamMap, Params, ActivatedRouteSnapshot } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 
 /**
@@ -12,6 +12,8 @@ export class ActivatedRouteStub {
     // Use a ReplaySubject to share previous values with subscribers
     // and pump new values into the `paramMap` observable
     private subject = new ReplaySubject<ParamMap>();
+
+    private snapshot: ActivatedRouteSnapshot = new ActivatedRouteSnapshot();
 
     constructor(initialParams?: Params) {
         this.paramMap = this.subject.asObservable();

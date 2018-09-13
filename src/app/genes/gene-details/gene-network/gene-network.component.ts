@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, GeneNode, GeneLink } from '../../../models';
+import { Gene, GeneNetwork } from '../../../models';
 
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
 @Component({
@@ -17,24 +17,30 @@ export class GeneNetworkComponent implements OnInit {
     @Input() style: any;
     @Input() gene: Gene;
     @Input() id: string;
+    @Input() noData: boolean;
     dataLoaded: boolean = false;
     displayBRDia: boolean = false;
     displaySimilarGenesDialog: boolean = false;
     networkData: GeneNetwork;
+    filter: boolean;
     selectedGeneData: GeneNetwork = {
         nodes: [],
         links: [],
-        origin: undefined
+        origin: undefined,
+        filterLvl: 0
     };
 
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
+    private filterlvl: number = 0;
+    private filterlvlN: number = 0;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private geneService: GeneService,
+        private apiService: ApiService,
         private dataService: DataService,
+        private geneService: GeneService,
         private forceService: ForceService
     ) { }
 
@@ -43,21 +49,52 @@ export class GeneNetworkComponent implements OnInit {
         this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         if (!!this.forceService.getGeneOriginalList() &&
-        this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
+            this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
             this.loadGenes();
         } else {
             if (this.forceService.getGeneOriginalList()) {
                 const dn = this.forceService.getGeneOriginalList();
-                this.networkData = dn;
+                this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
+                this.networkData = dn;
                 console.log(this.currentGene);
             } else {
                 this.loadGenes();
             }
         }
+    }
+
+    getText(state?: boolean): string {
+        let text = '';
+        if (state) {
+            text = 'True';
+        } else {
+            if (state === undefined) {
+                text = 'No data';
+            } else {
+                text = 'False';
+            }
+        }
+        return text;
+    }
+
+    getTextColorClass(state: boolean, normal?: boolean): any {
+        const colorClassObj = {} as any;
+        if (state) {
+            colorClassObj['green-text'] = true;
+        } else {
+            colorClassObj['red-text'] = true;
+        }
+
+        if (normal) {
+            colorClassObj['normal-heading'] = true;
+        } else {
+            colorClassObj['italic-heading'] = true;
+        }
+        return colorClassObj;
     }
 
     updategene(event) {
@@ -66,7 +103,7 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.links = network.links;
                 this.selectedGeneData.nodes = network.nodes;
                 this.selectedGeneData.origin = network.origin;
-                this.dataService.getGene(event.id).subscribe((data) => {
+                this.apiService.getGene(event.id).subscribe((data) => {
                     if (data['info']) {
                         this.geneInfo = data['info'];
                     } else {
@@ -75,6 +112,29 @@ export class GeneNetworkComponent implements OnInit {
                 });
             });
         });
+    }
+
+    filterNodes(lvl) {
+        this.filterlvlN = lvl;
+        if (!lvl) {
+            this.filter = false;
+            this.networkData = this.forceService.getGeneOriginalList();
+            this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+            this.selectedGeneData.links = this.networkData.links.slice().reverse();
+            this.selectedGeneData.origin = this.networkData.origin;
+        } else {
+            this.forceService.filterLink(lvl).then((network) => {
+                this.networkData = network;
+                this.selectedGeneData.nodes = network.nodes.slice(1);
+                this.selectedGeneData.links = network.links.slice().reverse();
+                this.selectedGeneData.origin = network.origin;
+                this.filter = true;
+            });
+        }
+    }
+
+    filterLevel(n: number): number[] {
+        return Array(n);
     }
 
     goToRoute(path: string, outlets?: any) {
@@ -86,11 +146,12 @@ export class GeneNetworkComponent implements OnInit {
         this.dataService.loadNodes(this.currentGene).then((data: any) => {
             this.forceService.setData(data);
             this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
-                this.networkData = dn;
+                this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
+                this.networkData = dn;
             });
         });
     }
@@ -104,7 +165,7 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             id = link;
         }
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {
