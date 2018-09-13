@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DecimalPipe } from '@angular/common';
 
-import { Gene, GeneInfo } from '../../models';
+import { ApiService } from '.';
 
-import { LazyLoadEvent } from 'primeng/primeng';
+import { Gene, GenesResponse, GeneListResponse } from '../../models';
 
 import { Observable } from 'rxjs';
 
@@ -32,7 +31,7 @@ export class DataService {
     compSignificantDigits: string = '1.2-4';
 
     constructor(
-        private http: HttpClient,
+        private apiService: ApiService,
         private decimalPipe: DecimalPipe
     ) {}
 
@@ -47,25 +46,23 @@ export class DataService {
     loadNodes(sgene: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             let dataLinks: any;
-            this.http.get(`/api/genelist/${sgene.ensembl_gene_id}`).subscribe((data: object[]) => {
+            this.apiService.getGeneList(sgene).subscribe((data: GeneListResponse) => {
                 dataLinks = data;
             }, (error) => {
                 console.log('Error loading genes! ' + error.message);
+                reject(null);
             }, () => {
                 resolve(dataLinks);
             });
         });
     }
 
+    // Requests all the genes to be loaded by Crossfilter
     loadGenes(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            const params = new HttpParams();
-
-            // Get all the genes to render the charts
-            this.http.get('/api/genes', { headers, params }).subscribe((data: Gene[]) => {
-                if (data['geneEntries']) { this.geneEntries = data['geneEntries']; }
-                data['items'].forEach((d: Gene) => {
+            this.apiService.getGenes().subscribe((data: GenesResponse) => {
+                if (data.geneEntries) { this.geneEntries = data.geneEntries; }
+                data.items.forEach((d: Gene) => {
                     // Separate the columns we need
                     d.logfc = this.getSignificantValue(+d.logfc, true);
                     d.fc = this.getSignificantValue(+d.fc, true);
@@ -76,93 +73,19 @@ export class DataService {
                     d.tissue = d.tissue;
                 });
 
-                this.ndx = crossfilter(data['items']);
-                this.data = data['items'];
+                this.ndx = crossfilter(data.items);
+                this.data = data.items;
 
                 this.hgncDim = this.ndx.dimension((d) => {
                     return d.hgnc_symbol;
                 });
             }, (error) => {
                 console.log('Error loading genes! ' + error.message);
+                reject(false);
             }, () => {
                 resolve(true);
             });
         });
-    }
-
-    getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams();
-
-        for (const key in paramsObj) {
-            if (paramsObj.hasOwnProperty(key)) {
-                params = params.append(key, paramsObj[key]);
-            }
-        }
-
-        return this.http.get('/api/genes/page', { headers, params });
-    }
-
-    getTableData(): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams();
-
-        return this.http.get('/api/genes/table', { headers, params });
-    }
-
-    getGenesMatchId(id: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        return this.http.get('/api/genes/' + id, { headers });
-    }
-
-    getGene(id: string, tissue?: string, model?: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams().set(
-            'id', id
-        );
-        if (tissue) {
-            params = params.set(
-                'tissue', tissue
-            );
-        }
-        if (model) {
-            params = params.set(
-                'model', model
-            );
-        }
-
-        return this.http.get('/api/gene/', { headers, params });
-    }
-
-    getTeams(info: GeneInfo): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams().set(
-            'teams', info.nominatedtarget.map((e) => e.team).join(', ')
-        );
-
-        return this.http.get('/api/teams', { headers, params });
-    }
-
-    getAllTeams(): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const params = new HttpParams();
-
-        return this.http.get('/api/teams/all', { headers, params });
-    }
-
-    getTeamMemberImage(name: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
-            'Accept': 'image/jpg',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        });
-        const params = new HttpParams().set(
-            'name', name
-        );
-
-        return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
     }
 
     getGeneEntries(): Gene[] {

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     GeneService,
-    DataService
+    ApiService
 } from '../../core/services';
 
 import { GeneInfo, NominatedTarget } from '../../models';
@@ -32,7 +32,7 @@ export class GenesListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private dataService: DataService,
+        private apiService: ApiService,
         private geneService: GeneService
     ) { }
 
@@ -43,7 +43,7 @@ export class GenesListComponent implements OnInit {
             { field: 'nominatedtarget', header: 'Teams' }
         ];
 
-        this.dataService.getTableData().subscribe((data) => {
+        this.apiService.getTableData().subscribe((data) => {
             this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
             this.genesInfo = this.datasource;
             this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
@@ -71,7 +71,7 @@ export class GenesListComponent implements OnInit {
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
-        this.dataService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
+        this.apiService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
             this.geneService.updateGeneData(data);
             this.router.navigate(

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneNetwork } from '../../../models';
 
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
 @Component({
@@ -38,8 +38,9 @@ export class GeneNetworkComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private geneService: GeneService,
+        private apiService: ApiService,
         private dataService: DataService,
+        private geneService: GeneService,
         private forceService: ForceService
     ) { }
 
@@ -102,7 +103,7 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.links = network.links;
                 this.selectedGeneData.nodes = network.nodes;
                 this.selectedGeneData.origin = network.origin;
-                this.dataService.getGene(event.id).subscribe((data) => {
+                this.apiService.getGene(event.id).subscribe((data) => {
                     if (data['info']) {
                         this.geneInfo = data['info'];
                     } else {
@@ -164,7 +165,7 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             id = link;
         }
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {

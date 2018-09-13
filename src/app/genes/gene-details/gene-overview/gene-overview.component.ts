@@ -4,8 +4,9 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 
 import {
-    GeneService,
-    DataService
+    ApiService,
+    DataService,
+    GeneService
 } from '../../../core/services';
 import { ForceService } from '../../../shared/services';
 
@@ -36,6 +37,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
         private forceService: ForceService
@@ -65,7 +67,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol) {
-            this.dataService.getGene(this.id).subscribe((data) => {
+            this.apiService.getGene(this.id).subscribe((data) => {
                 if (!data['info']) {
                     this.router.navigate(['/genes']);
                 } else {
@@ -145,7 +147,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     }
 
     viewGene(id: string) {
-        this.dataService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
             if (!data['item']) {

@@ -7,7 +7,10 @@ import {
     ViewContainerRef,
     ComponentFactoryResolver,
     ComponentRef,
-    QueryList
+    QueryList,
+    ViewChild,
+    ElementRef,
+    AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -16,7 +19,7 @@ import { BoxPlotsViewComponent } from './box-plots-view';
 import { Gene, GeneInfo } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
-import { GeneService, DataService } from '../../../core/services';
+import { ApiService, DataService, GeneService } from '../../../core/services';
 
 import { SelectItem } from 'primeng/api';
 
@@ -26,12 +29,13 @@ import { SelectItem } from 'primeng/api';
     styleUrls: [ './gene-rnaseq-de.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneRNASeqDEComponent implements OnInit {
+export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
+    @ViewChild('noDataMedian') noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
     tissues: SelectItem[] = [];
     emptySelection: SelectItem[] = [];
@@ -47,10 +51,12 @@ export class GeneRNASeqDEComponent implements OnInit {
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = true;
+    isViewReady: boolean = false;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
         private chartService: ChartService,
@@ -101,6 +107,10 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }
             });
         }
+    }
+
+    ngAfterViewInit() {
+        this.isViewReady = true;
     }
 
     loadChartData(): Promise<any> {
@@ -188,7 +198,7 @@ export class GeneRNASeqDEComponent implements OnInit {
             this.geneService.setCurrentTissue(event.itemValue);
 
             // Update the current gene for this tissue
-            this.dataService.getGene(
+            this.apiService.getGene(
                 this.gene.ensembl_gene_id,
                 this.geneService.getCurrentTissue(),
                 this.geneService.getCurrentModel()

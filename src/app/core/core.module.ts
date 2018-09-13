@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
 
 import { AppSharedModule } from '../shared';
 import { CoreRoutingModule } from './core-routing.module';
@@ -13,6 +13,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 
 import {
+    ApiService,
     AuthGuardService,
     AuthenticationService,
     GeneService,
@@ -73,6 +74,7 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         BetaBannerComponent
     ],
     providers: [
+        ApiService,
         AuthenticationService,
         AuthGuardService,
         DataService,

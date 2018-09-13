@@ -4,17 +4,17 @@ images=$(docker images -q)
 dangling_volumes=$(docker volume ls -qf dangling=true)
 
 
-if [ -z ${containers} ]
+if [[ -z ${containers} ]]
 then
     echo "No containers to stop or remove!"
 else
     # Stop all containers
-    docker stop ${containers} -f
+    docker stop ${containers}
     # Delete all containers
     docker rm ${containers} -f
 fi
 
-if [ -z ${images} ]
+if [[ -z ${images} ]]
 then
     echo "No images to remove!"
 else
@@ -22,7 +22,7 @@ else
     docker rmi ${images} -f
 fi
 
-if [ -z ${exited_containers} ]
+if [[ -z ${exited_containers} ]]
 then
     echo "No exited containers to remove!"
 else
@@ -30,7 +30,7 @@ else
     docker rm ${exited_containers} -f
 fi
 
-if [ -z ${dangling_volumes} ]
+if [[ -z ${dangling_volumes} ]]
 then
     echo "No dangling volumes to remove!"
 else

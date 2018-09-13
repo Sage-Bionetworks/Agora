@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
 
 import {
     RouterStub,
-    DataServiceStub,
+    ApiServiceStub,
     GeneServiceStub,
     mockInfo1
 } from '../../testing';
 
 import { GeneSearchComponent } from './gene-search.component';
 
-import { DataService, GeneService } from '../../core/services';
+import { ApiService, GeneService } from '../../core/services';
 
 import { of } from 'rxjs';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
@@ -26,8 +26,7 @@ import { MockComponent } from 'ng-mocks';
 describe('Component: GeneSearch', () => {
     let component: GeneSearchComponent;
     let fixture: ComponentFixture<GeneSearchComponent>;
-    let router: RouterStub;
-    let dataService: DataServiceStub;
+    let apiService: ApiServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -40,7 +39,7 @@ describe('Component: GeneSearch', () => {
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
+                { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() }
             ]
         })
@@ -49,8 +48,7 @@ describe('Component: GeneSearch', () => {
         fixture = TestBed.createComponent(GeneSearchComponent);
 
         // Get the injected instances
-        router = fixture.debugElement.injector.get(Router);
-        dataService = fixture.debugElement.injector.get(DataService);
+        apiService = fixture.debugElement.injector.get(ApiService);
 
         component = fixture.componentInstance; // Component test instance
     }));
@@ -83,7 +81,7 @@ describe('Component: GeneSearch', () => {
     it('should not search for an empty gene string', fakeAsync(() => {
         const emptyObs = new EmptyObservable<Response>();
 
-        const dsSpy = spyOn(dataService, 'getGenesMatchId');
+        const dsSpy = spyOn(apiService, 'getGenesMatchId');
 
         spyOn(component, 'search').and.callThrough();
         component.search('').subscribe((data) => {
@@ -93,7 +91,7 @@ describe('Component: GeneSearch', () => {
     }));
 
     it('should search for a typed gene', fakeAsync(() => {
-        const dsSpy = spyOn(dataService, 'getGenesMatchId').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getGenesMatchId').and.returnValue(
             of([mockInfo1])
         );
 
