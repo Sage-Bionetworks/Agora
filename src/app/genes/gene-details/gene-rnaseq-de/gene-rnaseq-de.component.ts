@@ -7,7 +7,10 @@ import {
     ViewContainerRef,
     ComponentFactoryResolver,
     ComponentRef,
-    QueryList
+    QueryList,
+    ViewChild,
+    ElementRef,
+    AfterViewInit
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -26,12 +29,13 @@ import { SelectItem } from 'primeng/api';
     styleUrls: [ './gene-rnaseq-de.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneRNASeqDEComponent implements OnInit {
+export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
+    @ViewChild('noDataMedian') noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
     tissues: SelectItem[] = [];
     emptySelection: SelectItem[] = [];
@@ -47,6 +51,7 @@ export class GeneRNASeqDEComponent implements OnInit {
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = true;
+    isViewReady: boolean = false;
 
     constructor(
         private router: Router,
@@ -102,6 +107,10 @@ export class GeneRNASeqDEComponent implements OnInit {
                 }
             });
         }
+    }
+
+    ngAfterViewInit() {
+        this.isViewReady = true;
     }
 
     loadChartData(): Promise<any> {

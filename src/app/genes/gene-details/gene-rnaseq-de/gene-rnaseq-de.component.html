@@ -1,32 +1,34 @@
-<div #stme class="section-thin rna-seq-me" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-me" *ngIf="dataLoaded">
     <h2 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
         <i class="fa fa-info-circle" (click)="showDialog('displayBRDia2')"></i>
         <span class="icon-spacing"></span>
         <span class="icon-spacing"></span>
-        <download [target]="stme" [name]="'overall_exp_ac_tissues'"></download>
+        <download *ngIf="!isEmptyGene" [target]="stme" [name]="'overall_exp_ac_tissues'"></download>
     </h2>
     <p class="black-paragraph">
-        This plot depicts the median expression of the selected gene across tissues (brain regions)
-        in the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful
-        expression is considered to be anything greater than five CPM (referenced by red line in the plot).
+        This plot depicts the median expression of the selected gene across tissues (brain regions) in
+        the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression
+        is considered to be anything greater than 5 CPM.
     </p>
-    <span *ngIf="!isEmptyGene; else noDataMedian">
-        <median-chart [geneinfo]="geneInfo"></median-chart>
-    </span>
+    <div #stme>
+        <ng-container *ngIf="!isEmptyGene; else noDataMedian">
+            <median-chart [geneinfo]="geneInfo"></median-chart>
+        </ng-container>
+    </div>
     <ng-template #noDataMedian>
         <div class="no-median-data">No expression data is currently available.</div>
     </ng-template>
 </div>
 
-<div #stbp class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-bplot" *ngIf="dataLoaded">
     <div class="row">
         <div class="col-md-8 col-sm-12 col-12 col-fixer">
             <h2>
                 Differential Expression of Selected Gene within Selected Tissue
                 <span class="icon-spacing"></span>
-                <download [target]="stbp"  [name]="'dif_exp_tissue'"></download>
+                <download *ngIf="!isEmptyGene" [target]="stbp" [name]="'dif_exp_tissue'"></download>
             </h2>
             <p class="black-paragraph de-paragraph">
                 After selecting a tissue and statistical model, you will be able to see whether the
@@ -86,10 +88,12 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!isEmptyGene" class="col-md-4 col-sm-12 col-12 bplot-col">
-            <!-- BoxPlots component-->
-            <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-            </ng-template>
+        <div #stbp class="col-md-4 col-sm-12 col-12">
+            <ng-container *ngIf="!isEmptyGene">
+                <!-- BoxPlots component-->
+                <ng-template *ngFor="let tissue of tissues; let i = index" #t>
+                </ng-template>
+            </ng-container>
         </div>
         <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
@@ -97,18 +101,20 @@
     </div>
 </div>
 
-<div #stfp class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
+<div class="section-thin rna-seq-fplot" *ngIf="dataLoaded">
     <h2>
         Consistency of Change in Expression
         <span class="icon-spacing"></span>
-        <download [target]="stfp" [name]="'consistency_chg_in_exp'"></download>
+        <download *ngIf="!isEmptyGene" [target]="stfp" [name]="'consistency_chg_in_exp'"></download>
     </h2>
     <p class="black-paragraph">
         This forest plot indicates the estimate of the log fold change with standard errors across the
         tissues in the chosen model. Genes that show consistent patterns of differential expression will
         have similar log-fold change value across tissues.
     </p>
-    <row-chart *ngIf="!isEmptyGene"></row-chart>
+    <div #stfp>
+        <row-chart *ngIf="!isEmptyGene"></row-chart>
+    </div>
     <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
         <h2 class="placeholder-text">No expression data is currently available.</h2>
     </div>
