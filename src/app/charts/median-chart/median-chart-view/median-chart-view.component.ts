@@ -90,7 +90,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                     }
                 });
                 // const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
-                const mult = 240 / yDomainLength;
+                const mult = chart.effectiveHeight() / yDomainLength;
                 const lefty = 0;
                 const righty = 0; // use real statistics here!
                 const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
