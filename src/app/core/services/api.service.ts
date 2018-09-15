@@ -6,13 +6,14 @@ import {
     GeneInfo,
     GenesResponse,
     GeneListResponse,
-    TeamMember
+    TeamMember,
+    TeamInfo
 } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { Observable, from, of, empty, throwError, forkJoin } from 'rxjs';
-import { catchError, mergeMap, combineLatest, concatAll } from 'rxjs/operators';
+import { Observable, empty, throwError, forkJoin, combineLatest, of } from 'rxjs';
+import { catchError, concatAll, share } from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
@@ -92,11 +93,11 @@ export class ApiService {
         return this.http.get('/api/teams', { headers, params });
     }
 
-    getAllTeams(): Observable<object> {
+    getAllTeams(): Observable<TeamInfo[]> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const params = new HttpParams();
 
-        return this.http.get('/api/teams/all', { headers, params });
+        return this.http.get('/api/teams/all', { headers, params }) as Observable<TeamInfo[]>;
     }
 
     getTeamMemberImage(name: string): Observable<object> {
@@ -113,7 +114,7 @@ export class ApiService {
         return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
     }
 
-    getTeamMemberImages(members: TeamMember[]): Observable<object> {
+    getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
         const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
             'Accept': 'image/jpg',
             'Access-Control-Allow-Origin': '*',
@@ -142,8 +143,8 @@ export class ApiService {
                         console.log('Caught rethrown error, providing fallback value');
                         return empty();
                     })
-                ) as Observable<ArrayBuffer>;
+                ) as Observable<object>;
             })
-        ).pipe(concatAll()) as Observable<ArrayBuffer>;
+        ).pipe(share());
     }
 }

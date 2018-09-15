@@ -369,11 +369,11 @@ connection.once('open', () => {
             console.log('Get all team infos');
         }
 
-        TeamsInfo.find({}).exec((err, teams) => {
+        TeamsInfo.find().exec((err, teams) => {
             if (err) {
                 next(err);
             } else {
-                res.json({ items: teams });
+                res.json(teams);
             }
         });
     });
