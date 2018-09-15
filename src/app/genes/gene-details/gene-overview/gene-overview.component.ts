@@ -6,9 +6,9 @@ import { Gene, GeneInfo, GeneNetwork } from '../../../models';
 import {
     ApiService,
     DataService,
-    GeneService
+    GeneService,
+    ForceService
 } from '../../../core/services';
-import { ForceService } from '../../../shared/services';
 
 @Component({
     selector: 'gene-overview',

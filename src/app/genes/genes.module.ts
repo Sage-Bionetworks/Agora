@@ -5,17 +5,6 @@ import { GenesRoutingModule } from './genes-routing.module';
 import { ChartsModule } from '../charts';
 import { AppSharedModule } from '../shared';
 
-import { SharedModule } from 'primeng/shared';
-import { PanelModule } from 'primeng/panel';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TabViewModule } from 'primeng/tabview';
-import { DialogModule } from 'primeng/dialog';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { TableModule } from 'primeng/table';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { BlockUIModule } from 'primeng/blockui';
-
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
@@ -45,19 +34,8 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
     imports: [
         ReactiveFormsModule,
         ChartsModule,
-        AppSharedModule.forRoot(),
-        GenesRoutingModule,
-        // PrimeNG modules
-        SharedModule,
-        PanelModule,
-        ButtonModule,
-        TableModule,
-        DialogModule,
-        CardModule,
-        TabViewModule,
-        ProgressBarModule,
-        MultiSelectModule,
-        BlockUIModule
+        AppSharedModule,
+        GenesRoutingModule
     ],
     entryComponents: [
         BoxPlotsViewComponent

@@ -5,12 +5,14 @@ import {
     Gene,
     GeneInfo,
     GenesResponse,
-    GeneListResponse
+    GeneListResponse,
+    TeamMember
 } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { Observable } from 'rxjs';
+import { Observable, from, of, empty, throwError, forkJoin } from 'rxjs';
+import { catchError, mergeMap, combineLatest, concatAll } from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
@@ -109,5 +111,39 @@ export class ApiService {
         );
 
         return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
+    }
+
+    getTeamMemberImages(members: TeamMember[]): Observable<object> {
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
+            'Accept': 'image/jpg',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        });
+
+        return forkJoin(
+            members.map((member, index) => {
+                const params = new HttpParams().set(
+                    'name', member.name
+                );
+
+                return this.http.get(
+                    `/api/team/image`, {
+                        headers,
+                        params,
+                        responseType: 'arraybuffer'
+                    }
+                ).pipe(
+                    catchError((err) => {
+                        console.log('Caught merge mapping error and rethrowing', err);
+                        return throwError(err);
+                    }),
+                    catchError((err) => {
+                        console.log('Caught rethrown error, providing fallback value');
+                        return empty();
+                    })
+                ) as Observable<ArrayBuffer>;
+            })
+        ).pipe(concatAll()) as Observable<ArrayBuffer>;
     }
 }

@@ -3,8 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneNetwork } from '../../../models';
 
-import { ApiService, DataService, GeneService } from '../../../core/services';
-import { ForceService } from '../../../shared/services';
+import {
+    ApiService,
+    DataService,
+    GeneService,
+    ForceService
+} from '../../../core/services';
 
 @Component({
     selector: 'gene-network',

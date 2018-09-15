@@ -20,8 +20,7 @@ import {
 
 import { GeneOverviewComponent } from './gene-overview.component';
 
-import { ForceService } from '../../../shared/services';
-import { ApiService, DataService, GeneService } from '../../../core/services';
+import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
 
 import { Button } from 'primeng/button';
 

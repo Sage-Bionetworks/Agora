@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../models';
+import { Gene, GeneInfo, TeamInfo, NominatedTarget, TeamMember } from '../../models';
 
 import {
     ApiService,
     GeneService
 } from '../services';
+
+import { forkJoin, combineLatest } from 'rxjs';
 
 @Component({
     selector: 'contrib-teams-page',
@@ -52,32 +54,41 @@ export class ContribTeamsPageComponent implements OnInit {
 
     loadMembers() {
         let membersLength = -1;
+        let allMembers = [];
+        const dataArray: object[] = [];
+
         this.teams.forEach((t) => {
             membersLength += t.members.length;
         });
-        let index = 0;
         this.teams.forEach((t) => {
-            t.members.forEach((m) => {
-                this.memberImages.push({ name: null, imgUrl: null });
-                this.apiService.getTeamMemberImage(m.name).subscribe((data) => {
-                    this.memberImages[index].name = m.name;
-                    if (data) {
-                        this.memberImages[index].imgUrl =
-                            this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
-                                new Blob([data as Blob], {
-                                    type: 'image/jpg'
-                                })
-                            )}`);
-                    }
-                }, (error) => {
-                    console.log('Error loading member image: ' + error.message);
-                }, () => {
-                    index++;
-                    if (membersLength === index) {
-                        this.dataLoaded = true;
-                    }
-                });
+            allMembers = allMembers.concat(t.members);
+        });
+        for (const member of allMembers) {
+            this.memberImages.push(new Object({
+                name: null, imgUrl: null
+            }));
+        }
+        const memberNames: TeamMember[] = allMembers.map((m) => {
+            return { name: m.name, isprimaryinvestigator: false };
+        });
+
+        // Request member images in parallel
+        this.apiService.getTeamMemberImages(memberNames).subscribe((data: object) => {
+            dataArray.push(data);
+        }, (error) => {
+            console.log('Error loading member image: ' + error.message);
+        }, () => {
+            this.memberImages.forEach((mi, i) => {
+                mi.name = memberNames[i].name;
+                if (dataArray[i]) {
+                    mi.imgUrl = this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
+                        new Blob([new Object(dataArray[i]) as Blob], {
+                            type: 'image/jpg'
+                        })
+                    )}`);
+                }
             });
+            this.dataLoaded = true;
         });
     }
 

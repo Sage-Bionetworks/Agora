@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { GeneNetwork } from '../../../models';
 
 import { ApiService, DataService, GeneService } from '../../../core/services';
-import { ForceService } from '../../../shared/services';
+import { ForceService } from '../../../core/services';
 
 @Component({
     selector: 'gene-brainregions',

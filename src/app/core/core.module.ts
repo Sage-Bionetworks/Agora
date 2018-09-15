@@ -1,23 +1,16 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 
 import { AppSharedModule } from '../shared';
 import { CoreRoutingModule } from './core-routing.module';
-
-// PrimeNG modules
-import { ButtonModule } from 'primeng/button';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { MenuModule } from 'primeng/menu';
-import { MenubarModule } from 'primeng/menubar';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { TieredMenuModule } from 'primeng/tieredmenu';
 
 import {
     ApiService,
     AuthGuardService,
     AuthenticationService,
     GeneService,
-    DataService
+    DataService,
+    ForceService
 } from './services';
 
 import { AboutComponent } from './about';
@@ -29,24 +22,15 @@ import { NavbarComponent } from './navbar';
 import { MenubarComponent } from './menubar';
 import { FooterComponent } from './footer';
 import { NoContentComponent } from './no-content';
+import { ContribTeamsPageComponent } from './contrib-teams';
 
 import '../../styles/styles.scss';
 import '../../styles/headings.scss';
-import { ContribTeamsPageComponent } from './contrib-teams';
-import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
 
 @NgModule({
     imports: [
-        // PrimeNG modules
-        ButtonModule,
-        ProgressBarModule,
-        SplitButtonModule,
-        MenuModule,
-        MenubarModule,
-        TieredMenuModule,
-        PanelMenuModule,
         // Shared and route modules
-        AppSharedModule.forRoot(),
+        AppSharedModule,
         CoreRoutingModule
     ],
     declarations: [
@@ -79,8 +63,15 @@ import { ProgressBarModule } from '../../../node_modules/primeng/primeng';
         AuthGuardService,
         DataService,
         GeneService,
+        ForceService,
         DecimalPipe,
         TitleCasePipe
     ]
 })
-export class CoreModule { }
+export class CoreModule {
+    constructor(@Optional() @SkipSelf() core: CoreModule) {
+        if (core) {
+            throw new Error('Attempt to import CoreModule more than once!');
+        }
+    }
+}
