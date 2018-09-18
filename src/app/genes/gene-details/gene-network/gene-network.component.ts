@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork } from '../../../models';
+import { Gene, GeneNetwork, LinksListResponse } from '../../../models';
 
 import {
     ApiService,
@@ -102,17 +102,21 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     updategene(event) {
-        this.dataService.loadNodes(event).then((datanetwork: any) => {
-            this.forceService.processSelectedNode(event, datanetwork).then((network) => {
-                this.selectedGeneData.links = network.links;
-                this.selectedGeneData.nodes = network.nodes;
-                this.selectedGeneData.origin = network.origin;
-                this.apiService.getGene(event.id).subscribe((data) => {
-                    if (data['info']) {
-                        this.geneInfo = data['info'];
-                    } else {
-                        this.geneInfo = { hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol };
-                    }
+        this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
+            this.dataService.loadNodes(linksList, event).then((datanetwork: any) => {
+                this.forceService.processSelectedNode(event, datanetwork).then((network) => {
+                    this.selectedGeneData.links = network.links;
+                    this.selectedGeneData.nodes = network.nodes;
+                    this.selectedGeneData.origin = network.origin;
+                    this.apiService.getGene(event.id).subscribe((data) => {
+                        if (data['info']) {
+                            this.geneInfo = data['info'];
+                        } else {
+                            this.geneInfo = {
+                                hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol
+                            };
+                        }
+                    });
                 });
             });
         });
@@ -147,15 +151,17 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     loadGenes() {
-        this.dataService.loadNodes(this.currentGene).then((data: any) => {
-            this.forceService.setData(data);
-            this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
-                this.filterlvl = dn.filterLvl;
-                this.selectedGeneData.nodes = dn.nodes.slice(1);
-                this.selectedGeneData.links = dn.links.slice().reverse();
-                this.selectedGeneData.origin = dn.origin;
-                this.dataLoaded = true;
-                this.networkData = dn;
+        this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
+            this.dataService.loadNodes(linksList, this.currentGene).then((data: any) => {
+                this.forceService.setData(data);
+                this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
+                    this.filterlvl = dn.filterLvl;
+                    this.selectedGeneData.nodes = dn.nodes.slice(1);
+                    this.selectedGeneData.links = dn.links.slice().reverse();
+                    this.selectedGeneData.origin = dn.origin;
+                    this.dataLoaded = true;
+                    this.networkData = dn;
+                });
             });
         });
     }

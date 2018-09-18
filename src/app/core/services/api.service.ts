@@ -5,15 +5,15 @@ import {
     Gene,
     GeneInfo,
     GenesResponse,
-    GeneListResponse,
+    LinksListResponse,
     TeamMember,
     TeamInfo
 } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { Observable, empty, throwError, forkJoin, combineLatest, of } from 'rxjs';
-import { catchError, concatAll, share } from 'rxjs/operators';
+import { Observable, empty, throwError, forkJoin } from 'rxjs';
+import { catchError, share } from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
@@ -26,8 +26,8 @@ export class ApiService {
     }
 
     // Get a list of links related to a gene
-    getGeneList(sgene: Gene): Observable<GeneListResponse> {
-        return this.http.get<GeneListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`);
+    getLinksList(sgene: Gene): Observable<LinksListResponse> {
+        return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`);
     }
 
     // Get all the genes
@@ -146,5 +146,25 @@ export class ApiService {
                 ) as Observable<object>;
             })
         ).pipe(share());
+    }
+
+    getTissues(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/tissues', { headers });
+    }
+
+    getGeneTissues(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/tissues/gene', { headers });
+    }
+
+    getModels(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/models', { headers });
+    }
+
+    getGeneModels(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/models/gene', { headers });
     }
 }

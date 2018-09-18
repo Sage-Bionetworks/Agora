@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
-import { Gene, GeneInfo, GeneNetwork } from '../../../models';
+import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../../models';
 
 import {
     ApiService,
@@ -57,7 +57,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.geneInfo = this.geneService.getCurrentInfo();
         this.id = this.route.snapshot.paramMap.get('id');
 
-        // ALways reset the models and tissues
+        // Always reset the models and tissues
         this.geneService.setGeneModels([]);
         this.geneService.setGeneTissues([]);
 
@@ -66,35 +66,36 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
             !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
-            this.geneService.getCurrentGene().hgnc_symbol) {
-            this.apiService.getGene(this.id).subscribe((data) => {
-                if (!data['info']) {
+            this.geneService.getCurrentGene().hgnc_symbol
+        ) {
+            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+                if (!data.info) {
                     this.router.navigate(['/genes']);
                 } else {
-                    if (!data['item']) {
+                    if (!data.item) {
                         // Fill in a new gene with the info attributes
-                        data['item'] = this.geneService.getEmptyGene(
-                            data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                        data.item = this.geneService.getEmptyGene(
+                            data.info.ensembl_gene_id, data.info.hgnc_symbol
                         );
                         this.noData = true;
                     }
                     this.geneService.updateGeneData(data);
-                    this.gene = data['item'];
-                    this.geneInfo = data['info'];
+                    this.gene = data.item;
+                    this.geneInfo = data.info;
                 }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
             }, () => {
                 // Check if we have a database id at this point
                 if (this.gene && this.gene._id) {
-                    this.geneService.loadGeneTissues().then((tstatus) => {
-                        if (tstatus) {
-                            this.geneService.loadGeneModels().then((mstatus) => {
-                                if (mstatus) {
-                                    this.initDetails();
-                                }
-                            });
-                        }
+                    this.dataService.loadData(this.gene).subscribe((responseList) => {
+                        // Genes response
+                        this.dataService.loadGenes(responseList[0]);
+                        this.dataService.loadNodes(responseList[1], this.gene);
+                        this.geneService.loadGeneTissues(responseList[2]);
+                        this.geneService.loadGeneModels(responseList[3]);
+
+                        this.dataLoaded = true;
                     });
                 } else {
                     this.geneService.setGeneTissues([]);
@@ -108,11 +109,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     }
 
     initDetails() {
-        this.dataService.loadGenes().then((genesLoaded) => {
-            if (genesLoaded) {
-                this.dataLoaded = genesLoaded;
-            }
-            // Handle error later
+        this.apiService.getGenes().subscribe((data: GenesResponse) => {
+            this.dataService.loadGenes(data);
+        }, (error) => {
+            console.log('Error loading genes!');
+        }, () => {
+            this.dataLoaded = true;
         });
     }
 

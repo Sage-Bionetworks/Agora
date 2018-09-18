@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Gene, GeneInfo, TeamInfo } from '../../models';
+import { Gene, GeneInfo, TeamInfo, TissuesResponse, ModelsResponse } from '../../models';
+
+import { ApiService } from './api.service';
 
 @Injectable()
 export class GeneService {
@@ -24,9 +25,7 @@ export class GeneService {
     maxAdjPValue: number = 1e-50;
     minAdjPValue: number = Math.pow(10, -20);
 
-    constructor(
-        private http: HttpClient
-    ) {}
+    constructor(private apiService: ApiService) {}
 
     setCurrentGene(gene: Gene) {
         this.currentGene = gene;
@@ -162,65 +161,30 @@ export class GeneService {
         return eGene;
     }
 
-    loadTissues(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            this.http.get('/api/tissues', { headers }).subscribe((data) => {
-                this.tissues = data['items'];
-                this.tissues.sort((a, b) => {
-                    if (a < b) { return -1; }
-                    if (a > b) { return 1; }
-                    return 0;
-                });
-            }, (error) => {
-                console.log('Error loading tissues! ' + error.message);
-            }, () => {
-                resolve(true);
-            });
+    // Add pipe
+    loadTissues(data: TissuesResponse) {
+        this.tissues = data.items;
+        this.tissues.sort((a, b) => {
+            if (a < b) { return -1; }
+            if (a > b) { return 1; }
+            return 0;
         });
     }
 
-    loadGeneTissues(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            this.http.get('/api/tissues/gene', { headers }).subscribe((data) => {
-                this.geneTissues = data['items'];
-                this.geneTissues.sort((a, b) => {
-                    if (a < b) { return -1; }
-                    if (a > b) { return 1; }
-                    return 0;
-                });
-            }, (error) => {
-                console.log('Error loading tissues! ' + error.message);
-            }, () => {
-                resolve(true);
-            });
+    loadGeneTissues(data: TissuesResponse) {
+        this.geneTissues = data.items;
+        this.geneTissues.sort((a, b) => {
+            if (a < b) { return -1; }
+            if (a > b) { return 1; }
+            return 0;
         });
     }
 
-    loadModels(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            this.http.get('/api/models', { headers }).subscribe((data) => {
-                this.models = data['items'];
-            }, (error) => {
-                console.log('Error loading models! ' + error.message);
-            }, () => {
-                resolve(true);
-            });
-        });
+    loadModels(data: ModelsResponse) {
+        this.models = data.items;
     }
 
-    loadGeneModels(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-            this.http.get('/api/models/gene', { headers }).subscribe((data) => {
-                this.geneModels = data['items'];
-            }, (error) => {
-                console.log('Error loading models! ' + error.message);
-            }, () => {
-                resolve(true);
-            });
-        });
+    loadGeneModels(data: ModelsResponse) {
+        this.geneModels = data.items;
     }
 }

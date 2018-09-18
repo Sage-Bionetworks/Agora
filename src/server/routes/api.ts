@@ -293,8 +293,7 @@ connection.once('open', () => {
                             minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
                             maxFC,
                             minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC :
-                                minLogFC,
+                                -maxLogFC : minLogFC,
                             maxLogFC,
                             minAdjPValue,
                             maxAdjPValue
