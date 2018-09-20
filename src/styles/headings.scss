@@ -47,3 +47,13 @@ h3 {
     font-weight: normal;
     cursor: pointer;
 }
+
+.modal-heading {
+    @include lato-font('bold');
+
+    line-height: normal;
+    font-size: 24px;
+    text-align: center;
+
+    color: #1A1C29;
+}

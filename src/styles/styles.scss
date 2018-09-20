@@ -90,7 +90,7 @@ span {
     }
 
     line-height: normal;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     letter-spacing: 1px;
     color: #1A1C29;
@@ -112,26 +112,42 @@ p-dialog {
     .ui-dialog-titlebar {
         @include lato-font('bold');
 
-        padding-top: 85px ;
+        padding-top: 59px !important;;
         text-align-last: center;
         background: white;
         line-height: normal;
-        font-size: 24px;
+        font-size: 24px !important;
         color: #1A1C29;
         text-align: center;
         padding-top: 10% ;
 
         .pi-times:before {
             color: #5BB0B5;
+            content: url("/assets/img/close_modal_icon.png");
+        }
+    }
+
+    .ui-dialog-title {
+        @include lato-font('bold');
+        font-size: 24px !important;
+        color: #1A1C29;
+    }
+
+    .ui-dialog-titlebar-icon {
+        padding: .525em !important;
+
+        > span {
+            width: 31px;
+            height: 31px;
         }
     }
 
     .ui-dialog-content {
         @include lato-font('normal');
 
-        padding-bottom: 85px ;
-        padding-left: 10% ;
-        padding-right: 10% ;
+        padding-bottom: 45px !important;
+        padding-left: 20% !important;
+        padding-right: 20% !important;
         line-height: normal;
         font-size: 18px;
         text-align: left;
@@ -199,6 +215,10 @@ p-dialog {
 .center-justified {
     text-align: justify;
     text-align-last: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .vertical-align {

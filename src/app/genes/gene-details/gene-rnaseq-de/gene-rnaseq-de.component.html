@@ -124,7 +124,7 @@
     <p-dialog header="" [(visible)]="displayBPDia" [modal]="true"
         [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true"
         [styleClass]="'btm-dialog'">
-        <div class="row content-row" dir="ltr">
+        <div class="row content-row first-bp-dia-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
                     Brain Tissues
@@ -201,11 +201,11 @@
                 </span>
             </div>
         </div>
-        <div class="row content-row content-vspace" dir="ltr">
+        <div class="row content-vspacing" dir="ltr">
         </div>
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
+                <span class="header-span first-bp-dia-row" dir="ltr">
                     Models
                 </span>
             </div>
@@ -251,24 +251,80 @@
             </div>
         </div>
     </p-dialog>
-<p-dialog header="" [(visible)]="displayBRDia2" [modal]="true" [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000"
-    [dismissableMask]="true" [styleClass]="'btm-dialog'">
-
-    <div class="row content-row" dir="ltr">
-        <div class="col-md-12 col-sm-12 col-12">
-        <span class="header-span" dir="ltr">
-            Brain Tissues: <br>
-        </span>
-        <span dir="ltr">
-            DLPFC: Dorsolateral Prefrontal Cortex <br>
-            TCX: Temporal Cortex <br>
-            CBE: Cerebellum <br>
-            PHG: Parahippocampal Gyrus <br>
-            STG:Superior Temporal Gyrus <br>
-            FP: Frontal Pole <br>
-            IFG: Inferior Frontal Gyrus <br>
-        </span>
+</div>
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="Brain Tissues" [(visible)]="displayBRDia2" [modal]="true" [responsive]="true"
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true"
+        [styleClass]="'btm-dialog2'">
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    DLPFC:
+                </span>
+                <span dir="ltr">
+                    Dorsolateral Prefrontal Cortex
+                </span>
+            </div>
         </div>
-    </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    TCX:
+                </span>
+                <span dir="ltr">
+                    Temporal Cortex
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    CBE:
+                </span>
+                <span dir="ltr">
+                    Cerebellum
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    PHG:
+                </span>
+                <span dir="ltr">
+                    Parahippocampal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    STG:
+                </span>
+                <span dir="ltr">
+                    Superior Temporal Gyrus
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    FP:
+                </span>
+                <span dir="ltr">
+                    Frontal Pole
+                </span>
+            </div>
+        </div>
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    IFG:
+                </span>
+                <span dir="ltr">
+                    Inferior Frontal Gyrus
+                </span>
+            </div>
+        </div>
     </p-dialog>
 </div>
