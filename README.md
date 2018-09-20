@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/Sage-Bionetworks/Agora/badge.svg?branch=master)](https://coveralls.io/github/Sage-Bionetworks/Agora?branch=master)
-[![Build Status](https://travis-ci.com/Sage-Bionetworks/Agora.svg?branch=master)](https://travis-ci.com/Sage-Bionetworks/Agora)
+[![Build Status](https://travis-ci.org/Sage-Bionetworks/Agora.svg?branch=master)](https://travis-ci.org/Sage-Bionetworks/Agora)
 [![GitHub version](https://badge.fury.io/gh/Sage-Bionetworks%2FAgora.svg)](https://badge.fury.io/gh/Sage-Bionetworks%2FAgora)
 
 # Agora BETA
