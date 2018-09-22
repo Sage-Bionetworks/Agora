@@ -129,9 +129,10 @@
             height: 32px;
             width: 32px;
             vertical-align: middle;
+            border-radius: 6px;
 
             .ui-chkbox-icon {
-                top: 18%;
+                color: white;
             }
 
             span {
@@ -187,7 +188,7 @@
             .ui-state-active {
                 background: #2F8E94;
                 border: 2px solid #73C8CC;
-                background-color: #5BB0B5;
+                box-sizing: border-box;
                 border-radius: 6px;
                 color: white;
             }

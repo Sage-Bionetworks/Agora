@@ -30,6 +30,10 @@
     g.axis.y, g.axis.x {
         text {
             @include lato-font('bold');
+            @include respond-to('ex-small') {
+                font-size: $font-size-small;
+            }
+
             font-size: $font-size-x-regular;
             color: $text-color-normal;
         }
