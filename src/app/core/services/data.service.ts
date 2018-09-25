@@ -58,6 +58,16 @@ export class DataService {
         ]);
     }
 
+    loadTissuesModels(gene: Gene): Observable<any[]> {
+        const tissuesResponse = this.apiService.getGeneTissues();
+        const modelsResponse = this.apiService.getGeneModels();
+
+        return forkJoin([
+            tissuesResponse,
+            modelsResponse
+        ]);
+    }
+
     loadNodes(data: LinksListResponse, gene: Gene): Promise<GeneNetwork> {
         this.forceService.setData(data.items);
         return this.forceService.processNodes(gene);

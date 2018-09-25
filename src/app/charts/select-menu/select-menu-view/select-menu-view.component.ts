@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    Input,
+    ElementRef,
+    ViewChild,
+    OnDestroy
+} from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,7 +22,7 @@ import * as dc from 'dc';
     styleUrls: [ './select-menu-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class SelectMenuViewComponent implements OnInit {
+export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() label: string;
     @Input() chart: any;
     @Input() info: any;
@@ -51,7 +59,7 @@ export class SelectMenuViewComponent implements OnInit {
         }
     }
 
-    async initChart() {
+    initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
@@ -222,5 +230,9 @@ export class SelectMenuViewComponent implements OnInit {
                 x[i].classList.add('select-hide');
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.chart.filter(null);
     }
 }

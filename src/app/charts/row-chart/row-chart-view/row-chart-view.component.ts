@@ -85,6 +85,7 @@ export class RowChartViewComponent implements OnInit {
             .transitionDuration(0);
 
         // Increase bottom margin by 20 to place a label there, default is 30
+        this.chart.margins().left = 50;
         this.chart.margins().bottom = 50;
 
         // Removes the click event for the rowChart to prevent filtering

@@ -8,6 +8,7 @@ import { ApiService } from './api.service';
 export class GeneService {
     // Add the new #[field] from TypeScript when it's out
     // https://github.com/Microsoft/TypeScript/issues/24418
+    previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
     currentTeams: TeamInfo[];
@@ -33,6 +34,21 @@ export class GeneService {
 
     getCurrentGene(): Gene {
         return this.currentGene;
+    }
+
+    setPreviousGene(gene: Gene) {
+        this.previousGene = gene;
+    }
+
+    getPreviousGene(): Gene {
+        return this.previousGene;
+    }
+
+    updatePreviousGene() {
+        if (this.getCurrentGene() && this.getCurrentGene().hgnc_symbol) {
+            // Only update the previous gene if we already have a current one
+            this.setPreviousGene(this.getCurrentGene());
+        }
     }
 
     // To be used everytime a new gene data arrives from the server
@@ -186,5 +202,11 @@ export class GeneService {
 
     loadGeneModels(data: ModelsResponse) {
         this.geneModels = data.items;
+    }
+
+    hasGeneChanged(): boolean {
+        return (this.getPreviousGene() && this.getCurrentGene()) ?
+            this.getPreviousGene().hgnc_symbol !== this.getCurrentGene().hgnc_symbol :
+            false;
     }
 }

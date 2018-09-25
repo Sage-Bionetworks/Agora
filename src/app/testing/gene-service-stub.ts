@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import { Gene, GeneInfo, TissuesResponse, ModelsResponse } from '../models';
-import { mockGene1, mockInfo1, mockTissues, mockModels } from './gene-mocks';
+import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels } from './gene-mocks';
 
 @Injectable()
 export class GeneServiceStub {
+    previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
     currentTissue: string;
@@ -19,6 +20,10 @@ export class GeneServiceStub {
     maxLogFC: number = 10;
     maxAdjPValue: number = 50;
     minAdjPValue: number = 0;
+
+    getPreviousGene(): Gene {
+        return mockGene2;
+    }
 
     getCurrentGene(): Gene {
         return mockGene1;
@@ -42,6 +47,10 @@ export class GeneServiceStub {
         this.currentGene = gene;
     }
 
+    setPreviousGene(gene: Gene) {
+        this.previousGene = gene;
+    }
+
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
     }
@@ -56,6 +65,13 @@ export class GeneServiceStub {
 
     setGeneTissues(tissues: string[]) {
         this.geneTissues = tissues;
+    }
+
+    updatePreviousGene() {
+        if (this.getCurrentGene() && this.getCurrentGene().hgnc_symbol) {
+            // Only update the previous gene if we already have a current one
+            this.setPreviousGene(this.getCurrentGene());
+        }
     }
 
     // To be used everytime a new gene data arrives from the server
@@ -83,5 +99,11 @@ export class GeneServiceStub {
     setAdjPValue(max: number, min?: number) {
         this.maxAdjPValue = max;
         this.minAdjPValue = (min) ? min : 0;
+    }
+
+    hasGeneChanged(): boolean {
+        return (this.getPreviousGene() && this.getCurrentGene()) ?
+            this.getPreviousGene().hgnc_symbol !== this.getCurrentGene().hgnc_symbol :
+            false;
     }
 }

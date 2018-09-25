@@ -57,14 +57,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         this.geneInfo = this.geneService.getCurrentInfo();
         this.id = this.route.snapshot.paramMap.get('id');
 
-        // Always reset the models and tissues
-        this.geneService.setGeneModels([]);
-        this.geneService.setGeneTissues([]);
-
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneInfo || !this.geneService.getGeneModels().length ||
-            !this.geneService.getGeneTissues().length || this.id !== this.gene.ensembl_gene_id
+        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol
         ) {
@@ -79,6 +74,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                         );
                         this.noData = true;
                     }
+                    this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
@@ -86,36 +82,48 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
             }, () => {
-                // Check if we have a database id at this point
-                if (this.gene && this.gene._id) {
-                    this.dataService.loadData(this.gene).subscribe((responseList) => {
-                        // Genes response
-                        this.dataService.loadGenes(responseList[0]);
-                        this.dataService.loadNodes(responseList[1], this.gene);
-                        this.geneService.loadGeneTissues(responseList[2]);
-                        this.geneService.loadGeneModels(responseList[3]);
-
-                        this.dataLoaded = true;
-                    });
-                } else {
-                    this.geneService.setGeneTissues([]);
-                    this.geneService.setGeneModels([]);
-                    this.initDetails();
-                }
+                this.initTissuesModels();
             });
         } else {
+            this.initTissuesModels();
+        }
+    }
+
+    initTissuesModels() {
+        // Check if we have a database id at this point
+        if (this.gene && this.gene._id) {
+            if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
+                this.dataService.loadData(this.gene).subscribe((responseList) => {
+                    // Genes response
+                    this.dataService.loadGenes(responseList[0]);
+                    this.dataService.loadNodes(responseList[1], this.gene);
+                    this.geneService.loadGeneTissues(responseList[2]);
+                    this.geneService.loadGeneModels(responseList[3]);
+
+                    this.dataLoaded = true;
+                });
+            } else {
+                this.dataLoaded = true;
+            }
+        } else {
+            this.geneService.setGeneTissues([]);
+            this.geneService.setGeneModels([]);
             this.initDetails();
         }
     }
 
     initDetails() {
-        this.apiService.getGenes().subscribe((data: GenesResponse) => {
-            this.dataService.loadGenes(data);
-        }, (error) => {
-            console.log('Error loading genes!');
-        }, () => {
+        if (this.geneService.hasGeneChanged()) {
+            this.apiService.getGenes().subscribe((data: GenesResponse) => {
+                this.dataService.loadGenes(data);
+            }, (error) => {
+                console.log('Error loading genes!');
+            }, () => {
+                this.dataLoaded = true;
+            });
+        } else {
             this.dataLoaded = true;
-        });
+        }
     }
 
     getText(state?: boolean): string {

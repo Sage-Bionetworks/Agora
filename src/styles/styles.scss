@@ -109,11 +109,11 @@ p-checkbox {
 
 p-panel {
     .pi-minus:before {
-        content: url("/assets/img/plus_icon.png") !important;
+        content: url("/assets/img/minus_icon.png") !important;
     }
 
     .pi-plus:before {
-        content: url("/assets/img/minus_icon.png") !important;
+        content: url("/assets/img/plus_icon.png") !important;
     }
 
     .ui-panel-titlebar {
