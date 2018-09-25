@@ -8,12 +8,8 @@
                 </p>
             </div>
             <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
-                <button class="btn nom-button"
+                <img class="nominated-button" src="/assets/img/nominated_button.png"
                     (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
-                    <i class="fa fa-star fa-lg"></i>
-                    <span  [ngClass]="{'fixIOS': iOS}">AMP-AD Nominated</span>
-                    <i class="fa fa-angle-right fa-lg"></i>
-                </button>
             </div>
         </div>
     </div>
@@ -159,9 +155,7 @@
                     <span class="druggability-span" (click)="showDruggability()">here</span>. To access this data you will need a Synapse account. To
                     sign up for a Synapse account, please click the button below.
                 </p>
-                <button class="btn synapse-button" (click)="viewSynapseReg()">
-                    <span>Create Synapse Account</span>
-                </button>
+                <img class="synapse-button" src="/assets/img/synapse_button.png" (click)="viewSynapseReg()">
             </div>
         </p-panel>
     </div>
@@ -173,7 +167,8 @@
 <!-- Dialogs section -->
 <div class="ui-rtl" dir="rtl">
     <p-dialog header="Summary of Evidence" [(visible)]="displayRelDia" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
+        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true"
+        [styleClass]="'soe-dialog'">
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">

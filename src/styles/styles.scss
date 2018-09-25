@@ -43,7 +43,7 @@ html {
 html, body{
     @include lato-font('normal');
 
-    min-width: 367px;
+    min-width: 380px;
     padding: 0;
     margin: 0;
 }
@@ -100,12 +100,41 @@ input::-ms-clear {
     display: none;
 }
 
+p-checkbox {
+    .ui-state-focus.ui-state-active {
+        background: #2F8E94 !important;
+        border: 2px solid #73C8CC !important;
+    }
+}
+
+p-panel {
+    .pi-minus:before {
+        content: url("/assets/img/plus_icon.png") !important;
+    }
+
+    .pi-plus:before {
+        content: url("/assets/img/minus_icon.png") !important;
+    }
+
+    .ui-panel-titlebar {
+        line-height: 45px !important;
+    }
+}
+
 p-dialog {
     .ui-dialog {
-        width: 80% ;
-        max-width: 80% ;
-        top: 109px ;
-        max-height: 80% ;
+        width: 80% !important;
+
+        @include respond-to('ex-small') {
+            left: 10% !important;
+        }
+        @include respond-to('small') {
+            left: 10% !important;
+        }
+
+        // max-width: 80%;
+        top: 109px;
+        max-height: 80%;
         overflow: auto;
     }
 
@@ -178,6 +207,10 @@ p-dialog {
         left: 1%;
         top: 10%;
     }
+}
+
+.synapse-button {
+    cursor: pointer;
 }
 
 .bold {

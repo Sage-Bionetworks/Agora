@@ -57,6 +57,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
             .yAxisLabel('LOG CPM', 20);
         this.barchart.margins().top = 50;
         this.barchart.margins().left = 70;
+        this.barchart.margins().right = 0;
         this.barchart
             .barPadding(0.5)
             .renderLabel(true)
