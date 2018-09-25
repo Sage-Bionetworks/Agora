@@ -70,8 +70,10 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                 return self.dataService.getSignificantValue(+d.value);
             })
             .brushOn(false)
+            .turnOnControls(false)
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
+            .renderTitle(false)
             .on('renderlet', (chart) => {
                 const yDomainLength = Math.abs(this.barchart.y().domain()[1]
                 - this.barchart.y().domain()[0]);
@@ -83,6 +85,9 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                         tree[i].setAttribute('height', 0);
                     }
                  });
+                chart.selectAll('rect').on('mouseover', () => {
+                    event.preventDefault();
+                });
                 chart.selectAll('text').each((el, i, tree) => {
                     if (el && el['data'] && el['data'].value < 0) {
                         el['data'].value = '';
@@ -112,6 +117,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
             });
 
         this.barchart.yAxis().ticks(3);
+        this.barchart.filter = () => '';
         this.barchart.render();
     }
 

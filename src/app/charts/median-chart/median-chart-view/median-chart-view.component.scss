@@ -6,7 +6,12 @@
 
     .dc-chart {
         width: 100%;
-
+        rect.bar{
+            cursor: default;
+        }
+        rect.bar:hover {
+          fill-opacity: 1;
+        }
         svg {
             height: 100%;
         }
