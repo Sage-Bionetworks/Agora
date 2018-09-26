@@ -109,11 +109,11 @@ p-checkbox {
 
 p-panel {
     .pi-minus:before {
-        content: url("/assets/img/minus_icon.png") !important;
+        content: url("/assets/icon/minus_icon.png") !important;
     }
 
     .pi-plus:before {
-        content: url("/assets/img/plus_icon.png") !important;
+        content: url("/assets/icon/plus_icon.png") !important;
     }
 
     .ui-panel-titlebar {
@@ -152,7 +152,7 @@ p-dialog {
 
         .pi-times:before {
             color: #5BB0B5;
-            content: url("/assets/img/close_modal_icon.png");
+            content: url("/assets/icon/close_modal_icon.png");
         }
     }
 
@@ -474,4 +474,8 @@ p-dialog {
     left: 50%;
     margin: -100px 0 0 -100px;
     pointer-events: none;
+}
+
+.pi-check:before {
+    content: url("/assets/icon/checked_icon.png") !important;
 }

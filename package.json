@@ -202,6 +202,7 @@
     "lato-font": "^3.0.0",
     "mini-css-extract-plugin": "^0.4.3",
     "ng-mocks": "^6.2.1",
+    "ngx-page-scroll": "^5.0.0",
     "node-sass": "^4.9.3",
     "nodemon": "^1.18.4",
     "nodemon-webpack-plugin": "^4.0.3",

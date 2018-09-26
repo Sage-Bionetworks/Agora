@@ -17,6 +17,8 @@ import { GeneBRComponent } from './gene-details/gene-brainregions';
 import { GeneSimilarComponent } from './gene-details/gene-similar';
 import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
 
+import { NgxPageScrollModule } from 'ngx-page-scroll';
+
 @NgModule({
     declarations: [
         GenesViewComponent,
@@ -32,6 +34,7 @@ import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-v
         BoxPlotsViewComponent
     ],
     imports: [
+        NgxPageScrollModule,
         ReactiveFormsModule,
         ChartsModule,
         AppSharedModule,

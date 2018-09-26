@@ -29,6 +29,8 @@ export class BoxPlotViewComponent implements OnInit {
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() dim: any;
     @Input() group: any;
+    @Input() rcRadius: number = 13.6;
+    @Input() boxRadius: number = 9;
 
     @ViewChild('chart') boxPlot: ElementRef;
 
@@ -79,7 +81,8 @@ export class BoxPlotViewComponent implements OnInit {
                 this.renderRedCircle(chart, true);
             })
             .tickFormat(() => '')
-            .elasticY(true);
+            .elasticY(true)
+            .yRangePadding(this.rcRadius * 1.1);
 
         if (this.info.attr !== 'fc') { this.chart.yAxis().tickFormat(d3.format('.1e')); }
         this.chart.xAxis().tickFormat('');
@@ -96,32 +99,6 @@ export class BoxPlotViewComponent implements OnInit {
         this.chart.render();
     }
 
-    getNearestPot(num: number, multpl: number, upper?: boolean): number {
-        if (num >= 1) {
-            return Math.pow(multpl, Math.ceil(Math.log(num) / Math.log(multpl)));
-        }
-        let accum = 1;
-        while (num * accum < multpl) {
-            accum *= multpl;
-        }
-        num = Math.ceil(num * accum) / accum;
-
-        return (upper) ? num : (num / multpl);
-    }
-
-    getYScale(): d3.ScaleContinuousNumeric<number, number> {
-        const minMaxArray = this.group.all()[0].value.slice();
-        const max = minMaxArray.reduce(function(a, b) {
-            return Math.max(a, b);
-        });
-        const min = minMaxArray.reduce(function(a, b) {
-            return Math.min(a, b);
-        });
-
-        // return d3.scaleLog().base(multpl).domain([min, max]);
-        return d3.scaleLinear().domain([min, max]);
-    }
-
     // A custom renderlet function for this chart, allows us to change
     // what happens to the chart after rendering
     registerChartEvent(chartEl: dc.BoxPlot, type: string = 'renderlet') {
@@ -129,7 +106,7 @@ export class BoxPlotViewComponent implements OnInit {
         // Using a different name for the chart variable here so it's not shadowed
         chartEl.on(type, function(chart) {
             chart.selectAll('rect.box')
-                .attr('rx', 9);
+                .attr('rx', self.boxRadius);
 
             // Renders the selected gene circle
             (type === 'postRender') ? self.renderRedCircle(chart) :
@@ -158,13 +135,13 @@ export class BoxPlotViewComponent implements OnInit {
                 self.currentGene.adj_p_val + '.';
 
             chart.selectAll('g.box')
-                .append('circle')
+                .insert('circle', ':first-child')
                 .attr('cx', lineCenter.attr('x1'))
                 .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
                 .attr('fill', '#FCA79A')
                 .style('stroke', '#F47E6C')
                 .style('stroke-width', 3)
-                .attr('r', 13.6)
+                .attr('r', self.rcRadius)
                 .attr('opacity', 1)
                 .on('mouseover', function() {
                     self.div.transition()
@@ -179,6 +156,13 @@ export class BoxPlotViewComponent implements OnInit {
                         .duration(500)
                         .style('opacity', 0);
                 });
+
+            const parentNode = chart.select('g.axis.x').node().parentNode;
+            const xAxisNode = chart.select('g.axis.x').node();
+            const firstChild = parentNode.firstChild;
+            if (firstChild) {
+                parentNode.insertBefore(xAxisNode, firstChild);
+            }
         } else {
             chart.select('circle')
                 .attr('cx', lineCenter.attr('x1'))
