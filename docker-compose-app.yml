@@ -1,9 +1,7 @@
 version: '2'
 services:
   agora:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: 'sagebionetworks/agora-app'
     environment:
       - MONGO_URI=mongodb://mongodb/agora
     restart: always
@@ -13,10 +11,7 @@ services:
       - front-tier
   # NGINX will reverse proxy the express application
   nginx:
-    build:
-      # Look for the Dockerfile inside the "nginx" folder
-      context: .
-      dockerfile: nginx.Dockerfile
+    image: 'sagebionetworks/agora-nginx'
     restart: always
     ports:
       - '80:80'

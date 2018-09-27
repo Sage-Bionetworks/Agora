@@ -25,6 +25,22 @@ before_install:
 
 install:
   - npm install
+  - node_modules/protractor/bin/webdriver-manager update --gecko=false
+  - find . -name update-config.json
+  - sudo apt-get install -y build-essential libssl-dev python-pip python2.7-dev
+  - sudo pip install -U setuptools wheel docker-cloud synapseclient[pandas,pysftp]
+  - docker login --username="$DOCKER_USER" --password="$DOCKER_PASSWORD"
 
 script:
   - npm run ci:travis
+
+stages:
+  - name: deploy-containers
+
+jobs:
+  include:
+    - stage: deploy-containers
+      script:
+        - ./get-data-aws.sh || travis_terminate 1
+        - ./container-build.sh || travis_terminate 1
+        - ./container-deploy.sh || travis_terminate 1
