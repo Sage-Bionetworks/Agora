@@ -275,6 +275,7 @@ export class ForceService {
             };
             this.genes.nodes = [...this.genes.nodes,
                 this.dicNodes[this.currentGene.ensembl_gene_id]];
+            console.log(this.rawData);
             this.rawData.forEach((obj: any) => {
                 this.processNode(obj, this.dicNodes, this.genes);
                 this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);

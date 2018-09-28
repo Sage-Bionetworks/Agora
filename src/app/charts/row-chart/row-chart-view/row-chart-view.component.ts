@@ -1,4 +1,17 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    ElementRef,
+    Input,
+    OnDestroy,
+    AfterViewInit
+} from '@angular/core';
+
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -20,7 +33,7 @@ d3.selection.prototype['nodes'] = function() {
     styleUrls: [ './row-chart-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class RowChartViewComponent implements OnInit {
+export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -41,13 +54,47 @@ export class RowChartViewComponent implements OnInit {
     private resizeTimer;
 
     constructor(
+        private location: PlatformLocation,
+        private router: Router,
         private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService
     ) { }
 
     ngOnInit() {
+        // If we move aways from the overview page, remove
+        // the charts
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (this.chart && dc.hasChart(this.chart)) {
+                    this.chartService.removeChart(
+                        this.chart, this.chart.group(),
+                        this.chart.dimension()
+                    );
+                    this.chart = null;
+                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+                }
+            }
+        });
+        // Event for back and forth in the browser location
+        this.location.onPopState(() => {
+            if (this.chart && dc.hasChart(this.chart)) {
+                this.chartService.removeChart(
+                    this.chart, this.chart.group(),
+                    this.chart.dimension()
+                );
+                this.chart = null;
+                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+            }
+        });
+    }
+
+    ngAfterViewInit() {
         this.initChart();
+    }
+
+    ngOnDestroy() {
+        this.chartService.removeChart(this.chart);
     }
 
     initChart() {

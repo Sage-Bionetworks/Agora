@@ -4,8 +4,13 @@ import {
     ViewEncapsulation,
     ViewChild,
     ElementRef,
-    Input
+    Input,
+    OnDestroy
 } from '@angular/core';
+
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
 
 import { Gene } from '../../../models';
 
@@ -21,7 +26,7 @@ import * as dc from 'dc';
     styleUrls: [ './box-plot-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class BoxPlotViewComponent implements OnInit {
+export class BoxPlotViewComponent implements OnInit, OnDestroy {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -48,13 +53,44 @@ export class BoxPlotViewComponent implements OnInit {
     private resizeTimer;
 
     constructor(
+        private location: PlatformLocation,
+        private router: Router,
         private dataService: DataService,
         private geneService: GeneService,
         private chartService: ChartService
     ) { }
 
     ngOnInit() {
+        // If we move aways from the overview page, remove
+        // the charts
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (this.chart) {
+                    this.chartService.removeChart(
+                        this.chart, this.chart.group(),
+                        this.chart.dimension()
+                    );
+                    this.chart = null;
+                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+                }
+            }
+        });
+        this.location.onPopState(() => {
+            if (this.chart) {
+                this.chartService.removeChart(
+                    this.chart, this.chart.group(),
+                    this.chart.dimension()
+                );
+                this.chart = null;
+                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+            }
+        });
+
         this.initChart();
+    }
+
+    ngOnDestroy() {
+        this.chartService.removeChart(this.chart);
     }
 
     initChart() {

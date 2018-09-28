@@ -5,10 +5,16 @@ import {
     ViewChild,
     ElementRef,
     Input,
-    AfterViewInit
+    AfterViewInit,
+    OnDestroy
 } from '@angular/core';
 
-import { DataService } from '../../../core/services';
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
+
+import { DataService, GeneService } from '../../../core/services';
+import { ChartService } from '../../services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -21,7 +27,7 @@ import * as crossfilter from 'crossfilter2';
     styleUrls: ['./median-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class MedianChartViewComponent implements OnInit, AfterViewInit {
+export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
     @Input() paddingLR: number = 15;
@@ -36,10 +42,39 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     private resizeTimer;
 
     constructor(
-        private dataService: DataService
+        private location: PlatformLocation,
+        private router: Router,
+        private dataService: DataService,
+        private geneService: GeneService,
+        private chartService: ChartService
     ) {}
 
     ngOnInit() {
+        // If we move aways from the overview page, remove
+        // the charts
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (this.barchart && dc.hasChart(this.barchart)) {
+                    this.chartService.removeChart(
+                        this.barchart, this.barchart.group(),
+                        this.barchart.dimension()
+                    );
+                    this.barchart = null;
+                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+                }
+            }
+        });
+        this.location.onPopState(() => {
+            if (this.barchart && dc.hasChart(this.barchart)) {
+                this.chartService.removeChart(
+                    this.barchart, this.barchart.group(),
+                    this.barchart.dimension()
+                );
+                this.barchart = null;
+                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+            }
+        });
+
         if (!this.geneinfo) {
             return;
         }
@@ -49,6 +84,10 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
             d.medianlogcpm
         );
+    }
+
+    ngOnDestroy() {
+        this.chartService.removeChart(this.barchart);
     }
 
     ngAfterViewInit() {
