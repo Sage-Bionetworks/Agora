@@ -371,16 +371,7 @@
 }
 
 .no-median-data {
-    min-height: 150px;
-    width: 100%;
+    position: relative;
+    height: 350px;
     background: rgba(245, 245, 245, 0.5);
-    text-align: center;
-    padding-top: 65px;
-    font-family: Lato;
-    font-style: italic;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 18px;
-    text-align: center;
-    color: #9DA3B3;
 }

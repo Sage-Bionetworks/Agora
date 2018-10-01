@@ -180,20 +180,24 @@ export class GeneService {
     // Add pipe
     loadTissues(data: TissuesResponse) {
         this.tissues = data.items;
-        this.tissues.sort((a, b) => {
-            if (a < b) { return -1; }
-            if (a > b) { return 1; }
-            return 0;
-        });
+        if (this.tissues) {
+            this.tissues.sort((a, b) => {
+                if (a < b) { return -1; }
+                if (a > b) { return 1; }
+                return 0;
+            });
+        }
     }
 
     loadGeneTissues(data: TissuesResponse) {
         this.geneTissues = data.items;
-        this.geneTissues.sort((a, b) => {
-            if (a < b) { return -1; }
-            if (a > b) { return 1; }
-            return 0;
-        });
+        if (this.geneTissues) {
+            this.geneTissues.sort((a, b) => {
+                if (a < b) { return -1; }
+                if (a > b) { return 1; }
+                return 0;
+            });
+        }
     }
 
     loadModels(data: ModelsResponse) {

@@ -410,7 +410,7 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have tissues
-        if (!allTissues.length) { res.json({ items: null }); }
+        if (!allTissues.length) { res.json({ items: [] }); }
 
         res.json({ items: allTissues });
     });
@@ -419,12 +419,12 @@ connection.once('open', () => {
     router.get('/tissues/gene', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
-            console.log('Get all tissues');
-            console.log(allTissues);
+            console.log('Get gene tissues');
+            console.log(geneTissues);
         }
 
         // Return an empty array in case we don't have tissues
-        if (!geneTissues.length) { res.json({ items: null }); }
+        if (!geneTissues.length) { res.json({ items: [] }); }
 
         res.json({ items: geneTissues });
     });
@@ -438,7 +438,7 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have models
-        if (!allModels.length) { res.json({ items: null }); }
+        if (!allModels.length) { res.json({ items: [] }); }
 
         res.json({ items: allModels });
     });
@@ -447,12 +447,12 @@ connection.once('open', () => {
     router.get('/models/gene', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
-            console.log('Get all models');
-            console.log(allModels);
+            console.log('Get gene models');
+            console.log(geneModels);
         }
 
         // Return an empty array in case we don't have models
-        if (!geneModels.length) { res.json({ items: null }); }
+        if (!geneModels.length) { res.json({ items: [] }); }
 
         res.json({ items: geneModels });
     });

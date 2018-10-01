@@ -18,7 +18,9 @@
         </ng-container>
     </div>
     <ng-template #noDataMedian>
-        <div class="no-median-data">No expression data is currently available.</div>
+        <div class="no-median-data">
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
+        </div>
     </ng-template>
 </div>
 
@@ -88,8 +90,8 @@
                 </div>
             </div>
         </div>
-        <div #stbp class="col-md-4 col-sm-12 col-12">
-            <ng-container *ngIf="!isEmptyGene">
+        <div *ngIf="!isEmptyGene" #stbp class="col-md-4 col-sm-12 col-12">
+            <ng-container>
                 <!-- BoxPlots component-->
                 <ng-template *ngFor="let tissue of tissues; let i = index" #t>
                 </ng-template>

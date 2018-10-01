@@ -91,7 +91,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
 
     initTissuesModels() {
         // Check if we have a database id at this point
-        if (this.gene && this.gene._id) {
+        if (this.gene) {
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
                     // Genes response

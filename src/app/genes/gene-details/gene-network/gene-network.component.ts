@@ -153,7 +153,6 @@ export class GeneNetworkComponent implements OnInit {
     loadGenes() {
         this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
             this.dataService.loadNodes(linksList, this.currentGene).then((data: any) => {
-                this.forceService.setData(data);
                 this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
                     this.filterlvl = dn.filterLvl;
                     this.selectedGeneData.nodes = dn.nodes.slice(1);
