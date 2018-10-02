@@ -9,10 +9,10 @@ cache:
 addons:
   chrome: stable
 
-node_js:
-  - "6"
-  - "7"
-  - "8"
+#node_js:
+#  - "6"
+#  - "7"
+#  - "8"
 
 matrix:
   fast_finish: true
@@ -31,11 +31,12 @@ install:
   - sudo pip install -U setuptools wheel docker-cloud synapseclient[pandas,pysftp]
   - docker login --username="$DOCKER_USER" --password="$DOCKER_PASSWORD"
 
-script:
-  - npm run ci:travis
+#script:
+#  - npm run ci:travis
 
 stages:
   - name: deploy-containers
+  - name: test
 
 jobs:
   include:
@@ -44,3 +45,12 @@ jobs:
         - ./get-data-aws.sh || travis_terminate 1
         - ./container-build.sh || travis_terminate 1
         - ./container-deploy.sh || travis_terminate 1
+    - stage: test
+      script: npm run ci:travis
+      node_js: 6
+    - stage: test
+      script: npm run ci:travis
+      node_js: 7
+    - stage: test
+      script: npm run ci:travis
+      node_js: 8
