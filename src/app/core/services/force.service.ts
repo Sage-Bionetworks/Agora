@@ -253,7 +253,7 @@ export class ForceService {
                 filterLvl: 0
             };
             this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
-            data['items'].forEach((obj: any) => {
+            data['nodes'].forEach((obj: any) => {
                 this.processNode(obj, dicNodesC, this.genesClicked);
                 this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
             });

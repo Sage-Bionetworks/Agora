@@ -125,6 +125,8 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                     .enter()
                     .append('path')
                     .attr('d', this.hex)
+                    .attr('origin', (d) =>
+                    this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
                     .attr('r', 4)
                     .attr('fill', this.getNodeColor)
                     .attr('class', 'hex')
@@ -230,6 +232,8 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .append('path')
             .attr('d', this.hex)
             .attr('r', 4)
+            .attr('origin', (d) =>
+                this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
             .attr('fill', this.getNodeColor)
             .attr('class', 'hex')
             .on('click', (d: any, i, nodes) => {
@@ -266,7 +270,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     }
 
     private getNodeColor(node: GeneNode , index, arr): string {
-        if (!index) {
+        if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
             return '#F38070';
         }
         if (node.brainregions.length >= 6) {
