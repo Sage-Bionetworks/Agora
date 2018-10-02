@@ -9,18 +9,14 @@ services:
       - front_agora
   mongod:
     container_name: mongod
-    build:
-      context: ./mongo-seed
-      dockerfile: ./mongod.Dockerfile
+    image: 'sagebionetworks/agora-mongod'
     links:
       - mongodb
     networks:
       - front_agora
   mongo_data:
     container_name: mongo_data
-    build:
-      context: ../data
-      dockerfile: ../Agora/mongo-seed/rnaseq_differential_expression.Dockerfile
+    image: 'sagebionetworks/agora-mongo_data'
     links:
       - mongodb
     depends_on:
@@ -29,9 +25,7 @@ services:
       - front_agora
   mongo_seed_links:
     container_name: mongo_seed_links
-    build:
-      context: ../data
-      dockerfile: ../Agora/mongo-seed/network.Dockerfile
+    image: 'sagebionetworks/agora-mongo_seed_links'
     links:
       - mongodb
     depends_on:
@@ -40,9 +34,7 @@ services:
       - front_agora
   mongo_seed_info:
     container_name: mongo_seed_info
-    build:
-      context: ../data
-      dockerfile: ../Agora/mongo-seed/gene_info.Dockerfile
+    image: 'sagebionetworks/agora-mongo_seed_info'
     links:
       - mongodb
     depends_on:
@@ -51,9 +43,7 @@ services:
       - front_agora
   mongo_seed_team:
     container_name: mongo_seed_team
-    build:
-      context: ../data
-      dockerfile: ../Agora/mongo-seed/team_info.Dockerfile
+    image: 'sagebionetworks/agora-mongo_seed_team'
     links:
       - mongodb
     depends_on:
@@ -62,9 +52,7 @@ services:
       - front_agora
   mongo_seed_team_images:
     container_name: mongo_seed_team_images
-    build:
-      context: ../data
-      dockerfile: ../Agora/mongo-seed/team_images.Dockerfile
+    image: 'sagebionetworks/agora-mongo_seed_team_images'
     links:
       - mongodb
     depends_on:
