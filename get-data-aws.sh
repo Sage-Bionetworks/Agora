@@ -1,5 +1,7 @@
-synapseusername=`aws secretsmanager --region us-east-1 --output text get-secret-value --secret-id synapse-agora-username | cut -f 4`
-synapsepassword=`aws secretsmanager --region us-east-1 --output text get-secret-value --secret-id synapse-agora-password | cut -f 4`
+#!/bin/bash
+set -e
+synapseusername="$SYNAPSE_USERNAME"
+synapsepassword="$SYNAPSE_PASSWORD"
 
 [ -d ../data/ ] || mkdir ../data/
 
