@@ -1,5 +1,6 @@
 export * from './api-service-stub';
 export * from './activated-route-stub';
+export * from './chart-service-stub';
 export * from './data-service-stub';
 export * from './force-service-stub';
 export * from './gene-service-stub';

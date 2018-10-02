@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as dc from 'dc';
 
 @Injectable()
-export class ChartService {
+export class ChartServiceStub {
     chartInfos: Map<string, any> = new Map<string, any>();
 
     constructor() {
