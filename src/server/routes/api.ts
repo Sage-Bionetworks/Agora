@@ -293,8 +293,7 @@ connection.once('open', () => {
                             minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
                             maxFC,
                             minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC :
-                                minLogFC,
+                                -maxLogFC : minLogFC,
                             maxLogFC,
                             minAdjPValue,
                             maxAdjPValue
@@ -369,11 +368,11 @@ connection.once('open', () => {
             console.log('Get all team infos');
         }
 
-        TeamsInfo.find({}).exec((err, teams) => {
+        TeamsInfo.find().exec((err, teams) => {
             if (err) {
                 next(err);
             } else {
-                res.json({ items: teams });
+                res.json(teams);
             }
         });
     });
@@ -386,7 +385,7 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
+        if (!req.params || !Object.keys(req.query).length) { res.json({ item: null }); }
         const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
         gfs.exist({ filename: name }, (err, hasFile) => {
             if (env === 'development') {
@@ -398,30 +397,6 @@ connection.once('open', () => {
                 stream.pipe(res);
             } else {
                 res.status(204).send('Could not find member!');
-            }
-        });
-    });
-
-    router.get('/teams/images', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a team member image');
-            console.log(req.query);
-        }
-
-        // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
-        const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
-        gfs.exist({ filename: name }, (err, hasFile) => {
-            if (env === 'development') {
-                console.log('The team file exists');
-                console.log(hasFile);
-            }
-            if (hasFile) {
-                const stream = gfs.createReadStream(name);
-                stream.pipe(res);
-            } else {
-                res.status(500).send('Could not find member!');
             }
         });
     });

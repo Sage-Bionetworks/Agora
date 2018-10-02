@@ -75,7 +75,27 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(info: GeneInfo) {
-        this.apiService.getGene(info.hgnc_symbol).subscribe((data) => {
+        if (!this.geneService.getCurrentGene()) {
+            this.getGene(info.hgnc_symbol);
+        } else {
+            this.geneService.updatePreviousGene();
+            if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
+                this.getGene(info.hgnc_symbol);
+            } else {
+                this.goToRoute(
+                    '/genes',
+                    { outlets: {'genes-router':
+                        [
+                            'gene-details', this.geneService.getCurrentGene().ensembl_gene_id
+                        ]
+                    }}
+                );
+            }
+        }
+    }
+
+    getGene(geneSymbol: string) {
+        this.apiService.getGene(geneSymbol).subscribe((data) => {
             if (!data['info']) {
                 this.router.navigate(['/genes']);
             } else {
@@ -85,6 +105,7 @@ export class GeneSearchComponent implements OnInit {
                         data['info'].ensembl_gene_id, data['info'].hgnc_symbol
                     );
                 }
+                this.geneService.updatePreviousGene();
                 this.geneService.updateGeneData(data);
                 this.gene = data['item'];
             }

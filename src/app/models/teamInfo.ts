@@ -1,9 +1,11 @@
 import { Document } from 'mongoose';
 
 export interface TeamMember {
+    id?: string;
     name: string;
     isprimaryinvestigator: boolean;
     url?: string;
+    imgUrl?: string;
 }
 
 export interface TeamInfo {

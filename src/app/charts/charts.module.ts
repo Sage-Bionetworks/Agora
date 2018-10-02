@@ -10,13 +10,7 @@ import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ForceChartViewComponent } from './force-chart/force-chart-view';
 import { MedianChartViewComponent } from './median-chart/median-chart-view';
 
-import { FormsModule } from '@angular/forms';
-
 import { ChartService } from './services';
-
-import {
-    ButtonModule
-} from 'primeng/button';
 
 @NgModule({
     declarations: [
@@ -29,10 +23,7 @@ import {
     ],
     imports: [
         CommonModule,
-        FormsModule,
-        AppSharedModule.forRoot(),
-        // PrimeNG modules
-        ButtonModule
+        AppSharedModule
     ],
     exports: [
         BoxPlotViewComponent,

@@ -5,12 +5,15 @@ import {
     Gene,
     GeneInfo,
     GenesResponse,
-    GeneListResponse
+    LinksListResponse,
+    TeamMember,
+    TeamInfo
 } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { Observable } from 'rxjs';
+import { Observable, empty, throwError, forkJoin } from 'rxjs';
+import { catchError, share } from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
@@ -23,8 +26,8 @@ export class ApiService {
     }
 
     // Get a list of links related to a gene
-    getGeneList(sgene: Gene): Observable<GeneListResponse> {
-        return this.http.get<GeneListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`);
+    getLinksList(sgene: Gene): Observable<LinksListResponse> {
+        return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`);
     }
 
     // Get all the genes
@@ -90,11 +93,11 @@ export class ApiService {
         return this.http.get('/api/teams', { headers, params });
     }
 
-    getAllTeams(): Observable<object> {
+    getAllTeams(): Observable<TeamInfo[]> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const params = new HttpParams();
 
-        return this.http.get('/api/teams/all', { headers, params });
+        return this.http.get('/api/teams/all', { headers, params }) as Observable<TeamInfo[]>;
     }
 
     getTeamMemberImage(name: string): Observable<object> {
@@ -109,5 +112,59 @@ export class ApiService {
         );
 
         return this.http.get('/api/team/image', { headers, params, responseType: 'arraybuffer' });
+    }
+
+    getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
+            'Accept': 'image/jpg',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        });
+
+        return forkJoin(
+            members.map((member, index) => {
+                const params = new HttpParams().set(
+                    'name', member.name
+                );
+
+                return this.http.get(
+                    `/api/team/image`, {
+                        headers,
+                        params,
+                        responseType: 'arraybuffer'
+                    }
+                ).pipe(
+                    catchError((err) => {
+                        console.log('Caught merge mapping error and rethrowing', err);
+                        return throwError(err);
+                    }),
+                    catchError((err) => {
+                        console.log('Caught rethrown error, providing fallback value');
+                        return empty();
+                    })
+                ) as Observable<object>;
+            })
+        ).pipe(share());
+    }
+
+    getTissues(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/tissues', { headers });
+    }
+
+    getGeneTissues(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/tissues/gene', { headers });
+    }
+
+    getModels(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/models', { headers });
+    }
+
+    getGeneModels(): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get('/api/models/gene', { headers });
     }
 }

@@ -5,10 +5,16 @@ import {
     ViewChild,
     ElementRef,
     Input,
-    AfterViewInit
+    AfterViewInit,
+    OnDestroy
 } from '@angular/core';
 
-import { DataService } from '../../../core/services';
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
+
+import { DataService, GeneService } from '../../../core/services';
+import { ChartService } from '../../services';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -21,7 +27,7 @@ import * as crossfilter from 'crossfilter2';
     styleUrls: ['./median-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class MedianChartViewComponent implements OnInit, AfterViewInit {
+export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
     @Input() paddingLR: number = 15;
@@ -36,10 +42,39 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
     private resizeTimer;
 
     constructor(
-        private dataService: DataService
+        private location: PlatformLocation,
+        private router: Router,
+        private dataService: DataService,
+        private geneService: GeneService,
+        private chartService: ChartService
     ) {}
 
     ngOnInit() {
+        // If we move aways from the overview page, remove
+        // the charts
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (this.barchart && dc.hasChart(this.barchart)) {
+                    this.chartService.removeChart(
+                        this.barchart, this.barchart.group(),
+                        this.barchart.dimension()
+                    );
+                    this.barchart = null;
+                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+                }
+            }
+        });
+        this.location.onPopState(() => {
+            if (this.barchart && dc.hasChart(this.barchart)) {
+                this.chartService.removeChart(
+                    this.barchart, this.barchart.group(),
+                    this.barchart.dimension()
+                );
+                this.barchart = null;
+                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+            }
+        });
+
         if (!this.geneinfo) {
             return;
         }
@@ -51,12 +86,17 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
         );
     }
 
+    ngOnDestroy() {
+        this.chartService.removeChart(this.barchart);
+    }
+
     ngAfterViewInit() {
         const self = this;
         this.barchart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
         this.barchart.margins().top = 50;
         this.barchart.margins().left = 70;
+        this.barchart.margins().right = 0;
         this.barchart
             .barPadding(0.5)
             .renderLabel(true)
@@ -69,8 +109,10 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                 return self.dataService.getSignificantValue(+d.value);
             })
             .brushOn(false)
+            .turnOnControls(false)
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
+            .renderTitle(false)
             .on('renderlet', (chart) => {
                 const yDomainLength = Math.abs(this.barchart.y().domain()[1]
                 - this.barchart.y().domain()[0]);
@@ -82,6 +124,9 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
                         tree[i].setAttribute('height', 0);
                     }
                  });
+                chart.selectAll('rect').on('mouseover', () => {
+                    event.preventDefault();
+                });
                 chart.selectAll('text').each((el, i, tree) => {
                     if (el && el['data'] && el['data'].value < 0) {
                         el['data'].value = '';
@@ -111,6 +156,7 @@ export class MedianChartViewComponent implements OnInit, AfterViewInit {
             });
 
         this.barchart.yAxis().ticks(3);
+        this.barchart.filter = () => '';
         this.barchart.render();
     }
 

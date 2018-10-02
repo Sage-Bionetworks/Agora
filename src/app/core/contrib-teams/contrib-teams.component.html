@@ -1,4 +1,4 @@
-<div *ngIf="dataLoaded">
+<div>
     <div class="section-thin section-hero overview-header" tabindex="0">
         <div class="row no-gutters">
             <div class="col-md-7">
@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of teams; let i = index" class="section-thin overview-desc" tabindex="0">
+    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin overview-desc" tabindex="0">
         <h2>
             {{team.team}}
         </h2>
@@ -16,8 +16,8 @@
             {{team.description}}
         </p>
         <div class="row members-row">
-            <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
-                <div class="member-img" [style.background-image]="getMemberImg(member.name)"></div>
+            <div *ngFor="let member of team.members; let j = index" class="col-md-2 col-sm-3 col-4">
+                <div *ngIf="teamsImages[i] | async as tIs; else noimg" class="member-img" [style.background-image]="getImageUrl(tIs[j], tIs, i, j)"></div>
                 <h3>{{member.name}}</h3>
             </div>
         </div>
@@ -26,3 +26,6 @@
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
     <loading></loading>
 </div>
+<ng-template #noimg>
+    <div class="member-img" [style.background-image]="getImageUrl(null)"></div>
+</ng-template>

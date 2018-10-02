@@ -129,9 +129,10 @@
             height: 32px;
             width: 32px;
             vertical-align: middle;
+            border-radius: 6px;
 
             .ui-chkbox-icon {
-                top: 18%;
+                color: white;
             }
 
             span {
@@ -187,7 +188,7 @@
             .ui-state-active {
                 background: #2F8E94;
                 border: 2px solid #73C8CC;
-                background-color: #5BB0B5;
+                box-sizing: border-box;
                 border-radius: 6px;
                 color: white;
             }
@@ -278,7 +279,43 @@
     }
 
     .ui-dialog-titlebar {
-        padding: 2.25% !important;
+        padding-bottom: 73px !important;
+    }
+
+    .ui-dialog-content {
+        padding-top: 0% !important;
+        padding-bottom: 132px !important;
+        padding-left: 6% !important;
+        padding-right: 6% !important;
+    }
+
+    .first-bp-dia-row {
+        padding-bottom: 25px !important;
+    }
+
+    .content-vspacing {
+        padding-bottom: 215px;
+    }
+
+    .ui-dialog-titlebar-icon {
+
+        cursor: pointer;
+
+        :hover {
+            border-color: #c0c0c0;
+            background-color: #eeeeee;
+            color: #212121;
+        }
+    }
+}
+
+.btm-dialog2 {
+    .ui-dialog {
+        max-height: 90% !important;
+    }
+
+    .ui-dialog-titlebar {
+        padding-bottom: 73px !important;
     }
 
     .ui-dialog-content {

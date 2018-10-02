@@ -20,8 +20,7 @@ import {
 
 import { GeneNetworkComponent } from './gene-network.component';
 
-import { ForceService } from '../../../shared/services';
-import { ApiService, DataService, GeneService } from '../../../core/services';
+import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GeneNetwork } from '../../../models';
+import { GeneNetwork, LinksListResponse } from '../../../models';
 
 import { ApiService, DataService, GeneService } from '../../../core/services';
-import { ForceService } from '../../../shared/services';
+import { ForceService } from '../../../core/services';
 
 @Component({
     selector: 'gene-brainregions',
@@ -51,11 +51,15 @@ export class GeneBRComponent implements OnInit {
                 this.geneService.setCurrentInfo(data['geneInfo']);
                 this.gene = data['item'];
                 this.geneInfo = data['geneInfo'];
-                this.dataService.loadNodes(this.gene).then((datalinks: any) => {
-                    this.forceService.setData(datalinks);
-                    this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
-                        this.selectedGeneData.links = dn.links.slice().reverse();
-                        this.dataLoaded = true;
+
+                this.apiService.getLinksList(this.gene).subscribe(
+                    (linksList: LinksListResponse) => {
+                    this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
+                        this.forceService.setData(datalinks);
+                        this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
+                            this.selectedGeneData.links = dn.links.slice().reverse();
+                            this.dataLoaded = true;
+                        });
                     });
                 });
             });

@@ -1,4 +1,4 @@
-import { Gene, GeneInfo, GeneNetworkLinks } from '../models';
+import { Gene, GeneInfo, GeneNetworkLinks, GeneNetwork } from '../models';
 
 export const mockGene1: Gene = {
     _id: '5afa0be1310e7e82fde5112c',
@@ -123,6 +123,13 @@ export const mockDataLink2: GeneNetworkLinks = {
     geneA_external_gene_name: 'SLC6A17',
     geneB_ensembl_gene_id: 'ENSG00000152954',
     geneB_external_gene_name: 'NRSN1'
+};
+
+export const mockNetwork1: GeneNetwork = {
+    nodes: [],
+    links: [],
+    origin: mockGene1,
+    filterLvl: 1
 };
 
 export const mockTissues: string [] = ['DLPFC', 'CBE', 'TCX'];

@@ -20,8 +20,7 @@ import {
 
 import { GeneOverviewComponent } from './gene-overview.component';
 
-import { ForceService } from '../../../shared/services';
-import { ApiService, DataService, GeneService } from '../../../core/services';
+import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
 
 import { Button } from 'primeng/button';
 
@@ -35,6 +34,7 @@ describe('Component: GeneOverview', () => {
     let fixture: ComponentFixture<GeneOverviewComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
+    let geneService: GeneServiceStub;
     let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
@@ -67,6 +67,7 @@ describe('Component: GeneOverview', () => {
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
+        geneService = fixture.debugElement.injector.get(GeneService);
         dataService = fixture.debugElement.injector.get(DataService);
         forceService = fixture.debugElement.injector.get(ForceService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
@@ -144,11 +145,29 @@ describe('Component: GeneOverview', () => {
         );
 
         spyOn(component, 'initDetails').and.callThrough();
+        const hgcSpy = spyOn(geneService, 'hasGeneChanged');
+        hgcSpy.and.callFake(() => {
+            return true;
+        });
         component.initDetails();
         tick(500);
 
         fixture.detectChanges();
         expect(component.dataLoaded).toEqual(true);
         expect(dsSpy.calls.any()).toEqual(true);
+
+        component.dataLoaded = false;
+        fixture.detectChanges();
+        expect(component.dataLoaded).toEqual(false);
+
+        hgcSpy.and.callFake(() => {
+            return false;
+        });
+        component.initDetails();
+        tick(500);
+
+        fixture.detectChanges();
+        expect(component.dataLoaded).toEqual(true);
+        expect(dsSpy.calls.count()).toEqual(2);
     }));
 });

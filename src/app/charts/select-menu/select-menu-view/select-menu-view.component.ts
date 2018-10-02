@@ -1,6 +1,16 @@
-import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    Input,
+    ElementRef,
+    ViewChild,
+    OnDestroy
+} from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
+
+import { PlatformLocation } from '@angular/common';
 
 import { ChartService } from '../../services';
 import { GeneService, DataService } from '../../../core/services';
@@ -14,7 +24,7 @@ import * as dc from 'dc';
     styleUrls: [ './select-menu-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class SelectMenuViewComponent implements OnInit {
+export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() label: string;
     @Input() chart: any;
     @Input() info: any;
@@ -34,6 +44,8 @@ export class SelectMenuViewComponent implements OnInit {
     menuSelection: any;
 
     constructor(
+        private location: PlatformLocation,
+        private router: Router,
         private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,
@@ -41,6 +53,31 @@ export class SelectMenuViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        // If we move aways from the overview page, remove
+        // the charts
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                if (this.chart && dc.hasChart(this.chart)) {
+                    this.chartService.removeChart(
+                        this.chart, this.chart.group(),
+                        this.chart.dimension()
+                    );
+                    this.chart = null;
+                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+                }
+            }
+        });
+        this.location.onPopState(() => {
+            if (this.chart && dc.hasChart(this.chart)) {
+                this.chartService.removeChart(
+                    this.chart, this.chart.group(),
+                    this.chart.dimension()
+                );
+                this.chart = null;
+                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+            }
+        });
+
         if (!this.label) {
             this.route.params.subscribe((params) => {
                 this.label = params['label'];
@@ -51,7 +88,7 @@ export class SelectMenuViewComponent implements OnInit {
         }
     }
 
-    async initChart() {
+    initChart() {
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
@@ -121,8 +158,18 @@ export class SelectMenuViewComponent implements OnInit {
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
                 const oldOptions = self.menuSelection.selectAll('option');
-                oldOptions.filter((d, i) => i === 0).remove();
-                const newOptions = oldOptions.filter((d, i) => i !== 0);
+                const firstOldOption = oldOptions.filter((d, i) => i === 0);
+                // If the first option is the text All, we need to remove it
+                // because it is not a brain tissue. This is the default text
+                // in the selectMenu chart
+                let newOptions = null;
+                if (firstOldOption['_groups'][0][0].innerHTML === 'All') {
+                    firstOldOption.remove();
+                    newOptions = oldOptions.filter((d, i) => i !== 0);
+                } else {
+                    newOptions = oldOptions;
+                }
+
                 newOptions['_groups'][0][0]['selected'] = 'selected';
                 self.menuSelection.dispatch('change');
 
@@ -222,5 +269,9 @@ export class SelectMenuViewComponent implements OnInit {
                 x[i].classList.add('select-hide');
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.chartService.removeChart(this.chart);
     }
 }

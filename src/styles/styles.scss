@@ -43,7 +43,7 @@ html {
 html, body{
     @include lato-font('normal');
 
-    min-width: 367px;
+    min-width: 380px;
     padding: 0;
     margin: 0;
 }
@@ -90,7 +90,7 @@ span {
     }
 
     line-height: normal;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     letter-spacing: 1px;
     color: #1A1C29;
@@ -100,38 +100,83 @@ input::-ms-clear {
     display: none;
 }
 
+p-checkbox {
+    .ui-state-focus.ui-state-active {
+        background: #2F8E94 !important;
+        border: 2px solid #73C8CC !important;
+    }
+}
+
+p-panel {
+    .pi-minus:before {
+        content: url("/assets/icon/minus_icon.png") !important;
+    }
+
+    .pi-plus:before {
+        content: url("/assets/icon/plus_icon.png") !important;
+    }
+
+    .ui-panel-titlebar {
+        line-height: 45px !important;
+    }
+}
+
 p-dialog {
     .ui-dialog {
-        width: 80% ;
-        max-width: 80% ;
-        top: 109px ;
-        max-height: 80% ;
+        width: 80% !important;
+
+        @include respond-to('ex-small') {
+            left: 10% !important;
+        }
+        @include respond-to('small') {
+            left: 10% !important;
+        }
+
+        // max-width: 80%;
+        top: 109px;
+        max-height: 80%;
         overflow: auto;
     }
 
     .ui-dialog-titlebar {
         @include lato-font('bold');
 
-        padding-top: 85px ;
+        padding-top: 59px !important;;
         text-align-last: center;
         background: white;
         line-height: normal;
-        font-size: 24px;
+        font-size: 24px !important;
         color: #1A1C29;
         text-align: center;
         padding-top: 10% ;
 
         .pi-times:before {
             color: #5BB0B5;
+            content: url("/assets/icon/close_modal_icon.png");
+        }
+    }
+
+    .ui-dialog-title {
+        @include lato-font('bold');
+        font-size: 24px !important;
+        color: #1A1C29;
+    }
+
+    .ui-dialog-titlebar-icon {
+        padding: .525em !important;
+
+        > span {
+            width: 31px;
+            height: 31px;
         }
     }
 
     .ui-dialog-content {
         @include lato-font('normal');
 
-        padding-bottom: 85px ;
-        padding-left: 10% ;
-        padding-right: 10% ;
+        padding-bottom: 45px !important;
+        padding-left: 20% !important;
+        padding-right: 20% !important;
         line-height: normal;
         font-size: 18px;
         text-align: left;
@@ -162,6 +207,10 @@ p-dialog {
         left: 1%;
         top: 10%;
     }
+}
+
+.synapse-button {
+    cursor: pointer;
 }
 
 .bold {
@@ -199,6 +248,10 @@ p-dialog {
 .center-justified {
     text-align: justify;
     text-align-last: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .vertical-align {
@@ -421,4 +474,8 @@ p-dialog {
     left: 50%;
     margin: -100px 0 0 -100px;
     pointer-events: none;
+}
+
+.pi-check:before {
+    content: url("/assets/icon/checked_icon.png") !important;
 }

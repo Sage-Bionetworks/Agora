@@ -71,13 +71,27 @@ export class GenesListComponent implements OnInit {
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
-        this.apiService.getGene(this.selectedInfo.hgnc_symbol).subscribe((data) => {
+        if (!this.geneService.getCurrentGene()) {
+            this.getGene(this.selectedInfo.hgnc_symbol);
+        } else {
+            this.geneService.updatePreviousGene();
+            if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+                this.getGene(this.selectedInfo.hgnc_symbol);
+            } else {
+                this.goToRoute(
+                    '../gene-details',
+                    this.geneService.getCurrentGene().ensembl_gene_id
+                );
+            }
+        }
+    }
+
+    getGene(geneSymbol: string) {
+        this.apiService.getGene(geneSymbol).subscribe((data) => {
             if (!data['item']) { this.router.navigate(['/genes']); }
+            this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
-            this.router.navigate(
-                ['../gene-details', this.selectedInfo.ensembl_gene_id],
-                {relativeTo: this.route}
-            );
+            this.goToRoute('../gene-details', this.selectedInfo.ensembl_gene_id);
         });
     }
 
@@ -122,5 +136,10 @@ export class GenesListComponent implements OnInit {
 
     getTeams(nomTargets: NominatedTarget[]): string {
         return nomTargets.map((nt) => nt.team).join(', ');
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
+            this.router.navigate([path], { relativeTo: this.route });
     }
 }

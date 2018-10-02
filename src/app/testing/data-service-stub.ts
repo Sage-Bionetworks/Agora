@@ -1,23 +1,39 @@
 import { Injectable } from '@angular/core';
 
-import { mockGene1, mockGene2, mockDataLink1, mockDataLink2 } from './gene-mocks';
+import {
+    mockGene1,
+    mockGene2,
+    mockNetwork1,
+    mockDataLink1,
+    mockDataLink2,
+    mockTissues,
+    mockModels
+} from './gene-mocks';
 
-import { Gene } from '../models';
+import { Gene, LinksListResponse, GenesResponse, GeneNetwork } from '../models';
+
+import { forkJoin, of, Observable } from 'rxjs';
 
 @Injectable()
 export class DataServiceStub {
     data: any;
 
-    loadNodes(sgene?: Gene): Promise<any> {
+    loadData(gene: Gene): Observable<any[]> {
+        return forkJoin([
+            of([mockGene1, mockGene2]),
+            of({ items: [mockDataLink1, mockDataLink2] }),
+            of([mockTissues]),
+            of([mockModels])
+        ]);
+    }
+
+    loadNodes(linksList?: LinksListResponse, sgene?: Gene): Promise<GeneNetwork> {
         return new Promise((resolve, reject) => {
-            resolve([mockDataLink1, mockDataLink2]);
+            resolve(mockNetwork1);
         });
     }
 
-    loadGenes(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.data = [mockGene1, mockGene2];
-            resolve(true);
-        });
+    loadGenes(data: GenesResponse) {
+        this.data = [mockGene1, mockGene2];
     }
 }

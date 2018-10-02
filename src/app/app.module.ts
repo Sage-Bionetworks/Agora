@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 // Our other developed modules
+import { AppSharedModule } from './shared';
 import { CoreModule } from './core';
 
 // Platform and Environment providers
@@ -38,6 +39,7 @@ interface StoreType {
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule,
+        AppSharedModule.forRoot(),
         CoreModule
     ],
     /**

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import { ApiService } from '.';
+import { ApiService, ForceService } from '.';
 
-import { Gene, GenesResponse, GeneListResponse } from '../../models';
+import { Gene, GenesResponse, LinksListResponse, GeneNetwork } from '../../models';
 
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 import * as crossfilter from 'crossfilter2';
 
@@ -32,6 +32,7 @@ export class DataService {
 
     constructor(
         private apiService: ApiService,
+        private forceService: ForceService,
         private decimalPipe: DecimalPipe
     ) {}
 
@@ -43,48 +44,53 @@ export class DataService {
         this.ndx.remove();
     }
 
-    loadNodes(sgene: Gene): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let dataLinks: any;
-            this.apiService.getGeneList(sgene).subscribe((data: GeneListResponse) => {
-                dataLinks = data;
-            }, (error) => {
-                console.log('Error loading genes! ' + error.message);
-                reject(null);
-            }, () => {
-                resolve(dataLinks);
-            });
-        });
+    loadData(gene: Gene): Observable<any[]> {
+        const genesResponse = this.apiService.getGenes();
+        const nodesResponse = this.apiService.getLinksList(gene);
+        const tissuesResponse = this.apiService.getGeneTissues();
+        const modelsResponse = this.apiService.getGeneModels();
+
+        return forkJoin([
+            genesResponse,
+            nodesResponse,
+            tissuesResponse,
+            modelsResponse
+        ]);
     }
 
-    // Requests all the genes to be loaded by Crossfilter
-    loadGenes(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.apiService.getGenes().subscribe((data: GenesResponse) => {
-                if (data.geneEntries) { this.geneEntries = data.geneEntries; }
-                data.items.forEach((d: Gene) => {
-                    // Separate the columns we need
-                    d.logfc = this.getSignificantValue(+d.logfc, true);
-                    d.fc = this.getSignificantValue(+d.fc, true);
-                    d.adj_p_val = this.getSignificantValue(+d.adj_p_val, true);
-                    d.hgnc_symbol = d.hgnc_symbol;
-                    d.model = d.model;
-                    d.study = d.study;
-                    d.tissue = d.tissue;
-                });
+    loadTissuesModels(gene: Gene): Observable<any[]> {
+        const tissuesResponse = this.apiService.getGeneTissues();
+        const modelsResponse = this.apiService.getGeneModels();
 
-                this.ndx = crossfilter(data.items);
-                this.data = data.items;
+        return forkJoin([
+            tissuesResponse,
+            modelsResponse
+        ]);
+    }
 
-                this.hgncDim = this.ndx.dimension((d) => {
-                    return d.hgnc_symbol;
-                });
-            }, (error) => {
-                console.log('Error loading genes! ' + error.message);
-                reject(false);
-            }, () => {
-                resolve(true);
-            });
+    loadNodes(data: LinksListResponse, gene: Gene): Promise<GeneNetwork> {
+        this.forceService.setData(data.items);
+        return this.forceService.processNodes(gene);
+    }
+
+    loadGenes(data: GenesResponse) {
+        if (data.geneEntries) { this.geneEntries = data.geneEntries; }
+        data.items.forEach((d: Gene) => {
+            // Separate the columns we need
+            d.logfc = this.getSignificantValue(+d.logfc, true);
+            d.fc = this.getSignificantValue(+d.fc, true);
+            d.adj_p_val = this.getSignificantValue(+d.adj_p_val, true);
+            d.hgnc_symbol = d.hgnc_symbol;
+            d.model = d.model;
+            d.study = d.study;
+            d.tissue = d.tissue;
+        });
+
+        this.ndx = crossfilter(data.items);
+        this.data = data.items;
+
+        this.hgncDim = this.ndx.dimension((d) => {
+            return d.hgnc_symbol;
         });
     }
 

@@ -1,18 +1,24 @@
-<p-dialog header="Gene not listed?" [(visible)]="display" [modal]="true" [responsive]="true" [width]="350" [minWidth]="200" [minY]="70"
-        [baseZIndex]="10000">
-    <span>
-        Only genes that show differential expression in AD brains are currently visible in Agora.
-        Information on additional genes is coming soon.
-    </span>
+<p-dialog header="Is your gene not listed?"
+    [(visible)]="display"
+    [modal]="true"
+    [responsive]="true"
+    [minWidth]="330"
+    [minY]="256"
+    [baseZIndex]="10000">
+    Only genes that show differential expression in AD brains are currently visible in Agora.
+    Information on additional genes is coming soon.
 </p-dialog>
 <div class="section section-hero intro-desc center-justified">
     <h1 class="center-justified">
         Welcome!
     </h1>
     <p class="intro-paragraph">
-        Agora is an open space to discover and evaluate the results from the AMP-AD consortium.
-        Explore evidence for your favorite gene or evaluate the dynamic list of genes that have
-        been nominated by the consortium as nascent AD associated drug targets.
+        Agora is an open space to discover and evaluate the results from the AMP-AD consortium. Explore
+        evidence for your favorite gene or evaluate the dynamic list of genes that have been nominated by
+        the consortium as nascent AD associated drug targets. Need help? Visit our
+        <a class="not-listed" (click)="goToRoute('/help')" tabindex="0">
+            help page
+        </a>
     </p>
     <gene-search></gene-search>
     <div class="row no-gutters">
@@ -27,7 +33,7 @@
     <h2 class="center-justified">
         Nominated Targets
     </h2>
-    <h3 class="nom-targets-heading center-justified" tabindex="-1">
+    <h3 class="nom-targets-heading text-center" tabindex="-1">
         Explore the current list of AMP-AD nominated targets.
         <span class="beta-underline" (click)="goToRoute('/about')" tabindex="0">Learn more</span>
         about how these early AD signals were found.
@@ -43,7 +49,7 @@
     <h2 class="center-justified">
         Contributing Teams
     </h2>
-    <p class="black-paragraph center-justified">
+    <p class="black-paragraph text-center">
         Seven teams have nominated targets. See their profiles.
     </p>
     <div class="row list-control-row">
