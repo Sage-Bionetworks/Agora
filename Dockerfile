@@ -29,8 +29,8 @@ COPY . .
 
 RUN npm run webdriver:update
 
-## The ci:travis script already runs the AoT build, so these two lines build the client and server
-RUN npm run ci:travis
+## These two lines build the client and server
+RUN npm run build:aot
 RUN npm run build:server:docker
 
 COPY ./start-server.sh /ng-app/start-server.sh
