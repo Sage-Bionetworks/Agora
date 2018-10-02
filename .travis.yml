@@ -26,5 +26,19 @@ before_install:
 install:
   - npm install
 
-script:
-  - npm run ci:travis
+script: "npm run ci:travis"
+
+stages:
+  - name: deploy-containers
+    if: branch =~ /^deploy-.*$/
+
+jobs:
+  include:
+    - stage: deploy-containers
+      script:
+        - sudo apt-get install -y build-essentials libssl-dev python-pip python2.7-dev
+        - sudo pip install -U setuptools wheel synapseclient[pandas,pysftp]
+        - ./get-data-aws.sh || travis_terminate 1
+        - container-build.sh || travis_terminate 1
+        - docker login --username="$DOCKER_USER" --password="$DOCKER_PASSWORD"
+        - container-deploy.sh || travis_terminate 1
