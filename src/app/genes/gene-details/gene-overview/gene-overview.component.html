@@ -35,9 +35,11 @@
     <div class="section-thin overview-rel" tabindex="0">
         <h2>
             Summary of Evidence
-            <span class="icon-spacing"></span>
-            <i class="fa fa-info-circle" (click)="showDialog('displayRelDia')"></i>
         </h2>
+        <span class="link-heading" (click)="showDialog('displayRelDia')">
+            View more information
+            <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displayRelDia')">
+        </span>
         <!-- TODO: Improve this part -->
         <div class="row">
             <div class="col-md-6">

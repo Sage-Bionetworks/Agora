@@ -44,7 +44,7 @@
                 </h3>
                 <h3 class="cg-col-span">
                     Nominated target &nbsp;&nbsp;&nbsp;
-                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText(geneInfo.nominations)}}</span>
+                    <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText((geneInfo.nominations === undefined) ? false : geneInfo.nominations)}}</span>
                 </h3>
                 <h3 class="cg-col-span">
                     Brain eQTL &nbsp;&nbsp;&nbsp;
@@ -56,9 +56,11 @@
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h2>
                     Tissue Specificity of Gene Connections
-                    <span class="icon-spacing"></span>
-                    <i class="fa fa-info-circle" (click)="showDialog('displayBRDia')"></i>
                 </h2>
+                <span class="link-heading" (click)="showDialog('displayBRDia')">
+                    View more information
+                    <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displayBRDia')">
+                </span>
                 <p class="italic-paragraph"> 6 of {{selectedGeneData.links.length}} genes</p>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
@@ -84,11 +86,15 @@
         </div>
         <div class="row cg-row" *ngIf="!noData;">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-              <h2>
-                  Similar Genes
-                  <span class="icon-spacing"></span>
-                  <i class="fa fa-info-circle" (click)="showDialog('displaySimilarGenesDialog')"></i>
-              </h2>
+                <h2>
+                    Similar Genes
+                </h2>
+                <h2 class="vmi-wrapper">
+                    <span class="link-heading" (click)="showDialog('displaySimilarGenesDialog')">
+                        View more information
+                        <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displaySimilarGenesDialog')">
+                    </span>
+                </h2>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
                         <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">

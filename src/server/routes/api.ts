@@ -192,8 +192,8 @@ connection.once('open', () => {
         res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
     });
 
-    // Get all genes that match an id, currently hgnc_symbol
-    router.get('/genes/:id', (req, res, next) => {
+    // Get all gene infos that match an id, currently hgnc_symbol
+    router.get('/gene/infos/:id', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get the genes that match an id');

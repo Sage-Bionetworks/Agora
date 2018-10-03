@@ -34,9 +34,6 @@
 
         background: #FFFFFF !important;
         border-radius: 100px !important;
-        /*font-family: Lato !important;
-        font-style: normal !important;
-        font-weight: bold !important;*/
         line-height: normal !important;
         font-size: 18px !important;
         color: #73C8CC !important;
@@ -49,9 +46,6 @@
 
             background: #FFFFFF !important;
             border-radius: 100px !important;
-            /*font-family: Lato !important;
-            font-style: normal !important;
-            font-weight: bold !important;*/
             line-height: normal !important;
             font-size: 18px !important;
             color: #73C8CC !important;
@@ -68,15 +62,13 @@
     }
 
     .beta-coming-soon {
-        @include lato-font('normal');
-
         margin-bottom: auto;
         margin-top: auto;
         font-size: 18px;
         color: #1A1C29;
         text-align: center;
 
-        span {
+        .beta-row-span {
             @include lato-font('normal');
 
             line-height: normal;

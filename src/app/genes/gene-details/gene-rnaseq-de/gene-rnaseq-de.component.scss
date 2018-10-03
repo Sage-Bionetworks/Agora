@@ -13,8 +13,6 @@
     .fa-info-circle:before {
         color: #9DA3B3;
     }
-
-    border-top: 1px solid #E0E0E0;
 }
 
 .rna-seq-bplot {
@@ -245,8 +243,12 @@
         display: table-row;
     }
 
-    .de-header, .de-paragraph, .filters-header, .multi-sel-row, .sm-row {
+    .de-header, .de-paragraph, .multi-sel-row, .sm-row {
         margin-bottom: 40px;
+    }
+
+    .vmi-wrapper {
+        line-height: 20px;
     }
 
     .filters-header {

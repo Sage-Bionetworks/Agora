@@ -208,6 +208,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                     return bracketsArr[0].replace(/  /g, '');
                 } else {
                     // Return the last bracket string
+                    if (bracketsArr[1].includes(',')) {
+                        bracketsArr[1] = bracketsArr[1].split(',')[0];
+                    }
                     return bracketsArr[1];
                 }
             } else {

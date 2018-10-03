@@ -7,7 +7,8 @@ import {
     GenesResponse,
     LinksListResponse,
     TeamMember,
-    TeamInfo
+    TeamInfo,
+    GeneInfosResponse
 } from '../../models';
 
 import { LazyLoadEvent } from 'primeng/primeng';
@@ -59,10 +60,10 @@ export class ApiService {
         return this.http.get('/api/genes/table', { headers, params });
     }
 
-    getGenesMatchId(id: string): Observable<object> {
+    getInfosMatchId(id: string): Observable<GeneInfosResponse> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-        return this.http.get('/api/genes/' + id, { headers });
+        return this.http.get<GeneInfosResponse>('/api/gene/infos/' + id, { headers });
     }
 
     getGene(id: string, tissue?: string, model?: string): Observable<object> {

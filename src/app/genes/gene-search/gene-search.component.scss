@@ -48,6 +48,51 @@
             left: 91.5%;
         }
     }
+
+    p-progressSpinner {
+        position: absolute;
+        z-index: 2;
+        color: #FCCB6F;
+        top: 35%;
+
+        .ui-progress-spinner {
+            width: 20px;
+            height: 20px;
+        }
+
+        @include respond-to('ex-small') {
+            left: 83.5%;
+        }
+        @include respond-to('small') {
+            left: 88%;
+        }
+        @include respond-to('medium') {
+            left: 88.5%;
+        }
+        @include respond-to('large') {
+            left: 87.5%;
+        }
+        @include respond-to('ex-large') {
+            left: 86.5%;
+        }
+    }
+}
+
+@keyframes ui-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #FCCB6F;
+    }
+    40% {
+        stroke: #FCCB6F;
+    }
+    66% {
+        stroke: #FCCB6F;
+    }
+    80%,
+    90% {
+        stroke: #FCCB6F;
+    }
 }
 
 #keyword {

@@ -21,6 +21,10 @@ export interface GeneResponse {
     maxAdjPValue: number;
 }
 
+export interface GeneInfosResponse {
+    items: GeneInfo[];
+}
+
 export interface TissuesResponse {
     items: string[];
 }

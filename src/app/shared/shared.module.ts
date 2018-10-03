@@ -23,6 +23,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { DownloadComponent } from './components/download';
 import { LoadingComponent } from './components/loading';
@@ -71,7 +72,8 @@ import { NumbersPipe, ArraySortPipe } from './pipes';
         TabViewModule,
         ProgressBarModule,
         MultiSelectModule,
-        BlockUIModule
+        BlockUIModule,
+        ProgressSpinnerModule
     ],
     exports: [
         // Angular modules
@@ -100,6 +102,7 @@ import { NumbersPipe, ArraySortPipe } from './pipes';
         ProgressBarModule,
         MultiSelectModule,
         BlockUIModule,
+        ProgressSpinnerModule,
         // Other declarations
         AlertComponent,
         DownloadComponent,

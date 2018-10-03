@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 // Updating to rxjs 6 import statement
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, finalize } from 'rxjs/operators';
 import { Observable, empty } from 'rxjs';
 
-import { Gene, GeneInfo } from '../../models';
+import { Gene, GeneInfo, GeneInfosResponse } from '../../models';
 
 import {
     ApiService,
@@ -27,6 +27,7 @@ export class GeneSearchComponent implements OnInit {
     queryField: FormControl = new FormControl();
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
+    isSearching: boolean = false;
     gene: Gene;
 
     constructor(
@@ -42,22 +43,29 @@ export class GeneSearchComponent implements OnInit {
                 distinctUntilChanged(),
                 switchMap((query) => {
                     if (query) {
+                        this.isSearching = true;
                         return this.search(query);
                     } else {
+                        this.isSearching = false;
                         this.results = [];
                         return empty();
                     }
                 })
             )
-            .subscribe((data) => {
-                this.results = (data['items']) ? data['items'] as GeneInfo[] : [];
+            // If you add a complete callback, it is never called here
+            .subscribe((data: GeneInfosResponse) => {
+                this.isSearching = false;
+                this.results = (data.items) ? data.items : [];
+            }, (error) => {
+                console.log('Invalid search!: ' + error.message);
             });
     }
 
     search(queryString: string): Observable<any> {
         if (queryString) {
-            return this.apiService.getGenesMatchId(queryString);
+            return this.apiService.getInfosMatchId(queryString);
         } else {
+            this.isSearching = false;
             return empty();
         }
     }

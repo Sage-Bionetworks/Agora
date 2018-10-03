@@ -46,7 +46,6 @@
 .genelink {
     @include lato-font('bold');
 
-    color: #86C4C7;
     cursor: pointer;
     width: 100%;
     line-height: normal;
@@ -62,6 +61,10 @@
 
     .cg-row {
         margin: 0px;
+    }
+
+    .vmi-wrapper {
+        line-height: 20px;
     }
 
     .cg-col {

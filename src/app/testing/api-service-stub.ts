@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { mockGene1, mockGene2, mockDataLink1, mockDataLink2 } from './gene-mocks';
+import { mockGene1, mockGene2, mockDataLink1, mockDataLink2, mockInfo1 } from './gene-mocks';
 import { mockTeam1 } from './team-info-mocks';
 
-import { Gene, LinksListResponse, GenesResponse } from '../models';
+import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse } from '../models';
 
 import { Observable, of } from 'rxjs';
 
@@ -25,8 +25,8 @@ export class ApiServiceStub {
         return of([mockGene1, mockGene2]);
     }
 
-    getGenesMatchId(id?: string): Observable<object> {
-        return of([mockGene1]);
+    getInfosMatchId(id?: string): Observable<GeneInfosResponse> {
+        return of({ items: [mockInfo1] });
     }
 
     getAllTeams(): Observable<object> {

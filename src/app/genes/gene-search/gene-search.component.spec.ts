@@ -81,7 +81,7 @@ describe('Component: GeneSearch', () => {
     it('should not search for an empty gene string', fakeAsync(() => {
         const emptyObs = new EmptyObservable<Response>();
 
-        const dsSpy = spyOn(apiService, 'getGenesMatchId');
+        const dsSpy = spyOn(apiService, 'getInfosMatchId');
 
         spyOn(component, 'search').and.callThrough();
         component.search('').subscribe((data) => {
@@ -91,7 +91,7 @@ describe('Component: GeneSearch', () => {
     }));
 
     it('should search for a typed gene', fakeAsync(() => {
-        const dsSpy = spyOn(apiService, 'getGenesMatchId').and.returnValue(
+        const dsSpy = spyOn(apiService, 'getInfosMatchId').and.returnValue(
             of([mockInfo1])
         );
 
