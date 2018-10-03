@@ -9,11 +9,6 @@ cache:
 addons:
   chrome: stable
 
-#node_js:
-#  - "6"
-#  - "7"
-#  - "8"
-
 matrix:
   fast_finish: true
 
@@ -30,9 +25,6 @@ install:
   - sudo apt-get install -y build-essential libssl-dev python-pip python2.7-dev
   - sudo pip install -U setuptools wheel docker-cloud synapseclient[pandas,pysftp]
   - docker login --username="$DOCKER_USER" --password="$DOCKER_PASSWORD"
-
-#script:
-#  - npm run ci:travis
 
 stages:
   - name: deploy-containers

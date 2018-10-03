@@ -16,8 +16,5 @@ synapse -u $SYNAPSE_USERNAME -p $SYNAPSE_PASSWORD cat --version $DATA_VERSION sy
 done
 
 [ -d $DATA_DIR/team_images/ ] || mkdir $DATA_DIR/team_images/
-ls -l $DATA_DIR
 
 synapse -u $SYNAPSE_USERNAME -p $SYNAPSE_PASSWORD get -r --downloadLocation $DATA_DIR/team_images/ syn12861877
-
-ls -l $DATA_DIR/team_images
