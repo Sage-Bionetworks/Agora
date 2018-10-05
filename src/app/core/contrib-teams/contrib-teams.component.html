@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of obsTeams | async | agrOrderBy: ['team']; let i = index" class="section-thin overview-desc" tabindex="0">
+    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin overview-desc" tabindex="0">
         <h2>
             {{team.team}}
         </h2>
