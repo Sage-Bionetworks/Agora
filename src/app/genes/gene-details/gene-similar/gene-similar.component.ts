@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GeneNetwork, LinksListResponse } from '../../../models';
+import { GeneNetwork, LinksListResponse, GeneInfo } from '../../../models';
 
 import {
     ApiService,
@@ -9,6 +9,7 @@ import {
     GeneService,
     ForceService
 } from '../../../core/services';
+import { SortEvent } from 'primeng/primeng';
 
 @Component({
     selector: 'gene-similar',
@@ -30,6 +31,11 @@ export class GeneSimilarComponent implements OnInit {
 
     private gene = this.geneService.getCurrentGene();
     private geneInfo: any;
+    private cols: any[];
+    private datasource: GeneInfo[];
+    private genesInfo: any;
+    private totalRecords: any;
+    private loading: boolean;
 
     constructor(
         private router: Router,
@@ -41,39 +47,57 @@ export class GeneSimilarComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.cols = [
+            { field: 'hgnc_symbol', header: 'Gene name' },
+            { field: 'nominations', header: 'Nominated Target' },
+            { field: 'haseqtl', header: 'Brain Eqtl' },
+            { field: 'isIGAP', header: 'AD Genetic Association'},
+            { field: 'drugabillity', header: 'Druggability Bucket'},
+            { field: 'pc', header: 'Pharos Class'}
+        ];
         // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-        if (!!this.forceService.getGeneClickedList() &&
-            this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
-            this.selectedGeneData = this.forceService.getGeneClickedList();
-            this.dataLoaded = true;
-            console.log('preloaded copy');
-        } else if (!!this.forceService.getGeneOriginalList() &&
-            this.forceService.getGeneOriginalList().origin.ensembl_gene_id === this.id) {
-            this.selectedGeneData = this.forceService.getGeneOriginalList();
-            this.dataLoaded = true;
-            console.log('preloaded original');
-        } else {
-            this.apiService.getGene(this.id).subscribe((data) => {
-                console.log(data);
-                if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.setCurrentGene(data['item']);
-                this.geneService.setCurrentInfo(data['geneInfo']);
-                this.gene = data['item'];
-                this.geneInfo = data['geneInfo'];
-                this.apiService.getLinksList(this.gene).subscribe(
-                    (linksList: LinksListResponse) => {
-                    this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
-                        this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
-                            this.selectedGeneData.nodes = dn.nodes.slice();
-                            this.dataLoaded = true;
-                            console.log('loaded original');
+        // if (!!this.forceService.getGeneClickedList() &&
+        //     this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
+        //     this.selectedGeneData = this.forceService.getGeneClickedList();
+        //     this.dataLoaded = true;
+        // } else if (!!this.forceService.getGeneOriginalList() &&
+        //     this.forceService.getGeneOriginalList().origin.ensembl_gene_id === this.id) {
+        //     this.selectedGeneData = this.forceService.getGeneOriginalList();
+        //     this.dataLoaded = true;
+        // } else {
+        this.apiService.getGene(this.id).subscribe((data) => {
+            if (!data['item']) { this.router.navigate(['/genes']); }
+            this.geneService.setCurrentGene(data['item']);
+            this.geneService.setCurrentInfo(data['geneInfo']);
+            this.gene = data['item'];
+            this.geneInfo = data['geneInfo'];
+            this.apiService.getLinksList(this.gene).subscribe(
+                (linksList: LinksListResponse) => {
+                this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
+                    this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
+                        this.apiService.getTableData().subscribe((datas) => {
+                            this.datasource = (datas['items']) ? datas['items'] as GeneInfo[] : [];
+                            this.genesInfo = this.datasource;
+                            this.totalRecords =
+                            (datas['totalRecords']) ? (datas['totalRecords']) : 0;
+                            console.log(datas);
+                            // Starts table with the nominations columns sorted in descending order
+                            // this.customSort({
+                            //     data: this.datasource,
+                            //     field: 'nominations',
+                            //     mode: 'single',
+                            //     order: -1
+                            // } as SortEvent);
+
+                            this.loading = false;
                         });
                     });
                 });
             });
-        }
+        });
+        //}
     }
 
     viewGene(id: string) {
@@ -97,5 +121,17 @@ export class GeneSimilarComponent implements OnInit {
                         }]);
                 });
         });
+    }
+
+    onRowSelect(event) {
+        // todo
+    }
+
+    onRowUnselect(event) {
+        // todo
+    }
+
+    customSort(event: SortEvent) {
+        // todo
     }
 }
