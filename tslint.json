@@ -25,7 +25,7 @@
     "no-input-rename": true,
     "no-output-rename": true,
     "only-arrow-functions": false,
-    "pipe-naming": [true, "camelCase", "my"],
+    "pipe-naming": [true, "camelCase", "agr"],
     "use-host-property-decorator": true,
     "use-input-property-decorator": true,
     "use-life-cycle-interface": true,

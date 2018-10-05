@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, LinksListResponse } from '../../../models';
+import { Gene, GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
 
 import {
     ApiService,
@@ -108,9 +108,9 @@ export class GeneNetworkComponent implements OnInit {
                     this.selectedGeneData.links = network.links;
                     this.selectedGeneData.nodes = network.nodes;
                     this.selectedGeneData.origin = network.origin;
-                    this.apiService.getGene(event.id).subscribe((data) => {
-                        if (data['info']) {
-                            this.geneInfo = data['info'];
+                    this.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
+                        if (data.info) {
+                            this.geneInfo = data.info;
                         } else {
                             this.geneInfo = {
                                 hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol
@@ -174,10 +174,10 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             id = link;
         }
-        this.apiService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data: GeneResponse) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
-            if (!data['item']) {
+            if (!data.item) {
                 this.router.navigate(['/genes']);
                 return;
             }

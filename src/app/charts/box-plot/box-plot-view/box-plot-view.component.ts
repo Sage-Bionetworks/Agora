@@ -106,7 +106,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy {
 
         this.chart
             .dimension(this.dim)
-            .yAxisLabel('log 2 fold change', 20)
+            .yAxisLabel('LOG 2 FOLD CHANGE', 20)
             .group(this.group)
             .renderTitle(true)
             .showOutliers(false)

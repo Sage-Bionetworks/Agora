@@ -157,10 +157,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     }
 
     viewGene(id: string) {
-        this.apiService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data: GeneResponse) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
-            if (!data['item']) {
+            if (!data.item) {
                 this.router.navigate(['/genes']);
                 return;
             }

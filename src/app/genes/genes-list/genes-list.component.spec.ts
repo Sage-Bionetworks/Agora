@@ -26,6 +26,7 @@ import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
 import { ApiService, GeneService } from '../../core/services';
+import { OrderBy } from '../../shared/pipes';
 
 import { of } from 'rxjs';
 
@@ -47,7 +48,8 @@ describe('Component: GenesList', () => {
                 SynapseAccountComponent,
                 NoContentComponent,
                 GenesListComponent,
-                RouterOutletStubComponent
+                RouterOutletStubComponent,
+                OrderBy
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

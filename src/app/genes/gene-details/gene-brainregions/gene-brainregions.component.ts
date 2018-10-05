@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GeneNetwork, LinksListResponse } from '../../../models';
+import { GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
 
 import { ApiService, DataService, GeneService } from '../../../core/services';
 import { ForceService } from '../../../core/services';
@@ -45,12 +45,12 @@ export class GeneBRComponent implements OnInit {
             this.selectedGeneData = this.forceService.getGeneClickedList();
             this.dataLoaded = true;
         } else {
-            this.apiService.getGene(this.id).subscribe((data) => {
-                if (!data['item']) { this.router.navigate(['/genes']); }
-                this.geneService.setCurrentGene(data['item']);
-                this.geneService.setCurrentInfo(data['geneInfo']);
-                this.gene = data['item'];
-                this.geneInfo = data['geneInfo'];
+            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+                if (!data.item) { this.router.navigate(['/genes']); }
+                this.geneService.setCurrentGene(data.item);
+                this.geneService.setCurrentInfo(data.info);
+                this.gene = data.item;
+                this.geneInfo = data.info;
 
                 this.apiService.getLinksList(this.gene).subscribe(
                     (linksList: LinksListResponse) => {
@@ -72,10 +72,10 @@ export class GeneBRComponent implements OnInit {
         } else {
             id = link[pos];
         }
-        this.apiService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data: GeneResponse) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
-            if (!data['item']) {
+            if (!data.item) {
                 this.router.navigate(['/genes']);
                 return;
             }
@@ -87,7 +87,7 @@ export class GeneBRComponent implements OnInit {
                         {
                             outlets:
                             {
-                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
+                                'genes-router': ['gene-details', data.item.ensembl_gene_id]
                             }
                         }]);
                 });

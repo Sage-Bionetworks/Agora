@@ -13,6 +13,7 @@ import {
 } from '../../testing';
 
 import { ApiService, GeneService } from '../services';
+import { OrderBy } from '../../shared/pipes';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -24,7 +25,8 @@ describe('NavbarComponent', () => {
         TestBed.configureTestingModule({
             declarations: [
                 MockComponent(LoadingComponent),
-                ContribTeamsPageComponent
+                ContribTeamsPageComponent,
+                OrderBy
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
