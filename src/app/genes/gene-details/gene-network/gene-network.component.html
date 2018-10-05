@@ -97,7 +97,7 @@
                 </h2>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
-                        <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | myArraySort: 'brainregions' : true;" class="pathbox">
+                        <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
                             <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
                         </div>
                     </div>

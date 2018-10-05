@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 // Updating to rxjs 6 import statement
-import { debounceTime, distinctUntilChanged, switchMap, finalize } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, empty } from 'rxjs';
 
-import { Gene, GeneInfo, GeneInfosResponse } from '../../models';
+import { Gene, GeneInfo, GeneInfosResponse, GeneResponse } from '../../models';
 
 import {
     ApiService,
@@ -103,19 +103,19 @@ export class GeneSearchComponent implements OnInit {
     }
 
     getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data) => {
-            if (!data['info']) {
-                this.router.navigate(['/genes']);
+        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+            if (!data.info) {
+                this.router.navigate(['./genes']);
             } else {
-                if (!data['item']) {
+                if (!data.item) {
                     // Fill in a new gene with the info attributes
-                    data['item'] = this.geneService.getEmptyGene(
-                        data['info'].ensembl_gene_id, data['info'].hgnc_symbol
+                    data.item = this.geneService.getEmptyGene(
+                        data.info.ensembl_gene_id, data.info.hgnc_symbol
                     );
                 }
                 this.geneService.updatePreviousGene();
                 this.geneService.updateGeneData(data);
-                this.gene = data['item'];
+                this.gene = data.item;
             }
         }, (error) => {
             console.log('Routing error! ' + error.message);

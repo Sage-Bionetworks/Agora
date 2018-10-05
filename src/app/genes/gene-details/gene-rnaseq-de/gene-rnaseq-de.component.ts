@@ -16,7 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
 
-import { Gene, GeneInfo } from '../../../models';
+import { Gene, GeneInfo, GeneResponse } from '../../../models';
 
 import { ChartService } from '../../../charts/services';
 import { ApiService, DataService, GeneService } from '../../../core/services';
@@ -203,8 +203,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                 this.geneService.getCurrentTissue(),
                 this.geneService.getCurrentModel()
             ).subscribe(
-                (data) => {
-                    if (!data['info']) {
+                (data: GeneResponse) => {
+                    if (!data.info) {
                         this.router.navigate(['/genes']);
                     } else {
                         if (!data['item']) {
@@ -215,7 +215,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                         }
                     }
                     this.geneService.updateGeneData(data);
-                    this.gene = data['item'];
+                    this.gene = data.item;
                 }, (error) => {
                     console.log('Error getting gene: ' + error.message);
                 }, () => {

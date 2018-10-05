@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../../models';
+import { Gene, GeneInfo, TeamInfo, NominatedTarget, GeneResponse } from '../../../models';
 
 import {
     ApiService,
@@ -44,11 +44,11 @@ export class TeamsPageComponent implements OnInit {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id) {
-            this.apiService.getGene(this.id).subscribe((data) => {
-                if (!data['item']) { this.router.navigate(['/genes']); }
+            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+                if (!data.item) { this.router.navigate(['/genes']); }
                 this.geneService.updateGeneData(data);
-                this.gene = data['item'];
-                this.geneInfo = data['info'];
+                this.gene = data.item;
+                this.geneInfo = data.info;
                 this.ntInfoArray = this.geneInfo.nominatedtarget;
             }, (error) => {
                 console.log('Error loading gene: ' + error.message);

@@ -6,7 +6,7 @@ import {
     ApiService
 } from '../../core/services';
 
-import { GeneInfo, NominatedTarget } from '../../models';
+import { GeneInfo, NominatedTarget, GeneResponse } from '../../models';
 
 import {
     Message,
@@ -87,8 +87,8 @@ export class GenesListComponent implements OnInit {
     }
 
     getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data) => {
-            if (!data['item']) { this.router.navigate(['/genes']); }
+        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+            if (!data.item) { this.router.navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
             this.goToRoute('../gene-details', this.selectedInfo.ensembl_gene_id);

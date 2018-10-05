@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GeneNetwork, LinksListResponse, GeneInfo } from '../../../models';
+
+import { GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
 
 import {
     ApiService,
@@ -32,7 +33,7 @@ export class GeneSimilarComponent implements OnInit {
     private gene = this.geneService.getCurrentGene();
     private geneInfo: any;
     private cols: any[];
-    private datasource: GeneInfo[];
+    private datasource: GeneResponse[];
     private genesInfo: any;
     private totalRecords: any;
     private loading: boolean;
@@ -78,7 +79,8 @@ export class GeneSimilarComponent implements OnInit {
                 this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                         this.apiService.getTableData().subscribe((datas) => {
-                            this.datasource = (datas['items']) ? datas['items'] as GeneInfo[] : [];
+                            this.datasource =
+                            (datas['items']) ? datas['items'] as GeneResponse[] : [];
                             this.genesInfo = this.datasource;
                             this.totalRecords =
                             (datas['totalRecords']) ? (datas['totalRecords']) : 0;
@@ -101,10 +103,10 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     viewGene(id: string) {
-        this.apiService.getGene(id).subscribe((data) => {
+        this.apiService.getGene(id).subscribe((data: GeneResponse) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
             const currentUrl = this.router.url + '?';
-            if (!data['item']) {
+            if (!data.item) {
                 this.router.navigate(['/genes']);
                 return;
             }
