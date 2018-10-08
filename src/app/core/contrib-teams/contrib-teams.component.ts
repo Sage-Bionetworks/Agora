@@ -6,14 +6,17 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Gene, GeneInfo, TeamInfo, NominatedTarget, TeamMember } from '../../models';
 
 import { ApiService } from '../services';
+import { OrderBy } from '../../shared/pipes';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'contrib-teams-page',
     templateUrl: './contrib-teams.component.html',
     styleUrls: [ './contrib-teams.component.scss' ],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    providers: [ OrderBy ]
 })
 export class ContribTeamsPageComponent implements OnInit {
     @Input() gene: Gene;
@@ -31,7 +34,8 @@ export class ContribTeamsPageComponent implements OnInit {
         private router: Router,
         private apiService: ApiService,
         private titleCase: TitleCasePipe,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        private orderBy: OrderBy
     ) {}
 
     ngOnInit() {
@@ -41,11 +45,25 @@ export class ContribTeamsPageComponent implements OnInit {
     loadTeams() {
         this.obsTeams = this.apiService.getAllTeams();
         this.obsTeams.subscribe((data: TeamInfo[]) => {
+            // The team info comes unordered, so we order it
+            // and ask for images in order
             this.teamsImageURLs.length = data.length;
+            data = this.orderBy.transform(data, ['team']);
             data.forEach((ti, i) => {
                 this.teamsImageURLs[i] = [];
                 this.teamsImages[i] = this.loadMembers(ti.members, i);
             });
+            // With the images in order we need to update the async
+            // array that has the info or the images will be correct
+            // but the teams will be in the original order
+            this.obsTeams = this.obsTeams.pipe(
+                map((ti: TeamInfo[]) => {
+                    ti.sort((a, b) => {
+                        return a.team < b.team ? -1 : 1;
+                    });
+                    return ti;
+                })
+            );
         }, (error) => {
             console.log('Error loading member image: ' + error.message);
         }, () => {
