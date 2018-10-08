@@ -3,15 +3,11 @@ services:
   mongodb:
     container_name: mongodb
     image: 'amd64/mongo'
+    entrypoint:
+        - mongod
+        - --bind_ip_all
     ports:
       - 27017:27017
-    networks:
-      - front_agora
-  mongod:
-    container_name: mongod
-    image: 'sagebionetworks/agora-mongod'
-    links:
-      - mongodb
     networks:
       - front_agora
   mongo_data:
@@ -20,7 +16,7 @@ services:
     links:
       - mongodb
     depends_on:
-      - mongod
+      - mongodb
     networks:
       - front_agora
   mongo_seed_links:
