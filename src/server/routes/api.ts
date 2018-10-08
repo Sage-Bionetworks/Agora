@@ -226,12 +226,12 @@ connection.once('open', () => {
 
         const ids = req.params.ids.split(',');
 
-        GenesInfo.find({ hgnc_symbol: { $in: ids }}).exec(
+        GenesInfo.find({ ensembl_gene_id: { $in: ids}}).exec(
             (err, geneInfos) => {
                 if (err) {
                     next(err);
                 } else {
-                    res.json({ items: geneInfos });
+                    res.json({ items: geneInfos, totalRecords: geneInfos.length });
                 }
             });
     });
@@ -352,8 +352,8 @@ connection.once('open', () => {
                     .where('geneB_ensembl_gene_id')
                     .in(arr)
                     .exec((errC, linksC) => {
-                        if (err) {
-                            next(err);
+                        if (errC) {
+                            next(errC);
                         } else {
                             const flinks = [...links, ...linkB, ...linksC];
                             res.json({ items: flinks });

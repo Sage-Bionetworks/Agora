@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
+import { GeneNetwork, LinksListResponse, GeneResponse, GeneInfo } from '../../../models';
 
 import {
     ApiService,
@@ -31,7 +31,7 @@ export class GeneSimilarComponent implements OnInit {
     private gene = this.geneService.getCurrentGene();
     private geneInfo: any;
     private cols: any[];
-    private datasource: GeneResponse[];
+    private datasource: GeneInfo[];
     private genesInfo: any;
     private totalRecords: any;
     private loading: boolean;
@@ -76,28 +76,20 @@ export class GeneSimilarComponent implements OnInit {
                 (linksList: LinksListResponse) => {
                 this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
-                        this.apiService.getTableData().subscribe((datas) => {
+                        const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
+                        this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
                             this.datasource =
-                            (datas['items']) ? datas['items'] as GeneResponse[] : [];
+                                (datas['items']) ? datas['items'] as GeneInfo[] : [];
                             this.genesInfo = this.datasource;
                             this.totalRecords =
                             (datas['totalRecords']) ? (datas['totalRecords']) : 0;
-                            console.log(datas);
-                            // Starts table with the nominations columns sorted in descending order
-                            // this.customSort({
-                            //     data: this.datasource,
-                            //     field: 'nominations',
-                            //     mode: 'single',
-                            //     order: -1
-                            // } as SortEvent);
-
                             this.loading = false;
                         });
                     });
                 });
             });
         });
-        //}
+        // }
     }
 
     viewGene(id: string) {
@@ -140,6 +132,28 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     customSort(event: SortEvent) {
-        // todo
+        event.data.sort((data1, data2) => {
+            const value1 = (Array.isArray(data1[event.field])) ?
+                data1[event.field].map((nt) => nt.team).join(', ') :
+                data1[event.field];
+            const value2 = (Array.isArray(data2[event.field])) ?
+                data2[event.field].map((nt) => nt.team).join(', ') :
+                data2[event.field];
+            let result = null;
+
+            if (value1 == null && value2 != null) {
+                result = -1;
+            } else if (value1 != null && value2 == null) {
+                result = 1;
+            } else if (value1 == null && value2 == null) {
+                result = 0;
+            } else if (typeof value1 === 'string' && typeof value2 === 'string') {
+                result = value1.localeCompare(value2);
+            } else {
+                result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+            }
+
+            return (event.order * result);
+        });
     }
 }
