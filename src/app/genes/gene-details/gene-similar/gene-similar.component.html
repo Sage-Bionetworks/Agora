@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="center-justified linkstable">
+<div class="nomlist-list center-justified linkstable">
     <!-- <table>
         <tr *ngFor="let node of selectedGeneData.nodes" class="pathbox">
             <td>
@@ -16,52 +16,45 @@
             </td>
         </tr>
     </table> -->
-<p-table #gl [columns]="cols" [value]="genesInfo" selectionMode="single"
-    [(selection)]="selectedInfo"
-    [paginator]="true"
-    [rows]="14"
-    [totalRecords]="totalRecords"
-    [loading]="loading"
-    (sortFunction)="customSort($event)"
-    (onRowSelect)="onRowSelect($event)"
-    (onRowUnselect)="onRowUnselect($event)"
-    [customSort]="true">
-    <ng-template pTemplate="caption">
-        <input type="text" pInputText size="50" placeholder="Gene Filter" (input)="gl.filterGlobal($event.target.value, 'contains')">
-        <i class="fa fa-search fa-lg"></i>
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-        <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="col.field">
-            {{col.header}}
-            <p-sortIcon [field]="col.field"></p-sortIcon>
-        </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-        <!--<td *ngFor="let col of columns; let i = index;">
-                        {{rowData[col.field]}}
-                    </td>-->
-        <td>
-            {{rowData[columns[0].field]}}
-        </td>
-        <td>
-            {{rowData[columns[1].field]}}
-        </td>
-        <td>
-            {{rowData[columns[2].field]}}
-        </td>
-        <td>
-            {{rowData[columns[3].field]}}
-        </td>
-        <td>
-            {{rowData[columns[4].field]}}
-        </td>
-        <td>
-            {{rowData[columns[5].field]}}
-        </td>
-        </tr>
-    </ng-template>
+    <p-table #gl [columns]="cols" [value]="genesInfo" selectionMode="single"
+        [(selection)]="selectedInfo"
+        [paginator]="true"
+        [rows]="14"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        (sortFunction)="customSort($event)"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
+        [customSort]="true">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+            <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+            <td>
+                {{rowData[columns[0].field]}}
+            </td>
+            <td>
+                {{rowData[columns[1].field]?'YES':'NO'}}
+            </td>
+            <td>
+                {{rowData[columns[2].field]}}
+            </td>
+            <td>
+                {{rowData[columns[3].field]}}
+            </td>
+            <td>
+                {{druggability(rowData[columns[4].field])}}
+            </td>
+            <td>
+                {{druggabilitypc(rowData[columns[5].field])}}
+            </td>
+            </tr>
+        </ng-template>
     </p-table>
 </div>

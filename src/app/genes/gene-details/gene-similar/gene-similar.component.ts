@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-
 import { GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
 
 import {
@@ -53,8 +51,8 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'nominations', header: 'Nominated Target' },
             { field: 'haseqtl', header: 'Brain Eqtl' },
             { field: 'isIGAP', header: 'AD Genetic Association'},
-            { field: 'drugabillity', header: 'Druggability Bucket'},
-            { field: 'pc', header: 'Pharos Class'}
+            { field: 'druggability', subfield: 'pharos_class', header: 'Druggability Bucket'},
+            { field: 'druggability', header: 'Pharos Class'}
         ];
         // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
@@ -123,6 +121,14 @@ export class GeneSimilarComponent implements OnInit {
                         }]);
                 });
         });
+    }
+
+    druggabilitypc(druggability): string {
+        return druggability.map((dg) => dg['pharos_class']);
+    }
+
+    druggability(druggability): string {
+        return druggability.map((dg) => `${dg['sm_druggability_bucket']}: ${dg['classification']}`);
     }
 
     onRowSelect(event) {
