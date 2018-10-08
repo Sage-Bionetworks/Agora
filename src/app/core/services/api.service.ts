@@ -68,8 +68,11 @@ export class ApiService {
 
     getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-        return this.http.get<GeneInfosResponse>('/api/genes/infos/' + ids, { headers });
+        const params = new HttpParams().set(
+            'ids', ids.map((e) => e).join(',')
+        );
+        console.log(params);
+        return this.http.get<GeneInfosResponse>('/api/mgenes/infos/', { headers, params });
     }
 
     getGene(id: string, tissue?: string, model?: string): Observable<object> {

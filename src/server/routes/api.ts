@@ -214,24 +214,25 @@ connection.once('open', () => {
     });
 
     // Get all genes infos that match an array of ids, currently hgnc_symbol
-    router.get('/genes/infos/:ids', (req, res, next) => {
+    router.get('/mgenes/infos', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get the genes that match an id');
-            console.log(req.params.ids);
+            console.log(req.query.ids);
         }
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) { res.json({ items: [] }); }
 
-        const ids = req.params.ids.split(',');
+        const ids = req.query.ids.split(',');
+        console.log('ids', ids);
 
         GenesInfo.find({ ensembl_gene_id: { $in: ids}}).exec(
             (err, geneInfos) => {
                 if (err) {
                     next(err);
                 } else {
-                    res.json({ items: geneInfos, totalRecords: geneInfos.length });
+                    res.json({ items: tableGenesById});
                 }
             });
     });

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GeneNetwork, LinksListResponse, GeneResponse, GeneInfo } from '../../../models';
+import { GeneNetwork, LinksListResponse, GeneResponse, GeneInfosResponse } from '../../../models';
 
 import {
     ApiService,
@@ -31,7 +31,7 @@ export class GeneSimilarComponent implements OnInit {
     private gene = this.geneService.getCurrentGene();
     private geneInfo: any;
     private cols: any[];
-    private datasource: GeneInfo[];
+    private datasource: GeneInfosResponse;
     private genesInfo: any;
     private totalRecords: any;
     private loading: boolean;
@@ -78,11 +78,10 @@ export class GeneSimilarComponent implements OnInit {
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                         const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
                         this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
-                            this.datasource =
-                                (datas['items']) ? datas['items'] as GeneInfo[] : [];
-                            this.genesInfo = this.datasource;
-                            this.totalRecords =
-                            (datas['totalRecords']) ? (datas['totalRecords']) : 0;
+                            // this.datasource =(datas['items']) ?
+                            // datas['items'] as GeneInfosResponse : [];
+                            this.genesInfo = datas['items'];
+                            this.totalRecords = datas['items'].length;
                             this.loading = false;
                         });
                     });
