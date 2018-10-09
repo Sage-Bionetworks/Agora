@@ -1,0 +1,25 @@
+.br-dialog {
+    .ui-dialog {
+        max-height: 90% !important;
+    }
+
+    .ui-dialog-titlebar {
+        padding-bottom: 73px !important;
+    }
+
+    .ui-dialog-content {
+        padding-top: 0% !important;
+        padding-bottom: 4.5% !important;
+    }
+
+    .ui-dialog-titlebar-icon {
+
+        cursor: pointer;
+
+        :hover {
+            border-color: #c0c0c0;
+            background-color: #eeeeee;
+            color: #212121;
+        }
+    }
+}

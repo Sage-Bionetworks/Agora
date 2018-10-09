@@ -1,0 +1,16 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.soe-dialog {
+    .ui-dialog-titlebar {
+        @include respond-to('ex-small') {
+            padding-top: 20% !important;
+        }
+    }
+
+    .ui-button-text-only .ui-button-text{
+        display: none !important;
+    }
+}
+
+

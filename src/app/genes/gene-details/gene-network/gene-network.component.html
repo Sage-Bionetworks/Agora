@@ -57,10 +57,9 @@
                 <h2>
                     Tissue Specificity of Gene Connections
                 </h2>
-                <span class="link-heading" (click)="showDialog('displayBRDia')">
-                    View more information
-                    <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displayBRDia')">
-                </span>
+                <more-info [name]="'me'">
+                    <me-dialog [header]="'Tissue Specificity of Gene Connections'" [description]="true"></me-dialog>
+                </more-info>
                 <p class="italic-paragraph"> 6 of {{selectedGeneData.links.length}} genes</p>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
@@ -90,10 +89,9 @@
                     Similar Genes
                 </h2>
                 <h2 class="vmi-wrapper">
-                    <span class="link-heading" (click)="showDialog('displaySimilarGenesDialog')">
-                        View more information
-                        <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displaySimilarGenesDialog')">
-                    </span>
+                    <more-info [name]="'sg'">
+                        <sg-dialog></sg-dialog>
+                    </more-info>
                 </h2>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
@@ -111,101 +109,4 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Dialogs section -->
-<div class="ui-rtl" dir="rtl">
-    <p-dialog header="Tissue Specificity of Gene Connections" [(visible)]="displayBRDia" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <div class="row content-row" dir="ltr">
-            The tissue types in which the RNA-seq gene coexpression connection was observed.
-        </div>
-
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Brain Tissues
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    DLPFC:
-                </span>
-                <span dir="ltr">
-                    Dorsolateral Prefrontal Cortex
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    TCX:
-                </span>
-                <span dir="ltr">
-                    Temporal Cortex
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    CBE:
-                </span>
-                <span dir="ltr">
-                    Cerebellum
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    PHG:
-                </span>
-                <span dir="ltr">
-                    Parahippocampal Gyrus
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    STG:
-                </span>
-                <span dir="ltr">
-                    Superior Temporal Gyrus
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    FP:
-                </span>
-                <span dir="ltr">
-                    Frontal Pole
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    IFG:
-                </span>
-                <span dir="ltr">
-                    Inferior Frontal Gyrus
-                </span>
-            </div>
-        </div>
-    </p-dialog>
-</div>
-
-<div class="ui-rtl" dir="rtl">
-    <p-dialog header="Similar Genes" [(visible)]="displaySimilarGenesDialog" [modal]="true" [responsive]="true"
-    [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-            List of similar genes ranked based on how close they are in the network to the selected gene.
-        </span>
-    </p-dialog>
 </div>

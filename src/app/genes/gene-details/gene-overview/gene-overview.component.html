@@ -36,10 +36,9 @@
         <h2>
             Summary of Evidence
         </h2>
-        <span class="link-heading" (click)="showDialog('displayRelDia')">
-            View more information
-            <img class="info-icon" src="/assets/icon/info_icon.png" (click)="showDialog('displayRelDia')">
-        </span>
+        <more-info [name]="'soe'">
+            <soe-dialog></soe-dialog>
+        </more-info>
         <!-- TODO: Improve this part -->
         <div class="row">
             <div class="col-md-6">
@@ -164,135 +163,4 @@
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
     <loading></loading>
-</div>
-
-<!-- Dialogs section -->
-<div class="ui-rtl" dir="rtl">
-    <p-dialog header="Summary of Evidence" [(visible)]="displayRelDia" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true"
-        [styleClass]="'soe-dialog'">
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    AD Genetic Association:
-                </span>
-                <span>
-                    Significant genetic association with based on the International Genomics of Alzheimer's Project (IGAP) genome-wide association study.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Brain eQTL:
-                </span>
-                <span dir="ltr">
-                    Significant expression Quantitative Trait Locus (eQTL) based on AMP-AD consortium unpublished work.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Cell Type Specificity:
-                </span>
-                <span dir="ltr">
-                    Coming soon.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Association with Hallmarks of AD:
-                </span>
-                <span dir="ltr">
-                    Coming soon.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    RNA Expression Change in AD Brain:
-                </span>
-                <span dir="ltr">
-                    Significant differential expression based on AMP-AD consortium work detailed on Agora under “RNA-seq Differential Expression”.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Protein Expression Change in AD Brain:
-                </span>
-                <span dir="ltr">
-                    Coming soon.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Gene Ontology:
-                </span>
-                <span dir="ltr">
-                    Provides a link out to gene ontology information in Ensembl.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Reactome Pathways:
-                </span>
-                <span dir="ltr">
-                    Provides a link out to reactome pathway information in Ensembl.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Nominated Target:
-                </span>
-                <span dir="ltr">
-                    Indicates whether this gene has been nominated by the AMP-AD consortia as a nascent target for AD treatment.
-                </span>
-            </div>
-        </div>
-        <div class="row content-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                <span class="header-span" dir="ltr">
-                    Druggability:
-                </span>
-                <span dir="ltr">
-                    Coming Soon.
-                </span>
-            </div>
-        </div>
-    </p-dialog>
-</div>
-
-<div class="ui-rtl" dir="rtl">
-    <p-dialog header="Actions" [(visible)]="displayActDia" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-            External resources for understanding the biology of the gene, target validation
-            resources, and further information for users interested in studying this particular
-            gene. Things you might take into account to do preclinical evaluations or drug
-            discovery.
-        </span>
-    </p-dialog>
-</div>
-
-<div class="ui-rtl" dir="rtl">
-    <p-dialog header="AMP-AD Analysis Source Data" [(visible)]="displaySDDia" [modal]="true"
-        [responsive]="true" [minWidth]="330" [minY]="256" [baseZIndex]="10000" [dismissableMask]="true">
-        <span dir="ltr">
-            Data used from the AMP-AD consortia.  This includes the Religious Order Study/
-            Memory Aging Project (ROSMAP), Mount Sinai Brain Bank (MSBB), and Mayo RNAseq
-            study (MayoRNAseq).
-        </span>
-    </p-dialog>
 </div>
