@@ -28,13 +28,13 @@ export class GeneSimilarComponent implements OnInit {
         filterLvl: 0
     };
 
-    private gene = this.geneService.getCurrentGene();
-    private geneInfo: any;
-    private cols: any[];
-    private datasource: GeneInfosResponse;
-    private genesInfo: any;
-    private totalRecords: any;
-    private loading: boolean;
+    gene = this.geneService.getCurrentGene();
+    geneInfo: any;
+    cols: any[];
+    datasource: GeneInfosResponse;
+    genesInfo: any;
+    totalRecords: any;
+    loading: boolean;
 
     constructor(
         private router: Router,
