@@ -37,7 +37,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
             <td>
-               <a (click)="viewGene(node.ensembl_gene_id)">{{rowData[columns[0].field]}}</a>
+               {{rowData[columns[0].field]}}
             </td>
             <td>
                 {{rowData[columns[1].field]?'YES':'NO'}}

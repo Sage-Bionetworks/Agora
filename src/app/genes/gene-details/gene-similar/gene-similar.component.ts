@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GeneNetwork, LinksListResponse, GeneResponse, GeneInfosResponse } from '../../../models';
+import { GeneNetwork,
+    LinksListResponse,
+    GeneResponse,
+    GeneInfosResponse,
+    GeneInfo } from '../../../models';
 
 import {
     ApiService,
@@ -8,7 +12,7 @@ import {
     GeneService,
     ForceService
 } from '../../../core/services';
-import { SortEvent } from 'primeng/primeng';
+import { SortEvent, Message } from 'primeng/primeng';
 
 @Component({
     selector: 'gene-similar',
@@ -30,7 +34,9 @@ export class GeneSimilarComponent implements OnInit {
 
     gene = this.geneService.getCurrentGene();
     geneInfo: any;
+    msgs: Message[] = [];
     cols: any[];
+    selectedInfo: GeneInfo;
     datasource: GeneInfosResponse;
     genesInfo: any;
     totalRecords: any;
@@ -123,11 +129,43 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        // todo
+        this.msgs = [{
+            severity: 'info',
+            summary: 'Gene Selected',
+            detail: 'Gene: ' + event.data.hgnc_symbol
+        }];
+        if (!this.selectedInfo) { this.selectedInfo = event.data; }
+        if (!this.geneService.getCurrentGene()) {
+            this.getGene(this.selectedInfo.hgnc_symbol);
+        } else {
+            this.geneService.updatePreviousGene();
+            if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+                this.getGene(this.selectedInfo.hgnc_symbol);
+            } else {
+                this.goToRoute(
+                    '../gene-details',
+                    this.geneService.getCurrentGene().ensembl_gene_id
+                );
+            }
+        }
+    }
+
+    getGene(geneSymbol: string) {
+        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+            if (!data.item) { this.router.navigate(['/genes']); }
+            this.geneService.updatePreviousGene();
+            this.geneService.updateGeneData(data);
+            this.goToRoute('../gene-details', this.selectedInfo.ensembl_gene_id);
+        });
     }
 
     onRowUnselect(event) {
-        // todo
+        this.msgs = [{
+            severity: 'info',
+            summary: 'Gene Unselected',
+            detail: 'Gene: ' + event.data.ensembl_gene_id
+        }];
+        this.geneService.setCurrentGene(null);
     }
 
     customSort(event: SortEvent) {
@@ -154,5 +192,10 @@ export class GeneSimilarComponent implements OnInit {
 
             return (event.order * result);
         });
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
+            this.router.navigate([path], { relativeTo: this.route });
     }
 }
