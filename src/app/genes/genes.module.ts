@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { GenesRoutingModule } from './genes-routing.module';
 import { ChartsModule } from '../charts';
 import { AppSharedModule } from '../shared';
+import { DialogsModule } from 'app/dialogs';
 
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
@@ -16,6 +17,7 @@ import { TeamsPageComponent } from './gene-details/teams-page';
 import { GeneBRComponent } from './gene-details/gene-brainregions';
 import { GeneSimilarComponent } from './gene-details/gene-similar';
 import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
+import { GeneDruggabilityComponent } from './gene-details/gene-druggability';
 
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 
@@ -31,13 +33,15 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         TeamsPageComponent,
         GeneBRComponent,
         GeneSimilarComponent,
-        BoxPlotsViewComponent
+        BoxPlotsViewComponent,
+        GeneDruggabilityComponent
     ],
     imports: [
         NgxPageScrollModule,
         ReactiveFormsModule,
         ChartsModule,
         AppSharedModule,
+        DialogsModule,
         GenesRoutingModule
     ],
     entryComponents: [

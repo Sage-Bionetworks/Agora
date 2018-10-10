@@ -8,7 +8,6 @@ DATA_DIR=$PARENT_DIR/data
 # build docker images
 docker build -t sagebionetworks/agora-app:latest -f ./Dockerfile $CURRENT_DIR
 docker build -t sagebionetworks/agora-nginx:latest -f ./nginx.Dockerfile $CURRENT_DIR
-docker build -t sagebionetworks/agora-mongod:latest -f ./mongo-seed/mongod.Dockerfile $CURRENT_DIR
 
 # move docker files to DATA_DIR, otherwise docker builds will fail on travis
 cp -rp $CURRENT_DIR/mongo-seed $DATA_DIR/.

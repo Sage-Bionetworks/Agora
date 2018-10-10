@@ -26,9 +26,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
 
-    displayRelDia: boolean = false;
-    displaySDDia: boolean = false;
-    displayActDia: boolean = false;
     currentGeneData = [];
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;

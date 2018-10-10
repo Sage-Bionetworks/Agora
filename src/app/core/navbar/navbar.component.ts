@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MenuItem } from 'primeng/primeng';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'navbar',

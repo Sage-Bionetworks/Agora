@@ -23,8 +23,6 @@ export class GeneNetworkComponent implements OnInit {
     @Input() id: string;
     @Input() noData: boolean;
     dataLoaded: boolean = false;
-    displayBRDia: boolean = false;
-    displaySimilarGenesDialog: boolean = false;
     networkData: GeneNetwork;
     filter: boolean;
     selectedGeneData: GeneNetwork = {
