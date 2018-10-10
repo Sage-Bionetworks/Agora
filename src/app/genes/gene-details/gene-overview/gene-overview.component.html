@@ -148,6 +148,22 @@
         </p-panel>
     </div>
 
+    <div class="overview-link panel-gene-druggability">
+        <p-panel [toggleable]="true" [style]="{'margin-bottom':'20px', 'position': 'relative'}">
+            <p-header>
+                Druggability Information
+                <div class="row no-gutters dgb-header-row">
+                    <more-info [name]="'dgb'" [needDisplayBlock]="true">
+                        <soe-dialog></soe-dialog>
+                    </more-info>
+                </div>
+            </p-header>
+            <div class="section-thin st-desc" tabindex="0">
+                <gene-druggability></gene-druggability>
+            </div>
+        </p-panel>
+    </div>
+
     <div class="overview-link">
         <p-panel id="nextSteps" header="Next Steps" [toggleable]="false" [style]="{'margin-bottom':'20px'}">
             <div class="section-thin st-desc" tabindex="0">

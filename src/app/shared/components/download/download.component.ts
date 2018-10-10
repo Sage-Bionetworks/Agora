@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild, Input } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 
-import { OverlayPanel, Message } from 'primeng/primeng';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import * as domtoimage from 'dom-to-image';

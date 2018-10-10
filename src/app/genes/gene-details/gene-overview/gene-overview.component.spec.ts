@@ -26,9 +26,6 @@ import { Button } from 'primeng/button';
 
 import { MockComponent } from 'ng-mocks';
 
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-
 describe('Component: GeneOverview', () => {
     let component: GeneOverviewComponent;
     let fixture: ComponentFixture<GeneOverviewComponent>;

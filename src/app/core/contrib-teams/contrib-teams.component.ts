@@ -8,7 +8,7 @@ import { Gene, GeneInfo, TeamInfo, NominatedTarget, TeamMember } from '../../mod
 import { ApiService } from '../services';
 import { OrderBy } from '../../shared/pipes';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({

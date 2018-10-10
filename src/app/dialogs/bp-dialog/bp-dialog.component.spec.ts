@@ -14,9 +14,6 @@ import { BPDialogComponent } from './bp-dialog.component';
 
 import { DialogsService } from '../services';
 
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-
 import { MockComponent } from 'ng-mocks';
 
 describe('Component: SGDialog', () => {
