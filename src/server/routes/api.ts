@@ -201,40 +201,39 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) { res.json({ items: []}); }
-
-        GenesInfo.find({ hgnc_symbol: { $regex: req.params.id.trim(), $options: 'i' }}).exec(
-            (err, geneInfos) => {
-            if (err) {
-                next(err);
-            } else {
-                res.json({ items: geneInfos });
-            }
-        });
+        if (!req.params || !req.params.id) { res.json({ items: []}); } else {
+            GenesInfo.find({ hgnc_symbol: { $regex: req.params.id.trim(), $options: 'i' } }).exec(
+                (err, geneInfos) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        res.json({ items: geneInfos });
+                    }
+                });
+        }
     });
 
     // Get all genes infos that match an array of ids, currently hgnc_symbol
     router.get('/mgenes/infos', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
-            console.log('Get the genes that match an id');
-            console.log(req.query.ids);
+            console.log('Get the genes that match multiple ids');
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) { res.json({ items: [] }); }
+        if (!req.query || !req.query.ids) { res.json({ items: [] });
+        } else {
+            const ids = req.query.ids.split(',');
 
-        const ids = req.query.ids.split(',');
-        console.log('ids', ids);
-
-        GenesInfo.find({ ensembl_gene_id: { $in: ids}}).exec(
-            (err, geneInfos) => {
-                if (err) {
-                    next(err);
-                } else {
-                    res.json({ items: tableGenesById});
-                }
-            });
+            GenesInfo.find({ ensembl_gene_id: { $in: ids } }).exec(
+                (err, geneInfos) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        res.json({ items: geneInfos });
+                    }
+                });
+        }
     });
 
     // Get a gene by id, can be hgnc_symbol or ensembl_gene_id
@@ -251,81 +250,81 @@ connection.once('open', () => {
                 console.log('no id');
             }
             res.json({ item: null });
-        }
+        } else {
+            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+            const queryObj = { [fieldName]: req.query.id };
 
-        const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-        const queryObj = {[fieldName]: req.query.id};
-
-        if (req.query.tissue) {
-            queryObj['tissue'] = req.query.tissue;
-        }
-        if (req.query.model) {
-            queryObj['model'] = req.query.model;
-        }
-
-        // Find all the Genes with the current id
-        Genes.find(queryObj).exec((err, genes) => {
-            if (err) {
-                next(err);
-            } else {
-                geneEntries = genes.slice();
-                let minFC: number = +Infinity;
-                let maxFC: number = -Infinity;
-                let minLogFC: number = +Infinity;
-                let maxLogFC: number = -Infinity;
-                let maxAdjPValue: number = -Infinity;
-                let minAdjPValue: number = Infinity;
-                geneTissues = [];
-                geneModels = [];
-                genes.forEach((g) => {
-                    if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                    if (+g.fc < minFC) { minFC = (+g.fc); }
-                    if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                    if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                    const adjPVal: number = +g.adj_p_val;
-                    if (+g.adj_p_val) {
-                        if (adjPVal > maxAdjPValue) {
-                            maxAdjPValue = adjPVal;
-                        }
-                        if (adjPVal < minAdjPValue) {
-                            minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
-                        }
-                    }
-                    if (geneTissues.indexOf(g.tissue) === -1) {
-                        geneTissues.push(g.tissue);
-                    }
-                    if (geneModels.indexOf(g.model) === -1) {
-                        geneModels.push(g.model);
-                    }
-                });
-
-                GenesInfo.findOne({[fieldName]: req.query.id}).exec((errB, info) => {
-                    if (errB) {
-                        next(errB);
-                    } else {
-                        // Adding this condition because UglifyJS can't handle ES2015, only needed
-                        // for the server
-                        if (env === 'development') {
-                            console.log('The gene info and item');
-                            console.log(info);
-                            console.log(geneEntries[0]);
-                        }
-
-                        res.json({
-                            info,
-                            item: geneEntries[0],
-                            minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                            maxFC,
-                            minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC : minLogFC,
-                            maxLogFC,
-                            minAdjPValue,
-                            maxAdjPValue
-                        });
-                    }
-                });
+            if (req.query.tissue) {
+                queryObj['tissue'] = req.query.tissue;
             }
-        });
+            if (req.query.model) {
+                queryObj['model'] = req.query.model;
+            }
+
+            // Find all the Genes with the current id
+            Genes.find(queryObj).exec((err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    geneEntries = genes.slice();
+                    let minFC: number = +Infinity;
+                    let maxFC: number = -Infinity;
+                    let minLogFC: number = +Infinity;
+                    let maxLogFC: number = -Infinity;
+                    let maxAdjPValue: number = -Infinity;
+                    let minAdjPValue: number = Infinity;
+                    geneTissues = [];
+                    geneModels = [];
+                    genes.forEach((g) => {
+                        if (+g.fc > maxFC) { maxFC = (+g.fc); }
+                        if (+g.fc < minFC) { minFC = (+g.fc); }
+                        if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
+                        if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
+                        const adjPVal: number = +g.adj_p_val;
+                        if (+g.adj_p_val) {
+                            if (adjPVal > maxAdjPValue) {
+                                maxAdjPValue = adjPVal;
+                            }
+                            if (adjPVal < minAdjPValue) {
+                                minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                            }
+                        }
+                        if (geneTissues.indexOf(g.tissue) === -1) {
+                            geneTissues.push(g.tissue);
+                        }
+                        if (geneModels.indexOf(g.model) === -1) {
+                            geneModels.push(g.model);
+                        }
+                    });
+
+                    GenesInfo.findOne({ [fieldName]: req.query.id }).exec((errB, info) => {
+                        if (errB) {
+                            next(errB);
+                        } else {
+                        // Adding this condition because UglifyJS can't handle ES2015, only needed
+                            // for the server
+                            if (env === 'development') {
+                                console.log('The gene info and item');
+                                console.log(info);
+                                console.log(geneEntries[0]);
+                            }
+
+                            res.json({
+                                info,
+                                item: geneEntries[0],
+                                minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                                maxFC,
+                                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
+                                    -maxLogFC : minLogFC,
+                                maxLogFC,
+                                minAdjPValue,
+                                maxAdjPValue
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 
     // Get a gene list by id
@@ -337,31 +336,31 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) { res.json({ items: [] }); }
-
-        GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).exec((err, links) => {
-            const arrA = links.slice().map((slink) => {
-                return slink.toJSON()['geneB_ensembl_gene_id'];
-            });
-
-            GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
-                const arrB = linkB.slice().map((slink) => {
-                    return slink.toJSON()['geneA_ensembl_gene_id'];
+        if (!req.params || !req.params.id) { res.json({ items: [] }); } else {
+            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec((err, links) => {
+                const arrA = links.slice().map((slink) => {
+                    return slink.toJSON()['geneB_ensembl_gene_id'];
                 });
-                const arr = [...arrA, ...arrB];
-                GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
-                    .where('geneB_ensembl_gene_id')
-                    .in(arr)
-                    .exec((errC, linksC) => {
-                        if (errC) {
-                            next(errC);
-                        } else {
-                            const flinks = [...links, ...linkB, ...linksC];
-                            res.json({ items: flinks });
-                        }
+
+                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
+                    const arrB = linkB.slice().map((slink) => {
+                        return slink.toJSON()['geneA_ensembl_gene_id'];
+                    });
+                    const arr = [...arrA, ...arrB];
+                    GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
+                        .where('geneB_ensembl_gene_id')
+                        .in(arr)
+                        .exec((errC, linksC) => {
+                            if (errC) {
+                                next(errC);
+                            } else {
+                                const flinks = [...links, ...linkB, ...linksC];
+                                res.json({ items: flinks });
+                            }
+                        });
                 });
             });
-        });
+        }
     });
 
     // Get a team by team field
@@ -373,16 +372,17 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); }
-        const arr = req.query.teams.split(', ');
+        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); } else {
+            const arr = req.query.teams.split(', ');
 
-        TeamsInfo.find({team: { $in: arr } }).exec((err, team) => {
-            if (err) {
-                next(err);
-            } else {
-                res.json({ items: team });
-            }
-        });
+            TeamsInfo.find({ team: { $in: arr } }).exec((err, team) => {
+                if (err) {
+                    next(err);
+                } else {
+                    res.json({ items: team });
+                }
+            });
+        }
     });
 
     // Get all team infos
@@ -409,20 +409,21 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ item: null }); }
-        const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
-        gfs.exist({ filename: name }, (err, hasFile) => {
-            if (env === 'development') {
-                console.log('The team file exists');
-                console.log(hasFile);
-            }
-            if (hasFile) {
-                const stream = gfs.createReadStream(name);
-                stream.pipe(res);
-            } else {
-                res.status(204).send('Could not find member!');
-            }
-        });
+        if (!req.params || !Object.keys(req.query).length) { res.json({ item: null }); } else {
+            const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
+            gfs.exist({ filename: name }, (err, hasFile) => {
+                if (env === 'development') {
+                    console.log('The team file exists');
+                    console.log(hasFile);
+                }
+                if (hasFile) {
+                    const stream = gfs.createReadStream(name);
+                    stream.pipe(res);
+                } else {
+                    res.status(204).send('Could not find member!');
+                }
+            });
+        }
     });
 
     // Get all the tissues
@@ -434,9 +435,9 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have tissues
-        if (!allTissues.length) { res.json({ items: [] }); }
-
-        res.json({ items: allTissues });
+        if (!allTissues.length) { res.json({ items: [] }); } else {
+            res.json({ items: allTissues });
+        }
     });
 
     // Get all the gene tissues
@@ -448,9 +449,9 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have tissues
-        if (!geneTissues.length) { res.json({ items: [] }); }
-
-        res.json({ items: geneTissues });
+        if (!geneTissues.length) { res.json({ items: [] }); } else {
+            res.json({ items: geneTissues });
+        }
     });
 
     // Get all the models
@@ -462,9 +463,9 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have models
-        if (!allModels.length) { res.json({ items: [] }); }
-
-        res.json({ items: allModels });
+        if (!allModels.length) { res.json({ items: [] }); } else {
+            res.json({ items: allModels });
+        }
     });
 
     // Get all the models
@@ -476,9 +477,9 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case we don't have models
-        if (!geneModels.length) { res.json({ items: [] }); }
-
-        res.json({ items: geneModels });
+        if (!geneModels.length) { res.json({ items: [] }); } else {
+            res.json({ items: geneModels });
+        }
     });
 });
 
