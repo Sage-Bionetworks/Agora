@@ -25,8 +25,6 @@ import { ChartService } from '../../../charts/services';
 
 import { MockComponent } from 'ng-mocks';
 
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { ArraySortPipe } from '../../../shared/pipes';
 
 describe('Component: GeneNetwork', () => {

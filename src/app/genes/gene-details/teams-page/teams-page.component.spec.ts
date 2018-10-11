@@ -12,16 +12,12 @@ import {
     ActivatedRouteStub,
     RouterStub,
     ApiServiceStub,
-    GeneServiceStub,
-    mockInfo1
+    GeneServiceStub
 } from '../../../testing';
 
 import { TeamsPageComponent } from './teams-page.component';
 
 import { ApiService, GeneService } from '../../../core/services';
-
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 
 import { MockComponent } from 'ng-mocks';
 

@@ -20,9 +20,6 @@ import { BoxPlotsViewComponent } from './box-plots-view.component';
 
 import { ApiService, GeneService } from '../../../../core/services';
 
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-
 import { MockComponent } from 'ng-mocks';
 
 describe('Component: TeamsPage', () => {

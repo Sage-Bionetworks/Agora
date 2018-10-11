@@ -18,8 +18,7 @@ import { GeneSearchComponent } from './gene-search.component';
 
 import { ApiService, GeneService } from '../../core/services';
 
-import { of } from 'rxjs';
-import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { of, empty, Observable } from 'rxjs';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -79,7 +78,7 @@ describe('Component: GeneSearch', () => {
     });
 
     it('should not search for an empty gene string', fakeAsync(() => {
-        const emptyObs = new EmptyObservable<Response>();
+        const emptyObs = empty() as Observable<Response>;
 
         const dsSpy = spyOn(apiService, 'getInfosMatchId');
 

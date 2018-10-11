@@ -9,6 +9,7 @@ const helpers = require('./helpers');
  *
  * problem with copy-webpack-plugin
  */
+const webpack = require('webpack');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlElementsPlugin = require('./html-elements-plugin');
@@ -19,6 +20,7 @@ const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const rxPaths = require('rxjs/_esm2015/path-mapping');
 
 const buildUtils = require('./build-utils');
 
@@ -54,9 +56,13 @@ module.exports = function (options) {
      *
      * https://github.com/webpack-contrib/webpack-bundle-analyzer
      */
-    const baPlugin = (METADATA.Analyzer === true) ? [new BundleAnalyzerPlugin({
+    const baPlugin = (METADATA.Analyzer === 'true') ? [new BundleAnalyzerPlugin({
       openAnalyzer: false
     })] : [];
+
+    /*const baPlugin = [new BundleAnalyzerPlugin({
+      openAnalyzer: false
+    })];*/
 
   return {
     /**
@@ -106,7 +112,7 @@ module.exports = function (options) {
        *
        * BE AWARE that not using lettable operators will probably result in significant payload added to your bundle.
        */
-      alias: buildUtils.rxjsAlias(supportES2015)
+      alias: rxPaths()
     },
 
     /**
@@ -200,6 +206,8 @@ module.exports = function (options) {
         'Analyzer': JSON.stringify(METADATA.Analyzer),
         'process.env.Docker': JSON.stringify(METADATA.Docker)
       }),
+
+      new webpack.optimize.ModuleConcatenationPlugin(),
 
       /**
        * Plugin: CopyWebpackPlugin

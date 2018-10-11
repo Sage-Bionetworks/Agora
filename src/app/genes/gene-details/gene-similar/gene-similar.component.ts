@@ -12,7 +12,7 @@ import {
     GeneService,
     ForceService
 } from '../../../core/services';
-import { SortEvent, Message } from 'primeng/primeng';
+import { SortEvent, Message } from 'primeng/api';
 
 @Component({
     selector: 'gene-similar',
