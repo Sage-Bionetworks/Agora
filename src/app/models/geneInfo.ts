@@ -13,6 +13,7 @@ export interface GeneInfo {
     _id: string;
     ensembl_gene_id: string;
     alias?: string[];
+    druggability?: object[];
     name: string;
     summary?: string;
     hgnc_symbol: string;
