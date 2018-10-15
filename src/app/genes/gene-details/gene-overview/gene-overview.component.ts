@@ -93,7 +93,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
                     // Genes response
                     this.dataService.loadGenes(responseList[0]);
-                    this.dataService.loadNodes(responseList[1], this.gene);
                     this.geneService.loadGeneTissues(responseList[2]);
                     this.geneService.loadGeneModels(responseList[3]);
 

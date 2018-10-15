@@ -54,7 +54,8 @@ export class GeneBRComponent implements OnInit {
 
                 this.apiService.getLinksList(this.gene).subscribe(
                     (linksList: LinksListResponse) => {
-                    this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
+                    this.forceService.setData(linksList.items);
+                    this.dataService.loadNodes(this.gene).then((datalinks: any) => {
                         this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                             this.selectedGeneData.links = dn.links.slice().reverse();
                             this.dataLoaded = true;

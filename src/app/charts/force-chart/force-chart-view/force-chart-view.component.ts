@@ -215,6 +215,13 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         if (!this.loaded) {
             return;
         }
+        if (this.pnode) {
+            d3.select(this.nodeElements.nodes()[this.pnode.index])
+                .attr('fill', this.getNodeColor(this.pnode.node,
+                    this.pnode.index,
+                    []));
+            this.pnode = null;
+        }
         // linkElements
         this.linkElements = this.linkElements
             .data(this.networkData.links, (d) =>  d.source.id + '-' + d.target.id);
@@ -232,8 +239,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .append('path')
             .attr('d', this.hex)
             .attr('r', 4)
-            .attr('origin', (d) =>
-                this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
             .attr('fill', this.getNodeColor)
             .attr('class', 'hex')
             .on('click', (d: any, i, nodes) => {

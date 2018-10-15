@@ -93,7 +93,8 @@ export class GeneSimilarComponent implements OnInit {
             this.geneInfo = data['geneInfo'];
             this.apiService.getLinksList(this.gene).subscribe(
                 (linksList: LinksListResponse) => {
-                this.dataService.loadNodes(linksList, this.gene).then((datalinks: any) => {
+                this.forceService.setData(linksList.items);
+                this.dataService.loadNodes(this.gene).then((datalinks: any) => {
                     this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
                         const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
                         this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {

@@ -100,21 +100,19 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     updategene(event) {
-        this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
-            this.dataService.loadNodes(linksList, event).then((datanetwork: any) => {
-                this.forceService.processSelectedNode(event, datanetwork).then((network) => {
-                    this.selectedGeneData.links = network.links;
-                    this.selectedGeneData.nodes = network.nodes;
-                    this.selectedGeneData.origin = network.origin;
-                    this.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
-                        if (data.info) {
-                            this.geneInfo = data.info;
-                        } else {
-                            this.geneInfo = {
-                                hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol
-                            };
-                        }
-                    });
+        this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
+            this.dataService.loadSelectedNodes(linksList, event).then((datanetwork: any) => {
+                this.selectedGeneData.links = datanetwork.links;
+                this.selectedGeneData.nodes = datanetwork.nodes;
+                this.selectedGeneData.origin = datanetwork.origin;
+                this.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
+                    if (data.info) {
+                        this.geneInfo = data.info;
+                    } else {
+                        this.geneInfo = {
+                            hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol
+                        };
+                    }
                 });
             });
         });
@@ -122,12 +120,13 @@ export class GeneNetworkComponent implements OnInit {
 
     filterNodes(lvl) {
         this.filterlvlN = lvl;
+        this.geneInfo = this.geneService.getCurrentInfo();
+        this.networkData = this.forceService.getGeneOriginalList();
+        this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+        this.selectedGeneData.links = this.networkData.links.slice().reverse();
+        this.selectedGeneData.origin = this.networkData.origin;
         if (!lvl) {
             this.filter = false;
-            this.networkData = this.forceService.getGeneOriginalList();
-            this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
-            this.selectedGeneData.links = this.networkData.links.slice().reverse();
-            this.selectedGeneData.origin = this.networkData.origin;
         } else {
             this.forceService.filterLink(lvl).then((network) => {
                 this.networkData = network;
@@ -150,15 +149,15 @@ export class GeneNetworkComponent implements OnInit {
 
     loadGenes() {
         this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
-            this.dataService.loadNodes(linksList, this.currentGene).then((data: any) => {
-                this.forceService.processNodes(this.currentGene).then((dn: GeneNetwork) => {
-                    this.filterlvl = dn.filterLvl;
-                    this.selectedGeneData.nodes = dn.nodes.slice(1);
-                    this.selectedGeneData.links = dn.links.slice().reverse();
-                    this.selectedGeneData.origin = dn.origin;
-                    this.dataLoaded = true;
-                    this.networkData = dn;
-                });
+            this.forceService.setData(linksList.items);
+            this.dataService.loadNodes(this.currentGene)
+            .then((dn: GeneNetwork) => {
+                this.filterlvl = dn.filterLvl;
+                this.selectedGeneData.nodes = dn.nodes.slice(1);
+                this.selectedGeneData.links = dn.links.slice().reverse();
+                this.selectedGeneData.origin = dn.origin;
+                this.dataLoaded = true;
+                this.networkData = dn;
             });
         });
     }

@@ -12,7 +12,7 @@
             <td>
                 <span class="genes" tabindex="0">
                     <span (click)="viewGene(link, 'source')" tabindex="0">{{link.hgnc_symbolA}}</span>
-                    <i class="fa fa-arrow-right"></i>&nbsp;
+                    :
                     <span (click)="viewGene(link, 'target')" tabindex="0">{{link.hgnc_symbolB}}</span>
                 </span>
                 <span *ngFor="let region of link.brainregions; last as isLast" tabindex="0">

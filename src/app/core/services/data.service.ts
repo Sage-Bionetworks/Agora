@@ -68,9 +68,12 @@ export class DataService {
         ]);
     }
 
-    loadNodes(data: LinksListResponse, gene: Gene): Promise<GeneNetwork> {
-        this.forceService.setData(data.items);
+    loadNodes(gene: Gene): Promise<GeneNetwork> {
         return this.forceService.processNodes(gene);
+    }
+
+    loadSelectedNodes(sList: LinksListResponse, sNode: Gene): Promise<GeneNetwork> {
+        return this.forceService.processSelectedNode(sList, sNode);
     }
 
     loadGenes(data: GenesResponse) {

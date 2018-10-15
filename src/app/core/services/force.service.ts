@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Gene } from '../../models';
+import { Gene, LinksListResponse } from '../../models';
 
 import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/geneLink';
 
@@ -73,7 +73,7 @@ export class ForceService {
 
     processNode(obj: GeneNetworkLinks, dic, genes) {
         // Nodes from selected Gene
-        if (!dic[obj.geneB_ensembl_gene_id]) {
+        if (obj.geneB_ensembl_gene_id && !dic[obj.geneB_ensembl_gene_id]) {
             const node: GeneNode = {
                 id: obj.geneB_ensembl_gene_id,
                 ensembl_gene_id: obj.geneB_ensembl_gene_id,
@@ -87,7 +87,7 @@ export class ForceService {
             this.processBrainRegion(dic[obj.geneB_ensembl_gene_id], dic);
         }
         // Nodes to selected Gene
-        if (!dic[obj.geneA_ensembl_gene_id]) {
+        if (obj.geneA_ensembl_gene_id && !dic[obj.geneA_ensembl_gene_id]) {
             const node: GeneNode = {
                 id: obj.geneA_ensembl_gene_id,
                 ensembl_gene_id: obj.geneA_ensembl_gene_id,
@@ -152,12 +152,12 @@ export class ForceService {
             }
 
             // check both nodes and add brainregion
-            if (dicN[obj.geneA_ensembl_gene_id]
+            if (dicN[obj.geneA_ensembl_gene_id] && dicN[obj.geneA_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
                 dicN[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
                 this.processBrainRegion(dicN[obj.geneA_ensembl_gene_id], dicN);
             }
-            if (dicN[obj.geneB_ensembl_gene_id]
+            if (dicN[obj.geneB_ensembl_gene_id] && dicN[obj.geneB_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
                 dicN[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
                 this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
@@ -174,12 +174,12 @@ export class ForceService {
             dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
             genes.links = [...genes.links,
             dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]];
-            if (dicN[obj.geneA_ensembl_gene_id]
+            if (dicN[obj.geneA_ensembl_gene_id] && dicN[obj.geneA_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
                 dicN[obj.geneA_ensembl_gene_id].brainregions.push(obj.brainRegion);
                 this.processBrainRegion(dicN[obj.geneA_ensembl_gene_id], dicN);
             }
-            if (dicN[obj.geneB_ensembl_gene_id]
+            if (dicN[obj.geneB_ensembl_gene_id] && dicN[obj.geneB_ensembl_gene_id]
                 .brainregions.indexOf(obj.brainRegion) === -1) {
                 dicN[obj.geneB_ensembl_gene_id].brainregions.push(obj.brainRegion);
                 this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
@@ -196,38 +196,71 @@ export class ForceService {
         };
         return new Promise((resolve, reject) => {
             const dicF = [];
+            const dicL = [];
             this.genesFiltered.origin = this.genes.origin;
             this.genes.links.forEach((link: any) => {
                 if (link.value > lvl) {
-                    if (!dicF[link.source.ensembl_gene_id]) {
-                        dicF[link.source.ensembl_gene_id] =
-                        this.dicNodes[link.source.ensembl_gene_id];
-                        this.genesFiltered.nodes
-                        .push(this.dicNodes[link.source.ensembl_gene_id]);
-                    }
-                    if (!dicF[link.target.ensembl_gene_id]) {
-                        dicF[link.target.ensembl_gene_id] =
-                        this.dicNodes[link.target.ensembl_gene_id];
-                        this.genesFiltered.nodes
-                        .push(this.dicNodes[link.target.ensembl_gene_id]);
+                    if (link.source.ensembl_gene_id) {
+                        if (!dicF[link.source.ensembl_gene_id]) {
+                            dicF[link.source.ensembl_gene_id] =
+                                this.dicNodes[link.source.ensembl_gene_id];
+                            this.genesFiltered.nodes
+                                .push(this.dicNodes[link.source.ensembl_gene_id]);
+                        }
+                        if (!dicF[link.target.ensembl_gene_id]) {
+                            dicF[link.target.ensembl_gene_id] =
+                                this.dicNodes[link.target.ensembl_gene_id];
+                            this.genesFiltered.nodes
+                                .push(this.dicNodes[link.target.ensembl_gene_id]);
+                        }
+                    } else {
+                        if (!dicF[link.source]) {
+                            dicF[link.source] =
+                                this.dicNodes[link.source];
+                            this.genesFiltered.nodes
+                                .push(this.dicNodes[link.source]);
+                        }
+                        if (!dicF[link.target]) {
+                            dicF[link.target] =
+                                this.dicNodes[link.target];
+                            this.genesFiltered.nodes
+                                .push(this.dicNodes[link.target]);
+                        }
                     }
                 }
             });
             this.genes.links.forEach((link: any) => {
                 this.genesFiltered.nodes.forEach((n) => {
-                    if (n.ensembl_gene_id === link.target.id) {
-                        this.genesFiltered.nodes.forEach((t) => {
-                            if (t.ensembl_gene_id === link.source.id) {
-                                this.genesFiltered.links.push(link);
-                            }
-                        });
-                    }
-                    if (n.ensembl_gene_id === link.source.id) {
-                        this.genesFiltered.nodes.forEach((s) => {
-                            if (s.ensembl_gene_id === link.target.id) {
-                                this.genesFiltered.links.push(link);
-                            }
-                        });
+                    if (link.target.id) {
+                        if (n.ensembl_gene_id === link.target.id) {
+                            this.genesFiltered.nodes.forEach((t) => {
+                                if (t.ensembl_gene_id === link.source.id) {
+                                    this.genesFiltered.links.push(link);
+                                }
+                            });
+                        }
+                        if (n.ensembl_gene_id === link.source.id) {
+                            this.genesFiltered.nodes.forEach((s) => {
+                                if (s.ensembl_gene_id === link.target.id) {
+                                    this.genesFiltered.links.push(link);
+                                }
+                            });
+                        }
+                    } else {
+                        if (n.ensembl_gene_id === link.target) {
+                            this.genesFiltered.nodes.forEach((t) => {
+                                if (t.ensembl_gene_id === link.source) {
+                                    this.genesFiltered.links.push(link);
+                                }
+                            });
+                        }
+                        if (n.ensembl_gene_id === link.source) {
+                            this.genesFiltered.nodes.forEach((s) => {
+                                if (s.ensembl_gene_id === link.target) {
+                                    this.genesFiltered.links.push(link);
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -235,7 +268,7 @@ export class ForceService {
         });
     }
 
-    processSelectedNode(gene: Gene, data): Promise<GeneNetwork> {
+    processSelectedNode(data: LinksListResponse , gene: Gene): Promise<GeneNetwork> {
         return new Promise((resolve, reject) => {
             const dicNodesC = [];
             const dicLinksC = [];
@@ -253,7 +286,7 @@ export class ForceService {
                 filterLvl: 0
             };
             this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
-            data['nodes'].forEach((obj: any) => {
+            data.items.forEach((obj: any) => {
                 this.processNode(obj, dicNodesC, this.genesClicked);
                 this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
             });
@@ -275,7 +308,6 @@ export class ForceService {
             };
             this.genes.nodes = [...this.genes.nodes,
                 this.dicNodes[this.currentGene.ensembl_gene_id]];
-            console.log(this.rawData);
             this.rawData.forEach((obj: any) => {
                 this.processNode(obj, this.dicNodes, this.genes);
                 this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);
