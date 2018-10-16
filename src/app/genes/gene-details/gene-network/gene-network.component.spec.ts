@@ -31,7 +31,7 @@ describe('Component: GeneNetwork', () => {
     let fixture: ComponentFixture<GeneNetworkComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
-    let dataService: DataServiceStub;
+    // let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
@@ -63,7 +63,7 @@ describe('Component: GeneNetwork', () => {
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
-        dataService = fixture.debugElement.injector.get(DataService);
+        // dataService = fixture.debugElement.injector.get(DataService);
         forceService = fixture.debugElement.injector.get(ForceService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });

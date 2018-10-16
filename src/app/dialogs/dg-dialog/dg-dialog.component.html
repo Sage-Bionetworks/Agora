@@ -1,0 +1,53 @@
+<div class="ui-rtl" dir="rtl">
+    <p-dialog header="" [(visible)]="display" [modal]="true" [responsive]="true" [minWidth]="330" [minY]="256"
+    [baseZIndex]="10000" [styleClass]="'btm-dialog'">
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                Druggability Information
+                </span>
+            </div>
+        </div>
+         <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Small Molecule Druggability Bucket:
+                </span>
+                <span dir="ltr">
+                    Targets have been scored for likely suitability for small-molecule drugs (SM
+                    ligandability) in a multi-step process. In brief, targets are placed into buckets that are ordered according to
+                    preference for small-molecule (SM) drug development, with smaller bucket numbers being generally accepted as easier or
+                    more likely to result in successful drug development than larger numbered buckets. Learn more about the details of this
+                    analysis here.
+                </span>
+            </div>
+        </div>
+
+        <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Druggable Class:
+                </span>
+                <span dir="ltr">
+                    This indicates “Target Family” for the selected target as classified by Pharos. Possible values are:
+                    cytokine, enzyme, G-protein coupled receptor (GPCR), ion channel, kinase, nuclear receptor, transporter, or “non-IDG”
+                    for targets that are not classified by Pharos.
+                </span>
+            </div>
+        </div>
+
+         <div class="row content-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span class="header-span" dir="ltr">
+                    Pharos Class:
+                </span>
+                <span dir="ltr">
+                    This indicates the “Development Level” of the selected target as classified by Pharos. Targets are
+                    assigned a classification related to the amount of knowledge about the target, where Tclin > Tchem > Tbio > Tdark.
+                    Targets categorized as Tclin have approved drugs with known mechanisms of action, whereas targets categorized as Tdark
+                    have virtually nothing is known about them. Learn more by visiting the Pharos website.
+                </span>
+            </div>
+        </div>
+    </p-dialog>
+</div>

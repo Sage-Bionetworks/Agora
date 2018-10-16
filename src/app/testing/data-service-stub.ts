@@ -27,7 +27,7 @@ export class DataServiceStub {
         ]);
     }
 
-    loadNodes(linksList?: LinksListResponse, sgene?: Gene): Promise<GeneNetwork> {
+    loadNodes(sgene?: Gene): Promise<GeneNetwork> {
         return new Promise((resolve, reject) => {
             resolve(mockNetwork1);
         });

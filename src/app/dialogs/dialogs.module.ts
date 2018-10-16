@@ -4,6 +4,7 @@ import { AppSharedModule } from '../shared';
 
 import { BPDialogComponent } from './bp-dialog';
 import { BRDialogComponent } from './br-dialog';
+import { DRUggabilityComponent } from './dg-dialog';
 import { MEDialogComponent } from './me-dialog';
 import { SOEDialogComponent } from './soe-dialog';
 import { SGDialogComponent } from './sg-dialog';
@@ -22,7 +23,8 @@ import { DialogsService } from './services';
         BRDialogComponent,
         MEDialogComponent,
         SGDialogComponent,
-        SOEDialogComponent
+        SOEDialogComponent,
+        DRUggabilityComponent
     ],
     exports: [
         MoreInfoComponent,
@@ -30,7 +32,8 @@ import { DialogsService } from './services';
         BRDialogComponent,
         MEDialogComponent,
         SGDialogComponent,
-        SOEDialogComponent
+        SOEDialogComponent,
+        DRUggabilityComponent
     ],
     providers: [
         DialogsService
