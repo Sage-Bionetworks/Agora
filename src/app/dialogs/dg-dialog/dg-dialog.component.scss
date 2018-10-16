@@ -12,6 +12,7 @@
     padding-bottom: 132px !important;
     padding-left: 6% !important;
     padding-right: 6% !important;
+
   }
 
   .first-bp-dia-row {
@@ -32,4 +33,18 @@
       color: #212121;
     }
   }
+}
+.link {
+  font-family: Lato;
+  font-weight: 600;
+  font-style: normal;
+  cursor: pointer;
+  width: 100%;
+  line-height: normal;
+  font-size: 18px;
+  text-decoration: none;
+  color: #5BB0B5!important;
+  position: relative;
+  top: inherit;
+  left: inherit;
 }
