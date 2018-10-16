@@ -18,7 +18,9 @@ export class GeneDruggabilityComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.geneInfo);
-        this.druggability = this.geneInfo.druggability[0];
+        if (this.geneInfo.druggability) {
+            this.druggability = this.geneInfo.druggability[0];
+        }
     }
 
     goToRoute(path: string, outlets?: any) {
