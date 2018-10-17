@@ -65,9 +65,9 @@
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
                         <div *ngFor="let link of selectedGeneData.links | slice:0:6;" class="pathbox">
                             <span class="genes">
-                                <span (click)="viewGene(link, 'source')">{{link.hgnc_symbolA}}</span>
+                                <span (click)="onNavigate('genes/(genes-router:gene-details/'+(link.source.ensembl_gene_id?link.source.ensembl_gene_id:link.source)+')')">{{link.hgnc_symbolA}}</span>
                                 :&nbsp;
-                                <span (click)="viewGene(link, 'target')">{{link.hgnc_symbolB}}</span>
+                                <span (click)="onNavigate('genes/(genes-router:gene-details/'+(link.target.ensembl_gene_id?link.target.ensembl_gene_id:link.target)+')')">{{link.hgnc_symbolB}}</span>
                             </span>
                             <span *ngFor="let region of link.brainregions; last as isLast">
                                 {{region}}{{isLast ? '' : ', '}}
@@ -96,7 +96,7 @@
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
                         <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
-                            <div (click)="viewGene(node.id)" class="genelink">{{node.hgnc_symbol}}</div>
+                            <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol}}</div>
                         </div>
                     </div>
                     <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">

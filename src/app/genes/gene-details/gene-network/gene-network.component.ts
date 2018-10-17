@@ -147,6 +147,10 @@ export class GeneNetworkComponent implements OnInit {
             this.router.navigate([path], { relativeTo: this.route });
     }
 
+    onNavigate(url) {
+        window.open(url, '_blank');
+    }
+
     loadGenes() {
         this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
             this.forceService.setData(linksList.items);
