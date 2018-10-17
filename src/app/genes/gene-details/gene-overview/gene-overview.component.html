@@ -1,36 +1,40 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin section-hero overview-header" tabindex="0">
-        <div class="row no-gutters">
-            <div *ngIf="geneInfo" class="col-md-5 col-sm-12 col-12 info-header">
-                <h1>{{gene.hgnc_symbol}}</h1>
-                <p>
-                    {{geneInfo.name}}
-                </p>
+    <div class="section-hero">
+        <div class="section-thin overview-header" tabindex="0">
+            <div class="row no-gutters">
+                <div *ngIf="geneInfo" class="col-md-5 col-sm-12 col-12 info-header">
+                    <h1 class="no-margin">{{gene.hgnc_symbol}}</h1>
+                    <p class="no-margin">
+                        {{geneInfo.name}}
+                    </p>
+                </div>
+                <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
+                    <img class="nominated-button" src="/assets/img/nominated_button.png"
+                        (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
+                </div>
             </div>
-            <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
-                <img class="nominated-button" src="/assets/img/nominated_button.png"
-                    (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
+        </div>
+
+        <div *ngIf="geneInfo" class="section-thin overview-desc" tabindex="0">
+            <h2>
+                Gene Description
+            </h2>
+            <p class="black-paragraph">
+                {{getSummary(true)}}
+            </p>
+            <p class="italic-paragraph">
+                {{getSummary()}}
+            </p>
+            <div *ngIf="getAlias()">
+                <h3>Also known as</h3>
+                <p class="black-paragraph">
+                    {{getAlias()}}
+                </p>
             </div>
         </div>
     </div>
 
-    <div *ngIf="geneInfo" class="section-thin overview-desc" tabindex="0">
-        <h2>
-            Gene Description
-        </h2>
-        <p class="black-paragraph">
-            {{getSummary(true)}}
-        </p>
-        <p class="italic-paragraph">
-            {{getSummary()}}
-        </p>
-        <div *ngIf="getAlias()">
-            <h3>Also known as</h3>
-            <p class="black-paragraph">
-                {{getAlias()}}
-            </p>
-        </div>
-    </div>
+    <p-tabMenu [model]="items" [styleClass]="'overview-tab-menu'"></p-tabMenu>
 
     <div class="section-thin overview-rel" tabindex="0">
         <h2>

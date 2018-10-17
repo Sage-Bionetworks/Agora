@@ -58,6 +58,20 @@ body {
     margin-bottom: 100px;
 }
 
+ng-scrollbar {
+    .-vertical {
+        top: 14px;
+        right: 10px;
+        bottom: 14px;
+        background-color: rgba(0,0,0,.1);
+    }
+
+    .ng-scrollbar-view {
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+}
+
 footer {
     position: absolute;
     bottom: 0;
@@ -206,6 +220,10 @@ p-dialog {
         left: 1%;
         top: 10%;
     }
+}
+
+.no-margin {
+    margin: 0px;
 }
 
 .synapse-button {

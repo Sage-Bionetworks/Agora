@@ -10,6 +10,8 @@ import {
     ForceService
 } from '../../../core/services';
 
+import { MenuItem } from 'primeng/api';
+
 @Component({
     selector: 'gene-overview',
     templateUrl: './gene-overview.component.html',
@@ -30,6 +32,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
     noData: boolean = false;
+    items: MenuItem[];
 
     constructor(
         private router: Router,
@@ -41,6 +44,14 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        // Populate the tab menu
+        this.items = [
+            {label: 'NOMINATION DETAILS', icon: ''},
+            {label: 'SUMMARY', icon: ''},
+            {label: 'EVIDENCE', icon: ''},
+            {label: 'DRUGGABILITY', icon: ''}
+        ];
+
         // Get the current clicked gene, always update
         this.router.events.subscribe((evt) => {
             if (!(evt instanceof NavigationEnd)) {

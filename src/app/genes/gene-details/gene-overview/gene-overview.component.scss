@@ -6,6 +6,8 @@
 }
 
 .overview-header {
+    background-color: transparent;
+
     .fa-star::before {
         color: #FACFAF;
     }
@@ -166,6 +168,7 @@
     margin-bottom: auto;
     margin-top: auto;
 }
+
 .show-more-button {
     @include lato-font('bold');
 
@@ -207,13 +210,115 @@
 }
 
 .overview-desc {
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2%;
+    background-color: transparent;
+    background: rgba(255, 255, 255, 0.35);
 }
+
+.overview-tab-menu {
+    padding: 0px !important;
+
+    .ui-tabmenu-nav {
+        padding: 0px !important;
+        background: white;
+        background-color: white !important;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+        position: relative;
+
+        @include respond-to('ex-small') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 3.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 3.5% !important;
+            }
+        }
+        @include respond-to('small') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 4.0% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 4.0% !important;
+            }
+        }
+        @include respond-to('medium') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 4.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 4.5% !important;
+            }
+        }
+        @include respond-to('large') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 5.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 5.5% !important;
+            }
+        }
+        @include respond-to('ex-large') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 7.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 7.5% !important;
+            }
+        }
+    }
+
+    li {
+        background: white;
+        background-color: white !important;
+        height: 70px;
+        line-height: 70px;
+        margin: 0px !important;
+        width: 25%;
+        border: none;
+        color: #3C4A63;
+        opacity: 0.5;
+
+
+        a {
+            padding: 0px !important;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .ui-state-active {
+        a > span {
+            @include lato-font('bold');
+            font-size: 20px;
+            opacity: 1;
+        }
+    }
+}
+
 .overview-rel {
     padding-bottom: 4em;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     margin-bottom: 2%;
+
     .fa-info-circle:before {
         color: #9DA3B3;
     }

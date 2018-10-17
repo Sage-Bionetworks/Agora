@@ -2,10 +2,15 @@
 @import "../../../assets/css/helpers/mixins";
 
 .nav-row {
-    height: 80px;
-    max-height: 80px;
+    height: 87px;
+    max-height: 87px;
     margin-left: 0px;
     margin-right: 0px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    z-index: 100000;
 
     .ui-tabmenuitem {
         background-color: white !important;
