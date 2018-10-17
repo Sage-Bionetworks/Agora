@@ -38,7 +38,7 @@ export class GenesListComponent implements OnInit {
 
     ngOnInit() {
         this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene name' },
+            { field: 'hgnc_symbol', header: 'Gene Symbol' },
             { field: 'nominations', header: 'Nominations' },
             { field: 'nominatedtarget', header: 'Teams' }
         ];

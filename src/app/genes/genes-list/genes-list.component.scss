@@ -24,11 +24,16 @@
 
     background-position: top; /* Position the image to the top center of the div */
 
+    .top-section {
+        padding-bottom: 0px;
+    }
+
     .ui-table-caption {
         background-color: transparent;
         background: none;
         border: none;
-        padding-bottom: 4%;
+        padding-top: 1%;
+        padding-bottom: 1%;
         position: relative;
 
         @include respond-to('ex-small') {
@@ -67,8 +72,8 @@
                 padding-left: 2%;
             }
 
-            height: 50px;
-            line-height: 50px;
+            height: 63px;
+            line-height: 63px;
             box-shadow: inset 0px 0px 4px #C7C5C5;
             text-align-last: left;
             font-size: 16px;
@@ -85,52 +90,67 @@
             position: absolute;
             z-index: 2;
             color: #FCCB6F;
+            width: 32px;
+
             @include respond-to('ex-small') {
-                left: 90%;
-                top: 30%;
+                left: 89%;
+                top: 13%;
             }
             @include respond-to('small') {
-                left: 92%;
-                top: 27%;
+                left: 90.4%;
+                top: 13.0%;
             }
             @include respond-to('medium') {
-                left: 66%;
-                top: 24%;
+                left: 65.4%;
+                top: 15.0%;
             }
             @include respond-to('large') {
-                left: 67%;
-                top: 21%;
+                left: 66.4%;
+                top: 15.5%;
             }
             @include respond-to('ex-large') {
-                left: 67.5%;
-                top: 18%;
+                left: 67.2%;
+                top: 16.0%;
             }
+
+            content: url("/assets/icon/search_icon.png") !important;
+        }
+
+        p {
+            margin-top: 35px;
+        }
+
+        .span-add-this {
+            @include lato-font('bold');
+
+            color: #24334F;
+            margin-right: 20px;
         }
     }
 
     .ui-table-thead {
         .ui-state-highlight {
-            color: #0D1C38;
+            color: #FFFFFF;
         }
 
         >tr>th {
             @include lato-font('bold');
 
-            background: #E1F4F5 !important;
+            background: #3C4A63 !important;
             border: none;
-            height: 63px;
+            height: 58px;
             line-height: 40px;
             font-size: 18px;
-            color: #0D1C38 !important;
+            color: #FFFFFF !important;
         }
 
         @include respond-to('ex-small') {
             >tr>th:first-child {
                 padding-left: 4%;
-                text-align-last: left;
+                text-align: center;
             }
             >tr>th:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
 
             .ui-sortable-column {
@@ -140,10 +160,10 @@
         @include respond-to('small') {
             >tr>th:first-child {
                 padding-left: 4%;
-                text-align-last: left;
+                text-align: center;
             }
             >tr>th:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
 
             .ui-sortable-column {
@@ -152,10 +172,10 @@
         }
         @include respond-to('medium') {
             >tr>th:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>th:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
 
             .ui-sortable-column {
@@ -164,10 +184,10 @@
         }
         @include respond-to('large') {
             >tr>th:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>th:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
 
             .ui-sortable-column {
@@ -176,10 +196,10 @@
         }
         @include respond-to('ex-large') {
             >tr>th:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>th:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
 
             .ui-sortable-column {
@@ -217,16 +237,16 @@
                 font-size: 18px;
             }
 
-            color: #1A1C29 !important;
+            color: #24334F !important;
             height: 40px;
         }
         @include respond-to('ex-small') {
             >tr>td:first-child {
                 padding-left: 4%;
-                text-align-last: left;
+                text-align: center;
             }
             >tr>td:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
             >tr>td:last-child {
                 padding-right: 4%;
@@ -235,10 +255,10 @@
         @include respond-to('small') {
             >tr>td:first-child {
                 padding-left: 4%;
-                text-align-last: left;
+                text-align: center;
             }
             >tr>td:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
             >tr>td:last-child {
                 padding-right: 4%;
@@ -246,26 +266,26 @@
         }
         @include respond-to('medium') {
             >tr>td:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>td:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
         }
         @include respond-to('large') {
             >tr>td:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>td:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
         }
         @include respond-to('ex-large') {
             >tr>td:first-child {
-                text-align-last: center;
+                text-align: center;
             }
             >tr>td:not(:first-child) {
-                text-align-last: left;
+                text-align: center;
             }
         }
     }

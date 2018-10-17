@@ -61,20 +61,6 @@ describe('Component: GenesIntro', () => {
         expect(gsElement).toBeTruthy();
     });
 
-    it('should tell that the list button was clicked', fakeAsync(() => {
-        const gtrSpy = spyOn(component, 'goToRoute');
-        const buttons = fixture.debugElement.nativeElement.querySelectorAll('p-button');
-        expect(buttons.length).toBe(2);
-
-        const pButton = fixture.debugElement.queryAll(By.css('p-button'))[1];
-        const pButtonElem = pButton.nativeElement;
-        const leftclickevent = new MouseEvent('click', {button: 0});
-        pButtonElem.dispatchEvent(leftclickevent);
-        tick();
-        fixture.detectChanges();
-        expect(gtrSpy.calls.any()).toEqual(true);
-    }));
-
     it('should tell ROUTER to navigate to genes list', fakeAsync(() => {
         spyOn(router, 'navigate'); // .and.callThrough();
 

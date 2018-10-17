@@ -9,8 +9,8 @@ import { SharedModule } from 'primeng/shared';
 import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { BlockUIModule } from 'primeng/blockui';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -57,6 +57,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         MenubarModule,
         PanelModule,
         TableModule,
+        TabMenuModule,
         ProgressBarModule,
         MultiSelectModule,
         ProgressSpinnerModule
@@ -77,6 +78,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         MenubarModule,
         PanelModule,
         TableModule,
+        TabMenuModule,
         ProgressBarModule,
         MultiSelectModule,
         ProgressSpinnerModule,

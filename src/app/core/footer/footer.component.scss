@@ -4,7 +4,7 @@
 .footer-row {
     @include lato-font('normal');
 
-    background: #EDEDED;
+    background: #FFFFFF;
     height: 100px;
     margin-right: 0px;
     line-height: normal;
@@ -12,6 +12,7 @@
     color: #0D1C38;
     z-index: 2;
     align-items: center;
+    border-top: 1px solid #C7C5C5;
 
     span {
         cursor: pointer;

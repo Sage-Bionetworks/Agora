@@ -1,16 +1,19 @@
-<div class="nomlist-list section-hero center-justified">
-    <div class="section center-justified">
+<div class="nomlist-list section-hero center-justified-last">
+    <div class="section center-justified-last top-section">
         <h1>Nominated Target List</h1>
         <p>
-            Please select a gene from the list of nascent AD targets to view details and evidence.
-            You can find a gene by typing in a gene symbol (e.g. “VGF”).
+            AD researchers have nominated genes that may be good targets for new AD therapies. Select a gene from the list
+            of nominated targets to view details and evidence.
         </p>
     </div>
     <p-table #gl
         [columns]="cols" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
-        [paginator]="true"
+        [paginator]="false"
         [rows]="14"
+        scrollHeight="270px"
+        [virtualScroll]="true"
+        [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
         (sortFunction)="customSort($event)"
@@ -18,9 +21,15 @@
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true">
         <ng-template pTemplate="caption">
-            <input type="text" pInputText size="50" placeholder="Gene Filter"
+            <input type="text" pInputText size="50" placeholder="Search by gene symbol"
                 (input)="gl.filterGlobal($event.target.value, 'contains')">
             <i class="fa fa-search fa-lg"></i>
+            <p>
+                <span class="span-add-this">
+                    Would you like to add to this list?
+                </span>
+                <img src="/assets/img/nominate_a_target.png">
+            </p>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>

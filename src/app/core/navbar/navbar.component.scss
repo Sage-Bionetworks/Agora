@@ -1,22 +1,42 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .nav-row {
     height: 80px;
     max-height: 80px;
     margin-left: 0px;
     margin-right: 0px;
-    //flex-wrap: nowrap;
-    //margin-left: 10px;
 
-    span {
-        color: white;
+    .ui-tabmenuitem {
+        background-color: white !important;
+        border: none;
+        height: 80px;
+
+        a {
+            padding: 0 1em !important;
+            height: 80px;
+
+            span {
+                display: block;
+                line-height: 80px;
+                height: 80px;
+            }
+        }
     }
 
-    .ui-menubar {
-        background: #000000 !important;
-        border: 0px;
-
-        span.ui-menuitem-text {
-            color: black !important;
+    .ui-state-active {
+        a > span {
+            @include lato-font('bold');
+            background-repeat: repeat-x;
+            background-image: url('/assets/img/ActivePage.svg') !important;
+            background-position: 0 2.67em !important;
         }
+    }
+
+    span {
+        @include lato-font('normal');
+        font-size: 20px;
+        color: #3C4A63;
     }
 }
 

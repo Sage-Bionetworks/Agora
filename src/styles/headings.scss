@@ -2,12 +2,12 @@
 @import "../assets/css/helpers/mixins";
 
 h1 {
-    @include lato-font('bold');
+    @include lato-font('medium');
 
     line-height: normal;
-    font-size: 30px;
+    font-size: 40px;
     text-align: left;
-    color: #FFFFFF;
+    color: #5171C0;
 }
 
 h2 {

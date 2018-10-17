@@ -3,7 +3,7 @@
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
             <input type="text" [formControl]="queryField" id="keyword"
-                (blur)="closeSearchList($event.target)"  placeholder="Search by HGNC symbol"/>
+                (blur)="closeSearchList($event.target)" placeholder="Search by gene symbol"/>
             <p-progressSpinner *ngIf="isSearching" strokeWidth="8" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
             <i class="fa fa-search fa-lg"></i>
         </div>

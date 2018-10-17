@@ -1,61 +1,10 @@
-<p-dialog header="Is your gene not listed?"
-    [(visible)]="display"
-    [modal]="true"
-    [responsive]="true"
-    [minWidth]="330"
-    [minY]="256"
-    [baseZIndex]="10000">
-    Only genes that show differential expression in AD brains are currently visible in Agora.
-    Information on additional genes is coming soon.
-</p-dialog>
-<div class="section section-hero intro-desc center-justified">
-    <h1 class="center-justified">
-        Welcome!
+<div class="section section-hero intro-desc center-justified-last video-section">
+    <div class="intro-video">
+        <img *ngIf="!showVideo" src="/assets/img/VideoBG.png" (click)="playVideo()">
+        <iframe #frame *ngIf="showVideo" src="https://www.youtube.com/embed/GX_Gukyev2M?autoplay=1&controls=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <h1 class="center-text">
+        Discover Alzheimer’s Disease Genes
     </h1>
-    <p class="intro-paragraph">
-        Agora is an open space to discover and evaluate the results from the AMP-AD consortium. Explore
-        evidence for your favorite gene or evaluate the dynamic list of genes that have been nominated by
-        the consortium as nascent AD associated drug targets. Need help? Visit our
-        <a class="not-listed" (click)="goToRoute('/help')" tabindex="0">
-            help page
-        </a>
-    </p>
     <gene-search></gene-search>
-    <div class="row no-gutters">
-        <div class="col-md-12 col-sm-12 col-12 not-listed-col">
-            <a class="not-listed" (click)="showDialog()" tabindex="0">
-                Gene not listed?
-            </a>
-        </div>
-    </div>
-</div>
-<div class="section intro-nomlist-desc center-justified">
-    <h2 class="center-justified">
-        Nominated Targets
-    </h2>
-    <h3 class="nom-targets-heading text-center" tabindex="-1">
-        Explore the current list of AMP-AD nominated targets.
-        <span class="beta-underline" (click)="goToRoute('/about')" tabindex="0">Learn more</span>
-        about how these early AD signals were found.
-    </h3>
-    <div class="row list-control-row">
-        <p-button (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }})"
-            label="View all nominated targets"
-            [styleClass]="'list-button'" tabindex="0">
-        </p-button>
-    </div>
-</div>
-<div class="section intro-contrib-desc center-justified">
-    <h2 class="center-justified">
-        Contributing Teams
-    </h2>
-    <p class="black-paragraph text-center">
-        Seven teams have nominated targets. See their profiles.
-    </p>
-    <div class="row list-control-row">
-        <p-button (click)="goToRoute('teams-contributing')"
-            label="View all contributing teams"
-            [styleClass]="'list-button'" tabindex="0">
-        </p-button>
-    </div>
 </div>

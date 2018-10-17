@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class GenesIntroComponent {
     display: boolean = false;
+    showVideo: boolean = false;
 
     constructor(
         private router: Router
@@ -16,6 +17,10 @@ export class GenesIntroComponent {
 
     showDialog() {
         this.display = true;
+    }
+
+    playVideo() {
+        this.showVideo = true;
     }
 
     goToRoute(path: string, outlets?: any) {

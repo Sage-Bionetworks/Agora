@@ -50,6 +50,12 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     changedLabels: boolean = false;
     display: boolean = false;
     colors: string[] = ['#5171C0'];
+    // Define the div for the tooltip
+    div: any = d3.select('body').append('div')
+        .attr('class', 'rc-tooltip')
+        .style('width', 200)
+        .style('height', 160)
+        .style('opacity', 0);
 
     private resizeTimer;
 
@@ -286,6 +292,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
+        const self = this;
         const newSvg = d3.select(el).append('svg');
         const textGroup = newSvg.append('g').attr('class', 'textGroup');
 
@@ -312,8 +319,40 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     .attr('text-anchor', 'end')
                     .attr('transform', () => {
                         return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
+                    })
+                    .on('mouseover', function() {
+                        self.div.transition()
+                            .duration(200)
+                            .style('opacity', 1);
+                        self.div.html(self.getTooltipText(d3.select(this).text()))
+                            .style('left', (el.getBoundingClientRect().right) + 'px')
+                            .style('top', (el.offsetTop + (currentStep + (vSpacing))) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        self.div.transition()
+                            .duration(500)
+                            .style('opacity', 0);
                     });
             });
+        }
+    }
+
+    getTooltipText(text: string): string {
+        switch (text) {
+            case 'CBE':
+                return 'Cerebellum';
+            case 'DLPFC':
+                return 'Dorsolateral Prefrontal Cortex';
+            case 'FP':
+                return 'Frontal Pole';
+            case 'IFG':
+                return 'Inferior Frontal Gyrus';
+            case 'PHG':
+                return 'Parahippocampal Gyrus';
+            case 'STG':
+                return 'Superior Temporal Gyrus';
+            case 'TCX':
+                return 'Temporal Cortex';
         }
     }
 

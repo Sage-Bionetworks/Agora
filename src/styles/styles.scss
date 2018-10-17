@@ -78,9 +78,9 @@ p {
     @include lato-font('normal');
 
     line-height: normal;
-    font-size: 18px;
     text-align: left;
-    color: white;
+    font-size: 20px;
+    color: #24334F;
 }
 
 span {
@@ -90,10 +90,9 @@ span {
     }
 
     line-height: normal;
-    font-size: 18px;
+    font-size: 20px;
     text-align: center;
-    letter-spacing: 1px;
-    color: #1A1C29;
+    color: #3C4A63;
 }
 
 input::-ms-clear {
@@ -245,9 +244,13 @@ p-dialog {
     padding-left: 0;
 }
 
-.center-justified {
+.center-justified-last {
     text-align: justify;
     text-align-last: center;
+}
+
+.center-text {
+    text-align: center;
 }
 
 .text-center {
@@ -255,7 +258,6 @@ p-dialog {
 }
 
 .vertical-align {
-    display: block;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
     align-items: center;
 }
 
@@ -302,17 +304,17 @@ p-dialog {
     }
     @include respond-to('large') {
         padding-top: 2em;
-        padding-left: 21%;
+        padding-left: 17%;
         padding-bottom: 2em;
-        padding-right: 21%;
+        padding-right: 17%;
         color: #000000;
         //background-color: #ffffff;
     }
     @include respond-to('ex-large') {
         padding-top: 2em;
-        padding-left: 25%;
+        padding-left: 22%;
         padding-bottom: 2em;
-        padding-right: 25%;
+        padding-right: 22%;
         color: #000000;
        //background-color: #ffffff;
     }
@@ -364,8 +366,8 @@ p-dialog {
 }
 
 .section-hero {
-    background-image: url('/assets/img/hero_bg.jpg');
-    background-size: cover;
+    background-image: url('/assets/img/Background.svg');
+    background-size: auto !important;
 }
 
 .beta-underline {

@@ -30,7 +30,8 @@
         position: absolute;
         z-index: 2;
         color: #FCCB6F;
-        top: 35%;
+        top: 20%;
+        content: url("/assets/icon/search_icon.png") !important;
 
         @include respond-to('ex-small') {
             left: 88.5%;
@@ -52,7 +53,7 @@
     p-progressSpinner {
         position: absolute;
         z-index: 2;
-        color: #FCCB6F;
+        color: #5171C0;
         top: 35%;
 
         .ui-progress-spinner {
@@ -81,17 +82,17 @@
 @keyframes ui-progress-spinner-color {
     100%,
     0% {
-        stroke: #FCCB6F;
+        stroke: #5171C0;
     }
     40% {
-        stroke: #FCCB6F;
+        stroke: #5171C0;
     }
     66% {
-        stroke: #FCCB6F;
+        stroke: #5171C0;
     }
     80%,
     90% {
-        stroke: #FCCB6F;
+        stroke: #5171C0;
     }
 }
 
@@ -100,33 +101,31 @@
 
     @include respond-to('ex-small') {
         padding-left: 8%;
-        //padding-right: 8%;
     }
     @include respond-to('small') {
         padding-left: 5%;
-        //padding-right: 5%;
     }
     @include respond-to('medium') {
         padding-left: 4%;
-        //padding-right: 4%;
     }
     @include respond-to('large') {
         padding-left: 4%;
-        //padding-right: 4%;
     }
     @include respond-to('ex-large') {
         padding-left: 4%;
-        //padding-right: 4%;
     }
 
     width: 100%;
     background: #FFFFFF;
-    -moz-box-shadow: inset 0 0 4px #C7C5C5;
-    -webkit-box-shadow: inset 0 0 4px #C7C5C5;
-    box-shadow: inset 0 0 4px #C7C5C5;
+    //-moz-box-shadow: inset 0 0 4px #C7C5C5;
+    //-webkit-box-shadow: inset 0 0 4px #C7C5C5;
+    //box-shadow: inset 0 0 4px #C7C5C5;
+    -moz-box-shadow: inset 0 0 5px rgba(128, 133, 146, 0.6);
+    -webkit-box-shadow: inset 0 0 5px rgba(128, 133, 146, 0.6);
+    box-shadow: inset 0px 0px 5px rgba(128, 133, 146, 0.6);
     border-radius: 6px;
     line-height: 63px;
-    font-size: 16px;
+    font-size: 24px;
     border-color: rgba(197,199,196,0.5);
     border: 2px;
 
@@ -134,6 +133,7 @@
     outline-offset:-2px;
     outline: none;
 
+    // Input placehold for search
     ::-moz-placeholder,
     ::-ms-input-placeholder,
     ::-webkit-input-placeholder {

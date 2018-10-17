@@ -124,3 +124,30 @@ gene-search {
         cursor: pointer;
     }
 }
+
+.video-section {
+    padding-top: 168px;
+    padding-bottom: 144px;
+
+    .intro-video {
+        width: 100%;
+        max-width: 590px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 332px;
+        position: relative;
+        margin-bottom: 4em;
+
+        iframe {
+            height: 100%;
+            width: 100%;
+            max-width: 590px;
+            max-height: 332px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            border: 0;
+            overflow: hidden;
+        }
+    }
+}

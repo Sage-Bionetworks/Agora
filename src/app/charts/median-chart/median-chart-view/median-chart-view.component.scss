@@ -1,6 +1,20 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
+.mc-tooltip {
+    @include lato-font('regular');
+
+    position: absolute;
+    padding: 14px;
+    text-align: center;
+    line-height: normal;
+    border: 0px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px #C7C5C5;
+    border-radius: 2px;
+    color: black;
+}
+
 .median-content {
     height: 350px;
 
@@ -38,6 +52,8 @@
             @include respond-to('ex-small') {
                 font-size: $font-size-small;
             }
+
+            pointer-events: auto;
 
             font-size: $font-size-x-regular;
             color: $text-color-normal;

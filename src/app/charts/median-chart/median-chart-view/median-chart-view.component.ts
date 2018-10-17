@@ -30,14 +30,22 @@ import * as crossfilter from 'crossfilter2';
 export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
+    @ViewChild('bccol') bcCol: ElementRef;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
+    // Define the div for the tooltip
+    div: any = d3.select('body').append('div')
+        .attr('class', 'mc-tooltip')
+        .style('width', 200)
+        .style('height', 160)
+        .style('opacity', 0);
 
     barchart: any;
     ndx: any;
     group: any;
     dimension: any;
     tissuecoresGroup: any;
+    tissues: number = 7;
 
     private resizeTimer;
 
@@ -153,11 +161,87 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     .attr('id', 'extra-line')
                     .merge(path);
                 path.attr('d', line);
+
+                // Adds tooltip below the x axis labels
+                self.addXAxisTooltips(chart);
             });
 
         this.barchart.yAxis().ticks(3);
         this.barchart.filter = () => '';
         this.barchart.render();
+    }
+
+    addXAxisTooltips(chart: dc.BarChart) {
+        const self = this;
+        chart.selectAll('g.axis.x g.tick text').each(function(d, i) {
+            d3.select(this)
+                .on('mouseover', function() {
+                    // The space between the beginning of the page and the column
+                    const left = self.bcCol.nativeElement.getBoundingClientRect().left;
+                    // Total column width, including padding
+                    const colWidth = self.bcCol.nativeElement.offsetWidth;
+                    // Shows the tooltip
+                    self.div.transition()
+                        .duration(200)
+                        .style('opacity', 1);
+                    // Get the text based on the brain tissue
+                    self.div.html(self.getTooltipText(d3.select(this).text()));
+                    // The tooltip element, we need half of the width
+                    const tooltip =
+                        document.getElementsByClassName('mc-tooltip')[0] as HTMLElement;
+                    // Represents the width of each x axis tick section
+                    // We get the total column width, minus both side paddings,
+                    // and we divide by all tissues plus 1. Eight sections total
+                    const tickSectionWidth = (
+                        (colWidth - (self.paddingLR * 2)) /
+                        (self.tissues + 1)
+                    );
+                    // The start position for the current section tick will be
+                    // the width of a section * current index + one
+                    const xTickPos = tickSectionWidth * (i + 1);
+                    self.div
+                        .style('left',
+                            (
+                                // The most important calculation. We need the space
+                                // between the beginning of the page and the column,
+                                // plus the left padding, plus half the width of a
+                                // vertical bar, plus the current tick position and we
+                                // subtract half the width of the tooltip
+                                left + self.paddingLR + 35 + xTickPos -
+                                (tooltip.offsetWidth / 2.0)
+                            ) + 'px'
+                        )
+                        .style('top',
+                            (
+                                self.bcCol.nativeElement.offsetTop + chart.height()
+                            ) + 'px'
+                        );
+                })
+                .on('mouseout', function() {
+                    self.div.transition()
+                        .duration(500)
+                        .style('opacity', 0);
+                });
+        });
+    }
+
+    getTooltipText(text: string): string {
+        switch (text) {
+            case 'CBE':
+                return 'Cerebellum';
+            case 'DLPFC':
+                return 'Dorsolateral Prefrontal Cortex';
+            case 'FP':
+                return 'Frontal Pole';
+            case 'IFG':
+                return 'Inferior Frontal Gyrus';
+            case 'PHG':
+                return 'Parahippocampal Gyrus';
+            case 'STG':
+                return 'Superior Temporal Gyrus';
+            case 'TCX':
+                return 'Temporal Cortex';
+        }
     }
 
     onResize(event?: any) {
