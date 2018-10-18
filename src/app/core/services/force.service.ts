@@ -232,19 +232,24 @@ export class ForceService {
             this.genes.links.forEach((link: any) => {
                 this.genesFiltered.nodes.forEach((n) => {
                     if (link.target.id) {
-                        if (n.ensembl_gene_id === link.target.id) {
-                            this.genesFiltered.nodes.forEach((t) => {
-                                if (t.ensembl_gene_id === link.source.id) {
-                                    this.genesFiltered.links.push(link);
-                                }
-                            });
-                        }
-                        if (n.ensembl_gene_id === link.source.id) {
-                            this.genesFiltered.nodes.forEach((s) => {
-                                if (s.ensembl_gene_id === link.target.id) {
-                                    this.genesFiltered.links.push(link);
-                                }
-                            });
+                        if (!dicL[link.source.id + link.target.id] &&
+                            !dicL[link.target.id + link.source.id]) {
+                            if (n.ensembl_gene_id === link.target.id) {
+                                this.genesFiltered.nodes.forEach((t) => {
+                                    if (t.ensembl_gene_id === link.source.id) {
+                                        dicL[link.source.id + link.target.id] = true;
+                                        this.genesFiltered.links.push(link);
+                                    }
+                                });
+                            }
+                            if (n.ensembl_gene_id === link.source.id) {
+                                this.genesFiltered.nodes.forEach((s) => {
+                                    if (s.ensembl_gene_id === link.target.id) {
+                                        dicL[link.source.id + link.target.id] = true;
+                                        this.genesFiltered.links.push(link);
+                                    }
+                                });
+                            }
                         }
                     } else {
                         if (n.ensembl_gene_id === link.target) {

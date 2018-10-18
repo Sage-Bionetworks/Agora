@@ -278,6 +278,9 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
             return '#F38070';
         }
+        if (this.networkData && this.networkData.origin.ensembl_gene_id === node.ensembl_gene_id) {
+            return '#F38070';
+        }
         if (node.brainregions.length >= 6) {
             return '#11656A';
         }
