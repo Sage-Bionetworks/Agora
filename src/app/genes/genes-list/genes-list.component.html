@@ -12,7 +12,6 @@
         [paginator]="false"
         [rows]="14"
         scrollHeight="270px"
-        [virtualScroll]="true"
         [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
@@ -42,9 +41,6 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
-                <!--<td *ngFor="let col of columns; let i = index;">
-                    {{rowData[col.field]}}
-                </td>-->
                 <td>
                     {{rowData[columns[0].field]}}
                 </td>

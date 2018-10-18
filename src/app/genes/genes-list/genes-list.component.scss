@@ -28,6 +28,18 @@
         padding-bottom: 0px;
     }
 
+    .ui-table-tbody {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: unset !important;
+    }
+
+    .ui-table-scrollable-header-box {
+        margin-right: 0px !important;
+        border-right: solid 17px rgb(60, 74, 99) !important;
+    }
+
     .ui-table-caption {
         background-color: transparent;
         background: none;
@@ -209,6 +221,8 @@
     }
 
     .ui-table-tbody {
+        height: 100%;
+
         >tr.ui-state-highlight {
             background-color: rgba(91, 176, 181, 0.25) !important;
         }
@@ -249,7 +263,7 @@
                 text-align: center;
             }
             >tr>td:last-child {
-                padding-right: 4%;
+                padding-right: calc(4% - 17px);
             }
         }
         @include respond-to('small') {
@@ -261,7 +275,7 @@
                 text-align: center;
             }
             >tr>td:last-child {
-                padding-right: 4%;
+                padding-right: calc(4% - 17px);
             }
         }
         @include respond-to('medium') {
@@ -271,6 +285,9 @@
             >tr>td:not(:first-child) {
                 text-align: center;
             }
+            >tr>td:last-child {
+                padding-right: calc(4% - 17px);
+            }
         }
         @include respond-to('large') {
             >tr>td:first-child {
@@ -279,6 +296,9 @@
             >tr>td:not(:first-child) {
                 text-align: center;
             }
+            >tr>td:last-child {
+                padding-right: calc(4% - 17px);
+            }
         }
         @include respond-to('ex-large') {
             >tr>td:first-child {
@@ -286,6 +306,9 @@
             }
             >tr>td:not(:first-child) {
                 text-align: center;
+            }
+            >tr>td:last-child {
+                padding-right: calc(4% - 17px);
             }
         }
     }
