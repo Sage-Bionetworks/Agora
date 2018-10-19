@@ -1,0 +1,48 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.nomform {
+
+  margin-top: -15em;
+  background-color: transparent !important;
+  width: auto;
+  /* Scale the div to the parent width */
+
+  @include respond-to('ex-small') {
+    background-size: 1330px 350px;
+  }
+
+  @include respond-to('small') {
+    background-size: 1330px 350px;
+  }
+
+  @include respond-to('medium') {
+    background-size: 1330px 350px;
+  }
+
+  @include respond-to('large') {
+    background-size: 1600px 421px;
+  }
+
+  @include respond-to('ex-large') {
+    background-size: 100%;
+  }
+
+  background-position: top;
+  /* Position the image to the top center of the div */
+
+  .top-section {
+    padding-bottom: 0px;
+    height: 500px;
+  }
+}
+
+.form-container {
+    margin-top: -150px;
+    margin-bottom: 150px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -9,6 +9,7 @@ import { DialogsModule } from 'app/dialogs';
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
+import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewComponent } from './gene-details/gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
@@ -26,6 +27,7 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         GenesViewComponent,
         GenesIntroComponent,
         GenesListComponent,
+        NominatedFormComponent,
         GeneSearchComponent,
         GeneOverviewComponent,
         GeneRNASeqDEComponent,
