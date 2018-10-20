@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
+import { Gene, GeneNetwork, LinksListResponse, GeneResponse } from '../../models';
 
 import {
     ApiService,
     DataService,
     GeneService,
     ForceService
-} from '../../../core/services';
+} from '../../core/services';
 
 @Component({
     selector: 'gene-network',

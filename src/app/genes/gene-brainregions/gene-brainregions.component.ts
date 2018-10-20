@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { GeneNetwork, LinksListResponse, GeneResponse } from '../../../models';
+import { GeneNetwork, LinksListResponse, GeneResponse } from '../../models';
 
-import { ApiService, DataService, GeneService } from '../../../core/services';
-import { ForceService } from '../../../core/services';
+import { ApiService, DataService, GeneService, ForceService } from '../../core/services';
 
 @Component({
     selector: 'gene-brainregions',
