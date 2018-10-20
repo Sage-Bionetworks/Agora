@@ -3,10 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
-import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
-import { GeneNetworkComponent } from './gene-details/gene-network';
-import { GeneBRComponent } from './gene-details/gene-brainregions';
-import { GeneSimilarComponent } from './gene-details/gene-similar';
+import { GeneRNASeqDEComponent } from './gene-rnaseq-de';
+import { GeneNetworkComponent } from './gene-network';
+import { GeneBRComponent } from './gene-brainregions';
+import { GeneSimilarComponent } from './gene-similar';
 import { NominatedFormComponent } from './nominated-form';
 
 import { SOEComponent } from './gene-overview/soe';
