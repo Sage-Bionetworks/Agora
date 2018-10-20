@@ -4,14 +4,14 @@ import { GeneNetwork,
     LinksListResponse,
     GeneResponse,
     GeneInfosResponse,
-    GeneInfo } from '../../../models';
+    GeneInfo } from '../../models';
 
 import {
     ApiService,
     DataService,
     GeneService,
     ForceService
-} from '../../../core/services';
+} from '../../core/services';
 import { SortEvent, Message } from 'primeng/api';
 
 @Component({
