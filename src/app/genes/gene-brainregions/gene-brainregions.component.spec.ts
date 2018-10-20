@@ -16,15 +16,15 @@ import {
     ForceServiceStub,
     GeneServiceStub,
     mockInfo1
-} from '../../../testing';
+} from '../../testing';
 
 import { GeneBRComponent } from './gene-brainregions.component';
 
-import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
+import { ApiService, DataService, ForceService, GeneService } from '../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
-import { ArraySortPipe } from '../../../shared/pipes';
+import { ArraySortPipe } from '../../shared/pipes';
 
 describe('Component: GeneNetwork', () => {
     let component: GeneBRComponent;

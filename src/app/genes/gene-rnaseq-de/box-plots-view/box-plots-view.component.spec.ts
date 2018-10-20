@@ -14,11 +14,11 @@ import {
     ApiServiceStub,
     GeneServiceStub,
     mockInfo1
-} from '../../../../testing';
+} from '../../../testing';
 
 import { BoxPlotsViewComponent } from './box-plots-view.component';
 
-import { ApiService, GeneService } from '../../../../core/services';
+import { ApiService, GeneService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 

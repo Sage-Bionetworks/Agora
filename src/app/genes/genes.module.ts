@@ -12,12 +12,12 @@ import { GenesListComponent } from './genes-list';
 import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewModule } from './gene-overview';
-import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
-import { GeneNetworkComponent } from './gene-details/gene-network';
-import { GeneBRComponent } from './gene-details/gene-brainregions';
-import { GeneSimilarComponent } from './gene-details/gene-similar';
-import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
-import { GeneDruggabilityComponent } from './gene-details/gene-druggability';
+import { GeneRNASeqDEComponent } from './gene-rnaseq-de';
+import { GeneNetworkComponent } from './gene-network';
+import { GeneBRComponent } from './gene-brainregions';
+import { GeneSimilarComponent } from './gene-similar';
+import { BoxPlotsViewComponent } from './gene-rnaseq-de/box-plots-view';
+import { GeneDruggabilityComponent } from './gene-druggability';
 
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 
