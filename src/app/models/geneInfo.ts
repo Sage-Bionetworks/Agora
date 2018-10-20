@@ -21,6 +21,7 @@ export interface GeneInfo {
     'go.MF': GoMF[];
     isIGAP: boolean;
     haseqtl: boolean;
+    isChangedInADBrain: boolean;
     medianexpression: MedianExpression[];
     nominatedtarget: NominatedTarget[];
     nominations: number;

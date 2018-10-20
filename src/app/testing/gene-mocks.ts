@@ -73,6 +73,7 @@ export const mockInfo1: GeneInfo = {
             term: 'protein binding'
         }
     ],
+    'isChangedInADBrain': false,
     'isIGAP': false,
     'haseqtl': true,
     'medianexpression': [

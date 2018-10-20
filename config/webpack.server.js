@@ -16,11 +16,18 @@ const NodemonPlugin = require( 'nodemon-webpack-plugin' );
 
 const ENV = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 const Docker = process.env.Docker || false;
+const HOST = process.env.HOST || 'localhost';
+
+const MONGODB_HOST = process.env.MONGODB_HOST || null;
+const MONGODB_PORT = process.env.MONGODB_PORT || null;
+
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
     port: process.env.PORT || 3000,
     ENV: ENV,
-    Docker: Docker
+    Docker: Docker,
+    MONGODB_HOST: MONGODB_HOST,
+    MONGODB_PORT: MONGODB_PORT
 });
 
 module.exports = {
@@ -70,7 +77,9 @@ module.exports = {
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HOST': JSON.stringify(METADATA.host),
         'process.env.PORT': JSON.stringify(METADATA.port),
-        'process.env.Docker': JSON.stringify(METADATA.Docker)
+        'process.env.Docker': JSON.stringify(METADATA.Docker),
+        'process.env.MONGODB_HOST': JSON.stringify(METADATA.MONGODB_HOST),
+        'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT)
       })
     ],
     target: 'node',

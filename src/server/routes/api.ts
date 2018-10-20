@@ -4,6 +4,7 @@ import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
+import * as awsParamStore from 'aws-param-store';
 
 const router = express.Router();
 const database = { url: '' };
@@ -14,15 +15,24 @@ if (env === 'development') {
 }
 
 // Set the database url
-if (process.env.Docker) {
-    // Service name here, not the localhost
-    database.url = 'mongodb://mongodb:27017/agora';
+if (process.env.MONGODB_HOST && process.env.MONGODB_PORT) {
+    const results = awsParamStore.getParametersSync(
+        [
+            '/agora-develop/MongodbUsername', '/agora-develop/MongodbPassword'
+        ], { region: 'us-east-1' }
+    );
+
+    database.url = 'mongodb://' + results.Parameters[0] + ':' + results.Parameters[1]
+        + '@' + process.env.MONGODB_HOST + ':' + process.env.MONGODB_PORT + '/agora'
+        + '?authSource=admin';
 } else {
+    // Fallback to the service for now
+    // Service name here, not the localhost
     database.url = 'mongodb://localhost:27017/agora';
 }
 
-// Connect to mongoDB database, local or remotely
 mongoose.connect(database.url, { useNewUrlParser: true });
+
 // Get the default connection
 const connection = mongoose.connection;
 

@@ -10,7 +10,7 @@ import { MenuItem } from 'primeng/api';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
-    @ViewChild('menuItems') menu: MenuItem[];
+    @ViewChild('navMenu') menu: MenuItem[];
     items: MenuItem[];
     activeItem: MenuItem;
 

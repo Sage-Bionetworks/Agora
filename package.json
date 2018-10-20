@@ -124,6 +124,8 @@
     "@angular/router": "^6.1.9",
     "@types/dc": "^0.0.28",
     "@types/express": "^4.16.0",
+    "aws-param-store": "^2.1.0",
+    "aws-sdk": "^2.337.0",
     "body-parser": "^1.18.3",
     "core-js": "^2.5.7",
     "cors": "^2.8.4",

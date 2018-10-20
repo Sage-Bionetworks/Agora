@@ -11,12 +11,12 @@ import {
 } from '../../../core/services';
 
 @Component({
-    selector: 'teams-page',
-    templateUrl: './teams-page.component.html',
-    styleUrls: [ './teams-page.component.scss' ],
+    selector: 'nom-details',
+    templateUrl: './nom-details.component.html',
+    styleUrls: [ './nom-details.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class TeamsPageComponent implements OnInit {
+export class NominationDetailsComponent implements OnInit {
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
@@ -41,21 +41,17 @@ export class TeamsPageComponent implements OnInit {
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-        // If we don't have a Gene or any Models/Tissues here, or in case we are
-        // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id) {
-            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
-                if (!data.item) { this.router.navigate(['/genes']); }
-                this.geneService.updateGeneData(data);
-                this.gene = data.item;
-                this.geneInfo = data.info;
-                this.ntInfoArray = this.geneInfo.nominatedtarget;
-            }, (error) => {
-                console.log('Error loading gene: ' + error.message);
-            }, () => {
-                this.loadTeams();
+
+        // Check if we tried to load this path straight away
+        if (!this.geneInfo) {
+            this.goToRoute('/genes', {
+                outlets: {
+                    'genes-router': [ 'gene-details', this.id ]
+                }
             });
         } else {
+            // We don't need to check for data here since the parent component
+            // handled that
             this.ntInfoArray = this.geneInfo.nominatedtarget;
             this.loadTeams();
         }
@@ -127,6 +123,8 @@ export class TeamsPageComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
+        console.log(this.router);
+        console.log(outlets);
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

@@ -11,10 +11,9 @@ import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
 import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
-import { GeneOverviewComponent } from './gene-details/gene-overview';
+import { GeneOverviewModule } from './gene-overview';
 import { GeneRNASeqDEComponent } from './gene-details/gene-rnaseq-de';
 import { GeneNetworkComponent } from './gene-details/gene-network';
-import { TeamsPageComponent } from './gene-details/teams-page';
 import { GeneBRComponent } from './gene-details/gene-brainregions';
 import { GeneSimilarComponent } from './gene-details/gene-similar';
 import { BoxPlotsViewComponent } from './gene-details/gene-rnaseq-de/box-plots-view';
@@ -29,10 +28,8 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         GenesListComponent,
         NominatedFormComponent,
         GeneSearchComponent,
-        GeneOverviewComponent,
         GeneRNASeqDEComponent,
         GeneNetworkComponent,
-        TeamsPageComponent,
         GeneBRComponent,
         GeneSimilarComponent,
         BoxPlotsViewComponent,
@@ -44,7 +41,8 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         ChartsModule,
         AppSharedModule,
         DialogsModule,
-        GenesRoutingModule
+        GenesRoutingModule,
+        GeneOverviewModule
     ],
     entryComponents: [
         BoxPlotsViewComponent

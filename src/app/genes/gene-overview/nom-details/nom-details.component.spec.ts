@@ -15,22 +15,22 @@ import {
     GeneServiceStub
 } from '../../../testing';
 
-import { TeamsPageComponent } from './teams-page.component';
+import { NominationDetailsComponent } from './nom-details.component';
 
 import { ApiService, GeneService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
 describe('Component: TeamsPage', () => {
-    let component: TeamsPageComponent;
-    let fixture: ComponentFixture<TeamsPageComponent>;
+    let component: NominationDetailsComponent;
+    let fixture: ComponentFixture<NominationDetailsComponent>;
     let apiService: ApiServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                TeamsPageComponent,
-                MockComponent(TeamsPageComponent)
+                NominationDetailsComponent,
+                MockComponent(NominationDetailsComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -45,7 +45,7 @@ describe('Component: TeamsPage', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(TeamsPageComponent);
+        fixture = TestBed.createComponent(NominationDetailsComponent);
 
         // Get the injected instances
         apiService = fixture.debugElement.injector.get(ApiService);

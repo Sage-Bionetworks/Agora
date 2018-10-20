@@ -59,28 +59,7 @@ h3 {
 }
 
 .inner-section-divider {
-    border-bottom: 1px solid #E0E0E0;
-}
-
-.inner-section-divider:after {
-    content: '';
-    display: block;
-    border-bottom: 1px solid #FFFFFF;
-    margin-bottom: -2px;
-
-    @include respond-to('ex-small') {
-        max-width: 3.5%;
-    }
-    @include respond-to('small') {
-        max-width: 4.0%;
-    }
-    @include respond-to('medium') {
-        max-width: 4.5%;
-    }
-    @include respond-to('large') {
-        max-width: 5.5%;
-    }
-    @include respond-to('ex-large') {
-        max-width: 7.5%;
-    }
+    border-bottom: 2px solid #E0E0E0;
+    margin-top: 45px;
+    margin-bottom: 45px;
 }

@@ -1,5 +1,5 @@
-@import "../../../../assets/css/helpers/variables";
-@import "../../../../assets/css/helpers/mixins";
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
 
 .info-header {
     padding-right: 5% !important;
@@ -42,6 +42,12 @@
             text-align: right;
         }
     }
+}
+
+.custom-desc {
+    background-color: transparent;
+    background: rgba(255, 255, 255, 0.35);
+    margin-bottom: 0px;
 }
 
 .nominated-button {
@@ -207,11 +213,6 @@
         margin-left: 2%;
         margin-right: 2%;
     }
-}
-
-.overview-desc {
-    background-color: transparent;
-    background: rgba(255, 255, 255, 0.35);
 }
 
 .overview-tab-menu {

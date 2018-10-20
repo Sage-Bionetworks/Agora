@@ -64,6 +64,8 @@ declare var Analyzer: boolean;
 declare var Docker: boolean;
 declare var VERSION: string;
 declare var DATA_VERSION: string;
+declare var MONGODB_HOST: string;
+declare var MONGODB_PORT: number;
 
 interface FirebaseConfig {
   apiKey: string;
@@ -87,6 +89,8 @@ interface GlobalEnvironment {
   Docker: boolean;
   VERSION: string;
   DATA_VERSION: string;
+  MONGODB_HOST: string;
+  MONGODB_PORT: number;
 }
 
 interface Es6PromiseLoader {

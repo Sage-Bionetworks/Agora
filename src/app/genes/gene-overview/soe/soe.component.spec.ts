@@ -18,17 +18,15 @@ import {
     mockInfo1
 } from '../../../testing';
 
-import { GeneOverviewComponent } from './gene-overview.component';
+import { SOEComponent } from './soe.component';
 
 import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
 
-import { Button } from 'primeng/button';
-
 import { MockComponent } from 'ng-mocks';
 
-describe('Component: GeneOverview', () => {
-    let component: GeneOverviewComponent;
-    let fixture: ComponentFixture<GeneOverviewComponent>;
+describe('Component: SOE', () => {
+    let component: SOEComponent;
+    let fixture: ComponentFixture<SOEComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
@@ -40,9 +38,8 @@ describe('Component: GeneOverview', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GeneOverviewComponent,
-                MockComponent(Button),
-                MockComponent(GeneOverviewComponent)
+                SOEComponent,
+                MockComponent(SOEComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -59,7 +56,7 @@ describe('Component: GeneOverview', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(GeneOverviewComponent);
+        fixture = TestBed.createComponent(SOEComponent);
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
@@ -135,36 +132,4 @@ describe('Component: GeneOverview', () => {
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
     });
-
-    it('should save the loaded genes state', fakeAsync(() => {
-        const dsSpy = spyOn(dataService, 'loadGenes').and.callFake(() =>
-            Promise.resolve(true)
-        );
-
-        spyOn(component, 'initDetails').and.callThrough();
-        const hgcSpy = spyOn(geneService, 'hasGeneChanged');
-        hgcSpy.and.callFake(() => {
-            return true;
-        });
-        component.initDetails();
-        tick(500);
-
-        fixture.detectChanges();
-        expect(component.dataLoaded).toEqual(true);
-        expect(dsSpy.calls.any()).toEqual(true);
-
-        component.dataLoaded = false;
-        fixture.detectChanges();
-        expect(component.dataLoaded).toEqual(false);
-
-        hgcSpy.and.callFake(() => {
-            return false;
-        });
-        component.initDetails();
-        tick(500);
-
-        fixture.detectChanges();
-        expect(component.dataLoaded).toEqual(true);
-        expect(dsSpy.calls.count()).toEqual(2);
-    }));
 });

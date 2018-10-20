@@ -1,0 +1,51 @@
+<div *ngIf="dataLoaded">
+    <div class="section-thin overview-header nom-details-oh" tabindex="0">
+        <div class="row no-gutters">
+            <div class="col-md-9 col-sm-12 col-12">
+                <h1 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h1>
+                <p class="no-margin-bottom">
+                    The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
+                    AD targets. For selected targets, teams have performed further experimental model system validation.
+                    Because these target hypotheses are not yet fully validated, we are seeking input from the community
+                    to help in their evalutation.
+                </p>
+            </div>
+        </div>
+        <h1 class="inner-section-divider"></h1>
+    </div>
+    <div class="section-thin teams-section" tabindex="0">
+        <div *ngFor="let team of teams; let i = index">
+            <h1 class="team-name">
+                {{team.team}}
+            </h1>
+            <p class="black-paragraph custom-paragraph">
+                {{team.description}}
+            </p>
+            <h3>
+                Why was the target selected?
+            </h3>
+            <p class="black-paragraph custom-paragraph">
+                {{ntInfoArray[i].target_choice_justification}}
+            </p>
+            <h3>
+                Predicted therapeutic direction
+            </h3>
+            <p class="black-paragraph custom-paragraph">
+                {{ntInfoArray[i].predicted_therapeutic_direction}}
+            </p>
+            <h3>
+                The type of data used and analyses done to identify target
+            </h3>
+            <p class="black-paragraph custom-paragraph">
+                {{ntInfoArray[i].data_used_to_support_target_selection}}
+            </p>
+            <div class="row members-row">
+                <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
+                    <div class="member-img" [style.background-image]="getMemberImg(member.name)"></div>
+                    <h3>{{member.name}}</h3>
+                </div>
+            </div>
+            <h1 class="inner-section-divider"></h1>
+        </div>
+    </div>
+</div>

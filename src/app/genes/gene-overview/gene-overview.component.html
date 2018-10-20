@@ -1,21 +1,17 @@
 <div *ngIf="dataLoaded">
     <div class="section-hero">
-        <div class="section-thin overview-header" tabindex="0">
+        <div class="section-thin overview-header " tabindex="0">
             <div class="row no-gutters">
-                <div *ngIf="geneInfo" class="col-md-5 col-sm-12 col-12 info-header">
+                <div *ngIf="geneInfo" class="col-md-12 col-sm-12 col-12 info-header">
                     <h1 class="no-margin">{{gene.hgnc_symbol}}</h1>
                     <p class="no-margin">
                         {{geneInfo.name}}
                     </p>
                 </div>
-                <div *ngIf="geneInfo && geneInfo.nominations && gene" class="col-md-7 col-sm-12 col-12 nom-button-col">
-                    <img class="nominated-button" src="/assets/img/nominated_button.png"
-                        (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'teams-page', gene.ensembl_gene_id ]} })">
-                </div>
             </div>
         </div>
 
-        <div *ngIf="geneInfo" class="section-thin overview-desc" tabindex="0">
+        <div *ngIf="geneInfo" class="section-thin overview-desc custom-desc" tabindex="0">
             <h2>
                 Gene Description
             </h2>
@@ -34,16 +30,16 @@
         </div>
     </div>
 
-    <p-tabMenu [model]="items" [styleClass]="'overview-tab-menu'"></p-tabMenu>
+    <p-tabMenu #overviewMenu [model]="items" [activeItem]="activeItem" [styleClass]="'overview-tab-menu'" (click)="activateMenu()"></p-tabMenu>
 
-    <div class="section-thin overview-rel" tabindex="0">
+
+    <!--<div class="section-thin overview-rel" tabindex="0">
         <h2>
             Summary of Evidence
         </h2>
         <more-info [name]="'soe'">
             <soe-dialog></soe-dialog>
         </more-info>
-        <!-- TODO: Improve this part -->
         <div class="row">
             <div class="col-md-6">
                 <h3>
@@ -179,7 +175,7 @@
                 <img class="synapse-button" src="/assets/img/synapse_button.png" (click)="viewSynapseReg()">
             </div>
         </p-panel>
-    </div>
+    </div>-->
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
     <loading></loading>

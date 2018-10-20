@@ -1,14 +1,22 @@
-import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import {
+    Component,
+    OnInit,
+    Input,
+    ViewEncapsulation,
+    OnDestroy,
+    ViewChild,
+    AfterContentChecked
+} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../../models';
+import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
 
 import {
     ApiService,
     DataService,
     GeneService,
     ForceService
-} from '../../../core/services';
+} from '../../core/services';
 
 import { MenuItem } from 'primeng/api';
 
@@ -18,7 +26,7 @@ import { MenuItem } from 'primeng/api';
     styleUrls: [ './gene-overview.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneOverviewComponent implements OnInit, OnDestroy {
+export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChecked {
     @Input() styleClass: string = 'overview-panel';
     @Input() style: any;
     @Input() gene: Gene;
@@ -27,12 +35,15 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
+    @ViewChild('overviewMenu') menu: MenuItem[];
 
+    activeItem: MenuItem;
     currentGeneData = [];
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
     noData: boolean = false;
     items: MenuItem[];
+    neverActivated: boolean = true;
 
     constructor(
         private router: Router,
@@ -46,19 +57,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Populate the tab menu
         this.items = [
-            {label: 'NOMINATION DETAILS', icon: ''},
-            {label: 'SUMMARY', icon: ''},
-            {label: 'EVIDENCE', icon: ''},
-            {label: 'DRUGGABILITY', icon: ''}
+            {label: 'NOMINATION DETAILS'},
+            {label: 'SUMMARY'},
+            {label: 'EVIDENCE'},
+            {label: 'DRUGGABILITY'}
         ];
 
         // Get the current clicked gene, always update
-        this.router.events.subscribe((evt) => {
+        /*this.router.events.subscribe((evt) => {
             if (!(evt instanceof NavigationEnd)) {
                 return;
             }
             document.body.scrollTop = 0;
-        });
+        });*/
         this.subscription = this.forceService.getGenes()
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
@@ -97,6 +108,72 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    ngAfterContentChecked() {
+        if (this.menu && this.neverActivated) {
+            this.neverActivated = false;
+            this.activateMenu();
+        }
+    }
+
+    activateMenu() {
+        this.activeItem = this.menu['activeItem'];
+        if (this.activeItem) {
+            switch (this.activeItem.label) {
+                case 'NOMINATION DETAILS':
+                    this.goToRoute('/genes', {
+                        outlets: {
+                            'genes-router': ['gene-details', this.id],
+                            'gene-overview': ['nom-details']
+                        }
+                    });
+                    break;
+                case 'SUMMARY':
+                    this.goToRoute('/genes', {
+                        outlets: {
+                            'genes-router': ['gene-details', this.id],
+                            'gene-overview': ['soe']
+                        }
+                    });
+                    break;
+                case 'EVIDENCE':
+                    this.goToRoute('/genes', {
+                        outlets: {
+                            'genes-router': ['gene-details', this.id],
+                            'gene-overview': ['nom-details']
+                        }
+                    });
+                    break;
+                case 'DRUGGABILITY':
+                    this.goToRoute('/genes', {
+                        outlets: {
+                            'genes-router': ['gene-details', this.id],
+                            'gene-overview': ['nom-details']
+                        }
+                    });
+                    break;
+                default:
+                    this.goToRoute('/genes', {
+                        outlets: {
+                            'genes-router': ['gene-details', this.id],
+                            'gene-overview': ['nom-details']
+                        }
+                    });
+            }
+        }
+    }
+
+    setActiveItem() {
+        if (this.geneInfo) {
+            if (!this.geneInfo.nominations) {
+                this.items[0].visible = false;
+                this.activeItem = this.items[1];
+            } else {
+                this.items[0].visible = true;
+                this.activeItem = this.items[0];
+            }
+        }
+    }
+
     initTissuesModels() {
         // Check if we have a database id at this point
         if (this.gene) {
@@ -107,9 +184,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
                     this.geneService.loadGeneTissues(responseList[2]);
                     this.geneService.loadGeneModels(responseList[3]);
 
+                    this.setActiveItem();
                     this.dataLoaded = true;
                 });
             } else {
+                this.setActiveItem();
                 this.dataLoaded = true;
             }
         } else {
@@ -126,41 +205,13 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
             }, (error) => {
                 console.log('Error loading genes!');
             }, () => {
+                this.setActiveItem();
                 this.dataLoaded = true;
             });
         } else {
+            this.setActiveItem();
             this.dataLoaded = true;
         }
-    }
-
-    getText(state?: boolean): string {
-        let text = '';
-        if (state) {
-            text = 'True';
-        } else {
-            if (state === undefined) {
-                text = 'No data';
-            } else {
-                text = 'False';
-            }
-        }
-        return text;
-    }
-
-    getTextColorClass(state: boolean, normal?: boolean): any {
-        const colorClassObj = {} as any;
-        if (state) {
-            colorClassObj['green-text'] = true;
-        } else {
-            colorClassObj['red-text'] = true;
-        }
-
-        if (normal) {
-            colorClassObj['normal-heading'] = true;
-        } else {
-            colorClassObj['italic-heading'] = true;
-        }
-        return colorClassObj;
     }
 
     viewGene(id: string) {
@@ -266,17 +317,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
-    }
-
-    viewPathways() {
-        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
-            this.gene.ensembl_gene_id, '_blank');
-    }
-
-    viewGeneOntology() {
-        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=' +
-            this.gene.ensembl_gene_id, '_blank');
+        (outlets) ? this.router.navigate([path, outlets], {
+            relativeTo: this.route,
+            skipLocationChange: true
+        }) : this.router.navigate([path]);
     }
 
     isNominatedTarget(): string {
