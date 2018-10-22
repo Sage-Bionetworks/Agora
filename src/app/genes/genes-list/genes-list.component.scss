@@ -5,6 +5,23 @@
     margin-top: -0.1em;
     background-color: transparent !important;
     width: auto; /* Scale the div to the parent width */
+    .section {
+        margin-bottom: 43px;
+        h1 {
+            text-align: center;
+        }
+        p{
+            text-align: center;
+        }
+    }
+
+    .link-heading {
+        color: #24334F;
+        float: left;
+        margin-left: 50%;
+        transform: translate(-50%);
+        margin-bottom: 20px;
+    }
 
     @include respond-to('ex-small') {
         background-size: 1330px 350px;
@@ -130,6 +147,7 @@
 
         p {
             margin-top: 35px;
+            text-align: center;
         }
 
         .span-add-this {

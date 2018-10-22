@@ -5,13 +5,16 @@
             AD researchers have nominated genes that may be good targets for new AD therapies. Select a gene from the list
             of nominated targets to view details and evidence.
         </p>
+        <more-info [name]="'nt'" [text]="'Learn more about Nominated Targets'">
+            <nt-dialog [header]="''" [name]="'nt'"></nt-dialog>
+        </more-info>
     </div>
     <p-table #gl
         [columns]="cols" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
-        scrollHeight="270px"
+        scrollHeight="calc(100vh - 788px)"
         [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"

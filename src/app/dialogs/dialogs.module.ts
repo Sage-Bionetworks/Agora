@@ -9,6 +9,7 @@ import { MEDialogComponent } from './me-dialog';
 import { SOEDialogComponent } from './soe-dialog';
 import { SGDialogComponent } from './sg-dialog';
 import { MoreInfoComponent } from './more-info';
+import { NOMinatedTargetComponent } from './nt-dialog';
 
 import { DialogsService } from './services';
 
@@ -24,7 +25,8 @@ import { DialogsService } from './services';
         MEDialogComponent,
         SGDialogComponent,
         SOEDialogComponent,
-        DRUggabilityComponent
+        DRUggabilityComponent,
+        NOMinatedTargetComponent
     ],
     exports: [
         MoreInfoComponent,
@@ -33,7 +35,8 @@ import { DialogsService } from './services';
         MEDialogComponent,
         SGDialogComponent,
         SOEDialogComponent,
-        DRUggabilityComponent
+        DRUggabilityComponent,
+        NOMinatedTargetComponent
     ],
     providers: [
         DialogsService

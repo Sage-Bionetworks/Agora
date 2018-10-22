@@ -15,6 +15,7 @@ import { DialogsService } from '../services';
 export class MoreInfoComponent {
     // The dialog name
     @Input() name: string = '';
+    @Input() text: string = 'View more information';
     @Input() needDisplayBlock: boolean = false;
 
     constructor(private dialogsService: DialogsService) {}
