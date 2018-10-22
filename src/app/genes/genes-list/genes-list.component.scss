@@ -23,6 +23,10 @@
         margin-bottom: 20px;
     }
 
+    .info-icon{
+        content:url("/assets/icon/info_icon2.png");
+    }
+
     @include respond-to('ex-small') {
         background-size: 1330px 350px;
     }
