@@ -59,7 +59,7 @@ export class ContribTeamsPageComponent implements OnInit {
             this.obsTeams = this.obsTeams.pipe(
                 map((ti: TeamInfo[]) => {
                     ti.sort((a, b) => {
-                        return a.team < b.team ? -1 : 1;
+                        return a.team.toLowerCase() < b.team.toLowerCase() ? -1 : 1;
                     });
                     return ti;
                 })
