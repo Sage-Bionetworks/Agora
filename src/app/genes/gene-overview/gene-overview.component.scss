@@ -287,22 +287,33 @@
         }
     }
 
+    ul {
+        display: flex !important;
+        width: 100%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
     li {
         background: white;
         background-color: white !important;
         height: 70px;
         line-height: 70px;
         margin: 0px !important;
-        width: 25%;
+        width: 100%;
         border: none;
         color: #3C4A63;
-        opacity: 0.5;
-
 
         a {
             padding: 0px !important;
             width: 100%;
             text-align: center;
+
+            span {
+                color: #3C4A63;
+                opacity: 0.5;
+            }
         }
     }
 

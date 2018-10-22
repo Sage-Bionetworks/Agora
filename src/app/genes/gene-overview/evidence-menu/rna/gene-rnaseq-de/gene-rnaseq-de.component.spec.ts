@@ -16,16 +16,21 @@ import {
     ChartServiceStub,
     GeneServiceStub,
     mockInfo1
-} from '../../testing';
+} from '../../../../../testing';
 
 import { GeneRNASeqDEComponent } from './gene-rnaseq-de.component';
 
-import { ApiService, DataService, GeneService } from '../../core/services';
-import { ChartService } from '../../charts/services';
+import {
+    ApiService,
+    DataService,
+    GeneService
+} from '../../../../../core/services';
+
+import { ChartService } from '../../../../../charts/services';
 
 import { MockComponent } from 'ng-mocks';
 
-import { ArraySortPipe } from '../../shared/pipes';
+import { ArraySortPipe } from '../../../../../shared/pipes';
 
 describe('Component: GeneNetwork', () => {
     let component: GeneRNASeqDEComponent;

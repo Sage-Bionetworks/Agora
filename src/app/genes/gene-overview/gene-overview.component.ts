@@ -41,7 +41,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     currentGeneData = [];
     subscription: any;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
-    noData: boolean = false;
     items: MenuItem[];
     neverActivated: boolean = true;
 
@@ -64,12 +63,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         ];
 
         // Get the current clicked gene, always update
-        /*this.router.events.subscribe((evt) => {
-            if (!(evt instanceof NavigationEnd)) {
-                return;
-            }
-            document.body.scrollTop = 0;
-        });*/
         this.subscription = this.forceService.getGenes()
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
@@ -91,7 +84,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         data.item = this.geneService.getEmptyGene(
                             data.info.ensembl_gene_id, data.info.hgnc_symbol
                         );
-                        this.noData = true;
+                        this.geneService.setInfoDataState(true);
                     }
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
@@ -139,7 +132,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
+                            'evidence-menu': ['evidence'],
+                            'gene-overview': ['rna']
                         }
                     });
                     break;
@@ -212,29 +206,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             this.setActiveItem();
             this.dataLoaded = true;
         }
-    }
-
-    viewGene(id: string) {
-        this.apiService.getGene(id).subscribe((data: GeneResponse) => {
-            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            const currentUrl = this.router.url + '?';
-            if (!data.item) {
-                this.router.navigate(['/genes']);
-                return;
-            }
-            this.geneService.updateGeneData(data);
-            this.router.navigateByUrl(currentUrl)
-                .then(() => {
-                    this.router.navigated = false;
-                    this.router.navigate(['/genes',
-                        {
-                            outlets:
-                            {
-                                'genes-router': ['gene-details', data['item'].ensembl_gene_id]
-                            }
-                        }]);
-                });
-        });
     }
 
     getSummary(body: boolean): string {
