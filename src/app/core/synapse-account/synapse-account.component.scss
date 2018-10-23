@@ -2,7 +2,12 @@
 @import "../../../assets/css/helpers/mixins";
 
 .info-header {
-    padding-right: 5% !important;
+    h1{
+        text-align: center;
+    }
+    p {
+        text-align: center;
+    }
 }
 
 .overview-header {
@@ -71,8 +76,15 @@
     }
 
     h1 {
-        font-size: 42px;
-        color: #BCC0CA;
+        font-size: 40px;
+        color: #6C7489;
+        font-weight: 100;
+    }
+
+    h2{
+        color: #3F5EAB;
+        font-size: 28px;
+        font-weight: 500;
     }
 
     .col-md-11, .col-sm-10, .col-10,
@@ -105,6 +117,8 @@
 
     .synapse-img-col {
         margin-bottom: 25px;
+        margin-top: 25px;
+        margin-left: -3px;
     }
 
     .synapse-desc-paragraph {
