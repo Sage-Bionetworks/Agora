@@ -1,0 +1,116 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
+.evidence-tab-menu {
+    padding: 0px !important;
+
+    .ui-tabmenu-nav {
+        padding: 0px !important;
+        background: #3C4A63;
+        background-color: #3C4A63 !important;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+        position: relative;
+
+        text-align: left;
+        text-align-last: left;
+
+        @include respond-to('ex-small') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 3.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 3.5% !important;
+            }
+        }
+        @include respond-to('small') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 4.0% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 4.0% !important;
+            }
+        }
+        @include respond-to('medium') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 4.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 4.5% !important;
+            }
+        }
+        @include respond-to('large') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 5.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 5.5% !important;
+            }
+        }
+        @include respond-to('ex-large') {
+            >li:first-child {
+                text-align: left;
+                text-align-last: left;
+                padding-left: 7.5% !important;
+            }
+            >li:last-child {
+                text-align: right;
+                text-align-last: right;
+                padding-right: 7.5% !important;
+            }
+        }
+    }
+
+    ul {
+        display: flex !important;
+        width: 100%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    li {
+        background: #3C4A63;
+        background-color: #3C4A63 !important;
+        height: 70px;
+        line-height: 70px;
+        margin: 0px !important;
+        width: 100%;
+        border: none;
+        color: white;
+
+        a {
+            padding: 0px !important;
+            width: 100%;
+            text-align: center;
+
+            span {
+                opacity: 0.5;
+                color: white;
+            }
+        }
+    }
+
+    .ui-state-active {
+        a > span {
+            @include lato-font('bold');
+            font-size: 20px;
+            opacity: 1;
+        }
+    }
+}

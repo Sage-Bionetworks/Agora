@@ -20,6 +20,7 @@ export class GeneServiceStub {
     maxLogFC: number = 10;
     maxAdjPValue: number = 50;
     minAdjPValue: number = 0;
+    noInfoData: boolean = false;
 
     getPreviousGene(): Gene {
         return mockGene2;
@@ -105,5 +106,13 @@ export class GeneServiceStub {
         return (this.getPreviousGene() && this.getCurrentGene()) ?
             this.getPreviousGene().hgnc_symbol !== this.getCurrentGene().hgnc_symbol :
             false;
+    }
+
+    getInfoDataState() {
+        return this.noInfoData;
+    }
+
+    setInfoDataState(state: boolean) {
+        this.noInfoData = state;
     }
 }

@@ -16,10 +16,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { BoxPlotsViewComponent } from './box-plots-view';
 
-import { Gene, GeneInfo, GeneResponse } from '../../models';
+import { Gene, GeneInfo, GeneResponse } from '../../../../../models';
 
-import { ChartService } from '../../charts/services';
-import { ApiService, DataService, GeneService } from '../../core/services';
+import { ChartService } from '../../../../../charts/services';
+import {
+    ApiService,
+    DataService,
+    GeneService
+} from '../../../../../core/services';
 
 import { SelectItem } from 'primeng/api';
 
