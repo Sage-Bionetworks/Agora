@@ -1,11 +1,42 @@
 <div class="section-thin overview-rel" tabindex="0">
-    <h2>
+    <h1>
         Summary of Evidence
-    </h2>
+    </h1>
+    <p class="no-margin-bottom">
+        This is a summary of evidence for a gene’s association to AD compiled from several data sources.
+    </p>
     <more-info [name]="'soe'">
         <soe-dialog></soe-dialog>
     </more-info>
-    <div class="row">
+</div>
+    <p-table [ngClass]="'st-table'" [columns]="cols" [value]="summary">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+            <tr>
+                <td *ngFor="let col of columns; let j = index;">
+                    <ng-container *ngIf="j !== 0">
+                        <ng-container *ngIf="summary[i].extraText">
+                            <span *ngIf="summary[i].hasLink" [ngClass]="'link-heading'" (click)="summary[i].command($event)">{{summary[i].extraText}}</span>
+                            <span *ngIf="!summary[i].hasLink" [ngClass]="'italic-heading'">Coming soon</span>
+                        </ng-container>
+                        <ng-container *ngIf="!summary[i].extraText">
+                            <span [ngClass]="getTextColorClass(rowData[col.field], true)">{{getText(summary[i].state)}}</span>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="j === 0">
+                        <span>{{rowData[col.field]}}</span>
+                    </ng-container>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <!--<div class="row">
         <div class="col-md-6">
             <h3>
                 AD Genetic Association &nbsp;&nbsp;&nbsp;
@@ -74,5 +105,4 @@
                 <span class="italic-heading">See <a pageScroll href="#nextSteps" class="italic-heading">"Next Steps"</a> at bottom of page</span>
             </h3>
         </div>
-    </div>
-</div>
+    </div>-->

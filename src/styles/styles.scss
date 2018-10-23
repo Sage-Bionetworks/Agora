@@ -76,7 +76,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 136px;
+    height: 100px;
     line-height: 100px;
 }
 
@@ -457,11 +457,11 @@ p-dialog {
 [hidden] { display: none !important; }
 
 .green-text {
-    color: #78B87A;
+    color: #78B87A !important;
 }
 
 .red-text {
-    color: #E06672;
+    color: #E06672 !important;
 }
 
 .placeholder-img {

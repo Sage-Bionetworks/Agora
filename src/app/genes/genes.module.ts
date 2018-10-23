@@ -13,7 +13,6 @@ import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewModule } from './gene-overview';
 import { GeneBRComponent } from './gene-brainregions';
 import { GeneSimilarComponent } from './gene-similar';
-import { GeneDruggabilityComponent } from './gene-druggability';
 
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 
@@ -25,8 +24,7 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         NominatedFormComponent,
         GeneSearchComponent,
         GeneBRComponent,
-        GeneSimilarComponent,
-        GeneDruggabilityComponent
+        GeneSimilarComponent
     ],
     imports: [
         NgxPageScrollModule,

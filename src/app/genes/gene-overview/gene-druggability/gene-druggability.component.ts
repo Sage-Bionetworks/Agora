@@ -1,6 +1,8 @@
 import { Component, ViewEncapsulation, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Gene, GeneInfo } from 'app/models';
+import { GeneInfo } from '../../../models';
+
+import { GeneService } from '../../../core/services';
 
 @Component({
     selector: 'gene-druggability',
@@ -13,10 +15,12 @@ export class GeneDruggabilityComponent implements OnInit {
     druggability: any;
 
     constructor(
-        private router: Router
+        private router: Router,
+        private geneService: GeneService
     ) {}
 
     ngOnInit() {
+        this.geneInfo = this.geneService.getCurrentInfo();
         console.log(this.geneInfo);
         if (this.geneInfo.druggability) {
             this.druggability = this.geneInfo.druggability[0];

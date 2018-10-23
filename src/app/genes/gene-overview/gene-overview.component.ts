@@ -132,7 +132,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
-                            'evidence-menu': ['evidence'],
+                            // Commented until we got full information in February
+                            /* 'evidence-menu': ['evidence'],
+                            'gene-overview': ['rna']*/
                             'gene-overview': ['rna']
                         }
                     });
@@ -141,7 +143,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
+                            'gene-overview': ['druggability']
                         }
                     });
                     break;
