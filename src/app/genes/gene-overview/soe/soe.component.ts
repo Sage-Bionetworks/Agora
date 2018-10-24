@@ -116,7 +116,7 @@ export class SOEComponent implements OnInit {
     getTextColorClass(state: boolean, normal?: boolean): any {
         const colorClassObj = {} as any;
         // The empty string is also a truthy value
-        if (!!(state)) {
+        if (state) {
             colorClassObj['green-text'] = true;
         } else {
             colorClassObj['red-text'] = true;

@@ -21,8 +21,10 @@ export const routes: Routes = [
         { path: 'gene-similar/:id', component: GeneSimilarComponent, outlet: 'genes-router' },
         { path: 'gene-brainregions/:id', component: GeneBRComponent, outlet: 'genes-router' },
         { path: 'nominated-form', component: NominatedFormComponent, outlet: 'genes-router'},
-        { path: 'gene-details/:id', outlet: 'genes-router', loadChildren:
-            './gene-overview/gene-overview.module#GeneOverviewModule'
+        {
+            path: 'gene-details/:id',
+            outlet: 'genes-router',
+            loadChildren: './gene-overview/gene-overview.module#GeneOverviewModule'
         },
         { path: 'soe', component: SOEComponent, outlet: 'gene-overview' },
         { path: 'nom-details', component: NominationDetailsComponent, outlet: 'gene-overview' },

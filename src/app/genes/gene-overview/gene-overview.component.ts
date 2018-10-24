@@ -132,9 +132,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
-                            // Commented until we got full information in February
-                            /* 'evidence-menu': ['evidence'],
-                            'gene-overview': ['rna']*/
                             'gene-overview': ['rna']
                         }
                     });
