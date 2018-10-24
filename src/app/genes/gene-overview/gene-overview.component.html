@@ -12,9 +12,6 @@
         </div>
 
         <div *ngIf="geneInfo" class="section-thin overview-desc custom-desc" tabindex="0">
-            <h2>
-                Gene Description
-            </h2>
             <p class="black-paragraph">
                 {{getSummary(true)}}
             </p>
@@ -22,8 +19,8 @@
                 {{getSummary()}}
             </p>
             <div *ngIf="getAlias()">
-                <h3>Also known as</h3>
-                <p class="black-paragraph">
+                <h4 class="ak-heading">Also known as</h4>
+                <p class="black-paragraph ak-paragraph">
                     {{getAlias()}}
                 </p>
             </div>

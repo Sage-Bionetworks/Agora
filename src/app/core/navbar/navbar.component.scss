@@ -40,7 +40,7 @@
 
     span {
         @include lato-font('normal');
-        font-size: 20px;
+        font-size: $font-size-xx-regular;
         color: #3C4A63;
     }
 }

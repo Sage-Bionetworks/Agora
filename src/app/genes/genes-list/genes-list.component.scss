@@ -16,15 +16,15 @@
     }
 
     .link-heading {
-        color: #24334F;
+        // color: #24334F;
         float: left;
         margin-left: 50%;
         transform: translate(-50%);
         margin-bottom: 20px;
     }
 
-    .info-icon{
-        content:url("/assets/icon/info_icon2.png");
+    .info-icon {
+        content:url("/assets/icon/info_icon.png");
     }
 
     @include respond-to('ex-small') {

@@ -1,12 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import {
-    ApiService,
-    GeneService
-} from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 @Component({
     selector: 'soe',
@@ -23,7 +20,6 @@ export class SOEComponent implements OnInit {
     summary: any[];
 
     constructor(
-        private router: Router,
         private route: ActivatedRoute,
         private geneService: GeneService
     ) {}
@@ -37,25 +33,27 @@ export class SOEComponent implements OnInit {
         this.summary = [
             {
                 property: 'AD Genetic Association',
-                state: this.getText(this.geneInfo.isIGAP),
+                state: (this.geneInfo.isIGAP === undefined) ? false : this.geneInfo.isIGAP,
                 hasLink: false,
                 extraText: ''
             },
             {
                 property: 'Brain eQTL',
-                state: this.getText(this.geneInfo.haseqtl),
+                state: (this.geneInfo.haseqtl === undefined) ? false : this.geneInfo.haseqtl,
                 hasLink: false,
                 extraText: ''
             },
             {
                 property: 'RNA Expression Change in AD Brain',
-                state: this.getText(this.geneInfo.isChangedInADBrain),
+                state: (this.geneInfo.isChangedInADBrain === undefined) ?
+                    false : this.geneInfo.isChangedInADBrain,
                 hasLink: false,
                 extraText: ''
             },
             {
                 property: 'Nominated Target',
-                state: this.getText((this.geneInfo.nominations === undefined) ? false : true),
+                state: (this.geneInfo.nominations === undefined) ?
+                    false : this.geneInfo.nominations,
                 hasLink: false,
                 extraText: ''
             },
@@ -138,9 +136,5 @@ export class SOEComponent implements OnInit {
     viewPathways() {
         window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
             this.gene.ensembl_gene_id, '_blank');
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

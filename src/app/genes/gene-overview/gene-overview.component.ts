@@ -7,7 +7,7 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
 
@@ -43,6 +43,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
     items: MenuItem[];
     neverActivated: boolean = true;
+    disableMenu: boolean = false;
 
     constructor(
         private router: Router,
@@ -56,11 +57,25 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     ngOnInit() {
         // Populate the tab menu
         this.items = [
-            {label: 'NOMINATION DETAILS'},
-            {label: 'SUMMARY'},
-            {label: 'EVIDENCE'},
-            {label: 'DRUGGABILITY'}
+            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
+            { label: 'SUMMARY', disabled: this.disableMenu },
+            { label: 'EVIDENCE', disabled: this.disableMenu },
+            { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
+
+        this.router.events.subscribe((re: RouterEvent) => {
+            if (re instanceof NavigationEnd) {
+                if (this.disableMenu) {
+                    // Improve this part, 0.8 seconds to re-activate the menu items
+                    setTimeout(() => {
+                        this.items.forEach((i) => {
+                            i.disabled = false;
+                        });
+                        this.disableMenu = false;
+                    }, 800);
+                }
+            }
+        });
 
         // Get the current clicked gene, always update
         this.subscription = this.forceService.getGenes()
@@ -109,48 +124,54 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     activateMenu() {
-        this.activeItem = this.menu['activeItem'];
-        if (this.activeItem) {
-            switch (this.activeItem.label) {
-                case 'NOMINATION DETAILS':
-                    this.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
-                        }
-                    });
-                    break;
-                case 'SUMMARY':
-                    this.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['soe']
-                        }
-                    });
-                    break;
-                case 'EVIDENCE':
-                    this.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['rna']
-                        }
-                    });
-                    break;
-                case 'DRUGGABILITY':
-                    this.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['druggability']
-                        }
-                    });
-                    break;
-                default:
-                    this.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
-                        }
-                    });
+        if (!this.disableMenu) {
+            this.disableMenu = true;
+            this.items.forEach((i) => {
+                i.disabled = true;
+            });
+            this.activeItem = this.menu['activeItem'];
+            if (this.activeItem) {
+                switch (this.activeItem.label) {
+                    case 'NOMINATION DETAILS':
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['nom-details']
+                            }
+                        });
+                        break;
+                    case 'SUMMARY':
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['soe']
+                            }
+                        });
+                        break;
+                    case 'EVIDENCE':
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['rna']
+                            }
+                        });
+                        break;
+                    case 'DRUGGABILITY':
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['druggability']
+                            }
+                        });
+                        break;
+                    default:
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['nom-details']
+                            }
+                        });
+                }
             }
         }
     }

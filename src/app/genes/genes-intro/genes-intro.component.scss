@@ -17,7 +17,7 @@
         @include lato-font('normal', italic);
 
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         text-decoration: underline;
         cursor: pointer;
     }
@@ -61,7 +61,7 @@ gene-search {
         font-weight: normal;
 
         span {
-            font-size: 18px;
+            font-size: $font-size-x-regular;
         }
     }
 }

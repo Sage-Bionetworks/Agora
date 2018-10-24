@@ -1,3 +1,6 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
 .gene-druggability {
     .dgb-first-h3 {
         margin-top: 30px;
@@ -10,4 +13,101 @@
 
 .no-data{
     min-height: 120px;
+}
+
+.gd-table {
+    .ui-table{
+        padding-bottom: 70px;
+    }
+
+    .ui-table .ui-table-tbody > tr {
+        background-color: #fafafb;
+    }
+
+    .ui-table .ui-table-tbody > tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .ui-table-thead {
+        display: none;
+    }
+
+    .dg-property-text {
+        @include lato-font('bold');
+        font-size: $font-size-xx-regular;
+        color: #24334F;
+    }
+
+    .dg-value-text {
+        font-size: $font-size-x-regular;
+        color: #24334F;
+    }
+
+    .ui-table-tbody {
+        height: 100%;
+
+        >tr>td {
+            @include lato-font('normal');
+
+            border: 0px;
+            line-height: 40px;
+
+            padding: .25em .5em;
+
+            @include respond-to('ex-small') {
+                font-size: 14px;
+            }
+            @include respond-to('small') {
+                font-size: $font-size-regular;
+            }
+            @include respond-to('medium') {
+                font-size: $font-size-x-regular;
+            }
+            @include respond-to('large') {
+                font-size: $font-size-x-regular;
+            }
+            @include respond-to('ex-large') {
+                font-size: $font-size-x-regular;
+            }
+
+            color: #24334F !important;
+            height: 40px;
+        }
+
+        @include respond-to('ex-small') {
+            >tr>td {
+                padding-left: 3.5%;
+                padding-right: 3.5%;
+                text-align: left;
+            }
+        }
+        @include respond-to('small') {
+            >tr>td {
+                padding-left: 4.0%;
+                padding-right: 4.0%;
+                text-align: left;
+            }
+        }
+        @include respond-to('medium') {
+            >tr>td {
+                padding-left: 4.5%;
+                padding-right: 4.5%;
+                text-align: left;
+            }
+        }
+        @include respond-to('large') {
+            >tr>td {
+                padding-left: 5.5%;
+                padding-right: 5.5%;
+                text-align: left;
+            }
+        }
+        @include respond-to('ex-large') {
+            >tr>td {
+                padding-left: 7.5%;
+                padding-right: 7.5%;
+                text-align: left;
+            }
+        }
+    }
 }

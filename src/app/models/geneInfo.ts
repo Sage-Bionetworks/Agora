@@ -13,7 +13,7 @@ export interface GeneInfo {
     _id: string;
     ensembl_gene_id: string;
     alias?: string[];
-    druggability?: object[];
+    druggability?: Druggability[];
     name: string;
     summary?: string;
     hgnc_symbol: string;
@@ -39,6 +39,13 @@ export interface NominatedTarget {
     predicted_therapeutic_direction: string;
     data_used_to_support_target_selection: string;
     data_synapseid: string[];
+}
+
+export interface Druggability {
+    sm_druggability_bucket: number;
+    classification: string;
+    druggable_class: string;
+    pharos_class: string;
 }
 
 export type GeneInfoDocument = GeneInfo & Document;

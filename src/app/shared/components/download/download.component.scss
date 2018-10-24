@@ -57,7 +57,7 @@
         @include lato-font('normal');
 
         line-height: normal;
-        font-size: 16px;
+        font-size: $font-size-regular;
         height: 32px;
         color: #1A1C29;
 
@@ -85,7 +85,7 @@
             height: 100%;
 
             .pi-check:before {
-                font-size: 21px;
+                font-size: $font-size-xx-regular-odd;
             }
         }
     }
@@ -121,7 +121,7 @@
         color: #1A1C29;
         background: #ffe399;
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
     }
 
     .ui-toast-summary {
@@ -130,12 +130,12 @@
         color: #1A1C29;
         background: #ffe399;
         line-height: normal;
-        font-size: 20px;
+        font-size: $font-size-xx-regular;
     }
 
     .ui-toast-close-icon {
         color: #1A1C29;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
     }

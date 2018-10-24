@@ -1,3 +1,6 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
 .nt-dialog {
   .ui-dialog {
     max-height: 90% !important;
@@ -40,7 +43,7 @@
   cursor: pointer;
   width: 100%;
   line-height: normal;
-  font-size: 18px;
+  font-size: $font-size-x-regular;
   text-decoration: none;
   color: #5BB0B5 !important;
   position: relative;

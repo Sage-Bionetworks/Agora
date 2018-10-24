@@ -35,7 +35,7 @@
         background: #FFFFFF !important;
         border-radius: 100px !important;
         line-height: normal !important;
-        font-size: 18px !important;
+        font-size: $font-size-x-regular !important;
         color: #73C8CC !important;
         border: 1px solid #73C8CC !important;
     }
@@ -47,7 +47,7 @@
             background: #FFFFFF !important;
             border-radius: 100px !important;
             line-height: normal !important;
-            font-size: 18px !important;
+            font-size: $font-size-x-regular !important;
             color: #73C8CC !important;
             border: 1px solid #73C8CC !important;
         }
@@ -58,13 +58,13 @@
 
         color: black;
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
     }
 
     .beta-coming-soon {
         margin-bottom: auto;
         margin-top: auto;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         color: #1A1C29;
         text-align: center;
 
@@ -72,7 +72,7 @@
             @include lato-font('normal');
 
             line-height: normal;
-            font-size: 18px;
+            font-size: $font-size-x-regular;
             color: #1A1C29;
         }
     }

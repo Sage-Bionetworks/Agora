@@ -33,7 +33,7 @@
     padding-top: 0px;
 
     .team-name {
-        font-size: 28px;
+        font-size: $font-size-large;
     }
 
     .custom-paragraph {
@@ -46,7 +46,7 @@
     padding-bottom: 0px;
     text-align-last: center;
 
-    h3 {
+    .member-name {
         text-align: center;
     }
 }

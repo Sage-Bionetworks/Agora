@@ -23,23 +23,6 @@
             height: 100%;
         }
     }
-    .nom-button-col {
-        @include respond-to('ex-small') {
-            margin-top: 20px;
-        }
-        @include respond-to('small') {
-            margin-top: 20px;
-        }
-        @include respond-to('medium') {
-            text-align: right;
-        }
-        @include respond-to('large') {
-            text-align: right;
-        }
-        @include respond-to('ex-large') {
-            text-align: right;
-        }
-    }
 }
 .nomlist-list {
   margin-top: -0.1em;
@@ -176,7 +159,7 @@
       border: none;
       height: 63px;
       line-height: 40px;
-      font-size: 18px;
+      font-size: $font-size-x-regular;
       color: #0D1C38 !important;
     }
 
@@ -220,7 +203,7 @@
       }
 
       .ui-sortable-column {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
     }
 
@@ -234,7 +217,7 @@
       }
 
       .ui-sortable-column {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
     }
 
@@ -248,7 +231,7 @@
       }
 
       .ui-sortable-column {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
     }
   }
@@ -275,15 +258,15 @@
       }
 
       @include respond-to('medium') {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
 
       @include respond-to('large') {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
 
       @include respond-to('ex-large') {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
       }
 
       color: #1A1C29 !important;
