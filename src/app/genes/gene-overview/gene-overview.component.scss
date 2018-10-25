@@ -25,29 +25,20 @@
             height: 100%;
         }
     }
-    .nom-button-col {
-        @include respond-to('ex-small') {
-            margin-top: 20px;
-        }
-        @include respond-to('small') {
-            margin-top: 20px;
-        }
-        @include respond-to('medium') {
-            text-align: right;
-        }
-        @include respond-to('large') {
-            text-align: right;
-        }
-        @include respond-to('ex-large') {
-            text-align: right;
-        }
-    }
 }
 
 .custom-desc {
     background-color: transparent;
     background: rgba(255, 255, 255, 0.35);
     margin-bottom: 0px;
+
+    .ak-heading {
+        margin-bottom: 0px;
+    }
+
+    .ak-paragraph {
+        margin-top: 6px;
+    }
 }
 
 .nominated-button {
@@ -70,106 +61,6 @@
     cursor: pointer;
 }
 
-.nom-button {
-    @include lato-font('bold');
-
-    background: #F89C55 !important;
-    border: 0px !important;
-    border-radius: 100px;
-    line-height: normal;
-    white-space: nowrap;
-    padding: 10px;
-
-    span {
-        @include lato-font('bold');
-
-        margin-left: 4%;
-        margin-right: 4%;
-        vertical-align: middle;
-        &.fixIOS {
-            vertical-align: top;
-        }
-
-        @include respond-to('ex-small') {
-            font-size: 20px;
-        }
-        @include respond-to('small') {
-            font-size: 20px;
-        }
-        @include respond-to('medium') {
-            font-size: 24px;
-        }
-        @include respond-to('large') {
-            font-size: 24px;
-        }
-        @include respond-to('ex-large') {
-            font-size: 24px;
-        }
-
-        color: #0D1C38;
-    }
-
-    @include respond-to('ex-small') {
-        height: 48px;
-        width: 292px;
-        .fa-star {
-            font-size: 31px;
-        }
-        .fa-angle-right {
-            font-size: 31px;
-        }
-    }
-    @include respond-to('small') {
-        height: 48px;
-        width: 292px;
-        .fa-star {
-            font-size: 31px;
-        }
-        .fa-angle-right {
-            font-size: 31px;
-        }
-    }
-    @include respond-to('medium') {
-        height: 68px;
-        width: 366px;
-        .fa-star {
-            font-size: 43px;
-        }
-        .fa-angle-right {
-            font-size: 43px;
-        }
-    }
-    @include respond-to('large') {
-        height: 68px;
-        width: 366px;
-        .fa-star {
-            font-size: 43px;
-        }
-        .fa-angle-right {
-            font-size: 43px;
-        }
-    }
-    @include respond-to('ex-large') {
-        height: 68px;
-        width: 366px;
-        .fa-star {
-            font-size: 43px;
-        }
-        .fa-angle-right {
-            font-size: 43px;
-        }
-    }
-
-    color: #0D1C38 !important;
-    vertical-align: middle;
-    cursor: pointer;
-
-    .fa-angle-right {
-        -webkit-text-stroke: 1.25px;
-        vertical-align: -12%;
-    }
-}
-
 .show-more-col {
     margin-bottom: auto;
     margin-top: auto;
@@ -180,23 +71,23 @@
 
     @include respond-to('ex-small') {
         width: 70%;
-        font-size: 22px;
+        font-size: $font-size-xxx-regular;
     }
     @include respond-to('small') {
         width: 100%;
-        font-size: 22px;
+        font-size: $font-size-xxx-regular;
     }
     @include respond-to('medium') {
         width: 85%;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
     }
     @include respond-to('large') {
         width: 70%;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
     }
     @include respond-to('ex-large') {
         width: 70%;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
     }
 
     background: #FCCB6F !important;
@@ -317,10 +208,22 @@
         }
     }
 
+    .ui-state-disabled {
+        a {
+            padding: 0px !important;
+            width: 100%;
+            text-align: center;
+
+            span {
+                color: #3C4A63;
+            }
+        }
+    }
+
     .ui-state-active {
         a > span {
             @include lato-font('bold');
-            font-size: 20px;
+            font-size: $font-size-xx-regular;
             opacity: 1;
         }
     }
@@ -401,7 +304,7 @@
         text-align: left;
         line-height: normal;
         color: #1A1C29;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
     }
 
     .ui-widget-header {
@@ -431,13 +334,13 @@
         text-align: left;
         line-height: normal;
         color: #1A1C29;
-        font-size: 24px;
+        font-size: $font-size-xxxx-regular;
     }
 
     .druggability-span {
         color: #5BB0B5;
         text-decoration: underline;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         cursor: pointer;
     }
 }
@@ -489,7 +392,7 @@
         @include lato-font('bold');
 
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         text-decoration-line: underline;
         color: #5BB0B5;
     }

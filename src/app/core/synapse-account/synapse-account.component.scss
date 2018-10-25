@@ -49,19 +49,19 @@
 
         h2 {
             @include respond-to('ex-small') {
-                font-size: 22px;
+                font-size: $font-size-xxx-regular;
             }
             @include respond-to('small') {
-                font-size: 24px;
+                font-size: $font-size-xxxx-regular;
             }
             @include respond-to('medium') {
-                font-size: 24px;
+                font-size: $font-size-xxxx-regular;
             }
             @include respond-to('large') {
-                font-size: 24px;
+                font-size: $font-size-xxxx-regular;
             }
             @include respond-to('ex-large') {
-                font-size: 24px;
+                font-size: $font-size-xxxx-regular;
             }
         }
     }
@@ -73,18 +73,6 @@
 
     .synapse-img {
         width: 243px;
-    }
-
-    h1 {
-        font-size: 40px;
-        color: #6C7489;
-        font-weight: 100;
-    }
-
-    h2{
-        color: #3F5EAB;
-        font-size: 28px;
-        font-weight: 500;
     }
 
     .col-md-11, .col-sm-10, .col-10,

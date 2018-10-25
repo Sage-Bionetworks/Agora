@@ -49,7 +49,7 @@
     cursor: pointer;
     width: 100%;
     line-height: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     text-decoration: underline;
     color: #5BB0B5;
 }
@@ -72,7 +72,7 @@
             @include lato-font('normal');
 
             line-height: normal;
-            font-size: 18px;
+            font-size: $font-size-x-regular;
             color: #1A1C29;
         }
 
@@ -80,7 +80,7 @@
             @include lato-font('normal');
 
             line-height: normal;
-            font-size: 18px;
+            font-size: $font-size-x-regular;
         }
 
         padding-bottom: 15px;
@@ -161,7 +161,7 @@
         display: inline;
         padding-right: 15px;
         color: #8D919E;
-        font-size: 16px;
+        font-size: $font-size-regular;
     }
 }
 .no-expression-data-image {
@@ -251,7 +251,7 @@ ul {
     .filter-reference {
         span{
             color: #6D7078;
-            font-size: 16px;
+            font-size: $font-size-regular;
         }
         width: 100%;
         .left{
@@ -272,7 +272,7 @@ ul {
     background: #FFF;
     padding: 5px 10px;
     top: -40px;
-    font-size: 16px;
+    font-size: $font-size-regular;
     left: -10px;
     width: 42px;
 }

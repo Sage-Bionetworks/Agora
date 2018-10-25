@@ -26,9 +26,13 @@ if (process.env.MONGODB_HOST && process.env.MONGODB_PORT) {
         + '@' + process.env.MONGODB_HOST + ':' + process.env.MONGODB_PORT + '/agora'
         + '?authSource=admin';
 } else {
-    // Fallback to the service for now
-    // Service name here, not the localhost
-    database.url = 'mongodb://localhost:27017/agora';
+    if (env === 'development') {
+        database.url = 'mongodb://localhost:27017/agora';
+    } else {
+        // Fallback to the service for now
+        // Service name here, not the localhost
+        database.url = 'mongodb://mongodb:27017/agora';
+    }
 }
 
 mongoose.connect(database.url, { useNewUrlParser: true });

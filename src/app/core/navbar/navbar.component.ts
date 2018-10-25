@@ -32,6 +32,8 @@ export class NavbarComponent implements OnInit {
                     this.activeItem = this.items[1];
                 } else if (re.url === '/teams-contributing') {
                     this.activeItem = this.items[2];
+                } else {
+                    this.activeItem = null;
                 }
             }
         });
@@ -43,7 +45,11 @@ export class NavbarComponent implements OnInit {
             if (this.activeItem.label === 'Gene Search') {
                 this.goToRoute('genes');
             } else if (this.activeItem.label === 'Nominated Targets') {
-                this.goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }});
+                this.goToRoute('/genes', {
+                    outlets: {
+                        'genes-router': [ 'genes-list' ],
+                        'gene-overview': null
+                }});
             } else {
                 this.goToRoute('teams-contributing');
             }

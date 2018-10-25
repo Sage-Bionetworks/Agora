@@ -32,7 +32,7 @@ g.textGroup text {
     @include lato-font('bold');
 
     line-height: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     color: #1A1C29;
 }
 
@@ -55,7 +55,7 @@ g.textGroup text {
         pointer-events: auto;
 
         line-height: normal;
-        font-size: 16px;
+        font-size: $font-size-regular;
         color: #6D7078;
         fill: #6D7078;
     }
@@ -72,7 +72,7 @@ g.textGroup text {
         @include lato-font('normal');
 
         line-height: normal;
-        font-size: 16px;
+        font-size: $font-size-regular;
         text-align: center;
         color: #6D7078;
     }

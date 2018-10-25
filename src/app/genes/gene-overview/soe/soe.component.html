@@ -1,78 +1,38 @@
-<div class="section-thin overview-rel" tabindex="0">
+<div class="section-thin" tabindex="0">
     <h2>
         Summary of Evidence
     </h2>
+    <p>
+        This is a summary of evidence for a gene\'s association to AD compiled from several data sources.
+    </p>
     <more-info [name]="'soe'">
         <soe-dialog></soe-dialog>
     </more-info>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>
-                AD Genetic Association &nbsp;&nbsp;&nbsp;
-                <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
-            </h3>
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Protein Expression Change in AD Brain: &nbsp;&nbsp;&nbsp;
-                <span class="italic-heading">Coming soon</span>
-            </h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>
-                Brain eQTL &nbsp;&nbsp;&nbsp;
-                <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
-            </h3>
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Gene Ontology &nbsp;&nbsp;&nbsp;
-                <span class="link-heading" (click)="viewGeneOntology()">View gene ontology</span>
-            </h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>
-                Cell Type Specificity &nbsp;&nbsp;&nbsp;
-                <span class="italic-heading">Coming soon</span>
-            </h3>
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Reactome Pathways &nbsp;&nbsp;&nbsp;
-                <span class="link-heading" (click)="viewPathways()">View pathways</span>
-            </h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>
-                Association with Hallmarks of AD &nbsp;&nbsp;&nbsp;
-                <span class="italic-heading">Coming soon</span>
-            </h3>
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Nominated target &nbsp;&nbsp;&nbsp;
-                <span [ngClass]="getTextColorClass(((geneInfo.nominations === undefined) ? false : true), true)">{{getText((geneInfo.nominations === undefined) ? false : true)}}</span>
-            </h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>
-                RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                <span [ngClass]="getTextColorClass(geneInfo.isChangedInADBrain, true)">{{getText(geneInfo.isChangedInADBrain)}}</span>
-            </h3>
-        </div>
-        <div class="col-md-6">
-            <h3>
-                Druggability &nbsp;&nbsp;&nbsp;
-                <span class="italic-heading">See <a pageScroll href="#nextSteps" class="italic-heading">"Next Steps"</a> at bottom of page</span>
-            </h3>
-        </div>
-    </div>
 </div>
+<p-table [ngClass]="'st-table'" [columns]="cols" [value]="summary">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+        <tr>
+            <td *ngFor="let col of columns; let j = index;">
+                <ng-container *ngIf="j !== 0">
+                    <ng-container *ngIf="summary[i].extraText">
+                        <span *ngIf="summary[i].hasLink" [ngClass]="'link-heading'" (click)="summary[i].command($event)">{{summary[i].extraText}}</span>
+                        <span *ngIf="!summary[i].hasLink" [ngClass]="'italic-heading'">Coming soon</span>
+                    </ng-container>
+                    <ng-container *ngIf="!summary[i].extraText">
+                        <span [ngClass]="getTextColorClass(summary[i].state, true)">{{getText(summary[i].state)}}</span>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="j === 0">
+                    <span>{{rowData[col.field]}}</span>
+                </ng-container>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

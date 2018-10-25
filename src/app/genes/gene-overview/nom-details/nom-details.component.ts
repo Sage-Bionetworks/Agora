@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { Gene, GeneInfo, TeamInfo, NominatedTarget, GeneResponse } from '../../../models';
+import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../../models';
 
 import {
     ApiService,

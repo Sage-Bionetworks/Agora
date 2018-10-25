@@ -1,0 +1,32 @@
+<div class="section-thin" tabindex="0">
+    <h2>
+        Druggability of {{geneInfo.hgnc_symbol}}
+    </h2>
+    <p>
+        Nominated targets have been scored for likely suitability for small-molecule drugs using a multi-step process.
+    </p>
+    <more-info [name]="'dg-dialog'">
+        <dg-dialog></dg-dialog>
+    </more-info>
+</div>
+<p-table [ngClass]="'gd-table'" [columns]="cols" [value]="summary">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+        <tr>
+            <td *ngFor="let col of columns; let j = index;">
+                <ng-container *ngIf="j !== 0">
+                    <span [ngClass]="'dg-value-text'">{{rowData[col.field]}}</span>
+                </ng-container>
+                <ng-container *ngIf="j === 0">
+                    <span [ngClass]="'dg-property-text'">{{rowData[col.field]}}</span>
+                </ng-container>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

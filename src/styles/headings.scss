@@ -2,48 +2,57 @@
 @import "../assets/css/helpers/mixins";
 
 h1 {
-    @include lato-font('medium');
+    @include lato-font('bold');
 
-    line-height: normal;
-    font-size: 40px;
     text-align: left;
-    color: #5171C0;
+    line-height: normal;
+    color: #3F5EAB;
+    font-size: $font-size-x-large;
 }
 
 h2 {
-    @include lato-font('bold');
+    @include lato-font('medium');
 
     text-align: left;
     line-height: normal;
-    color: #1A1C29;
-    font-size: 24px;
+    color: #3F5EAB;
+    font-size: $font-size-large;
 }
 
 h3 {
+    @include lato-font('medium');
+
+    text-align: left;
+    line-height: normal;
+    color: #3F5EAB;
+    font-size: $font-size-xxxx-regular;
+}
+
+h4 {
     @include lato-font('bold');
 
     text-align: left;
     line-height: normal;
-    color: #1A1C29;
-    font-size: 18px;
+    color: #24334F;
+    font-size: $font-size-xx-regular;
 }
 
 .normal-heading {
     font-weight: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
 }
 
 .italic-heading {
     font-weight: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     font-style: italic;
-    color: #8D919E;
+    color: #8D919E !important;
 }
 
 .link-heading {
     color: #5BB0B5;
     text-decoration: underline;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     font-weight: normal;
     cursor: pointer;
 }
@@ -52,7 +61,7 @@ h3 {
     @include lato-font('bold');
 
     line-height: normal;
-    font-size: 24px;
+    font-size: $font-size-xxxx-regular;
     text-align: center;
 
     color: #1A1C29;

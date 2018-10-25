@@ -1,7 +1,21 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
-.st-table {
+.gene-druggability {
+    .dgb-first-h3 {
+        margin-top: 30px;
+    }
+
+    h3 {
+        margin-bottom: 0px;
+    }
+}
+
+.no-data{
+    min-height: 120px;
+}
+
+.gd-table {
     .ui-table{
         padding-bottom: 70px;
     }
@@ -18,13 +32,19 @@
         display: none;
     }
 
+    .dg-property-text {
+        @include lato-font('bold');
+        font-size: $font-size-xx-regular;
+        color: #24334F;
+    }
+
+    .dg-value-text {
+        font-size: $font-size-x-regular;
+        color: #24334F;
+    }
+
     .ui-table-tbody {
         height: 100%;
-
-        >tr {
-            height: 58px;
-            line-height: 58px;
-        }
 
         >tr>td {
             @include lato-font('normal');
@@ -38,34 +58,20 @@
                 font-size: 14px;
             }
             @include respond-to('small') {
-                span {
-                    font-size: $font-size-regular;
-                }
+                font-size: $font-size-regular;
             }
             @include respond-to('medium') {
-                span {
-                    font-size: $font-size-x-regular;
-                }
+                font-size: $font-size-x-regular;
             }
             @include respond-to('large') {
-                span {
-                    font-size: $font-size-x-regular;
-                }
+                font-size: $font-size-x-regular;
             }
             @include respond-to('ex-large') {
-                span {
-                    font-size: $font-size-x-regular;
-                }
+                font-size: $font-size-x-regular;
             }
 
             color: #24334F !important;
             height: 40px;
-        }
-
-        >tr>td:first-child {
-            span {
-                @include lato-font('bold');
-            }
         }
 
         @include respond-to('ex-small') {

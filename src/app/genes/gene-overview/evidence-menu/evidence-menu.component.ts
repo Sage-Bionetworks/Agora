@@ -6,16 +6,11 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import {
-    ApiService,
-    DataService,
-    GeneService,
-    ForceService
-} from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 import { MenuItem } from 'primeng/api';
 
@@ -39,7 +34,6 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private geneService: GeneService
     ) {}
 
