@@ -14,7 +14,7 @@
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
-        scrollHeight="calc(100vh - 788px)"
+        scrollHeight="calc(100vh - 745px)"
         [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
@@ -23,7 +23,7 @@
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true">
         <ng-template pTemplate="caption">
-            <input type="text" pInputText size="50" placeholder="Search by gene symbol"
+            <input type="text" pInputText size="50" id="keyword" placeholder="Search by gene symbol"
                 (input)="gl.filterGlobal($event.target.value, 'contains')">
             <i class="fa fa-search fa-lg"></i>
             <p>

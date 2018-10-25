@@ -26,6 +26,10 @@
     text-align: justify;
     text-align-last: left;
 
+    #keyword {
+        font-size: $font-size-xx-regular;
+    }
+
     i {
         position: absolute;
         z-index: 2;

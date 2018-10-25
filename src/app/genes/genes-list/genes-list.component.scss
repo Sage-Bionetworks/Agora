@@ -5,6 +5,23 @@
     margin-top: -0.1em;
     background-color: transparent !important;
     width: auto; /* Scale the div to the parent width */
+
+    #keyword:focus {
+      box-shadow: 0px 0px 4px 2px #5BB0B5;
+      border-radius: 6px;
+      outline-offset: -2px;
+      outline: none;
+    }
+
+    tr:hover {
+      background: rgba(91, 176, 181, 0.25)!important;
+      color: #fff;
+    }
+
+    .ui-table-scrollable-view {
+        background-color: #FFF;
+    }
+
     .section {
         margin-bottom: 43px;
         h1 {
