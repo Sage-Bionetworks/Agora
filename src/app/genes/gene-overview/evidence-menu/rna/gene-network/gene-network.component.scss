@@ -61,6 +61,10 @@
 
     .cg-row {
         margin: 0px;
+
+        .smaller-h3 {
+            font-size: $font-size-xx-regular;
+        }
     }
 
     .vmi-wrapper {
@@ -75,6 +79,8 @@
             font-size: $font-size-x-regular;
             color: #1A1C29;
         }
+
+        font-size: $font-size-regular;
 
         span {
             @include lato-font('normal');
@@ -92,7 +98,6 @@
         }
     }
 
-    border-top: 1px solid #DDD;
     padding: 0px;
 }
 

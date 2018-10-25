@@ -1,7 +1,7 @@
 {
   "name": "agora",
   "version": "0.1.0",
-  "data-version": "8",
+  "data-version": "9",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular",
@@ -83,7 +83,7 @@
     "server:dev:hmr": "npm run server:dev -- --hotOnly",
     "server:docker": "npm run build:server:docker",
     "server:prod": "cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
-    "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
+    "server:prod:ci": "http-server dist -p 8080 -c-1 --cors",
     "server:wds": "npm run webpack-dev-server -- --config config/webpack.server.js --open --progress --profile --watch --content-base src/",
     "start": "npm run server",
     "start:mongo": "sh start-mongo.sh '/var/lib/mongodb/'",

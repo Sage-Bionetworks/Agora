@@ -20,7 +20,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 module.exports = function (options) {
   const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'development');
   const HOST = process.env.HOST || 'localhost';
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 8080;
   const Docker = process.env.Docker || false;
   const Analyzer = process.env.Analyzer || false;
 

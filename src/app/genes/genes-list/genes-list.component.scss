@@ -5,6 +5,8 @@
     margin-top: -0.1em;
     background-color: transparent !important;
     width: auto; /* Scale the div to the parent width */
+
+
     .section {
         margin-bottom: 43px;
         h1 {
@@ -28,19 +30,19 @@
     }
 
     @include respond-to('ex-small') {
-        background-size: 1330px 350px;
+        background-size: 1330px 350px !important;
     }
     @include respond-to('small') {
-        background-size: 1330px 350px;
+        background-size: 1330px 350px !important;
     }
     @include respond-to('medium') {
-        background-size: 1330px 350px;
+        background-size: 1330px 350px !important;
     }
     @include respond-to('large') {
-        background-size: 1600px 421px;
+        background-size: 1600px 421px !important;
     }
     @include respond-to('ex-large') {
-        background-size: 100%;
+        background-size: 100% !important;
     }
 
     background-position: top; /* Position the image to the top center of the div */

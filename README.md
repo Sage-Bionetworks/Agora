@@ -126,7 +126,7 @@ There are two ways to use this application in a remote production environment. O
 
 If you are copying the dist folder, install Node in the remote machine. Then, install MongoDB and populate the needed collections (follow the steps described above). Start the application by running `node` against the `server.js` file.
 
-If you are copying the entire project, install Node and any needed global dependencies in the remote machine. Then, run `npm install` to get all local dependencies installed and just follow the same steps for the local development (see below). You'll need to expose port `3000` so anyone can access the application.
+If you are copying the entire project, install Node and any needed global dependencies in the remote machine. Then, run `npm install` to get all local dependencies installed and just follow the same steps for the local development (see below). You'll need to expose port `8080` so anyone can access the application.
 
 In both cases the final URL will be the remote machine public ip.
 
@@ -170,7 +170,7 @@ npm start
 npm run start:prod
 ```
 
-go to [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser. If you are running in production mode change from `3000` to `8080`.
+go to [http://0.0.0.0:8080](http://0.0.0.0:8080) in your browser.
 
 ## Other commands
 
@@ -302,7 +302,7 @@ We have good experience using these editors:
 ### Visual Studio Code + Debugger for Chrome
 > Install [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) and see docs for instructions to launch Chrome
 
-The included `.vscode` automatically connects to the webpack development server on port `3000`.
+The included `.vscode` automatically connects to the webpack development server on port `8080`.
 
 # Types
 > When you include a module that doesn't include Type Definitions inside of the module you can include external Type Definitions with @types

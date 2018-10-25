@@ -23,7 +23,7 @@ const MONGODB_PORT = process.env.MONGODB_PORT || null;
 
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 8080,
     ENV: ENV,
     Docker: Docker,
     MONGODB_HOST: MONGODB_HOST,
