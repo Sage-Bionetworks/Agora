@@ -3,14 +3,28 @@
 
 .info-header {
     padding-right: 5% !important;
+    h1{
+      text-align: center;
+    }
+    .info-icon {
+      content: url(/assets/icon/info_icon2.png);
+    }
 }
 
 .overview-header {
+  text-align: center;
     .fa-star::before {
         color: #FACFAF;
     }
     .row {
         align-items: center;
+    }
+    .link-heading {
+          color: #24334F;
+          float: left;
+          margin-left: 50%;
+          transform: translate(-50%);
+          margin-bottom: 20px;
     }
     p-button {
         @include respond-to('ex-small') {

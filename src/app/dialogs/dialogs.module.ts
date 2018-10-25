@@ -11,6 +11,7 @@ import { SGDialogComponent } from './sg-dialog';
 import { MoreInfoComponent } from './more-info';
 import { NOMinatedTargetComponent } from './nt-dialog';
 import { RNAComponent } from './rna-dialog';
+import { SIMilarPageDialogComponent } from './sp-dialog';
 
 import { DialogsService } from './services';
 
@@ -28,7 +29,8 @@ import { DialogsService } from './services';
         SOEDialogComponent,
         DRUggabilityComponent,
         NOMinatedTargetComponent,
-        RNAComponent
+        RNAComponent,
+        SIMilarPageDialogComponent
     ],
     exports: [
         MoreInfoComponent,
@@ -39,7 +41,8 @@ import { DialogsService } from './services';
         SOEDialogComponent,
         DRUggabilityComponent,
         NOMinatedTargetComponent,
-        RNAComponent
+        RNAComponent,
+        SIMilarPageDialogComponent
     ],
     providers: [
         DialogsService
