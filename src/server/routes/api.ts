@@ -22,7 +22,7 @@ if (process.env.MONGODB_HOST && process.env.MONGODB_PORT) {
         ], { region: 'us-east-1' }
     );
 
-    database.url = 'mongodb://' + results.Parameters[0] + ':' + results.Parameters[1]
+    database.url = 'mongodb://' + results.Parameters[1]['Value'] + ':' + results.Parameters[0]['Value']
         + '@' + process.env.MONGODB_HOST + ':' + process.env.MONGODB_PORT + '/agora'
         + '?authSource=admin';
 } else {
