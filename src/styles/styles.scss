@@ -29,6 +29,10 @@
     box-sizing: border-box;
 }
 
+.info-icon {
+    float: none!important;
+}
+
 // Let the OS add the default outline to tabbable elements
 :focus {
     outline: -webkit-focus-ring-color auto 5px;

@@ -38,7 +38,7 @@
         content: url("/assets/icon/search_icon.png") !important;
 
         @include respond-to('ex-small') {
-            left: 88.5%;
+            left: 84.5%;
         }
         @include respond-to('small') {
             left: 93%;

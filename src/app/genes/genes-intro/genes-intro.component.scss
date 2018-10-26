@@ -137,6 +137,11 @@ gene-search {
         height: 332px;
         position: relative;
         margin-bottom: 4em;
+        @include respond-to('ex-small') {
+            img{
+                width: 100%;
+            }
+        }
 
         iframe {
             height: 100%;

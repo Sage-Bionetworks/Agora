@@ -2,20 +2,19 @@
     <div class="col-md-3 col-sm-3 col-3 logo-bg" (click)="goHome()">
         <img src="/assets/img/AgoraLogo-R.svg">
     </div>
-    <div class="pull-right mobile-menu-btn" (click)="toggleMenu()">
+    <div *ngIf="!mobileVisible;else closeMenu" class="pull-right mobile-menu-btn" (click)="toggleMenu()">
         <img src="/assets/icon/menu-lines.svg" alt="menu">
         MENU
     </div>
+    <ng-template #closeMenu>
+        <div class="pull-right mobile-menu-btn close" (click)="toggleMenu()">
+            <img src="/assets/icon/menu-close.svg" alt="">
+        </div>
+    </ng-template>
     <div class="col-12 col-md-9 col-sm-9 col-9 tab-menu-col">
         <div class="pull-right mobile-menu" [ngClass]="{'visible': mobileVisible}">
             <p-tabMenu #navMenu [model]="items" [activeItem]="activeItem" (click)="activateMenu()">
             </p-tabMenu>
-            <div class="middle-line"></div>
-            <span class="footer-span">
-                <div  (click)="goToRoute('about')" tabindex="0">ABOUT</div>
-                <div class="" (click)="goToRoute('help')" tabindex="0">HELP</div>
-                <div class="last-footer-div" (click)="goToRoute('terms')" tabindex="0">TERMS & PRIVACY</div>
-            </span>
         </div>
     </div>
 </div>

@@ -108,6 +108,9 @@
 
 .overview-tab-menu {
     padding: 0px !important;
+     @include respond-to('ex-small') {
+        overflow-x: scroll;
+     }
 
     .ui-tabmenu-nav {
         padding: 0px !important;

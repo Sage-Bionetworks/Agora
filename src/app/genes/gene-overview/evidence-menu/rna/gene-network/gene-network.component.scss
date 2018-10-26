@@ -8,6 +8,9 @@
     margin-left: 0px;
     margin-right: 0px;
     display: flex;
+    @include respond-to('ex-small') {
+        display: block;
+    }
     force-chart {
         width: 100%;
     }

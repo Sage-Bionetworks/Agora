@@ -86,15 +86,6 @@
         padding-bottom: 1%;
         position: relative;
 
-        @include respond-to('ex-small') {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-        @include respond-to('small') {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-
         > input {
             @include lato-font('normal');
 

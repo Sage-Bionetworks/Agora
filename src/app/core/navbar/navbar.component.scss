@@ -82,6 +82,9 @@
         display: initial;
         position: absolute;
         right: 10px;
+        &.close{
+            right: 20px;
+        }
     }
 }
 .mobile-menu{
@@ -102,25 +105,6 @@
         background: #3C4A63;
         &.visible{
             transform: scaleY(1);
-        }
-        .footer-span {
-          display: block;
-          position: absolute;
-          top: 250px;
-          color: white;
-          left: 15px;
-          text-align: left;
-          div{
-              margin-top: 30px;
-          }
-        }
-        .middle-line{
-            display: block;
-            position: absolute;
-            top: 245px;
-            width: 90%;
-            margin-left: 18px;
-            border-bottom: 1px solid #E0E0E0;
         }
         .ui-tabmenu{
             padding: 0;

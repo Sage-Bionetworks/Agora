@@ -63,7 +63,9 @@ export class NavbarComponent implements OnInit {
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
-        this.mobileVisible = false;
+        setTimeout(() => {
+            this.mobileVisible = false;
+        }, 300);
     }
 
     toggleMenu() {
