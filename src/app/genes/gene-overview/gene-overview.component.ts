@@ -118,17 +118,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     ngAfterContentChecked() {
         if (this.menu && this.neverActivated) {
-            this.neverActivated = false;
             this.activateMenu();
         }
     }
 
     activateMenu() {
-        if (!this.disableMenu) {
+        if (((!this.disableMenu && (this.activeItem.label !== this.menu['activeItem'].label)) ||
+            this.neverActivated) && this.dataLoaded) {
+            this.neverActivated = false;
             this.disableMenu = true;
             this.items.forEach((i) => {
                 i.disabled = true;
             });
+
             this.activeItem = this.menu['activeItem'];
             if (this.activeItem) {
                 switch (this.activeItem.label) {

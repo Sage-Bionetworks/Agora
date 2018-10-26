@@ -6,7 +6,7 @@ services:
       - MONGO_URI=mongodb://mongodb/agora
     restart: always
     expose:
-      - '5000'
+      - '8080'
     networks:
       - front-tier
   # NGINX will reverse proxy the express application

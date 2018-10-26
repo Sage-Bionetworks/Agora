@@ -58,7 +58,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
     ) {}
 
     ngOnInit() {
-        // If we move aways from the overview page, remove
+        // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {

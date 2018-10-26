@@ -27,7 +27,7 @@
     "build:docker": "npm run clean:docker && npm run build:docker:mongo && npm run build:docker:app",
     "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:server:dev": "npm run clean:server && cross-env npm run webpack:server -- --config config/webpack.server.js --mode development --progress --profile --bail",
-    "build:server:docker": "npm run clean:server && cross-env PORT=5000 NODE_ENV=production Docker=true npm run webpack:server -- --config config/webpack.server.js --mode production --progress --profile --bail",
+    "build:server:docker": "npm run clean:server && cross-env PORT=8080 NODE_ENV=production Docker=true npm run webpack:server -- --config config/webpack.server.js --mode production --progress --profile --bail",
     "build:server:prod": "npm run clean:server && cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js --mode production --progress --profile --bail",
     "build": "npm run build:dev",
     "bundle-report": "webpack-bundle-analyzer dist/stats.json",

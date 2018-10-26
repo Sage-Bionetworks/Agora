@@ -11,7 +11,7 @@ import {
 
 import { PlatformLocation } from '@angular/common';
 
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, RouterEvent } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -70,9 +70,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit() {
         // If we move away from the overview page, remove
         // the charts
-        /*this.router.events.subscribe((event) => {
-            if (event instanceof NavigationStart) {
-                if (this.chart && dc.hasChart(this.chart)) {
+        this.router.events.subscribe((re: RouterEvent) => {
+            if (re instanceof NavigationStart) {
+                if (this.chart) {
                     this.chartService.removeChart(
                         this.chart, this.chart.group(),
                         this.chart.dimension()
@@ -81,10 +81,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.geneService.setPreviousGene(this.geneService.getCurrentGene());
                 }
             }
-        });*/
-        // Event for back and forth in the browser location
+        });
         this.location.onPopState(() => {
-            if (this.chart && dc.hasChart(this.chart)) {
+            if (this.chart) {
                 this.chartService.removeChart(
                     this.chart, this.chart.group(),
                     this.chart.dimension()
@@ -111,6 +110,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.currentGene
         );
         this.group = this.dataService.getGroup(this.info);
+        console.log(this.group.all());
 
         this.title = this.info.title;
         this.chart = dc.rowChart(this.rowChart.nativeElement);
@@ -125,12 +125,16 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             .label((d) => {
                 return d.key;
             })
-            .on('preRender', (chart) => {
-                self.updateXDomain(chart);
+            .on('postRedraw', async (chart) => {
+                //setTimeout(() => {
+                await self.updateChartExtras(chart);
+                //}, 5000);
             })
-            .on('preRedraw', (chart) => {
-                self.updateXDomain(chart);
+            .on('preRedraw', async (chart) => {
+                await self.updateXDomain(chart);
+                await self.updateChartExtras(chart);
             })
+            //.elasticX(true)
             .othersGrouper(null)
             .ordinalColors(this.colors)
             .dimension(this.dim)
@@ -147,7 +151,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         };
 
         // Register the row chart renderlet
-        this.registerChartEvent(this.chart);
+        //this.registerChartEvent(this.chart);
 
         this.chart.render();
     }
@@ -177,6 +181,66 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             .attr('y', chart.height() - Math.ceil(textDims.height) / 2);
     }
 
+    updateChartExtras(chart: dc.RowChart) {
+        const self = this;
+
+        const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
+        const squareSize = 18;
+        const lineWidth = 60;
+
+        // Test if we should display the chart. Using this variable so we don't see
+        // the rows rectangles change into small squares abruptly
+        if (!self.display) {
+            // Copy all vertical texts to another div, so they don't get hidden by
+            // the row chart svg after being translated
+            self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+
+            // Insert a line for each row of the chart
+            self.insertLinesInRows(chart);
+
+            // Insert the texts for each row of the chart. At first we need to add
+            // empty texts so that the rowChart redraw does not move out confidence
+            // texts around
+            self.insertTextsInRows(chart);
+            self.insertTextsInRows(chart, 'confidence-text-left');
+            self.insertTextsInRows(chart, 'confidence-text-right');
+
+            // Add a label to the x axis
+            self.addXLabel(this.chart, 'LOG FOLD CHANGE');
+        } else {
+            // This part will be called on redraw after filtering, so at this point
+            // we just need to move the lines to the correct position again. First
+            // translate the parent elements
+            const hlines = chart.selectAll('g.row g.hline');
+            hlines.each(function() {
+                d3.select(this).attr('transform', function(d: any) {
+                    console.log(d.value.logfc);
+                    return 'translate(' + d.value.logfc + ')';
+                });
+            });
+
+            // Adjust the x label
+            this.adjustXLabel(chart, chart.select('text.x-axis-label'));
+        }
+
+        // Finally redraw the lines in each row
+        self.drawLines(chart, rectHeight / 2, lineWidth);
+
+        // Change the row rectangles into small circles, this happens on
+        // every render or redraw
+        self.rectToCircles(chart, squareSize, rectHeight);
+
+        // Only show the 0, min and max values on the xAxis ticks
+        self.updateXTicks(chart);
+
+        // Redraw confidence text next to the lines in each row
+        self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth, true);
+        self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth);
+
+        // Finally show the chart
+        self.display = true;
+    }
+
     // A custom renderlet function for this chart, allows us to change
     // what happens to the chart after rendering
     registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
@@ -192,7 +256,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             if (!self.display) {
                 // Copy all vertical texts to another div, so they don't get hidden by
                 // the row chart svg after being translated
-                await self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
                 // Insert a line for each row of the chart
                 self.insertLinesInRows(chart);
@@ -254,6 +318,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 max = Math.abs(+g.ci_r);
             }
         });
+        console.log('updating X domain');
+        console.log(max);
         if (max !== +Infinity) {
             chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([-max, max]));
             chart.xAxis().scale(chart.x());

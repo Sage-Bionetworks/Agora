@@ -56,6 +56,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = true;
     isViewReady: boolean = false;
+    canFilter: boolean = false;
 
     constructor(
         private router: Router,
@@ -104,11 +105,12 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                 this.toggleTissue({
                     itemValue: this.selectedTissues[0],
                     value: [this.selectedTissues[0]]
+                }).then((status) => {
+                    if (this.gene && this.gene._id) {
+                        this.isEmptyGene = false;
+                    }
+                    this.dataLoaded = true;
                 });
-                this.dataLoaded = true;
-                if (this.gene && this.gene._id) {
-                    this.isEmptyGene = false;
-                }
             });
         }
     }
