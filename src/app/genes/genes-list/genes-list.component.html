@@ -23,7 +23,7 @@
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true">
         <ng-template pTemplate="caption">
-            <input type="text" pInputText size="50" id="keyword" placeholder="Search by gene symbol"
+            <input type="text" pInputText size="50" id="keywords" placeholder="Search by gene symbol"
                 (input)="gl.filterGlobal($event.target.value, 'contains')">
             <i class="fa fa-search fa-lg"></i>
             <p>
