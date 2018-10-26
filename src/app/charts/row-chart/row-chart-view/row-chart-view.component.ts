@@ -68,9 +68,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
-        // If we move aways from the overview page, remove
+        // If we move away from the overview page, remove
         // the charts
-        this.router.events.subscribe((event) => {
+        /*this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
                 if (this.chart && dc.hasChart(this.chart)) {
                     this.chartService.removeChart(
@@ -81,7 +81,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.geneService.setPreviousGene(this.geneService.getCurrentGene());
                 }
             }
-        });
+        });*/
         // Event for back and forth in the browser location
         this.location.onPopState(() => {
             if (this.chart && dc.hasChart(this.chart)) {

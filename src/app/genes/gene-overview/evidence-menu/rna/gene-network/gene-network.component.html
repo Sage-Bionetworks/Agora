@@ -36,30 +36,30 @@
     <div class="col-xl-4 col-12 currentGene">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2>{{geneInfo.hgnc_symbol}}</h2>
+                <h3>{{geneInfo.hgnc_symbol}}</h3>
                 <p class="cg-col-p">{{geneInfo.summary}}</p>
-                <h3 class="cg-col-span">
-                    AD Genetic Association &nbsp;&nbsp;&nbsp;
+                <h4 class="cg-col-span">
+                    Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
                     <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
-                </h3>
-                <h3 class="cg-col-span">
+                </h4>
+                <h4 class="cg-col-span">
                     Nominated target &nbsp;&nbsp;&nbsp;
                     <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText((geneInfo.nominations === undefined) ? false : geneInfo.nominations)}}</span>
-                </h3>
-                <h3 class="cg-col-span">
+                </h4>
+                <h4 class="cg-col-span">
                     Brain eQTL &nbsp;&nbsp;&nbsp;
                     <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
-                </h3>
+                </h4>
             </div>
         </div>
         <div class="row cg-row" *ngIf="!noData;">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2>
+                <h3 class="smaller-h3">
                     Tissue Specificity of Gene Connections
-                </h2>
-                <more-info [name]="'me'">
+                </h3>
+                <!--<more-info [name]="'me'">
                     <me-dialog [header]="'Tissue Specificity of Gene Connections'" [description]="true"></me-dialog>
-                </more-info>
+                </more-info>-->
                 <p class="italic-paragraph"> 6 of {{selectedGeneData.links.length}} genes</p>
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
@@ -85,14 +85,14 @@
         </div>
         <div class="row cg-row" *ngIf="!noData;">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
-                <h2>
+                <h3 class="smaller-h3">
                     Similar Genes
-                </h2>
-                <h2 class="vmi-wrapper">
+                </h3>
+                <!--<h2 class="vmi-wrapper">
                     <more-info [name]="'sg'">
                         <sg-dialog></sg-dialog>
                     </more-info>
-                </h2>
+                </h2>-->
                 <div class="row pathboxes-row">
                     <div class="col-md-11 col-sm-11 col-11 nopadding-left">
                         <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">

@@ -118,6 +118,11 @@ export class NominationDetailsComponent implements OnInit {
         }
     }
 
+    viewNomProcess(index: number) {
+        window.open('https://www.synapse.org/#!Synapse:' +
+            this.geneInfo.nominatedtarget[index].data_synapseid[0], '_blank');
+    }
+
     toTitleCase(index: number, field: string): string {
         return this.titleCase.transform(this.ntInfoArray[index][field]);
     }

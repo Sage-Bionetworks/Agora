@@ -268,8 +268,20 @@ p-dialog {
 }
 
 .no-padding {
-    padding-right: 0;
-    padding-left: 0;
+    padding: 0 !important;
+}
+
+.no-padding-top {
+    padding-top: 0px !important;
+}
+
+.no-padding-bottom {
+    padding-bottom: 0 !important;
+}
+
+.no-vertical-padding {
+    padding-bottom: 0 !important;
+    padding-top: 0px !important;
 }
 
 .center-justified-last {

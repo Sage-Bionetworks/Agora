@@ -1,17 +1,20 @@
-<div class="overview-link">
-<p-panel header="RNA Expression" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-        <div class="section-thin st-desc">
+<div class="section-thin overview-header nom-rna-oh" tabindex="0">
+    <div class="row no-gutters">
+        <div class="col-md-9 col-sm-12 col-12">
+            <h2>RNA Expression</h2>
             <more-info [name]="'rna'">
                 <rna-dialog [header]="'RNA Expression Analysis'"></rna-dialog>
             </more-info>
         </div>
-        <gene-rnaseq-de></gene-rnaseq-de>
-    </p-panel>
+    </div>
+    <h1 class="inner-section-divider"></h1>
 </div>
+<gene-rnaseq-de></gene-rnaseq-de>
 
-<div class="overview-link">
-    <p-panel header="Similarly Expressed Genes" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
-        <div class="section-thin st-desc" tabindex="0">
+<div class="section-thin overview-header nom-rna-oh" tabindex="0">
+    <div class="row no-gutters">
+        <div class="col-md-9 col-sm-12 col-12">
+            <h3>Similarly Expressed Genes</h3>
             <p class="black-paragraph">
                 Here we show results of a coexpression network analysis based on the RNA-seq
                 data. The network analysis uses an ensemble methodology to identify networks
@@ -25,6 +28,10 @@
                 <img class="info-icon" src="/assets/icon/info_icon.png">
             </p>
         </div>
-        <gene-network [noData]="getInfoState()"></gene-network>
-    </p-panel>
+    </div>
+    <h1 class="inner-section-divider"></h1>
+</div>
+
+<div class="section-thin overview-header nom-rna-oh no-padding-top" tabindex="0">
+    <gene-network [noData]="getInfoState()"></gene-network>
 </div>

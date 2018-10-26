@@ -39,6 +39,11 @@
             <p class="black-paragraph custom-paragraph">
                 {{ntInfoArray[i].data_used_to_support_target_selection}}
             </p>
+            <h4>
+                <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">
+                    Learn more about the target nomination process
+                </span>
+            </h4>
             <div class="row members-row">
                 <div *ngFor="let member of team.members" class="col-md-2 col-sm-3 col-4">
                     <div class="member-img" [style.background-image]="getMemberImg(member.name)"></div>
