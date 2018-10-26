@@ -53,11 +53,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        // If we move aways from the overview page, remove
+        // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                if (this.chart && dc.hasChart(this.chart)) {
+                if (this.chart) {
                     this.chartService.removeChart(
                         this.chart, this.chart.group(),
                         this.chart.dimension()
@@ -68,7 +68,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             }
         });
         this.location.onPopState(() => {
-            if (this.chart && dc.hasChart(this.chart)) {
+            if (this.chart) {
                 this.chartService.removeChart(
                     this.chart, this.chart.group(),
                     this.chart.dimension()
@@ -93,6 +93,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
 
+        console.log(this.dim.group().all());
         this.chart = dc.selectMenu(this.selectMenu.nativeElement)
             .dimension(this.dim)
             .group(this.dim.group())
@@ -151,10 +152,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         });
         this.chart.promptText(this.promptText);
 
-        this.chart.on('postRender', function(chart) {
-            self.generateSelect();
-
+        this.chart.on('postRender', async (chart) => {
             if (self.defaultValue) {
+                await self.generateSelect();
+
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
                 const oldOptions = self.menuSelection.selectAll('option');
@@ -171,7 +172,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 }
 
                 newOptions['_groups'][0][0]['selected'] = 'selected';
-                self.menuSelection.dispatch('change');
+                await self.menuSelection.dispatch('change');
 
                 self.defaultValue = '';
             }
