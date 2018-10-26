@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
     @ViewChild('navMenu') menu: MenuItem[];
     items: MenuItem[];
     activeItem: MenuItem;
+    mobileVisible: boolean = false;
 
     constructor(
         private router: Router
@@ -62,5 +63,10 @@ export class NavbarComponent implements OnInit {
 
     goToRoute(path: string, outlets?: any) {
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
+        this.mobileVisible = false;
+    }
+
+    toggleMenu() {
+        this.mobileVisible = this.mobileVisible ? false : true;
     }
 }

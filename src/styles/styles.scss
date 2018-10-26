@@ -46,6 +46,9 @@ html, body{
     min-width: 380px;
     padding: 0;
     margin: 0;
+    @include respond-to('ex-small') {
+        min-width: 100vw;
+    }
 }
 
 body {
