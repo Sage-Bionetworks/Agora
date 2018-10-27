@@ -103,7 +103,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     initChart() {
-        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
@@ -113,62 +112,89 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         console.log(this.group.all());
 
         this.title = this.info.title;
-        this.chart = dc.rowChart(this.rowChart.nativeElement);
-        this.chart
-            .gap(4)
-            .title(function(d) {
-                return 'Log Fold Change: ' + self.dataService.getSignificantValue(+d.value.logfc);
-            })
-            .valueAccessor((d) => {
-                return self.dataService.getSignificantValue(+d.value.logfc);
-            })
-            .label((d) => {
-                return d.key;
-            })
-            .on('postRedraw', async (chart) => {
-                //setTimeout(() => {
-                await self.updateChartExtras(chart);
-                //}, 5000);
-            })
-            .on('preRedraw', async (chart) => {
-                await self.updateXDomain(chart);
-                await self.updateChartExtras(chart);
-            })
-            //.elasticX(true)
-            .othersGrouper(null)
-            .ordinalColors(this.colors)
-            .dimension(this.dim)
-            .group(this.group)
-            .transitionDuration(0);
+        this.getChartPromise().then((chart) => {
+            // Increase bottom margin by 20 to place a label there, default is 30
+            chart.margins().left = 50;
+            chart.margins().bottom = 50;
 
-        // Increase bottom margin by 20 to place a label there, default is 30
-        this.chart.margins().left = 50;
-        this.chart.margins().bottom = 50;
+            // Removes the click event for the rowChart to prevent filtering
+            chart.onClick = () => {
+                //
+            };
 
-        // Removes the click event for the rowChart to prevent filtering
-        this.chart.onClick = () => {
-            //
-        };
-
-        // Register the row chart renderlet
-        //this.registerChartEvent(this.chart);
-
-        this.chart.render();
+            chart.render();
+            this.chart = chart;
+        });
     }
 
-    addXLabel(chart: dc.RowChart, text: string) {
-        const textSelection = chart.svg()
+    getChartPromise(): Promise<dc.RowChart> {
+        return new Promise((resolve, reject) => {
+            const self = this;
+            const chartInst = dc.rowChart(self.rowChart.nativeElement)
+                .gap(4)
+                .title(function(d) {
+                    return 'Log Fold Change: ' +
+                        self.dataService.getSignificantValue(+d.value.logfc);
+                })
+                .valueAccessor((d) => {
+                    return self.dataService.getSignificantValue(+d.value.logfc);
+                })
+                .label((d) => {
+                    return d.key;
+                })
+                .on('postRedraw', function(chart) {
+                    console.log('post redraw');
+                    console.log(chart.svg());
+                    console.log(chart.width());
+                    console.log(chart.height());
+                    if (self.display) {
+                        self.updateChartExtras(
+                            chart,
+                            chart.svg(),
+                            chart.width(),
+                            chart.height()
+                        );
+                    }
+                    self.updateChartExtras(
+                        chart,
+                        chart.svg(),
+                        chart.width(),
+                        chart.height()
+                    );
+                })
+                .on('preRedraw', function(chart) {
+                    console.log('pre redraw');
+                    console.log(chart.svg());
+                    console.log(chart.width());
+                    console.log(chart.height());
+                    self.updateXDomain(chart);
+
+                })
+                .othersGrouper(null)
+                .ordinalColors(this.colors)
+                .dimension(this.dim)
+                .group(this.group)
+                .transitionDuration(0);
+
+            resolve(chartInst);
+        });
+    }
+
+    addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
+        const textSelection = (svg || chart.svg())
                 .append('text')
                 .attr('class', 'x-axis-label')
                 .attr('text-anchor', 'middle')
-                .attr('x', chart.width() / 2)
-                .attr('y', chart.height() - 10)
+                /*.attr('x', (width || chart.width()) / 2)
+                .attr('y', (height || chart.height()) - 10)*/
+                .attr('x', width / 2)
+                .attr('y', height - 10)
                 .text(text);
 
-        this.adjustXLabel(chart, textSelection);
+        this.adjustXLabel(chart, textSelection, width, height);
     }
 
-    adjustXLabel(chart: dc.RowChart, sel: any) {
+    adjustXLabel(chart: dc.RowChart, sel: any, width?: number, height?: number) {
         const svgEl = (sel.node() as SVGGraphicsElement);
         const textDims = svgEl.getBBox();
 
@@ -177,11 +203,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // of 15 pixels. We subtract them from the svg size, get the middle point
         // then add back the left translate to get the correct center
         sel
-            .attr('x', ((chart.width() - 45) / 2) + 30)
-            .attr('y', chart.height() - Math.ceil(textDims.height) / 2);
+            /*.attr('x', ((chart.width() - 45) / 2) + 30)
+            .attr('y', chart.height() - Math.ceil(textDims.height) / 2);*/
+            .attr('x', ((width - 45) / 2) + 30)
+            .attr('y', height - Math.ceil(textDims.height) / 2);
     }
 
-    updateChartExtras(chart: dc.RowChart) {
+    updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
 
         const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
@@ -206,7 +234,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             self.insertTextsInRows(chart, 'confidence-text-right');
 
             // Add a label to the x axis
-            self.addXLabel(this.chart, 'LOG FOLD CHANGE');
+            self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
         } else {
             // This part will be called on redraw after filtering, so at this point
             // we just need to move the lines to the correct position again. First
@@ -220,7 +248,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             // Adjust the x label
-            this.adjustXLabel(chart, chart.select('text.x-axis-label'));
+            this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
         }
 
         // Finally redraw the lines in each row

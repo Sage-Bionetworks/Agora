@@ -79,6 +79,13 @@ describe('Component: GeneOverview', () => {
             Promise.resolve(true)
         );
 
+        component.items = [
+            { label: 'NOMINATION DETAILS', disabled: component.disableMenu },
+            { label: 'SUMMARY', disabled: component.disableMenu },
+            { label: 'EVIDENCE', disabled: component.disableMenu },
+            { label: 'DRUGGABILITY', disabled: component.disableMenu }
+        ];
+
         spyOn(component, 'initDetails').and.callThrough();
         const hgcSpy = spyOn(geneService, 'hasGeneChanged');
         hgcSpy.and.callFake(() => {

@@ -123,8 +123,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     activateMenu() {
-        if (((!this.disableMenu && (this.activeItem.label !== this.menu['activeItem'].label)) ||
-            this.neverActivated) && this.dataLoaded) {
+        if (((!this.disableMenu && ((this.activeItem && this.menu['activeItem'])
+            ? (this.activeItem.label !== this.menu['activeItem'].label) : false)
+            ) || this.neverActivated) && this.dataLoaded) {
             this.neverActivated = false;
             this.disableMenu = true;
             this.items.forEach((i) => {

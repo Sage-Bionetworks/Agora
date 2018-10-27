@@ -105,7 +105,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                 this.toggleTissue({
                     itemValue: this.selectedTissues[0],
                     value: [this.selectedTissues[0]]
-                }).then((status) => {
+                }).then((state) => {
                     if (this.gene && this.gene._id) {
                         this.isEmptyGene = false;
                     }

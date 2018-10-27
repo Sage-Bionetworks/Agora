@@ -5,7 +5,8 @@ import {
     ViewChild,
     ElementRef,
     Input,
-    OnDestroy
+    OnDestroy,
+    AfterViewInit
 } from '@angular/core';
 
 import { PlatformLocation } from '@angular/common';
@@ -26,7 +27,7 @@ import * as dc from 'dc';
     styleUrls: [ './box-plot-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class BoxPlotViewComponent implements OnInit, OnDestroy {
+export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -85,7 +86,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy {
                 this.geneService.setPreviousGene(this.geneService.getCurrentGene());
             }
         });
+    }
 
+    ngAfterViewInit() {
         this.initChart();
     }
 
@@ -102,51 +105,53 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy {
         );
         this.group = this.dataService.getGroup(this.info);
 
-        this.chart = dc.boxPlot(this.boxPlot.nativeElement);
+        this.getChartPromise().then((chart: any) => {
+            this.chart = chart;
 
-        this.chart
-            .dimension(this.dim)
-            .yAxisLabel('LOG 2 FOLD CHANGE', 20)
-            .group(this.group)
-            .renderTitle(true)
-            .showOutliers(false)
-            .dataWidthPortion(0.1)
-            .dataOpacity(0)
-            .colors('transparent')
-            .on('filtered', (chart) => {
-                this.renderRedCircle(chart, true);
-            })
-            .tickFormat(() => '')
-            .elasticY(true)
-            .yRangePadding(this.rcRadius * 1.1);
+            if (this.info.attr !== 'fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
+            chart.xAxis().tickFormat('');
 
-        if (this.info.attr !== 'fc') { this.chart.yAxis().tickFormat(d3.format('.1e')); }
-        this.chart.xAxis().tickFormat('');
+            // Remove filtering for these charts
+            chart.filter = function() {
+                //
+            };
+            chart.margins().left = 70;
 
-        // Remove filtering for these charts
-        this.chart.filter = function() {
-            //
-        };
-        this.chart.margins().left = 70;
-
-        this.registerChartEvent(this.chart, 'postRedraw');
-        this.registerChartEvent(this.chart, 'postRender');
-
-        this.chart.render();
+            chart.render();
+        });
     }
 
-    // A custom renderlet function for this chart, allows us to change
-    // what happens to the chart after rendering
-    registerChartEvent(chartEl: dc.BoxPlot, type: string = 'renderlet') {
-        const self = this;
-        // Using a different name for the chart variable here so it's not shadowed
-        chartEl.on(type, function(chart) {
-            chart.selectAll('rect.box')
-                .attr('rx', self.boxRadius);
+    getChartPromise(): Promise<dc.BoxPlot> {
+        return new Promise((resolve, reject) => {
+            const self = this;
+            const chartInst = dc.boxPlot(this.boxPlot.nativeElement)
+                .dimension(this.dim)
+                .yAxisLabel('LOG 2 FOLD CHANGE', 20)
+                .group(this.group)
+                .renderTitle(true)
+                ['showOutliers'](false)
+                .dataWidthPortion(0.1)
+                .dataOpacity(0)
+                .colors('transparent')
+                .tickFormat(() => '')
+                .elasticY(true)
+                .yRangePadding(this.rcRadius * 1.1)
+                .on('postRender', (chart) => {
+                    chart.selectAll('rect.box')
+                        .attr('rx', self.boxRadius);
 
-            // Renders the selected gene circle
-            (type === 'postRender') ? self.renderRedCircle(chart) :
-                self.renderRedCircle(chart, true);
+                    // Renders the selected gene circle
+                    self.renderRedCircle(chart);
+                })
+                .on('postRedraw', (chart) => {
+                    chart.selectAll('rect.box')
+                        .attr('rx', self.boxRadius);
+
+                    // Renders the selected gene circle
+                    self.renderRedCircle(chart, true);
+                });
+
+            resolve(chartInst);
         });
     }
 
