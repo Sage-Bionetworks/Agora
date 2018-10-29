@@ -14,10 +14,6 @@
     align-items: center;
     border-top: 1px solid #C7C5C5;
 
-    span {
-        cursor: pointer;
-    }
-
     a.contact-us-footer {
         @include lato-font('normal');
 
@@ -35,14 +31,10 @@
     @include respond-to('ex-small') {
         padding-left: 3.5%;
         padding-right: 3.5%;
-        padding-bottom: 3.5%;
-        padding-top: 3.5%;
     }
     @include respond-to('small') {
         padding-left: 4.0%;
         padding-right: 4.0%;
-        padding-bottom: 3.5%;
-        padding-top: 3.5%;
     }
     @include respond-to('medium') {
         padding-left: 4.5%;
@@ -109,6 +101,7 @@
     line-height: normal;
     font-size: $font-size-regular;
     color: #0D1C38;
+    cursor: pointer;
 }
 
 .last-footer-span {

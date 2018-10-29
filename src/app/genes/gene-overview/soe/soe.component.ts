@@ -32,7 +32,7 @@ export class SOEComponent implements OnInit {
 
         this.summary = [
             {
-                property: 'AD Genetic Association',
+                property: 'Genetic Association with LOAD',
                 state: (this.geneInfo.isIGAP === undefined) ? false : this.geneInfo.isIGAP,
                 hasLink: false,
                 extraText: ''
