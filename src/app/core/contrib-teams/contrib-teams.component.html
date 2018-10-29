@@ -18,7 +18,7 @@
         <div class="row members-row">
             <div *ngFor="let member of team.members; let j = index" class="col-md-2 col-sm-3 col-4">
                 <div *ngIf="teamsImages[i] | async as tIs; else noimg" class="member-img" [style.background-image]="getImageUrl(tIs[j], tIs, i, j)"></div>
-                <h3>{{member.name}}</h3>
+                <h3 class="member-name">{{member.name}}</h3>
             </div>
         </div>
     </div>

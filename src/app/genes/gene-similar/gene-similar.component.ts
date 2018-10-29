@@ -56,7 +56,7 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'hgnc_symbol', header: 'Gene name' },
             { field: 'nominations', header: 'Nominated Target' },
             { field: 'haseqtl', header: 'Brain Eqtl' },
-            { field: 'isIGAP', header: 'AD Genetic Association'},
+            { field: 'isIGAP', header: 'Genetic Association with LOAD'},
             { field: 'druggability', subfield: 'pharos_class', header: 'Druggability Bucket'},
             { field: 'druggability', header: 'Pharos Class'}
         ];
