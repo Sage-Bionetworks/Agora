@@ -93,92 +93,104 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
 
-        console.log(this.dim.group().all());
-        this.chart = dc.selectMenu(this.selectMenu.nativeElement)
-            .dimension(this.dim)
-            .group(this.dim.group())
-            .controlsUseVisibility(true)
-            .title((d) => {
-                return d.key;
-            })
-            .on('filtered', (chart, filter) => {
-                if (self.label === 'select-tissue') { self.geneService.setCurrentTissue(filter); }
-                if (self.label === 'select-model') { self.geneService.setCurrentModel(filter); }
-                self.isDisabled = (filter) ? false : true;
+        this.getChartPromise().then((chartInst) => {
+            chartInst.filterHandler((dimension, filters) => {
+                if (filters.length === 0) {
+                    // The empty case (no filtering)
+                    dimension.filter(null);
+                } else if (filters.length === 1 && !filters[0].isFiltered) {
+                    // Single value and not a function-based filter
+                    // Before filters are applied, update the gene
+                    if (self.label === 'select-tissue') {
+                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                            .slice().find((g) => {
+                                return g.tissue === filters[0] &&
+                                    g.model === self.geneService.getCurrentModel();
+                            })
+                        );
+                    }
+                    if (self.label === 'select-model') {
+                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                            .slice().find((g) => {
+                                return g.model === filters[0] &&
+                                    g.tissue === self.geneService.getCurrentTissue();
+                            })
+                        );
+                    }
+
+                    dimension.filterExact(filters[0]);
+                } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
+                    // Single range-based filter
+                    dimension.filterRange(filters[0]);
+                } else {
+                    // An array of values, or an array of filter objects
+                    dimension.filterFunction((d) => {
+                        filters.forEach((filter) => {
+                            if (filter.isFiltered && filter.isFiltered(d)) {
+                                return true;
+                            } else if (filter <= d && filter >= d) {
+                                return true;
+                            }
+                        });
+                        return false;
+                    });
+                }
+                return filters;
+            });
+            chartInst.promptText(this.promptText);
+
+            chartInst.on('postRender', async (chart) => {
+                if (self.defaultValue) {
+                    await self.generateSelect();
+
+                    self.menuSelection = d3.select(self.selectMenu.nativeElement)
+                        .select('select.dc-select-menu');
+                    const oldOptions = self.menuSelection.selectAll('option');
+                    const firstOldOption = oldOptions.filter((d, i) => i === 0);
+                    // If the first option is the text All, we need to remove it
+                    // because it is not a brain tissue. This is the default text
+                    // in the selectMenu chart
+                    let newOptions = null;
+                    if (firstOldOption['_groups'][0][0].innerHTML === 'All') {
+                        firstOldOption.remove();
+                        newOptions = oldOptions.filter((d, i) => i !== 0);
+                    } else {
+                        newOptions = oldOptions;
+                    }
+
+                    newOptions['_groups'][0][0]['selected'] = 'selected';
+                    await self.menuSelection.dispatch('change');
+
+                    self.defaultValue = '';
+                }
             });
 
-        this.chart.filterHandler((dimension, filters) => {
-            if (filters.length === 0) {
-                // The empty case (no filtering)
-                dimension.filter(null);
-            } else if (filters.length === 1 && !filters[0].isFiltered) {
-                // Single value and not a function-based filter
-                // Before filters are applied, update the gene
-                if (self.label === 'select-tissue') {
-                    self.geneService.setCurrentGene(self.dataService.getGeneEntries()
-                        .slice().find((g) => {
-                            return g.tissue === filters[0] &&
-                                g.model === self.geneService.getCurrentModel();
-                        })
-                    );
-                }
-                if (self.label === 'select-model') {
-                    self.geneService.setCurrentGene(self.dataService.getGeneEntries()
-                        .slice().find((g) => {
-                            return g.model === filters[0] &&
-                                g.tissue === self.geneService.getCurrentTissue();
-                        })
-                    );
-                }
+            chartInst.render();
+        });
+    }
 
-                dimension.filterExact(filters[0]);
-            } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
-                // Single range-based filter
-                dimension.filterRange(filters[0]);
-            } else {
-                // An array of values, or an array of filter objects
-                dimension.filterFunction((d) => {
-                    filters.forEach((filter) => {
-                        if (filter.isFiltered && filter.isFiltered(d)) {
-                            return true;
-                        } else if (filter <= d && filter >= d) {
-                            return true;
-                        }
-                    });
-                    return false;
+    getChartPromise(): Promise<dc.SelectMenu> {
+        const self = this;
+        return new Promise((resolve, reject) => {
+            const chartInst = dc.selectMenu(this.selectMenu.nativeElement)
+                .dimension(this.dim)
+                .group(this.dim.group())
+                .controlsUseVisibility(true)
+                .title((d) => {
+                    return d.key;
+                })
+                .on('filtered', (chart, filter) => {
+                    if (self.label === 'select-tissue') {
+                        self.geneService.setCurrentTissue(filter);
+                    }
+                    if (self.label === 'select-model') {
+                        self.geneService.setCurrentModel(filter);
+                    }
+                    self.isDisabled = (filter) ? false : true;
                 });
-            }
-            return filters;
+
+            resolve(chartInst);
         });
-        this.chart.promptText(this.promptText);
-
-        this.chart.on('postRender', async (chart) => {
-            if (self.defaultValue) {
-                await self.generateSelect();
-
-                self.menuSelection = d3.select(self.selectMenu.nativeElement)
-                    .select('select.dc-select-menu');
-                const oldOptions = self.menuSelection.selectAll('option');
-                const firstOldOption = oldOptions.filter((d, i) => i === 0);
-                // If the first option is the text All, we need to remove it
-                // because it is not a brain tissue. This is the default text
-                // in the selectMenu chart
-                let newOptions = null;
-                if (firstOldOption['_groups'][0][0].innerHTML === 'All') {
-                    firstOldOption.remove();
-                    newOptions = oldOptions.filter((d, i) => i !== 0);
-                } else {
-                    newOptions = oldOptions;
-                }
-
-                newOptions['_groups'][0][0]['selected'] = 'selected';
-                await self.menuSelection.dispatch('change');
-
-                self.defaultValue = '';
-            }
-        });
-
-        this.chart.render();
     }
 
     filterAll() {
