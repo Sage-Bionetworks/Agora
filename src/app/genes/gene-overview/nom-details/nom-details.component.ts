@@ -72,50 +72,8 @@ export class NominationDetailsComponent implements OnInit {
         }, (error) => {
             console.log('Error loading gene: ' + error.message);
         }, () => {
-            this.loadMembers();
+            this.dataLoaded = true;
         });
-    }
-
-    loadMembers() {
-        let membersLength = -1;
-        this.teams.forEach((t) => {
-            membersLength += t.members.length;
-        });
-        let index = 0;
-        this.teams.forEach((t) => {
-            t.members.forEach((m) => {
-                this.memberImages.push({ name: null, imgUrl: null });
-                this.apiService.getTeamMemberImage(m.name).subscribe((data) => {
-                    this.memberImages[index].name = m.name;
-                    if (data) {
-                        this.memberImages[index].imgUrl =
-                            this.sanitizer.bypassSecurityTrustStyle(`url(${URL.createObjectURL(
-                                new Blob([data as Blob], {
-                                    type: 'image/jpg'
-                                })
-                            )}`);
-                    }
-                }, (error) => {
-                    console.log('Error loading member image: ' + error.message);
-                }, () => {
-                    index++;
-                    if (membersLength === index) {
-                        this.dataLoaded = true;
-                    }
-                });
-            });
-        });
-    }
-
-    getMemberImg(name: string): SafeStyle {
-        const memberImg = this.memberImages.find((mi) => {
-            return mi.name === name;
-        });
-        if (memberImg && memberImg.imgUrl) {
-            return memberImg.imgUrl;
-        } else {
-            return this.sanitizer.bypassSecurityTrustStyle(`url(${this.placeholderUrl})`);
-        }
     }
 
     viewNomProcess(index: number) {
