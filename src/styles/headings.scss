@@ -2,7 +2,7 @@
 @import "../assets/css/helpers/mixins";
 
 h1 {
-    @include lato-font('bold');
+    @include lato-font('medium');
 
     text-align: left;
     line-height: normal;
