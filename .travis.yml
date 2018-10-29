@@ -12,6 +12,12 @@ addons:
 matrix:
   fast_finish: true
 
+branches:
+  only:
+  - develop
+  - staging
+  - prod
+
 before_install:
   - npm install npm@5 -g
   - npm cache verify
@@ -23,10 +29,17 @@ install:
   - sudo apt-get install -y build-essential libssl-dev python-pip python2.7-dev
   - sudo pip install -U setuptools wheel docker-cloud synapseclient[pandas,pysftp]
   - docker login --username="$DOCKER_USER" --password="$DOCKER_PASSWORD"
+  # install aws cli
+  - wget https://github.com/Sage-Bionetworks/infra-utils/archive/master.zip -O /tmp/infra-utils.zip
+  - unzip -j -n /tmp/infra-utils.zip -x "infra-utils-master/.gitignore" "infra-utils-master/LICENSE" "infra-utils-master/*.md" "infra-utils-master/aws/*"
+  - ./setup_aws_cli.sh || travis_terminate 1
 
 stages:
   - name: deploy-containers
+    if: branch = develop
   - name: test
+    if: branch = develop
+  - name: eb-deploy
 
 jobs:
   include:
@@ -44,3 +57,7 @@ jobs:
     - stage: test
       script: npm run ci:travis
       node_js: 8
+    - stage: eb-deploy
+      script:
+        - sed -i -e "s/TRAVIS_BRANCH/$TRAVIS_BRANCH/g" ./.elasticbeanstalk/config.yml
+        - eb deploy
