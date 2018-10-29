@@ -59,5 +59,6 @@ jobs:
       node_js: 8
     - stage: eb-deploy
       script:
+        - sudo pip install -y awsebcli
         - sed -i -e "s/TRAVIS_BRANCH/$TRAVIS_BRANCH/g" ./.elasticbeanstalk/config.yml
         - eb deploy
