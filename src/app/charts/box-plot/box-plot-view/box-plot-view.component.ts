@@ -40,6 +40,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chart') boxPlot: ElementRef;
 
     changedLabels: boolean = false;
+    renderRedCall: boolean = false;
     display: boolean = false;
     counter: number = 0;
     geneEntries: Gene[] = [];
@@ -161,7 +162,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     await self.chartService.addChartName('box');
                 })
                 .on('postRedraw', async (chart) => {
-                    if (chart.select('g.box circle').empty()) {
+                    if (chart.select('g.box circle').empty() && !this.renderRedCall) {
+                        this.renderRedCall = true;
                         await self.renderRedCircle(chart);
                     }
                 })
@@ -172,7 +174,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     await chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    if (!chart.select('g.box circle').empty()) {
+                    if (!chart.select('g.box circle').empty() && !this.renderRedCall) {
+                        this.renderRedCall = true;
                         await self.renderRedCircle(chart, true);
                         await self.updateYDomain(chart);
                     }
@@ -271,6 +274,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         .style('opacity', 0);
                 });
         }
+        this.renderRedCall = false;
     }
 
     onResize(event?: any) {
