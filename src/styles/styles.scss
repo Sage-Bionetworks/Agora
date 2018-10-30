@@ -178,7 +178,7 @@ p-dialog {
     .ui-dialog-title {
         @include lato-font('bold');
         font-size: 24px !important;
-        color: $text-color-normal;
+        color: $text-color-title;
     }
 
     .ui-dialog-titlebar-icon {
