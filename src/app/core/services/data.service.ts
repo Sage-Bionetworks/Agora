@@ -14,6 +14,7 @@ export class DataService {
     // Add the new #[field] from TypeScript when it's out
     // https://github.com/Microsoft/TypeScript/issues/24418
     ndx: any;
+    rowChartNdx: any;
     data: any;
     hgncDim: any;
     tissuesDim: any;
@@ -36,8 +37,8 @@ export class DataService {
         private decimalPipe: DecimalPipe
     ) {}
 
-    getNdx(): any {
-        return this.ndx;
+    getNdx(auxNdx?: boolean): any {
+        return (auxNdx) ? this.rowChartNdx : this.ndx;
     }
 
     clearNdx() {
@@ -90,6 +91,7 @@ export class DataService {
         });
 
         this.ndx = crossfilter(data.items);
+        this.rowChartNdx = crossfilter(data.items.slice());
         this.data = data.items;
 
         this.hgncDim = this.ndx.dimension((d) => {
@@ -118,16 +120,17 @@ export class DataService {
     }
 
     // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene): crossfilter.Dimension<any, any> {
+    getDimension(info: any, filterGene?: Gene, auxNdx?: boolean): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = this.getNdx().dimension((d) => {
+        const dim = ((auxNdx) ? this.getNdx(auxNdx) : this.getNdx()).dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned
                     let rvalue: any = '';
 
-                    if (d.hgnc_symbol === filterGene.hgnc_symbol) {
+                    if (d.hgnc_symbol === filterGene.hgnc_symbol && d.model ===
+                        filterGene.model) {
                         rvalue = d[dimValue[0]];
                     }
                     return rvalue;
@@ -152,8 +155,8 @@ export class DataService {
         return info.dim;
     }
 
-    getGroup(info: any): crossfilter.Group<any, any, any> {
-        let group = info.dim.group();
+    getGroup(info: any, auxDim?: any): crossfilter.Group<any, any, any> {
+        let group = (auxDim) ? auxDim.group() : info.dim.group();
 
         // If we want to reduce based on certain parameters
         if (info.attr || info.format) {

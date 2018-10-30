@@ -48,23 +48,17 @@ plot.
                     <bp-dialog [name]="'bp'"></bp-dialog>
                 </more-info>
             </h2>
-            <div class="row multi-sel-row">
+            <div class="row sm-row-1">
                 <div class="col-md-10 col-sm-12 col-12">
-                    <p-multiSelect *ngIf="!isEmptyGene"
-                        [options]="tissues"
-                        [(ngModel)]="selectedTissues"
-                        [showToggleAll]="false"
-                        [showHeader]="false"
-                        [panelStyle]="{minWidth:'12em'}"
-                        [defaultLabel]="getDefaultLabel()"
-                        [dropdownIcon]="getDropdownIcon()"
-                        (onPanelShow)="openDropdown()"
-                        (onPanelHide)="closeDropdown()"
-                        (onChange)="toggleTissue($event)">
-                    </p-multiSelect>
-                    <p-multiSelect #egms *ngIf="isEmptyGene"
+                    <select-menu *ngIf="!isEmptyGene"
+                        [promptText]="'All'"
+                        [label]="'select-tissue'"
+                        [columnName]="'select-column-tissue'"
+                        [defaultValue]="getTissue(1)">
+                    </select-menu>
+                    <p-multiSelect #egmsc *ngIf="isEmptyGene"
                         [options]="emptySelection"
-                        [(ngModel)]="selectedTissues"
+                        [(ngModel)]="selectedModels"
                         [showToggleAll]="false"
                         [showHeader]="false"
                         [panelStyle]="{minWidth:'12em'}"
@@ -74,11 +68,12 @@ plot.
                     </p-multiSelect>
                 </div>
             </div>
-            <div class="row sm-row">
+            <div class="row sm-row-2">
                 <div class="col-md-10 col-sm-12 col-12">
                     <select-menu *ngIf="!isEmptyGene"
                         [promptText]="'All'"
                         [label]="'select-model'"
+                        [columnName]="'select-column-model'"
                         [defaultValue]="getModel(1)">
                     </select-menu>
                     <p-multiSelect #egmsc *ngIf="isEmptyGene"
@@ -97,8 +92,9 @@ plot.
         <div *ngIf="!isEmptyGene" #stbp class="col-md-4 col-sm-12 col-12">
             <ng-container>
                 <!-- BoxPlots component-->
-                <ng-template *ngFor="let tissue of tissues; let i = index" #t>
-                </ng-template>
+                <!--<ng-template *ngFor="let tissue of tissues; let i = index" #t>
+                </ng-template>-->
+                <box-plot [label]="'box-plot'"></box-plot>
             </ng-container>
         </div>
         <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">

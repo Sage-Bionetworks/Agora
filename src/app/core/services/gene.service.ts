@@ -15,6 +15,7 @@ export class GeneService {
     currentTissue: string;
     currentModel: string;
     defaultTissue: string = 'DLPFC';
+    defaultModel: string = 'AD Diagnosis (males and females)';
     models: string[] = [];
     geneModels: string[] = [];
     tissues: string[] = [];
@@ -99,6 +100,14 @@ export class GeneService {
 
     setDefaultTissue(tissue: string) {
         this.defaultTissue = tissue;
+    }
+
+    getDefaultModel(): string {
+        return this.defaultModel;
+    }
+
+    setDefaultModel(model: string) {
+        this.defaultModel = model;
     }
 
     getTissues(): string[] {

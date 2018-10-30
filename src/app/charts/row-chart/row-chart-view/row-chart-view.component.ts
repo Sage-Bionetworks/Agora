@@ -47,6 +47,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
 
+    canRedraw: boolean = true;
     changedLabels: boolean = false;
     display: boolean = false;
     colors: string[] = ['#5171C0'];
@@ -70,27 +71,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit() {
         // If we move away from the overview page, remove
         // the charts
-        this.router.events.subscribe((re: RouterEvent) => {
-            if (re instanceof NavigationStart) {
-                if (this.chart) {
-                    this.chartService.removeChart(
-                        this.chart, this.chart.group(),
-                        this.chart.dimension()
-                    );
-                    this.chart = null;
-                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-                }
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                this.removeChart();
             }
         });
         this.location.onPopState(() => {
-            if (this.chart) {
-                this.chartService.removeChart(
-                    this.chart, this.chart.group(),
-                    this.chart.dimension()
-                );
-                this.chart = null;
-                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-            }
+            this.removeChart();
         });
     }
 
@@ -103,13 +90,14 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     initChart() {
+        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
-            this.currentGene
+            this.currentGene,
+            true
         );
         this.group = this.dataService.getGroup(this.info);
-        console.log(this.group.all());
 
         this.title = this.info.title;
         this.getChartPromise().then((chart) => {
@@ -127,7 +115,18 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    getChartPromise(): Promise<dc.RowChart> {
+    removeChart() {
+        if (this.chart) {
+            this.chartService.removeChart(
+                this.chart, this.chart.group(),
+                this.chart.dimension()
+            );
+            this.chart = null;
+            this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+        }
+    }
+
+    getChartPromise(): Promise<any> {
         return new Promise((resolve, reject) => {
             const self = this;
             const chartInst = dc.rowChart(self.rowChart.nativeElement)
@@ -142,11 +141,47 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .label((d) => {
                     return d.key;
                 })
-                .on('postRedraw', function(chart) {
-                    console.log('post redraw');
-                    console.log(chart.svg());
-                    console.log(chart.width());
-                    console.log(chart.height());
+                .on('preRedraw', async (chart) => {
+                    chart.dimension(self.dataService.getDimension(
+                        self.info,
+                        self.geneService.getCurrentGene(),
+                        true
+                    ));
+                    chart.group(self.dataService.getGroup(self.info));
+
+                    self.updateXDomain(chart);
+
+                    if (self.display) {
+                        await self.removeLinesInRows(chart);
+                        await self.insertLinesInRows(chart);
+
+                        await self.removeTextInRows(chart);
+                        await self.insertTextsInRows(chart);
+                        await self.insertTextsInRows(chart, 'confidence-text-left');
+                        await self.insertTextsInRows(chart, 'confidence-text-right');
+
+                        self.updateChartExtras(
+                            chart,
+                            chart.svg(),
+                            chart.width(),
+                            chart.height()
+                        );
+                    }
+                })
+                .on('postRedraw', (chart) => {
+                    if (self.display) {
+                        self.updateChartExtras(
+                            chart,
+                            chart.svg(),
+                            chart.width(),
+                            chart.height()
+                        );
+                    }
+                })
+                .on('postRender', (chart) => {
+                    // Registers this chart
+                    self.chartService.addChartName('forest');
+
                     if (self.display) {
                         self.updateChartExtras(
                             chart,
@@ -161,14 +196,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         chart.width(),
                         chart.height()
                     );
-                })
-                .on('preRedraw', function(chart) {
-                    console.log('pre redraw');
-                    console.log(chart.svg());
-                    console.log(chart.width());
-                    console.log(chart.height());
-                    self.updateXDomain(chart);
-
                 })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)
@@ -242,7 +269,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             const hlines = chart.selectAll('g.row g.hline');
             hlines.each(function() {
                 d3.select(this).attr('transform', function(d: any) {
-                    console.log(d.value.logfc);
                     return 'translate(' + d.value.logfc + ')';
                 });
             });
@@ -269,69 +295,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         self.display = true;
     }
 
-    // A custom renderlet function for this chart, allows us to change
-    // what happens to the chart after rendering
-    registerChartEvent(chartEl: dc.RowChart, type: string = 'renderlet') {
-        const self = this;
-        // Using a different name for the chart variable here so it's not shadowed
-        chartEl.on(type, async (chart) => {
-            const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
-            const squareSize = 18;
-            const lineWidth = 60;
-
-            // Test if we should display the chart. Using this variable so we don't see
-            // the rows rectangles change into small squares abruptly
-            if (!self.display) {
-                // Copy all vertical texts to another div, so they don't get hidden by
-                // the row chart svg after being translated
-                self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
-
-                // Insert a line for each row of the chart
-                self.insertLinesInRows(chart);
-
-                // Insert the texts for each row of the chart. At first we need to add
-                // empty texts so that the rowChart redraw does not move out confidence
-                // texts around
-                self.insertTextsInRows(chart);
-                self.insertTextsInRows(chart, 'confidence-text-left');
-                self.insertTextsInRows(chart, 'confidence-text-right');
-
-                // Add a label to the x axis
-                self.addXLabel(this.chart, 'LOG FOLD CHANGE');
-            } else {
-                // This part will be called on redraw after filtering, so at this point
-                // we just need to move the lines to the correct position again. First
-                // translate the parent elements
-                const hlines = chart.selectAll('g.row g.hline');
-                hlines.each(function() {
-                    d3.select(this).attr('transform', function(d: any) {
-                        return 'translate(' + d.value.logfc + ')';
-                    });
-                });
-
-                // Adjust the x label
-                this.adjustXLabel(chart, chart.select('text.x-axis-label'));
-            }
-
-            // Finally redraw the lines in each row
-            self.drawLines(chart, rectHeight / 2, lineWidth);
-
-            // Change the row rectangles into small circles, this happens on
-            // every render or redraw
-            self.rectToCircles(chart, squareSize, rectHeight);
-
-            // Only show the 0, min and max values on the xAxis ticks
-            self.updateXTicks(chart);
-
-            // Redraw confidence text next to the lines in each row
-            self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth, true);
-            self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth);
-
-            // Finally show the chart
-            self.display = true;
-        });
-    }
-
     updateXDomain(chart: dc.RowChart) {
         // Draw the horizontal lines
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
@@ -346,8 +309,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 max = Math.abs(+g.ci_r);
             }
         });
-        console.log('updating X domain');
-        console.log(max);
+
         if (max !== +Infinity) {
             chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([-max, max]));
             chart.xAxis().scale(chart.x());
@@ -450,11 +412,20 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    removeLinesInRows(chart: dc.RowChart) {
+        chart.selectAll('g.row')
+            .remove();
+    }
+
     insertLinesInRows(chart: dc.RowChart) {
         chart.selectAll('g.row')
             .insert('g')
             .attr('class', 'hline')
             .insert('line');
+    }
+
+    removeTextInRows(chart: dc.RowChart) {
+        chart.selectAll('g.row g text');
     }
 
     insertTextsInRows(chart: dc.RowChart, textClass?: string) {

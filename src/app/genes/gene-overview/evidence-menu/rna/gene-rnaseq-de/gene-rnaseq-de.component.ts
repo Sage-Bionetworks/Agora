@@ -10,7 +10,8 @@ import {
     QueryList,
     ViewChild,
     ElementRef,
-    AfterViewInit
+    AfterViewInit,
+    AfterViewChecked
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -33,7 +34,7 @@ import { SelectItem } from 'primeng/api';
     styleUrls: [ './gene-rnaseq-de.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
+export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
     @Input() gene: Gene;
@@ -42,9 +43,11 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
     @ViewChild('noDataMedian') noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
     tissues: SelectItem[] = [];
+    models: SelectItem[] = [];
     emptySelection: SelectItem[] = [];
     currentTissues: string[] = [];
     selectedTissues: string[] = [];
+    selectedModels: string[] = [];
     componentRefs: any[] = [];
     oldIndex: number = -1;
     index: number = -1;
@@ -95,27 +98,34 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                 this.geneService.getGeneTissues().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
+                this.geneService.getGeneModels().forEach((t) => {
+                    this.models.push({label: t.toUpperCase(), value: t});
+                });
                 const index = this.tissues.findIndex((t) => {
                     return t.value === this.geneService.getDefaultTissue();
                 });
                 this.selectedTissues = (index !== -1) ?
                     this.tissues.slice(index, index + 1).map((a) => a.value) :
                     this.tissues.slice(0, 1).map((a) => a.value);
+                this.geneService.setDefaultTissue(this.selectedTissues[0]);
 
-                this.toggleTissue({
-                    itemValue: this.selectedTissues[0],
-                    value: [this.selectedTissues[0]]
-                }).then((state) => {
-                    if (this.gene && this.gene._id) {
-                        this.isEmptyGene = false;
-                    }
-                    this.dataLoaded = true;
-                });
+                this.selectedModels = this.models.slice(0, 1).map((a) => a.value);
+
+                this.geneService.setDefaultTissue(this.selectedTissues[0]);
+                this.geneService.setDefaultModel(this.selectedModels[0]);
+
+                if (this.gene && this.gene._id) {
+                    this.isEmptyGene = false;
+
+                    this.toggleTissueModel().then(() => {
+                        this.dataLoaded = true;
+                    });
+                }
             });
         }
     }
 
-    ngAfterViewInit() {
+    ngAfterViewChecked() {
         this.isViewReady = true;
     }
 
@@ -165,6 +175,21 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
                     filter: 'default'
                 }
             );
+            this.registerBoxPlot(
+                'box-plot',
+                [
+                    {
+                        name: this.currentTissues[this.index],
+                        attr: 'tissue'
+                    },
+                    {
+                        name: this.geneService.getCurrentModel(),
+                        attr: 'model'
+                    }
+                ],
+                'log2(fold change)',
+                'fc'
+            );
 
             resolve(true);
         });
@@ -183,86 +208,39 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewInit {
             (this.tissues.length ? this.tissues[0].value : '');
     }
 
-    async toggleTissue(event: any) {
-        // Update default tissue in case the user navigates away and comes back
-        this.geneService.setDefaultTissue(event.itemValue);
-        this.index = this.tissues.findIndex((t) => t.value === event.itemValue);
-        const LIMIT_NUMBER = 1;
-        const hasTissue = (this.currentTissues[this.index]) ? true : false;
-        // Create or destroy the box plots for this tissue
-        if (!hasTissue) {
-            this.currentTissues[this.index] = event.itemValue;
-            // Remove the old box plot and erase the index
-            if (this.oldIndex !== -1) {
-                this.destroyComponent(this.oldIndex);
-                if (this.index !== this.oldIndex) {
-                    this.currentTissues[this.oldIndex] = undefined;
+    async toggleTissueModel() {
+        // Update the current gene for this tissue
+        this.apiService.getGene(
+            this.gene.ensembl_gene_id,
+            this.geneService.getCurrentTissue(),
+            this.geneService.getCurrentModel()
+        ).subscribe(
+            (data: GeneResponse) => {
+                if (!data.info) {
+                    this.router.navigate(['/genes']);
+                } else {
+                    if (!data.item) {
+                        // Fill in a new gene with the info attributes
+                        data.item = this.geneService.getEmptyGene(
+                            data.info.ensembl_gene_id, data.info.hgnc_symbol
+                        );
+                    }
+                }
+
+                this.geneService.updateGeneData(data);
+                this.gene = data.item;
+            }, (error) => {
+                console.log('Error getting gene: ' + error.message);
+            }, () => {
+                // Check if we have a database id at this point
+                if (this.gene && this.gene._id) {
+                    this.geneService.setCurrentTissue(this.gene.tissue);
+                    this.geneService.setCurrentModel(this.gene.model);
+                } else {
+                    this.isEmptyGene = true;
                 }
             }
-
-            // Set the current tissue to the toggled value
-            this.geneService.setCurrentTissue(event.itemValue);
-
-            // Update the current gene for this tissue
-            this.apiService.getGene(
-                this.gene.ensembl_gene_id,
-                this.geneService.getCurrentTissue(),
-                this.geneService.getCurrentModel()
-            ).subscribe(
-                (data: GeneResponse) => {
-                    if (!data.info) {
-                        this.router.navigate(['/genes']);
-                    } else {
-                        if (!data['item']) {
-                            // Fill in a new gene with the info attributes
-                            data['item'] = this.geneService.getEmptyGene(
-                                data['info'].ensembl_gene_id, data['info'].hgnc_symbol
-                            );
-                        }
-                    }
-                    this.geneService.updateGeneData(data);
-                    this.gene = data.item;
-                }, (error) => {
-                    console.log('Error getting gene: ' + error.message);
-                }, () => {
-                    // Check if we have a database id at this point
-                    if (this.gene && this.gene._id) {
-                        const label1 = 'box-plot-' + this.index + '1';
-                        const info1 = this.chartService.getChartInfo(label1);
-                        if (!info1) {
-                            this.registerBoxPlot(
-                                'box-plot-' + this.index + '1',
-                                [
-                                    {
-                                        name: this.currentTissues[this.index],
-                                        attr: 'tissue'
-                                    },
-                                    {
-                                        name: this.geneService.getCurrentModel(),
-                                        attr: 'model'
-                                    }
-                                ],
-                                'log2(fold change)',
-                                'fc'
-                            );
-                        }
-
-                        this.createComponent(this.index, info1, label1);
-                    } else {
-                        this.isEmptyGene = true;
-                    }
-                }
-            );
-        } else {
-            this.destroyComponent(this.index);
-            this.currentTissues[this.index] = undefined;
-
-            // Set the current tissue to the toggled value
-            this.geneService.setCurrentTissue(undefined);
-        }
-
-        this.oldIndex = this.index;
-        if (event.value.length > LIMIT_NUMBER) { event.value.splice(0, 1); }
+        );
     }
 
     registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
