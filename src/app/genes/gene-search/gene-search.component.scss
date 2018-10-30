@@ -175,7 +175,7 @@
     margin: 0px;
     line-height: normal;
     font-size: $font-size-x-regular;
-    color: #1A1C29;
+    color: $text-color-normal;
     max-height: 250px;
     overflow-y: auto;
     padding-left: 0px;
@@ -191,15 +191,15 @@
     cursor: pointer;
     padding: 5px 10px;
     height: 60px;
-    color: #1A1C29;
+    color: $text-color-normal;
     line-height: normal;
     font-size: $font-size-regular;
-    color: #1A1C29;
+    color: $text-color-normal;
     padding-left: 4%;
     box-shadow: inset 0px 0px 1px #EDEDED;
 
     p {
-        color: #1A1C29;
+        color: $text-color-normal;
     }
 
     .fa-star {

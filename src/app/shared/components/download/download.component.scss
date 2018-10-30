@@ -59,7 +59,7 @@
         line-height: normal;
         font-size: $font-size-regular;
         height: 32px;
-        color: #1A1C29;
+        color: $text-color-normal;
 
     }
 
@@ -118,7 +118,7 @@
     .ui-toast-message {
         @include lato-font('normal');
 
-        color: #1A1C29;
+        color: $text-color-normal;
         background: #ffe399;
         line-height: normal;
         font-size: $font-size-x-regular;
@@ -127,14 +127,14 @@
     .ui-toast-summary {
         @include lato-font('bold');
 
-        color: #1A1C29;
+        color: $text-color-normal;
         background: #ffe399;
         line-height: normal;
         font-size: $font-size-xx-regular;
     }
 
     .ui-toast-close-icon {
-        color: #1A1C29;
+        color: $text-color-normal;
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
