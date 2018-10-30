@@ -26,7 +26,6 @@ export class SIMilarPageDialogComponent {
 
     // Waiting for the new PrimeNG version
     closeDialog() {
-        console.log('close');
         this.dialogsService.closeDialog(this.name);
     }
 }

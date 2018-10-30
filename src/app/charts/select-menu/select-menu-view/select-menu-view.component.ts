@@ -77,8 +77,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             this.initChart();
         }
 
-        this.chartService.chartsReady$.subscribe((state: boolean) => {
-            if (state) { this.replaceSelect(); }
+        this.chartService.chartsReady$.subscribe(async (state: boolean) => {
+            if (state) {
+                await this.replaceSelect();
+            }
         });
     }
 
@@ -191,10 +193,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    replaceSelect() {
+    async replaceSelect() {
         if (this.defaultValue) {
-            this.generateSelect();
-            this.removeFirstOption();
+            await this.generateSelect();
+            await this.removeFirstOption();
         }
     }
 
