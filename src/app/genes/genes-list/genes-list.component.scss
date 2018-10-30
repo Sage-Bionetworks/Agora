@@ -22,6 +22,10 @@
         background-color: #FFF;
     }
 
+    .ui-table-scrollable-body {
+      min-height: 300px;
+    }
+
     .section {
         margin-bottom: 43px;
         h1 {
@@ -76,6 +80,9 @@
     .ui-table-scrollable-header-box {
         margin-right: 0px !important;
         border-right: solid 17px rgb(60, 74, 99) !important;
+        @include respond-to('ex-small') {
+            border-right: 0px!important;
+        }
     }
 
     .ui-table-caption {
@@ -91,7 +98,7 @@
 
             @include respond-to('ex-small') {
                 width: 100%;
-                padding-left: 4%;
+                padding-left: 2.5em;
             }
             @include respond-to('small') {
                 width: 100%;
@@ -184,11 +191,11 @@
             line-height: 40px;
             font-size: 18px;
             color: #FFFFFF !important;
+
         }
 
         @include respond-to('ex-small') {
             >tr>th:first-child {
-                padding-left: 4%;
                 text-align: center;
             }
             >tr>th:not(:first-child) {
@@ -266,7 +273,7 @@
             padding: .25em .5em;
 
             @include respond-to('ex-small') {
-                font-size: 14px;
+                font-size: 12px;
             }
             @include respond-to('small') {
                 font-size: 16px;
