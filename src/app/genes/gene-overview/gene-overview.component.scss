@@ -181,6 +181,7 @@
         }
     }
 
+
     ul {
         display: flex !important;
         width: 100%;
@@ -228,6 +229,15 @@
             @include lato-font('bold');
             font-size: $font-size-xx-regular;
             opacity: 1;
+        }
+    }
+}
+
+.nominated{
+    .ui-tabmenu-nav {
+        >li:last-child {
+            text-align: center !important;
+            text-align-last: center!important;
         }
     }
 }
