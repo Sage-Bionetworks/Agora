@@ -79,3 +79,9 @@ dll/
 # Mongo #
 /mongodump/
 /mongodump/**
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
