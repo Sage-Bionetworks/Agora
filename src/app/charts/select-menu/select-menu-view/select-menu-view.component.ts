@@ -13,7 +13,9 @@ import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 
 import { ChartService } from '../../services';
-import { GeneService, DataService } from '../../../core/services';
+import { GeneService, DataService, ApiService } from '../../../core/services';
+
+import { GeneResponse } from '../../../models';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -26,6 +28,7 @@ import * as dc from 'dc';
 })
 export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() label: string;
+    @Input() columnName: string = '';
     @Input() chart: any;
     @Input() info: any;
     @Input() promptText: string;
@@ -49,6 +52,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private dataService: DataService,
         private geneService: GeneService,
+        private apiService: ApiService,
         private chartService: ChartService
     ) { }
 
@@ -57,25 +61,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                if (this.chart) {
-                    this.chartService.removeChart(
-                        this.chart, this.chart.group(),
-                        this.chart.dimension()
-                    );
-                    this.chart = null;
-                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-                }
+                this.removeChart();
             }
         });
         this.location.onPopState(() => {
-            if (this.chart) {
-                this.chartService.removeChart(
-                    this.chart, this.chart.group(),
-                    this.chart.dimension()
-                );
-                this.chart = null;
-                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-            }
+            this.removeChart();
         });
 
         if (!this.label) {
@@ -86,6 +76,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         } else {
             this.initChart();
         }
+
+        this.chartService.chartsReady$.subscribe((state: boolean) => {
+            if (state) { this.replaceSelect(); }
+        });
     }
 
     initChart() {
@@ -102,17 +96,18 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     // Single value and not a function-based filter
                     // Before filters are applied, update the gene
                     if (self.label === 'select-tissue') {
-                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
-                            .slice().find((g) => {
-                                return g.tissue === filters[0] &&
-                                    g.model === self.geneService.getCurrentModel();
-                            })
-                        );
+                        self.geneService.setCurrentTissue(filters[0]);
+
+                        self.getNewGenes();
                     }
                     if (self.label === 'select-model') {
+                        self.geneService.setCurrentModel(filters[0]);
+                    }
+
+                    if (self.geneService.getCurrentModel() && self.geneService.getCurrentTissue()) {
                         self.geneService.setCurrentGene(self.dataService.getGeneEntries()
                             .slice().find((g) => {
-                                return g.model === filters[0] &&
+                                return g.model === self.geneService.getCurrentModel() &&
                                     g.tissue === self.geneService.getCurrentTissue();
                             })
                         );
@@ -139,34 +134,105 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             });
             chartInst.promptText(this.promptText);
 
-            chartInst.on('postRender', async (chart) => {
-                if (self.defaultValue) {
-                    await self.generateSelect();
-
-                    self.menuSelection = d3.select(self.selectMenu.nativeElement)
-                        .select('select.dc-select-menu');
-                    const oldOptions = self.menuSelection.selectAll('option');
-                    const firstOldOption = oldOptions.filter((d, i) => i === 0);
-                    // If the first option is the text All, we need to remove it
-                    // because it is not a brain tissue. This is the default text
-                    // in the selectMenu chart
-                    let newOptions = null;
-                    if (firstOldOption['_groups'][0][0].innerHTML === 'All') {
-                        firstOldOption.remove();
-                        newOptions = oldOptions.filter((d, i) => i !== 0);
-                    } else {
-                        newOptions = oldOptions;
-                    }
-
-                    newOptions['_groups'][0][0]['selected'] = 'selected';
-                    await self.menuSelection.dispatch('change');
-
-                    self.defaultValue = '';
+            chartInst.on('postRender', () => {
+                // Registers this chart
+                if (this.label === 'select-tissue') {
+                    self.chartService.addChartName('select-tissue');
+                } else {
+                    self.chartService.addChartName('select-model');
                 }
             });
 
             chartInst.render();
         });
+    }
+
+    async getNewGenes() {
+        let gene = null;
+        await this.apiService.getGene(
+            this.geneService.getCurrentGene().ensembl_gene_id,
+            this.geneService.getCurrentTissue(),
+            this.geneService.getCurrentModel()
+        ).subscribe(
+            (data: GeneResponse) => {
+                if (!data.info) {
+                    this.router.navigate(['/genes']);
+                } else {
+                    if (!data.item) {
+                        // Fill in a new gene with the info attributes
+                        data.item = this.geneService.getEmptyGene(
+                            data.info.ensembl_gene_id, data.info.hgnc_symbol
+                        );
+                    }
+                }
+
+                this.geneService.updateGeneData(data);
+                gene = data.item;
+            }, (error) => {
+                console.log('Error getting gene: ' + error.message);
+            }, () => {
+                // Check if we have a database id at this point
+                if (gene && gene._id) {
+                    this.geneService.setCurrentTissue(gene.tissue);
+                    this.geneService.setCurrentModel(gene.model);
+                }
+            }
+        );
+    }
+
+    removeChart() {
+        if (this.chart) {
+            this.chartService.removeChart(
+                this.chart, this.chart.group(),
+                this.chart.dimension()
+            );
+            this.chart = null;
+            this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+        }
+    }
+
+    async replaceSelect() {
+        if (this.defaultValue) {
+            await this.generateSelect();
+            await this.removeFirstOption();
+        }
+    }
+
+    async removeFirstOption() {
+        this.menuSelection = d3.select(this.selectMenu.nativeElement)
+            .select('select.dc-select-menu');
+        const oldOptions = this.menuSelection.selectAll('option');
+        const firstOldOption = oldOptions.filter((d, i) => i === 0);
+        // If the first option is the text All, we need to remove it
+        // because it is not a brain tissue. This is the default text
+        // in the selectMenu chart
+        let newOptions = null;
+        if (firstOldOption['_groups'][0][0].innerHTML === 'All') {
+            firstOldOption.remove();
+            newOptions = oldOptions.filter((d, i) => i !== 0);
+        } else {
+            newOptions = oldOptions;
+        }
+
+        for (const no of firstOldOption['_groups'][0]) {
+            console.log(no);
+            if (this.label === 'select-tissue') {
+                if (no.innerHTML === this.geneService.getDefaultTissue()) {
+                    no['selected'] = 'selected';
+                    break;
+                }
+            }
+            if (this.label === 'select-model') {
+                if (no.innerHTML === this.geneService.getDefaultModel()) {
+                    no['selected'] = 'selected';
+                    break;
+                }
+            }
+        }
+
+        await this.menuSelection.dispatch('change');
+
+        this.defaultValue = '';
     }
 
     getChartPromise(): Promise<dc.SelectMenu> {
@@ -203,13 +269,15 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         const self = this;
         // Look for any elements with the class 'dc-select-menu'
         const oriSelEl: HTMLSelectElement =
-            document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement;
+            (self.label === 'select-tissue') ?
+            document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement :
+            document.getElementsByClassName('dc-select-menu')[1] as HTMLSelectElement;
 
         const a = document.createElement('DIV');
         a.setAttribute('class', 'select-selected');
 
         a.innerHTML = oriSelEl.options[1].innerHTML;
-        const newSelElmnt = document.getElementsByClassName('select-column')[0];
+        const newSelElmnt = document.getElementsByClassName(this.columnName)[0];
         newSelElmnt.appendChild(a);
 
         // For each element, create a new DIV that will contain the option list

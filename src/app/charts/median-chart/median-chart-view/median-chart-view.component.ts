@@ -40,7 +40,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         .style('height', 160)
         .style('opacity', 0);
 
-    barchart: any;
+    chart: any;
     ndx: any;
     group: any;
     dimension: any;
@@ -62,25 +62,11 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                if (this.barchart && dc.hasChart(this.barchart)) {
-                    this.chartService.removeChart(
-                        this.barchart, this.barchart.group(),
-                        this.barchart.dimension()
-                    );
-                    this.barchart = null;
-                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-                }
+                this.removeChart();
             }
         });
         this.location.onPopState(() => {
-            if (this.barchart && dc.hasChart(this.barchart)) {
-                this.chartService.removeChart(
-                    this.barchart, this.barchart.group(),
-                    this.barchart.dimension()
-                );
-                this.barchart = null;
-                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-            }
+            this.removeChart();
         });
 
         if (!this.geneinfo) {
@@ -94,18 +80,29 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         );
     }
 
+    removeChart() {
+        if (this.chart) {
+            this.chartService.removeChart(
+                this.chart, this.chart.group(),
+                this.chart.dimension()
+            );
+            this.chart = null;
+            this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+        }
+    }
+
     ngOnDestroy() {
-        this.chartService.removeChart(this.barchart);
+        this.chartService.removeChart(this.chart);
     }
 
     ngAfterViewInit() {
         const self = this;
-        this.barchart = dc.barChart(this.medianChart.nativeElement)
+        this.chart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
-        this.barchart.margins().top = 50;
-        this.barchart.margins().left = 70;
-        this.barchart.margins().right = 0;
-        this.barchart
+        this.chart.margins().top = 50;
+        this.chart.margins().left = 70;
+        this.chart.margins().right = 0;
+        this.chart
             .barPadding(0.5)
             .renderLabel(true)
             .elasticY(false)
@@ -121,9 +118,13 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
             .renderTitle(false)
+            .on('postRender', () => {
+                // Registers this chart
+                self.chartService.addChartName('median');
+            })
             .on('renderlet', (chart) => {
-                const yDomainLength = Math.abs(this.barchart.y().domain()[1]
-                - this.barchart.y().domain()[0]);
+                const yDomainLength = Math.abs(this.chart.y().domain()[1]
+                - this.chart.y().domain()[0]);
                 // if (chart.select('rect').attr('y') === '240' ) {
                 //     chart.select('rect').attr('y', 290 );
                 // }
@@ -166,9 +167,9 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                 self.addXAxisTooltips(chart);
             });
 
-        this.barchart.yAxis().ticks(3);
-        this.barchart.filter = () => '';
-        this.barchart.render();
+        this.chart.yAxis().ticks(3);
+        this.chart.filter = () => '';
+        this.chart.render();
     }
 
     addXAxisTooltips(chart: dc.BarChart) {
@@ -249,18 +250,18 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
 
         clearTimeout(this.resizeTimer);
         this.resizeTimer = setTimeout(() => {
-            self.barchart
+            self.chart
                 .width(
                     self.medianChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
                 )
                 .height(self.medianChart.nativeElement.offsetHeight - (self.paddingUD * 2));
 
-            if (self.barchart.rescale) {
-                self.barchart.rescale();
+            if (self.chart.rescale) {
+                self.chart.rescale();
             }
 
             // Run code here, resizing has "stopped"
-            self.barchart.redraw();
+            self.chart.redraw();
         }, 100);
     }
 

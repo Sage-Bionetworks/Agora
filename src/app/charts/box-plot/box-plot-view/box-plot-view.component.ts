@@ -32,7 +32,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() chart: any;
     @Input() info: any;
     @Input() label: string = '';
-    @Input() currentGene = this.geneService.getCurrentGene();
     @Input() dim: any;
     @Input() group: any;
     @Input() rcRadius: number = 13.6;
@@ -66,26 +65,23 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                if (this.chart) {
-                    this.chartService.removeChart(
-                        this.chart, this.chart.group(),
-                        this.chart.dimension()
-                    );
-                    this.chart = null;
-                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-                }
+                this.removeChart();
             }
         });
         this.location.onPopState(() => {
-            if (this.chart) {
-                this.chartService.removeChart(
-                    this.chart, this.chart.group(),
-                    this.chart.dimension()
-                );
-                this.chart = null;
-                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-            }
+            this.removeChart();
         });
+    }
+
+    removeChart() {
+        if (this.chart) {
+            this.chartService.removeChart(
+                this.chart, this.chart.group(),
+                this.chart.dimension()
+            );
+            this.chart = null;
+            this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+        }
     }
 
     ngAfterViewInit() {
@@ -99,11 +95,29 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     initChart() {
         this.geneEntries = this.dataService.getGeneEntries();
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(
-            this.info,
-            this.currentGene
+        this.dim = this.dataService.getNdx().dimension((d) => d.tissue);
+
+        this.group = this.dim.group().reduce(
+            function(p, v) {
+                // Retrieve the data value, if not Infinity or null add it.
+                const dv = Math.log2(v.fc);
+                if (dv !== Infinity && dv !== null) {
+                    p.push(dv);
+                }
+                return p;
+            },
+            function(p, v) {
+                // Retrieve the data value, if not Infinity or null remove it.
+                const dv = Math.log2(v.fc);
+                if (dv !== Infinity && dv !== null) {
+                    p.splice(p.indexOf(dv), 1);
+                }
+                return p;
+            },
+            function() {
+                return [];
+            }
         );
-        this.group = this.dataService.getGroup(this.info);
 
         this.getChartPromise().then((chart: any) => {
             this.chart = chart;
@@ -115,7 +129,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             chart.filter = function() {
                 //
             };
-            chart.margins().left = 70;
+            chart.margins().left = 90;
+            chart.margins().bottom = 10;
 
             chart.render();
         });
@@ -134,25 +149,61 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .dataOpacity(0)
                 .colors('transparent')
                 .tickFormat(() => '')
-                .elasticY(true)
-                .yRangePadding(this.rcRadius * 1.1)
+                .elasticX(true)
+                .yRangePadding(this.rcRadius * 1.5)
                 .on('postRender', (chart) => {
                     chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    // Renders the selected gene circle
-                    self.renderRedCircle(chart);
+                    self.updateYDomain(chart);
+
+                    // Registers this chart
+                    self.chartService.addChartName('box');
                 })
                 .on('postRedraw', (chart) => {
+                    if (chart.select('g.box circle').empty()) {
+                        self.renderRedCircle(chart);
+                    }
+                })
+                .on('preRedraw', (chart) => {
+                    self.updateYDomain(chart);
+                })
+                .on('renderlet', (chart) => {
                     chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    // Renders the selected gene circle
-                    self.renderRedCircle(chart, true);
+                    if (!chart.select('g.box circle').empty()) {
+                        self.renderRedCircle(chart, true);
+                        self.updateYDomain(chart);
+                    }
                 });
 
             resolve(chartInst);
         });
+    }
+
+    updateYDomain(chart: dc.BoxPlot) {
+        // Draw the horizontal lines
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+        let max = -Infinity;
+        currentGenes.forEach((g) => {
+            if (Math.abs(+g.logfc) > max) {
+                max = Math.abs(+g.logfc);
+            }
+            if (Math.abs(+g.logfc) > max) {
+                max = Math.abs(+g.logfc);
+            }
+        });
+        if (max !== +Infinity) {
+            chart.y(d3.scaleLinear().range([0, (chart.height() - 20)]).domain([-max, max]));
+            chart.yAxis().scale(chart.y());
+        }
+    }
+
+    removeRedCircle(chart: dc.BoxPlot) {
+        chart.selectAll('g.box circle').remove();
     }
 
     renderRedCircle(chart: dc.BoxPlot, translate?: boolean) {
@@ -160,23 +211,21 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.y().domain()[1] - chart.y().domain()[0]);
         const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
-        const mult = (svgEl.getBBox().height - 10) / yDomainLength;
-        // Update the component gene copy everytime
-        self.currentGene = self.geneService.getCurrentGene();
-        const val = +self.currentGene[self.info.attr];
-        let logVal = (self.info.attr === 'fc') ? Math.log2(val) : Math.log10(val);
+        const mult = (svgEl.getBBox().height) / yDomainLength;
+        let logVal = +self.geneService.getCurrentGene()['logfc'];
         logVal = this.dataService.getSignificantValue(logVal);
-        const significanceText = (self.currentGene.adj_p_val <= 0.05) ? ' ' : 'not ';
+        const significanceText = (self.geneService.getCurrentGene().adj_p_val <= 0.05) ?
+            ' ' : 'not ';
+
+        const phrase = self.geneService.getCurrentGene().hgnc_symbol + ' is ' + significanceText +
+            'significantly differentially expressed in ' +
+            self.geneService.getCurrentTissue() +
+            ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +
+            self.geneService.getCurrentGene().adj_p_val + '.';
 
         if (!translate) {
-            const phrase = self.currentGene.hgnc_symbol + ' is ' + significanceText +
-                'significantly differentially expressed in ' +
-                self.geneService.getCurrentTissue() +
-                ' with a log fold change value of ' + logVal + ' and an adjusted p-value of ' +
-                self.currentGene.adj_p_val + '.';
-
             chart.selectAll('g.box')
-                .insert('circle', ':first-child')
+                .insert('circle', ':last-child')
                 .attr('cx', lineCenter.attr('x1'))
                 .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
                 .attr('fill', '#FCA79A')
@@ -207,7 +256,20 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             chart.select('circle')
                 .attr('cx', lineCenter.attr('x1'))
-                .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult);
+                .attr('cy', Math.abs(chart.y().domain()[1] - logVal) * mult)
+                .on('mouseover', function() {
+                    self.div.transition()
+                        .duration(200)
+                        .style('opacity', .9);
+                    self.div.html(phrase)
+                        .style('left', (d3.event.pageX - 60) + 'px')
+                        .style('top', (d3.event.pageY + 20) + 'px');
+                })
+                .on('mouseout', function() {
+                    self.div.transition()
+                        .duration(500)
+                        .style('opacity', 0);
+                });
         }
     }
 

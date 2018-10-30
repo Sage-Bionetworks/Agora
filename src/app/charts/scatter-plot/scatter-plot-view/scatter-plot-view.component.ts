@@ -49,25 +49,11 @@ export class ScatterPlotViewComponent implements OnInit, OnDestroy {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                if (this.chart && dc.hasChart(this.chart)) {
-                    this.chartService.removeChart(
-                        this.chart, this.chart.group(),
-                        this.chart.dimension()
-                    );
-                    this.chart = null;
-                    this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-                }
+                this.removeChart();
             }
         });
         this.location.onPopState(() => {
-            if (this.chart && dc.hasChart(this.chart)) {
-                this.chartService.removeChart(
-                    this.chart, this.chart.group(),
-                    this.chart.dimension()
-                );
-                this.chart = null;
-                this.geneService.setPreviousGene(this.geneService.getCurrentGene());
-            }
+            this.removeChart();
         });
 
         this.initChart();
@@ -123,5 +109,16 @@ export class ScatterPlotViewComponent implements OnInit, OnDestroy {
             });
 
         this.chart.render();
+    }
+
+    removeChart() {
+        if (this.chart) {
+            this.chartService.removeChart(
+                this.chart, this.chart.group(),
+                this.chart.dimension()
+            );
+            this.chart = null;
+            this.geneService.setPreviousGene(this.geneService.getCurrentGene());
+        }
     }
 }
