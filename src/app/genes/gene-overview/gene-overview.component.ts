@@ -59,7 +59,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         this.items = [
             { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
             { label: 'SUMMARY', disabled: this.disableMenu },
-            { label: 'EVIDENCE', disabled: this.disableMenu }
+            { label: 'EVIDENCE', disabled: this.disableMenu },
+            { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
         this.router.events.subscribe((re: RouterEvent) => {
@@ -104,9 +105,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
-                    if (data.info.nominations) {
-                        this.items.push({ label: 'DRUGGABILITY', disabled: this.disableMenu });
-                    }
                 }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
@@ -185,9 +183,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         if (this.geneInfo) {
             if (!this.geneInfo.nominations) {
                 this.items[0].visible = false;
+                this.items[2].visible = false;
                 this.activeItem = this.items[1];
             } else {
                 this.items[0].visible = true;
+                this.items[2].visible = true;
                 this.activeItem = this.items[0];
             }
         }
