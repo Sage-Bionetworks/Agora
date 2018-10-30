@@ -191,14 +191,14 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    async replaceSelect() {
+    replaceSelect() {
         if (this.defaultValue) {
-            await this.generateSelect();
-            await this.removeFirstOption();
+            this.generateSelect();
+            this.removeFirstOption();
         }
     }
 
-    async removeFirstOption() {
+    removeFirstOption() {
         this.menuSelection = d3.select(this.selectMenu.nativeElement)
             .select('select.dc-select-menu');
         const oldOptions = this.menuSelection.selectAll('option');
@@ -214,8 +214,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             newOptions = oldOptions;
         }
 
-        for (const no of firstOldOption['_groups'][0]) {
-            console.log(no);
+        for (const no of newOptions['_groups']) {
             if (this.label === 'select-tissue') {
                 if (no.innerHTML === this.geneService.getDefaultTissue()) {
                     no['selected'] = 'selected';
@@ -230,7 +229,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             }
         }
 
-        await this.menuSelection.dispatch('change');
+        this.menuSelection.dispatch('change');
 
         this.defaultValue = '';
     }
