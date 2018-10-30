@@ -65,7 +65,7 @@
         margin-bottom: auto;
         margin-top: auto;
         font-size: $font-size-x-regular;
-        color: #1A1C29;
+        color: $text-color-normal;
         text-align: center;
 
         .beta-row-span {
@@ -73,7 +73,7 @@
 
             line-height: normal;
             font-size: $font-size-x-regular;
-            color: #1A1C29;
+            color: $text-color-normal;
         }
     }
 }

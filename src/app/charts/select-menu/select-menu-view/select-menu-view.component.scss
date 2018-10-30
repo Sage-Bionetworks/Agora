@@ -34,7 +34,7 @@
     }
 
     .select-selected {
-        color: #1A1C29;
+        color: $text-color-normal;
         height: 52px;
         line-height: 52px;
         padding-left: 15px;
@@ -67,10 +67,9 @@
     .select-items div {
         @include lato-font('normal');
 
-        color: #1A1C29;
+        color: $text-color-normal;
         cursor: pointer;
         font-size: $font-size-regular;
-        color: #1A1C29;
         padding-left: 30px;
         height: 52px;
         line-height: 52px;
