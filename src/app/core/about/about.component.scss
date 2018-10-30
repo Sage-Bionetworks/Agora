@@ -3,6 +3,9 @@
 
 .info-header {
     padding-right: 5% !important;
+    h1{
+        text-align: center
+    }
 }
 
 .overview-header {
@@ -35,4 +38,10 @@
     color: #5BB0B5;
     line-height: normal;
     font-size: $font-size-x-regular;
+}
+.content-row{
+    @include lato-font('normal');
+    margin-bottom: 45px;
+    font-size: 18px;
+    color: #24334F;
 }

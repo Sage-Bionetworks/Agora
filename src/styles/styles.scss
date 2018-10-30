@@ -535,3 +535,18 @@ p-dialog {
 .pi-check:before {
     content: url("/assets/icon/checked_icon.png") !important;
 }
+
+.link {
+  font-family: Lato;
+  font-weight: 600;
+  font-style: normal;
+  cursor: pointer;
+  width: 100%;
+  line-height: normal;
+  font-size: $font-size-x-regular;
+  text-decoration: none;
+  color: #5BB0B5 !important;
+  position: relative;
+  top: inherit;
+  left: inherit;
+}
