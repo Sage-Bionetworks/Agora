@@ -86,8 +86,6 @@ export class NominationDetailsComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        console.log(this.router);
-        console.log(outlets);
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

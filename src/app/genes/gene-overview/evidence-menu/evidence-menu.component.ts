@@ -82,7 +82,6 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     }
 
     setActiveItem() {
-        console.log(this.geneInfo);
         if (this.geneInfo) {
             this.items[0].visible = true;
             this.activeItem = this.items[0];
@@ -90,8 +89,6 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     }
 
     goToRoute(path: string, outlets?: any) {
-        console.log(this.router);
-        console.log(outlets);
         (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }
