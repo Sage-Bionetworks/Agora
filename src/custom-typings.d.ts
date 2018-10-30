@@ -66,6 +66,7 @@ declare var VERSION: string;
 declare var DATA_VERSION: string;
 declare var MONGODB_HOST: string;
 declare var MONGODB_PORT: number;
+declare var APP_ENV: string;
 
 interface FirebaseConfig {
   apiKey: string;
@@ -91,6 +92,7 @@ interface GlobalEnvironment {
   DATA_VERSION: string;
   MONGODB_HOST: string;
   MONGODB_PORT: number;
+  APP_ENV: string;
 }
 
 interface Es6PromiseLoader {
