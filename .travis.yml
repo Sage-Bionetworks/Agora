@@ -46,12 +46,6 @@ jobs:
         - ./container-deploy.sh || travis_terminate 1
     - stage: test
       script: npm run ci:travis
-      node_js: 6
-    - stage: test
-      script: npm run ci:travis
-      node_js: 7
-    - stage: test
-      script: npm run ci:travis
       node_js: 8
     - stage: eb-deploy
       script: git archive -v -o agora-app.zip --format=zip HEAD
