@@ -183,11 +183,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         if (this.geneInfo) {
             if (!this.geneInfo.nominations) {
                 this.items[0].visible = false;
-                this.items[2].visible = false;
+                this.items[3].visible = false;
                 this.activeItem = this.items[1];
             } else {
                 this.items[0].visible = true;
-                this.items[2].visible = true;
+                this.items[3].visible = true;
                 this.activeItem = this.items[0];
             }
         }
