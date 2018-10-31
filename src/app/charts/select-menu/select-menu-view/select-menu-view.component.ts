@@ -290,7 +290,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         const oriSelEl: HTMLSelectElement =
             (self.label === 'select-tissue') ?
             document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement :
-            document.getElementsByClassName('dc-select-menu')[1] as HTMLSelectElement;
+            document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement;
 
         const a = document.createElement('DIV');
         a.setAttribute('class', 'select-selected');

@@ -129,8 +129,7 @@ export class DataService {
                     // The key returned
                     let rvalue: any = '';
 
-                    if (d.hgnc_symbol === filterGene.hgnc_symbol && d.model ===
-                        filterGene.model) {
+                    if (d.hgnc_symbol === filterGene.hgnc_symbol) {
                         rvalue = d[dimValue[0]];
                     }
                     return rvalue;

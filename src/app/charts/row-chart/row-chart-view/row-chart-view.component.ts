@@ -96,8 +96,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
-            this.currentGene,
-            true
+            this.currentGene
         );
         this.group = this.dataService.getGroup(this.info);
 
@@ -143,23 +142,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .label((d) => {
                     return d.key;
                 })
-                .on('preRedraw', async (chart) => {
-                    if ((self.geneService.getCurrentModel() !== self.currentModel) ||
-                        !self.geneService.getCurrentModel()) {
-                        await self.updateXDomain(chart);
-                        if (self.geneService.getCurrentModel()) {
-                            self.currentModel = self.geneService.getCurrentModel();
-                        }
-
-                        await self.updateDimGroup(chart);
-                        await self.removeTextFromElement();
-                        self.display = false;
-                        await chart.render();
-
-                    }
-
-                    await self.updateXDomain(chart);
-
+                .on('preRedraw', (chart) => {
+                    self.updateXDomain(chart);
+                })
+                .on('postRedraw', (chart) => {
                     self.updateChartExtras(
                         chart,
                         chart.svg(),
@@ -188,23 +174,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    async updateDimGroup(chart: dc.RowChart) {
-        await chart.dimension(this.dataService.getDimension(
-            this.info,
-            this.geneService.getCurrentGene(),
-            true
-        ));
-
-        await chart.group(this.dataService.getGroup(this.info));
-    }
-
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
         const textSelection = (svg || chart.svg())
                 .append('text')
                 .attr('class', 'x-axis-label')
                 .attr('text-anchor', 'middle')
-                /*.attr('x', (width || chart.width()) / 2)
-                .attr('y', (height || chart.height()) - 10)*/
                 .attr('x', width / 2)
                 .attr('y', height - 10)
                 .text(text);
@@ -221,13 +195,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // of 15 pixels. We subtract them from the svg size, get the middle point
         // then add back the left translate to get the correct center
         sel
-            /*.attr('x', ((chart.width() - 45) / 2) + 30)
-            .attr('y', chart.height() - Math.ceil(textDims.height) / 2);*/
             .attr('x', ((width - 45) / 2) + 30)
             .attr('y', height - Math.ceil(textDims.height) / 2);
     }
 
-    async updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
+    updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
         const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
         const squareSize = 18;
@@ -238,20 +210,20 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!self.display) {
             // Copy all vertical texts to another div, so they don't get hidden by
             // the row chart svg after being translated
-            await self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+            self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
             // Insert a line for each row of the chart
-            await self.insertLinesInRows(chart);
+            self.insertLinesInRows(chart);
 
             // Insert the texts for each row of the chart. At first we need to add
             // empty texts so that the rowChart redraw does not move out confidence
             // texts around
-            await self.insertTextsInRows(chart);
-            await self.insertTextsInRows(chart, 'confidence-text-left');
-            await self.insertTextsInRows(chart, 'confidence-text-right');
+            self.insertTextsInRows(chart);
+            self.insertTextsInRows(chart, 'confidence-text-left');
+            self.insertTextsInRows(chart, 'confidence-text-right');
 
             // Add a label to the x axis
-            await self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
+            self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
         } else {
             // This part will be called on redraw after filtering, so at this point
             // we just need to move the lines to the correct position again. First
@@ -264,7 +236,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             // Adjust the x label
-            await this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
+            this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
         }
 
         // Finally redraw the lines in each row
@@ -336,13 +308,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    async removeTextFromElement() {
-        await d3.selectAll('svg g.textGroup')
-            .remove();
-        await d3.selectAll('.sc svg')
-            .remove();
-    }
-
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
         const self = this;
@@ -410,41 +375,15 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    async removeLinesInRows(chart: dc.RowChart) {
-        await chart.selectAll('g.row g.hline line')
-            .remove();
-        await chart.selectAll('g.row g.hline')
-            .remove();
-        await chart.selectAll('g.row g')
-            .remove();
-    }
-
-    async insertLinesInRows(chart: dc.RowChart) {
-        await chart.selectAll('g.row')
+    insertLinesInRows(chart: dc.RowChart) {
+        chart.selectAll('g.row')
             .insert('g')
             .attr('class', 'hline')
             .insert('line');
     }
 
-    async removeTextInRows(chart: dc.RowChart) {
-        await chart.selectAll('g.row g.confidence-text text')
-            .remove();
-        await chart.selectAll('g.row g.confidence-text-left text')
-            .remove();
-        await chart.selectAll('g.row g.confidence-text-right text')
-            .remove();
-        await chart.selectAll('g.row g.confidence-text')
-            .remove();
-        await chart.selectAll('g.row g.confidence-text-left')
-            .remove();
-        await chart.selectAll('g.row g.confidence-text-right')
-            .remove();
-        await chart.selectAll('g.row g')
-            .remove();
-    }
-
-    async insertTextsInRows(chart: dc.RowChart, textClass?: string) {
-        await chart.selectAll('g.row')
+    insertTextsInRows(chart: dc.RowChart, textClass?: string) {
+        chart.selectAll('g.row')
             .insert('g')
             .attr('class', (textClass) ? textClass : 'confidence-text')
             .insert('text');

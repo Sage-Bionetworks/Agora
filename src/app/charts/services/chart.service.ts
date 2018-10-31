@@ -11,7 +11,7 @@ export class ChartService {
         ['median', false],
         ['box', false],
         ['forest', false],
-        ['select-tissue', false],
+        // ['select-tissue', false],
         ['select-model', false]
     ]);
     tissueToFilter: string = '';
