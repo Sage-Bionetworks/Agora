@@ -15,12 +15,6 @@
         text-align-last: left;
 
         @include respond-to('ex-small') {
-            .ui-tabmenuitem {
-                a{
-                    padding-right: 25px !important;
-                }
-
-            }
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
