@@ -151,30 +151,30 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
-                .on('postRender', (chart) => {
-                    chart.selectAll('rect.box')
+                .on('postRender', async (chart) => {
+                    await chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    self.updateYDomain(chart);
+                    await self.updateYDomain(chart);
 
                     // Registers this chart
-                    self.chartService.addChartName('box');
+                    await self.chartService.addChartName('box');
                 })
-                .on('postRedraw', (chart) => {
+                .on('postRedraw', async (chart) => {
                     if (chart.select('g.box circle').empty()) {
-                        self.renderRedCircles(chart);
+                        await self.renderRedCircles(chart);
                     }
                 })
-                .on('preRedraw', (chart) => {
-                    self.updateYDomain(chart);
+                .on('preRedraw', async (chart) => {
+                    await self.updateYDomain(chart);
                 })
-                .on('renderlet', (chart) => {
-                    chart.selectAll('rect.box')
+                .on('renderlet', async (chart) => {
+                    await chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
                     if (!chart.select('g.box circle').empty()) {
-                        self.renderRedCircles(chart, true);
-                        self.updateYDomain(chart);
+                        await self.renderRedCircles(chart, true);
+                        await self.updateYDomain(chart);
                     }
                 });
 
