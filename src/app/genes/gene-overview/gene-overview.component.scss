@@ -204,7 +204,9 @@
             padding: 0px !important;
             width: 100%;
             text-align: center;
-
+            @include respond-to('ex-small') {
+              padding-right: 25px !important;
+            }
             span {
                 color: #3C4A63;
                 opacity: 0.5;
@@ -217,7 +219,6 @@
             padding: 0px !important;
             width: 100%;
             text-align: center;
-
             span {
                 color: #3C4A63;
             }
