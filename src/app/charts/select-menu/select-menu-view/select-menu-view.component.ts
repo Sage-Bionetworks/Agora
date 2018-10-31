@@ -89,8 +89,8 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(this.info);
 
-        this.getChartPromise().then((chartInst) => {
-            chartInst.filterHandler((dimension, filters) => {
+        this.getChartPromise().then(async (chartInst) => {
+            await chartInst.filterHandler(async (dimension, filters) => {
                 if (filters.length === 0) {
                     // The empty case (no filtering)
                     dimension.filter(null);
@@ -98,16 +98,16 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     // Single value and not a function-based filter
                     // Before filters are applied, update the gene
                     if (self.label === 'select-tissue') {
-                        self.geneService.setCurrentTissue(filters[0]);
+                        await self.geneService.setCurrentTissue(filters[0]);
 
-                        self.getNewGenes();
+                        await self.getNewGenes();
                     }
                     if (self.label === 'select-model') {
-                        self.geneService.setCurrentModel(filters[0]);
+                        await self.geneService.setCurrentModel(filters[0]);
                     }
 
                     if (self.geneService.getCurrentModel() && self.geneService.getCurrentTissue()) {
-                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                        await self.geneService.setCurrentGene(self.dataService.getGeneEntries()
                             .slice().find((g) => {
                                 return g.model === self.geneService.getCurrentModel() &&
                                     g.tissue === self.geneService.getCurrentTissue();
@@ -115,13 +115,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         );
                     }
 
-                    dimension.filterExact(filters[0]);
+                    await dimension.filterExact(filters[0]);
                 } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
                     // Single range-based filter
-                    dimension.filterRange(filters[0]);
+                    await dimension.filterRange(filters[0]);
                 } else {
                     // An array of values, or an array of filter objects
-                    dimension.filterFunction((d) => {
+                    await dimension.filterFunction((d) => {
                         filters.forEach((filter) => {
                             if (filter.isFiltered && filter.isFiltered(d)) {
                                 return true;
@@ -136,27 +136,26 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             });
             chartInst.promptText(this.promptText);
 
-            chartInst.on('postRender', () => {
+            chartInst.on('postRender', async () => {
                 // Registers this chart
                 if (this.label === 'select-tissue') {
-                    self.chartService.addChartName('select-tissue');
+                    await self.chartService.addChartName('select-tissue');
                 } else {
-                    self.chartService.addChartName('select-model');
+                    await self.chartService.addChartName('select-model');
                 }
             });
 
-            chartInst.render();
+            await chartInst.render();
         });
     }
 
-    async getNewGenes() {
+    getNewGenes() {
         let gene = null;
-        await this.apiService.getGene(
+        this.apiService.getGene(
             this.geneService.getCurrentGene().ensembl_gene_id,
             this.geneService.getCurrentTissue(),
             this.geneService.getCurrentModel()
-        ).subscribe(
-            (data: GeneResponse) => {
+        ).subscribe(async (data: GeneResponse) => {
                 if (!data.info) {
                     this.router.navigate(['/genes']);
                 } else {
@@ -168,15 +167,15 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                this.geneService.updateGeneData(data);
+                await this.geneService.updateGeneData(data);
                 gene = data.item;
             }, (error) => {
                 console.log('Error getting gene: ' + error.message);
-            }, () => {
+            }, async () => {
                 // Check if we have a database id at this point
                 if (gene && gene._id) {
-                    this.geneService.setCurrentTissue(gene.tissue);
-                    this.geneService.setCurrentModel(gene.model);
+                    await this.geneService.setCurrentTissue(gene.tissue);
+                    await this.geneService.setCurrentModel(gene.model);
                 }
             }
         );

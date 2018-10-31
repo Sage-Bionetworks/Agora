@@ -142,14 +142,14 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     return d.key;
                 })
                 .on('preRedraw', async (chart) => {
-                    chart.dimension(self.dataService.getDimension(
+                    await chart.dimension(self.dataService.getDimension(
                         self.info,
                         self.geneService.getCurrentGene(),
                         true
                     ));
-                    chart.group(self.dataService.getGroup(self.info));
+                    await chart.group(self.dataService.getGroup(self.info));
 
-                    self.updateXDomain(chart);
+                    await self.updateXDomain(chart);
 
                     if (self.display) {
                         await self.removeLinesInRows(chart);
@@ -160,7 +160,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         await self.insertTextsInRows(chart, 'confidence-text-left');
                         await self.insertTextsInRows(chart, 'confidence-text-right');
 
-                        self.updateChartExtras(
+                        await self.updateChartExtras(
                             chart,
                             chart.svg(),
                             chart.width(),
@@ -168,9 +168,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         );
                     }
                 })
-                .on('postRedraw', (chart) => {
+                .on('postRedraw', async (chart) => {
                     if (self.display) {
-                        self.updateChartExtras(
+                        await self.updateChartExtras(
                             chart,
                             chart.svg(),
                             chart.width(),
@@ -178,19 +178,19 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         );
                     }
                 })
-                .on('postRender', (chart) => {
+                .on('postRender', async (chart) => {
                     // Registers this chart
-                    self.chartService.addChartName('forest');
+                    await self.chartService.addChartName('forest');
 
                     if (self.display) {
-                        self.updateChartExtras(
+                        await self.updateChartExtras(
                             chart,
                             chart.svg(),
                             chart.width(),
                             chart.height()
                         );
                     }
-                    self.updateChartExtras(
+                    await self.updateChartExtras(
                         chart,
                         chart.svg(),
                         chart.width(),
