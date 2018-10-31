@@ -120,7 +120,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         );
 
-        this.getChartPromise().then((chart: any) => {
+        this.getChartPromise().then(async (chart: any) => {
             this.chart = chart;
 
             if (this.info.attr !== 'fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
@@ -152,32 +152,30 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .tickFormat(() => '')
                 .elasticX(true)
                 .yRangePadding(this.rcRadius * 1.5)
-                .on('postRender', async (chart) => {
-                    await chart.selectAll('rect.box')
+                .on('postRender', (chart) => {
+                    chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    await self.updateYDomain(chart);
+                    self.updateYDomain(chart);
 
                     // Registers this chart
-                    await self.chartService.addChartName('box');
+                    self.chartService.addChartName('box');
                 })
-                .on('postRedraw', async (chart) => {
-                    if (chart.select('g.box circle').empty() && !this.renderRedCall) {
-                        this.renderRedCall = true;
-                        await self.renderRedCircle(chart);
+                .on('postRedraw', (chart) => {
+                    if (chart.select('g.box circle').empty()) {
+                        self.renderRedCircle(chart);
                     }
                 })
-                .on('preRedraw', async (chart) => {
-                    await self.updateYDomain(chart);
+                .on('preRedraw', (chart) => {
+                    self.updateYDomain(chart);
                 })
-                .on('renderlet', async (chart) => {
-                    await chart.selectAll('rect.box')
+                .on('renderlet', (chart) => {
+                    chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    if (!chart.select('g.box circle').empty() && !this.renderRedCall) {
-                        this.renderRedCall = true;
-                        await self.renderRedCircle(chart, true);
-                        await self.updateYDomain(chart);
+                    if (!chart.select('g.box circle').empty()) {
+                        self.renderRedCircle(chart, true);
+                        self.updateYDomain(chart);
                     }
                 });
 
