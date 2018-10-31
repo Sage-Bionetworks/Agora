@@ -14,6 +14,8 @@ export class ChartService {
         ['select-tissue', false],
         ['select-model', false]
     ]);
+    tissueToFilter: string = '';
+    modelToFilter: string = '';
 
     // Observable string sources
     chartsReadySource = new Subject<boolean>();

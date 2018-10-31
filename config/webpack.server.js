@@ -20,6 +20,7 @@ const HOST = process.env.HOST || 'localhost';
 
 const MONGODB_HOST = process.env.MONGODB_HOST || null;
 const MONGODB_PORT = process.env.MONGODB_PORT || null;
+const APP_ENV = process.env.APP_ENV || null;
 
 const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'localhost',
@@ -27,7 +28,8 @@ const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     ENV: ENV,
     Docker: Docker,
     MONGODB_HOST: MONGODB_HOST,
-    MONGODB_PORT: MONGODB_PORT
+    MONGODB_PORT: MONGODB_PORT,
+    APP_ENV: APP_ENV
 });
 
 module.exports = {
@@ -79,7 +81,8 @@ module.exports = {
         'process.env.PORT': JSON.stringify(METADATA.port),
         'process.env.Docker': JSON.stringify(METADATA.Docker),
         'process.env.MONGODB_HOST': JSON.stringify(METADATA.MONGODB_HOST),
-        'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT)
+        'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT),
+        'process.env.APP_ENV': JSON.stringify(METADATA.APP_ENV)
       })
     ],
     target: 'node',

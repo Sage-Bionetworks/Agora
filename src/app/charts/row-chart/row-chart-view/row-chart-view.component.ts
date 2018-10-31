@@ -47,8 +47,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
 
-    canRedraw: boolean = true;
-    changedLabels: boolean = false;
+    currentModel: string;
+    currentTissue: string;
     display: boolean = false;
     colors: string[] = ['#5171C0'];
     // Define the div for the tooltip
@@ -69,6 +69,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
+        this.currentModel = this.geneService.getDefaultModel();
+        this.currentTissue = this.geneService.getDefaultTissue();
+
         // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
@@ -90,7 +93,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     initChart() {
-        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
             this.info,
@@ -142,54 +144,33 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     return d.key;
                 })
                 .on('preRedraw', async (chart) => {
-                    chart.dimension(self.dataService.getDimension(
-                        self.info,
-                        self.geneService.getCurrentGene(),
-                        true
-                    ));
-                    chart.group(self.dataService.getGroup(self.info));
+                    if ((self.geneService.getCurrentModel() !== self.currentModel) ||
+                        !self.geneService.getCurrentModel()) {
+                        await self.updateXDomain(chart);
+                        if (self.geneService.getCurrentModel()) {
+                            self.currentModel = self.geneService.getCurrentModel();
+                        }
 
-                    self.updateXDomain(chart);
+                        await self.updateDimGroup(chart);
+                        await self.removeTextFromElement();
+                        self.display = false;
+                        await chart.render();
 
-                    if (self.display) {
-                        await self.removeLinesInRows(chart);
-                        await self.insertLinesInRows(chart);
-
-                        await self.removeTextInRows(chart);
-                        await self.insertTextsInRows(chart);
-                        await self.insertTextsInRows(chart, 'confidence-text-left');
-                        await self.insertTextsInRows(chart, 'confidence-text-right');
-
-                        self.updateChartExtras(
-                            chart,
-                            chart.svg(),
-                            chart.width(),
-                            chart.height()
-                        );
                     }
-                })
-                .on('postRedraw', (chart) => {
-                    if (self.display) {
-                        self.updateChartExtras(
-                            chart,
-                            chart.svg(),
-                            chart.width(),
-                            chart.height()
-                        );
-                    }
+
+                    await self.updateXDomain(chart);
+
+                    self.updateChartExtras(
+                        chart,
+                        chart.svg(),
+                        chart.width(),
+                        chart.height()
+                    );
                 })
                 .on('postRender', (chart) => {
                     // Registers this chart
                     self.chartService.addChartName('forest');
 
-                    if (self.display) {
-                        self.updateChartExtras(
-                            chart,
-                            chart.svg(),
-                            chart.width(),
-                            chart.height()
-                        );
-                    }
                     self.updateChartExtras(
                         chart,
                         chart.svg(),
@@ -205,6 +186,16 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
             resolve(chartInst);
         });
+    }
+
+    async updateDimGroup(chart: dc.RowChart) {
+        await chart.dimension(this.dataService.getDimension(
+            this.info,
+            this.geneService.getCurrentGene(),
+            true
+        ));
+
+        await chart.group(this.dataService.getGroup(this.info));
     }
 
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
@@ -236,9 +227,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             .attr('y', height - Math.ceil(textDims.height) / 2);
     }
 
-    updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
+    async updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
-
         const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
         const squareSize = 18;
         const lineWidth = 60;
@@ -248,20 +238,20 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!self.display) {
             // Copy all vertical texts to another div, so they don't get hidden by
             // the row chart svg after being translated
-            self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+            await self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
             // Insert a line for each row of the chart
-            self.insertLinesInRows(chart);
+            await self.insertLinesInRows(chart);
 
             // Insert the texts for each row of the chart. At first we need to add
             // empty texts so that the rowChart redraw does not move out confidence
             // texts around
-            self.insertTextsInRows(chart);
-            self.insertTextsInRows(chart, 'confidence-text-left');
-            self.insertTextsInRows(chart, 'confidence-text-right');
+            await self.insertTextsInRows(chart);
+            await self.insertTextsInRows(chart, 'confidence-text-left');
+            await self.insertTextsInRows(chart, 'confidence-text-right');
 
             // Add a label to the x axis
-            self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
+            await self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
         } else {
             // This part will be called on redraw after filtering, so at this point
             // we just need to move the lines to the correct position again. First
@@ -274,7 +264,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             // Adjust the x label
-            this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
+            await this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
         }
 
         // Finally redraw the lines in each row
@@ -346,6 +336,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    async removeTextFromElement() {
+        await d3.selectAll('svg g.textGroup')
+            .remove();
+        await d3.selectAll('.sc svg')
+            .remove();
+    }
+
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
         const self = this;
@@ -365,7 +362,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
         // Need this condition when reloading in Edge
         if (svgEl) {
-            const step = svgEl.getBBox().height / (removed['nodes']().length);
+            const step = svgEl.getBBox().height /
+                ((removed['nodes']().length) ? (removed['nodes']().length) : 7);
 
             d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
                 const currentStep = step * i;
@@ -412,24 +410,41 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    removeLinesInRows(chart: dc.RowChart) {
-        chart.selectAll('g.row')
+    async removeLinesInRows(chart: dc.RowChart) {
+        await chart.selectAll('g.row g.hline line')
+            .remove();
+        await chart.selectAll('g.row g.hline')
+            .remove();
+        await chart.selectAll('g.row g')
             .remove();
     }
 
-    insertLinesInRows(chart: dc.RowChart) {
-        chart.selectAll('g.row')
+    async insertLinesInRows(chart: dc.RowChart) {
+        await chart.selectAll('g.row')
             .insert('g')
             .attr('class', 'hline')
             .insert('line');
     }
 
-    removeTextInRows(chart: dc.RowChart) {
-        chart.selectAll('g.row g text');
+    async removeTextInRows(chart: dc.RowChart) {
+        await chart.selectAll('g.row g.confidence-text text')
+            .remove();
+        await chart.selectAll('g.row g.confidence-text-left text')
+            .remove();
+        await chart.selectAll('g.row g.confidence-text-right text')
+            .remove();
+        await chart.selectAll('g.row g.confidence-text')
+            .remove();
+        await chart.selectAll('g.row g.confidence-text-left')
+            .remove();
+        await chart.selectAll('g.row g.confidence-text-right')
+            .remove();
+        await chart.selectAll('g.row g')
+            .remove();
     }
 
-    insertTextsInRows(chart: dc.RowChart, textClass?: string) {
-        chart.selectAll('g.row')
+    async insertTextsInRows(chart: dc.RowChart, textClass?: string) {
+        await chart.selectAll('g.row')
             .insert('g')
             .attr('class', (textClass) ? textClass : 'confidence-text')
             .insert('text');

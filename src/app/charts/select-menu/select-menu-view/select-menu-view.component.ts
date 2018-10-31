@@ -44,6 +44,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
     isDisabled: boolean = true;
     destroyed: boolean = false;
+    firstTime: boolean = true;
     menuSelection: any;
 
     constructor(
@@ -77,9 +78,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             this.initChart();
         }
 
-        this.chartService.chartsReady$.subscribe(async (state: boolean) => {
+        this.chartService.chartsReady$.subscribe((state: boolean) => {
             if (state) {
-                await this.replaceSelect();
+                this.replaceSelect();
             }
         });
     }
@@ -90,7 +91,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.dim = this.dataService.getDimension(this.info);
 
         this.getChartPromise().then((chartInst) => {
-            chartInst.filterHandler((dimension, filters) => {
+            self.chart = chartInst;
+
+            chartInst.filterHandler(async (dimension, filters) => {
                 if (filters.length === 0) {
                     // The empty case (no filtering)
                     dimension.filter(null);
@@ -100,7 +103,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     if (self.label === 'select-tissue') {
                         self.geneService.setCurrentTissue(filters[0]);
 
-                        self.getNewGenes();
+                        if (self.firstTime) {
+                            self.firstTime = false;
+                        } else {
+                            await self.getNewGenes();
+                        }
                     }
                     if (self.label === 'select-model') {
                         self.geneService.setCurrentModel(filters[0]);
@@ -149,14 +156,19 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    async getNewGenes() {
+    multivalueFilter(values) {
+        return (v) => {
+            return values.indexOf(v) !== -1;
+        };
+    }
+
+    getNewGenes() {
         let gene = null;
-        await this.apiService.getGene(
+        this.apiService.getGene(
             this.geneService.getCurrentGene().ensembl_gene_id,
             this.geneService.getCurrentTissue(),
             this.geneService.getCurrentModel()
-        ).subscribe(
-            (data: GeneResponse) => {
+        ).subscribe((data: GeneResponse) => {
                 if (!data.info) {
                     this.router.navigate(['/genes']);
                 } else {
@@ -193,14 +205,14 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    async replaceSelect() {
+    replaceSelect() {
         if (this.defaultValue) {
-            await this.generateSelect();
-            await this.removeFirstOption();
+            this.generateSelect();
+            this.removeFirstOption();
         }
     }
 
-    removeFirstOption() {
+    async removeFirstOption() {
         this.menuSelection = d3.select(this.selectMenu.nativeElement)
             .select('select.dc-select-menu');
         const oldOptions = this.menuSelection.selectAll('option');
@@ -216,22 +228,20 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             newOptions = oldOptions;
         }
 
-        for (const no of newOptions['_groups']) {
+        for (const no of newOptions['_groups'][0]) {
             if (this.label === 'select-tissue') {
                 if (no.innerHTML === this.geneService.getDefaultTissue()) {
-                    no['selected'] = 'selected';
+                    await this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
                     break;
                 }
             }
             if (this.label === 'select-model') {
                 if (no.innerHTML === this.geneService.getDefaultModel()) {
-                    no['selected'] = 'selected';
+                    await this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
                     break;
                 }
             }
         }
-
-        this.menuSelection.dispatch('change');
 
         this.defaultValue = '';
     }
@@ -248,10 +258,18 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 })
                 .on('filtered', (chart, filter) => {
                     if (self.label === 'select-tissue') {
-                        self.geneService.setCurrentTissue(filter);
+                        if (filter instanceof Array) {
+                            self.geneService.setCurrentTissue(filter[0][0]);
+                        } else {
+                            self.geneService.setCurrentTissue(filter);
+                        }
                     }
                     if (self.label === 'select-model') {
-                        self.geneService.setCurrentModel(filter);
+                        if (filter instanceof Array) {
+                            self.geneService.setCurrentModel(filter[0][0]);
+                        } else {
+                            self.geneService.setCurrentModel(filter);
+                        }
                     }
                     self.isDisabled = (filter) ? false : true;
                 });
@@ -291,6 +309,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             c.innerHTML = oriSelEl.options[j].innerHTML;
             c['index'] = j - 1;
             if (j === 1) { c.setAttribute('class', 'same-as-selected'); }
+
             c.addEventListener('click', function(e) {
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');

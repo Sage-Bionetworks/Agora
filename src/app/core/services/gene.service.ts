@@ -12,10 +12,10 @@ export class GeneService {
     currentGene: Gene;
     currentInfo: GeneInfo;
     currentTeams: TeamInfo[];
-    currentTissue: string;
-    currentModel: string;
-    defaultTissue: string = 'DLPFC';
+    defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
+    currentTissue: string = this.defaultTissue;
+    currentModel: string = this.defaultModel;
     models: string[] = [];
     geneModels: string[] = [];
     tissues: string[] = [];

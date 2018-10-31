@@ -56,7 +56,7 @@ plot.
                         [columnName]="'select-column-tissue'"
                         [defaultValue]="getTissue(1)">
                     </select-menu>
-                    <p-multiSelect #egmsc *ngIf="isEmptyGene"
+                    <p-multiSelect #egmsc1 *ngIf="isEmptyGene"
                         [options]="emptySelection"
                         [(ngModel)]="selectedModels"
                         [showToggleAll]="false"
@@ -76,7 +76,7 @@ plot.
                         [columnName]="'select-column-model'"
                         [defaultValue]="getModel(1)">
                     </select-menu>
-                    <p-multiSelect #egmsc *ngIf="isEmptyGene"
+                    <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
                         [options]="emptySelection"
                         [(ngModel)]="selectedTissues"
                         [showToggleAll]="false"

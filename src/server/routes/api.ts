@@ -15,10 +15,11 @@ if (env === 'development') {
 }
 
 // Set the database url
-if (process.env.MONGODB_HOST && process.env.MONGODB_PORT) {
+if (process.env.MONGODB_HOST && process.env.MONGODB_PORT && process.env.APP_ENV) {
     const results = awsParamStore.getParametersSync(
         [
-            '/agora-develop/MongodbUsername', '/agora-develop/MongodbPassword'
+            '/agora-' + process.env.APP_ENV + '/MongodbUsername',
+            '/agora-' + process.env.APP_ENV + '/MongodbPassword'
         ], { region: 'us-east-1' }
     );
 
