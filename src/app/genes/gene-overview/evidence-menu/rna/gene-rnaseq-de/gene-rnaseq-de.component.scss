@@ -20,19 +20,16 @@
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
     @include respond-to('large') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
     @include respond-to('ex-large') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
 
     .fa-info-circle:before {
