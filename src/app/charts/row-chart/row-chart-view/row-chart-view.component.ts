@@ -142,22 +142,22 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .label((d) => {
                     return d.key;
                 })
-                .on('preRedraw', async (chart) => {
-                    await self.updateXDomain(chart);
+                .on('preRedraw', (chart) => {
+                    self.updateXDomain(chart);
                 })
-                .on('postRedraw', async (chart) => {
-                    await self.updateChartExtras(
+                .on('postRedraw', (chart) => {
+                    self.updateChartExtras(
                         chart,
                         chart.svg(),
                         chart.width(),
                         chart.height()
                     );
                 })
-                .on('postRender', async (chart) => {
+                .on('postRender', (chart) => {
                     // Registers this chart
                     self.chartService.addChartName('forest');
 
-                    await self.updateChartExtras(
+                    self.updateChartExtras(
                         chart,
                         chart.svg(),
                         chart.width(),

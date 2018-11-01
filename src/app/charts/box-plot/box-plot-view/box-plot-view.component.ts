@@ -118,7 +118,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         );
 
-        this.getChartPromise().then(async (chart: any) => {
+        this.getChartPromise().then((chart: any) => {
             this.chart = chart;
 
             if (this.info.attr !== 'fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
@@ -151,30 +151,30 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
-                .on('postRender', async (chart) => {
-                    await chart.selectAll('rect.box')
+                .on('postRender', (chart) => {
+                    chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
-                    await self.updateYDomain(chart);
+                    self.updateYDomain(chart);
 
                     // Registers this chart
-                    await self.chartService.addChartName('box');
+                    self.chartService.addChartName('box');
                 })
-                .on('postRedraw', async (chart) => {
+                .on('postRedraw', (chart) => {
                     if (chart.select('g.box circle').empty()) {
-                        await self.renderRedCircles(chart);
+                        self.renderRedCircles(chart);
                     }
                 })
-                .on('preRedraw', async (chart) => {
-                    await self.updateYDomain(chart);
+                .on('preRedraw', (chart) => {
+                    self.updateYDomain(chart);
                 })
-                .on('renderlet', async (chart) => {
-                    await chart.selectAll('rect.box')
+                .on('renderlet', (chart) => {
+                    chart.selectAll('rect.box')
                         .attr('rx', self.boxRadius);
 
                     if (!chart.select('g.box circle').empty()) {
-                        await self.renderRedCircles(chart, true);
-                        await self.updateYDomain(chart);
+                        self.renderRedCircles(chart, true);
+                        self.updateYDomain(chart);
                     }
                 });
 
