@@ -1,9 +1,9 @@
 <div *ngIf="dataLoaded">
     <div class="section-thin overview-header nom-details-oh" tabindex="0">
         <div class="row no-gutters">
-            <div class="col-md-9 col-sm-12 col-12">
+            <div class="">
                 <h2 *ngIf="dataLoaded">AMP-AD Evidence in Support of {{ gene.hgnc_symbol }}</h2>
-                <p class="no-margin-bottom">
+                <p class="no-margin-bottom col-8 no-padding">
                     The AMP-AD consortia perform computational analysis of human genomic data to predict new potential
                     AD targets. For selected targets, teams have performed further experimental model system validation.
                     Because these target hypotheses are not yet fully validated, we are seeking input from the community
@@ -18,25 +18,25 @@
             <h3 class="team-name">
                 {{team.team}}
             </h3>
-            <p class="black-paragraph custom-paragraph">
+            <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{team.description}}
             </p>
             <h4>
                 Why was the target selected?
             </h4>
-            <p class="black-paragraph custom-paragraph">
+            <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{ntInfoArray[i].target_choice_justification}}
             </p>
             <h4>
                 Predicted therapeutic direction
             </h4>
-            <p class="black-paragraph custom-paragraph">
+            <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{ntInfoArray[i].predicted_therapeutic_direction}}
             </p>
             <h4>
                 The type of data used and analyses done to identify target
             </h4>
-            <p class="black-paragraph custom-paragraph">
+            <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{ntInfoArray[i].data_used_to_support_target_selection}}
             </p>
             <h4>
