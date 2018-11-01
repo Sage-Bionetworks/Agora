@@ -21,6 +21,7 @@ export class GeneServiceStub {
     maxAdjPValue: number = 50;
     minAdjPValue: number = 0;
     noInfoData: boolean = false;
+    tissuesNum: number = 7;
 
     getPreviousGene(): Gene {
         return mockGene2;

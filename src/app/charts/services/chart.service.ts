@@ -69,4 +69,23 @@ export class ChartService {
             chart.resetSvg();
         }
     }
+
+    getTooltipText(text: string): string {
+        switch (text) {
+            case 'CBE':
+                return 'Cerebellum';
+            case 'DLPFC':
+                return 'Dorsolateral Prefrontal Cortex';
+            case 'FP':
+                return 'Frontal Pole';
+            case 'IFG':
+                return 'Inferior Frontal Gyrus';
+            case 'PHG':
+                return 'Parahippocampal Gyrus';
+            case 'STG':
+                return 'Superior Temporal Gyrus';
+            case 'TCX':
+                return 'Temporal Cortex';
+        }
+    }
 }

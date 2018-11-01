@@ -28,24 +28,23 @@ import * as crossfilter from 'crossfilter2';
     encapsulation: ViewEncapsulation.None
 })
 export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
-    @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
     @ViewChild('bccol') bcCol: ElementRef;
+    @Input() geneinfo: any;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
+    chart: any;
+    ndx: any;
+    group: any;
+    dimension: any;
+    tissuecoresGroup: any;
+
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
         .attr('class', 'mc-tooltip')
         .style('width', 200)
         .style('height', 160)
         .style('opacity', 0);
-
-    chart: any;
-    ndx: any;
-    group: any;
-    dimension: any;
-    tissuecoresGroup: any;
-    tissues: number = 7;
 
     private resizeTimer;
 
@@ -195,7 +194,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     // and we divide by all tissues plus 1. Eight sections total
                     const tickSectionWidth = (
                         (colWidth - (self.paddingLR * 2)) /
-                        (self.tissues + 1)
+                        (self.geneService.getNumOfTissues() + 1)
                     );
                     // The start position for the current section tick will be
                     // the width of a section * current index + one

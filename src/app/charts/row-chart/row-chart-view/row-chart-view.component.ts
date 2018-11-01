@@ -92,6 +92,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chartService.removeChart(this.chart);
     }
 
+    getModel(): string {
+        const model = this.geneService.getCurrentModel();
+        return (model) ? model : '';
+    }
+
     initChart() {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
@@ -103,7 +108,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.title = this.info.title;
         this.getChartPromise().then((chart) => {
             // Increase bottom margin by 20 to place a label there, default is 30
-            chart.margins().left = 50;
+            chart.margins().left = 70;
+            chart.margins().right = 70;
             chart.margins().bottom = 50;
 
             // Removes the click event for the rowChart to prevent filtering
@@ -343,7 +349,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         self.div.transition()
                             .duration(200)
                             .style('opacity', 1);
-                        self.div.html(self.getTooltipText(d3.select(this).text()))
+                        self.div.html(self.chartService.getTooltipText(d3.select(this).text()))
                             .style('left', (el.getBoundingClientRect().right) + 'px')
                             .style('top', (el.offsetTop + (currentStep + (vSpacing))) + 'px');
                     })
@@ -353,25 +359,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                             .style('opacity', 0);
                     });
             });
-        }
-    }
-
-    getTooltipText(text: string): string {
-        switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
         }
     }
 

@@ -1,6 +1,12 @@
 @import "../../../../assets/css/helpers/variables";
 @import "../../../../assets/css/helpers/mixins";
 
+.rc-plot-heading {
+    h2, h3 {
+        text-align: center !important;
+    }
+}
+
 .rc-tooltip {
     @include lato-font('regular');
 

@@ -27,6 +27,7 @@ export class GeneService {
     maxAdjPValue: number = 1e-50;
     minAdjPValue: number = Math.pow(10, -20);
     noInfoData: boolean = false;
+    tissuesNum: number = 7;
 
     constructor(private apiService: ApiService) {}
 
@@ -167,6 +168,10 @@ export class GeneService {
 
     getAdjPValue(): number[] {
         return [this.minAdjPValue, this.maxAdjPValue];
+    }
+
+    getNumOfTissues(): number {
+        return this.tissuesNum;
     }
 
     getEmptyGene(ensemblGeneId?: string, hgncSymbol?: string): Gene {
