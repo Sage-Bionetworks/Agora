@@ -100,6 +100,7 @@ export class GeneSimilarComponent implements OnInit {
                         this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
                             this.genesInfo = datas['items'];
                             this.totalRecords = datas['items'].length;
+                            console.log(datas.items);
                             this.loading = false;
                         });
                     });
@@ -110,6 +111,7 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     druggabilitypc(druggability): string {
+        console.log(druggability);
         if (!druggability) { return '-'; }
         return druggability.map((dg) => dg['pharos_class']);
     }
