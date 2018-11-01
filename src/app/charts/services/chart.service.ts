@@ -8,10 +8,9 @@ import { Subject } from 'rxjs';
 export class ChartService {
     chartInfos: Map<string, any> = new Map<string, any>();
     chartNames: Map<string, boolean> = new Map([
-        ['median', false],
-        ['box', false],
-        ['forest', false],
-        // ['select-tissue', false],
+        ['median-chart', false],
+        ['box-plot', false],
+        ['forest-plot', false],
         ['select-model', false]
     ]);
     tissueToFilter: string = '';
@@ -38,7 +37,7 @@ export class ChartService {
     }
 
     removeChartName(name: string) {
-        if (name && this.chartNames[name]) { this.chartNames[name].set(false); }
+        if (name && this.chartNames.has(name)) { this.chartNames.set(name, false); }
     }
 
     allChartsLoaded() {

@@ -35,7 +35,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
-    @Input() label: string = '';
+    @Input() label: string = 'box-plot';
     @Input() dim: any;
     @Input() group: any;
     @Input() rcRadius: number = 13.6;
@@ -85,6 +85,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -169,7 +170,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     self.updateYDomain(chart);
 
                     // Registers this chart
-                    self.chartService.addChartName('box');
+                    self.chartService.addChartName(self.label);
                 })
                 .on('postRedraw', (chart) => {
                     if (chart.select('g.box circle').empty()) {

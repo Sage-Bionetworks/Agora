@@ -156,16 +156,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                 }
             );
             this.chartService.addChartInfo(
-                'select-tissue',
-                {
-                    dimension: ['tissue'],
-                    group: 'self',
-                    type: 'select-menu',
-                    title: '',
-                    filter: 'default'
-                }
-            );
-            this.chartService.addChartInfo(
                 'select-model',
                 {
                     dimension: ['model'],

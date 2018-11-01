@@ -33,6 +33,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() geneinfo: any;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
+    @Input() label: string = 'median-chart';
     chart: any;
     ndx: any;
     group: any;
@@ -60,9 +61,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
-            if (event instanceof NavigationStart) {
-                this.removeChart();
-            }
+            this.removeChart();
         });
         this.location.onPopState(() => {
             this.removeChart();
@@ -85,6 +84,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -119,7 +119,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .renderTitle(false)
             .on('postRender', () => {
                 // Registers this chart
-                self.chartService.addChartName('median');
+                self.chartService.addChartName(self.label);
             })
             .on('renderlet', (chart) => {
                 const yDomainLength = Math.abs(this.chart.y().domain()[1]

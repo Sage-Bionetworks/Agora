@@ -128,6 +128,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -161,7 +162,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 })
                 .on('postRender', (chart) => {
                     // Registers this chart
-                    self.chartService.addChartName('forest');
+                    self.chartService.addChartName(self.label);
 
                     self.updateChartExtras(
                         chart,
