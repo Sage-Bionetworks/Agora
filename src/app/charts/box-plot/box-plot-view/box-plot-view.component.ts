@@ -227,7 +227,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     // The start position for the current section tick will be
                     // the width of a section * current index + one
                     const xTickPos = tickSectionWidth * (i + 1);
-                    console.log(self.bpCol);
                     self.sDiv
                         .style('left',
                             (
@@ -242,7 +241,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         )
                         .style('top',
                             (
-                                self.bpCol.nativeElement.offsetTop + chart.height()
+                                self.bpCol.nativeElement.offsetParent.offsetTop
+                                + chart.height() + 60
                             ) + 'px'
                         );
                 })
