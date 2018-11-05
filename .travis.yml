@@ -1,10 +1,7 @@
 sudo: required
 dist: trusty
 language: node_js
-
-cache:
-  directories:
-    - node_modules
+cache: npm
 
 addons:
   chrome: stable
@@ -21,8 +18,8 @@ branches:
 before_install:
   - npm install npm@5 -g
   - npm cache verify
-  - npm prune
-  - npm update
+  - travis_retry npm prune
+  - travis_retry npm update
 
 install:
   - npm install
