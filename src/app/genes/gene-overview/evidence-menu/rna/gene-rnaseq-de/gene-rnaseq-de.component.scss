@@ -16,6 +16,11 @@
 }
 
 .rna-seq-bplot {
+    .bplot-filter-row {
+        background: rgba(245, 245, 245, 0.5);
+        border-top: 2px solid #E0E0E0;
+    }
+
     @include respond-to('medium') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;

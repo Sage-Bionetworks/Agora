@@ -2,6 +2,9 @@
 @import "../../../assets/css/helpers/mixins";
 
 .intro-desc {
+    // Navbar minus footer minus body bottom margin for footer
+    height: calc(100vh - #{$navbar-height} - #{$footer-height});
+
     .intro-paragraph {
         margin-bottom: 60px;
         text-align: center;

@@ -30,6 +30,19 @@
     }
 }
 
+.x-axis-row {
+    margin-bottom: 30px;
+
+    .x-axis-heading {
+        @include lato-font('bold');
+        line-height: normal;
+        font-size: $font-size-regular;
+        width: 100%;
+
+        color: #6D7078;
+    }
+}
+
 .bplot-heading {
     h2, h3 {
         text-align: center !important;
