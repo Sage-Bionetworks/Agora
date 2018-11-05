@@ -98,9 +98,12 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         const self = this;
         this.chart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
-        this.chart.margins().top = 50;
-        this.chart.margins().left = 70;
-        this.chart.margins().right = 0;
+        this.chart.margins({
+            left: 70,
+            right: 10,
+            bottom: 30,
+            top: 50
+        });
         this.chart
             .barPadding(0.5)
             .renderLabel(true)
