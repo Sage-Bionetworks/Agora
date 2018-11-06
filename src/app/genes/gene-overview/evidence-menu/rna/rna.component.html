@@ -1,33 +1,35 @@
-<div class="section-thin overview-header nom-rna-oh" tabindex="0">
-    <div class="row no-gutters">
-        <div class="col-md-9 col-sm-12 col-12">
-            <h2>RNA Expression</h2>
-            <more-info [name]="'rna'">
-                <rna-dialog [header]="'RNA Expression Analysis'"></rna-dialog>
-            </more-info>
+<div class="rna-wrapper">
+    <div class="section-thin overview-header nom-rna-oh" tabindex="0">
+        <div class="row no-gutters">
+            <div class="col-md-9 col-sm-12 col-12">
+                <h1>RNA Expression</h1>
+                <more-info [name]="'rna'">
+                    <rna-dialog [header]="'RNA Expression Analysis'"></rna-dialog>
+                </more-info>
+            </div>
         </div>
+        <h1 class="inner-section-divider"></h1>
     </div>
-    <h1 class="inner-section-divider"></h1>
-</div>
-<gene-rnaseq-de></gene-rnaseq-de>
+    <gene-rnaseq-de></gene-rnaseq-de>
 
-<div class="section-thin overview-header nom-rna-oh" tabindex="0">
-    <div class="row no-gutters">
-        <div class="col-md-9 col-sm-12 col-12">
-            <h3>Similarly Expressed Genes</h3>
-            <p class="black-paragraph">
-                Here we show results of a coexpression network analysis based on the RNA-seq
-                data. The network analysis uses an ensemble methodology to identify networks
-                of genes that show similar coexpression across patients. In the network
-                diagram below, the color of the edge and nodes indicates how frequently
-                significant coexpression was identified across brain regions. Darker edges
-                indicate significant coexpression in more brain regions.
-            </p>
+    <div class="section-thin overview-header nom-rna-oh no-vertical-padding" tabindex="0">
+        <div class="row no-gutters">
+            <div class="col-md-9 col-sm-12 col-12">
+                <h3>Similarly Expressed Genes</h3>
+                <p class="black-paragraph">
+                    Here we show results of a coexpression network analysis based on the RNA-seq
+                    data. The network analysis uses an ensemble methodology to identify networks
+                    of genes that show similar coexpression across patients. In the network
+                    diagram below, the color of the edge and nodes indicates how frequently
+                    significant coexpression was identified across brain regions. Darker edges
+                    indicate significant coexpression in more brain regions.
+                </p>
+            </div>
         </div>
+        <h1 class="inner-section-divider"></h1>
     </div>
-    <h1 class="inner-section-divider"></h1>
-</div>
 
-<div class="section-thin overview-header nom-rna-oh no-padding-top" tabindex="0">
-    <gene-network [noData]="getInfoState()"></gene-network>
+    <div class="section-thin overview-header nom-rna-oh no-padding-top" tabindex="0">
+        <gene-network [noData]="getInfoState()"></gene-network>
+    </div>
 </div>

@@ -27,7 +27,7 @@ import * as dc from 'dc';
     encapsulation: ViewEncapsulation.None
 })
 export class SelectMenuViewComponent implements OnInit, OnDestroy {
-    @Input() label: string;
+    @Input() label: string = 'select-model';
     @Input() columnName: string = '';
     @Input() chart: any;
     @Input() info: any;
@@ -62,10 +62,12 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
+                d3.selectAll('.select-selected, .select-items.select-hide').html(null);
                 this.removeChart();
             }
         });
         this.location.onPopState(() => {
+            d3.selectAll('.select-selected, .select-items.select-hide').html(null);
             this.removeChart();
         });
 
@@ -145,11 +147,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
             chartInst.on('postRender', () => {
                 // Registers this chart
-                if (this.label === 'select-tissue') {
-                    self.chartService.addChartName('select-tissue');
-                } else {
-                    self.chartService.addChartName('select-model');
-                }
+                self.chartService.addChartName(self.label);
             });
 
             chartInst.render();
@@ -200,6 +198,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -288,8 +287,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         const self = this;
         // Look for any elements with the class 'dc-select-menu'
         const oriSelEl: HTMLSelectElement =
-            (self.label === 'select-tissue') ?
-            document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement :
             document.getElementsByClassName('dc-select-menu')[0] as HTMLSelectElement;
 
         const a = document.createElement('DIV');

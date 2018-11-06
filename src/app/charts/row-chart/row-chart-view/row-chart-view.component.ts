@@ -92,6 +92,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chartService.removeChart(this.chart);
     }
 
+    getModel(): string {
+        const model = this.geneService.getCurrentModel();
+        return (model) ? model : '';
+    }
+
     initChart() {
         this.info = this.chartService.getChartInfo(this.label);
         this.dim = this.dataService.getDimension(
@@ -103,8 +108,12 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.title = this.info.title;
         this.getChartPromise().then((chart) => {
             // Increase bottom margin by 20 to place a label there, default is 30
-            chart.margins().left = 50;
-            chart.margins().bottom = 50;
+            chart.margins({
+                left: 20,
+                right: 20,
+                bottom: 50,
+                top: 0
+            });
 
             // Removes the click event for the rowChart to prevent filtering
             chart.onClick = () => {
@@ -122,6 +131,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -155,7 +165,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 })
                 .on('postRender', (chart) => {
                     // Registers this chart
-                    self.chartService.addChartName('forest');
+                    self.chartService.addChartName(self.label);
 
                     self.updateChartExtras(
                         chart,
@@ -163,6 +173,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         chart.width(),
                         chart.height()
                     );
+                })
+                .on('renderlet', (chart) => {
+                    // Only show the 0, min and max values on the xAxis ticks
+                    self.updateXTicks(chart);
                 })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)
@@ -273,7 +287,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         if (max !== +Infinity) {
-            chart.x(d3.scaleLinear().range([0, (chart.width() - 50)]).domain([-max, max]));
+            max *= 1.1;
+            chart.x(d3.scaleLinear().range([0, (chart.width() - 40)]).domain([-max, max]));
             chart.xAxis().scale(chart.x());
         }
     }
@@ -284,6 +299,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             if (i > 0 && i < allTicks.size() - 1) {
                 if (parseFloat(d3.select(this).select('text').text())) {
                     d3.select(this).select('text').style('opacity', 0);
+                }
+            } else {
+                if (parseFloat(d3.select(this).select('text').text())) {
+                    d3.select(this).select('text').style('opacity', 1);
                 }
             }
         });
@@ -343,7 +362,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         self.div.transition()
                             .duration(200)
                             .style('opacity', 1);
-                        self.div.html(self.getTooltipText(d3.select(this).text()))
+                        self.div.html(self.chartService.getTooltipText(d3.select(this).text()))
                             .style('left', (el.getBoundingClientRect().right) + 'px')
                             .style('top', (el.offsetTop + (currentStep + (vSpacing))) + 'px');
                     })
@@ -353,25 +372,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                             .style('opacity', 0);
                     });
             });
-        }
-    }
-
-    getTooltipText(text: string): string {
-        switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
         }
     }
 

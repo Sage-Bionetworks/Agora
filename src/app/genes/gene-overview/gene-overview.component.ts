@@ -20,6 +20,8 @@ import {
 
 import { MenuItem } from 'primeng/api';
 
+import * as d3 from 'd3';
+
 @Component({
     selector: 'gene-overview',
     templateUrl: './gene-overview.component.html',
@@ -123,6 +125,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     activateMenu() {
+        d3.selectAll('.mc-tooltip, .bp-tooltip, .bp-axis-tooltip, .rc-tooltip')
+            .remove();
+
         if (((!this.disableMenu && ((this.activeItem && this.menu['activeItem'])
             ? (this.activeItem.label !== this.menu['activeItem'].label) : false)
             ) || this.neverActivated) && this.dataLoaded) {

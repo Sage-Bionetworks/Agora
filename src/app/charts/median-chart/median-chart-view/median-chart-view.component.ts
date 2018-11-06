@@ -28,24 +28,24 @@ import * as crossfilter from 'crossfilter2';
     encapsulation: ViewEncapsulation.None
 })
 export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
-    @Input() geneinfo: any;
     @ViewChild('barchart') medianChart: ElementRef;
     @ViewChild('bccol') bcCol: ElementRef;
+    @Input() geneinfo: any;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
+    @Input() label: string = 'median-chart';
+    chart: any;
+    ndx: any;
+    group: any;
+    dimension: any;
+    tissuecoresGroup: any;
+
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
         .attr('class', 'mc-tooltip')
         .style('width', 200)
         .style('height', 160)
         .style('opacity', 0);
-
-    chart: any;
-    ndx: any;
-    group: any;
-    dimension: any;
-    tissuecoresGroup: any;
-    tissues: number = 7;
 
     private resizeTimer;
 
@@ -61,9 +61,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
-            if (event instanceof NavigationStart) {
-                this.removeChart();
-            }
+            this.removeChart();
         });
         this.location.onPopState(() => {
             this.removeChart();
@@ -86,6 +84,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                 this.chart, this.chart.group(),
                 this.chart.dimension()
             );
+            this.chartService.removeChartName(this.label);
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
@@ -99,9 +98,12 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         const self = this;
         this.chart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
-        this.chart.margins().top = 50;
-        this.chart.margins().left = 70;
-        this.chart.margins().right = 0;
+        this.chart.margins({
+            left: 70,
+            right: 10,
+            bottom: 30,
+            top: 50
+        });
         this.chart
             .barPadding(0.5)
             .renderLabel(true)
@@ -120,7 +122,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .renderTitle(false)
             .on('postRender', () => {
                 // Registers this chart
-                self.chartService.addChartName('median');
+                self.chartService.addChartName(self.label);
             })
             .on('renderlet', (chart) => {
                 const yDomainLength = Math.abs(this.chart.y().domain()[1]
@@ -195,7 +197,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     // and we divide by all tissues plus 1. Eight sections total
                     const tickSectionWidth = (
                         (colWidth - (self.paddingLR * 2)) /
-                        (self.tissues + 1)
+                        (self.geneService.getNumOfTissues() + 1)
                     );
                     // The start position for the current section tick will be
                     // the width of a section * current index + one

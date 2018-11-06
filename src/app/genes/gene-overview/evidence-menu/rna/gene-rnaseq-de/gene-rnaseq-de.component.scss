@@ -10,29 +10,33 @@
 }
 
 .rna-seq-me {
+    padding-bottom: 4em;
+
     .fa-info-circle:before {
         color: #9DA3B3;
     }
 }
 
 .rna-seq-bplot {
+    .bplot-filter-row {
+        background: rgba(245, 245, 245, 0.5);
+        border-top: 2px solid #E0E0E0;
+    }
+
     @include respond-to('medium') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
     @include respond-to('large') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
     @include respond-to('ex-large') {
         border-right-color: rgba(245, 245, 245, 0.5);
         padding-top: 2em;
         padding-bottom: 2em;
-        padding-right: 15px;
     }
 
     .fa-info-circle:before {

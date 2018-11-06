@@ -1,4 +1,11 @@
+@import "../../../../../assets/css/helpers/variables";
+@import "../../../../../assets/css/helpers/mixins";
+
 .nom-rna-oh {
     padding-top: 36px;
     padding-bottom: 0px;
+}
+
+.rna-wrap {
+    height: calc(100vh - #{$navbar-height} - #{$footer-height});
 }
