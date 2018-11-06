@@ -46,13 +46,25 @@ html {
 
 html, body{
     @include lato-font('normal');
+    @include respond-to('ex-small') {
+        min-width: 100vw;
+    }
 
     min-width: 380px;
     padding: 0;
     margin: 0;
-    @include respond-to('ex-small') {
-        min-width: 100vw;
-    }
+    height: 100vh;
+}
+
+.page-wrap {
+    min-height: 100%;
+    // Equal to footer height
+    margin-bottom: -$footer-height;
+}
+
+.page-wrap:after {
+    content: '';
+    display: block;
 }
 
 body {
@@ -62,7 +74,6 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
-    margin-bottom: 110px;
 }
 
 ng-scrollbar {
@@ -79,11 +90,10 @@ ng-scrollbar {
     }
 }
 
-footer {
-    position: absolute;
-    bottom: 0;
+footer, .page-wrap:after {
     width: 100%;
-    line-height: 100px;
+    line-height: $footer-height;
+    height: $footer-height;
 }
 
 a {

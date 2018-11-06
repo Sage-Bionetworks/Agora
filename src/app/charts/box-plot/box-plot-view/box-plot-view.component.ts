@@ -140,8 +140,12 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             chart.filter = function() {
                 //
             };
-            chart.margins().left = 90;
-            chart.margins().bottom = 50;
+            chart.margins({
+                left: 90,
+                right: 30,
+                bottom: 50,
+                top: 10
+            });
 
             chart.render();
         });

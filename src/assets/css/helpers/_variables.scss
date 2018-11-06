@@ -6,6 +6,9 @@ $lato-font-path: '~lato-font/fonts';
 @include lato-include-font('medium');
 @include lato-include-font('normal');
 
+$navbar-height: 87px;
+$footer-height: 100px;
+
 $font-size-small: 12px;
 $font-size-regular: 16px;
 $font-size-x-regular: 18px;

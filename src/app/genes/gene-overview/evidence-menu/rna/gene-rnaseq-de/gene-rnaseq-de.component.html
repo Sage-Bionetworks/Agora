@@ -1,5 +1,5 @@
 <ng-container *ngIf="dataLoaded">
-<div class="section-thin rna-seq-me no-vertical-padding">
+<div class="section-thin rna-seq-me no-padding-top">
     <h3 class="filters-header">
         Overall Expression of Selected Gene Across Tissues
         <span class="icon-spacing"></span>
@@ -22,26 +22,14 @@
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </ng-template>
-    <h1 class="inner-section-divider"></h1>
 </div>
 
 <div class="section-thin rna-seq-bplot no-vertical-padding">
-    <h3>
-        Differential Expression of Selected Gene within Selected Tissue
-        <span class="icon-spacing"></span>
-        <download *ngIf="!isEmptyGene" [target]="stbp" [name]="'dif_exp_tissue'"></download>
-    </h3>
-    <div class="row">
+    <div class="row bplot-filter-row">
         <div class="col-md-6 col-sm-12 col-12 col-fixer">
             <h4 class="filters-header">
-                Filter by Statistical Model
+                Filter the following charts by statistical model
             </h4>
-            <p class="black-paragraph de-paragraph">
-                After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
-                between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
-                (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
-                by hovering over the red dots.
-            </p>
             <h2 class="vmi-wrapper">
                 <more-info [name]="'bp'">
                     <bp-dialog [name]="'bp'"></bp-dialog>
@@ -68,17 +56,31 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="!isEmptyGene" #stbp class="col-md-6 col-sm-12 col-12">
+    </div>
+    <h3>
+        Differential Expression of Selected Gene
+        <span class="icon-spacing"></span>
+        <download *ngIf="!isEmptyGene" [target]="stbp" [name]="'dif_exp_tissue'"></download>
+    </h3>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 col-fixer">
+            <p class="black-paragraph de-paragraph">
+                After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
+                between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
+                (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
+                by hovering over the red dots.
+            </p>
+        </div>
+        <div *ngIf="!isEmptyGene" #stbp class="col-md-12 col-sm-12 col-12">
             <box-plot [label]="'box-plot'"></box-plot>
         </div>
-        <div *ngIf="isEmptyGene" class="col-md-4 col-sm-12 col-12 empty-bplot-col">
+        <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </div>
-    <h1 class="inner-section-divider"></h1>
 </div>
 
-<div class="section-thin rna-seq-fplot no-vertical-padding">
+<div class="section-thin rna-seq-fplot no-padding-bottom">
     <h3>
         Consistency of Change in Expression
         <span class="icon-spacing"></span>

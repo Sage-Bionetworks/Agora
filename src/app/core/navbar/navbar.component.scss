@@ -2,7 +2,7 @@
 @import "../../../assets/css/helpers/mixins";
 
 .nav-row {
-    height: 87px;
+    height: $navbar-height;
     max-height: 87px;
     margin-left: 0px;
     margin-right: 0px;
