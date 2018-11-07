@@ -203,8 +203,7 @@ module.exports = function (options) {
         'process.env.ENV': JSON.stringify(METADATA.ENV),
         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
         'process.env.HMR': METADATA.HMR,
-        'Analyzer': JSON.stringify(METADATA.Analyzer),
-        'process.env.Docker': JSON.stringify(METADATA.Docker)
+        'Analyzer': JSON.stringify(METADATA.Analyzer)
       }),
 
       new webpack.optimize.ModuleConcatenationPlugin(),
