@@ -61,7 +61,6 @@ declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
 declare var Analyzer: boolean;
-declare var Docker: boolean;
 declare var VERSION: string;
 declare var DATA_VERSION: string;
 declare var MONGODB_HOST: string;
@@ -87,7 +86,6 @@ interface GlobalEnvironment {
   SystemJS: SystemJS;
   System: SystemJS;
   Analyzer: boolean;
-  Docker: boolean;
   VERSION: string;
   DATA_VERSION: string;
   MONGODB_HOST: string;

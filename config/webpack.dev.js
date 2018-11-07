@@ -21,7 +21,6 @@ module.exports = function (options) {
   const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'development');
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 8080;
-  const Docker = process.env.Docker || false;
   const Analyzer = process.env.Analyzer || false;
 
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
@@ -30,7 +29,6 @@ module.exports = function (options) {
     ENV: ENV,
     HMR: helpers.hasProcessFlag('hot'),
     PUBLIC: process.env.PUBLIC_DEV || HOST + ':' + PORT,
-    Docker: Docker,
     Analyzer: Analyzer
   });
 
@@ -136,7 +134,7 @@ module.exports = function (options) {
         public: METADATA.PUBLIC,
         historyApiFallback: true,
         watchOptions: {
-            // if you're using Docker you may need this
+            // If you're using Docker you may need this
             // aggregateTimeout: 300,
             // poll: 1000,
             ignored: [/node_modules/, helpers.root('src/server/**/*'), helpers.root('src/app/models/**/*')]

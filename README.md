@@ -122,9 +122,7 @@ You'll need `Linux` to run the previous script. If you need to do this in `Windo
 
 * Remote production environment
 
-There are two ways to use this application in a remote production environment. One is by copying the dist or root project folder to a remote machine and the second one is by copying the Docker image and running it. The first method will be discussed in this section, and the other one will be discussed in the deployment section.
-
-If you are copying the dist folder, install Node in the remote machine. Then, install MongoDB and populate the needed collections (follow the steps described above). Start the application by running `node` against the `server.js` file.
+If you are copying the dist folder, install Node in the remote machine. Then, install MongoDB and populate the needed collections (follow the steps described above). Start the application by running `node` against the generated `server.js` file. That file will server the built client bundle along with the `index.html` file.
 
 If you are copying the entire project, install Node and any needed global dependencies in the remote machine. Then, run `npm install` to get all local dependencies installed and just follow the same steps for the local development (see below). You'll need to expose port `8080` so anyone can access the application.
 
@@ -211,21 +209,6 @@ npm run ci
 ### run Protractor's elementExplorer (for end-to-end)
 ```bash
 npm run e2e:live
-```
-
-### build Docker
-```bash
-npm run build:docker
-```
-
-### run Docker
-```bash
-npm run docker:up
-```
-
-### build and run Docker
-```bash
-npm run docker
 ```
 
 ## run load tests, so you can stress test the application (uses a EC2 URL for now)
@@ -353,92 +336,7 @@ import * as _ from 'lodash';
 
 # Deployment
 
-## Docker
-
-Before using Docker go one level above the root folder of the project and create a folder called `data`:
-
-```bash
-PATH_TO_PROJECT\Agora> cd ..
-PATH_TO_PROJECT> mkdir data
-PATH_TO_PROJECT> mkdir data/team_images
-```
-
-This folder will be used to load the data into MongoDB when we build the DOcker image. Go ahead and grab the latest data files from the [Downloading the data](#downloading-the-data) section. Copy all the `.json` files described in the download section to the `data` folder you just created.
-
-The easiest way to deploy this project is by using Docker. Just follow [this](https://docs.docker.com/ee/) link and choose your OS on the left side menu. After installing docker you need to start it and test if your installation went correct:
-
-```bash
-$ docker --version
-Docker version 18.03.1-ce, build 9ee9f40
-```
-
-The project is configured in a way that we can connect to MongoDB inside the Docker container or outside it. If you are in a container, the MongoDB URL uses the `mongodb` name (if you want to change it, edit the `docker-compose.yml` file at the root level and the `server.ts` file accordingly). The final URL will be localhost for development and production if done in your local machine. If you deploy this application to an EC2 machine, the URL can be the public ip address of that machine or a domain name (this project uses the name `agora.ampadportal.org` in the `Nginx` configuration).
-
-Start `Docker`, go to the project root and run `npm run build:docker`. This command will build an image called `agora` with everything you need. If this is the second time around, and you just want to launch the application again (without rebuilding), run `npm run docker:up`. If you need to use parts of the cache when building and skip rebuilding everything, you can use `npm run docker:app -- build` or `npm run docker:mongo -- build`.
-
-```bash
-# Building for the first time or rebuilding
-npm run build:docker
-# Using cached versions
-npm run docker:up
-# Building and running
-npm run docker
-```
-
-Now go to `localhost` and you should see the application up. If you run into the following errors:
-
-```bash
-...Cannot start service mongodb: driver failed programming external connectivity on endpoint...
-Error starting userland proxy: mkdir /port/tcp:0.0.0.0:27017:tcp:172.19.0.2:27017: input/output error
-```
-
-```bash
-mongodb: forward host lookup failed: Unknown host
-# or
-server can't find mongodb: NXDOMAIN
-```
-
-Try to restart or even reopen Docker and see if the error goes away. If Docker started without enough RAM it might error out.
-
-```bash
-ERROR: The Compose file '././docker-compose.yml' is invalid because:
-networks.front_agora value Additional properties are not allowed ('name' was unexpected)
-# or
-Exception: Unknown docker network 'agora_network'. Did you create it with 'docker network create agora_network'
-```
-
-You may be running out of space, run `docker system prune` press `y`. If that doesn't solve you can run `docker network create agora_network` if the network does not exist.
-
-To remove all images and containers (to restart the whole Docker process) you can run the following commands:
-
-```bash
-# Stop all containers
-docker stop $(docker ps -a -q)
-# Delete all containers
-docker rm $(docker ps -a -q)
-# Delete all images
-docker rmi $(docker images -q)
-```
-
-To remove all unused containers:
-
-```bash
-# Remove all containers with the Exited status
-docker rm $(docker ps -q -f status=exited)
-```
-
-To remove all unused volumes (good to prevent out of space problems):
-```bash
-# Removed all dangling volumes
-docker volume rm $(docker volume ls -qf dangling=true)
-```
-
-To remove all images and containers:
-
-```bash
-# Remove eveything
-docker system prune
-```
+## To be added
 
 ## Style Guide and Project Structure
 

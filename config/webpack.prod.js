@@ -53,7 +53,6 @@ module.exports = function (env) {
   const ENV = (process.env.mode = process.env.NODE_ENV = process.env.ENV = 'production');
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
   const sourceMapEnabled = process.env.SOURCE_MAP === '1';
-  const Docker = process.env.Docker || false;
   const Analyzer = process.env.Analyzer || false;
 
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
@@ -61,7 +60,6 @@ module.exports = function (env) {
     port: process.env.PORT || 8080,
     ENV: ENV,
     HMR: false,
-    Docker: Docker,
     Analyzer: Analyzer
   });
 

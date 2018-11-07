@@ -79,7 +79,6 @@ app.use(function(err, req, res, next) {
 if (env === 'development') {
     console.log('NODE_ENV: ', process.env.NODE_ENV);
     console.log('PORT: ', process.env.PORT);
-    console.log('Docker: ', process.env.Docker);
 }
 
 // Get port from environment and store in Express
