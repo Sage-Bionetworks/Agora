@@ -1,9 +1,9 @@
 <div class="section section-hero intro-desc center-justified-last video-section">
     <div class="intro-video">
-        <img *ngIf="!showVideo" src="/assets/img/VideoBG.png" (click)="playVideo()">
-        <iframe #frame *ngIf="showVideo" src="https://player.vimeo.com/video/297609960?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <img *ngIf="!showVideo" src="/assets/img/video-bg.svg" (click)="playVideo()">
+        <iframe #frame *ngIf="showVideo" src="https://player.vimeo.com/video/297609960?autoplay=1&speed=1" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
     </div>
-    <h1 class="center-text">
+    <h1 class="center-text custom-intro-heading">
         Discover Alzheimer&#39;s Disease Genes
     </h1>
     <gene-search></gene-search>

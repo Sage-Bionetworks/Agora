@@ -44,26 +44,6 @@
     }
 }
 
-.nominated-button {
-    @include respond-to('ex-small') {
-        width: 346px;
-    }
-    @include respond-to('small') {
-        width: 366px;
-    }
-    @include respond-to('medium') {
-        width: 366px;
-    }
-    @include respond-to('large') {
-        width: 366px;
-    }
-    @include respond-to('ex-large') {
-        width: 366px;
-    }
-
-    cursor: pointer;
-}
-
 .show-more-col {
     margin-bottom: auto;
     margin-top: auto;
