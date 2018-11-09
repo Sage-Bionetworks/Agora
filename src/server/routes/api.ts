@@ -136,9 +136,7 @@ connection.once('open', () => {
             items: [],
             geneEntries: []
         };
-        console.log(allGenes.slice(5, 11));
         const chartGenes = allGenes.slice();
-        console.log(chartGenes.slice(5, 11));
         if (geneEntries) {
             resObj.geneEntries = geneEntries;
             geneEntries.forEach((ge) => {
@@ -325,7 +323,6 @@ connection.once('open', () => {
                             if (env === 'development') {
                                 console.log('The gene info and item');
                                 console.log(info);
-                                console.log(geneEntries);
                                 console.log(geneEntries[0]);
                             }
 
