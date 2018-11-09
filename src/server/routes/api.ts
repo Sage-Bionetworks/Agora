@@ -62,23 +62,25 @@ connection.once('open', () => {
     Genes.aggregate(
         [
             {
-                $group: {
-                    _id: '$_id',
-                    hgnc_symbol: { $first: '$hgnc_symbol' },
-                    ensembl_gene_id : { $first: '$ensembl_gene_id' },
-                    logfc : { $first: '$logfc' },
-                    fc : { $first: '$fc' },
-                    ci_l : { $first: '$ci_l' },
-                    ci_r : { $first: '$ci_r' },
-                    adj_p_val : { $first: '$adj_p_val' },
-                    tissue : { $first: '$tissue' },
-                    study : { $first: '$study' },
-                    model : { $first: '$model' }
+                $sort: {
+                    hgnc_symbol: -1,
+                    model: 1,
+                    tissue: -1
                 }
             },
             {
-                $sort: {
-                    hgnc_symbol: 1
+                $group: {
+                    _id: '$_id',
+                    hgnc_symbol: { $first: '$hgnc_symbol' },
+                    ensembl_gene_id: { $first: '$ensembl_gene_id' },
+                    logfc: { $first: '$logfc' },
+                    fc: { $first: '$fc' },
+                    ci_l: { $first: '$ci_l' },
+                    ci_r: { $first: '$ci_r' },
+                    adj_p_val: { $first: '$adj_p_val' },
+                    tissue: { $first: '$tissue' },
+                    study: { $first: '$study' },
+                    model: { $first: '$model' }
                 }
             }
         ]
@@ -98,10 +100,12 @@ connection.once('open', () => {
             seen[g['hgnc_symbol']] = true;
             return g['hgnc_symbol'];
         });
+        allTissues.sort();
+        allModels.sort();
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: 1 }).exec((err, genes, next) => {
+        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec((err, genes, next) => {
         if (err) {
             next(err);
         } else {
@@ -132,7 +136,9 @@ connection.once('open', () => {
             items: [],
             geneEntries: []
         };
+        console.log(allGenes.slice(5, 11));
         const chartGenes = allGenes.slice();
+        console.log(chartGenes.slice(5, 11));
         if (geneEntries) {
             resObj.geneEntries = geneEntries;
             geneEntries.forEach((ge) => {
@@ -272,7 +278,8 @@ connection.once('open', () => {
             }
 
             // Find all the Genes with the current id
-            Genes.find(queryObj).exec((err, genes) => {
+            Genes.find(queryObj)
+                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec((err, genes) => {
                 if (err) {
                     next(err);
                 } else {
@@ -306,6 +313,8 @@ connection.once('open', () => {
                             geneModels.push(g.model);
                         }
                     });
+                    geneTissues.sort();
+                    geneModels.sort();
 
                     GenesInfo.findOne({ [fieldName]: req.query.id }).exec((errB, info) => {
                         if (errB) {
@@ -316,6 +325,7 @@ connection.once('open', () => {
                             if (env === 'development') {
                                 console.log('The gene info and item');
                                 console.log(info);
+                                console.log(geneEntries);
                                 console.log(geneEntries[0]);
                             }
 

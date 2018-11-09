@@ -95,10 +95,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             ]);
         } else {
             this.loadChartData().then((status) => {
-                this.geneService.getGeneTissues().forEach((t) => {
+                this.geneService.getGeneTissues().sort().forEach((t) => {
                     this.tissues.push({label: t.toUpperCase(), value: t});
                 });
-                this.geneService.getGeneModels().forEach((t) => {
+                this.geneService.getGeneModels().sort().forEach((t) => {
                     this.models.push({label: t.toUpperCase(), value: t});
                 });
                 const index = this.tissues.findIndex((t) => {
