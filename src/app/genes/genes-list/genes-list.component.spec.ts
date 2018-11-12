@@ -6,14 +6,14 @@ import {
     tick
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import {
     ActivatedRouteStub,
-    RouterStub,
     RouterOutletStubComponent,
     ApiServiceStub,
     GeneServiceStub,
+    NavigationServiceStub,
     mockInfo1
 } from '../../testing';
 
@@ -25,7 +25,7 @@ import { SynapseAccountComponent } from '../../core/synapse-account';
 import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
-import { ApiService, GeneService } from '../../core/services';
+import { ApiService, GeneService, NavigationService } from '../../core/services';
 import { OrderBy } from '../../shared/pipes';
 
 import { of } from 'rxjs';
@@ -33,9 +33,9 @@ import { of } from 'rxjs';
 describe('Component: GenesList', () => {
     let component: GenesListComponent;
     let fixture: ComponentFixture<GenesListComponent>;
-    let router: RouterStub;
     let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
+    let navService: NavigationServiceStub;
     let activatedRoute: any;
 
     beforeEach(async(() => {
@@ -55,10 +55,10 @@ describe('Component: GenesList', () => {
             // elements and attributes
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
-                { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() }
+                { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
             ]
         })
         .compileComponents();
@@ -66,9 +66,9 @@ describe('Component: GenesList', () => {
         fixture = TestBed.createComponent(GenesListComponent);
 
         // Get the injected instances
-        router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
+        navService = fixture.debugElement.injector.get(NavigationService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
@@ -96,7 +96,7 @@ describe('Component: GenesList', () => {
         const dsSpy = spyOn(apiService, 'getGene').and.returnValue(
             of(mockInfo1)
         );
-        const spy = spyOn(router, 'navigate').and.callThrough();
+        const spy = spyOn(navService.testRouter, 'navigate').and.callThrough();
 
         component.onRowSelect({ data: mockInfo1 }); // trigger click on row
         tick();
@@ -104,16 +104,7 @@ describe('Component: GenesList', () => {
         expect(component.selectedInfo).toEqual(mockInfo1);
         expect(dsSpy.calls.any()).toEqual(true);
 
-        expect(router.navigate).toHaveBeenCalled();
-
-        // Expecting to navigate to hgnc_symbol of the selected gene
-        /*expect(router.navigate).toHaveBeenCalledWith(
-            [
-                '../gene-details',
-                component.selectedInfo.ensembl_gene_id
-            ],
-            { relativeTo: activatedRoute }
-        );*/
+        expect(navService.testRouter.navigate).toHaveBeenCalled();
     }));
 
     it('should unselect gene', fakeAsync(() => {

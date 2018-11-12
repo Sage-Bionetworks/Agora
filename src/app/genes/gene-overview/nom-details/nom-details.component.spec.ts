@@ -12,12 +12,13 @@ import {
     ActivatedRouteStub,
     RouterStub,
     ApiServiceStub,
+    NavigationServiceStub,
     GeneServiceStub
 } from '../../../testing';
 
 import { NominationDetailsComponent } from './nom-details.component';
 
-import { ApiService, GeneService } from '../../../core/services';
+import { ApiService, GeneService, NavigationService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -40,6 +41,7 @@ describe('Component: TeamsPage', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
             ]
         })

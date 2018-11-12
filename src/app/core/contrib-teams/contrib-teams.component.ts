@@ -1,11 +1,10 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Gene, GeneInfo, TeamInfo, NominatedTarget, TeamMember } from '../../models';
 
-import { ApiService } from '../services';
+import { ApiService, NavigationService } from '../services';
 import { OrderBy } from '../../shared/pipes';
 
 import { Observable } from 'rxjs';
@@ -31,8 +30,8 @@ export class ContribTeamsPageComponent implements OnInit {
     dataLoaded: boolean = false;
 
     constructor(
-        private router: Router,
         private apiService: ApiService,
+        private navService: NavigationService,
         private titleCase: TitleCasePipe,
         private sanitizer: DomSanitizer,
         private orderBy: OrderBy
@@ -109,9 +108,5 @@ export class ContribTeamsPageComponent implements OnInit {
 
     toTitleCase(index: number, field: string): string {
         return this.titleCase.transform(this.ntInfoArray[index][field]);
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

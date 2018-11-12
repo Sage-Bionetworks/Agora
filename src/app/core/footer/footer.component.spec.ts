@@ -8,10 +8,11 @@ import { FooterComponent } from './footer.component';
 import {
     RouterStub,
     DataServiceStub,
-    GeneServiceStub
+    GeneServiceStub,
+    NavigationServiceStub
 } from '../../testing';
 
-import { DataService, GeneService } from '../services';
+import { DataService, GeneService, NavigationService } from '../services';
 
 describe('NavbarComponent', () => {
     let component: FooterComponent;
@@ -27,6 +28,7 @@ describe('NavbarComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
             ]
         })

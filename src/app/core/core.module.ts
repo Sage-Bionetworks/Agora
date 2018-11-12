@@ -10,14 +10,14 @@ import {
     AuthenticationService,
     GeneService,
     DataService,
-    ForceService
+    ForceService,
+    NavigationService
 } from './services';
 
 import { AboutComponent } from './about';
 import { HelpComponent } from './help';
 import { TermsComponent } from './terms';
 import { SynapseAccountComponent } from './synapse-account';
-import { BetaBannerComponent } from './beta-banner';
 import { NavbarComponent } from './navbar';
 import { MenubarComponent } from './menubar';
 import { FooterComponent } from './footer';
@@ -42,8 +42,7 @@ import '../../styles/headings.scss';
         HelpComponent,
         TermsComponent,
         ContribTeamsPageComponent,
-        SynapseAccountComponent,
-        BetaBannerComponent
+        SynapseAccountComponent
     ],
     exports: [
         // Exported components
@@ -54,8 +53,7 @@ import '../../styles/headings.scss';
         HelpComponent,
         TermsComponent,
         ContribTeamsPageComponent,
-        SynapseAccountComponent,
-        BetaBannerComponent
+        SynapseAccountComponent
     ],
     providers: [
         ApiService,
@@ -64,6 +62,7 @@ import '../../styles/headings.scss';
         DataService,
         GeneService,
         ForceService,
+        NavigationService,
         DecimalPipe,
         TitleCasePipe
     ]

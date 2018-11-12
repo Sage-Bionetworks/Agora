@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+
 import { DialogsService } from '../services';
+import { NavigationService } from '../../core/services';
 
 @Component({
     selector: 'nt-dialog',
@@ -14,9 +15,10 @@ export class NOMinatedTargetComponent {
     @Input() header: string = '';
     @Input() name: string = 'nt';
 
-    constructor(private dialogsService: DialogsService,
-                private router: Router,
-                private route: ActivatedRoute) {
+    constructor(
+        private dialogsService: DialogsService,
+        private navService: NavigationService
+    ) {
         dialogsService.displayed$.subscribe((visibleObj: any) => {
             if (visibleObj && visibleObj.name && visibleObj.name === this.name) {
                 this.display = (visibleObj.visible) ? visibleObj.visible : false;
@@ -30,7 +32,6 @@ export class NOMinatedTargetComponent {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
-            this.router.navigate([path], { relativeTo: this.route });
+        this.navService.goToRouteRelative(path, outlets);
     }
 }

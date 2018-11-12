@@ -7,7 +7,8 @@ import {
     ApiService,
     DataService,
     GeneService,
-    ForceService
+    ForceService,
+    NavigationService
 } from '../../../../../core/services';
 
 @Component({
@@ -38,8 +39,7 @@ export class GeneNetworkComponent implements OnInit {
     private filterlvlN: number = 0;
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private navService: NavigationService,
         private apiService: ApiService,
         private dataService: DataService,
         private geneService: GeneService,
@@ -50,7 +50,7 @@ export class GeneNetworkComponent implements OnInit {
         if (!this.noData) { this.noData = this.geneService.getInfoDataState(); }
         // The data wasn't loaded yet, redirect for now
         this.geneInfo = this.geneService.getCurrentInfo();
-        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+        if (!this.id) { this.id = this.navService.getRoute().snapshot.paramMap.get('id'); }
         if (!!this.forceService.getGeneOriginalList() &&
             this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
             this.loadGenes();
@@ -144,8 +144,7 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
-            this.router.navigate([path], { relativeTo: this.route });
+        this.navService.goToRouteRelative(path, outlets);
     }
 
     onNavigate(url) {
@@ -176,18 +175,20 @@ export class GeneNetworkComponent implements OnInit {
         } else {
             id = link;
         }
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        const currentUrl = this.router.url + '?';
-        this.router.navigateByUrl(currentUrl)
+        const router = this.navService.getRouter();
+        router.routeReuseStrategy.shouldReuseRoute = () => false;
+        const currentUrl = router.url + '?';
+        router.navigateByUrl(currentUrl)
             .then(() => {
-                this.router.navigated = false;
-                this.router.navigate(['/genes',
+                router.navigated = false;
+                router.navigate([
+                    '/genes',
                     {
-                        outlets:
-                            {
+                        outlets: {
                             'genes-router': ['gene-details', id]
-                            }
-                    }]);
+                        }
+                    }
+                ]);
             });
     }
 

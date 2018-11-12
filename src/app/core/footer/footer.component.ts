@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+
+import { NavigationService } from '../services';
 
 @Component({
   selector: 'footer',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class FooterComponent {
     constructor(
-        private router: Router
+        private navService: NavigationService
     ) {
         //
     }
@@ -19,6 +20,6 @@ export class FooterComponent {
     }
 
     goToRoute(path: string) {
-        this.router.navigate(['/' + path]);
+        this.navService.goToRoute('/' + path);
     }
 }

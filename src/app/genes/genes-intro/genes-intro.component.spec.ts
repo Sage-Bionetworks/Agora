@@ -1,17 +1,10 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
-
-import {
-    RouterStub
-} from '../../testing';
 
 import { GenesIntroComponent } from './genes-intro.component';
 import { GeneSearchComponent } from '../gene-search';
@@ -23,7 +16,6 @@ import { MockComponent } from 'ng-mocks';
 describe('Component: GenesIntro', () => {
     let component: GenesIntroComponent;
     let fixture: ComponentFixture<GenesIntroComponent>;
-    let router: RouterStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -34,17 +26,11 @@ describe('Component: GenesIntro', () => {
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [
-                { provide: Router, useValue: new RouterStub() }
-            ]
+            schemas: [ NO_ERRORS_SCHEMA ]
         })
         .compileComponents();
 
         fixture = TestBed.createComponent(GenesIntroComponent);
-
-        // Get the injected instances
-        router = fixture.debugElement.injector.get(Router);
 
         component = fixture.componentInstance; // Component test instance
     }));
@@ -60,17 +46,4 @@ describe('Component: GenesIntro', () => {
 
         expect(gsElement).toBeTruthy();
     });
-
-    it('should tell ROUTER to navigate to genes list', fakeAsync(() => {
-        spyOn(router, 'navigate'); // .and.callThrough();
-
-        component.goToRoute('/genes', { outlets: {'genes-router': [ 'genes-list' ] }});
-        fixture.detectChanges();
-
-        // Expecting to navigate to genes list
-        expect(router.navigate).toHaveBeenCalledWith([
-            '/genes',
-            { outlets: {'genes-router': [ 'genes-list' ] }}
-        ]);
-    }));
 });

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import {
     GeneService,
-    ApiService
+    ApiService,
+    NavigationService
 } from '../../core/services';
 
 import { GeneInfo, NominatedTarget, GeneResponse } from '../../models';
@@ -30,8 +30,7 @@ export class GenesListComponent implements OnInit {
     loading: boolean = true;
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService
     ) { }
@@ -88,7 +87,7 @@ export class GenesListComponent implements OnInit {
 
     getGene(geneSymbol: string) {
         this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
-            if (!data.item) { this.router.navigate(['/genes']); }
+            if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
             this.goToRoute('../gene-details', this.selectedInfo.ensembl_gene_id);
@@ -139,7 +138,9 @@ export class GenesListComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
-            this.router.navigate([path], { relativeTo: this.route });
+        const extras = {
+            relativeTo: this.navService.getRoute()
+        };
+        this.navService.goToRoute(path, outlets, extras);
     }
 }

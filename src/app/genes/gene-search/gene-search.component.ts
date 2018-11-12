@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 // Updating to rxjs 6 import statement
@@ -10,7 +9,8 @@ import { Gene, GeneInfo, GeneInfosResponse, GeneResponse } from '../../models';
 
 import {
     ApiService,
-    GeneService
+    GeneService,
+    NavigationService
 } from '../../core/services';
 
 @Component({
@@ -31,7 +31,7 @@ export class GeneSearchComponent implements OnInit {
     gene: Gene;
 
     constructor(
-        private router: Router,
+        private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService
     ) { }
@@ -83,6 +83,7 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(info: GeneInfo) {
+        this.navService.setOvMenuTabIndex(0);
         if (!this.geneService.getCurrentGene()) {
             this.getGene(info.hgnc_symbol);
         } else {
@@ -90,7 +91,7 @@ export class GeneSearchComponent implements OnInit {
             if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
                 this.getGene(info.hgnc_symbol);
             } else {
-                this.goToRoute(
+                this.navService.goToRoute(
                     '/genes',
                     { outlets: {'genes-router':
                         [
@@ -105,7 +106,7 @@ export class GeneSearchComponent implements OnInit {
     getGene(geneSymbol: string) {
         this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
             if (!data.info) {
-                this.router.navigate(['./genes']);
+                this.navService.goToRoute('./genes');
             } else {
                 if (!data.item) {
                     // Fill in a new gene with the info attributes
@@ -120,14 +121,10 @@ export class GeneSearchComponent implements OnInit {
         }, (error) => {
             console.log('Routing error! ' + error.message);
         }, () => {
-            this.goToRoute(
+            this.navService.goToRoute(
                 '/genes',
                 { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
             );
         });
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

@@ -6,11 +6,10 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import { GeneService } from '../../../core/services';
+import { GeneService, NavigationService } from '../../../core/services';
 
 import { MenuItem } from 'primeng/api';
 
@@ -33,7 +32,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     neverActivated: boolean = true;
 
     constructor(
-        private router: Router,
+        private navService: NavigationService,
         private geneService: GeneService
     ) {}
 
@@ -56,7 +55,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
         if (this.activeItem) {
             switch (this.activeItem.label) {
                 case 'RNA':
-                    this.goToRoute('/genes', {
+                    this.navService.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
                             'gene-overview': ['nom-details']
@@ -64,7 +63,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                     });
                     break;
                 default:
-                    this.goToRoute('/genes', {
+                    this.navService.goToRoute('/genes', {
                         outlets: {
                             'genes-router': ['gene-details', this.id],
                             'gene-overview': ['nom-details']
@@ -86,9 +85,5 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
             this.items[0].visible = true;
             this.activeItem = this.items[0];
         }
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

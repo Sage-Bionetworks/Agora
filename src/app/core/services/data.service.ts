@@ -79,7 +79,6 @@ export class DataService {
 
     loadGenes(data: GenesResponse) {
         if (data.geneEntries) { this.geneEntries = data.geneEntries; }
-        console.log(this.geneEntries);
         data.items.forEach((d: Gene) => {
             // Separate the columns we need
             d.logfc = this.getSignificantValue(+d.logfc, true);
