@@ -336,7 +336,21 @@ import * as _ from 'lodash';
 
 # Deployment
 
-## To be added
+## Continuous Deployment
+We have setup Travis to deploy Agora to our [AWS infrastructure](https://github.com/Sage-Bionetworks/Agora-infra).
+
+We continuously deploy to three environments:
+* Development -> https://agora-develop.ampadportal.org
+* Staging -> https://agora-staging.ampadportal.org
+* Production -> https://agora.ampadportal.org
+
+## Deployment Workflow
+To deploy Agora updates to one of the environments just merge code to the branch you would like
+to deploy to then Travis will take care of building, testing and deployming the Agora
+application.
+
+## Builds
+* https://travis-ci.org/Sage-Bionetworks/Agora
 
 ## Style Guide and Project Structure
 
