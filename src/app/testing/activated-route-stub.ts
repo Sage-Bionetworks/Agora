@@ -17,6 +17,7 @@ export class ActivatedRouteStub {
 
     constructor(initialParams?: Params) {
         this.paramMap = this.subject.asObservable();
+
         this.setParamMap(initialParams);
     }
 

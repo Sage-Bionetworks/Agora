@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../../models';
 
@@ -21,7 +20,6 @@ export class RNAComponent implements OnInit {
     memberImages: any[] = [];
 
     constructor(
-        private router: Router,
         private geneService: GeneService
     ) {}
 
@@ -31,9 +29,5 @@ export class RNAComponent implements OnInit {
 
     getInfoState() {
         return this.geneService.getInfoDataState();
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

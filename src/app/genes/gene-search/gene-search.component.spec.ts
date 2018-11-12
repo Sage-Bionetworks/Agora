@@ -11,12 +11,13 @@ import {
     RouterStub,
     ApiServiceStub,
     GeneServiceStub,
+    NavigationServiceStub,
     mockInfo1
 } from '../../testing';
 
 import { GeneSearchComponent } from './gene-search.component';
 
-import { ApiService, GeneService } from '../../core/services';
+import { ApiService, GeneService, NavigationService } from '../../core/services';
 
 import { of, empty, Observable } from 'rxjs';
 
@@ -39,7 +40,8 @@ describe('Component: GeneSearch', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() }
+                { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
             ]
         })
         .compileComponents();

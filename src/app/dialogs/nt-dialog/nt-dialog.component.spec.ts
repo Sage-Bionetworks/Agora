@@ -10,12 +10,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
     DialogsServiceStub,
     RouterStub,
-    ActivatedRouteStub
+    ActivatedRouteStub,
+    NavigationServiceStub
 } from '../../testing';
 
 import { NOMinatedTargetComponent } from './nt-dialog.component';
 
 import { DialogsService } from '../services';
+import { NavigationService } from '../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -38,7 +40,8 @@ describe('Component: NTDialog', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DialogsService, useValue: new DialogsServiceStub() }
+                { provide: DialogsService, useValue: new DialogsServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
             ]
         })
             .compileComponents();

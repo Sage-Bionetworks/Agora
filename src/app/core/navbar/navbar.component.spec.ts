@@ -8,13 +8,15 @@ import { NavbarComponent } from './navbar.component';
 import {
     RouterStub,
     DataServiceStub,
-    GeneServiceStub
+    GeneServiceStub,
+    NavigationServiceStub
 } from '../../testing';
 
-import { DataService, GeneService } from '../services';
+import { DataService, GeneService, NavigationService } from '../services';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
+    let navService: NavigationServiceStub;
     let fixture: ComponentFixture<NavbarComponent>;
 
     beforeEach(async(() => {
@@ -27,12 +29,14 @@ describe('NavbarComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
             ]
         })
         .compileComponents();
 
         fixture = TestBed.createComponent(NavbarComponent);
+        navService = fixture.debugElement.injector.get(NavigationService);
         component = fixture.componentInstance;
     }));
 

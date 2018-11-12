@@ -9,10 +9,11 @@ import { LoadingComponent } from '../../shared/components/loading';
 import {
     RouterStub,
     ApiServiceStub,
-    GeneServiceStub
+    GeneServiceStub,
+    NavigationServiceStub
 } from '../../testing';
 
-import { ApiService, GeneService } from '../services';
+import { ApiService, GeneService, NavigationService } from '../services';
 import { OrderBy } from '../../shared/pipes';
 
 import { MockComponent } from 'ng-mocks';
@@ -33,6 +34,7 @@ describe('NavbarComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
             ]
         })

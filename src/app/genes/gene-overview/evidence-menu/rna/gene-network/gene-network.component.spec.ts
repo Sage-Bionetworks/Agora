@@ -13,12 +13,19 @@ import {
     DataServiceStub,
     ForceServiceStub,
     GeneServiceStub,
+    NavigationServiceStub,
     mockInfo1
 } from '../../../../../testing';
 
 import { GeneNetworkComponent } from './gene-network.component';
 
-import { ApiService, DataService, ForceService, GeneService } from '../../../../../core/services';
+import {
+    ApiService,
+    DataService,
+    ForceService,
+    GeneService,
+    NavigationService
+} from '../../../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -50,6 +57,7 @@ describe('Component: GeneNetwork', () => {
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ForceService, useValue: new ForceServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 { provide: Location, useValue: locationStub }
             ]
         })

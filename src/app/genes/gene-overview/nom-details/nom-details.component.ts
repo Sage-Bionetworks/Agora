@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Gene, GeneInfo, TeamInfo, NominatedTarget } from '../../../models';
 
 import {
     ApiService,
-    GeneService
+    GeneService,
+    NavigationService
 } from '../../../core/services';
 
 @Component({
@@ -28,23 +27,21 @@ export class NominationDetailsComponent implements OnInit {
     memberImages: any[] = [];
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService,
-        private titleCase: TitleCasePipe,
-        private sanitizer: DomSanitizer
+        private titleCase: TitleCasePipe
     ) {}
 
     ngOnInit() {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
-        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+        if (!this.id) { this.id = this.navService.getRoute().snapshot.paramMap.get('id'); }
 
         // Check if we tried to load this path straight away
         if (!this.geneInfo) {
-            this.goToRoute('/genes', {
+            this.navService.goToRoute('/genes', {
                 outlets: {
                     'genes-router': [ 'gene-details', this.id ]
                 }
@@ -60,7 +57,7 @@ export class NominationDetailsComponent implements OnInit {
     loadTeams() {
         const info = this.geneService.getCurrentInfo();
         this.apiService.getTeams(info).subscribe((data) => {
-            if (!data['items']) { this.router.navigate(['/genes']); }
+            if (!data['items']) { this.navService.getRouter().navigate(['/genes']); }
             this.teams.length = data['items'].length;
             const ntTeamsArray = this.ntInfoArray.slice().map((nti) => nti.team);
             data['items'].forEach((item) => {
@@ -83,9 +80,5 @@ export class NominationDetailsComponent implements OnInit {
 
     toTitleCase(index: number, field: string): string {
         return this.titleCase.transform(this.ntInfoArray[index][field]);
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
     }
 }

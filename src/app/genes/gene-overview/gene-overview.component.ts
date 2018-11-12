@@ -7,7 +7,7 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { Router, ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
+import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
 
@@ -15,7 +15,8 @@ import {
     ApiService,
     DataService,
     GeneService,
-    ForceService
+    ForceService,
+    NavigationService
 } from '../../core/services';
 
 import { MenuItem } from 'primeng/api';
@@ -39,6 +40,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() dataLoaded: boolean = false;
     @ViewChild('overviewMenu') menu: MenuItem[];
 
+    extras: NavigationExtras = {
+        relativeTo: this.navService.getRoute(),
+        skipLocationChange: true
+    };
     activeItem: MenuItem;
     currentGeneData = [];
     subscription: any;
@@ -48,8 +53,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     disableMenu: boolean = false;
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
@@ -65,7 +69,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
-        this.router.events.subscribe((re: RouterEvent) => {
+        this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
                 if (this.disableMenu) {
                     // Improve this part, 0.8 seconds to re-activate the menu items
@@ -84,7 +88,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
-        this.id = this.route.snapshot.paramMap.get('id');
+        this.id = this.navService.getId();
 
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
@@ -94,7 +98,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         ) {
             this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
                 if (!data.info) {
-                    this.router.navigate(['/genes']);
+                    this.navService.goToRoute('/genes');
                 } else {
                     if (!data.item) {
                         // Fill in a new gene with the info attributes
@@ -141,44 +145,67 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'NOMINATION DETAILS':
-                        this.goToRoute('/genes', {
+                        if (this.geneInfo.nominations) {
+                            this.navService.setOvMenuTabIndex(0);
+                        }
+                        this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['nom-details']
                             }
-                        });
+                        }, this.extras);
                         break;
                     case 'SUMMARY':
-                        this.goToRoute('/genes', {
+                        if (this.geneInfo.nominations) {
+                            this.navService.setOvMenuTabIndex(1);
+                        } else {
+                            this.navService.setOvMenuTabIndex(0);
+                        }
+                        this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['soe']
                             }
-                        });
+                        }, this.extras);
                         break;
                     case 'EVIDENCE':
-                        this.goToRoute('/genes', {
+                        if (this.geneInfo.nominations) {
+                            this.navService.setOvMenuTabIndex(2);
+                        } else {
+                            this.navService.setOvMenuTabIndex(1);
+                        }
+                        this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['rna']
                             }
-                        });
+                        }, this.extras);
                         break;
                     case 'DRUGGABILITY':
-                        this.goToRoute('/genes', {
+                        if (this.geneInfo.nominations) {
+                            if (this.geneInfo.druggability) {
+                                this.navService.setOvMenuTabIndex(3);
+                            }
+                        } else {
+                            if (this.geneInfo.druggability) {
+                                this.navService.setOvMenuTabIndex(2);
+                            }
+                        }
+                        this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['druggability']
                             }
-                        });
+                        }, this.extras);
                         break;
                     default:
-                        this.goToRoute('/genes', {
+                        this.navService.setOvMenuTabIndex(0);
+                        this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['nom-details']
                             }
-                        });
+                        }, this.extras);
                 }
             }
         }
@@ -186,15 +213,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     setActiveItem() {
         if (this.geneInfo) {
-            if (!this.geneInfo.nominations) {
-                this.items[0].visible = false;
-                this.items[3].visible = false;
-                this.activeItem = this.items[1];
-            } else {
-                this.items[0].visible = true;
-                this.items[3].visible = true;
-                this.activeItem = this.items[0];
-            }
+            this.activeItem = this.items[this.navService.getOvMenuTabIndex()];
         }
     }
 
@@ -208,10 +227,22 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.geneService.loadGeneTissues(responseList[2]);
                     this.geneService.loadGeneModels(responseList[3]);
 
+                    if (!this.geneInfo.nominations) {
+                        this.items.splice(0, 1);
+                    }
+                    if (!this.geneInfo.druggability) {
+                        this.items.splice(this.items.length - 1, 1);
+                    }
                     this.setActiveItem();
                     this.dataLoaded = true;
                 });
             } else {
+                if (!this.geneInfo.nominations) {
+                    this.items.splice(0, 1);
+                }
+                if (!this.geneInfo.druggability) {
+                    this.items.splice(this.items.length - 1, 1);
+                }
                 this.setActiveItem();
                 this.dataLoaded = true;
             }
@@ -291,7 +322,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     viewSynapseReg() {
-        this.goToRoute('/synapse-account');
+        this.navService.goToRoute('/synapse-account');
     }
 
     getAlias(): string {
@@ -315,13 +346,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     showDruggability() {
         window.open('https://www.synapse.org/#!Synapse:syn13363443', '_blank');
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], {
-            relativeTo: this.route,
-            skipLocationChange: true
-        }) : this.router.navigate([path]);
     }
 
     isNominatedTarget(): string {

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { RouterEvent, NavigationEnd } from '@angular/router';
+
+import { NavigationService } from '../services';
 
 import { MenuItem } from 'primeng/api';
 
@@ -16,7 +18,7 @@ export class NavbarComponent implements OnInit {
     mobileVisible: boolean = false;
 
     constructor(
-        private router: Router
+        private navService: NavigationService,
     ) { }
 
     ngOnInit() {
@@ -25,7 +27,7 @@ export class NavbarComponent implements OnInit {
             { label: 'Nominated Targets' },
             { label: 'Teams' }
         ];
-        this.router.events.subscribe((re: RouterEvent) => {
+        this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
                 if (re.url === '/genes' || re.url === '/') {
                     this.activeItem = this.items[0];
@@ -62,7 +64,7 @@ export class NavbarComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets]) : this.router.navigate([path]);
+        this.navService.goToRoute(path, outlets);
         setTimeout(() => {
             this.mobileVisible = false;
         }, 300);
