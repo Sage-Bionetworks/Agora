@@ -71,9 +71,11 @@
                 by hovering over the red dots.
             </p>
         </div>
-        <div *ngIf="!isEmptyGene" #stbp class="col-md-12 col-sm-12 col-12">
-            <box-plot [label]="'box-plot'"></box-plot>
-        </div>
+        <ng-container #stbp>
+            <div *ngIf="!isEmptyGene" class="col-md-12 col-sm-12 col-12">
+                <box-plot [label]="'box-plot'"></box-plot>
+            </div>
+        </ng-container>
         <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
