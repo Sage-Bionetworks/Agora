@@ -50,6 +50,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     currentModel: string;
     currentTissue: string;
     display: boolean = false;
+    canDisplay: boolean = false;
     colors: string[] = ['#5171C0'];
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -76,10 +77,12 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
+                this.canDisplay = false;
                 this.removeChart();
             }
         });
         this.location.onPopState(() => {
+            this.canDisplay = false;
             this.removeChart();
         });
     }
@@ -152,31 +155,30 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .label((d) => {
                     return d.key;
                 })
+                .on('pretransition', (chart) => {
+                    if (self.canDisplay) {
+                        self.updateXDomain(chart);
+                        self.updateChartExtras(
+                            chart,
+                            chart.svg(),
+                            chart.width(),
+                            chart.height()
+                        );
+                    }
+                })
                 .on('preRedraw', (chart) => {
                     self.updateXDomain(chart);
                 })
-                .on('postRedraw', (chart) => {
-                    self.updateChartExtras(
-                        chart,
-                        chart.svg(),
-                        chart.width(),
-                        chart.height()
-                    );
-                })
                 .on('postRender', (chart) => {
+                    self.canDisplay = true;
+                    const squareSize = 18;
+
+                    // Copy all vertical texts to another div, so they don't get hidden by
+                    // the row chart svg after being translated
+                    self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+
                     // Registers this chart
                     self.chartService.addChartName(self.label);
-
-                    self.updateChartExtras(
-                        chart,
-                        chart.svg(),
-                        chart.width(),
-                        chart.height()
-                    );
-                })
-                .on('renderlet', (chart) => {
-                    // Only show the 0, min and max values on the xAxis ticks
-                    self.updateXTicks(chart);
                 })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)
@@ -222,10 +224,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // Test if we should display the chart. Using this variable so we don't see
         // the rows rectangles change into small squares abruptly
         if (!self.display) {
-            // Copy all vertical texts to another div, so they don't get hidden by
-            // the row chart svg after being translated
-            self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
-
             // Insert a line for each row of the chart
             self.insertLinesInRows(chart);
 
@@ -525,7 +523,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     displayChart(): any {
-        return { opacity: (this.display) ? 1 : 0 };
+        //return { opacity: (this.display) ? 1 : 0 };
+        return { opacity: 1 };
     }
 
     onResize() {
