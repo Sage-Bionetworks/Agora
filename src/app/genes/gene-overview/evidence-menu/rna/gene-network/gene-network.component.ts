@@ -43,7 +43,8 @@ export class GeneNetworkComponent implements OnInit {
         private apiService: ApiService,
         private dataService: DataService,
         private geneService: GeneService,
-        private forceService: ForceService
+        private forceService: ForceService,
+        private activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit() {
@@ -144,7 +145,9 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        this.navService.goToRouteRelative(path, outlets);
+        this.navService.goToRoute(path, outlets, {
+            relativeTo: this.activatedRoute.parent // <--- PARENT activated route.
+        });
     }
 
     onNavigate(url) {

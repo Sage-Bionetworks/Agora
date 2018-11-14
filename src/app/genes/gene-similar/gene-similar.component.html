@@ -10,15 +10,6 @@
 </div>
 
 <div class="nomlist-list center-justified-last linkstable">
-    <!-- <table>
-        <tr *ngFor="let node of selectedGeneData.nodes" class="pathbox">
-            <td>
-                <span class="genes">
-                <span (click)="viewGene(node.ensembl_gene_id)">{{node.hgnc_symbol}}</span>
-            </span>
-            </td>
-        </tr>
-    </table> -->
     <p-table #gl [columns]="cols" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="true"
