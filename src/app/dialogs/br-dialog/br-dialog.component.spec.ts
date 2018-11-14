@@ -5,6 +5,7 @@ import {
     fakeAsync
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import {
     DialogsServiceStub
@@ -14,9 +15,11 @@ import { BRDialogComponent } from './br-dialog.component';
 
 import { DialogsService } from '../services';
 
+import { Dialog } from 'primeng/dialog';
+
 import { MockComponent } from 'ng-mocks';
 
-describe('Component: SGDialog', () => {
+describe('Component: BRDialog', () => {
     let component: BRDialogComponent;
     let fixture: ComponentFixture<BRDialogComponent>;
     let dialogsService: DialogsServiceStub;
@@ -25,6 +28,7 @@ describe('Component: SGDialog', () => {
         TestBed.configureTestingModule({
             declarations: [
                 BRDialogComponent,
+                MockComponent(Dialog),
                 MockComponent(BRDialogComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
@@ -46,5 +50,13 @@ describe('Component: SGDialog', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a dialog element', () => {
+        const el = fixture.debugElement.query(By.css('p-dialog'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-dialog'));
+        expect(aEl.length).toEqual(1);
     });
 });

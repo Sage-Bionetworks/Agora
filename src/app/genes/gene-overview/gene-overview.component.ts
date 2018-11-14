@@ -7,6 +7,7 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
 import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
@@ -53,6 +54,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     disableMenu: boolean = false;
 
     constructor(
+        private location: PlatformLocation,
         private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService,
@@ -81,6 +83,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     }, 800);
                 }
             }
+        });
+        this.location.onPopState(() => {
+            this.navService.setOvMenuTabIndex(0);
         });
 
         // Get the current clicked gene, always update
@@ -353,6 +358,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     ngOnDestroy() {
+        this.navService.setOvMenuTabIndex(0);
         if (this.subscription) {
             this.subscription.unsubscribe();
         }

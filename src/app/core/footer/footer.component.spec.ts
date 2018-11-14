@@ -14,7 +14,7 @@ import {
 
 import { DataService, GeneService, NavigationService } from '../services';
 
-describe('NavbarComponent', () => {
+describe('Component: Footer', () => {
     let component: FooterComponent;
     let fixture: ComponentFixture<FooterComponent>;
 

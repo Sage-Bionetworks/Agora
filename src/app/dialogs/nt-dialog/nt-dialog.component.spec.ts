@@ -6,6 +6,7 @@ import {
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { By } from '@angular/platform-browser';
 
 import {
     DialogsServiceStub,
@@ -18,6 +19,8 @@ import { NOMinatedTargetComponent } from './nt-dialog.component';
 
 import { DialogsService } from '../services';
 import { NavigationService } from '../../core/services';
+
+import { Dialog } from 'primeng/dialog';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -32,6 +35,7 @@ describe('Component: NTDialog', () => {
         TestBed.configureTestingModule({
             declarations: [
                 NOMinatedTargetComponent,
+                MockComponent(Dialog),
                 MockComponent(NOMinatedTargetComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
@@ -58,5 +62,13 @@ describe('Component: NTDialog', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a dialog element', () => {
+        const el = fixture.debugElement.query(By.css('p-dialog'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-dialog'));
+        expect(aEl.length).toEqual(1);
     });
 });

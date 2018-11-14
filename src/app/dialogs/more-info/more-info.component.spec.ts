@@ -4,6 +4,7 @@ import {
     TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import {
     DataServiceStub
@@ -44,5 +45,11 @@ describe('Component: MoreInfo', () => {
 
     it('should have a text to display', () => {
         expect(component.text).toEqual('View more information');
+    });
+
+    it('should have content to put the dialogs', () => {
+        fixture.detectChanges();
+        const el = fixture.debugElement.query(By.css('ng-content'));
+        expect(el).toBeDefined();
     });
 });
