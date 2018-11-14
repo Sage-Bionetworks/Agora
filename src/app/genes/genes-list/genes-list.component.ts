@@ -97,9 +97,8 @@ export class GenesListComponent implements OnInit {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
-
         }, (error) => {
-
+            console.log('Error getting gene: ' + error.message);
         }, () => {
             this.goToRoute(
                 '/genes',

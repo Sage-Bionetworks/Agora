@@ -523,7 +523,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     displayChart(): any {
-        //return { opacity: (this.display) ? 1 : 0 };
+        // return { opacity: (this.display) ? 1 : 0 };
         return { opacity: 1 };
     }
 
