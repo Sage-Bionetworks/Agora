@@ -288,6 +288,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
+        console.log(currentGenes);
         const logVals: number[] = [];
         const phrases: string[] = [];
         const significanceTexts: string[] = [];

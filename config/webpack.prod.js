@@ -39,7 +39,7 @@ function getUglifyOptions(supportES2015, enableCompress) {
     ecma: supportES2015 ? 6 : 5,
     warnings: false, // TODO verbose based on option?
     ie8: false,
-    mangle: true,
+    mangle: false,
     // compress: enableCompress ? uglifyCompressOptions : false,
     compress: false,
     output: {
