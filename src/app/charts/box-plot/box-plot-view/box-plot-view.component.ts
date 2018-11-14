@@ -71,10 +71,12 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
+                this.display = false;
                 this.removeChart();
             }
         });
         this.location.onPopState(() => {
+            this.display = false;
             this.removeChart();
         });
     }
@@ -167,35 +169,26 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
+                .on('pretransition', (chart) => {
+                    if (self.display) {
+                        chart.selectAll('rect.box')
+                            .attr('rx', self.boxRadius);
+
+                        if (chart.selectAll('g.box circle').empty()) {
+                            self.renderRedCircles(chart);
+                        } else {
+                            self.renderRedCircles(chart, true);
+                        }
+                        self.updateYDomain(chart);
+
+                        // Adds tooltip below the x axis labels
+                        self.addXAxisTooltips(chart);
+                    }
+                })
                 .on('postRender', (chart) => {
-                    chart.selectAll('rect.box')
-                        .attr('rx', self.boxRadius);
-
-                    self.updateYDomain(chart);
-
+                    self.display = true;
                     // Registers this chart
                     self.chartService.addChartName(self.label);
-                })
-                .on('postRedraw', (chart) => {
-                    if (chart.select('g.box circle').empty()) {
-                        self.renderRedCircles(chart);
-                    }
-                })
-                .on('preRedraw', (chart) => {
-                    self.updateYDomain(chart);
-
-                })
-                .on('renderlet', (chart) => {
-                    chart.selectAll('rect.box')
-                        .attr('rx', self.boxRadius);
-
-                    if (!chart.select('g.box circle').empty()) {
-                        self.renderRedCircles(chart, true);
-                        self.updateYDomain(chart);
-                    }
-
-                    // Adds tooltip below the x axis labels
-                    self.addXAxisTooltips(chart);
                 });
 
             resolve(chartInst);
