@@ -3,22 +3,22 @@ import {
 } from '@angular/core/testing';
 
 import {
-    GeneServiceStub
+    DialogsServiceStub
 } from '../../testing';
 
-import { GeneService } from './';
+import { DialogsService } from './';
 
-describe('Service: Gene: TestBed', () => {
-    let geneService: GeneServiceStub;
+describe('Service: Dialogs: TestBed', () => {
+    let geneService: DialogsServiceStub;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                { provide: GeneService, useValue: new GeneServiceStub() }
+                { provide: DialogsService, useValue: new DialogsServiceStub() }
             ]
         });
 
-        geneService = TestBed.get(GeneService);
+        geneService = TestBed.get(DialogsService);
     });
 
     it('should create an instance', () => {

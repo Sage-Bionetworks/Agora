@@ -32,7 +32,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { ArraySortPipe } from '../../../../../shared/pipes';
 
-describe('Component: GeneNetwork', () => {
+describe('Component: GeneRNASeqDE', () => {
     let component: GeneRNASeqDEComponent;
     let fixture: ComponentFixture<GeneRNASeqDEComponent>;
     let router: RouterStub;

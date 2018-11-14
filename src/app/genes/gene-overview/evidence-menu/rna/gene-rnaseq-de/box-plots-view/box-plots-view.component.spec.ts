@@ -22,7 +22,7 @@ import { ApiService, GeneService } from '../../../../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
-describe('Component: TeamsPage', () => {
+describe('Component: BoxPlots', () => {
     let component: BoxPlotsViewComponent;
     let fixture: ComponentFixture<BoxPlotsViewComponent>;
     let apiService: ApiServiceStub;

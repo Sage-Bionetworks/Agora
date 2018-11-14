@@ -13,7 +13,7 @@ import {
 
 import { DataService, GeneService } from '../services';
 
-describe('NavbarComponent', () => {
+describe('Component: SynapseAccount', () => {
     let component: SynapseAccountComponent;
     let fixture: ComponentFixture<SynapseAccountComponent>;
 
