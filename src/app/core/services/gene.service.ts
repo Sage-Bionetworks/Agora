@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TeamInfo, TissuesResponse, ModelsResponse } from '../../models';
+import { Gene, GeneInfo, TeamInfo, TissuesResponse, ModelsResponse, GeneResponse } from '../../models';
 
 import { ApiService } from './api.service';
 
@@ -55,12 +55,12 @@ export class GeneService {
     }
 
     // To be used everytime a new gene data arrives from the server
-    updateGeneData(data: any) {
-        this.setCurrentGene(data['item']);
-        this.setCurrentInfo(data['info']);
-        this.setFC(data['minFC'], data['maxFC']);
-        this.setLogFC(data['minFC'], data['maxFC']);
-        this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+    updateGeneData(data: GeneResponse) {
+        this.setCurrentGene(data.item);
+        this.setCurrentInfo(data.info);
+        this.setFC(data.minFC, data.maxFC);
+        this.setLogFC(data.minFC, data.maxFC);
+        this.setAdjPValue(data.minAdjPValue, data.maxAdjPValue);
     }
 
     setCurrentInfo(geneInfo: GeneInfo) {

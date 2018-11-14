@@ -14,6 +14,7 @@ export interface GeneResponse {
     geneEntries: Gene[];
     info: GeneInfo;
     item: Gene;
+    maxFC?: number;
     minFC: number;
     minLogFC: number;
     maxLogFC: number;

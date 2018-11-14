@@ -101,19 +101,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
             this.geneService.getCurrentGene().hgnc_symbol
         ) {
-            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+            this.apiService.getGene(this.id).subscribe(async (data: GeneResponse) => {
                 if (!data.info) {
-                    this.navService.goToRoute('/genes');
+                    await this.navService.goToRoute('/genes');
                 } else {
                     if (!data.item) {
                         // Fill in a new gene with the info attributes
                         data.item = this.geneService.getEmptyGene(
                             data.info.ensembl_gene_id, data.info.hgnc_symbol
                         );
-                        this.geneService.setInfoDataState(true);
+                        await this.geneService.setInfoDataState(true);
                     }
-                    this.geneService.updatePreviousGene();
-                    this.geneService.updateGeneData(data);
+                    await this.geneService.updatePreviousGene();
+                    await this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
                 }
@@ -226,11 +226,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         // Check if we have a database id at this point
         if (this.gene) {
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
-                this.dataService.loadData(this.gene).subscribe((responseList) => {
+                this.dataService.loadData(this.gene).subscribe(async (responseList) => {
                     // Genes response
-                    this.dataService.loadGenes(responseList[0]);
-                    this.geneService.loadGeneTissues(responseList[2]);
-                    this.geneService.loadGeneModels(responseList[3]);
+                    await this.dataService.loadGenes(responseList[0]);
+                    await this.geneService.loadGeneTissues(responseList[2]);
+                    await this.geneService.loadGeneModels(responseList[3]);
 
                     if (!this.geneInfo.nominations) {
                         this.items.splice(0, 1);
@@ -260,8 +260,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     initDetails() {
         if (this.geneService.hasGeneChanged()) {
-            this.apiService.getGenes().subscribe((data: GenesResponse) => {
-                this.dataService.loadGenes(data);
+            this.apiService.getGenes().subscribe(async (data: GenesResponse) => {
+                await this.dataService.loadGenes(data);
             }, (error) => {
                 console.log('Error loading genes!');
             }, () => {

@@ -285,6 +285,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const mult = (svgEl.getBBox().height) / yDomainLength;
         console.log('nult', svgEl.getBBox().height);
 
+        console.log(this.dataService.getGeneEntries());
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
