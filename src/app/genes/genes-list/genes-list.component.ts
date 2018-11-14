@@ -93,14 +93,11 @@ export class GenesListComponent implements OnInit {
     }
 
     getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+        this.apiService.getGene(geneSymbol).subscribe(async (data: GeneResponse) => {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
-            this.geneService.updatePreviousGene();
-            this.geneService.updateGeneData(data);
-        }, (error) => {
-            console.log('Error getting gene: ' + error.message);
-        }, () => {
-            this.goToRoute(
+            await this.geneService.updatePreviousGene();
+            await this.geneService.updateGeneData(data);
+            await this.goToRoute(
                 '/genes',
                 {
                     outlets: {
@@ -108,6 +105,8 @@ export class GenesListComponent implements OnInit {
                     }
                 }
             );
+        }, (error) => {
+            console.log('Error getting gene: ' + error.message);
         });
     }
 
