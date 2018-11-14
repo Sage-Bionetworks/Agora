@@ -145,9 +145,7 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        this.navService.goToRoute(path, outlets, {
-            relativeTo: this.activatedRoute.parent // <--- PARENT activated route.
-        });
+        this.navService.goToRoute(path, outlets);
     }
 
     onNavigate(url) {

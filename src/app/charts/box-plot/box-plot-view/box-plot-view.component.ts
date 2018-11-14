@@ -280,8 +280,10 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const self = this;
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.y().domain()[1] - chart.y().domain()[0]);
+        console.log('domain', chart.y().domain()[1], chart.y().domain()[0]);
         const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
         const mult = (svgEl.getBBox().height) / yDomainLength;
+        console.log('nult', svgEl.getBBox().height);
 
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
@@ -302,6 +304,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (!translate) {
             chart.selectAll('g.box').each(function(el, i) {
+                console.log('!transalete', chart.y().domain()[1], logVals[i], mult);
                 d3.select(this)
                     .insert('circle', ':last-child')
                     .attr('cx', lineCenter.attr('x1'))
@@ -334,6 +337,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         } else {
             chart.selectAll('circle').each(function(el, i) {
+                console.log('transalete', chart.y().domain()[1], logVals[i], mult);
                 d3.select(this)
                     .attr('cx', lineCenter.attr('x1'))
                     .attr('cy', Math.abs(chart.y().domain()[1] - logVals[i]) * mult)
