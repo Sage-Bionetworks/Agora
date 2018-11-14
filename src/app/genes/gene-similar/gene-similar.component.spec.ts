@@ -26,7 +26,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { ArraySortPipe } from '../../shared/pipes';
 
-describe('Component: GeneNetwork', () => {
+describe('Component: GeneSimilar', () => {
     let component: GeneSimilarComponent;
     let fixture: ComponentFixture<GeneSimilarComponent>;
     let router: RouterStub;

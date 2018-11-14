@@ -17,7 +17,7 @@ import { MockComponent } from 'ng-mocks';
 
 import { Button } from 'primeng/button';
 
-describe('NavbarComponent', () => {
+describe('Component: Help', () => {
     let component: HelpComponent;
     let fixture: ComponentFixture<HelpComponent>;
 

@@ -18,7 +18,7 @@ import { OrderBy } from '../../shared/pipes';
 
 import { MockComponent } from 'ng-mocks';
 
-describe('NavbarComponent', () => {
+describe('Component: ContribTeamsPage', () => {
     let component: ContribTeamsPageComponent;
     let fixture: ComponentFixture<ContribTeamsPageComponent>;
 
