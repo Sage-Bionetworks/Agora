@@ -78,8 +78,15 @@ export class GenesListComponent implements OnInit {
                 this.getGene(this.selectedInfo.hgnc_symbol);
             } else {
                 this.goToRoute(
-                    '../gene-details',
-                    this.geneService.getCurrentGene().ensembl_gene_id
+                    '/genes',
+                    {
+                        outlets: {
+                            'genes-router': [
+                                'gene-details',
+                                this.geneService.getCurrentGene().ensembl_gene_id
+                            ]
+                        }
+                    }
                 );
             }
         }
@@ -90,7 +97,17 @@ export class GenesListComponent implements OnInit {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
-            this.goToRoute('../gene-details', this.selectedInfo.ensembl_gene_id);
+        }, (error) => {
+            console.log('Error getting gene: ' + error.message);
+        }, () => {
+            this.goToRoute(
+                '/genes',
+                {
+                    outlets: {
+                        'genes-router': [ 'gene-details', this.selectedInfo.ensembl_gene_id ]
+                    }
+                }
+            );
         });
     }
 
@@ -138,9 +155,6 @@ export class GenesListComponent implements OnInit {
     }
 
     goToRoute(path: string, outlets?: any) {
-        const extras = {
-            relativeTo: this.navService.getRoute()
-        };
-        this.navService.goToRoute(path, outlets, extras);
+        this.navService.goToRoute(path, outlets);
     }
 }
