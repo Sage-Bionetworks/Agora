@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TeamInfo, TissuesResponse, ModelsResponse, GeneResponse } from '../../models';
+import {
+    Gene,
+    GeneInfo,
+    TeamInfo,
+    TissuesResponse,
+    ModelsResponse,
+    GeneResponse
+} from '../../models';
 
 import { ApiService } from './api.service';
 

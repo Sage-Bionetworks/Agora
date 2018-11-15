@@ -32,16 +32,16 @@ function getUglifyOptions(supportES2015, enableCompress) {
     pure_getters: true /* buildOptimizer */,
     // PURE comments work best with 3 passes.
     // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
-    passes: 2 /* buildOptimizer */
+    passes: 3 /* buildOptimizer */
   };
 
   return {
     ecma: supportES2015 ? 6 : 5,
     warnings: false, // TODO verbose based on option?
     ie8: false,
-    mangle: false,
-    // compress: enableCompress ? uglifyCompressOptions : false,
-    compress: false,
+    mangle: true,
+    compress: enableCompress ? uglifyCompressOptions : false,
+    // compress: false,
     output: {
       ascii_only: true,
       comments: false

@@ -5,17 +5,12 @@ import {
     ViewEncapsulation,
     ViewChildren,
     ViewContainerRef,
-    ComponentFactoryResolver,
-    ComponentRef,
     QueryList,
     ViewChild,
     ElementRef,
-    AfterViewInit,
     AfterViewChecked
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { BoxPlotsViewComponent } from './box-plots-view';
 
 import { Gene, GeneInfo, GeneResponse } from '../../../../../models';
 
@@ -67,8 +62,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
-        private chartService: ChartService,
-        private resolver: ComponentFactoryResolver
+        private chartService: ChartService
     ) { }
 
     ngOnInit() {
@@ -249,21 +243,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                 constraints
             }
         );
-    }
-
-    createComponent(index: number, info1: any, label1: string) {
-        const eArray = this.entries.toArray();
-        if (this.componentRefs[index]) { eArray[index].clear(); }
-        this.componentRefs[index] = new Promise((resolve) => {
-                setTimeout(() => {
-                    const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
-                    resolve(eArray[index].createComponent(factory));
-                }, 100);
-            }) as ComponentRef<BoxPlotsViewComponent>;
-        this.componentRefs[index].instance.tissue = this.tissues[index].value;
-        this.componentRefs[index].instance.model = this.geneService.getCurrentModel();
-        this.componentRefs[index].instance.label1 = label1;
-        this.componentRefs[index].instance.info1 = info1;
     }
 
     destroyComponent(index: number) {

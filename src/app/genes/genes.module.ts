@@ -14,8 +14,6 @@ import { GeneOverviewModule } from './gene-overview';
 import { GeneBRComponent } from './gene-brainregions';
 import { GeneSimilarComponent } from './gene-similar';
 
-import { NgxPageScrollModule } from 'ngx-page-scroll';
-
 @NgModule({
     declarations: [
         GenesViewComponent,
@@ -27,7 +25,6 @@ import { NgxPageScrollModule } from 'ngx-page-scroll';
         GeneSimilarComponent
     ],
     imports: [
-        NgxPageScrollModule,
         ReactiveFormsModule,
         AppSharedModule,
         DialogsModule,
