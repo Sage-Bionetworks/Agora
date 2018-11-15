@@ -251,10 +251,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         );
     }
 
-    async createComponent(index: number, info1: any, label1: string) {
+    createComponent(index: number, info1: any, label1: string) {
         const eArray = this.entries.toArray();
         if (this.componentRefs[index]) { eArray[index].clear(); }
-        this.componentRefs[index] = await new Promise((resolve) => {
+        this.componentRefs[index] = new Promise((resolve) => {
                 setTimeout(() => {
                     const factory = this.resolver.resolveComponentFactory(BoxPlotsViewComponent);
                     resolve(eArray[index].createComponent(factory));

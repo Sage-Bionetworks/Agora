@@ -95,7 +95,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.getChartPromise().then((chartInst) => {
             self.chart = chartInst;
 
-            chartInst.filterHandler(async (dimension, filters) => {
+            chartInst.filterHandler((dimension, filters) => {
                 if (filters.length === 0) {
                     // The empty case (no filtering)
                     dimension.filter(null);
@@ -108,7 +108,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         if (self.firstTime) {
                             self.firstTime = false;
                         } else {
-                            await self.getNewGenes();
+                            self.getNewGenes();
                         }
                     }
                     if (self.label === 'select-model') {
@@ -211,7 +211,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    async removeFirstOption() {
+    removeFirstOption() {
         this.menuSelection = d3.select(this.selectMenu.nativeElement)
             .select('select.dc-select-menu');
         const oldOptions = this.menuSelection.selectAll('option');
@@ -230,13 +230,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         for (const no of newOptions['_groups'][0]) {
             if (this.label === 'select-tissue') {
                 if (no.innerHTML === this.geneService.getDefaultTissue()) {
-                    await this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
+                    this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
                     break;
                 }
             }
             if (this.label === 'select-model') {
                 if (no.innerHTML === this.geneService.getDefaultModel()) {
-                    await this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
+                    this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
                     break;
                 }
             }
