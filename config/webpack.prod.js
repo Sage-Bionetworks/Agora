@@ -40,8 +40,8 @@ function getUglifyOptions(supportES2015, enableCompress) {
     warnings: false, // TODO verbose based on option?
     ie8: false,
     mangle: true,
-    compress: enableCompress ? uglifyCompressOptions : false,
-    // compress: false,
+    // compress: enableCompress ? uglifyCompressOptions : false,
+    compress: false,
     output: {
       ascii_only: true,
       comments: false
