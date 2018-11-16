@@ -217,7 +217,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
-        const rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
+        let rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
+        rectHeight = (isNaN(rectHeight) ? 52 : rectHeight);
         const squareSize = 18;
         const lineWidth = 60;
 
@@ -419,9 +420,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
 
                 if (gene) {
-                    return chart.x()(gene.ci_l);
+                    const val = chart.x()(gene.ci_l);
+                    return (isNaN(val) ? 0.0 : val);
                 } else {
-                    return chart.x()(d.value.logfc) - lineWidth / 2;
+                    // return chart.x()(d.value.logfc) - lineWidth / 2;
+                    return 0.0;
                 }
             })
             .attr('y1', () => {
@@ -433,9 +436,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
 
                 if (gene) {
-                    return chart.x()(gene.ci_r);
+                    const val = chart.x()(gene.ci_r);
+                    return (isNaN(val) ? 0.0 : val);
                 } else {
-                    return chart.x()(d.value.logfc) + lineWidth / 2;
+                    // return chart.x()(d.value.logfc) + lineWidth / 2;
+                    return 0.0;
                 }
             })
             .attr('y2', () => {
@@ -477,8 +482,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     scaledX = chart.x()(d.value.logfc) - (lineWidth / 2);
                 }
 
-                return (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels + dotPixels) :
-                    scaledX + (ciValue.toPrecision(2).length * mPixels + dotPixels);
+                const val = (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels +
+                    dotPixels) : scaledX + (ciValue.toPrecision(2).length * mPixels +
+                    dotPixels);
+                return (isNaN(val) ? 0.0 : val);
             })
             .attr('y', () => {
                 return yPos + 5;
@@ -508,9 +515,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         chart
             .selectAll('g.row rect')
             .attr('transform', function(d) {
+                const val = (chart.x()(d.value.logfc) - (squareSize / 2));
                 return 'translate(' +
                     // X translate
-                    (chart.x()(d.value.logfc) - (squareSize / 2)) +
+                    (isNaN(val) ? 0.0 : val) +
                     ',' +
                     // Y translate
                     ((rectHeight / 2) - (squareSize / 2)) +
