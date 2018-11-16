@@ -1,1 +1,1 @@
-export * from 'sgn-dialog.component';
+export * from './sgn-dialog.component';
