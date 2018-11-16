@@ -61,6 +61,10 @@
     .cg-row {
         margin: 0px;
 
+        .italic-paragraph{
+            margin-bottom: 0px;
+        }
+
         .smaller-h3 {
             font-size: $font-size-xx-regular;
         }
@@ -119,6 +123,7 @@
 
 .pathboxes-row {
     margin: 0px;
+    margin-top: 25px;
 }
 
 .nopadding{

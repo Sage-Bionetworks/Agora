@@ -10,6 +10,8 @@ import { SOEDialogComponent } from './soe-dialog';
 import { SGDialogComponent } from './sg-dialog';
 import { MoreInfoComponent } from './more-info';
 import { NOMinatedTargetComponent } from './nt-dialog';
+import { BRAinRegionNetworkComponent } from './brn-dialog';
+import { SimilarGenesNetworkComponent } from './sgn-dialog';
 import { RNAComponent } from './rna-dialog';
 import { SIMilarPageDialogComponent } from './sp-dialog';
 
@@ -29,6 +31,8 @@ import { DialogsService } from './services';
         SOEDialogComponent,
         DRUggabilityComponent,
         NOMinatedTargetComponent,
+        BRAinRegionNetworkComponent,
+        SimilarGenesNetworkComponent,
         RNAComponent,
         SIMilarPageDialogComponent
     ],
@@ -41,6 +45,8 @@ import { DialogsService } from './services';
         SOEDialogComponent,
         DRUggabilityComponent,
         NOMinatedTargetComponent,
+        BRAinRegionNetworkComponent,
+        SimilarGenesNetworkComponent,
         RNAComponent,
         SIMilarPageDialogComponent
     ],

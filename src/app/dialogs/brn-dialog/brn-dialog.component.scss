@@ -1,0 +1,52 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.brn-dialog {
+  .ui-dialog {
+    max-height: 90% !important;
+  }
+
+  h1{
+    text-align-last: auto;
+  }
+
+  .ui-dialog-content {
+    padding-top: 0% !important;
+    padding-bottom: 132px !important;
+    padding-left: 6% !important;
+    padding-right: 6% !important;
+  }
+
+  .first-bp-dia-row {
+    padding-bottom: 25px !important;
+  }
+
+  .content-vspacing {
+    padding-bottom: 215px;
+  }
+
+  .ui-dialog-titlebar-icon {
+
+    cursor: pointer;
+
+    :hover {
+      border-color: #c0c0c0;
+      background-color: #eeeeee;
+      color: #212121;
+    }
+  }
+}
+.link {
+  font-family: Lato;
+  font-weight: 600;
+  font-style: normal;
+  cursor: pointer;
+  width: 100%;
+  line-height: normal;
+  font-size: $font-size-x-regular;
+  text-decoration: none;
+  color: #5BB0B5 !important;
+  position: relative;
+  top: inherit;
+  left: inherit;
+}
