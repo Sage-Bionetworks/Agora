@@ -30,7 +30,7 @@
                 <span class="span-add-this">
                     Would you like to add to this list?
                 </span>
-                <img class="btn-nom" src="/assets/img/nominate-a-target.svg" (click)="goToRoute('../nominated-form')">
+                <img class="btn-nom" src="/assets/img/nominate-a-target.svg" (click)="goToRoute('/genes', { outlets: { 'genes-router': [ 'nominated-form' ] }})">
             </p>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
