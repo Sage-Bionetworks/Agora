@@ -13,6 +13,30 @@
       outline: none;
     }
 
+    p-table {
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #E1F4F5;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #A6DDE0;
+            border-radius: 14px;
+            height: 47px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #84b0b3;
+        }
+    }
+
     tr:hover {
       background: rgba(91, 176, 181, 0.25)!important;
       color: #fff;
@@ -23,7 +47,7 @@
     }
 
     .ui-table-scrollable-body {
-      min-height: 300px;
+        min-height: 300px;
     }
 
     .section {

@@ -45,7 +45,7 @@ export class DownloadComponent {
         if (!!new Blob()) {
             if (this.target) {
                 this.displayDialog = true;
-                domtoimage.toBlob(this.target).then((blob) => {
+                domtoimage.toBlob(this.target, { bgcolor: '#FFFFFF' }).then((blob) => {
                     this.displayDialog = false;
                     saveAs(blob, this.name + '.png');
                 });
