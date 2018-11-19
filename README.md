@@ -349,6 +349,13 @@ To deploy Agora updates to one of the environments just merge code to the branch
 to deploy to then Travis will take care of building, testing and deployming the Agora
 application.
 
+## Deployment configurations
+Elastic beanstalk uses files in the
+[.ebextensions folder](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html)
+to configure the environment that the Agora application runs in.
+The .ebextensions files are packaged up with Agora and deployed to beanstalk
+by the CI system. 
+
 ## Builds
 * https://travis-ci.org/Sage-Bionetworks/Agora
 
