@@ -159,15 +159,25 @@ export class GeneNetworkComponent implements OnInit {
             this.dataService.loadNodes(this.currentGene)
             .then((dn: GeneNetwork) => {
                 this.geneInfo = this.geneService.getCurrentInfo();
-                this.networkData = dn;
-                this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
-                this.selectedGeneData.links = this.networkData.links.slice().reverse();
-                this.selectedGeneData.origin = this.networkData.origin;
-                this.filterlvl = this.networkData.filterLvl;
+                this.networkData = {
+                    links: [],
+                    nodes: [],
+                    origin: undefined,
+                    filterLvl: 0
+                };
+                this.selectedGeneData.nodes = [];
+                this.selectedGeneData.links = [];
+                this.selectedGeneData.origin = undefined;
+                this.filterlvl = dn.filterLvl;
                 if (dn.links.length > 1000) {
                     this.initialFilter();
+                } else {
+                    this.networkData = dn;
+                    this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+                    this.selectedGeneData.links = this.networkData.links.slice().reverse();
+                    this.selectedGeneData.origin = this.networkData.origin;
+                    this.dataLoaded = true;
                 }
-                this.dataLoaded = true;
             });
         });
     }
