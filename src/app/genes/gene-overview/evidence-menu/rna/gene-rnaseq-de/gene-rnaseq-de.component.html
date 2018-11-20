@@ -1,104 +1,104 @@
 <ng-container *ngIf="dataLoaded">
-<div class="section-thin rna-seq-me no-padding-top">
-    <h3 class="filters-header">
-        Overall Expression of Selected Gene Across Tissues
-        <span class="icon-spacing"></span>
-        <span class="icon-spacing"></span>
-        <download *ngIf="!isEmptyGene" [target]="stme" [name]="gene.hgnc_symbol"></download>
-    </h3>
-    <p class="black-paragraph">
-        This plot depicts the median expression of the selected gene across tissues (brain regions) in
-        the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be
-        anything greater than 0.7 Log CPM, which is equivalent to 5 CPM. This threshold is depicted by the red line in the
-        plot.
-    </p>
-    <div #stme>
-        <ng-container *ngIf="!isEmptyGene; else noDataMedian">
-            <median-chart [geneinfo]="geneInfo"></median-chart>
-        </ng-container>
-    </div>
-    <ng-template #noDataMedian>
-        <div class="no-median-data">
-            <h2 class="placeholder-text">No expression data is currently available.</h2>
+    <div class="section-thin rna-seq-me no-padding-top">
+        <h3 class="filters-header">
+            Overall Expression of Selected Gene Across Tissues
+            <span class="icon-spacing"></span>
+            <span class="icon-spacing"></span>
+            <download *ngIf="!isEmptyGene" [target]="stme" [name]="gene.hgnc_symbol"></download>
+        </h3>
+        <p class="black-paragraph">
+            This plot depicts the median expression of the selected gene across tissues (brain regions) in
+            the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be
+            anything greater than 0.7 Log CPM, which is equivalent to 5 CPM. This threshold is depicted by the red line in the
+            plot.
+        </p>
+        <div #stme>
+            <ng-container *ngIf="!isEmptyGene; else noDataMedian">
+                <median-chart [geneinfo]="geneInfo"></median-chart>
+            </ng-container>
         </div>
-    </ng-template>
-</div>
+        <ng-template #noDataMedian>
+            <div class="no-median-data">
+                <h2 class="placeholder-text">No expression data is currently available.</h2>
+            </div>
+        </ng-template>
+    </div>
 
-<div class="section-thin rna-seq-bplot no-vertical-padding">
-    <div class="row bplot-filter-row">
-        <div class="col-md-6 col-sm-12 col-12 col-fixer">
-            <h4 class="filters-header">
-                Filter the following charts by statistical model
-            </h4>
-            <h2 class="vmi-wrapper">
-                <more-info [name]="'bp'">
-                    <bp-dialog [name]="'bp'"></bp-dialog>
-                </more-info>
-            </h2>
-            <div class="row sm-row-2">
-                <div class="col-md-10 col-sm-12 col-12">
-                    <select-menu *ngIf="!isEmptyGene"
-                        [promptText]="'All'"
-                        [label]="'select-model'"
-                        [columnName]="'select-column-model'"
-                        [defaultValue]="getModel(1)">
-                    </select-menu>
-                    <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
-                        [options]="emptySelection"
-                        [(ngModel)]="selectedTissues"
-                        [showToggleAll]="false"
-                        [showHeader]="false"
-                        [panelStyle]="{minWidth:'12em'}"
-                        [defaultLabel]="emptySelectionLabel"
-                        [dropdownIcon]="getDropdownIcon()"
-                        [disabled]="true">
-                    </p-multiSelect>
+    <div class="section-thin rna-seq-bplot no-vertical-padding">
+        <div class="row bplot-filter-row">
+            <div class="col-md-6 col-sm-12 col-12 col-fixer">
+                <h4 class="filters-header">
+                    Filter the following charts by statistical model
+                </h4>
+                <h2 class="vmi-wrapper">
+                    <more-info [name]="'bp'">
+                        <bp-dialog [name]="'bp'"></bp-dialog>
+                    </more-info>
+                </h2>
+                <div class="row sm-row-2">
+                    <div class="col-md-10 col-sm-12 col-12">
+                        <select-menu *ngIf="!isEmptyGene"
+                            [promptText]="'All'"
+                            [label]="'select-model'"
+                            [columnName]="'select-column-model'"
+                            [defaultValue]="getModel(1)">
+                        </select-menu>
+                        <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
+                            [options]="emptySelection"
+                            [(ngModel)]="selectedTissues"
+                            [showToggleAll]="false"
+                            [showHeader]="false"
+                            [panelStyle]="{minWidth:'12em'}"
+                            [defaultLabel]="emptySelectionLabel"
+                            [dropdownIcon]="getDropdownIcon()"
+                            [disabled]="true">
+                        </p-multiSelect>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <h3>
-        Differential Expression of Selected Gene
-        <span class="icon-spacing"></span>
-        <download *ngIf="!isEmptyGene" [target]="stbp" [name]="gene.hgnc_symbol"></download>
-    </h3>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12 col-fixer">
-            <p class="black-paragraph de-paragraph">
-                After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
-                between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
-                (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
-                by hovering over the red dots.
-            </p>
-        </div>
-        <ng-container #stbp>
-            <div *ngIf="!isEmptyGene" class="col-md-12 col-sm-12 col-12">
-                <box-plot [label]="'box-plot'"></box-plot>
+        <h3>
+            Differential Expression of Selected Gene
+            <span class="icon-spacing"></span>
+            <download *ngIf="!isEmptyGene" [target]="stbp" [name]="gene.hgnc_symbol"></download>
+        </h3>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-12 col-fixer">
+                <p class="black-paragraph de-paragraph">
+                    After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
+                    between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
+                    (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
+                    by hovering over the red dots.
+                </p>
             </div>
-        </ng-container>
-        <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
+        </div>
+        <div #stbp>
+            <box-plot *ngIf="!isEmptyGene" [label]="'box-plot'"></box-plot>
+        </div>
+        <div class="row">
+            <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
+                <h2 class="placeholder-text">No expression data is currently available.</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-thin rna-seq-fplot no-padding-bottom">
+        <h3>
+            Consistency of Change in Expression
+            <span class="icon-spacing"></span>
+            <download *ngIf="!isEmptyGene" [target]="stfp" [name]="gene.hgnc_symbol"></download>
+        </h3>
+        <p class="black-paragraph">
+            This forest plot indicates the estimate of the log fold change with standard errors across the
+            tissues in the chosen model. Genes that show consistent patterns of differential expression will
+            have similar log-fold change value across tissues.
+        </p>
+        <div #stfp>
+            <row-chart *ngIf="!isEmptyGene"></row-chart>
+        </div>
+        <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
+        <h1 class="inner-section-divider"></h1>
     </div>
-</div>
-
-<div class="section-thin rna-seq-fplot no-padding-bottom">
-    <h3>
-        Consistency of Change in Expression
-        <span class="icon-spacing"></span>
-        <download *ngIf="!isEmptyGene" [target]="stfp" [name]="gene.hgnc_symbol"></download>
-    </h3>
-    <p class="black-paragraph">
-        This forest plot indicates the estimate of the log fold change with standard errors across the
-        tissues in the chosen model. Genes that show consistent patterns of differential expression will
-        have similar log-fold change value across tissues.
-    </p>
-    <div #stfp>
-        <row-chart *ngIf="!isEmptyGene"></row-chart>
-    </div>
-    <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
-        <h2 class="placeholder-text">No expression data is currently available.</h2>
-    </div>
-    <h1 class="inner-section-divider"></h1>
-</div>
 </ng-container>
