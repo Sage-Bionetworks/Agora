@@ -191,8 +191,8 @@ export class ForceService {
         this.genesFiltered = {
             links: [],
             nodes: [],
-            origin: undefined,
-            filterLvl: 0
+            origin: this.genes.origin,
+            filterLvl: this.genes.filterLvl
         };
         return new Promise((resolve, reject) => {
             const dicF = [];
@@ -237,7 +237,7 @@ export class ForceService {
                             if (n.ensembl_gene_id === link.target.id) {
                                 this.genesFiltered.nodes.forEach((t) => {
                                     if (t.ensembl_gene_id === link.source.id) {
-                                        dicL[link.source.id + link.target.id] = true;
+                                        dicL[link.target.id + link.source.id] = true;
                                         this.genesFiltered.links.push(link);
                                     }
                                 });
@@ -252,19 +252,24 @@ export class ForceService {
                             }
                         }
                     } else {
-                        if (n.ensembl_gene_id === link.target) {
-                            this.genesFiltered.nodes.forEach((t) => {
-                                if (t.ensembl_gene_id === link.source) {
-                                    this.genesFiltered.links.push(link);
-                                }
-                            });
-                        }
-                        if (n.ensembl_gene_id === link.source) {
-                            this.genesFiltered.nodes.forEach((s) => {
-                                if (s.ensembl_gene_id === link.target) {
-                                    this.genesFiltered.links.push(link);
-                                }
-                            });
+                        if (!dicL[link.source + link.target] &&
+                            !dicL[link.target + link.source]) {
+                            if (n.ensembl_gene_id === link.target) {
+                                this.genesFiltered.nodes.forEach((t) => {
+                                    if (t.ensembl_gene_id === link.source) {
+                                        dicL[link.target + link.source] = true;
+                                        this.genesFiltered.links.push(link);
+                                    }
+                                });
+                            }
+                            if (n.ensembl_gene_id === link.source) {
+                                this.genesFiltered.nodes.forEach((s) => {
+                                    if (s.ensembl_gene_id === link.target) {
+                                        dicL[link.source + link.target] = true;
+                                        this.genesFiltered.links.push(link);
+                                    }
+                                });
+                            }
                         }
                     }
                 });

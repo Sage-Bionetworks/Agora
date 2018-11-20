@@ -25,6 +25,7 @@ export class GeneNetworkComponent implements OnInit {
     @Input() noData: boolean;
     dataLoaded: boolean = false;
     networkData: GeneNetwork;
+    networkDataCopy: GeneNetwork;
     filter: boolean;
     selectedGeneData: GeneNetwork = {
         nodes: [],
@@ -157,13 +158,35 @@ export class GeneNetworkComponent implements OnInit {
             this.forceService.setData(linksList.items);
             this.dataService.loadNodes(this.currentGene)
             .then((dn: GeneNetwork) => {
-                this.filterlvl = dn.filterLvl;
-                this.selectedGeneData.nodes = dn.nodes.slice(1);
-                this.selectedGeneData.links = dn.links.slice().reverse();
-                this.selectedGeneData.origin = dn.origin;
-                this.dataLoaded = true;
-                this.networkData = dn;
+                this.geneInfo = this.geneService.getCurrentInfo();
+                this.networkData = this.forceService.getGeneOriginalList();
+                this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+                this.selectedGeneData.links = this.networkData.links.slice().reverse();
+                this.selectedGeneData.origin = this.networkData.origin;
+                this.filterlvl = this.networkData.filterLvl;
+                if (dn.links.length > 1000) {
+                    this.initialFilter();
+                } else {
+                    this.networkData = dn;
+                    this.dataLoaded = true;
+                }
             });
+        });
+    }
+
+    initialFilter() {
+        this.filterlvlN = this.filterlvlN + 1;
+        this.forceService.filterLink(this.filterlvlN).then((network) => {
+            if (network.links.length < 1000 || this.filterlvlN >= this.filterlvl - 1) {
+                this.networkData = network;
+                this.selectedGeneData.nodes = network.nodes.slice(1);
+                this.selectedGeneData.links = network.links.slice().reverse();
+                this.selectedGeneData.origin = network.origin;
+                this.dataLoaded = true;
+                this.filter = true;
+            } else {
+                this.initialFilter();
+            }
         });
     }
 
