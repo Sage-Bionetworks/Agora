@@ -85,7 +85,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             }
         });
         this.location.onPopState(() => {
-            this.navService.setOvMenuTabIndex(0);
+            // this.navService.setOvMenuTabIndex(0);
         });
 
         // Get the current clicked gene, always update
@@ -204,7 +204,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     default:
-                        this.navService.setOvMenuTabIndex(0);
+                        if (this.geneInfo.nominations) {
+                            this.navService.setOvMenuTabIndex(0);
+                        } else {
+                            this.navService.setOvMenuTabIndex(1);
+                        }
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -358,7 +362,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     ngOnDestroy() {
-        this.navService.setOvMenuTabIndex(0);
         if (this.subscription) {
             this.subscription.unsubscribe();
         }
