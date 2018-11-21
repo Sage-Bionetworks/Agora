@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
@@ -14,6 +15,10 @@ import {
 
 import { DataService, GeneService, NavigationService } from '../services';
 
+import { MockComponent } from 'ng-mocks';
+
+import { TabMenu } from 'primeng/tabmenu';
+
 describe('Component: Navbar', () => {
     let component: NavbarComponent;
     let navService: NavigationServiceStub;
@@ -22,7 +27,8 @@ describe('Component: Navbar', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NavbarComponent
+                NavbarComponent,
+                MockComponent(TabMenu)
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
@@ -42,5 +48,13 @@ describe('Component: Navbar', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a tab menu', () => {
+        const el = fixture.debugElement.query(By.css('p-tabMenu'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-tabMenu'));
+        expect(aEl.length).toEqual(1);
     });
 });

@@ -5,6 +5,7 @@ import {
     fakeAsync,
     tick
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -77,6 +78,14 @@ describe('Component: GenesList', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a table', () => {
+        const el = fixture.debugElement.query(By.css('p-table'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
+        expect(aEl.length).toEqual(1);
     });
 
     it('should load the table', fakeAsync(() => {

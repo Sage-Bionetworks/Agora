@@ -4,6 +4,7 @@ import {
     TestBed,
     fakeAsync
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -56,6 +57,14 @@ describe('Component: GeneSearch', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a section', () => {
+        const el = fixture.debugElement.query(By.css('section'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('section'));
+        expect(aEl.length).toEqual(1);
     });
 
     it('should focus search list', () => {

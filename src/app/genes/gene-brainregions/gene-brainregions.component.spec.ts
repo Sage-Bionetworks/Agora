@@ -1,10 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -73,5 +72,13 @@ describe('Component: GeneBR', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a table', () => {
+        const el = fixture.debugElement.query(By.css('table'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('table'));
+        expect(aEl.length).toEqual(1);
     });
 });

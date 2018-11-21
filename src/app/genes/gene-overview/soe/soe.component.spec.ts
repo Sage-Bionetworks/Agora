@@ -1,10 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -24,6 +23,8 @@ import { ApiService, DataService, ForceService, GeneService } from '../../../cor
 
 import { MockComponent } from 'ng-mocks';
 
+import { Table } from 'primeng/table';
+
 describe('Component: SOE', () => {
     let component: SOEComponent;
     let fixture: ComponentFixture<SOEComponent>;
@@ -39,7 +40,8 @@ describe('Component: SOE', () => {
         TestBed.configureTestingModule({
             declarations: [
                 SOEComponent,
-                MockComponent(SOEComponent)
+                MockComponent(SOEComponent),
+                MockComponent(Table)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -131,5 +133,13 @@ describe('Component: SOE', () => {
 
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
+    });
+
+    it('should have a table', () => {
+        const el = fixture.debugElement.query(By.css('p-table'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
+        expect(aEl.length).toEqual(1);
     });
 });

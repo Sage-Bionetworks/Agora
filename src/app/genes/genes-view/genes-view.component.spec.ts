@@ -1,5 +1,6 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import {
     RouterOutletStubComponent
@@ -30,5 +31,13 @@ describe('Component: GenesView', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have two router-outlets', () => {
+        const el = fixture.debugElement.query(By.css('router-outlet'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('router-outlet'));
+        expect(aEl.length).toEqual(2);
     });
 });

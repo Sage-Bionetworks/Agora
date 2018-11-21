@@ -1,10 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -26,6 +25,8 @@ import { MockComponent } from 'ng-mocks';
 
 import { ArraySortPipe } from '../../shared/pipes';
 
+import { Table } from 'primeng/table';
+
 describe('Component: GeneSimilar', () => {
     let component: GeneSimilarComponent;
     let fixture: ComponentFixture<GeneSimilarComponent>;
@@ -41,6 +42,7 @@ describe('Component: GeneSimilar', () => {
             declarations: [
                 GeneSimilarComponent,
                 MockComponent(GeneSimilarComponent),
+                MockComponent(Table),
                 ArraySortPipe
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
@@ -73,5 +75,13 @@ describe('Component: GeneSimilar', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have a table', () => {
+        const el = fixture.debugElement.query(By.css('p-table'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
+        expect(aEl.length).toEqual(1);
     });
 });
