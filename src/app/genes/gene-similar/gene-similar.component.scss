@@ -12,7 +12,8 @@
 }
 
 .overview-header {
-  text-align: center;
+  &.similar-page{
+    text-align: center;
     .fa-star::before {
         color: #FACFAF;
     }
@@ -37,6 +38,7 @@
             height: 100%;
         }
     }
+  }
 }
 .nomlist-list {
   margin-top: -0.1em;
