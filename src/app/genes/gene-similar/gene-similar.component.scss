@@ -48,6 +48,12 @@
 
   @include respond-to('ex-small') {
     background-size: 1330px 350px;
+    .ui-table-wrapper {
+      overflow-y: scroll;
+      table {
+        min-width: 900px;;
+      }
+    }
   }
 
   @include respond-to('small') {
