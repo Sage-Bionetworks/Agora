@@ -141,6 +141,8 @@ gene-search {
         position: relative;
         margin-bottom: 4em;
         @include respond-to('ex-small') {
+            height: initial;
+            margin-bottom: 0em;
             img{
                 width: 100%;
             }

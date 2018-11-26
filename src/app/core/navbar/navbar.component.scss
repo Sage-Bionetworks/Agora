@@ -122,8 +122,10 @@
                     top: 0px;
                     border-radius: 0px;
                     a {
+                        width: 100%;
                         span{
-                            color: #FFF
+                            color: #FFF;
+                            text-align: left;
                         }
                         span:after {
                             content: none;
