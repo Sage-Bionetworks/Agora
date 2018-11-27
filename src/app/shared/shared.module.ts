@@ -10,8 +10,10 @@ import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenubarModule } from 'primeng/menubar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -50,6 +52,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         // PrimeNG modules
         SharedModule,
         ButtonModule,
+        SplitButtonModule,
         CheckboxModule,
         OverlayPanelModule,
         DialogModule,
@@ -58,6 +61,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         PanelModule,
         TableModule,
         TabMenuModule,
+        PanelMenuModule,
         ProgressBarModule,
         MultiSelectModule,
         ProgressSpinnerModule
@@ -71,6 +75,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         // PrimeNG modules
         SharedModule,
         ButtonModule,
+        SplitButtonModule,
         CheckboxModule,
         OverlayPanelModule,
         DialogModule,
@@ -79,6 +84,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         PanelModule,
         TableModule,
         TabMenuModule,
+        PanelMenuModule,
         ProgressBarModule,
         MultiSelectModule,
         ProgressSpinnerModule,

@@ -1,6 +1,6 @@
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -17,6 +17,7 @@ import { DataService, GeneService, NavigationService } from '../services';
 
 import { MockComponent } from 'ng-mocks';
 
+import { SplitButton } from 'primeng/splitbutton';
 import { TabMenu } from 'primeng/tabmenu';
 
 describe('Component: Navbar', () => {
@@ -28,7 +29,8 @@ describe('Component: Navbar', () => {
         TestBed.configureTestingModule({
             declarations: [
                 NavbarComponent,
-                MockComponent(TabMenu)
+                MockComponent(TabMenu),
+                MockComponent(SplitButton)
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
@@ -44,17 +46,29 @@ describe('Component: Navbar', () => {
         fixture = TestBed.createComponent(NavbarComponent);
         navService = fixture.debugElement.injector.get(NavigationService);
         component = fixture.componentInstance;
+
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have a tab menu', () => {
-        const el = fixture.debugElement.query(By.css('p-tabMenu'));
-        expect(el).toBeDefined();
+    it('should have a desktop menu', fakeAsync(() => {
+        component.showDesktopMenu = true;
+        component.showMobileMenu = false;
+        fixture.detectChanges();
 
-        const aEl = fixture.debugElement.queryAll(By.css('p-tabMenu'));
-        expect(aEl.length).toEqual(1);
+        const el = fixture.debugElement.query(By.css('p-tabMenu'));
+        expect(el).not.toBeNull();
+    }));
+
+    it('should have a mobile menu', () => {
+        component.showDesktopMenu = false;
+        component.showMobileMenu = true;
+        fixture.detectChanges();
+
+        const el = fixture.debugElement.query(By.css('p-splitButton'));
+        expect(el).not.toBeNull();
     });
 });

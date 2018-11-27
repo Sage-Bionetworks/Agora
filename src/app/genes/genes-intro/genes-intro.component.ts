@@ -8,7 +8,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class GenesIntroComponent {
     display: boolean = false;
-    showVideo: boolean = false;
+    showVideo: boolean = true;
 
     showDialog() {
         this.display = true;

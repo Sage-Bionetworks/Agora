@@ -41,13 +41,13 @@
             left: 84.5%;
         }
         @include respond-to('small') {
-            left: 93%;
+            left: 90%;
         }
         @include respond-to('medium') {
-            left: 93.5%;
+            left: 90%;
         }
         @include respond-to('large') {
-            left: 92.5%;
+            left: 92.0%;
         }
         @include respond-to('ex-large') {
             left: 91.5%;
