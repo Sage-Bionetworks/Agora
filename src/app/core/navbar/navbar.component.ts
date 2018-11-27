@@ -10,6 +10,8 @@ import { RouterEvent, NavigationEnd } from '@angular/router';
 import { NavigationService } from '../services';
 
 import { MenuItem } from 'primeng/api';
+import { SplitButton } from 'primeng/splitbutton';
+import { TabMenu } from 'primeng/tabmenu';
 
 @Component({
   selector: 'navbar',
@@ -18,8 +20,8 @@ import { MenuItem } from 'primeng/api';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit, AfterContentChecked {
-    @ViewChild('navMenu') menu: MenuItem[];
-    @ViewChild('mobileMenu') mobileMenu: MenuItem[];
+    @ViewChild('navMenu') menu: TabMenu;
+    @ViewChild('mobileMenu') mobileMenu: SplitButton;
     items: MenuItem[];
     mobileItems: MenuItem[];
     activeItem: MenuItem;
@@ -91,6 +93,13 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     goToRoute(path: string, outlets?: any) {
         this.navService.goToRoute(path, outlets);
+    }
+
+    showMenu(event: Event) {
+        // Mimics the splitbutton dropdown button click
+        this.mobileMenu.onDropdownClick.emit(event);
+        this.mobileMenu.dropdownClick = true;
+        this.mobileMenu.show();
     }
 
     updateVars() {

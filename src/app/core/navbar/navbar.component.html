@@ -5,6 +5,15 @@
             <p-tabMenu #navMenu [model]="items" [activeItem]="activeItem" (click)="activateMenu()">
             </p-tabMenu>
         </div>
-        <p-splitButton label="MENU" icon="" #mobileMenu *ngIf="showMobileMenu" [model]="mobileItems" [ngClass]="'mobile-menu'" [appendTo]="menuCol" dir="rtl"></p-splitButton>
+        <p-splitButton #mobileMenu
+            label="MENU"
+            icon=""
+            *ngIf="showMobileMenu"
+            [model]="mobileItems"
+            [ngClass]="'mobile-menu'"
+            [appendTo]="menuCol"
+            dir="rtl"
+            (onClick)="showMenu($event)">
+        </p-splitButton>
     </div>
 </div>
