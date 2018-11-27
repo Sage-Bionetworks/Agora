@@ -38,7 +38,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() label: string = 'box-plot';
     @Input() dim: any;
     @Input() group: any;
-    @Input() rcRadius: number = 13.6;
+    @Input() rcBigRadius: number = 12.5;
+    @Input() rcSmallRadius: number = 9;
+    @Input() rcRadius: number = 12.5;
     @Input() boxRadius: number = 9;
     display: boolean = false;
     counter: number = 0;
@@ -94,6 +96,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.updateCircleRadius();
         this.initChart();
     }
 
@@ -104,6 +107,14 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     getModel(): string {
         const model = this.geneService.getCurrentModel();
         return (model) ? model : '';
+    }
+
+    updateCircleRadius() {
+        if (window.innerWidth < 768) {
+            this.rcRadius = this.rcSmallRadius;
+        } else {
+            this.rcRadius = this.rcBigRadius;
+        }
     }
 
     initChart() {
@@ -307,7 +318,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     .insert('circle', ':last-child')
                     .attr('cx', lineCenter.attr('x1'))
                     .attr('cy', fcy)
-                    .attr('fill', '#FCA79A')
+                    .attr('fill', '#F47E6C')
                     .style('stroke', '#F47E6C')
                     .style('stroke-width', 3)
                     .attr('r', self.rcRadius)
@@ -360,6 +371,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         clearTimeout(this.resizeTimer);
         this.resizeTimer = setTimeout(function() {
+            self.updateCircleRadius();
+
             self.chart
                 .width(self.boxPlot.nativeElement.parentElement.offsetWidth)
                 .height(self.boxPlot.nativeElement.offsetHeight);
