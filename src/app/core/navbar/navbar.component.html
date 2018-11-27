@@ -1,20 +1,10 @@
-<div class="row nav-row vertical-align">
-    <div class="col-md-3 col-sm-3 col-3 logo-bg" (click)="goHome()">
-        <img src="/assets/img/agora-logo.svg">
-    </div>
-    <div *ngIf="!mobileVisible;else closeMenu" class="pull-right mobile-menu-btn" (click)="toggleMenu()">
-        <img src="/assets/icon/menu-lines.svg" alt="menu">
-        MENU
-    </div>
-    <ng-template #closeMenu>
-        <div class="pull-right mobile-menu-btn close" (click)="toggleMenu()">
-            <img src="/assets/icon/menu-close.svg" alt="">
-        </div>
-    </ng-template>
-    <div class="col-12 col-md-9 col-sm-9 col-9 tab-menu-col">
-        <div class="pull-right mobile-menu" [ngClass]="{'visible': mobileVisible}">
+<div class="row nav-row vertical-align" (window:resize)="onResize()">
+    <div class="col-md-12 col-sm-12 col-12 logo-bg" #menuCol>
+        <img src="/assets/img/agora-logo.svg" (click)="goHome()">
+        <div class="desktop-menu" *ngIf="showDesktopMenu">
             <p-tabMenu #navMenu [model]="items" [activeItem]="activeItem" (click)="activateMenu()">
             </p-tabMenu>
         </div>
+        <p-splitButton label="MENU" icon="" #mobileMenu *ngIf="showMobileMenu" [model]="mobileItems" [ngClass]="'mobile-menu'" [appendTo]="menuCol" dir="rtl"></p-splitButton>
     </div>
 </div>

@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    ViewEncapsulation,
+    ViewChild,
+    AfterContentChecked
+} from '@angular/core';
 import { RouterEvent, NavigationEnd } from '@angular/router';
 
 import { NavigationService } from '../services';
@@ -11,22 +17,47 @@ import { MenuItem } from 'primeng/api';
   styleUrls: [ './navbar.component.scss' ],
   encapsulation: ViewEncapsulation.None
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterContentChecked {
     @ViewChild('navMenu') menu: MenuItem[];
+    @ViewChild('mobileMenu') mobileMenu: MenuItem[];
     items: MenuItem[];
+    mobileItems: MenuItem[];
     activeItem: MenuItem;
-    mobileVisible: boolean = false;
+    oldActiveItem: MenuItem;
+    showMobileMenu: boolean = false;
+    showDesktopMenu: boolean = false;
+    firstTimeCheck: boolean = true;
+
+    private resizeTimer;
 
     constructor(
         private navService: NavigationService,
     ) { }
 
     ngOnInit() {
+        // Main Menu
         this.items = [
             { label: 'Gene Search' },
             { label: 'Nominated Targets' },
             { label: 'Teams' }
         ];
+
+        // Secondary Menu
+        this.mobileItems = [
+            { label: 'Gene Search', routerLink: ['genes'] },
+            { label: 'Nominated Targets', command: () => {
+                this.goToRoute('/genes', {
+                    outlets: {
+                        'genes-router': [ 'genes-list' ],
+                        'gene-overview': null
+                }});
+            }},
+            { label: 'Teams', routerLink: ['teams-contributing'] },
+            { label: 'About', routerLink: ['about'] },
+            { label: 'Help', routerLink: ['help'] },
+            { label: 'Terms & Privacy', routerLink: ['terms'] }
+        ];
+
         this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
                 if (re.url === '/genes' || re.url === '/') {
@@ -42,21 +73,16 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    activateMenu() {
-        if (!this.activeItem || (this.activeItem.label !== this.menu['activeItem'].label)) {
-            this.activeItem = this.menu['activeItem'];
-            if (this.activeItem.label === 'Gene Search') {
-                this.goToRoute('genes');
-            } else if (this.activeItem.label === 'Nominated Targets') {
-                this.goToRoute('/genes', {
-                    outlets: {
-                        'genes-router': [ 'genes-list' ],
-                        'gene-overview': null
-                }});
-            } else {
-                this.goToRoute('teams-contributing');
-            }
+    ngAfterContentChecked() {
+        // Small size
+        if (this.firstTimeCheck) {
+            this.firstTimeCheck = false;
+            this.updateVars();
         }
+    }
+
+    activateMenu() {
+        this.updateActiveItem(true);
     }
 
     goHome() {
@@ -65,12 +91,56 @@ export class NavbarComponent implements OnInit {
 
     goToRoute(path: string, outlets?: any) {
         this.navService.goToRoute(path, outlets);
-        setTimeout(() => {
-            this.mobileVisible = false;
-        }, 300);
     }
 
-    toggleMenu() {
-        this.mobileVisible = this.mobileVisible ? false : true;
+    updateVars() {
+        // Small size
+        if (window.innerWidth < 768) {
+            this.showMobileMenu = true;
+            this.showDesktopMenu = false;
+        } else {
+            this.updateActiveItem();
+            this.showMobileMenu = false;
+            this.showDesktopMenu = true;
+        }
+    }
+
+    updateActiveItem(route?: boolean) {
+        let label = '';
+        if (!this.activeItem) {
+            if (this.oldActiveItem) {
+                label = this.oldActiveItem.label;
+            }
+        } else {
+            label = this.activeItem.label;
+        }
+
+        if (this.menu) {
+            if (!this.activeItem || (label !== this.menu['activeItem'].label)) {
+                this.activeItem = this.menu['activeItem'];
+                if (this.activeItem && route) {
+                    if (this.activeItem.label === 'Gene Search') {
+                        this.goToRoute('genes');
+                    } else if (this.activeItem.label === 'Nominated Targets') {
+                        this.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': [ 'genes-list' ],
+                                'gene-overview': null
+                        }});
+                    } else {
+                        this.goToRoute('teams-contributing');
+                    }
+                }
+            }
+        }
+    }
+
+    onResize(event?: any) {
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(function() {
+            self.updateVars();
+        }, 100);
     }
 }

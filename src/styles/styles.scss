@@ -8,8 +8,9 @@
 @import "~bootstrap/scss/utilities/flex";
 @import "~dc/style/dc.scss";
 @import "~primeicons/primeicons.css";
-@import "~font-awesome/css/font-awesome.min.css";
 @import "~primeng/resources/primeng.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
+
 // 2. Helpers (variables, mixins, functions, ...)
 @import "../assets/css/helpers/variables";
 @import "../assets/css/helpers/mixins";
@@ -40,15 +41,11 @@
 html {
     position: relative;
     min-height: 100%;
+    overflow-y: hidden;
 }
 
 html, body{
-    @include lato-font('normal');
-    @include respond-to('ex-small') {
-        min-width: 100vw;
-    }
-
-    min-width: 380px;
+    min-width: 360px;
     padding: 0;
     margin: 0;
     height: 100vh;
@@ -72,20 +69,7 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
-}
-
-ng-scrollbar {
-    .-vertical {
-        top: 14px;
-        right: 10px;
-        bottom: 14px;
-        background-color: rgba(0,0,0,.1);
-    }
-
-    .ng-scrollbar-view {
-        overflow-x: hidden;
-        overflow-y: scroll;
-    }
+    overflow: auto;
 }
 
 footer, .page-wrap:after {
@@ -496,9 +480,9 @@ p-dialog {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     display: block;
     width: 100%;
 }

@@ -12,23 +12,6 @@
     background: #FFFFFF;
     z-index: 100000;
 
-    .ui-tabmenuitem {
-        background-color: white !important;
-        border: none;
-        height: 80px;
-
-        a {
-            padding: 0 1em !important;
-            height: 80px;
-
-            span {
-                display: block;
-                line-height: 80px;
-                height: 80px;
-            }
-        }
-    }
-
     .ui-state-active {
         a > span {
             @include lato-font('bold');
@@ -48,6 +31,12 @@
         }
     }
 
+    p-splitButton {
+        position: absolute;
+        right: 10px;
+        top: 27px;
+    }
+
     span {
         @include lato-font('normal');
         font-size: $font-size-xx-regular;
@@ -61,23 +50,33 @@
 
 .logo-bg {
     background: #FFFFFF;
-    width: 169px;
-    height: 80px;
+    height: 87px;
     cursor: pointer;
 
     > img {
-        height: 80px;
+        position: absolute;
+        float: left;
+        height: 87px;
         width: 169px;
-        margin: auto;
         display: block;
         padding-top: 12px;
         padding-bottom: 12px;
+        left: 6%;
         cursor: pointer;
     }
 }
 
 .mobile-menu-btn {
-    display: none;
+    @include lato-font('regular');
+    font-size: $font-size-xx-regular;
+    padding-right: 15px;
+    cursor: pointer;
+    z-index: 10000;
+
+    .mobile-menu-img {
+        padding-right: 5px;
+    }
+
     @include respond-to('ex-small') {
         display: initial;
         position: absolute;
@@ -86,61 +85,146 @@
             right: 20px;
         }
     }
+    @include respond-to('small') {
+        display: initial;
+        position: absolute;
+        right: 10px;
+        &.close{
+            right: 20px;
+        }
+    }
+    @include respond-to('medium') {
+        display: none;
+    }
 }
-.mobile-menu{
+
+.desktop-menu {
+
     .footer-span {
         display: none;
     }
+
     .middle-line{
         display: none;
     }
-    @include respond-to('ex-small') {
-        transition: all .2s ease-in-out;
-        transform: scaleY(0);
+
+    .ui-tabmenu {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #3C4A63;
-        &.visible{
-            transform: scaleY(1);
+        right: 0px;
+        top: 0px;
+        height: 100%;
+        padding-right: calc(5.5vw);
+
+        @include respond-to('small') {
+            padding-right: calc(0.2vw);
         }
-        .ui-tabmenu{
-            padding: 0;
-            height: calc(100vh - 70px);
-            background-color: #3C4A62;
-            .ui-tabmenu-nav {
-                background-color: #3C4A63;
-                padding: 0;
-                .ui-tabmenuitem {
-                    background-color: #3C4A63!important;
-                    color:#FFF;
-                    float: none ;
-                    margin: 0;
-                    padding: 0;
-                    top: 0px;
-                    border-radius: 0px;
-                    a {
-                        width: 100%;
-                        span{
-                            color: #FFF;
-                            text-align: left;
-                        }
-                        span:after {
-                            content: none;
-                        }
-                    }
-                    &.ui-state-active{
-                        background-color: #FCCB6F!important;
-                        a {
-                            span {
-                                color: #3C4A63;
-                                font-weight: 400;
-                            }
-                        }
-                    }
-                }
+        @include respond-to('medium') {
+            padding-right: calc(5.5vw);
+        }
+    }
+
+    .ui-tabmenu-nav {
+        float: right;
+    }
+
+    .ui-tabmenuitem {
+        background-color: white !important;
+        border: none;
+        height: 80px;
+
+        a {
+            padding: 0 1em !important;
+            height: 80px;
+
+            span {
+                display: block;
+                line-height: 80px;
+                height: 80px;
+            }
+        }
+    }
+}
+
+.mobile-menu {
+    float: right;
+
+    button {
+        margin: 0px;
+        border-color: transparent;
+        background: white;
+
+        .ui-button-text {
+            padding-left: 0px !important;
+        }
+    }
+
+    .ui-button-icon-only, .ui-button-text-only {
+        outline: none;
+    }
+
+    .ui-panelmenu-header {
+        float: right;
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+    }
+
+    .ui-button-icon-left:before {
+        content: url('/assets/icon/bars_icon.svg');
+    }
+}
+
+.ui-menu.ui-menu-dynamic {
+    background-color: #3C4A63;
+    left: 0px !important;
+    width: 100%;
+    height: calc(100vh - #{$navbar-height});
+    top: $navbar-height !important;
+    padding: 0px;
+    margin: 0px;
+    overflow-y: scroll;
+
+    span {
+        text-transform: uppercase;
+        color: white;
+    }
+
+    li:nth-child(3) > a {
+        :after {
+            content: '';
+            border-bottom: 1px solid #E0E0E0 !important;
+            display: block;
+            position: relative;
+            bottom: -1px;
+        }
+    }
+
+    li:nth-child(4) > a > span,
+    li:nth-child(5) > a > span,
+    li:nth-child(6) > a > span {
+        color: #D3D5DB;
+    }
+
+    li {
+        text-align: left;
+        text-align-last: left;
+        height: 90px !important;
+        line-height: 90px;
+        text-transform: uppercase;
+        margin: 0px;
+
+        a {
+            width: 100%;
+            padding-left: 33px !important;
+            padding-right: 33px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+        :hover {
+            background-color: #FCCB6F !important;
+
+            span {
+                color: #3C4A63 !important;
             }
         }
     }
