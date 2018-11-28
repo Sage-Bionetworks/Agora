@@ -227,6 +227,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         );
     }
 
+    getDownloadFileName(suffix: string): string {
+        return this.gene.hgnc_symbol + ' ' + suffix + '_' + this.geneService.getCurrentModel();
+    }
+
     registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
         this.chartService.addChartInfo(
             label,
