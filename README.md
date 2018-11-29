@@ -41,6 +41,7 @@ npm install -g rimraf
 npm install -g typescript
 npm install -g cross-env
 npm install -g artillery
+npm install -g opencollective
 ```
 ## Running the app
 
@@ -354,7 +355,7 @@ Elastic beanstalk uses files in the
 [.ebextensions folder](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html)
 to configure the environment that the Agora application runs in.
 The .ebextensions files are packaged up with Agora and deployed to beanstalk
-by the CI system. 
+by the CI system.
 
 ## Builds
 * https://travis-ci.org/Sage-Bionetworks/Agora
