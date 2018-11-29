@@ -128,19 +128,24 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             if (!this.activeItem || (label !== this.menu['activeItem'].label)) {
                 this.activeItem = this.menu['activeItem'];
                 if (this.activeItem && route) {
-                    if (this.activeItem.label === 'Gene Search') {
-                        this.goToRoute('genes');
-                    } else if (this.activeItem.label === 'Nominated Targets') {
-                        this.goToRoute('/genes', {
-                            outlets: {
-                                'genes-router': [ 'genes-list' ],
-                                'gene-overview': null
-                        }});
-                    } else {
-                        this.goToRoute('teams-contributing');
-                    }
+                    this.changeRoute(this.activeItem.label);
                 }
             }
+        }
+    }
+
+    changeRoute(path: string) {
+        if (path === 'Gene Search') {
+            this.goToRoute('genes');
+        } else if (path === 'Nominated Targets') {
+            this.goToRoute('/genes', {
+                outlets: {
+                    'genes-router': [ 'genes-list' ],
+                    'gene-overview': null
+                }
+            });
+        } else if (path === 'Teams') {
+            this.goToRoute('teams-contributing');
         }
     }
 
