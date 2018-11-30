@@ -114,6 +114,10 @@ input::-ms-clear {
     display: none;
 }
 
+textarea::-ms-clear {
+    display: none;
+}
+
 p-checkbox {
     .ui-state-focus.ui-state-active {
         background: #2F8E94 !important;
@@ -167,7 +171,7 @@ p-dialog {
 
         .pi-times:before {
             color: #5BB0B5;
-            content: url("/assets/icon/close_modal_icon.png");
+            content: url("/assets/icon/close-modal-icon.png");
         }
     }
 
