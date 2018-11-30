@@ -41,6 +41,7 @@
 html {
     position: relative;
     min-height: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
     height: 100vh;
 }
@@ -69,7 +70,8 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     min-height: 100%;
 }
 
