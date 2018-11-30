@@ -67,6 +67,20 @@ describe('Component: GeneSearch', () => {
         expect(aEl.length).toEqual(1);
     });
 
+    it('should have a textarea element', () => {
+        const el = fixture.debugElement.query(By.css('textarea'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('textarea'));
+        expect(aEl.length).toEqual(1);
+    });
+
+    it('should have a placeholder for the textarea', () => {
+        const el = fixture.debugElement.query(By.css('textarea'));
+        expect(el.nativeElement.placeholder).not.toBeNull();
+        expect(el.nativeElement.placeholder).toEqual('Search by gene symbol or ensembl id');
+    });
+
     it('should focus search list', () => {
         const sfSpy = spyOn(component, 'focusSearchList').and.callThrough();
         component.focusSearchList(true);

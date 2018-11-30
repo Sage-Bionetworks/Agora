@@ -10,7 +10,7 @@
             icon=""
             *ngIf="showMobileMenu"
             [model]="mobileItems"
-            [ngClass]="'mobile-menu'"
+            [ngClass]="getMobileClass()"
             [appendTo]="menuCol"
             dir="rtl"
             (onClick)="showMenu($event)">

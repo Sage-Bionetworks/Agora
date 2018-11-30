@@ -55,7 +55,13 @@ export class GeneSearchComponent implements OnInit {
             // If you add a complete callback, it is never called here
             .subscribe((data: GeneInfosResponse) => {
                 this.isSearching = false;
-                this.results = (data.items) ? data.items : [];
+                if (data.isEnsembl) {
+                    // It is safe to get the first index here because there will be only
+                    // one match when using the ensembl id
+                    this.viewGene(data.items[0]);
+                } else {
+                    this.results = (data.items) ? data.items : [];
+                }
             }, (error) => {
                 console.log('Invalid search!: ' + error.message);
             });

@@ -135,9 +135,12 @@
     outline: none;
 
     // Input placehold for search
+    :-moz-placeholder,
     ::-moz-placeholder,
     ::-ms-input-placeholder,
     ::-webkit-input-placeholder {
+        white-space:pre-line;
+        position:relative;
         color: #6C7489;
     }
 
