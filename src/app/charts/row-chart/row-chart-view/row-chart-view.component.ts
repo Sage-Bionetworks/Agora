@@ -319,9 +319,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 translateString.split(',') :
                 translateString.split(' ');
             const transfX = parseFloat(d3.select(el).select('svg').style('width')) - pRigth;
+            const ftransfx = (isNaN(transfX)) ? 0.0 : transfX;
             d3.select(this)
                 .attr('transform', () => {
-                    return 'translate(' + transfX + ',' + parseFloat(translate[1]) + ')';
+                    return 'translate(' + ftransfx + ',' + parseFloat(translate[1]) + ')';
                 });
         });
     }
@@ -352,10 +353,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const currentStep = step * i;
                 const transfX = parseFloat(newSvg.style('width')) -
                     parseFloat(d3.select(el).style('padding-right'));
+                const ftransfx = isNaN(transfX) ? 0 : transfX;
                 d3.select(this)
                     .attr('text-anchor', 'end')
                     .attr('transform', () => {
-                        return 'translate(' + transfX + ',' + (currentStep + (vSpacing)) + ')';
+                        return 'translate(' + ftransfx + ',' + (currentStep + (vSpacing)) + ')';
                     })
                     .on('mouseover', function() {
                         self.div.transition()
