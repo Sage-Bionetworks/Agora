@@ -38,6 +38,9 @@ $text-color-chart-label: #6D7078;
 $text-color-normal: #24334F;
 $text-color-title: #3F5EAB;
 
+$menu-dark: #3C4A63;
+$menu-inactive: rgba(255, 255, 255, 0.05);;
+
 $breakpoints: (
     'ex-small': (max-width: 600px),
     'small': (min-width: 600px),

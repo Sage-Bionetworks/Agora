@@ -41,6 +41,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() dataLoaded: boolean = false;
     @ViewChild('overviewMenu') menu: MenuItem[];
 
+    showMobileMenu: boolean = false;
+    showDesktopMenu: boolean = false;
+    firstTimeCheck: boolean = true;
+
     extras: NavigationExtras = {
         relativeTo: this.navService.getRoute(),
         skipLocationChange: true
@@ -52,6 +56,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     items: MenuItem[];
     neverActivated: boolean = true;
     disableMenu: boolean = false;
+
+    private resizeTimer;
+    private mobileOpen: boolean = true;
 
     constructor(
         private location: PlatformLocation,
@@ -67,7 +74,26 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         this.items = [
             { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
             { label: 'SUMMARY', disabled: this.disableMenu },
-            { label: 'EVIDENCE', disabled: this.disableMenu },
+            { label: 'EVIDENCE',
+                disabled: this.disableMenu,
+                items: [
+                    {
+                        label: 'RNA'
+                    },
+                    {
+                        label: 'Protein'
+                    },
+                    {
+                        label: 'Metabolomics'
+                    },
+                    {
+                        label: 'Single Cell RNA-Seq'
+                    },
+                    {
+                        label: 'Genomic'
+                    }
+            ]
+            },
             { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
@@ -128,25 +154,48 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     ngAfterContentChecked() {
+        // Small size
+        if (this.firstTimeCheck) {
+            this.firstTimeCheck = false;
+            this.updateVars();
+        }
         if (this.menu && this.neverActivated) {
-            this.activateMenu();
+            this.activateMenu(null);
         }
     }
 
-    activateMenu() {
+    updateVars() {
+        // Small size
+        if (window.innerWidth < 768) {
+            this.showMobileMenu = true;
+            this.showDesktopMenu = false;
+        } else {
+            this.showMobileMenu = false;
+            this.showDesktopMenu = true;
+        }
+    }
+
+    mobileActivate() {
+        this.mobileOpen = !this.mobileOpen;
+        this.activateMenu(null);
+    }
+
+    activateMenu(event) {
         d3.selectAll('.mc-tooltip, .bp-tooltip, .bp-axis-tooltip, .rc-tooltip')
             .remove();
 
         if (((!this.disableMenu && ((this.activeItem && this.menu['activeItem'])
             ? (this.activeItem.label !== this.menu['activeItem'].label) : false)
-            ) || this.neverActivated) && this.dataLoaded) {
+            ) || this.neverActivated) && this.dataLoaded || event) {
             this.neverActivated = false;
             this.disableMenu = true;
             this.items.forEach((i) => {
                 i.disabled = true;
             });
 
-            this.activeItem = this.menu['activeItem'];
+            this.activeItem =
+            this.menu['activeItem'] ? this.menu['activeItem'] :
+            event ? {label: event.target.textContent} : {label: this.isNominatedTargetMenu()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'NOMINATION DETAILS':
@@ -359,6 +408,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     isNominatedTarget(): string {
         return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
+    }
+
+    isNominatedTargetMenu(): string {
+        return (this.geneInfo && this.geneInfo.nominations) ? 'NOMINATION DETAILS ' : 'SUMMARY';
+    }
+
+    onResize(event?: any) {
+        const self = this;
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(function() {
+            self.updateVars();
+        }, 100);
     }
 
     ngOnDestroy() {

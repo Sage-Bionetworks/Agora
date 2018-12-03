@@ -88,6 +88,91 @@
         margin-right: 2%;
     }
 }
+.mobilemenu-container{
+    .overview-tab-menu-mobile {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        background-color: $menu-dark;
+        .ui-tabmenu-nav {
+            padding: 0;
+            li{
+                width: 100%;
+                &.ui-state-default{
+                    background-color: $menu-inactive;
+                    margin: 0;
+                }
+                &.ui-state-active{
+                    background-color: initial;
+                }
+                &.ui-state-active{
+                    a::before {
+                        content: url('/assets/icon/minus_icon.png');
+                        transform: scale(.55);
+                        float: right;
+                        margin-right: -16px;
+                    }
+                }
+                a{
+                    width: 100%;
+                    span{
+                        color: #ffffff;
+                    }
+                }
+                .ui-panelmenu-icon {
+                    float: right;
+                }
+            }
+            .ui-panelmenu-content{
+                padding: 0;
+                .ui-submenu-list{
+                    li{
+                        a{
+                            span{
+                                color:#fff;
+                                padding-left: 55px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.close{
+        .overview-tab-menu-mobile{
+            height: 38px;
+            .ui-tabmenu-nav {
+                padding: 0;
+                li{
+                    width: 100%;
+                    &.ui-state-default{
+                        background-color: $menu-inactive;
+                        margin: 0;
+                        display: none;
+                    }
+                    &.ui-state-active{
+                        display: inline;
+                        background-color: initial;
+                    }
+                    &.ui-state-active{
+                        a{
+                            width: 100%;
+                        }
+                        a::before {
+                            content: url('/assets/icon/plus_icon.png');
+                            transform: scale(.55);
+                            float: right;
+                            margin-right: -16px;
+                            padding-top: 0px;
+                            margin-top: -12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 .overview-tab-menu {
     padding: 0px !important;
