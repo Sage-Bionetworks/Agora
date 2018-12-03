@@ -6,7 +6,8 @@ import {
     ElementRef,
     Input,
     OnDestroy,
-    AfterViewInit
+    AfterViewInit,
+    AfterContentChecked
 } from '@angular/core';
 
 import { PlatformLocation } from '@angular/common';
@@ -33,7 +34,9 @@ d3.selection.prototype['nodes'] = function() {
     styleUrls: [ './row-chart-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
+export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
+    AfterContentChecked {
+
     @Input() title: string;
     @Input() chart: any;
     @Input() info: any;
@@ -51,6 +54,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     currentTissue: string;
     display: boolean = false;
     canDisplay: boolean = false;
+    canResize: boolean = false;
     colors: string[] = ['#5171C0'];
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -89,6 +93,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         this.initChart();
+    }
+
+    ngAfterContentChecked() {
+        this.canResize = true;
     }
 
     ngOnDestroy() {
@@ -158,11 +166,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .on('pretransition', (chart) => {
                     if (self.canDisplay) {
                         self.updateXDomain(chart);
+                        const width = (isNaN(chart.width())) ? 450 : chart.width();
+                        const height = (isNaN(chart.height())) ? 450 : chart.height();
                         self.updateChartExtras(
                             chart,
                             chart.svg(),
-                            chart.width(),
-                            chart.height()
+                            width,
+                            height
                         );
                     }
                 })
@@ -192,12 +202,12 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
         const textSelection = (svg || chart.svg())
-                .append('text')
-                .attr('class', 'x-axis-label')
-                .attr('text-anchor', 'middle')
-                .attr('x', width / 2)
-                .attr('y', height - 10)
-                .text(text);
+            .append('text')
+            .attr('class', 'x-axis-label')
+            .attr('text-anchor', 'middle')
+            .attr('x', width / 2)
+            .attr('y', height - 10)
+            .text(text);
 
         this.adjustXLabel(chart, textSelection, width, height);
     }
@@ -218,7 +228,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
     updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
         let rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
-        rectHeight = (isNaN(rectHeight) ? 52 : rectHeight);
+        rectHeight = (isNaN(rectHeight)) ? 52 : rectHeight;
         const squareSize = 18;
         const lineWidth = 60;
 
@@ -309,7 +319,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     adjustTextToElement(el: HTMLElement) {
         d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
-            const pRigth = parseInt(d3.select(el).style('padding-right'), 10);
+            const pRigth = isNaN(parseInt(d3.select(el).style('padding-right'), 10)) ?
+                15 : parseInt(d3.select(el).style('padding-right'), 10);
             const transfString = d3.select(this).attr('transform');
             const translateString = transfString.substring(
                 transfString.indexOf('(') + 1,
@@ -318,7 +329,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
             const translate = (translateString.split(',').length > 1) ?
                 translateString.split(',') :
                 translateString.split(' ');
-            const transfX = parseFloat(d3.select(el).select('svg').style('width')) - pRigth;
+            const svgWidth = (isNaN(parseFloat(d3.select(el).select('svg').style('width')))) ?
+                450 : parseFloat(d3.select(el).select('svg').style('width'));
+            const transfX = svgWidth - pRigth;
             const ftransfx = (isNaN(transfX)) ? 0.0 : transfX;
             d3.select(this)
                 .attr('transform', () => {
@@ -353,7 +366,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const currentStep = step * i;
                 const transfX = parseFloat(newSvg.style('width')) -
                     parseFloat(d3.select(el).style('padding-right'));
-                const ftransfx = isNaN(transfX) ? 0 : transfX;
+                const ftransfx = (isNaN(transfX)) ? 0 : transfX;
                 d3.select(this)
                     .attr('text-anchor', 'end')
                     .attr('transform', () => {
@@ -423,7 +436,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 if (gene) {
                     const val = chart.x()(gene.ci_l);
-                    return (isNaN(val) ? 0.0 : val);
+                    return (isNaN(val)) ? 0.0 : val;
                 } else {
                     // return chart.x()(d.value.logfc) - lineWidth / 2;
                     return 0.0;
@@ -439,7 +452,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 if (gene) {
                     const val = chart.x()(gene.ci_r);
-                    return (isNaN(val) ? 0.0 : val);
+                    return (isNaN(val)) ? 0.0 : val;
                 } else {
                     // return chart.x()(d.value.logfc) + lineWidth / 2;
                     return 0.0;
@@ -487,7 +500,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const val = (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels +
                     dotPixels) : scaledX + (ciValue.toPrecision(2).length * mPixels +
                     dotPixels);
-                return (isNaN(val) ? 0.0 : val);
+                return (isNaN(val)) ? 0.0 : val;
             })
             .attr('y', () => {
                 return yPos + 5;
@@ -517,11 +530,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
         chart
             .selectAll('g.row rect')
             .attr('transform', function(d) {
-                const val = (chart.x()(d.value.logfc) - (squareSize / 2));
+                const val = (isNaN((chart.x()(+d.value.logfc) - (squareSize / 2)))) ?
+                    0.0 : (chart.x()(+d.value.logfc) - (squareSize / 2));
                 return 'translate(' +
                     // X translate
-                    (isNaN(val) ? 0.0 : val) +
-                    ',' +
+                    val + ',' +
                     // Y translate
                     ((rectHeight / 2) - (squareSize / 2)) +
                 ')';
@@ -539,24 +552,25 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onResize() {
         const self = this;
+        if (this.canResize) {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => {
+                self.chart
+                    .width(
+                        self.rowChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
+                    )
+                    .height(self.rowChart.nativeElement.offsetHeight  - (self.paddingUD * 2));
 
-        clearTimeout(this.resizeTimer);
-        this.resizeTimer = setTimeout(() => {
-            self.chart
-                .width(
-                    self.rowChart.nativeElement.parentElement.offsetWidth - (self.paddingLR * 2)
-                )
-                .height(self.rowChart.nativeElement.offsetHeight  - (self.paddingUD * 2));
+                if (self.chart.rescale) {
+                    self.chart.rescale();
+                }
 
-            if (self.chart.rescale) {
-                self.chart.rescale();
-            }
+                // Adjust the text as the svg reduces its width
+                self.adjustTextToElement(self.stdCol.nativeElement);
 
-            // Adjust the text as the svg reduces its width
-            self.adjustTextToElement(self.stdCol.nativeElement);
-
-            // Run code here, resizing has "stopped"
-            self.chart.redraw();
-        }, 100);
+                // Run code here, resizing has "stopped"
+                self.chart.redraw();
+            }, 100);
+        }
     }
 }
