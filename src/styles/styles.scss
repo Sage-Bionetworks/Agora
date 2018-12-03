@@ -53,14 +53,7 @@ html, body{
 }
 
 .page-wrap {
-    min-height: 100%;
-    // Equal to footer height
-    margin-bottom: -$footer-height;
-}
-
-.page-wrap:after {
-    content: '';
-    display: block;
+    min-height: calc(100vh - #{$footer-height});
 }
 
 body {
@@ -75,7 +68,7 @@ body {
     min-height: 100%;
 }
 
-footer, .page-wrap:after {
+footer {
     width: 100%;
     line-height: $footer-height;
     height: $footer-height;

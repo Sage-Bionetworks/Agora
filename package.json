@@ -167,7 +167,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
     "d3": "^5.7.0",
-    "dc": "^3.0.8",
+    "dc": "^3.0.9",
     "debug": "^4.1.0",
     "doiuse": "^4.2.0",
     "dom-to-image": "git://github.com/MichalBryxi/dom-to-image.git",
