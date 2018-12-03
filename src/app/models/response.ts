@@ -24,6 +24,7 @@ export interface GeneResponse {
 
 export interface GeneInfosResponse {
     items: GeneInfo[];
+    isEnsembl: boolean;
 }
 
 export interface TissuesResponse {

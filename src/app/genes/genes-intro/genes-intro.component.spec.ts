@@ -33,10 +33,28 @@ describe('Component: GenesIntro', () => {
         fixture = TestBed.createComponent(GenesIntroComponent);
 
         component = fixture.componentInstance; // Component test instance
+
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should show and hide video properly', () => {
+        component.showVideo = true;
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+            const el = fixture.debugElement.query(By.css('iframe'));
+            expect(el).toBeDefined();
+        });
+
+        component.showVideo = false;
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+            const el = fixture.debugElement.query(By.css('img'));
+            expect(el).toBeDefined();
+        });
     });
 
     it('should have search as child component', () => {

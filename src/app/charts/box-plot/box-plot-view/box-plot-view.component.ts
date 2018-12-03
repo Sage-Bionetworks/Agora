@@ -346,9 +346,11 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         } else {
             chart.selectAll('circle').each(function(el, i) {
+                const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
+                const fcy = (isNaN(cy) ? 0.0 : cy);
                 d3.select(this)
                     .attr('cx', lineCenter.attr('x1'))
-                    .attr('cy', Math.abs(chart.y().domain()[1] - logVals[i]) * mult)
+                    .attr('cy', fcy)
                     .on('mouseover', function() {
                         self.div.transition()
                             .duration(200)

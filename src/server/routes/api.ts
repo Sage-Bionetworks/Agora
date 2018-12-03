@@ -206,7 +206,7 @@ connection.once('open', () => {
         res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
     });
 
-    // Get all gene infos that match an id, currently hgnc_symbol
+    // Get all gene infos that match an id, using the hgnc_symbol or ensembl id
     router.get('/gene/infos/:id', (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
@@ -214,14 +214,20 @@ connection.once('open', () => {
             console.log(req.params.id);
         }
 
+        const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+        const isEnsembl = (req.params.id.startsWith('ENSG')) ? true : false;
+        const queryObj = { [fieldName]: { $regex: req.params.id.trim(), $options: 'i' } };
+
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) { res.json({ items: []}); } else {
-            GenesInfo.find({ hgnc_symbol: { $regex: req.params.id.trim(), $options: 'i' } }).exec(
+        if (!req.params || !req.params.id) {
+            res.json({ items: [], isEnsembl});
+        } else {
+            GenesInfo.find(queryObj).exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);
                     } else {
-                        res.json({ items: geneInfos });
+                        res.json({ items: geneInfos, isEnsembl });
                     }
                 });
         }

@@ -41,25 +41,19 @@
 html {
     position: relative;
     min-height: 100%;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100vh;
 }
 
 html, body{
     min-width: 360px;
     padding: 0;
     margin: 0;
-    height: 100vh;
 }
 
 .page-wrap {
-    min-height: 100%;
-    // Equal to footer height
-    margin-bottom: -$footer-height;
-}
-
-.page-wrap:after {
-    content: '';
-    display: block;
+    min-height: calc(100vh - #{$footer-height});
 }
 
 body {
@@ -69,10 +63,12 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-size: 1em;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100%;
 }
 
-footer, .page-wrap:after {
+footer {
     width: 100%;
     line-height: $footer-height;
     height: $footer-height;
@@ -108,6 +104,10 @@ span {
 }
 
 input::-ms-clear {
+    display: none;
+}
+
+textarea::-ms-clear {
     display: none;
 }
 
@@ -164,7 +164,7 @@ p-dialog {
 
         .pi-times:before {
             color: #5BB0B5;
-            content: url("/assets/icon/close_modal_icon.png");
+            content: url("/assets/icon/close-modal-icon.png");
         }
     }
 
