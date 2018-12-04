@@ -1,9 +1,12 @@
 <div class="row nav-row vertical-align" (window:resize)="onResize()">
     <div class="col-md-12 col-sm-12 col-12 logo-bg" #menuCol>
         <img src="/assets/img/agora-logo.svg" (click)="goHome()">
-        <div class="desktop-menu" *ngIf="showDesktopMenu">
-            <p-tabMenu #navMenu [model]="items" [activeItem]="activeItem" (click)="activateMenu()">
-            </p-tabMenu>
+        <div *ngIf="showDesktopMenu">
+            <div class="desktop-menu">
+                <p-tabMenu #navMenu [model]="items" [activeItem]="activeItem" (click)="activateMenu()">
+                </p-tabMenu>
+            </div>
+            <p-button label="Watch the Video" (onClick)="showVideo()"></p-button>
         </div>
         <p-splitButton #mobileMenu
             label="MENU"

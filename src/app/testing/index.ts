@@ -6,6 +6,7 @@ export * from './dialogs-service-stub';
 export * from './force-service-stub';
 export * from './gene-service-stub';
 export * from './gene-mocks';
+export * from './local-storage-stub';
 export * from './navigation-service-stub';
 export * from './router-stub';
 export * from './router-outlet-stub';

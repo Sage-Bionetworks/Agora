@@ -79,7 +79,6 @@
 }
 
 .desktop-menu {
-
     .footer-span {
         display: none;
     }
@@ -90,17 +89,9 @@
 
     .ui-tabmenu {
         position: absolute;
-        right: 0px;
+        right: 250px;
         top: 0px;
         height: 100%;
-        padding-right: calc(5.5vw);
-
-        @include respond-to('small') {
-            padding-right: calc(0.2vw);
-        }
-        @include respond-to('medium') {
-            padding-right: calc(5.5vw);
-        }
     }
 
     .ui-tabmenu-nav {
@@ -122,6 +113,44 @@
                 height: 80px;
             }
         }
+    }
+}
+
+p-button {
+    float: right;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    padding-right: calc(5.5vw);
+    background-color: white !important;
+    border: none;
+    height: 80px;
+    outline: none;
+
+    button {
+        outline: none;
+        height: 80px;
+        line-height: 80px;
+        background-color: white !important;
+        border: none;
+    }
+
+    button:focus {
+        outline:0;
+    }
+
+    span {
+        display: block !important;
+        line-height: 80px  !important;
+        height: 80px;
+    }
+
+    @include respond-to('small') {
+        padding-right: calc(0.2vw);
+    }
+    @include respond-to('medium') {
+        padding-right: calc(5.5vw);
     }
 }
 

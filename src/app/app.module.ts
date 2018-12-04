@@ -8,6 +8,9 @@ import { RouterModule } from '@angular/router';
 import { AppSharedModule } from './shared';
 import { CoreModule } from './core';
 
+// Third-party modules
+import { NgxWebstorageModule } from 'ngx-webstorage';
+
 // Platform and Environment providers
 import { environment } from 'environments/environment';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -40,6 +43,7 @@ interface StoreType {
         BrowserAnimationsModule,
         RouterModule,
         AppSharedModule.forRoot(),
+        NgxWebstorageModule.forRoot(),
         CoreModule
     ],
     /**
