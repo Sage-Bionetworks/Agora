@@ -9,6 +9,8 @@ import { RouterEvent, NavigationEnd } from '@angular/router';
 
 import { NavigationService } from '../services';
 
+import { LocalStorageService } from 'ngx-webstorage';
+
 import { MenuItem } from 'primeng/api';
 import { SplitButton } from 'primeng/splitbutton';
 import { TabMenu } from 'primeng/tabmenu';
@@ -34,6 +36,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     constructor(
         private navService: NavigationService,
+        private localSt: LocalStorageService
     ) { }
 
     ngOnInit() {
@@ -107,6 +110,15 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
         this.mobileMenu.show();
     }
 
+    showVideo() {
+        const shouldShow = this.localSt.retrieve('showVideo');
+        if (shouldShow !== undefined) {
+            this.localSt.store('showVideo', !shouldShow);
+        } else {
+            this.localSt.store('showVideo', true);
+        }
+    }
+
     updateVars() {
         // Small size
         if (window.innerWidth < 768) {
@@ -130,8 +142,8 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
         }
 
         if (this.menu) {
-            if (!this.activeItem || (label !== this.menu['activeItem'].label)) {
-                this.activeItem = this.menu['activeItem'];
+            if (!this.activeItem || (label !== this.menu.activeItem.label)) {
+                this.activeItem = this.menu.activeItem;
                 if (this.activeItem && route) {
                     this.changeRoute(this.activeItem.label);
                 }
@@ -151,6 +163,8 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             });
         } else if (path === 'Teams') {
             this.goToRoute('teams-contributing');
+        } else if (path === 'Watch the Video') {
+            this.localSt.store('showVideo', true);
         }
     }
 

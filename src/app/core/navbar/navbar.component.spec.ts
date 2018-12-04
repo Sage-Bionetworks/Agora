@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from './navbar.component';
 
 import {
+    LocalStorageServiceStub,
     RouterStub,
     DataServiceStub,
     GeneServiceStub,
@@ -16,6 +17,7 @@ import {
 import { DataService, GeneService, NavigationService } from '../services';
 
 import { MockComponent } from 'ng-mocks';
+import { NgxWebstorageModule, LocalStorageService } from 'ngx-webstorage';
 
 import { SplitButton } from 'primeng/splitbutton';
 import { TabMenu } from 'primeng/tabmenu';
@@ -24,9 +26,13 @@ describe('Component: Navbar', () => {
     let component: NavbarComponent;
     let navService: NavigationServiceStub;
     let fixture: ComponentFixture<NavbarComponent>;
+    let lstService: LocalStorageServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                NgxWebstorageModule.forRoot()
+            ],
             declarations: [
                 NavbarComponent,
                 MockComponent(TabMenu),
@@ -38,6 +44,7 @@ describe('Component: Navbar', () => {
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
+                { provide: LocalStorageService, useValue: new LocalStorageServiceStub() },
                 TitleCasePipe
             ]
         })
@@ -45,6 +52,7 @@ describe('Component: Navbar', () => {
 
         fixture = TestBed.createComponent(NavbarComponent);
         navService = fixture.debugElement.injector.get(NavigationService);
+        lstService = fixture.debugElement.injector.get(LocalStorageService);
         component = fixture.componentInstance;
 
         fixture.detectChanges();
@@ -76,6 +84,15 @@ describe('Component: Navbar', () => {
         fixture.detectChanges();
 
         const el = fixture.debugElement.query(By.css('p-splitButton'));
+        expect(el).not.toBeNull();
+    });
+
+    it('should have a Watch the Video button', () => {
+        component.showDesktopMenu = true;
+        component.showMobileMenu = false;
+        fixture.detectChanges();
+
+        const el = fixture.debugElement.query(By.css('p-button'));
         expect(el).not.toBeNull();
     });
 
@@ -174,5 +191,32 @@ describe('Component: Navbar', () => {
             ],
             undefined
         );
+    }));
+
+    it('should show the video if it\'s current state is falsy', fakeAsync(() => {
+        const rSpy = spyOn(lstService, 'retrieve').and.callThrough();
+        const sSpy = spyOn(lstService, 'store').and.callThrough();
+
+        spyOn(component, 'showVideo').and.callThrough();
+        component.showVideo(); // trigger click on Watch the Video button
+        tick();
+        fixture.detectChanges();
+        expect(rSpy.calls.any()).toEqual(true);
+        expect(sSpy.calls.any()).toEqual(true);
+        expect(lstService.retrieve('showVideo')).toEqual(true);
+    }));
+
+    it('should change the show video state if we already a valid', fakeAsync(() => {
+        const rSpy = spyOn(lstService, 'retrieve').and.callThrough();
+        const sSpy = spyOn(lstService, 'store').and.callThrough();
+        lstService.store('showVideo', false);
+
+        spyOn(component, 'showVideo').and.callThrough();
+        component.showVideo(); // trigger click on Watch the Video button
+        tick();
+        fixture.detectChanges();
+        expect(rSpy.calls.any()).toEqual(true);
+        expect(sSpy.calls.any()).toEqual(true);
+        expect(lstService.retrieve('showVideo')).toEqual(false);
     }));
 });
