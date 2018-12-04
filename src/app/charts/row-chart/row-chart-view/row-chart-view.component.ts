@@ -165,30 +165,39 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 })
                 .on('pretransition', (chart) => {
                     if (self.canDisplay) {
-                        self.updateXDomain(chart);
-                        const width = (isNaN(chart.width())) ? 450 : chart.width();
-                        const height = (isNaN(chart.height())) ? 450 : chart.height();
-                        self.updateChartExtras(
-                            chart,
-                            chart.svg(),
-                            width,
-                            height
-                        );
+                        // smooth the rendering through event throttling
+                        dc.events.trigger(function() {
+                            self.updateXDomain(chart);
+                            const width = (isNaN(chart.width())) ? 450 : chart.width();
+                            const height = (isNaN(chart.height())) ? 450 : chart.height();
+                            self.updateChartExtras(
+                                chart,
+                                chart.svg(),
+                                width,
+                                height
+                            );
+                        });
                     }
                 })
                 .on('preRedraw', (chart) => {
-                    self.updateXDomain(chart);
+                    // smooth the rendering through event throttling
+                    dc.events.trigger(function() {
+                        self.updateXDomain(chart);
+                    });
                 })
                 .on('postRender', (chart) => {
-                    self.canDisplay = true;
-                    const squareSize = 18;
+                    // smooth the rendering through event throttling
+                    dc.events.trigger(function() {
+                        self.canDisplay = true;
+                        const squareSize = 18;
 
-                    // Copy all vertical texts to another div, so they don't get hidden by
-                    // the row chart svg after being translated
-                    self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
+                        // Copy all vertical texts to another div, so they don't get hidden by
+                        // the row chart svg after being translated
+                        self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
-                    // Registers this chart
-                    self.chartService.addChartName(self.label);
+                        // Registers this chart
+                        self.chartService.addChartName(self.label);
+                    });
                 })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)

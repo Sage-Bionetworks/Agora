@@ -146,8 +146,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             chartInst.promptText(this.promptText);
 
             chartInst.on('postRender', () => {
-                // Registers this chart
-                self.chartService.addChartName(self.label);
+                // smooth the rendering through event throttling
+                dc.events.trigger(function() {
+                    // Registers this chart
+                    self.chartService.addChartName(self.label);
+                });
             });
 
             chartInst.render();

@@ -121,7 +121,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     updateVars() {
         // Small size
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 945) {
             this.showMobileMenu = true;
             this.showDesktopMenu = false;
         } else {

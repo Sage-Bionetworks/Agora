@@ -182,24 +182,30 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .yRangePadding(this.rcRadius * 1.5)
                 .on('pretransition', (chart) => {
                     if (self.display) {
-                        chart.selectAll('rect.box')
-                            .attr('rx', self.boxRadius);
+                        // smooth the rendering through event throttling
+                        dc.events.trigger(function() {
+                            chart.selectAll('rect.box')
+                                .attr('rx', self.boxRadius);
 
-                        if (chart.selectAll('g.box circle').empty()) {
-                            self.renderRedCircles(chart);
-                        } else {
-                            self.renderRedCircles(chart, true);
-                        }
-                        self.updateYDomain(chart);
+                            if (chart.selectAll('g.box circle').empty()) {
+                                self.renderRedCircles(chart);
+                            } else {
+                                self.renderRedCircles(chart, true);
+                            }
+                            self.updateYDomain(chart);
 
-                        // Adds tooltip below the x axis labels
-                        self.addXAxisTooltips(chart);
+                            // Adds tooltip below the x axis labels
+                            self.addXAxisTooltips(chart);
+                        });
                     }
                 })
                 .on('postRender', (chart) => {
-                    self.display = true;
-                    // Registers this chart
-                    self.chartService.addChartName(self.label);
+                    // smooth the rendering through event throttling
+                    dc.events.trigger(function() {
+                        self.display = true;
+                        // Registers this chart
+                        self.chartService.addChartName(self.label);
+                    });
                 });
 
             resolve(chartInst);

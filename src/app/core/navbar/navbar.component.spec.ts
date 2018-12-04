@@ -117,7 +117,7 @@ describe('Component: Navbar', () => {
     it('should tell ROUTER to navigate home when selecting logo img', fakeAsync(() => {
         const spy = spyOn(navService.testRouter, 'navigate').and.callThrough();
 
-        component.goHome(); // trigger click on row
+        component.goHome();
         tick();
         fixture.detectChanges();
         expect(spy.calls.any()).toEqual(true);
@@ -218,5 +218,35 @@ describe('Component: Navbar', () => {
         expect(rSpy.calls.any()).toEqual(true);
         expect(sSpy.calls.any()).toEqual(true);
         expect(lstService.retrieve('showVideo')).toEqual(false);
+    }));
+
+    it('update the menu variables depending on window size', fakeAsync(() => {
+        component.showDesktopMenu = true;
+        component.showMobileMenu = false;
+        let width = 1200;
+        const rSpy = spyOn(component, 'updateVars').and.callThrough();
+        const wSpy = spyOnProperty(window, 'innerWidth').and.returnValue(width);
+
+        component.updateVars();
+        tick();
+        fixture.detectChanges();
+        expect(window.innerWidth).toEqual(width);
+        expect(component.showMobileMenu).toEqual(false);
+        expect(component.showDesktopMenu).toEqual(true);
+
+        width = 500;
+        wSpy.and.returnValue(width);
+
+        tick();
+        fixture.detectChanges();
+        expect(window.innerWidth).toEqual(width);
+        component.updateVars();
+        tick();
+        fixture.detectChanges();
+        expect(component.showMobileMenu).toEqual(true);
+        expect(component.showDesktopMenu).toEqual(false);
+
+        expect(wSpy.calls.any()).toEqual(true);
+        expect(rSpy.calls.any()).toEqual(true);
     }));
 });
