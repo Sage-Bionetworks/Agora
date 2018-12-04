@@ -1,48 +1,48 @@
 import {
     async,
     ComponentFixture,
-    TestBed
+    TestBed,
+    fakeAsync,
+    tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
-    ApiServiceStub,
-    ActivatedRouteStub,
     RouterStub,
-    DataServiceStub,
-    ForceServiceStub,
     GeneServiceStub,
+    DataServiceStub,
+    ChartServiceStub,
+    ActivatedRouteStub,
+    ApiServiceStub,
     mockInfo1
-} from '../../testing';
+} from '../../../testing';
 
-import { GeneSimilarComponent } from './gene-similar.component';
+import { SelectMenuViewComponent } from './select-menu-view.component';
 
-import { ApiService, DataService, ForceService, GeneService } from '../../core/services';
+import { GeneService, DataService, ApiService } from '../../../core/services';
+import { ChartService } from '../../services';
+
+import { of, empty, Observable } from 'rxjs';
 
 import { MockComponent } from 'ng-mocks';
 
-import { ArraySortPipe } from '../../shared/pipes';
-
-import { Table } from 'primeng/table';
-
-describe('Component: GeneSimilar', () => {
-    let component: GeneSimilarComponent;
-    let fixture: ComponentFixture<GeneSimilarComponent>;
+describe('Component: SelectMenuView', () => {
+    let component: SelectMenuViewComponent;
+    let fixture: ComponentFixture<SelectMenuViewComponent>;
     let router: RouterStub;
-    let apiService: ApiServiceStub;
+    let geneService: GeneServiceStub;
+    let chartService: ChartServiceStub;
     let dataService: DataServiceStub;
-    let forceService: ForceServiceStub;
+    let apiService: ApiServiceStub;
     let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                GeneSimilarComponent,
-                MockComponent(Table),
-                ArraySortPipe
+                SelectMenuViewComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -50,22 +50,23 @@ describe('Component: GeneSimilar', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: ForceService, useValue: new ForceServiceStub() },
+                { provide: ChartService, useValue: new ChartServiceStub() },
                 { provide: Location, useValue: locationStub }
             ]
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(GeneSimilarComponent);
+        fixture = TestBed.createComponent(SelectMenuViewComponent);
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
+        geneService = fixture.debugElement.injector.get(GeneService);
         dataService = fixture.debugElement.injector.get(DataService);
-        forceService = fixture.debugElement.injector.get(ForceService);
+        chartService = fixture.debugElement.injector.get(ChartService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
@@ -74,13 +75,5 @@ describe('Component: GeneSimilar', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
-    });
-
-    it('should have a table', () => {
-        const el = fixture.debugElement.query(By.css('p-table'));
-        expect(el).toBeDefined();
-
-        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
-        expect(aEl.length).toEqual(1);
     });
 });

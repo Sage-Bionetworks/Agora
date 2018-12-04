@@ -89,13 +89,40 @@
 
     .ui-tabmenu {
         position: absolute;
-        right: 250px;
+        right: calc(200px + 5.5vw);
         top: 0px;
         height: 100%;
+
+        @include respond-to('small') {
+            right: calc(200px + 0.2vw);
+        }
+        @include respond-to('medium') {
+            right: calc(200px + 5.5vw);
+        }
     }
 
     .ui-tabmenu-nav {
         float: right;
+        padding: 0px;
+        height: $navbar-height;
+        line-height: $navbar-height;
+
+        li {
+            top: 0px !important;
+            height: $navbar-height;
+            line-height: $navbar-height;
+            margin: 0px !important;
+
+            a {
+                height: $navbar-height;
+                line-height: $navbar-height;
+
+                span {
+                    height: $navbar-height;
+                    line-height: $navbar-height;
+                }
+            }
+        }
     }
 
     .ui-tabmenuitem {
@@ -125,15 +152,25 @@ p-button {
     padding-right: calc(5.5vw);
     background-color: white !important;
     border: none;
-    height: 80px;
+    height: $navbar-height;
     outline: none;
+
+    .ui-button-text {
+        width: 200px;
+        padding: 0px !important;
+    }
 
     button {
         outline: none;
-        height: 80px;
-        line-height: 80px;
+        height: $navbar-height  !important;
+        line-height: $navbar-height !important;
         background-color: white !important;
         border: none;
+
+        span {
+            height: $navbar-height  !important;
+            line-height: $navbar-height  !important;
+        }
     }
 
     button:focus {
@@ -142,8 +179,8 @@ p-button {
 
     span {
         display: block !important;
-        line-height: 80px  !important;
-        height: 80px;
+        height: $navbar-height  !important;
+        line-height: $navbar-height  !important;
     }
 
     @include respond-to('small') {

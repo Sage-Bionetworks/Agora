@@ -65,6 +65,10 @@ export class GeneServiceStub {
         this.geneModels = models;
     }
 
+    getGeneTissues(): string[] {
+        return this.geneTissues;
+    }
+
     setGeneTissues(tissues: string[]) {
         this.geneTissues = tissues;
     }

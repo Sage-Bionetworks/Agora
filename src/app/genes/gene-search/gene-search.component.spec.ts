@@ -2,7 +2,8 @@ import {
     async,
     ComponentFixture,
     TestBed,
-    fakeAsync
+    fakeAsync,
+    tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -22,6 +23,8 @@ import { ApiService, GeneService, NavigationService } from '../../core/services'
 
 import { of, empty, Observable } from 'rxjs';
 
+import { ProgressSpinner } from 'primeng/progressspinner';
+
 import { MockComponent } from 'ng-mocks';
 
 describe('Component: GeneSearch', () => {
@@ -33,7 +36,7 @@ describe('Component: GeneSearch', () => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneSearchComponent,
-                MockComponent(GeneSearchComponent)
+                MockComponent(ProgressSpinner)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -66,6 +69,17 @@ describe('Component: GeneSearch', () => {
         const aEl = fixture.debugElement.queryAll(By.css('section'));
         expect(aEl.length).toEqual(1);
     });
+
+    it('should have a progress spinner element', fakeAsync(() => {
+        component.isSearching = true;
+        tick();
+        fixture.detectChanges();
+        const el = fixture.debugElement.query(By.css('p-progressSpinner'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-progressSpinner'));
+        expect(aEl.length).toEqual(1);
+    }));
 
     it('should have a textarea element', () => {
         const el = fixture.debugElement.query(By.css('textarea'));

@@ -6,6 +6,7 @@ import {
     tick
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -20,6 +21,7 @@ import {
 } from '../../testing';
 
 import { GeneOverviewComponent } from './gene-overview.component';
+import { LoadingComponent } from '../../shared/components/loading';
 
 import {
     ApiService,
@@ -28,6 +30,8 @@ import {
     GeneService,
     NavigationService
 } from '../../core/services';
+
+import { TabMenu } from 'primeng/tabmenu';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -46,7 +50,9 @@ describe('Component: GeneOverview', () => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneOverviewComponent,
-                MockComponent(GeneOverviewComponent)
+                MockComponent(GeneOverviewComponent),
+                MockComponent(TabMenu),
+                MockComponent(LoadingComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -76,6 +82,8 @@ describe('Component: GeneOverview', () => {
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
         component = fixture.componentInstance; // Component test instance
+
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -88,10 +96,29 @@ describe('Component: GeneOverview', () => {
         );
 
         component.items = [
-            { label: 'NOMINATION DETAILS', disabled: component.disableMenu },
-            { label: 'SUMMARY', disabled: component.disableMenu },
-            { label: 'EVIDENCE', disabled: component.disableMenu },
-            { label: 'DRUGGABILITY', disabled: component.disableMenu }
+            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
+            { label: 'SUMMARY', disabled: this.disableMenu },
+            { label: 'EVIDENCE',
+                disabled: this.disableMenu,
+                items: [
+                    {
+                        label: 'RNA'
+                    },
+                    {
+                        label: 'Protein'
+                    },
+                    {
+                        label: 'Metabolomics'
+                    },
+                    {
+                        label: 'Single Cell RNA-Seq'
+                    },
+                    {
+                        label: 'Genomic'
+                    }
+            ]
+            },
+            { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
         spyOn(component, 'initDetails').and.callThrough();
@@ -118,6 +145,92 @@ describe('Component: GeneOverview', () => {
 
         fixture.detectChanges();
         expect(component.dataLoaded).toEqual(true);
-        expect(dsSpy.calls.count()).toEqual(2);
+        expect(dsSpy.calls.count()).toEqual(1);
+    }));
+
+    it('should have a tab menu element for desktop', fakeAsync(() => {
+        component.dataLoaded = true;
+        component.showDesktopMenu = true;
+        component.showMobileMenu = false;
+        tick();
+        fixture.detectChanges();
+        const el = fixture.debugElement.query(By.css('p-tabMenu'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-tabMenu'));
+        expect(aEl.length).toEqual(1);
+    }));
+
+    it('should have a tab menu element for mobile', fakeAsync(() => {
+        component.dataLoaded = true;
+        component.showDesktopMenu = false;
+        component.showMobileMenu = true;
+        tick();
+        fixture.detectChanges();
+        const el = fixture.debugElement.query(By.css('p-tabMenu'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('p-tabMenu'));
+        expect(aEl.length).toEqual(1);
+    }));
+
+    it('should show the loading component while loading', fakeAsync(() => {
+        component.dataLoaded = false;
+        tick();
+        fixture.detectChanges();
+
+        const el = fixture.debugElement.query(By.css('loading'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('loading'));
+        expect(aEl.length).toEqual(1);
+    }));
+
+    it('should show the gene full information if we have the gene info', fakeAsync(() => {
+        component.geneInfo = mockInfo1;
+        tick();
+        fixture.detectChanges();
+
+        const el = fixture.debugElement.query(By.css('.info-header'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('.info-header'));
+        expect(aEl.length).toEqual(1);
+
+        const dEl = fixture.debugElement.query(By.css('.overview-desc'));
+        expect(dEl).toBeDefined();
+
+        const dAEl = fixture.debugElement.queryAll(By.css('.overview-desc'));
+        expect(dAEl.length).toEqual(1);
+    }));
+
+    it('update the menu variables depending on window size', fakeAsync(() => {
+        component.showDesktopMenu = true;
+        component.showMobileMenu = false;
+        let width = 800;
+        const rSpy = spyOn(component, 'updateVars').and.callThrough();
+        const wSpy = spyOnProperty(window, 'innerWidth').and.returnValue(width);
+
+        component.updateVars();
+        tick();
+        fixture.detectChanges();
+        expect(window.innerWidth).toEqual(width);
+        expect(component.showMobileMenu).toEqual(false);
+        expect(component.showDesktopMenu).toEqual(true);
+
+        width = 500;
+        wSpy.and.returnValue(width);
+
+        tick();
+        fixture.detectChanges();
+        expect(window.innerWidth).toEqual(width);
+        component.updateVars();
+        tick();
+        fixture.detectChanges();
+        expect(component.showMobileMenu).toEqual(true);
+        expect(component.showDesktopMenu).toEqual(false);
+
+        expect(wSpy.calls.any()).toEqual(true);
+        expect(rSpy.calls.any()).toEqual(true);
     }));
 });
