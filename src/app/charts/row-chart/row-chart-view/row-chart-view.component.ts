@@ -156,6 +156,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     getChartPromise(): Promise<any> {
+        let firstRender: boolean = true;
         return new Promise((resolve, reject) => {
             const self = this;
             const chartInst = dc.rowChart(self.rowChart.nativeElement)
@@ -186,11 +187,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         });
                     }
                 })
-                .on('preRedraw', (chart) => {
-                    // smooth the rendering through event throttling
-                    dc.events.trigger(function() {
-                        self.updateXDomain(chart);
-                    });
+                .on('renderlet', (chart) => {
+                    if (firstRender) {
+                        firstRender = false;
+                        dc.events.trigger(function() {
+                            chart.redraw();
+                        });
+                    }
                 })
                 .on('postRender', (chart) => {
                     // smooth the rendering through event throttling
@@ -201,8 +204,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         // Copy all vertical texts to another div, so they don't get hidden by
                         // the row chart svg after being translated
                         self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
-
-                        chart.redraw();
                     });
                 })
                 .othersGrouper(null)
