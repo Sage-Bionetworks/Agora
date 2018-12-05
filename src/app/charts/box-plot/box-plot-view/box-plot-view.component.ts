@@ -81,6 +81,13 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.display = false;
             this.removeChart();
         });
+
+        this.chartService.chartsReady$.subscribe((state: boolean) => {
+            if (state) {
+                this.updateCircleRadius();
+                this.initChart();
+            }
+        });
     }
 
     removeChart() {
@@ -96,8 +103,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.updateCircleRadius();
-        this.initChart();
+        this.display = true;
+        // Registers this chart
+        this.chartService.addChartName(this.label);
     }
 
     ngOnDestroy() {
@@ -202,9 +210,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .on('postRender', (chart) => {
                     // smooth the rendering through event throttling
                     dc.events.trigger(function() {
-                        self.display = true;
-                        // Registers this chart
-                        self.chartService.addChartName(self.label);
+                        chart.redraw();
                     });
                 });
 

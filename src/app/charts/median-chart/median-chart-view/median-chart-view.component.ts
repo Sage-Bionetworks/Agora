@@ -76,6 +76,12 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
             d.medianlogcpm
         );
+
+        this.chartService.chartsReady$.subscribe((state: boolean) => {
+            if (state) {
+                this.initChart();
+            }
+        });
     }
 
     removeChart() {
@@ -95,6 +101,11 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     ngAfterViewInit() {
+        // Registers this chart
+        this.chartService.addChartName(this.label);
+    }
+
+    initChart() {
         const self = this;
         this.chart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
@@ -120,10 +131,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .xUnits(dc.units.ordinal)
             .colors(['#5171C0'])
             .renderTitle(false)
-            .on('postRender', () => {
-                // Registers this chart
-                self.chartService.addChartName(self.label);
-            })
             .on('renderlet', (chart) => {
                 const yDomainLength = Math.abs(this.chart.y().domain()[1]
                 - this.chart.y().domain()[0]);

@@ -89,10 +89,17 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             this.canDisplay = false;
             this.removeChart();
         });
+
+        this.chartService.chartsReady$.subscribe((state: boolean) => {
+            if (state) {
+                this.initChart();
+            }
+        });
     }
 
     ngAfterViewInit() {
-        this.initChart();
+        // Registers this chart
+        this.chartService.addChartName(this.label);
     }
 
     ngAfterContentChecked() {
@@ -195,8 +202,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         // the row chart svg after being translated
                         self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
 
-                        // Registers this chart
-                        self.chartService.addChartName(self.label);
+                        chart.redraw();
                     });
                 })
                 .othersGrouper(null)

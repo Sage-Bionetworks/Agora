@@ -45,6 +45,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     isDisabled: boolean = true;
     destroyed: boolean = false;
     firstTime: boolean = true;
+    firstReplace: boolean = true;
     menuSelection: any;
 
     constructor(
@@ -79,12 +80,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         } else {
             this.initChart();
         }
-
-        this.chartService.chartsReady$.subscribe((state: boolean) => {
-            if (state) {
-                this.replaceSelect();
-            }
-        });
     }
 
     initChart() {
@@ -146,11 +141,14 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             chartInst.promptText(this.promptText);
 
             chartInst.on('postRender', () => {
-                // smooth the rendering through event throttling
-                dc.events.trigger(function() {
-                    // Registers this chart
-                    self.chartService.addChartName(self.label);
-                });
+                if (self.firstReplace) {
+
+                    self.firstReplace = false;
+                    self.replaceSelect().then(() => {
+                        // Registers this chart
+                        self.chartService.addChartName(self.label);
+                    });
+                }
             });
 
             chartInst.render();
@@ -207,11 +205,15 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         }
     }
 
-    replaceSelect() {
-        if (this.defaultValue) {
-            this.generateSelect();
-            this.removeFirstOption();
-        }
+    replaceSelect(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (this.defaultValue) {
+                this.generateSelect();
+                this.removeFirstOption();
+            }
+
+            resolve(true);
+        });
     }
 
     removeFirstOption() {
