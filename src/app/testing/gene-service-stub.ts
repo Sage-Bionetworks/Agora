@@ -8,6 +8,8 @@ export class GeneServiceStub {
     previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
+    defaultTissue: string = 'CBE';
+    defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string;
     geneTissues: string[] = [];
     currentModel: string;
@@ -55,6 +57,26 @@ export class GeneServiceStub {
 
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
+    }
+
+    getDefaultTissue(): string {
+        return this.defaultTissue;
+    }
+
+    setDefaultTissue(tissue: string) {
+        this.defaultTissue = tissue;
+    }
+
+    getDefaultModel(): string {
+        return this.defaultModel;
+    }
+
+    getCurrentModel(): string {
+        return this.currentModel;
+    }
+
+    setDefaultModel(model: string) {
+        this.defaultModel = model;
     }
 
     getGeneModels(): string[] {

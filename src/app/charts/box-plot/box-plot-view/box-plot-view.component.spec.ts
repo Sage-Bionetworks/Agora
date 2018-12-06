@@ -66,4 +66,15 @@ describe('Component: BoxPlotView', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should call init if the statistical model was already selected', () => {
+        const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
+        const icSpy = spyOn(component, 'initChart').and.callThrough();
+        chartService.chartsReadySource.next(true);
+
+        component.ngOnInit();
+        fixture.detectChanges();
+        expect(oiSpy).toHaveBeenCalled();
+        expect(icSpy).toHaveBeenCalled();
+    });
 });

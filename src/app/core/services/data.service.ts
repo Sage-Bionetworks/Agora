@@ -107,7 +107,7 @@ export class DataService {
         return ((compare) ? this.compSignificantDigits : this.significantDigits) || '1.2-2';
     }
 
-    getSignificantValue(value: number, compare?: boolean) {
+    getSignificantValue(value: number, compare?: boolean): number {
         return +this.decimalPipe.transform(value, this.getSignificantDigits(compare));
     }
 

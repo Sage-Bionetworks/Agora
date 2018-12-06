@@ -76,4 +76,21 @@ describe('Component: SelectMenuView', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should call init if a label is present', () => {
+        const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
+        const icSpy = spyOn(component, 'initChart').and.callThrough();
+
+        expect(component.label).not.toBe('select-menu');
+        component.ngOnInit();
+        fixture.detectChanges();
+        expect(oiSpy).toHaveBeenCalled();
+        component.label = 'select-menu';
+
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        expect(oiSpy).toHaveBeenCalled();
+        expect(icSpy).toHaveBeenCalled();
+    });
 });

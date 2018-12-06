@@ -50,6 +50,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     @ViewChild('chart') rowChart: ElementRef;
     @ViewChild('studies') stdCol: ElementRef;
 
+    max: number = -Infinity;
     currentModel: string;
     currentTissue: string;
     display: boolean = false;
@@ -171,6 +172,18 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .label((d) => {
                     return d.key;
                 })
+                .on('preRender', (chart) => {
+                    self.updateXDomain();
+                    if (self.max !== -Infinity) {
+                        self.max *= 1.1;
+                        chart.x(d3.scaleLinear().range([
+                            0, (self.rowChart.nativeElement.offsetWidth - 40)
+                        ]).domain([
+                            -self.max, self.max
+                        ]));
+                        chart.xAxis().scale(chart.x());
+                    }
+                })
                 .on('renderlet', (chart) => {
                     if (self.firstRender) {
                         dc.events.trigger(function() {
@@ -194,8 +207,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .dimension(this.dim)
                 .group(this.group)
                 .transitionDuration(0);
-
-            self.updateXDomain(chartInst);
 
             resolve(chartInst);
         });
@@ -273,26 +284,19 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         self.display = true;
     }
 
-    updateXDomain(chart: dc.RowChart) {
+    updateXDomain() {
         // Draw the horizontal lines
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
-        let max = -Infinity;
         currentGenes.forEach((g) => {
-            if (Math.abs(+g.ci_l) > max) {
-                max = Math.abs(+g.ci_l);
+            if (Math.abs(+g.ci_l) > this.max) {
+                this.max = Math.abs(+g.ci_l);
             }
-            if (Math.abs(+g.ci_r) > max) {
-                max = Math.abs(+g.ci_r);
+            if (Math.abs(+g.ci_r) > this.max) {
+                this.max = Math.abs(+g.ci_r);
             }
         });
-
-        if (max !== +Infinity) {
-            max *= 1.1;
-            chart.x(d3.scaleLinear().range([0, (chart.width() - 40)]).domain([-max, max]));
-            chart.xAxis().scale(chart.x());
-        }
     }
 
     updateXTicks(chart: dc.RowChart) {
@@ -480,7 +484,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 let dotPixels = 0;
                 const mPixels = 5;
 
-                if (gene) {
+                if (gene && gene.ci_l && gene.ci_r) {
                     dotPixels = ((gene.ci_l.toPrecision(2).indexOf('.') !== -1) ? 0.5 : 0.0);
                     ciValue = (isNeg) ? gene.ci_l : gene.ci_r;
                     scaledX = chart.x()(ciValue);
@@ -490,9 +494,12 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     scaledX = chart.x()(d.value.logfc) - (lineWidth / 2);
                 }
 
-                const val = (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels +
-                    dotPixels) : scaledX + (ciValue.toPrecision(2).length * mPixels +
-                    dotPixels);
+                let val = 0.0;
+                if (ciValue) {
+                    val = (isNeg) ? scaledX - (ciValue.toPrecision(2).length * mPixels +
+                        dotPixels) : scaledX + (ciValue.toPrecision(2).length * mPixels +
+                        dotPixels);
+                }
                 return (isNaN(val)) ? 0.0 : val;
             })
             .attr('y', () => {

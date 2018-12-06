@@ -32,6 +32,12 @@ export class ChartServiceStub {
         if (!this.chartInfos[label]) { this.chartInfos.set(label, chartObj); }
     }
 
+    addChartName(name: string) {
+        if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
+
+        if (this.allChartsLoaded()) { this.chartsReadySource.next(true); }
+    }
+
     allChartsLoaded() {
         return true;
     }
