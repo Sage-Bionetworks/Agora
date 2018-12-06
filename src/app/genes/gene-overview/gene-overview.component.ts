@@ -22,6 +22,8 @@ import {
 
 import { MenuItem } from 'primeng/api';
 
+import { throwError } from 'rxjs';
+
 import * as d3 from 'd3';
 
 @Component({
@@ -293,6 +295,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     }
                     this.setActiveItem();
                     this.dataLoaded = true;
+                }, (error) => {
+                    console.error('Error loading the data!');
+                    return throwError(error);  // Angular 6/RxJS 6
                 });
             } else {
                 if (!this.geneInfo.nominations) {

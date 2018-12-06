@@ -282,8 +282,7 @@ connection.once('open', () => {
             }
 
             // Find all the Genes with the current id
-            Genes.find(queryObj)
-                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec((err, genes) => {
+            Genes.find(queryObj).exec((err, genes) => {
                 if (err) {
                     next(err);
                 } else {

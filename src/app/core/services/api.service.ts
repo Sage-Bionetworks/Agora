@@ -28,7 +28,10 @@ export class ApiService {
 
     // Get a list of links related to a gene
     getLinksList(sgene: Gene): Observable<LinksListResponse> {
-        return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`);
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`,
+            { headers });
     }
 
     // Get all the genes
