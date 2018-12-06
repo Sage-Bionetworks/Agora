@@ -172,39 +172,39 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .label((d) => {
                     return d.key;
                 })
-                .on('preRender', (chart) => {
-                    self.updateXDomain();
+                .on('preRender', async (chart) => {
+                    await self.updateXDomain();
                     if (self.max !== -Infinity) {
                         self.max *= 1.1;
-                        chart.x(d3.scaleLinear().range([
+                        await chart.x(d3.scaleLinear().range([
                             0, (self.rowChart.nativeElement.offsetWidth - 40)
                         ]).domain([
                             -self.max, self.max
                         ]));
-                        chart.xAxis().scale(chart.x());
+                        await chart.xAxis().scale(chart.x());
                     }
                 })
-                .on('preRedraw', (chart) => {
+                .on('preRedraw', async (chart) => {
                     self.max = -Infinity;
-                    self.updateXDomain();
+                    await self.updateXDomain();
                     if (self.max !== -Infinity) {
                         self.max *= 1.1;
-                        chart.x(d3.scaleLinear().range([
+                        await chart.x(d3.scaleLinear().range([
                             0, (self.rowChart.nativeElement.offsetWidth - 40)
                         ]).domain([
                             -self.max, self.max
                         ]));
-                        chart.xAxis().scale(chart.x());
+                        await chart.xAxis().scale(chart.x());
                     }
                 })
-                .on('renderlet', (chart) => {
+                .on('renderlet', async (chart) => {
                     if (self.firstRender) {
                         self.firstRender = false;
                         // Copy all vertical texts to another div, so they don't get hidden by
                         // the row chart svg after being translated
-                        self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
+                        await self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
                     }
-                    dc.events.trigger(function() {
+                    await dc.events.trigger(function() {
                         const width = self.rowChart.nativeElement.offsetWidth || 450;
                         const height = self.rowChart.nativeElement.offsetHeight || 450;
                         self.updateChartExtras(
