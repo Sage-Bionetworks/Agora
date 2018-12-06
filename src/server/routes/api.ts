@@ -282,7 +282,8 @@ connection.once('open', () => {
             }
 
             // Find all the Genes with the current id
-            Genes.find(queryObj).exec((err, genes) => {
+            Genes.find(queryObj)
+                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec((err, genes) => {
                 if (err) {
                     next(err);
                 } else {
@@ -309,10 +310,10 @@ connection.once('open', () => {
                                 minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
                             }
                         }
-                        if (geneTissues.indexOf(g.tissue) === -1) {
+                        if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
                             geneTissues.push(g.tissue);
                         }
-                        if (geneModels.indexOf(g.model) === -1) {
+                        if (g.model && geneModels.indexOf(g.model) === -1) {
                             geneModels.push(g.model);
                         }
                     });
