@@ -43,6 +43,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() rcRadius: number = 12.5;
     @Input() boxRadius: number = 9;
 
+    firstRender: boolean = true;
     max: number = -Infinity;
     display: boolean = false;
     counter: number = 0;
@@ -175,9 +176,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getChartPromise(): Promise<dc.BoxPlot> {
-        let firstRender: boolean = true;
+        const self = this;
         return new Promise((resolve, reject) => {
-            const self = this;
             const chartInst = dc.boxPlot(this.boxPlot.nativeElement)
                 .dimension(this.dim)
                 .yAxisLabel('LOG 2 FOLD CHANGE', 20)
@@ -198,8 +198,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         });
                     }
 
-                    if (firstRender) {
-                        firstRender = false;
+                    if (self.firstRender) {
+                        self.firstRender = false;
 
                         dc.events.trigger(function() {
                             chart.selectAll('rect.box')
@@ -208,10 +208,10 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                             if (chart.selectAll('g.box circle').empty()) {
                                 self.renderRedCircles(chart);
                             }
-
-                            // Adds tooltip below the x axis labels
-                            self.addXAxisTooltips(chart);
                         });
+
+                        // Adds tooltip below the x axis labels
+                        self.addXAxisTooltips(chart);
                     }
                 });
 
@@ -284,8 +284,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const self = this;
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
-        const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
-        const mult = (svgEl.getBBox().height) / yDomainLength;
+        const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
