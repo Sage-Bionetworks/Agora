@@ -191,9 +191,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
-                .on('renderlet', async (chart) => {
+                .on('renderlet', function(chart) {
                     if (!chart.selectAll('g.box circle').empty()) {
-                        await dc.events.trigger(function() {
+                        dc.events.trigger(function() {
                             self.renderRedCircles(chart, true);
                         });
                     }
@@ -201,7 +201,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (firstRender) {
                         firstRender = false;
 
-                        await dc.events.trigger(function() {
+                        dc.events.trigger(function() {
                             chart.selectAll('rect.box')
                                 .attr('rx', self.boxRadius);
 

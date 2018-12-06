@@ -110,16 +110,22 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         self.geneService.setCurrentModel(filters[0]);
                     }
 
-                    if (self.geneService.getCurrentModel() && self.geneService.getCurrentTissue()) {
-                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
-                            .slice().find((g) => {
-                                return g.model === self.geneService.getCurrentModel() &&
-                                    g.tissue === self.geneService.getCurrentTissue();
-                            })
-                        );
-                    }
+                    const sPromise = new Promise((resolve, reject) => {
+                        if (self.geneService.getCurrentModel() &&
+                            self.geneService.getCurrentTissue()) {
+                            self.geneService.setCurrentGene(self.dataService.getGeneEntries()
+                                .slice().find((g) => {
+                                    return g.model === self.geneService.getCurrentModel() &&
+                                        g.tissue === self.geneService.getCurrentTissue();
+                                })
+                            );
+                        }
 
-                    dimension.filterExact(filters[0]);
+                        resolve(true);
+                    });
+                    sPromise.then(() => {
+                        dimension.filterExact(filters[0]);
+                    });
                 } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
                     // Single range-based filter
                     dimension.filterRange(filters[0]);
