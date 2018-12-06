@@ -26,7 +26,6 @@ install:
 
 stages:
   - name: test
-    if: branch = develop
   - name: eb-deploy
 
 jobs:
