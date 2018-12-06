@@ -184,23 +184,36 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         chart.xAxis().scale(chart.x());
                     }
                 })
+                .on('preRedraw', (chart) => {
+                    self.max = -Infinity;
+                    self.updateXDomain();
+                    if (self.max !== -Infinity) {
+                        self.max *= 1.1;
+                        chart.x(d3.scaleLinear().range([
+                            0, (self.rowChart.nativeElement.offsetWidth - 40)
+                        ]).domain([
+                            -self.max, self.max
+                        ]));
+                        chart.xAxis().scale(chart.x());
+                    }
+                })
                 .on('renderlet', (chart) => {
                     if (self.firstRender) {
-                        dc.events.trigger(function() {
-                            self.firstRender = false;
-                            // Copy all vertical texts to another div, so they don't get hidden by
-                            // the row chart svg after being translated
-                            self.moveTextToElement(chart, self.stdCol.nativeElement, 18 / 2);
-                            const width = (isNaN(chart.width())) ? 450 : chart.width();
-                            const height = (isNaN(chart.height())) ? 450 : chart.height();
-                            self.updateChartExtras(
-                                chart,
-                                chart.svg(),
-                                width,
-                                height
-                            );
-                        });
+                        self.firstRender = false;
+                        // Copy all vertical texts to another div, so they don't get hidden by
+                        // the row chart svg after being translated
+                        self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
                     }
+                    dc.events.trigger(function() {
+                        const width = self.rowChart.nativeElement.offsetWidth || 450;
+                        const height = self.rowChart.nativeElement.offsetHeight || 450;
+                        self.updateChartExtras(
+                            chart,
+                            chart.svg(),
+                            width,
+                            height
+                        );
+                    });
                 })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)

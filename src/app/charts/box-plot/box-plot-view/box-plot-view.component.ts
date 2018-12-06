@@ -192,6 +192,12 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
                 .on('renderlet', (chart) => {
+                    if (!chart.selectAll('g.box circle').empty()) {
+                        dc.events.trigger(function() {
+                            self.renderRedCircles(chart, true);
+                        });
+                    }
+
                     if (firstRender) {
                         firstRender = false;
 
@@ -270,26 +276,11 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    updateYDomain() {
-        // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
-        currentGenes.forEach((g) => {
-            if (Math.abs(+g.logfc) > this.max) {
-                this.max = Math.abs(+g.logfc);
-            }
-            if (Math.abs(+g.logfc) > this.max) {
-                this.max = Math.abs(+g.logfc);
-            }
-        });
-    }
-
     removeRedCircle(chart: dc.BoxPlot) {
         chart.selectAll('g.box circle').remove();
     }
 
-    renderRedCircles(chart: dc.BoxPlot) {
+    renderRedCircles(chart: dc.BoxPlot, translate?: boolean) {
         const self = this;
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
@@ -312,38 +303,61 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 g.adj_p_val + '.');
         });
 
-        chart.selectAll('g.box').each(function(el, i) {
-            const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
-            const fcy = (isNaN(cy) ? 0.0 : cy);
-            d3.select(this)
-                .insert('circle', ':last-child')
-                .attr('cx', lineCenter.attr('x1'))
-                .attr('cy', fcy)
-                .attr('fill', '#F47E6C')
-                .style('stroke', '#F47E6C')
-                .style('stroke-width', 3)
-                .attr('r', self.rcRadius)
-                .attr('opacity', 1)
-                .on('mouseover', function() {
-                    self.div.transition()
-                        .duration(200)
-                        .style('opacity', .9);
-                    self.div.html(phrases[i])
-                        .style('left', (d3.event.pageX - 60) + 'px')
-                        .style('top', (d3.event.pageY + 20) + 'px');
-                })
-                .on('mouseout', function() {
-                    self.div.transition()
-                        .duration(500)
-                        .style('opacity', 0);
+        if (!translate) {
+            chart.selectAll('g.box').each(function(el, i) {
+                const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
+                const fcy = (isNaN(cy) ? 0.0 : cy);
+                d3.select(this)
+                    .insert('circle', ':last-child')
+                    .attr('cx', lineCenter.attr('x1'))
+                    .attr('cy', fcy)
+                    .attr('fill', '#F47E6C')
+                    .style('stroke', '#F47E6C')
+                    .style('stroke-width', 3)
+                    .attr('r', self.rcRadius)
+                    .attr('opacity', 1)
+                    .on('mouseover', function() {
+                        self.div.transition()
+                            .duration(200)
+                            .style('opacity', .9);
+                        self.div.html(phrases[i])
+                            .style('left', (d3.event.pageX - 60) + 'px')
+                            .style('top', (d3.event.pageY + 20) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        self.div.transition()
+                            .duration(500)
+                            .style('opacity', 0);
+                    });
                 });
-            });
 
-        const parentNode = chart.select('g.axis.x').node().parentNode;
-        const xAxisNode = chart.select('g.axis.x').node();
-        const firstChild = parentNode.firstChild;
-        if (firstChild) {
-            parentNode.insertBefore(xAxisNode, firstChild);
+            const parentNode = chart.select('g.axis.x').node().parentNode;
+            const xAxisNode = chart.select('g.axis.x').node();
+            const firstChild = parentNode.firstChild;
+            if (firstChild) {
+                parentNode.insertBefore(xAxisNode, firstChild);
+            }
+        } else {
+            chart.selectAll('circle').each(function(el, i) {
+                const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
+                const fcy = (isNaN(cy) ? 0.0 : cy);
+                d3.select(this)
+                    .attr('cx', lineCenter.attr('x1'))
+                    .attr('cy', fcy)
+                    .on('mouseover', function() {
+                        self.div.transition()
+                            .duration(200)
+                            .style('opacity', .9);
+                        self.div.html(phrases[i])
+                            .style('left', (d3.event.pageX - 60) + 'px')
+                            .style('top', (d3.event.pageY + 20) + 'px');
+                    })
+                    .on('mouseout', function() {
+                        self.div.transition()
+                            .duration(500)
+                            .style('opacity', 0);
+                    });
+            });
         }
     }
 
