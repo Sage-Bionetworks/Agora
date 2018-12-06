@@ -173,6 +173,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     return d.key;
                 })
                 .on('preRender', function(chart) {
+                    self.max = -Infinity;
                     self.updateXDomain();
                     if (self.max !== -Infinity) {
                         self.max *= 1.1;
