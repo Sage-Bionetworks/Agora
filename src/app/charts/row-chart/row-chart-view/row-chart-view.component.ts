@@ -12,7 +12,7 @@ import {
 
 import { PlatformLocation } from '@angular/common';
 
-import { Router, NavigationStart, RouterEvent } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
@@ -55,6 +55,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     display: boolean = false;
     canDisplay: boolean = false;
     canResize: boolean = false;
+    firstRender: boolean = true;
     colors: string[] = ['#5171C0'];
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -156,9 +157,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     getChartPromise(): Promise<any> {
-        let firstRender: boolean = true;
+        const self = this;
         return new Promise((resolve, reject) => {
-            const self = this;
             const chartInst = dc.rowChart(self.rowChart.nativeElement)
                 .gap(4)
                 .title(function(d) {
@@ -171,11 +171,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .label((d) => {
                     return d.key;
                 })
-                .on('pretransition', (chart) => {
-                    if (self.canDisplay) {
-                        // smooth the rendering through event throttling
+                .on('renderlet', (chart) => {
+                    if (self.firstRender) {
                         dc.events.trigger(function() {
-                            self.updateXDomain(chart);
+                            self.firstRender = false;
+                            // Copy all vertical texts to another div, so they don't get hidden by
+                            // the row chart svg after being translated
+                            self.moveTextToElement(chart, self.stdCol.nativeElement, 18 / 2);
                             const width = (isNaN(chart.width())) ? 450 : chart.width();
                             const height = (isNaN(chart.height())) ? 450 : chart.height();
                             self.updateChartExtras(
@@ -187,58 +189,46 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         });
                     }
                 })
-                .on('renderlet', (chart) => {
-                    if (firstRender) {
-                        firstRender = false;
-                        dc.events.trigger(function() {
-                            chart.redraw();
-                        });
-                    }
-                })
-                .on('postRender', (chart) => {
-                    // smooth the rendering through event throttling
-                    dc.events.trigger(function() {
-                        self.canDisplay = true;
-                        const squareSize = 18;
-
-                        // Copy all vertical texts to another div, so they don't get hidden by
-                        // the row chart svg after being translated
-                        self.moveTextToElement(chart, self.stdCol.nativeElement, squareSize / 2);
-                    });
-                })
                 .othersGrouper(null)
                 .ordinalColors(this.colors)
                 .dimension(this.dim)
                 .group(this.group)
                 .transitionDuration(0);
 
+            self.updateXDomain(chartInst);
+
             resolve(chartInst);
         });
     }
 
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
-        const textSelection = (svg || chart.svg())
-            .append('text')
-            .attr('class', 'x-axis-label')
-            .attr('text-anchor', 'middle')
-            .attr('x', width / 2)
-            .attr('y', height - 10)
-            .text(text);
+        const textSelection = (svg || chart.svg());
+        if (textSelection !== null) {
+            textSelection
+                .append('text')
+                .attr('class', 'x-axis-label')
+                .attr('text-anchor', 'middle')
+                .attr('x', width / 2)
+                .attr('y', height - 10)
+                .text(text);
 
-        this.adjustXLabel(chart, textSelection, width, height);
+            this.adjustXLabel(chart, textSelection, width, height);
+        }
     }
 
     adjustXLabel(chart: dc.RowChart, sel: any, width?: number, height?: number) {
-        const svgEl = (sel.node() as SVGGraphicsElement);
-        const textDims = svgEl.getBBox();
+        const svgEl = (sel.node() || chart.svg()) as SVGGraphicsElement;
+        if (svgEl !== null) {
+            const textDims = svgEl.getBBox();
 
-        // Dynamically adjust positioning after reading text dimension from DOM
-        // The main svg gets translated by (30, 10) and the flex row has a margin
-        // of 15 pixels. We subtract them from the svg size, get the middle point
-        // then add back the left translate to get the correct center
-        sel
-            .attr('x', ((width - 45) / 2) + 30)
-            .attr('y', height - Math.ceil(textDims.height) / 2);
+            // Dynamically adjust positioning after reading text dimension from DOM
+            // The main svg gets translated by (30, 10) and the flex row has a margin
+            // of 15 pixels. We subtract them from the svg size, get the middle point
+            // then add back the left translate to get the correct center
+            sel
+                .attr('x', ((width - 45) / 2) + 30)
+                .attr('y', height - Math.ceil(textDims.height) / 2);
+        }
     }
 
     updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
@@ -263,19 +253,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
             // Add a label to the x axis
             self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
-        } else {
-            // This part will be called on redraw after filtering, so at this point
-            // we just need to move the lines to the correct position again. First
-            // translate the parent elements
-            const hlines = chart.selectAll('g.row g.hline');
-            hlines.each(function() {
-                d3.select(this).attr('transform', function(d: any) {
-                    return 'translate(' + d.value.logfc + ')';
-                });
-            });
-
-            // Adjust the x label
-            this.adjustXLabel(chart, chart.select('text.x-axis-label'), width, height);
         }
 
         // Finally redraw the lines in each row

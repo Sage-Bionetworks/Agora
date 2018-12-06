@@ -173,6 +173,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getChartPromise(): Promise<dc.BoxPlot> {
+        let firstRender: boolean = true;
         return new Promise((resolve, reject) => {
             const self = this;
             const chartInst = dc.boxPlot(this.boxPlot.nativeElement)
@@ -188,31 +189,34 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
-                .on('pretransition', (chart) => {
-                    if (self.display) {
-                        // smooth the rendering through event throttling
+                .on('renderlet', (chart) => {
+                    if (firstRender) {
+                        firstRender = false;
+
                         dc.events.trigger(function() {
-                            chart.selectAll('rect.box')
-                                .attr('rx', self.boxRadius);
+                            const rrcPromise = new Promise((resolvee, rejectt) => {
+                                chart.selectAll('rect.box')
+                                    .attr('rx', self.boxRadius);
 
-                            if (chart.selectAll('g.box circle').empty()) {
-                                self.renderRedCircles(chart);
-                            } else {
-                                self.renderRedCircles(chart, true);
-                            }
-                            self.updateYDomain(chart);
+                                if (chart.selectAll('g.box circle').empty()) {
+                                    self.renderRedCircles(chart);
+                                }
 
-                            // Adds tooltip below the x axis labels
-                            self.addXAxisTooltips(chart);
+                                // Adds tooltip below the x axis labels
+                                self.addXAxisTooltips(chart);
+
+                                resolvee(true);
+                            });
+                            rrcPromise.then(() => {
+                                if (!chart.selectAll('g.box circle').empty()) {
+                                    self.renderRedCircles(chart, true);
+                                }
+                            });
                         });
                     }
-                })
-                .on('postRender', (chart) => {
-                    // smooth the rendering through event throttling
-                    dc.events.trigger(function() {
-                        chart.redraw();
-                    });
                 });
+
+            self.updateYDomain(chartInst);
 
             resolve(chartInst);
         });

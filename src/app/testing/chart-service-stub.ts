@@ -2,9 +2,27 @@ import { Injectable } from '@angular/core';
 
 import * as dc from 'dc';
 
+import { Subject } from 'rxjs';
+
+import { mockInfo1 } from './gene-mocks';
+
 @Injectable()
 export class ChartServiceStub {
     chartInfos: Map<string, any> = new Map<string, any>();
+    chartNames: Map<string, boolean> = new Map([
+        ['median-chart', false],
+        ['box-plot', false],
+        ['forest-plot', false],
+        ['select-model', false]
+    ]);
+    tissueToFilter: string = '';
+    modelToFilter: string = '';
+
+    // Observable string sources
+    chartsReadySource = new Subject<boolean>();
+
+    // Observable string streams
+    chartsReady$ = this.chartsReadySource.asObservable();
 
     constructor() {
         //
@@ -14,8 +32,12 @@ export class ChartServiceStub {
         if (!this.chartInfos[label]) { this.chartInfos.set(label, chartObj); }
     }
 
+    allChartsLoaded() {
+        return true;
+    }
+
     getChartInfo(label: string): any {
-        return this.chartInfos.get(label);
+        return mockInfo1;
     }
 
     removeChart(chart: any, group?: any, dimension?: any) {
@@ -29,5 +51,9 @@ export class ChartServiceStub {
             dc.chartRegistry.deregister(chart);
             chart.resetSvg();
         }
+    }
+
+    getTooltipText(text: string): string {
+        return 'CBE';
     }
 }
