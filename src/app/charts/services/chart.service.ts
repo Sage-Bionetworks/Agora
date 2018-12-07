@@ -9,9 +9,9 @@ export class ChartService {
     chartInfos: Map<string, any> = new Map<string, any>();
     chartNames: Map<string, boolean> = new Map([
         ['median-chart', false],
-        ['box-plot', false],
-        ['forest-plot', false],
-        ['select-model', false]
+        ['box-plot', true],
+        ['forest-plot', true],
+        ['select-model', true]
     ]);
     tissueToFilter: string = '';
     modelToFilter: string = '';
