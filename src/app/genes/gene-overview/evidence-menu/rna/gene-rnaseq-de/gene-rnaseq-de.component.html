@@ -35,24 +35,15 @@
                         <bp-dialog [name]="'bp'"></bp-dialog>
                     </more-info>
                 </h2>
-                <div class="row sm-row-2">
+                <div class="row fake-row">
                     <div class="col-md-10 col-sm-12 col-12">
-                        <select-menu *ngIf="!isEmptyGene"
+                        <!--  <select-menu *ngIf="!isEmptyGene"
                             [promptText]="'All'"
                             [label]="'select-model'"
                             [columnName]="'select-column-model'"
                             [defaultValue]="getModel(1)">
-                        </select-menu>
-                        <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
-                            [options]="emptySelection"
-                            [(ngModel)]="selectedTissues"
-                            [showToggleAll]="false"
-                            [showHeader]="false"
-                            [panelStyle]="{minWidth:'12em'}"
-                            [defaultLabel]="emptySelectionLabel"
-                            [dropdownIcon]="getDropdownIcon()"
-                            [disabled]="true">
-                        </p-multiSelect>
+                        </select-menu> -->
+                        <h2 class="placeholder-text fake-select">Under construction.</h2>
                     </div>
                 </div>
             </div>
@@ -73,11 +64,12 @@
             </div>
         </div>
         <div #stbp>
-            <box-plot *ngIf="!isEmptyGene" [label]="'box-plot'"></box-plot>
+            <!-- <box-plot *ngIf="!isEmptyGene" [label]="'box-plot'"></box-plot> -->
         </div>
         <div class="row">
-            <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
-                <h2 class="placeholder-text">No expression data is currently available.</h2>
+            <div *ngIf="!isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
+                <!-- <h2 class="placeholder-text">No expression data is currently available.</h2> -->
+                <h2 class="placeholder-text">Under construction.</h2>
             </div>
         </div>
     </div>
@@ -94,10 +86,11 @@
             have similar log-fold change value across tissues.
         </p>
         <div #stfp>
-            <row-chart *ngIf="!isEmptyGene"></row-chart>
+            <!--  <row-chart *ngIf="!isEmptyGene"></row-chart> -->
         </div>
-        <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
-            <h2 class="placeholder-text">No expression data is currently available.</h2>
+        <div *ngIf="!isEmptyGene" class="row rc-empty-plot-content">
+            <!-- <h2 class="placeholder-text">No expression data is currently available.</h2> -->
+            <h2 class="placeholder-text">Under construction.</h2>
         </div>
         <h1 class="inner-section-divider"></h1>
     </div>

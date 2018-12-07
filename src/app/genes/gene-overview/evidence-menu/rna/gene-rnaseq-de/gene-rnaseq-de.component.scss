@@ -43,6 +43,15 @@
         color: #9DA3B3;
     }
 
+    .fake-row {
+        height: 70px;
+
+        .fake-select {
+            top: 0;
+            left: 25%;
+        }
+    }
+
     select {
         @include lato-font('normal');
 
