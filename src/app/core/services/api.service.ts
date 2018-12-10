@@ -113,8 +113,8 @@ export class ApiService {
     }
 
     getTeamMemberImage(name: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
-            'Accept': 'image/jpg',
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg, image/png, image/jpeg',
+            'Accept': 'image/jpg, image/png, image/jpeg',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
             'Access-Control-Allow-Headers': 'Content-Type'
@@ -127,8 +127,8 @@ export class ApiService {
     }
 
     getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
-        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg',
-            'Accept': 'image/jpg',
+        const headers = new HttpHeaders({ 'Content-Type': 'image/jpg, image/png, image/jpeg',
+            'Accept': 'image/jpg, image/png, image/jpeg',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
             'Access-Control-Allow-Headers': 'Content-Type'

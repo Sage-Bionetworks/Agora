@@ -95,7 +95,7 @@ export class ContribTeamsPageComponent implements OnInit {
                 this.teamsImageURLs[i][j] = this.sanitizer.bypassSecurityTrustStyle(
                     `url(${URL.createObjectURL(
                         new Blob([new Object(rawImage) as Blob], {
-                            type: 'image/jpg'
+                            type: 'image/jpg, image/png, image/jpeg'
                         })
                     )}`
                 );

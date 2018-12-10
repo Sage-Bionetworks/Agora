@@ -435,18 +435,57 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) { res.json({ item: null }); } else {
             const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
             gfs.exist({ filename: name }, (err, hasFile) => {
-                if (env === 'development') {
-                    console.log('The team file exists');
-                    console.log(hasFile);
-                }
                 if (hasFile) {
+                    if (env === 'development') {
+                        console.log('The team file exists jpg');
+                        console.log(name);
+                        console.log(hasFile);
+                    }
                     const stream = gfs.createReadStream(name);
                     stream.pipe(res);
                 } else {
-                    res.status(204).send('Could not find member!');
+                    if (env === 'development') {
+                        console.log('The team file isnt jpg');
+                    }
+                    const NAMEJPEG = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpeg';
+                    gfs.exist({ filename: NAMEJPEG }, (err2, hasFile2) => {
+                        if (hasFile2) {
+                            if (env === 'development') {
+                                console.log('The team file exists jpeg');
+                                console.log(NAMEJPEG);
+                                console.log(hasFile);
+                            }
+                            const stream = gfs.createReadStream(NAMEJPEG);
+                            stream.pipe(res);
+                        } else {
+                            if (env === 'development') {
+                                console.log('The team file isnt jpeg');
+                            }
+                            const namePNG = req.query.name
+                            .toLowerCase().replace(/[- ]/g, '_') + '.png';
+                            gfs.exist({ filename: namePNG }, (err3, hasFile3) => {
+                                if (hasFile3) {
+                                    if (env === 'development') {
+                                        console.log('The team file exists png');
+                                        console.log(namePNG);
+                                        console.log(hasFile);
+                                    }
+                                    const stream = gfs.createReadStream(namePNG);
+                                    stream.pipe(res);
+                                } else {
+                                    if (env === 'development') {
+                                        console.log('The team file isnt png');
+                                    }
+                                    console.log(name, NAMEJPEG, namePNG);
+                                    res.status(204).send('Could not find member!');
+                                }
+                            });
+                        }
+                    });
                 }
             });
         }
+
     });
 
     // Get all the tissues

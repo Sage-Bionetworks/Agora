@@ -1,4 +1,4 @@
-<div>
+<div class='contrib-teams'>
     <div class="section-thin section-hero overview-header" tabindex="0">
         <div class="row no-gutters">
             <div class="col-md-7">
@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin overview-desc" tabindex="0">
+    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin" [ngClass]="{'overview-desc':i}" tabindex="0">
         <h2>
             {{team.team}}
         </h2>
