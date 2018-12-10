@@ -103,29 +103,33 @@ export class GeneNetworkComponent implements OnInit {
         return colorClassObj;
     }
 
-    updategene(event) {
+    updategene(event: Gene) {
         const self = this;
-        this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
-            const lsnPromise = new Promise((resolve, reject) => {
-                this.dataService.loadSelectedNodes(linksList, event);
-                resolve(true);
-            });
-            lsnPromise.then(() => {
-                const dataNetwork = self.forceService.getGeneClickedList();
-                self.selectedGeneData.links = dataNetwork.links;
-                self.selectedGeneData.nodes = dataNetwork.nodes;
-                self.selectedGeneData.origin = dataNetwork.origin;
-                self.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
-                    if (data.info) {
-                        self.geneInfo = data.info;
-                    } else {
-                        self.geneInfo = {
-                            hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
-                        };
-                    }
+        console.log(event);
+        console.log(this.geneService.getCurrentGene().hgnc_symbol);
+        if (event.hgnc_symbol !== this.geneService.getCurrentGene().hgnc_symbol) {
+            this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
+                const lsnPromise = new Promise((resolve, reject) => {
+                    this.forceService.processSelectedNode(linksList, event);
+                    resolve(true);
+                });
+                lsnPromise.then(() => {
+                    const dataNetwork = self.forceService.getGeneClickedList();
+                    self.selectedGeneData.links = dataNetwork.links;
+                    self.selectedGeneData.nodes = dataNetwork.nodes;
+                    self.selectedGeneData.origin = dataNetwork.origin;
+                    self.apiService.getGene(event.hgnc_symbol).subscribe((data: GeneResponse) => {
+                        if (data.info) {
+                            self.geneInfo = data.info;
+                        } else {
+                            self.geneInfo = {
+                                hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
+                            };
+                        }
+                    });
                 });
             });
-        });
+        }
     }
 
     filterNodes(lvl) {
@@ -161,31 +165,29 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     loadGenes() {
-        this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
-            this.forceService.setData(linksList.items);
-            this.dataService.loadNodes().then(() => {
-                const dn = this.forceService.getGeneClickedList();
-                this.geneInfo = this.geneService.getCurrentInfo();
-                this.networkData = {
-                    links: [],
-                    nodes: [],
-                    origin: undefined,
-                    filterLvl: 0
-                };
-                this.selectedGeneData.nodes = [];
-                this.selectedGeneData.links = [];
-                this.selectedGeneData.origin = undefined;
-                this.filterlvl = dn.filterLvl;
-                if (dn.links.length > 1000) {
-                    this.initialFilter();
-                } else {
-                    this.networkData = dn;
-                    this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
-                    this.selectedGeneData.links = this.networkData.links.slice().reverse();
-                    this.selectedGeneData.origin = this.networkData.origin;
-                    this.dataLoaded = true;
-                }
-            });
+        this.forceService.setData(this.forceService.getLinksListItems());
+        this.dataService.loadNodes().then(() => {
+            const dn = this.forceService.getGeneClickedList();
+            this.geneInfo = this.geneService.getCurrentInfo();
+            this.networkData = {
+                links: [],
+                nodes: [],
+                origin: undefined,
+                filterLvl: 0
+            };
+            this.selectedGeneData.nodes = [];
+            this.selectedGeneData.links = [];
+            this.selectedGeneData.origin = undefined;
+            this.filterlvl = dn.filterLvl;
+            if (dn.links.length > 1000) {
+                this.initialFilter();
+            } else {
+                this.networkData = dn;
+                this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
+                this.selectedGeneData.links = this.networkData.links.slice().reverse();
+                this.selectedGeneData.origin = this.networkData.origin;
+                this.dataLoaded = true;
+            }
         });
     }
 

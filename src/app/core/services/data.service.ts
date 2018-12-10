@@ -66,10 +66,6 @@ export class DataService {
         });
     }
 
-    loadSelectedNodes(sList: LinksListResponse, sNode: Gene) {
-        this.forceService.processSelectedNode(sList, sNode);
-    }
-
     loadGenes(data: GenesResponse) {
         if (data.geneEntries) { this.geneEntries = data.geneEntries; }
         data.items.forEach((d: Gene) => {

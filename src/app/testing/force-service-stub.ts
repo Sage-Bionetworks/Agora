@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Gene, GeneNetwork, GeneNetworkLinks } from '../models';
+import { Gene, GeneNetwork, GeneNetworkLinks, LinksListResponse } from '../models';
 
 @Injectable()
 export class ForceServiceStub {
@@ -27,6 +27,7 @@ export class ForceServiceStub {
         filterLvl: 0
     };
     currentGene: Gene;
+    linksListItems: GeneNetworkLinks[];
 
     setData(data: GeneNetworkLinks[]) {
         this.rawData = data;
@@ -57,6 +58,18 @@ export class ForceServiceStub {
     }
 
     processNodes(gene: Gene) {
+        //
+    }
+
+    setLinksListItems(items: GeneNetworkLinks[]) {
+        this.linksListItems = items;
+    }
+
+    getLinksListItems(): GeneNetworkLinks[] {
+        return this.linksListItems;
+    }
+
+    processSelectedNode(data: LinksListResponse , gene: Gene) {
         //
     }
 }

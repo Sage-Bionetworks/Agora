@@ -36,10 +36,6 @@ export class DataServiceStub {
         });
     }
 
-    loadSelectedNodes(sList: LinksListResponse, sNode: Gene) {
-        //
-    }
-
     loadGenes(data: GenesResponse) {
         this.data = [mockGene1, mockGene2];
     }

@@ -36,6 +36,7 @@ export class ForceService {
         origin: undefined,
         filterLvl: 0
     };
+    linksListItems: GeneNetworkLinks[];
     currentGene: Gene;
 
     constructor(
@@ -284,7 +285,16 @@ export class ForceService {
         });
     }
 
+    setLinksListItems(items: GeneNetworkLinks[]) {
+        this.linksListItems = items;
+    }
+
+    getLinksListItems(): GeneNetworkLinks[] {
+        return this.linksListItems;
+    }
+
     processSelectedNode(data: LinksListResponse , gene: Gene) {
+        this.setLinksListItems(data.items);
         const dicNodesC = [];
         const dicLinksC = [];
         dicNodesC[gene.ensembl_gene_id] = {
