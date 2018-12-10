@@ -67,7 +67,6 @@ export class DataService {
     }
 
     loadSelectedNodes(sList: LinksListResponse, sNode: Gene) {
-        console.log(sList);
         this.forceService.processSelectedNode(sList, sNode);
     }
 

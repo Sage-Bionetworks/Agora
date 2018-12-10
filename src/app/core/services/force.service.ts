@@ -129,7 +129,6 @@ export class ForceService {
                     .value++;
                 dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
-                console.log(genes);
                 if (genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
                     || genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id) {
                     if (dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value
@@ -286,7 +285,6 @@ export class ForceService {
     }
 
     processSelectedNode(data: LinksListResponse , gene: Gene) {
-        console.log(data);
         const dicNodesC = [];
         const dicLinksC = [];
         dicNodesC[gene.ensembl_gene_id] = {
@@ -302,7 +300,6 @@ export class ForceService {
             origin: gene,
             filterLvl: 0
         };
-        console.log(this.genesClicked);
         this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
         data.items.forEach((obj: any) => {
             this.processNode(obj, dicNodesC, this.genesClicked);
