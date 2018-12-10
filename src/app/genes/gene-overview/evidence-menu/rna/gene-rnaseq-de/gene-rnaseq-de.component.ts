@@ -112,11 +112,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
                 if (this.gene && this.gene._id) {
                     this.isEmptyGene = false;
-
-                    this.toggleTissueModel().then(() => {
-                        this.dataLoaded = true;
-                    });
+                } else {
+                    this.isEmptyGene = true;
                 }
+                this.dataLoaded = true;
             });
         }
     }
@@ -194,7 +193,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             (this.tissues.length ? this.tissues[0].value : '');
     }
 
-    async toggleTissueModel() {
+    toggleTissueModel() {
         // Update the current gene for this tissue
         this.apiService.getGene(
             this.gene.ensembl_gene_id,

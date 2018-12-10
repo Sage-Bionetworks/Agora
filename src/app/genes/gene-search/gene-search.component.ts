@@ -93,7 +93,6 @@ export class GeneSearchComponent implements OnInit {
         if (!this.geneService.getCurrentGene()) {
             this.getGene(info.hgnc_symbol);
         } else {
-            this.geneService.updatePreviousGene();
             if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
                 this.getGene(info.hgnc_symbol);
             } else {

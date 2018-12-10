@@ -55,8 +55,8 @@ export class GeneService {
     }
 
     updatePreviousGene() {
+        // Only update the previous gene if we already have a current one
         if (this.getCurrentGene() && this.getCurrentGene().hgnc_symbol) {
-            // Only update the previous gene if we already have a current one
             this.setPreviousGene(this.getCurrentGene());
         }
     }
@@ -68,6 +68,8 @@ export class GeneService {
         this.setFC(data.minFC, data.maxFC);
         this.setLogFC(data.minFC, data.maxFC);
         this.setAdjPValue(data.minAdjPValue, data.maxAdjPValue);
+        this.setCurrentModel(data.item.model);
+        this.setCurrentTissue(data.item.tissue);
     }
 
     setCurrentInfo(geneInfo: GeneInfo) {

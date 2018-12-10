@@ -44,7 +44,6 @@ describe('Component: GeneOverview', () => {
     let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -64,8 +63,7 @@ describe('Component: GeneOverview', () => {
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ForceService, useValue: new ForceServiceStub() },
-                { provide: NavigationService, useValue: new NavigationServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: NavigationService, useValue: new NavigationServiceStub() }
             ]
         })
         .compileComponents();

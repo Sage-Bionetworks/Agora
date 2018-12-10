@@ -7,7 +7,6 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
 import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
@@ -23,6 +22,8 @@ import {
 import { MenuItem } from 'primeng/api';
 
 import { throwError } from 'rxjs';
+
+import { TabMenu } from 'primeng/tabmenu';
 
 import * as d3 from 'd3';
 
@@ -41,7 +42,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
-    @ViewChild('overviewMenu') menu: MenuItem[];
+    @ViewChild('overviewMenu') menu: TabMenu;
 
     showMobileMenu: boolean = false;
     showDesktopMenu: boolean = false;
@@ -63,7 +64,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     private mobileOpen: boolean = true;
 
     constructor(
-        private location: PlatformLocation,
         private navService: NavigationService,
         private apiService: ApiService,
         private geneService: GeneService,
@@ -183,8 +183,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         d3.selectAll('.mc-tooltip, .bp-tooltip, .bp-axis-tooltip, .rc-tooltip')
             .remove();
 
-        if (((!this.disableMenu && ((this.activeItem && this.menu['activeItem'])
-            ? (this.activeItem.label !== this.menu['activeItem'].label) : false)
+        if (((!this.disableMenu && ((this.activeItem && this.menu.activeItem)
+            ? (this.activeItem.label !== this.menu.activeItem.label) : false)
             ) || this.neverActivated) && this.dataLoaded || event) {
             this.neverActivated = false;
             this.disableMenu = true;
@@ -192,9 +192,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 i.disabled = true;
             });
 
-            this.activeItem =
-            this.menu['activeItem'] ? this.menu['activeItem'] :
-            event ? {label: event.target.textContent} : {label: this.isNominatedTargetMenu()};
+            this.activeItem = (this.menu.activeItem) ? this.menu.activeItem :
+                event ? {label: event.target.textContent} : {label: this.isNominatedTargetMenu()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'NOMINATION DETAILS':
