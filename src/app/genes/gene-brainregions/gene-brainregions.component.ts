@@ -44,24 +44,10 @@ export class GeneBRComponent implements OnInit {
             this.selectedGeneData = this.forceService.getGeneClickedList();
             this.dataLoaded = true;
         } else {
-            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
-                if (!data.item) { this.router.navigate(['/genes']); }
-                this.geneService.setCurrentGene(data.item);
-                this.geneService.setCurrentInfo(data.info);
-                this.gene = data.item;
-                this.geneInfo = data.info;
-
-                this.apiService.getLinksList(this.gene).subscribe(
-                    (linksList: LinksListResponse) => {
-                    this.forceService.setData(linksList.items);
-                    this.dataService.loadNodes(this.gene).then((datalinks: any) => {
-                        this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
-                            this.selectedGeneData.links = dn.links.slice().reverse();
-                            this.dataLoaded = true;
-                        });
-                    });
-                });
-            });
+            this.gene = this.geneService.getCurrentGene();
+            this.selectedGeneData.links = this.forceService.getGeneClickedList().
+                links.slice().reverse();
+            this.dataLoaded = true;
         }
     }
 

@@ -53,6 +53,7 @@ export class GeneNetworkComponent implements OnInit {
         // The data wasn't loaded yet, redirect for now
         this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.navService.getRoute().snapshot.paramMap.get('id'); }
+
         if (!!this.forceService.getGeneOriginalList() &&
             this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
             this.loadGenes();
@@ -103,17 +104,23 @@ export class GeneNetworkComponent implements OnInit {
     }
 
     updategene(event) {
+        const self = this;
         this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
-            this.dataService.loadSelectedNodes(linksList, event).then((datanetwork: any) => {
-                this.selectedGeneData.links = datanetwork.links;
-                this.selectedGeneData.nodes = datanetwork.nodes;
-                this.selectedGeneData.origin = datanetwork.origin;
-                this.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
+            const lsnPromise = new Promise((resolve, reject) => {
+                this.dataService.loadSelectedNodes(linksList, event);
+                resolve(true);
+            });
+            lsnPromise.then(() => {
+                const dataNetwork = self.forceService.getGeneClickedList();
+                self.selectedGeneData.links = dataNetwork.links;
+                self.selectedGeneData.nodes = dataNetwork.nodes;
+                self.selectedGeneData.origin = dataNetwork.origin;
+                self.apiService.getGene(event.id).subscribe((data: GeneResponse) => {
                     if (data.info) {
-                        this.geneInfo = data.info;
+                        self.geneInfo = data.info;
                     } else {
-                        this.geneInfo = {
-                            hgnc_symbol: this.selectedGeneData.origin.hgnc_symbol
+                        self.geneInfo = {
+                            hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
                         };
                     }
                 });
@@ -156,8 +163,8 @@ export class GeneNetworkComponent implements OnInit {
     loadGenes() {
         this.apiService.getLinksList(this.currentGene).subscribe((linksList: LinksListResponse) => {
             this.forceService.setData(linksList.items);
-            this.dataService.loadNodes(this.currentGene)
-            .then((dn: GeneNetwork) => {
+            this.dataService.loadNodes().then(() => {
+                const dn = this.forceService.getGeneClickedList();
                 this.geneInfo = this.geneService.getCurrentInfo();
                 this.networkData = {
                     links: [],

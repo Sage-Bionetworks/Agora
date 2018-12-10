@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 
 import { ApiService, ForceService } from '.';
 
-import { Gene, GenesResponse, LinksListResponse, GeneNetwork } from '../../models';
+import { Gene, GenesResponse, LinksListResponse } from '../../models';
 
 import { Observable, forkJoin } from 'rxjs';
 
@@ -59,12 +59,16 @@ export class DataService {
         ]);
     }
 
-    loadNodes(gene: Gene): Promise<GeneNetwork> {
-        return this.forceService.processNodes(gene);
+    loadNodes(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.forceService.processNodes();
+            resolve(true);
+        });
     }
 
-    loadSelectedNodes(sList: LinksListResponse, sNode: Gene): Promise<GeneNetwork> {
-        return this.forceService.processSelectedNode(sList, sNode);
+    loadSelectedNodes(sList: LinksListResponse, sNode: Gene) {
+        console.log(sList);
+        this.forceService.processSelectedNode(sList, sNode);
     }
 
     loadGenes(data: GenesResponse) {

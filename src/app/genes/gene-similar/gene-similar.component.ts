@@ -85,27 +85,13 @@ export class GeneSimilarComponent implements OnInit {
                 this.dataLoaded = true;
             });
         } else {
-        this.apiService.getGene(this.id).subscribe((data) => {
-            if (!data['item']) { this.router.navigate(['/genes']); }
-            this.geneService.setCurrentGene(data['item']);
-            this.geneService.setCurrentInfo(data['geneInfo']);
-            this.gene = data['item'];
-            this.geneInfo = data['geneInfo'];
-            this.apiService.getLinksList(this.gene).subscribe(
-                (linksList: LinksListResponse) => {
-                this.forceService.setData(linksList.items);
-                this.dataService.loadNodes(this.gene).then((datalinks: any) => {
-                    this.forceService.processNodes(this.gene).then((dn: GeneNetwork) => {
-                        const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
-                        this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
-                            this.genesInfo = datas['items'];
-                            this.totalRecords = datas['items'].length;
-                            this.loading = false;
-                        });
-                    });
-                });
+            const dn = this.forceService.getGeneClickedList();
+            const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
+            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
+                this.genesInfo = datas['items'];
+                this.totalRecords = datas['items'].length;
+                this.loading = false;
             });
-        });
         }
     }
 

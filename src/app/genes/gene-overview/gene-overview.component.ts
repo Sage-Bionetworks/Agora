@@ -112,9 +112,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 }
             }
         });
-        this.location.onPopState(() => {
-            // this.navService.setOvMenuTabIndex(0);
-        });
 
         // Get the current clicked gene, always update
         this.subscription = this.forceService.getGenes()
@@ -284,6 +281,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
                     // Genes response
                     this.dataService.loadGenes(responseList[0]);
+                    this.dataService.loadSelectedNodes(responseList[1], this.gene);
                     this.geneService.loadGeneTissues(responseList[2]);
                     this.geneService.loadGeneModels(responseList[3]);
 

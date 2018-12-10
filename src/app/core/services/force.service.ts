@@ -3,6 +3,8 @@ import { Gene, LinksListResponse } from '../../models';
 
 import { GeneNetwork, GeneLink, GeneNode, GeneNetworkLinks } from '../../models/geneLink';
 
+import { GeneService } from './gene.service';
+
 @Injectable()
 export class ForceService {
 
@@ -35,6 +37,10 @@ export class ForceService {
         filterLvl: 0
     };
     currentGene: Gene;
+
+    constructor(
+        private geneService: GeneService
+    ) {}
 
     setData(data: GeneNetworkLinks[]) {
         this.rawData = data;
@@ -123,11 +129,12 @@ export class ForceService {
                     .value++;
                 dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
-                if (this.genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
-                    || this.genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id) {
+                console.log(genes);
+                if (genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
+                    || genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id) {
                     if (dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value
-                        > this.genes.filterLvl) {
-                        this.genes.filterLvl =
+                        > genes.filterLvl) {
+                        genes.filterLvl =
                             dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id].value;
                     }
                 }
@@ -141,11 +148,11 @@ export class ForceService {
                     .value++;
                 dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id]
                     .brainregions.push(obj.brainRegion);
-                if (this.genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
-                    || this.genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id ) {
+                if (genes.origin.ensembl_gene_id === obj.geneA_ensembl_gene_id
+                    || genes.origin.ensembl_gene_id === obj.geneB_ensembl_gene_id ) {
                     if (dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id].value
-                        > this.genes.filterLvl) {
-                        this.genes.filterLvl =
+                        > genes.filterLvl) {
+                        genes.filterLvl =
                         dicL[obj.geneB_ensembl_gene_id + obj.geneA_ensembl_gene_id].value;
                     }
                 }
@@ -278,58 +285,54 @@ export class ForceService {
         });
     }
 
-    processSelectedNode(data: LinksListResponse , gene: Gene): Promise<GeneNetwork> {
-        return new Promise((resolve, reject) => {
-            const dicNodesC = [];
-            const dicLinksC = [];
-            dicNodesC[gene.ensembl_gene_id] = {
-                id: gene.ensembl_gene_id,
-                ensembl_gene_id: gene.ensembl_gene_id,
-                group: 1,
-                hgnc_symbol: gene.hgnc_symbol,
-                brainregions: []
-            };
-            this.genesClicked = {
-                links: [],
-                nodes: [],
-                origin: gene,
-                filterLvl: 0
-            };
-            this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
-            data.items.forEach((obj: any) => {
-                this.processNode(obj, dicNodesC, this.genesClicked);
-                this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
-            });
-            resolve(this.genesClicked);
+    processSelectedNode(data: LinksListResponse , gene: Gene) {
+        console.log(data);
+        const dicNodesC = [];
+        const dicLinksC = [];
+        dicNodesC[gene.ensembl_gene_id] = {
+            id: gene.ensembl_gene_id,
+            ensembl_gene_id: gene.ensembl_gene_id,
+            group: 1,
+            hgnc_symbol: gene.hgnc_symbol,
+            brainregions: []
+        };
+        this.genesClicked = {
+            links: [],
+            nodes: [],
+            origin: gene,
+            filterLvl: 0
+        };
+        console.log(this.genesClicked);
+        this.genesClicked.nodes = [dicNodesC[gene.ensembl_gene_id]];
+        data.items.forEach((obj: any) => {
+            this.processNode(obj, dicNodesC, this.genesClicked);
+            this.processLink(obj, dicLinksC, dicNodesC, this.genesClicked);
         });
     }
 
-    processNodes(gene: Gene): Promise<GeneNetwork> {
-        return new Promise((resolve, reject) => {
-            this.currentGene = gene;
-            this.genes.origin = gene;
-            this.genes.filterLvl = 0;
-            this.dicNodes[this.currentGene.ensembl_gene_id] = {
-                id: this.currentGene.ensembl_gene_id,
-                ensembl_gene_id: this.currentGene.ensembl_gene_id,
-                group: 1,
-                hgnc_symbol: this.currentGene.hgnc_symbol,
-                brainregions: []
-            };
-            this.genes.nodes = [...this.genes.nodes,
-                this.dicNodes[this.currentGene.ensembl_gene_id]];
-            this.rawData.forEach((obj: any) => {
-                this.processNode(obj, this.dicNodes, this.genes);
-                this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);
-            });
-            this.genes.links.sort((a, b) => {
-                return a['value'] - b['value'];
-            });
-            this.genesClicked = this.genes;
-            // TODO: is a waste to return a promise and emit an event.
-            // update network component to use events.
-            this.emitDataChangeEvent(this.genes);
-            resolve(this.genes);
+    processNodes() {
+        const currentGene = this.geneService.getCurrentGene();
+        this.genes.origin = currentGene;
+        this.genes.filterLvl = 0;
+        this.dicNodes[currentGene.ensembl_gene_id] = {
+            id: currentGene.ensembl_gene_id,
+            ensembl_gene_id: currentGene.ensembl_gene_id,
+            group: 1,
+            hgnc_symbol: currentGene.hgnc_symbol,
+            brainregions: []
+        };
+        this.genes.nodes = [...this.genes.nodes,
+            this.dicNodes[currentGene.ensembl_gene_id]];
+        this.rawData.forEach((obj: any) => {
+            this.processNode(obj, this.dicNodes, this.genes);
+            this.processLink(obj, this.dicLinks, this.dicNodes, this.genes);
         });
+        this.genes.links.sort((a, b) => {
+            return a['value'] - b['value'];
+        });
+        this.genesClicked = this.genes;
+        // TODO: is a waste to return a promise and emit an event.
+        // update network component to use events.
+        this.emitDataChangeEvent(this.genes);
     }
 }

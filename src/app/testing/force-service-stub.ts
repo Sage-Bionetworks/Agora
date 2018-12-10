@@ -52,9 +52,11 @@ export class ForceServiceStub {
         return null;
     }
 
-    processNodes(gene: Gene): Promise<GeneNetwork> {
-        return new Promise((resolve, reject) => {
-            resolve(this.genes);
-        });
+    getGeneClickedList() {
+        return this.genesClicked;
+    }
+
+    processNodes(gene: Gene) {
+        //
     }
 }

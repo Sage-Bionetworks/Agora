@@ -30,10 +30,14 @@ export class DataServiceStub {
         ]);
     }
 
-    loadNodes(sgene?: Gene): Promise<GeneNetwork> {
+    loadNodes(sgene?: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             resolve(mockNetwork1);
         });
+    }
+
+    loadSelectedNodes(sList: LinksListResponse, sNode: Gene) {
+        //
     }
 
     loadGenes(data: GenesResponse) {

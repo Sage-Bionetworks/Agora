@@ -4,6 +4,6 @@ export * from './api.service';
 export * from './auth-guard.service';
 export * from './authentication.service';
 export * from './navigation.service';
+export * from './gene.service';
 export * from './force.service';
 export * from './data.service';
-export * from './gene.service';
