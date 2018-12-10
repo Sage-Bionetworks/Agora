@@ -4,7 +4,7 @@
             <div class="col-xs-12 col-sm-4">
                 <h4 class="filter-title">Filter by Number of Edges</h4>
             </div>
-            <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-12 col-sm-7 right">
                 <ul class="steps">
                     <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
                         <a (click)="filterNodes(i)" class="steps-marker"></a>
