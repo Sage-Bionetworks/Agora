@@ -1,3 +1,39 @@
 .link-heading {
     white-space: nowrap;
 }
+.ui-dialog-mask{
+    background-color: #9DA3B3;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+}
+
+.ui-dialog-content{
+    max-width: 80ch;
+    margin: auto;
+    >div:first-of-type{
+        text-align-last: center;
+        div{
+            span{
+                color: #3F5EAB;
+                font-size: 28px;
+            }
+        }
+    }
+}
+.link {
+    font-family: Lato;
+    font-weight: 600;
+    font-style: normal;
+    cursor: pointer;
+    width: 100%;
+    line-height: normal;
+    font-size: 18px;
+    text-decoration: underline;
+    color: #5BB0B5 !important;
+    position: relative;
+    top: inherit;
+    left: inherit;
+  }
