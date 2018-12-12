@@ -26,6 +26,7 @@ import { throwError } from 'rxjs';
 import { TabMenu } from 'primeng/tabmenu';
 
 import * as d3 from 'd3';
+import * as dc from 'dc';
 
 @Component({
     selector: 'gene-overview',
@@ -72,6 +73,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     ) { }
 
     ngOnInit() {
+        dc.chartRegistry.clear();
+
         // Populate the tab menu
         this.items = [
             { label: 'NOMINATION DETAILS', disabled: this.disableMenu },

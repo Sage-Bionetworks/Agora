@@ -48,6 +48,10 @@ export class ChartService {
                 break;
             }
         }
+        console.log(dc.chartRegistry.list());
+        dc.chartRegistry.list().forEach((c) => {
+            console.log(c.data());
+        });
 
         return loaded;
     }
@@ -65,6 +69,7 @@ export class ChartService {
                 dimension.filterAll();
             }
             dc.chartRegistry.deregister(chart);
+            chart.dimension().dispose();
             chart.resetSvg();
         }
     }

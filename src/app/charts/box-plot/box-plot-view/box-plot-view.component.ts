@@ -78,6 +78,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             if (event instanceof NavigationStart) {
                 this.display = false;
                 this.removeChart();
+                console.log(dc.chartRegistry.list());
             }
         });
         this.location.onPopState(() => {
