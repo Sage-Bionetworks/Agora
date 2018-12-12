@@ -28,7 +28,12 @@ export class ApiService {
 
     // Get a list of links related to a gene
     getLinksList(sgene: Gene): Observable<LinksListResponse> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
 
         return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`,
             { headers });
@@ -36,7 +41,12 @@ export class ApiService {
 
     // Get all the genes
     getGenes(): Observable<GenesResponse> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         const params = new HttpParams();
 
         // Get all the genes to render the charts
@@ -44,7 +54,12 @@ export class ApiService {
     }
 
     getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         let params = new HttpParams();
 
         for (const key in paramsObj) {
@@ -57,20 +72,35 @@ export class ApiService {
     }
 
     getTableData(): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         const params = new HttpParams();
 
         return this.http.get('/api/genes/table', { headers, params });
     }
 
     getInfosMatchId(id: string): Observable<GeneInfosResponse> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
 
         return this.http.get<GeneInfosResponse>('/api/gene/infos/' + id, { headers });
     }
 
     getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         const params = new HttpParams().set(
             'ids', ids.map((e) => e).join(',')
         );
@@ -78,7 +108,12 @@ export class ApiService {
     }
 
     getGene(id: string, tissue?: string, model?: string): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         let params = new HttpParams().set(
             'id', id
         );
@@ -97,7 +132,12 @@ export class ApiService {
     }
 
     getTeams(info: GeneInfo): Observable<object> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         const params = new HttpParams().set(
             'teams', info.nominatedtarget.map((e) => e.team).join(', ')
         );
@@ -161,22 +201,42 @@ export class ApiService {
     }
 
     getTissues(): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         return this.http.get('/api/tissues', { headers });
     }
 
     getGeneTissues(): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         return this.http.get('/api/tissues/gene', { headers });
     }
 
     getModels(): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         return this.http.get('/api/models', { headers });
     }
 
     getGeneModels(): Observable<any> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
         return this.http.get('/api/models/gene', { headers });
     }
 }
