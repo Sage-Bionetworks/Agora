@@ -24,7 +24,12 @@ export class DataServiceStub {
     loadData(gene: Gene): Observable<any[]> {
         return forkJoin([
             of([mockGene1, mockGene2]),
-            of({ items: [mockDataLink1, mockDataLink2] }),
+            of({ items: [mockDataLink1, mockDataLink2] })
+        ]);
+    }
+
+    loadTissuesModels(): Observable<any[]> {
+        return forkJoin([
             of([mockTissues]),
             of([mockModels])
         ]);

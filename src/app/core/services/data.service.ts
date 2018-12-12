@@ -48,12 +48,18 @@ export class DataService {
     loadData(gene: Gene): Observable<any[]> {
         const genesResponse = this.apiService.getGenes();
         const nodesResponse = this.apiService.getLinksList(gene);
+
+        return forkJoin([
+            genesResponse,
+            nodesResponse
+        ]);
+    }
+
+    loadTissuesModels(): Observable<any[]> {
         const tissuesResponse = this.apiService.getGeneTissues();
         const modelsResponse = this.apiService.getGeneModels();
 
         return forkJoin([
-            genesResponse,
-            nodesResponse,
             tissuesResponse,
             modelsResponse
         ]);
