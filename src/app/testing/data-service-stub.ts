@@ -10,7 +10,7 @@ import {
     mockModels
 } from './gene-mocks';
 
-import { Gene, LinksListResponse, GenesResponse, GeneNetwork } from '../models';
+import { Gene, LinksListResponse, GenesResponse, GeneNetwork, GeneResponse } from '../models';
 
 import { forkJoin, of, Observable } from 'rxjs';
 
@@ -21,15 +21,16 @@ export class DataServiceStub {
     data: any;
     ndx: any;
 
-    loadData(gene: Gene): Observable<any[]> {
-        return forkJoin([
-            of([mockGene1, mockGene2]),
-            of({ items: [mockDataLink1, mockDataLink2] })
-        ]);
+    loadData(): Observable<GenesResponse> {
+        return of({
+            items: [mockGene1, mockGene2],
+            geneEntries: [mockGene1, mockGene2]
+        } as GeneResponse);
     }
 
-    loadTissuesModels(): Observable<any[]> {
+    loadTissuesModels(gene: Gene): Observable<any[]> {
         return forkJoin([
+            of({ items: [mockDataLink1, mockDataLink2] }),
             of([mockTissues]),
             of([mockModels])
         ]);
