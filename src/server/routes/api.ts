@@ -153,6 +153,9 @@ connection.once('open', () => {
         resObj.items = chartGenes;
 
         // Use mongoose to get one page of genes
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
         res.json(resObj);
     });
 
@@ -192,6 +195,9 @@ connection.once('open', () => {
         if (sortOrder === -1) { genes.reverse(); }
 
         // Send the final genes page
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
         res.json({ items: genes.slice(skip, skip + limit), totalRecords });
     });
 
@@ -203,6 +209,9 @@ connection.once('open', () => {
             console.log(req.query);
         }
 
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
         res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
     });
 
@@ -227,6 +236,9 @@ connection.once('open', () => {
                     if (err) {
                         next(err);
                     } else {
+                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                        res.setHeader('Pragma', 'no-cache');
+                        res.setHeader('Expires', 0);
                         res.json({ items: geneInfos, isEnsembl });
                     }
                 });
@@ -250,6 +262,9 @@ connection.once('open', () => {
                     if (err) {
                         next(err);
                     } else {
+                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                        res.setHeader('Pragma', 'no-cache');
+                        res.setHeader('Expires', 0);
                         res.json({ items: geneInfos });
                     }
                 });
@@ -332,6 +347,9 @@ connection.once('open', () => {
                                 console.log(geneEntries[0]);
                             }
 
+                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                            res.setHeader('Pragma', 'no-cache');
+                            res.setHeader('Expires', 0);
                             res.json({
                                 info,
                                 item: geneEntries[0],
@@ -378,6 +396,11 @@ connection.once('open', () => {
                                 next(errC);
                             } else {
                                 const flinks = [...links, ...linkB, ...linksC];
+                                res.setHeader(
+                                    'Cache-Control', 'no-cache, no-store, must-revalidate'
+                                );
+                                res.setHeader('Pragma', 'no-cache');
+                                res.setHeader('Expires', 0);
                                 res.json({ items: flinks });
                             }
                         });
@@ -402,6 +425,9 @@ connection.once('open', () => {
                 if (err) {
                     next(err);
                 } else {
+                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
                     res.json({ items: team });
                 }
             });
@@ -498,6 +524,9 @@ connection.once('open', () => {
 
         // Return an empty array in case we don't have tissues
         if (!allTissues.length) { res.json({ items: [] }); } else {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
             res.json({ items: allTissues });
         }
     });
@@ -512,6 +541,9 @@ connection.once('open', () => {
 
         // Return an empty array in case we don't have tissues
         if (!geneTissues.length) { res.json({ items: [] }); } else {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
             res.json({ items: geneTissues });
         }
     });
@@ -526,6 +558,9 @@ connection.once('open', () => {
 
         // Return an empty array in case we don't have models
         if (!allModels.length) { res.json({ items: [] }); } else {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
             res.json({ items: allModels });
         }
     });
@@ -540,6 +575,9 @@ connection.once('open', () => {
 
         // Return an empty array in case we don't have models
         if (!geneModels.length) { res.json({ items: [] }); } else {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
             res.json({ items: geneModels });
         }
     });
