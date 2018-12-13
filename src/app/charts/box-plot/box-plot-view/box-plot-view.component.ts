@@ -18,6 +18,8 @@ import { Gene } from '../../../models';
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
 
+import { Subscription } from 'rxjs';
+
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
@@ -48,6 +50,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     display: boolean = false;
     counter: number = 0;
     geneEntries: Gene[] = [];
+    routerSubscription: Subscription;
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -74,16 +77,13 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnInit() {
         // If we move away from the overview page, remove
         // the charts
-        this.router.events.subscribe((event) => {
+        this.routerSubscription = this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                this.display = false;
-                this.removeChart();
-                console.log(dc.chartRegistry.list());
+                this.removeSelf();
             }
         });
         this.location.onPopState(() => {
-            this.display = false;
-            this.removeChart();
+            this.removeSelf();
         });
 
         this.chartService.chartsReady$.subscribe((state: boolean) => {
@@ -92,6 +92,16 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.initChart();
             }
         });
+    }
+
+    removeSelf() {
+        this.display = false;
+        this.removeChart();
+        this.chartService.removeChartName(this.label);
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+        this.geneService.setEmptyGeneState(true);
     }
 
     removeChart() {

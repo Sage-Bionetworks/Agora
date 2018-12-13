@@ -38,9 +38,23 @@ export class ChartService {
 
     removeChartName(name: string) {
         if (name && this.chartNames.has(name)) { this.chartNames.set(name, false); }
+
+        if (this.allEmptyCharts()) { dc.chartRegistry.clear(); }
     }
 
-    allChartsLoaded() {
+    allEmptyCharts(): boolean {
+        let allEmpty = true;
+        for (const value of this.chartNames.values()) {
+            if (value) {
+                allEmpty = false;
+                break;
+            }
+        }
+
+        return allEmpty;
+    }
+
+    allChartsLoaded(): boolean {
         let loaded = true;
         for (const value of this.chartNames.values()) {
             if (!value) {
@@ -48,10 +62,6 @@ export class ChartService {
                 break;
             }
         }
-        console.log(dc.chartRegistry.list());
-        dc.chartRegistry.list().forEach((c) => {
-            console.log(c.data());
-        });
 
         return loaded;
     }

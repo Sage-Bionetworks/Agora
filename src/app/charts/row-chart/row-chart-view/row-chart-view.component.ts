@@ -17,6 +17,8 @@ import { Router, NavigationStart } from '@angular/router';
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
 
+import { Subscription } from 'rxjs';
+
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
@@ -58,6 +60,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     canResize: boolean = false;
     firstRender: boolean = true;
     colors: string[] = ['#5171C0'];
+    routerSubscription: Subscription;
+
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
         .attr('class', 'rc-tooltip')
@@ -83,13 +87,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                this.canDisplay = false;
-                this.removeChart();
+                this.removeSelf();
             }
         });
         this.location.onPopState(() => {
-            this.canDisplay = false;
-            this.removeChart();
+            this.removeSelf();
         });
 
         this.chartService.chartsReady$.subscribe((state: boolean) => {
@@ -110,6 +112,16 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     ngOnDestroy() {
         this.chartService.removeChart(this.chart);
+    }
+
+    removeSelf() {
+        this.canDisplay = false;
+        this.removeChart();
+        this.chartService.removeChartName(this.label);
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+        this.geneService.setEmptyGeneState(true);
     }
 
     getModel(): string {

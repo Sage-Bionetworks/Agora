@@ -24,6 +24,7 @@ export class GeneServiceStub {
     minAdjPValue: number = 0;
     noInfoData: boolean = false;
     tissuesNum: number = 7;
+    isEmptyGene: boolean = true;
 
     getPreviousGene(): Gene {
         return mockGene2;
@@ -93,6 +94,22 @@ export class GeneServiceStub {
 
     setGeneTissues(tissues: string[]) {
         this.geneTissues = tissues;
+    }
+
+    getEmptyGeneState(): boolean {
+        return this.isEmptyGene;
+    }
+
+    setEmptyGeneState(state: boolean) {
+        this.isEmptyGene = state;
+    }
+
+    updateEmptyGeneState() {
+        if (this.getCurrentGene() && this.getCurrentGene()._id) {
+            this.isEmptyGene = false;
+        } else {
+            this.isEmptyGene =  true;
+        }
     }
 
     updatePreviousGene() {

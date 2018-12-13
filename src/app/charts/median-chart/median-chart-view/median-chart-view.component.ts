@@ -16,6 +16,8 @@ import { Router, NavigationStart } from '@angular/router';
 import { DataService, GeneService } from '../../../core/services';
 import { ChartService } from '../../services';
 
+import { Subscription } from 'rxjs';
+
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
@@ -39,6 +41,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
     group: any;
     dimension: any;
     tissuecoresGroup: any;
+    routerSubscription: Subscription;
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -61,10 +64,12 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         // If we move away from the overview page, remove
         // the charts
         this.router.events.subscribe((event) => {
-            this.removeChart();
+            if (event instanceof NavigationStart) {
+                this.removeSelf();
+            }
         });
         this.location.onPopState(() => {
-            this.removeChart();
+            this.removeSelf();
         });
 
         if (!this.geneinfo) {
@@ -82,6 +87,15 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                 this.initChart();
             }
         });
+    }
+
+    removeSelf() {
+        this.removeChart();
+        this.chartService.removeChartName(this.label);
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+        this.geneService.setEmptyGeneState(true);
     }
 
     removeChart() {

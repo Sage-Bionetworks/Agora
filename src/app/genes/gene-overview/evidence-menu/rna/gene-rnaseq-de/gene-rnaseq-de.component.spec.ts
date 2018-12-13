@@ -5,6 +5,7 @@ import {
     fakeAsync,
     tick
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -79,5 +80,32 @@ describe('Component: GeneRNASeqDE', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should not have charts after initial loading', () => {
+        fixture.detectChanges();
+
+        const bpEl = fixture.debugElement.query(By.css('box-plot'));
+        expect(bpEl).toEqual(null);
+        const rcEl = fixture.debugElement.query(By.css('row-chart'));
+        expect(rcEl).toEqual(null);
+        const mcEl = fixture.debugElement.query(By.css('median-chart'));
+        expect(mcEl).toEqual(null);
+        const smEl = fixture.debugElement.query(By.css('select-menu'));
+        expect(smEl).toEqual(null);
+    });
+
+    it('should have all charts if we have a gene', () => {
+        component.isEmptyGene = false;
+        fixture.detectChanges();
+
+        const bpEl = fixture.debugElement.query(By.css('box-plot'));
+        expect(bpEl).toBeDefined();
+        const rcEl = fixture.debugElement.query(By.css('row-chart'));
+        expect(rcEl).toBeDefined();
+        const mcEl = fixture.debugElement.query(By.css('median-chart'));
+        expect(mcEl).toBeDefined();
+        const smEl = fixture.debugElement.query(By.css('select-menu'));
+        expect(smEl).toBeDefined();
     });
 });

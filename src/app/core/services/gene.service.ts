@@ -35,6 +35,7 @@ export class GeneService {
     minAdjPValue: number = Math.pow(10, -20);
     noInfoData: boolean = false;
     tissuesNum: number = 7;
+    isEmptyGene: boolean = true;
 
     constructor(private apiService: ApiService) {}
 
@@ -199,6 +200,22 @@ export class GeneService {
         if (ensemblGeneId) { eGene.ensembl_gene_id = ensemblGeneId; }
         if (hgncSymbol) { eGene.hgnc_symbol = hgncSymbol; }
         return eGene;
+    }
+
+    getEmptyGeneState(): boolean {
+        return this.isEmptyGene;
+    }
+
+    setEmptyGeneState(state: boolean) {
+        this.isEmptyGene = state;
+    }
+
+    updateEmptyGeneState() {
+        if (this.getCurrentGene() && this.getCurrentGene()._id) {
+            this.isEmptyGene = false;
+        } else {
+            this.isEmptyGene =  true;
+        }
     }
 
     // Add pipe

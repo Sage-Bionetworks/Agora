@@ -95,15 +95,6 @@ export class GeneSearchComponent implements OnInit {
         } else {
             if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
                 this.getGene(info.hgnc_symbol);
-            } else {
-                this.navService.goToRoute(
-                    '/genes',
-                    { outlets: {'genes-router':
-                        [
-                            'gene-details', this.geneService.getCurrentGene().ensembl_gene_id
-                        ]
-                    }}
-                );
             }
         }
     }
@@ -123,6 +114,8 @@ export class GeneSearchComponent implements OnInit {
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
+
+                    resolve(true);
                 });
                 updatePromise.then(() => {
                     this.navService.goToRoute(

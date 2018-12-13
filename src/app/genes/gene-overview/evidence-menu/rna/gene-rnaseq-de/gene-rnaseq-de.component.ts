@@ -110,11 +110,9 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                 this.geneService.setDefaultTissue(this.selectedTissues[0]);
                 this.geneService.setDefaultModel(this.selectedModels[0]);
 
-                if (this.gene && this.gene._id) {
-                    this.isEmptyGene = false;
-                } else {
-                    this.isEmptyGene = true;
-                }
+                this.geneService.updateEmptyGeneState();
+                this.isEmptyGene = this.geneService.getEmptyGeneState();
+
                 this.dataLoaded = true;
             });
         }
@@ -122,6 +120,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
     ngAfterViewChecked() {
         this.isViewReady = true;
+        this.isEmptyGene = this.geneService.getEmptyGeneState();
     }
 
     loadChartData(): Promise<any> {
@@ -222,7 +221,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                     this.geneService.setCurrentTissue(this.gene.tissue);
                     this.geneService.setCurrentModel(this.gene.model);
                 } else {
-                    this.isEmptyGene = true;
+                    this.geneService.updateEmptyGeneState();
+                    this.isEmptyGene = this.geneService.getEmptyGeneState();
                 }
             }
         );

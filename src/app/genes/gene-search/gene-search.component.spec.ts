@@ -92,7 +92,7 @@ describe('Component: GeneSearch', () => {
     it('should have a placeholder for the textarea', () => {
         const el = fixture.debugElement.query(By.css('textarea'));
         expect(el.nativeElement.placeholder).not.toBeNull();
-        expect(el.nativeElement.placeholder).toEqual('Search by gene symbol or ensembl id');
+        expect(el.nativeElement.placeholder).toEqual('Search Gene Symbols or Ensembl IDs');
     });
 
     it('should focus search list', () => {

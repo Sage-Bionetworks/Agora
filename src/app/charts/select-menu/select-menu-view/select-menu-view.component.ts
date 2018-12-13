@@ -17,6 +17,8 @@ import { GeneService, DataService, ApiService } from '../../../core/services';
 
 import { GeneResponse } from '../../../models';
 
+import { Subscription } from 'rxjs';
+
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
@@ -47,6 +49,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     firstTime: boolean = true;
     firstReplace: boolean = true;
     menuSelection: any;
+    routerSubscription: Subscription;
 
     constructor(
         private location: PlatformLocation,
@@ -63,13 +66,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         // the charts
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                d3.selectAll('.select-selected, .select-items.select-hide').html(null);
-                this.removeChart();
+                this.removeSelf();
             }
         });
         this.location.onPopState(() => {
-            d3.selectAll('.select-selected, .select-items.select-hide').html(null);
-            this.removeChart();
+            this.removeSelf();
         });
 
         if (!this.label) {
@@ -154,6 +155,16 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
             chartInst.render();
         });
+    }
+
+    removeSelf() {
+        d3.selectAll('.select-selected, .select-items.select-hide').html(null);
+        this.removeChart();
+        this.chartService.removeChartName(this.label);
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+        this.geneService.setEmptyGeneState(true);
     }
 
     multivalueFilter(values) {
