@@ -119,17 +119,20 @@ export class GeneSearchComponent implements OnInit {
                         data.info.ensembl_gene_id, data.info.hgnc_symbol
                     );
                 }
-                this.geneService.updatePreviousGene();
-                this.geneService.updateGeneData(data);
-                this.gene = data.item;
+                const updatePromise = new Promise((resolve, reject) => {
+                    this.geneService.updatePreviousGene();
+                    this.geneService.updateGeneData(data);
+                    this.gene = data.item;
+                });
+                updatePromise.then(() => {
+                    this.navService.goToRoute(
+                        '/genes',
+                        { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
+                    );
+                });
             }
         }, (error) => {
             console.log('Routing error! ' + error.message);
-        }, () => {
-            this.navService.goToRoute(
-                '/genes',
-                { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
-            );
         });
     }
 }

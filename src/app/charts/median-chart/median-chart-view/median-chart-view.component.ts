@@ -142,9 +142,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                         tree[i].setAttribute('height', 0);
                     }
                  });
-                chart.selectAll('rect').on('mouseover', () => {
-                    event.preventDefault();
-                });
+                chart.selectAll('rect').attr('pointer-events', 'none');
                 chart.selectAll('text').each((el, i, tree) => {
                     if (el && el['data'] && el['data'].value < 0) {
                         el['data'].value = '';

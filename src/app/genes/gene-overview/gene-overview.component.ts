@@ -280,24 +280,31 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         // Check if we have a database id at this point
         if (this.gene) {
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
-                this.dataService.loadData(this.gene).subscribe((responseList) => {
+                this.dataService.loadData().subscribe((genesResponse) => {
                     // Genes response
-                    this.dataService.loadGenes(responseList[0]);
-                    this.forceService.processSelectedNode(responseList[1], this.gene);
-                    this.geneService.loadGeneTissues(responseList[2]);
-                    this.geneService.loadGeneModels(responseList[3]);
-
-                    if (!this.geneInfo.nominations) {
-                        this.items.splice(0, 1);
-                    }
-                    if (!this.geneInfo.druggability) {
-                        this.items.splice(this.items.length - 1, 1);
-                    }
-                    this.setActiveItem();
-                    this.dataLoaded = true;
+                    this.dataService.loadGenes(genesResponse);
                 }, (error) => {
                     console.error('Error loading the data!');
                     return throwError(error);  // Angular 6/RxJS 6
+                }, () => {
+                    this.dataService.loadTissuesModels(this.gene).subscribe((responseList) => {
+                        this.forceService.processSelectedNode(responseList[0], this.gene);
+                        this.geneService.loadGeneTissues(responseList[1]);
+                        this.geneService.loadGeneModels(responseList[2]);
+
+                        if (!this.geneInfo.nominations) {
+                            this.items.splice(0, 1);
+                        }
+                        if (!this.geneInfo.druggability) {
+                            this.items.splice(this.items.length - 1, 1);
+                        }
+                        this.setActiveItem();
+                    }, (error) => {
+                        console.error('Error loading the data!');
+                        return throwError(error);  // Angular 6/RxJS 6
+                    }, () => {
+                        this.dataLoaded = true;
+                    });
                 });
             } else {
                 if (!this.geneInfo.nominations) {

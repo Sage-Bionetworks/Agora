@@ -45,14 +45,23 @@ export class DataService {
         this.ndx.remove();
     }
 
-    loadData(gene: Gene): Observable<any[]> {
-        const genesResponse = this.apiService.getGenes();
+    loadData(): Observable<GenesResponse> {
+        // const genesResponse = this.apiService.getGenes();
+
+        return this.apiService.getGenes();
+
+        /* return forkJoin([
+            genesResponse,
+            nodesResponse
+        ]);*/
+    }
+
+    loadTissuesModels(gene: Gene): Observable<any[]> {
         const nodesResponse = this.apiService.getLinksList(gene);
         const tissuesResponse = this.apiService.getGeneTissues();
         const modelsResponse = this.apiService.getGeneModels();
 
         return forkJoin([
-            genesResponse,
             nodesResponse,
             tissuesResponse,
             modelsResponse
