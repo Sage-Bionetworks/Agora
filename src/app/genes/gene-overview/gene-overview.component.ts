@@ -21,7 +21,7 @@ import {
 
 import { MenuItem } from 'primeng/api';
 
-import { throwError } from 'rxjs';
+import { throwError, Subscription } from 'rxjs';
 
 import { TabMenu } from 'primeng/tabmenu';
 
@@ -55,7 +55,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     };
     activeItem: MenuItem;
     currentGeneData = [];
-    subscription: any;
+    subscription: Subscription;
+    routerSub: Subscription;
     iOS = ['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) >= 0;
     items: MenuItem[];
     neverActivated: boolean = true;
@@ -102,16 +103,26 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
-        this.navService.getRouter().events.subscribe((re: RouterEvent) => {
+        this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
-                if (this.disableMenu) {
-                    // Improve this part, 0.8 seconds to re-activate the menu items
-                    setTimeout(() => {
-                        this.items.forEach((i) => {
-                            i.disabled = false;
-                        });
-                        this.disableMenu = false;
-                    }, 800);
+                if (!re.url.includes('/genes/(genes-router:gene-details/' +
+                    this.geneService.getCurrentGene().ensembl_gene_id)) {
+                    if (this.routerSub) {
+                        this.routerSub.unsubscribe();
+                    }
+                    if (this.subscription) {
+                        this.subscription.unsubscribe();
+                    }
+                } else {
+                    if (this.disableMenu) {
+                        // Improve this part, 0.8 seconds to re-activate the menu items
+                        setTimeout(() => {
+                            this.items.forEach((i) => {
+                                i.disabled = false;
+                            });
+                            this.disableMenu = false;
+                        }, 800);
+                    }
                 }
             }
         });

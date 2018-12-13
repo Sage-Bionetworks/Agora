@@ -91,7 +91,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
 
     removeSelf() {
         this.removeChart();
-        this.chartService.removeChartName(this.label);
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
         }

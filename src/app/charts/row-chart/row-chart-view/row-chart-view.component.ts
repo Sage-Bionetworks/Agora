@@ -117,7 +117,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     removeSelf() {
         this.canDisplay = false;
         this.removeChart();
-        this.chartService.removeChartName(this.label);
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
         }

@@ -97,7 +97,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     removeSelf() {
         this.display = false;
         this.removeChart();
-        this.chartService.removeChartName(this.label);
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
         }

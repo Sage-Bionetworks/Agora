@@ -84,12 +84,12 @@ connection.once('open', () => {
                 }
             }
         ]
-    ).allowDiskUse(true).exec().then((genes) => {
+    ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
         // Unique genes, ordered by hgnc_symbol
         const seen = {};
-        genes.slice().filter((g) => {
+        await genes.slice().filter((g) => {
             if (allTissues.indexOf(g['tissue']) === -1) {
                 allTissues.push(g['tissue']);
             }
@@ -100,18 +100,18 @@ connection.once('open', () => {
             seen[g['hgnc_symbol']] = true;
             return g['hgnc_symbol'];
         });
-        allTissues.sort();
-        allModels.sort();
+        await allTissues.sort();
+        await allModels.sort();
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec((err, genes, next) => {
+        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec(async (err, genes, next) => {
         if (err) {
             next(err);
         } else {
             tableGenesById = genes.slice();
             // Table genes ordered by nominations
-            tableGenesByNom = genes.slice().sort((a, b) => {
+            tableGenesByNom = await genes.slice().sort((a, b) => {
                 return (a.nominations > b.nominations) ? 1 :
                     ((b.nominations > a.nominations) ? -1 : 0);
             });
@@ -126,7 +126,7 @@ connection.once('open', () => {
     });
 
     // Routes to get genes information
-    router.get('/genes', (req, res, next) => {
+    router.get('/genes', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all genes');
@@ -139,7 +139,7 @@ connection.once('open', () => {
         const chartGenes = allGenes.slice();
         if (geneEntries) {
             resObj.geneEntries = geneEntries;
-            geneEntries.forEach((ge) => {
+            await geneEntries.forEach((ge) => {
                 // If the current entry does not exist in the all genes array
                 if (!allGenes.some((g) => {
                     return (g.hgnc_symbol === ge.hgnc_symbol) &&
@@ -272,7 +272,7 @@ connection.once('open', () => {
     });
 
     // Get a gene by id, can be hgnc_symbol or ensembl_gene_id
-    router.get('/gene', (req, res, next) => {
+    router.get('/gene', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get a gene with an id');
@@ -298,7 +298,7 @@ connection.once('open', () => {
 
             // Find all the Genes with the current id
             Genes.find(queryObj)
-                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec((err, genes) => {
+                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec(async (err, genes) => {
                 if (err) {
                     next(err);
                 } else {
@@ -311,7 +311,7 @@ connection.once('open', () => {
                     let minAdjPValue: number = Infinity;
                     geneTissues = [];
                     geneModels = [];
-                    genes.forEach((g) => {
+                    await genes.forEach((g) => {
                         if (+g.fc > maxFC) { maxFC = (+g.fc); }
                         if (+g.fc < minFC) { minFC = (+g.fc); }
                         if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
@@ -332,15 +332,15 @@ connection.once('open', () => {
                             geneModels.push(g.model);
                         }
                     });
-                    geneTissues.sort();
-                    geneModels.sort();
+                    await geneTissues.sort();
+                    await geneModels.sort();
 
                     GenesInfo.findOne({ [fieldName]: req.query.id }).exec((errB, info) => {
                         if (errB) {
                             next(errB);
                         } else {
-                        // Adding this condition because UglifyJS can't handle ES2015, only needed
-                            // for the server
+                            // Adding this condition because UglifyJS can't handle ES2015,
+                            // only needed for the server
                             if (env === 'development') {
                                 console.log('The gene info and item');
                                 console.log(info);
@@ -378,13 +378,13 @@ connection.once('open', () => {
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) { res.json({ items: [] }); } else {
-            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec((err, links) => {
-                const arrA = links.slice().map((slink) => {
+            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec(async (err, links) => {
+                const arrA = await links.slice().map((slink) => {
                     return slink.toJSON()['geneB_ensembl_gene_id'];
                 });
 
-                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
-                    const arrB = linkB.slice().map((slink) => {
+                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, async (errB, linkB) => {
+                    const arrB = await linkB.slice().map((slink) => {
                         return slink.toJSON()['geneA_ensembl_gene_id'];
                     });
                     const arr = [...arrA, ...arrB];
