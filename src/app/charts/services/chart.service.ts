@@ -31,13 +31,17 @@ export class ChartService {
     }
 
     addChartName(name: string) {
+        console.log(dc.chartRegistry.list());
         if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
 
         if (this.allChartsLoaded()) { this.chartsReadySource.next(true); }
     }
 
     removeChartName(name: string) {
-        if (name && this.chartNames.has(name)) { this.chartNames.set(name, false); }
+        if (name && this.chartNames.has(name)) {
+            this.chartNames.set(name, false);
+            this.chartsReadySource.next(false);
+        }
 
         if (this.allEmptyCharts()) { dc.chartRegistry.clear(); }
     }

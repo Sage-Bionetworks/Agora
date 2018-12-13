@@ -61,6 +61,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     firstRender: boolean = true;
     colors: string[] = ['#5171C0'];
     routerSubscription: Subscription;
+    chartSubscription: Subscription;
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -94,7 +95,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             this.removeSelf();
         });
 
-        this.chartService.chartsReady$.subscribe((state: boolean) => {
+        this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
             if (state) {
                 this.initChart();
             }
@@ -119,6 +120,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         this.removeChart();
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
+        }
+        if (this.chartSubscription) {
+            this.chartSubscription.unsubscribe();
         }
         this.geneService.setEmptyGeneState(true);
     }

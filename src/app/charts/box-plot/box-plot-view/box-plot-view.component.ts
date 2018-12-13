@@ -51,6 +51,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     counter: number = 0;
     geneEntries: Gene[] = [];
     routerSubscription: Subscription;
+    chartSubscription: Subscription;
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -86,7 +87,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.removeSelf();
         });
 
-        this.chartService.chartsReady$.subscribe((state: boolean) => {
+        this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
             if (state) {
                 this.updateCircleRadius();
                 this.initChart();
@@ -99,6 +100,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.removeChart();
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
+        }
+        if (this.chartSubscription) {
+            this.chartSubscription.unsubscribe();
         }
         this.geneService.setEmptyGeneState(true);
     }
