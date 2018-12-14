@@ -384,7 +384,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         } else {
             // If we don't have a summary, return a placeholder description and an empty ref
             if (body) {
-                return 'No description';
+                return '';
             } else {
                 return '';
             }
