@@ -352,7 +352,9 @@ connection.once('open', () => {
                                     console.log(geneEntries[0]);
                                 }
 
-                                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                                res.setHeader(
+                                    'Cache-Control', 'no-cache, no-store, must-revalidate'
+                                );
                                 res.setHeader('Pragma', 'no-cache');
                                 res.setHeader('Expires', 0);
                                 await res.json({
