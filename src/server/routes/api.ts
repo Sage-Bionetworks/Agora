@@ -55,8 +55,8 @@ connection.once('open', () => {
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
-    let geneTissues: string[] = [];
-    let geneModels: string[] = [];
+    const geneTissues: string[] = [];
+    const geneModels: string[] = [];
 
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
