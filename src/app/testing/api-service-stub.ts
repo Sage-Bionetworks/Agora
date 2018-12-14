@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { mockGene1, mockGene2, mockDataLink1, mockDataLink2, mockInfo1 } from './gene-mocks';
+import {
+    mockGene1,
+    mockGene2,
+    mockGeneStatistics,
+    mockDataLink1,
+    mockDataLink2,
+    mockInfo1
+} from './gene-mocks';
 import { mockTeam1 } from './team-info-mocks';
 
 import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse } from '../models';
@@ -17,8 +24,19 @@ export class ApiServiceStub {
         return of(mockGene1);
     }
 
-    getGenes(): Observable<GenesResponse> {
-        return of({ items: [mockGene1], geneEntries: [mockGene1, mockGene2] });
+    getGenes(id: string): Observable<GenesResponse> {
+        return of({
+            items: [mockGene1],
+            geneEntries: [mockGene1, mockGene2],
+            maxFC: mockGeneStatistics.maxFC,
+            minFC: mockGeneStatistics.minFC,
+            minLogFC: mockGeneStatistics.minLogFC,
+            maxLogFC: mockGeneStatistics.maxLogFC,
+            minAdjPValue: mockGeneStatistics.minAdjPValue,
+            maxAdjPValue: mockGeneStatistics.maxAdjPValue,
+            geneTissues: mockGeneStatistics.geneTissues,
+            geneModels: mockGeneStatistics.geneModels
+        });
     }
 
     getTableData(): Observable<object> {

@@ -40,14 +40,16 @@ export class ApiService {
     }
 
     // Get all the genes
-    getGenes(): Observable<GenesResponse> {
+    getGenes(id: string): Observable<GenesResponse> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
             'Pragma': 'no-cache',
             'Expires': '0'
         });
-        const params = new HttpParams();
+        const params = new HttpParams().set(
+            'id', id
+        );
 
         // Get all the genes to render the charts
         return this.http.get<GenesResponse>('/api/genes', { headers, params });

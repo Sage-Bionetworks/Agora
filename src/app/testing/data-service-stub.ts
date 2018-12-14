@@ -7,10 +7,17 @@ import {
     mockDataLink1,
     mockDataLink2,
     mockTissues,
-    mockModels
+    mockModels,
+    mockGeneStatistics
 } from './gene-mocks';
 
-import { Gene, LinksListResponse, GenesResponse, GeneNetwork, GeneResponse } from '../models';
+import {
+    Gene,
+    LinksListResponse,
+    GenesResponse,
+    GeneNetwork,
+    GeneResponse,
+} from '../models';
 
 import { forkJoin, of, Observable } from 'rxjs';
 
@@ -21,16 +28,25 @@ export class DataServiceStub {
     data: any;
     ndx: any;
 
-    loadData(): Observable<GenesResponse> {
-        return of({
-            items: [mockGene1, mockGene2],
-            geneEntries: [mockGene1, mockGene2]
-        } as GeneResponse);
+    loadData(gene: Gene): Observable<any[]> {
+        return forkJoin([
+            of({
+                items: [mockGene1, mockGene2],
+                geneEntries: [mockGene1, mockGene2],
+                maxFC: mockGeneStatistics.maxFC,
+                minFC: mockGeneStatistics.minFC,
+                minLogFC: mockGeneStatistics.minLogFC,
+                maxLogFC: mockGeneStatistics.maxLogFC,
+                minAdjPValue: mockGeneStatistics.minAdjPValue,
+                maxAdjPValue: mockGeneStatistics.maxAdjPValue,
+                geneTissues: mockGeneStatistics.geneTissues,
+                geneModels: mockGeneStatistics.geneModels
+            })
+        ]);
     }
 
     loadTissuesModels(gene: Gene): Observable<any[]> {
         return forkJoin([
-            of({ items: [mockDataLink1, mockDataLink2] }),
             of([mockTissues]),
             of([mockModels])
         ]);

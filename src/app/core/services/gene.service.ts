@@ -66,9 +66,6 @@ export class GeneService {
     updateGeneData(data: GeneResponse) {
         this.setCurrentGene(data.item);
         this.setCurrentInfo(data.info);
-        this.setFC(data.minFC, data.maxFC);
-        this.setLogFC(data.minFC, data.maxFC);
-        this.setAdjPValue(data.minAdjPValue, data.maxAdjPValue);
         this.setCurrentModel(data.item.model);
         this.setCurrentTissue(data.item.tissue);
     }

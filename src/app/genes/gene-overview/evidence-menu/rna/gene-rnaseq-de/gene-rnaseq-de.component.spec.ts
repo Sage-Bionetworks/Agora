@@ -76,6 +76,8 @@ describe('Component: GeneRNASeqDE', () => {
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
         component = fixture.componentInstance; // Component test instance
+
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -83,8 +85,6 @@ describe('Component: GeneRNASeqDE', () => {
     });
 
     it('should not have charts after initial loading', () => {
-        fixture.detectChanges();
-
         const bpEl = fixture.debugElement.query(By.css('box-plot'));
         expect(bpEl).toEqual(null);
         const rcEl = fixture.debugElement.query(By.css('row-chart'));
@@ -108,4 +108,16 @@ describe('Component: GeneRNASeqDE', () => {
         const smEl = fixture.debugElement.query(By.css('select-menu'));
         expect(smEl).toBeDefined();
     });
+
+    it('should have three download widgets if we have a gene', fakeAsync(() => {
+        component.isEmptyGene = false;
+        tick();
+        fixture.detectChanges();
+
+        const el = fixture.debugElement.query(By.css('download'));
+        expect(el).toBeDefined();
+
+        const aEl = fixture.debugElement.queryAll(By.css('download'));
+        expect(aEl.length).toEqual(3);
+    }));
 });
