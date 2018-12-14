@@ -10,6 +10,7 @@ import {
     ElementRef,
     AfterViewChecked
 } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo, GeneResponse } from '../../../../../models';
@@ -62,7 +63,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         private apiService: ApiService,
         private geneService: GeneService,
         private dataService: DataService,
-        private chartService: ChartService
+        private chartService: ChartService,
+        private location: PlatformLocation
     ) { }
 
     ngOnInit() {
@@ -71,6 +73,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         this.emptySelection.push({
             label: this.emptySelectionLabel,
             value: this.emptySelectionValue
+        });
+
+        this.location.onPopState(() => {
+            this.isEmptyGene = true;
         });
 
         // The data wasn't loaded yet, redirect for now
@@ -120,7 +126,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
     ngAfterViewChecked() {
         this.isViewReady = true;
-        this.isEmptyGene = this.geneService.getEmptyGeneState();
     }
 
     loadChartData(): Promise<any> {

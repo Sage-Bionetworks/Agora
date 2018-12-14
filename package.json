@@ -137,11 +137,12 @@
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.11.1",
+    "@angular/cdk": "^7.1.1",
     "@angular/cli": "^7.1.1",
     "@angular/compiler-cli": "^7.1.1",
     "@angular/language-service": "^7.1.1",
     "@babel/core": "^7.2.0",
-    "@compodoc/compodoc": "^1.1.5",
+    "@compodoc/compodoc": "1.1.5",
     "@ngtools/webpack": "^7.1.1",
     "@types/core-js": "^2.5.0",
     "@types/d3": "^5.0.1",

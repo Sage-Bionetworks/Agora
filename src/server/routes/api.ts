@@ -55,8 +55,8 @@ connection.once('open', () => {
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
-    let geneTissues: string[] = [];
-    let geneModels: string[] = [];
+    const geneTissues: string[] = [];
+    const geneModels: string[] = [];
 
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
@@ -84,12 +84,12 @@ connection.once('open', () => {
                 }
             }
         ]
-    ).allowDiskUse(true).exec().then((genes) => {
+    ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
         // Unique genes, ordered by hgnc_symbol
         const seen = {};
-        genes.slice().filter((g) => {
+        await genes.slice().filter((g) => {
             if (allTissues.indexOf(g['tissue']) === -1) {
                 allTissues.push(g['tissue']);
             }
@@ -100,18 +100,18 @@ connection.once('open', () => {
             seen[g['hgnc_symbol']] = true;
             return g['hgnc_symbol'];
         });
-        allTissues.sort();
-        allModels.sort();
+        await allTissues.sort();
+        await allModels.sort();
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec((err, genes, next) => {
+        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec(async (err, genes, next) => {
         if (err) {
             next(err);
         } else {
             tableGenesById = genes.slice();
             // Table genes ordered by nominations
-            tableGenesByNom = genes.slice().sort((a, b) => {
+            tableGenesByNom = await genes.slice().sort((a, b) => {
                 return (a.nominations > b.nominations) ? 1 :
                     ((b.nominations > a.nominations) ? -1 : 0);
             });
@@ -126,7 +126,7 @@ connection.once('open', () => {
     });
 
     // Routes to get genes information
-    router.get('/genes', (req, res, next) => {
+    router.get('/genes', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get all genes');
@@ -139,7 +139,7 @@ connection.once('open', () => {
         const chartGenes = allGenes.slice();
         if (geneEntries) {
             resObj.geneEntries = geneEntries;
-            geneEntries.forEach((ge) => {
+            await geneEntries.forEach((ge) => {
                 // If the current entry does not exist in the all genes array
                 if (!allGenes.some((g) => {
                     return (g.hgnc_symbol === ge.hgnc_symbol) &&
@@ -272,7 +272,7 @@ connection.once('open', () => {
     });
 
     // Get a gene by id, can be hgnc_symbol or ensembl_gene_id
-    router.get('/gene', (req, res, next) => {
+    router.get('/gene', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get a gene with an id');
@@ -297,72 +297,80 @@ connection.once('open', () => {
             }
 
             // Find all the Genes with the current id
-            Genes.find(queryObj)
-                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec((err, genes) => {
+            await Genes.find(queryObj)
+                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec(async (err, genes) => {
                 if (err) {
                     next(err);
                 } else {
-                    geneEntries = genes.slice();
-                    let minFC: number = +Infinity;
-                    let maxFC: number = -Infinity;
-                    let minLogFC: number = +Infinity;
-                    let maxLogFC: number = -Infinity;
-                    let maxAdjPValue: number = -Infinity;
-                    let minAdjPValue: number = Infinity;
-                    geneTissues = [];
-                    geneModels = [];
-                    genes.forEach((g) => {
-                        if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                        if (+g.fc < minFC) { minFC = (+g.fc); }
-                        if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                        if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                        const adjPVal: number = +g.adj_p_val;
-                        if (+g.adj_p_val) {
-                            if (adjPVal > maxAdjPValue) {
-                                maxAdjPValue = adjPVal;
+                    if (!genes.length) {
+                        res.status(404).send('No genes found!');
+                    } else {
+                        geneEntries.length = 0;
+                        geneEntries = genes.slice();
+                        let minFC: number = +Infinity;
+                        let maxFC: number = -Infinity;
+                        let minLogFC: number = +Infinity;
+                        let maxLogFC: number = -Infinity;
+                        let maxAdjPValue: number = -Infinity;
+                        let minAdjPValue: number = Infinity;
+                        geneTissues.length = 0;
+                        geneModels.length = 0;
+                        await genes.forEach((g) => {
+                            if (+g.fc > maxFC) { maxFC = (+g.fc); }
+                            if (+g.fc < minFC) { minFC = (+g.fc); }
+                            if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
+                            if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
+                            const adjPVal: number = +g.adj_p_val;
+                            if (+g.adj_p_val) {
+                                if (adjPVal > maxAdjPValue) {
+                                    maxAdjPValue = adjPVal;
+                                }
+                                if (adjPVal < minAdjPValue) {
+                                    minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                                }
                             }
-                            if (adjPVal < minAdjPValue) {
-                                minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                            if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
+                                geneTissues.push(g.tissue);
                             }
-                        }
-                        if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
-                            geneTissues.push(g.tissue);
-                        }
-                        if (g.model && geneModels.indexOf(g.model) === -1) {
-                            geneModels.push(g.model);
-                        }
-                    });
-                    geneTissues.sort();
-                    geneModels.sort();
+                            if (g.model && geneModels.indexOf(g.model) === -1) {
+                                geneModels.push(g.model);
+                            }
+                        });
+                        await geneTissues.sort();
+                        await geneModels.sort();
 
-                    GenesInfo.findOne({ [fieldName]: req.query.id }).exec((errB, info) => {
-                        if (errB) {
-                            next(errB);
-                        } else {
-                        // Adding this condition because UglifyJS can't handle ES2015, only needed
-                            // for the server
-                            if (env === 'development') {
-                                console.log('The gene info and item');
-                                console.log(info);
-                                console.log(geneEntries[0]);
-                            }
+                        await GenesInfo.findOne({ [fieldName]: req.query.id }).exec(
+                            async (errB, info) => {
+                            if (errB) {
+                                next(errB);
+                            } else {
+                                // Adding this condition because UglifyJS can't handle ES2015,
+                                // only needed for the server
+                                if (env === 'development') {
+                                    console.log('The gene info and item');
+                                    console.log(info);
+                                    console.log(geneEntries[0]);
+                                }
 
-                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                            res.setHeader('Pragma', 'no-cache');
-                            res.setHeader('Expires', 0);
-                            res.json({
-                                info,
-                                item: geneEntries[0],
-                                minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                                maxFC,
-                                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                    -maxLogFC : minLogFC,
-                                maxLogFC,
-                                minAdjPValue,
-                                maxAdjPValue
-                            });
-                        }
-                    });
+                                res.setHeader(
+                                    'Cache-Control', 'no-cache, no-store, must-revalidate'
+                                );
+                                res.setHeader('Pragma', 'no-cache');
+                                res.setHeader('Expires', 0);
+                                await res.json({
+                                    info,
+                                    item: geneEntries[0],
+                                    minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                                    maxFC,
+                                    minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
+                                        -maxLogFC : minLogFC,
+                                    maxLogFC,
+                                    minAdjPValue,
+                                    maxAdjPValue
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -378,13 +386,13 @@ connection.once('open', () => {
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) { res.json({ items: [] }); } else {
-            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec((err, links) => {
-                const arrA = links.slice().map((slink) => {
+            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec(async (err, links) => {
+                const arrA = await links.slice().map((slink) => {
                     return slink.toJSON()['geneB_ensembl_gene_id'];
                 });
 
-                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, (errB, linkB) => {
-                    const arrB = linkB.slice().map((slink) => {
+                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, async (errB, linkB) => {
+                    const arrB = await linkB.slice().map((slink) => {
                         return slink.toJSON()['geneA_ensembl_gene_id'];
                     });
                     const arr = [...arrA, ...arrB];

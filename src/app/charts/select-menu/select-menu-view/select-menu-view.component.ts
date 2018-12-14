@@ -160,7 +160,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     removeSelf() {
         d3.selectAll('.select-selected, .select-items.select-hide').html(null);
         this.removeChart();
-        this.chartService.removeChartName(this.label);
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
         }
