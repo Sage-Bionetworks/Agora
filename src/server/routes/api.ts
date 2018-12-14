@@ -297,72 +297,78 @@ connection.once('open', () => {
             }
 
             // Find all the Genes with the current id
-            Genes.find(queryObj)
+            await Genes.find(queryObj)
                 .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec(async (err, genes) => {
                 if (err) {
                     next(err);
                 } else {
-                    geneEntries = genes.slice();
-                    let minFC: number = +Infinity;
-                    let maxFC: number = -Infinity;
-                    let minLogFC: number = +Infinity;
-                    let maxLogFC: number = -Infinity;
-                    let maxAdjPValue: number = -Infinity;
-                    let minAdjPValue: number = Infinity;
-                    geneTissues.length = 0;
-                    geneModels.length = 0;
-                    await genes.forEach((g) => {
-                        if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                        if (+g.fc < minFC) { minFC = (+g.fc); }
-                        if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                        if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                        const adjPVal: number = +g.adj_p_val;
-                        if (+g.adj_p_val) {
-                            if (adjPVal > maxAdjPValue) {
-                                maxAdjPValue = adjPVal;
+                    if (!genes.length) {
+                        res.status(404).send('No genes found!');
+                    } else {
+                        geneEntries.length = 0;
+                        geneEntries = genes.slice();
+                        let minFC: number = +Infinity;
+                        let maxFC: number = -Infinity;
+                        let minLogFC: number = +Infinity;
+                        let maxLogFC: number = -Infinity;
+                        let maxAdjPValue: number = -Infinity;
+                        let minAdjPValue: number = Infinity;
+                        geneTissues.length = 0;
+                        geneModels.length = 0;
+                        await genes.forEach((g) => {
+                            if (+g.fc > maxFC) { maxFC = (+g.fc); }
+                            if (+g.fc < minFC) { minFC = (+g.fc); }
+                            if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
+                            if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
+                            const adjPVal: number = +g.adj_p_val;
+                            if (+g.adj_p_val) {
+                                if (adjPVal > maxAdjPValue) {
+                                    maxAdjPValue = adjPVal;
+                                }
+                                if (adjPVal < minAdjPValue) {
+                                    minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                                }
                             }
-                            if (adjPVal < minAdjPValue) {
-                                minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
+                            if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
+                                geneTissues.push(g.tissue);
                             }
-                        }
-                        if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
-                            geneTissues.push(g.tissue);
-                        }
-                        if (g.model && geneModels.indexOf(g.model) === -1) {
-                            geneModels.push(g.model);
-                        }
-                    });
-                    await geneTissues.sort();
-                    await geneModels.sort();
+                            if (g.model && geneModels.indexOf(g.model) === -1) {
+                                geneModels.push(g.model);
+                            }
+                        });
+                        await geneTissues.sort();
+                        await geneModels.sort();
 
-                    GenesInfo.findOne({ [fieldName]: req.query.id }).exec((errB, info) => {
-                        if (errB) {
-                            next(errB);
-                        } else {
-                            // Adding this condition because UglifyJS can't handle ES2015,
-                            // only needed for the server
-                            if (env === 'development') {
-                                console.log('The gene info and item');
-                                console.log(info);
-                                console.log(geneEntries[0]);
-                            }
+                        await GenesInfo.findOne({ [fieldName]: req.query.id }).exec(
+                            async (errB, info) => {
+                            if (errB) {
+                                next(errB);
+                            } else {
+                                // Adding this condition because UglifyJS can't handle ES2015,
+                                // only needed for the server
+                                if (env === 'development') {
+                                    console.log('The gene info and item');
+                                    console.log(info);
+                                    console.log(geneEntries[0]);
+                                }
 
-                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                            res.setHeader('Pragma', 'no-cache');
-                            res.setHeader('Expires', 0);
-                            res.json({
-                                info,
-                                item: geneEntries[0],
-                                minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                                maxFC,
-                                minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                    -maxLogFC : minLogFC,
-                                maxLogFC,
-                                minAdjPValue,
-                                maxAdjPValue
-                            });
-                        }
-                    });
+                                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                                res.setHeader('Pragma', 'no-cache');
+                                res.setHeader('Expires', 0);
+                                await res.json({
+                                    info,
+                                    item: geneEntries[0],
+                                    minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                                    maxFC,
+                                    minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
+                                        -maxLogFC : minLogFC,
+                                    maxLogFC,
+                                    minAdjPValue,
+                                    maxAdjPValue
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }
