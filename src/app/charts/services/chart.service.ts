@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import * as d3 from 'd3';
 import * as dc from 'dc';
 
 import { Subject } from 'rxjs';
@@ -31,7 +32,6 @@ export class ChartService {
     }
 
     addChartName(name: string) {
-        console.log(dc.chartRegistry.list());
         if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
 
         if (this.allChartsLoaded()) { this.chartsReadySource.next(true); }
@@ -43,7 +43,10 @@ export class ChartService {
             this.chartsReadySource.next(false);
         }
 
-        if (this.allEmptyCharts()) { dc.chartRegistry.clear(); }
+        if (this.allEmptyCharts()) {
+            d3.selectAll('dc-chart').remove();
+            dc.chartRegistry.clear();
+        }
     }
 
     allEmptyCharts(): boolean {
@@ -84,7 +87,6 @@ export class ChartService {
             }
             dc.chartRegistry.deregister(chart);
             chart.dimension().dispose();
-            chart.resetSvg();
         }
     }
 
