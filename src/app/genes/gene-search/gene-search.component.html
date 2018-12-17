@@ -2,9 +2,8 @@
 <div class="row search-row">
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
-            <textarea type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
+            <input type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
                 (blur)="closeSearchList($event.target)" placeholder="Search Gene Symbols or Ensembl IDs">
-            </textarea>
             <p-progressSpinner *ngIf="isSearching" strokeWidth="8" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
             <i class="fa fa-search fa-lg"></i>
         </div>
