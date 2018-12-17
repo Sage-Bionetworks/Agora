@@ -8,8 +8,8 @@
             </div>
         </div>
     </div>
-    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin" [ngClass]="{'overview-desc':i}" tabindex="0">
-        <h2>
+    <div *ngFor="let team of obsTeams | async; let i = index" class="section-thin"  tabindex="0">
+        <h2 [ngClass]="{'overview-desc':i}">
             {{team.team}}
         </h2>
         <p class="black-paragraph text-max">
