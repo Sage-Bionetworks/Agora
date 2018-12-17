@@ -104,7 +104,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         if (self.firstTime) {
                             self.firstTime = false;
                         } else {
-                            self.getNewGenes();
+                            self.getNewGene();
                         }
                     }
                     if (self.label === 'select-model') {
@@ -172,7 +172,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         };
     }
 
-    getNewGenes() {
+    getNewGene() {
         let gene = null;
         this.apiService.getGene(
             this.geneService.getCurrentGene().ensembl_gene_id,

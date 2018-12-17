@@ -1,4 +1,4 @@
-import { Gene, GeneInfo, GeneNetworkLinks, GeneNetwork } from '../models';
+import { Gene, GeneInfo, GeneNetworkLinks, GeneNetwork, GeneStatistics } from '../models';
 
 export const mockGene1: Gene = {
     _id: '5afa0be1310e7e82fde5112c',
@@ -10,8 +10,8 @@ export const mockGene1: Gene = {
     ci_r: -0.3437,
     adj_p_val: Math.pow(10, 2.0532e-12),
     study: 'MayoRNAseq',
-    tissue: 'cerebellum',
-    model: 'Diagnosis (ALL)'
+    tissue: 'CBE',
+    model: 'AD Diagnosis (males and females)'
 };
 
 export const mockGene2: Gene = {
@@ -24,8 +24,19 @@ export const mockGene2: Gene = {
     ci_r: -0.2595,
     adj_p_val: Math.pow(10, 1.5351e-11),
     study: 'MayoRNAseq',
-    tissue: 'cerebellum',
-    model: 'Diagnosis (ALL)'
+    tissue: 'CBE',
+    model: 'AD Diagnosis (males and females)'
+};
+
+export const mockGeneStatistics: GeneStatistics = {
+    maxFC: 1.246,
+    minFC: 0.5,
+    minLogFC: -1.00,
+    maxLogFC: 0.32,
+    minAdjPValue: Math.pow(10, 1.5351e-9),
+    maxAdjPValue: Math.pow(10, 1.5351e-11),
+    geneTissues: ['CBE', 'TCX'],
+    geneModels: ['AD Diagnosis (males and females)', 'AD Diagnosis x AOD (males and females)']
 };
 
 export const mockInfo1: GeneInfo = {
