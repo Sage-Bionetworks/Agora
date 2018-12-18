@@ -10,7 +10,7 @@
       box-shadow: 0px 0px 4px 2px #5BB0B5;
       border-radius: 6px;
       outline-offset: -2px;
-      outline: none;
+      outline: 0;
     }
 
     p-table {
@@ -38,8 +38,8 @@
     }
 
     tr:hover {
-      background: rgba(91, 176, 181, 0.25)!important;
-      color: #fff;
+        background: rgba(63, 94, 171, 0.25) !important;
+        color: #fff;
     }
 
     .ui-table-scrollable-view {
@@ -61,7 +61,7 @@
     }
 
     .link-heading {
-        // color: #24334F;
+        color: #24334F;
         float: left;
         margin-left: 50%;
         transform: translate(-50%);
@@ -69,7 +69,7 @@
     }
 
     .info-icon {
-        content:url("/assets/icon/info-icon.png");
+        content:url("/assets/icon/info-icon2.svg");
     }
 
     background-size: cover;
@@ -191,6 +191,10 @@
             color: #FFFFFF;
         }
 
+        .ui-sortable-column {
+            outline: 0;
+        }
+
         >tr>th {
             @include lato-font('bold');
 
@@ -269,13 +273,20 @@
     .ui-table-tbody {
         height: 100%;
 
-        >tr.ui-state-highlight {
-            background-color: rgba(91, 176, 181, 0.25) !important;
+        .ui-selectable-row {
+            outline: 0;
+            cursor: pointer;
+        }
+
+        >tr.ui-state-highlight,
+        >tr:focus {
+            background-color: rgba(63, 94, 171, 0.25) !important;
         }
 
         >tr>td {
             @include lato-font('normal');
 
+            outline: 0;
             border: 0px;
             line-height: 40px;
 
