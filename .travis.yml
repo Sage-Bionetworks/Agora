@@ -34,12 +34,14 @@ jobs:
       script: npm run ci:travis
       node_js: 8
     - stage: eb-deploy
-      script: git archive -v -o agora-app.zip --format=zip HEAD
+      script:
+        - ./set-agora-version.sh || travis_terminate 1
+        - zip /tmp/agora-app.zip -r * .[^.]*
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true
           bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
-          zip_file: agora-app.zip
+          zip_file: /tmp/agora-app.zip
           region: us-east-1
           app: agora-ampad
           env:
