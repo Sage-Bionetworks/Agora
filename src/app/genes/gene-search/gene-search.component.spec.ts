@@ -81,16 +81,16 @@ describe('Component: GeneSearch', () => {
         expect(aEl.length).toEqual(1);
     }));
 
-    it('should have a textarea element', () => {
-        const el = fixture.debugElement.query(By.css('textarea'));
+    it('should have a inpput element', () => {
+        const el = fixture.debugElement.query(By.css('input'));
         expect(el).toBeDefined();
 
-        const aEl = fixture.debugElement.queryAll(By.css('textarea'));
+        const aEl = fixture.debugElement.queryAll(By.css('input'));
         expect(aEl.length).toEqual(1);
     });
 
-    it('should have a placeholder for the textarea', () => {
-        const el = fixture.debugElement.query(By.css('textarea'));
+    it('should have a placeholder for the input', () => {
+        const el = fixture.debugElement.query(By.css('input'));
         expect(el.nativeElement.placeholder).not.toBeNull();
         expect(el.nativeElement.placeholder).toEqual('Search Gene Symbols or Ensembl IDs');
     });
