@@ -24,6 +24,10 @@
         text-decoration: underline;
         cursor: pointer;
     }
+
+    .video-half-vspace {
+        height: $video-height / 2;
+    }
 }
 
 .intro-search {
@@ -133,10 +137,10 @@ gene-search {
 
     .intro-video {
         width: 100%;
-        max-width: 471px;
+        max-width: $video-width;
         margin-left: auto;
         margin-right: auto;
-        height: 262px;
+        height: $video-height;
         position: relative;
         margin-bottom: 4em;
         @include respond-to('ex-small') {
