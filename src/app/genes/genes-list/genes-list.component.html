@@ -43,7 +43,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
+            <tr [pSelectableRow]="rowData" tabindex="0">
                 <td>
                     {{rowData[columns[0].field]}}
                 </td>
