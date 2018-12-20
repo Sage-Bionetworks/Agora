@@ -31,5 +31,5 @@
     <p-tabMenu *ngIf="showDesktopMenu" #overviewMenu [model]="items" [activeItem]="activeItem" [styleClass]="'overview-tab-menu'" (click)="activateMenu()"></p-tabMenu>
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top">
-    <loading></loading>
+    <loading-page></loading-page>
 </div>

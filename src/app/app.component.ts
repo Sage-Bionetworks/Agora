@@ -19,7 +19,7 @@ export const ROOT_SELECTOR = 'app';
     encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
-    name = 'Agora BETA';
+    name = 'Agora';
     showDevModule: boolean = environment.showDevModule;
 
     constructor(
@@ -28,8 +28,6 @@ export class AppComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        console.log('Initial App State', this.appState.state);
-
         this.router.events.subscribe((evt) => {
             if (!(evt instanceof NavigationEnd)) {
                 return;

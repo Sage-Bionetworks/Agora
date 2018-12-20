@@ -50,15 +50,7 @@ describe(`App`, () => {
         expect(comp).toBeDefined();
     });
 
-    it(`should be @Agora BETA`, () => {
-        expect(comp.name).toEqual('Agora BETA');
-    });
-
-    it('should log ngOnInit', () => {
-        spyOn(console, 'log');
-        expect(console.log).not.toHaveBeenCalled();
-
-        comp.ngOnInit();
-        expect(console.log).toHaveBeenCalled();
+    it(`app should be named Agora`, () => {
+        expect(comp.name).toEqual('Agora');
     });
 });
