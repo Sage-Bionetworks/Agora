@@ -177,10 +177,10 @@ describe('Component: GeneOverview', () => {
         tick();
         fixture.detectChanges();
 
-        const el = fixture.debugElement.query(By.css('loading'));
+        const el = fixture.debugElement.query(By.css('loading-page'));
         expect(el).toBeDefined();
 
-        const aEl = fixture.debugElement.queryAll(By.css('loading'));
+        const aEl = fixture.debugElement.queryAll(By.css('loading-page'));
         expect(aEl.length).toEqual(1);
     }));
 

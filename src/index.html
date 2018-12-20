@@ -60,7 +60,46 @@
         <% } %>
 
         <app>
-            Loading...
+            <style>
+                app {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+
+                    color: #3F5EAB;;
+                    text-transform: uppercase;
+                    font-family: Lato;
+                    font-size: 2.5em;
+                    text-shadow: 2px 2px 3px rgba(255,255,255,1.0);
+                }
+                body {
+                    background: #D2DEEC;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                @keyframes dots {
+                    50% {
+                        transform: translateY(-.4rem);
+                    }
+                    100% {
+                        transform: translateY(0);
+                    }
+                }
+
+                .d {
+                    animation: dots 1.5s ease-out infinite;
+                }
+                .d-2 {
+                    animation-delay: .5s;
+                }
+                .d-3 {
+                    animation-delay: 1s;
+                }
+            </style>
+
+            Loading<span class="d">.</span><span class="d d-2">.</span><span class="d d-3">.</span>
         </app>
 
         <!-- Scripts will be injected by webpack here -->

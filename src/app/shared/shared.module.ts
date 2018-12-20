@@ -23,6 +23,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { DownloadComponent } from './components/download';
 import { LoadingComponent } from './components/loading';
+import { LoadingPageComponent } from './components/loading-page';
 
 import {
     AlertComponent,
@@ -38,6 +39,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         AlertComponent,
         DownloadComponent,
         LoadingComponent,
+        LoadingPageComponent,
         FocusDirective,
         NumbersPipe,
         ArraySortPipe,
@@ -92,6 +94,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
         AlertComponent,
         DownloadComponent,
         LoadingComponent,
+        LoadingPageComponent,
         FocusDirective,
         NumbersPipe,
         ArraySortPipe,

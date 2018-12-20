@@ -113,7 +113,14 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     showVideo() {
         const shouldShow = this.localSt.retrieve('showVideo');
         if (shouldShow !== undefined) {
-            this.localSt.store('showVideo', !shouldShow);
+            if (this.navService.getRouter().url === '/genes') {
+                this.localSt.store('showVideo', !shouldShow);
+            } else {
+                window.open(
+                    'https://player.vimeo.com/video/297609960?autoplay=0&speed=1',
+                    '_blank'
+                );
+            }
         } else {
             this.localSt.store('showVideo', true);
         }
@@ -163,8 +170,6 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             });
         } else if (path === 'Teams') {
             this.goToRoute('teams-contributing');
-        } else if (path === 'Watch the Video') {
-            this.localSt.store('showVideo', true);
         }
     }
 
