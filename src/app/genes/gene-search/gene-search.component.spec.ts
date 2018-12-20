@@ -92,7 +92,7 @@ describe('Component: GeneSearch', () => {
     it('should have a placeholder for the input', () => {
         const el = fixture.debugElement.query(By.css('input'));
         expect(el.nativeElement.placeholder).not.toBeNull();
-        expect(el.nativeElement.placeholder).toEqual('Search Gene Symbols or Ensembl IDs');
+        expect(el.nativeElement.placeholder).toEqual('Search Gene Symbol or Ensembl ID');
     });
 
     it('should focus search list', () => {
