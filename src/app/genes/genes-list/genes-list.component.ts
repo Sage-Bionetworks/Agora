@@ -39,7 +39,8 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol' },
             { field: 'nominations', header: 'Nominations' },
-            { field: 'nominatedtarget', header: 'Teams' }
+            { field: 'nominatedtarget', header: 'Teams' },
+            { field: 'ensembl_gene_id', header: 'ID'}
         ];
 
         this.apiService.getTableData().subscribe((data) => {
