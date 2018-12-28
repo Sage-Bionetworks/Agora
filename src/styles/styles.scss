@@ -34,7 +34,10 @@
 
 // Let the OS add the default outline to tabbable elements
 :focus {
-    outline: -webkit-focus-ring-color auto 5px;
+   outline: -webkit-focus-ring-color auto 5px;
+}
+*:focus {
+    outline: none;
 }
 
 // 5. Custom Global Styles

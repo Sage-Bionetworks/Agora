@@ -293,14 +293,19 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
                     // Genes response
-                    if (responseList[0].geneModels) {
-                        this.geneService.setGeneModels(responseList[0].geneModels);
+                    if (!responseList.length) {
+                        this.dataLoaded = true;
+                        return;
+                    } else {
+                        if (responseList[0].geneModels) {
+                            this.geneService.setGeneModels(responseList[0].geneModels);
+                        }
+                        if (responseList[0].geneTissues) {
+                            this.geneService.setGeneTissues(responseList[0].geneTissues);
+                        }
+                        this.dataService.loadGenes(responseList[0]);
+                        this.forceService.processSelectedNode(responseList[1], this.gene);
                     }
-                    if (responseList[0].geneTissues) {
-                        this.geneService.setGeneTissues(responseList[0].geneTissues);
-                    }
-                    this.dataService.loadGenes(responseList[0]);
-                    this.forceService.processSelectedNode(responseList[1], this.gene);
                 }, (error) => {
                     console.error('Error loading the data!');
                     return throwError(error);  // Angular 6/RxJS 6

@@ -3,6 +3,11 @@
 
 .info-header {
     padding-right: 5% !important;
+    span{
+        color: $text-color-title;
+        margin-left: 5px;
+        vertical-align: middle;
+    }
 }
 
 .overview-header {

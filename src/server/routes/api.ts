@@ -151,7 +151,7 @@ connection.once('open', () => {
                     next(err);
                 } else {
                     if (!genes.length) {
-                        res.status(404).send('No genes found!');
+                        res.json({items: genes});
                     } else {
                         const chartGenes = allGenes.slice();
                         const geneEntries = genes.slice();
