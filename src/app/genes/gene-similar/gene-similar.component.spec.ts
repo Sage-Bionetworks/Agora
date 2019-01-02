@@ -11,15 +11,15 @@ import {
     ApiServiceStub,
     ActivatedRouteStub,
     RouterStub,
-    DataServiceStub,
     ForceServiceStub,
     GeneServiceStub,
-    mockInfo1
+    mockInfo1,
+    NavigationServiceStub
 } from '../../testing';
 
 import { GeneSimilarComponent } from './gene-similar.component';
 
-import { ApiService, DataService, ForceService, GeneService } from '../../core/services';
+import { ApiService, NavigationService, ForceService, GeneService } from '../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -32,7 +32,7 @@ describe('Component: GeneSimilar', () => {
     let fixture: ComponentFixture<GeneSimilarComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
-    let dataService: DataServiceStub;
+    let navService: NavigationServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
@@ -51,7 +51,7 @@ describe('Component: GeneSimilar', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ForceService, useValue: new ForceServiceStub() },
                 { provide: Location, useValue: locationStub }
@@ -64,7 +64,7 @@ describe('Component: GeneSimilar', () => {
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
-        dataService = fixture.debugElement.injector.get(DataService);
+        navService = fixture.debugElement.injector.get(NavigationService);
         forceService = fixture.debugElement.injector.get(ForceService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });

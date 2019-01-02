@@ -8,9 +8,9 @@ import { GeneNetwork,
 
 import {
     ApiService,
-    DataService,
     GeneService,
-    ForceService
+    ForceService,
+    NavigationService
 } from '../../core/services';
 import { SortEvent, Message } from 'primeng/api';
 
@@ -46,7 +46,7 @@ export class GeneSimilarComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private apiService: ApiService,
-        private dataService: DataService,
+        private navService: NavigationService,
         private geneService: GeneService,
         private forceService: ForceService
     ) { }
@@ -113,13 +113,28 @@ export class GeneSimilarComponent implements OnInit {
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
         this.router.navigated = false;
-        this.router.navigate(['/genes',
-            {
-                outlets:
-                {
-                    'genes-router': ['gene-details', this.selectedInfo.ensembl_gene_id]
-                }
-            }]);
+
+        if (!this.geneService.getCurrentGene()) {
+            this.getGene(this.selectedInfo.hgnc_symbol);
+        } else {
+            this.geneService.updatePreviousGene();
+            if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+                this.navService.setOvMenuTabIndex(0);
+                this.getGene(this.selectedInfo.hgnc_symbol);
+            } else {
+                this.goToRoute(
+                    '/genes',
+                    {
+                        outlets: {
+                            'genes-router': [
+                                'gene-details',
+                                this.geneService.getCurrentGene().ensembl_gene_id
+                            ]
+                        }
+                    }
+                );
+            }
+        }
     }
 
     onRowUnselect(event) {
@@ -129,6 +144,24 @@ export class GeneSimilarComponent implements OnInit {
             detail: 'Gene: ' + event.data.ensembl_gene_id
         }];
         this.geneService.setCurrentGene(null);
+    }
+
+    getGene(geneSymbol: string) {
+        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+            if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
+            this.geneService.updatePreviousGene();
+            this.geneService.updateGeneData(data);
+            this.goToRoute(
+                '/genes',
+                {
+                    outlets: {
+                        'genes-router': [ 'gene-details', this.selectedInfo.ensembl_gene_id ]
+                    }
+                }
+            );
+        }, (error) => {
+            console.log('Error getting gene: ' + error.message);
+        });
     }
 
     customSort(event: SortEvent) {
@@ -155,5 +188,9 @@ export class GeneSimilarComponent implements OnInit {
 
             return (event.order * result);
         });
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        this.navService.goToRoute(path, outlets);
     }
 }

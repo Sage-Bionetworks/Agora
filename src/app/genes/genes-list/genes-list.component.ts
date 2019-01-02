@@ -76,6 +76,7 @@ export class GenesListComponent implements OnInit {
         } else {
             this.geneService.updatePreviousGene();
             if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+                this.navService.setOvMenuTabIndex(0);
                 this.getGene(this.selectedInfo.hgnc_symbol);
             } else {
                 this.goToRoute(
