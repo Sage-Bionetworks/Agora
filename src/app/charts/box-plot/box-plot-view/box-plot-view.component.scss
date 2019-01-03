@@ -25,19 +25,18 @@
 
         svg {
             height: 100%;
-
+            width: 100%;
         }
     }
 }
 
 .x-axis-row {
-    margin-bottom: 30px;
-
     .x-axis-heading {
         @include lato-font('bold');
         line-height: normal;
         font-size: $font-size-regular;
         width: 100%;
+        padding-left: 60px;
 
         color: #6D7078;
     }
@@ -99,12 +98,13 @@
             pointer-events: auto;
 
             font-size: $font-size-x-regular;
-            color: $text-color-normal;
+            color: $text-color;
+            fill: $text-color;
         }
     }
 
     .y-axis-label {
-        @include lato-font('normal');
+        @include lato-font('bold');
 
         line-height: normal;
         font-size: $font-size-regular;

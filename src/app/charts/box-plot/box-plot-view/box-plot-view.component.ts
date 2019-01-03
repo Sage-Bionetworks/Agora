@@ -382,7 +382,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             self.updateCircleRadius();
 
             self.chart
-                .width(self.boxPlot.nativeElement.parentElement.offsetWidth)
+                .width(self.boxPlot.nativeElement.offsetWidth)
                 .height(self.boxPlot.nativeElement.offsetHeight);
 
             if (self.chart.rescale) {

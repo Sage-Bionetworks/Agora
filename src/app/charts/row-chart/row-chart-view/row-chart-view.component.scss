@@ -55,7 +55,7 @@ g.textGroup text {
         stroke: white;
     }
 
-    svg g, g.axis text, g.row g.confidence-text-left text, g.row g.confidence-text-right text {
+    svg g, g.row g.confidence-text-left text, g.row g.confidence-text-right text {
         @include lato-font('normal');
 
         pointer-events: auto;
@@ -64,6 +64,17 @@ g.textGroup text {
         font-size: $font-size-regular;
         color: #6D7078;
         fill: #6D7078;
+    }
+
+    g.axis text {
+        @include lato-font('bold');
+
+        pointer-events: auto;
+
+        line-height: normal;
+        font-size: $font-size-regular;
+        color: $text-color-normal;
+        fill: $text-color-normal;
     }
 
     g.row rect {
@@ -75,7 +86,7 @@ g.textGroup text {
     }
 
     .x-axis-label {
-        @include lato-font('normal');
+        @include lato-font('bold');
 
         line-height: normal;
         font-size: $font-size-regular;

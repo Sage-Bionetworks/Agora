@@ -146,7 +146,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             chart.margins({
                 left: 20,
                 right: 20,
-                bottom: 50,
+                bottom: 60,
                 top: 0
             });
 
