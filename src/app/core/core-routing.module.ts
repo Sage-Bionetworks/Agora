@@ -15,6 +15,7 @@ export const routes: Routes = [
     { path: 'terms', component: TermsComponent },
     { path: 'teams-contributing', component: ContribTeamsPageComponent },
     { path: 'synapse-account', component: SynapseAccountComponent },
+    { path: 'no-content', component: NoContentComponent },
     { path: '**', component: NoContentComponent }
 ];
 

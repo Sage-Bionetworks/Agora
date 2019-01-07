@@ -105,23 +105,25 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
         this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
-                if (!re.url.includes('/genes/(genes-router:gene-details/' +
-                    this.geneService.getCurrentGene().ensembl_gene_id)) {
-                    if (this.routerSub) {
-                        this.routerSub.unsubscribe();
-                    }
-                    if (this.subscription) {
-                        this.subscription.unsubscribe();
-                    }
-                } else {
-                    if (this.disableMenu) {
-                        // Improve this part, 0.8 seconds to re-activate the menu items
-                        setTimeout(() => {
-                            this.items.forEach((i) => {
-                                i.disabled = false;
-                            });
-                            this.disableMenu = false;
-                        }, 800);
+                if (this.geneService.getCurrentGene()) {
+                    if (!re.url.includes('/genes/(genes-router:gene-details/' +
+                        this.geneService.getCurrentGene().ensembl_gene_id)) {
+                        if (this.routerSub) {
+                            this.routerSub.unsubscribe();
+                        }
+                        if (this.subscription) {
+                            this.subscription.unsubscribe();
+                        }
+                    } else {
+                        if (this.disableMenu) {
+                            // Improve this part, 0.8 seconds to re-activate the menu items
+                            setTimeout(() => {
+                                this.items.forEach((i) => {
+                                    i.disabled = false;
+                                });
+                                this.disableMenu = false;
+                            }, 800);
+                        }
                     }
                 }
             }

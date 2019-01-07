@@ -1,0 +1,27 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.no-content {
+    // Navbar minus footer minus body bottom margin for footer
+    height: calc(100vh - #{$navbar-height} - #{$footer-height});
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url('/assets/img/no-content.svg');
+    background-size: cover !important;
+
+    h1 {
+        text-align: center;
+        color: #FFFFFF;
+    }
+
+    .no-content-heading {
+        font-size: $font-size-xxx-large;
+    }
+
+    .no-content-message {
+        font-size: $font-size-x-large;
+    }
+}

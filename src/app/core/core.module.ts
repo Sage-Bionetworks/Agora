@@ -49,6 +49,7 @@ import '../../styles/headings.scss';
         NavbarComponent,
         MenubarComponent,
         FooterComponent,
+        NoContentComponent,
         AboutComponent,
         HelpComponent,
         TermsComponent,
