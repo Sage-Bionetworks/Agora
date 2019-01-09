@@ -545,3 +545,46 @@ p-dialog {
   top: inherit;
   left: inherit;
 }
+
+.custom-toast {
+    @include respond-to('ex-small') {
+        width: 80%;
+    }
+    @include respond-to('small') {
+        width: 60%;
+    }
+    @include respond-to('medium') {
+        width: 50%;
+    }
+
+    .ui-toast-message {
+        @include lato-font('normal');
+
+        color: $text-color-normal;
+        line-height: normal;
+        font-size: $font-size-x-regular;
+    }
+
+    .ui-toast-summary {
+        @include lato-font('bold');
+
+        color: $text-color-normal;
+        line-height: normal;
+        font-size: $font-size-xx-regular;
+    }
+
+    .ui-toast-close-icon {
+        color: $text-color-normal;
+        font-size: $font-size-xxxx-regular;
+        border: none;
+        text-decoration: none;
+    }
+
+    .ui-toast-message-error {
+        background: #f33847;
+    }
+
+    .ui-toast-message-warn {
+        background: #ffe399;
+    }
+}

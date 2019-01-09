@@ -105,43 +105,6 @@
     }
 }
 
-.warn-toast {
-    @include respond-to('ex-small') {
-        width: 80%;
-    }
-    @include respond-to('small') {
-        width: 60%;
-    }
-    @include respond-to('medium') {
-        width: 50%;
-    }
-
-    .ui-toast-message {
-        @include lato-font('normal');
-
-        color: $text-color-normal;
-        background: #ffe399;
-        line-height: normal;
-        font-size: $font-size-x-regular;
-    }
-
-    .ui-toast-summary {
-        @include lato-font('bold');
-
-        color: $text-color-normal;
-        background: #ffe399;
-        line-height: normal;
-        font-size: $font-size-xx-regular;
-    }
-
-    .ui-toast-close-icon {
-        color: $text-color-normal;
-        font-size: $font-size-xxxx-regular;
-        border: none;
-        text-decoration: none;
-    }
-}
-
 .progress-dialog {
     .ui-dialog-titlebar {
         display: none !important;

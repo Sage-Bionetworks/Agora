@@ -282,7 +282,7 @@ connection.once('open', () => {
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) {
-            res.json({ items: [], isEnsembl});
+            res.json({ items: [], isEnsembl });
         } else {
             GenesInfo.find(queryObj).exec(
                 (err, geneInfos) => {

@@ -1,7 +1,7 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 // PrimeNG modules
@@ -21,9 +21,12 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+import { MessageService } from 'primeng/api';
+
 import { DownloadComponent } from './components/download';
 import { LoadingComponent } from './components/loading';
 import { LoadingPageComponent } from './components/loading-page';
+import { HttpErrorInterceptor } from './http-error';
 
 import {
     AlertComponent,
@@ -33,6 +36,20 @@ import {
 import { AlertService } from './services';
 
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
+
+import * as Rollbar from 'rollbar';
+
+const rollbarConfig = {
+    accessToken: '69eb797b31874ac7a0248587cabeed86',
+    captureUncaught: true,
+    captureUnhandledRejections: true
+};
+
+export function rollbarFactory() {
+    return new Rollbar(rollbarConfig);
+}
+
+export const RollbarService = new InjectionToken<Rollbar>('rollbar');
 
 @NgModule({
     declarations: [
@@ -107,7 +124,17 @@ export class AppSharedModule {
         return {
             ngModule: AppSharedModule,
             providers: [
-                AlertService
+                AlertService,
+                MessageService,
+                {
+                    provide: RollbarService,
+                    useFactory: rollbarFactory
+                },
+                {
+                    provide: HTTP_INTERCEPTORS,
+                    useClass: HttpErrorInterceptor,
+                    multi: true
+                }
             ]
         };
     }

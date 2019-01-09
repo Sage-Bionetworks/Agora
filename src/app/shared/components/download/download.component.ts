@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 
 import * as domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';

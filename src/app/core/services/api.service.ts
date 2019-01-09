@@ -11,7 +11,7 @@ import {
     GeneInfosResponse
 } from '../../models';
 
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, Message } from 'primeng/api';
 
 import { Observable, empty, throwError, forkJoin } from 'rxjs';
 import { catchError, share } from 'rxjs/operators';

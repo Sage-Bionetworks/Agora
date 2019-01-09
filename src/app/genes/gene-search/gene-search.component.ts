@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-// Updating to rxjs 6 import statement
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Observable, empty } from 'rxjs';
-
 import { Gene, GeneInfo, GeneInfosResponse, GeneResponse } from '../../models';
 
 import {
@@ -12,6 +8,10 @@ import {
     GeneService,
     NavigationService
 } from '../../core/services';
+
+// Updating to rxjs 6 import statement
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
 
 @Component({
     selector: 'gene-search',
@@ -63,7 +63,7 @@ export class GeneSearchComponent implements OnInit {
                     this.results = (data.items) ? data.items : [];
                 }
             }, (error) => {
-                console.log('Invalid search!: ' + error.message);
+                this.isSearching = false;
             });
     }
 
