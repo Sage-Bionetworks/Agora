@@ -78,7 +78,7 @@ footer {
 }
 
 a {
-    color: white;
+    color: color(a, primary);
 }
 
 a:hover {
@@ -91,7 +91,7 @@ p {
     line-height: normal;
     text-align: left;
     font-size: $font-size-x-regular;
-    color: #24334F;
+    color: color(text, secondary);
 }
 
 span {
@@ -103,7 +103,7 @@ span {
     line-height: normal;
     font-size: $font-size-x-regular;
     text-align: center;
-    color: #3C4A63;
+    color: color(span, base);
 }
 
 input::-ms-clear {

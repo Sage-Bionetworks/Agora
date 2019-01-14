@@ -3,7 +3,7 @@
 
 .download-op {
     margin-top: 5px;
-    background: white;
+    background: color(overlay-panel, bg);
 
     .fake-span {
         height: 0px;
@@ -24,7 +24,7 @@
     .chkbox-col {
         height: 52px;
         line-height: 52px;
-        border-bottom: 1px solid #EDEDED;
+        border-bottom: 1px solid color(chkbox-col, border);
     }
 
     .button-col {
@@ -50,8 +50,8 @@
         padding-right: 19px;
         padding-top: 12px;
         padding-bottom: 12px;
-        color: #FFFFFF;
-        background: #5BB0B5;
+        color: color(h3, light);
+        background: color(h3, light-bg);
     }
 
     p-checkbox {
@@ -60,7 +60,7 @@
         line-height: normal;
         font-size: $font-size-regular;
         height: 32px;
-        color: $text-color-normal;
+        color: color(chkbox, text);
 
     }
 
@@ -69,8 +69,8 @@
     }
 
     .ui-chkbox-box {
-        background: #2F8E94;
-        border: 2px solid #73C8CC;
+        background: color(chkbox-box, bg);
+        border: 2px solid color(chkbox-box, border);
         box-sizing: border-box;
         border-radius: 6px;
         width: 32px;
@@ -79,7 +79,7 @@
     }
 
     .ui-chkbox-icon {
-        color: white;
+        color: color(chkbox-icon);
         margin-top: 4px;
 
         span {
@@ -92,9 +92,9 @@
     }
 
     .download-button {
-        background: #FCCB6F !important;
+        background: color(download-btn, bg) !important;
         border: 0px !important;
-        color: black !important;
+        color: color(download-btn, base) !important;
         border-radius: 100px;
         width: 100%;
         height: 100%;

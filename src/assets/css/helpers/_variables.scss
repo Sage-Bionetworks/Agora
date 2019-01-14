@@ -37,6 +37,110 @@ $font-size-xxx-large-odd: 61px;
 $font-size-xxxx-large-odd: 65px;
 $font-size-huge-odd: 97px;
 
+$colors: (
+    a: (
+        primary: #FFFFFF
+    ),
+    background: #FFFFFF,
+    box-shadow: #C7C5C5,
+    chart: (
+        axis: #6D7078,
+        label: #6D7078,
+        text-normal: #24334F,
+        title: #3F5EAB
+    ),
+    chkbox: (
+        icon: #FFFFFF,
+        text: #24334F
+    ),
+    chkbox-box: (
+        bg: #2F8E94,
+        border: #73C8CC
+    ),
+    chkbox-col: (
+        border: #EDEDED
+    ),
+    chkbox-icon: #FFFFFF,
+    divider: (
+        border: #E0E0E0
+    ),
+    download-btn: (
+        base: #000000,
+        bg: #FCCB6F
+    ),
+    h1: (
+        base: #3F5EAB,
+        light: #FFFFFF,
+        light-bg: #5BB0B5
+    ),
+    h2: (
+        base: #3F5EAB,
+        light: #FFFFFF,
+        light-bg: #5BB0B5
+    ),
+    h3: (
+        base: #3F5EAB,
+        light: #FFFFFF,
+        light-bg: #5BB0B5
+    ),
+    h4: (
+        base: #24334F,
+        light: #FFFFFF,
+        light-bg: #5BB0B5
+    ),
+    i: #FCCB6F,
+    input: (
+        border: #5BB0B5
+    ),
+    input-placeholder: #6C7489,
+    italic-text: (
+        base: #8D919E
+    ),
+    link-text: (
+        base: #5BB0B5,
+        table: #24334F
+    ),
+    overlay-panel: (
+        bg: #FFFFFF
+    ),
+    span: (
+        base: #3C4A63,
+        add: #24334F
+    ),
+    table: (
+        scrollbar: (
+            track: (
+                bg: #E1F4F5
+            ),
+            thumb: (
+                bg: #A6DDE0,
+                bg-hover: #A6DDE0
+            )
+        )
+    ),
+    table-scrollbar-track: (
+        bg: #E1F4F5
+    ),
+    table-scrollbar-thumb: (
+        bg: #A6DDE0,
+        bg-hover: #A6DDE0
+    ),
+    text: (
+        primary: #1A1C29,
+        secondary: #24334F
+    ),
+    th: (
+        base: #FFFFFF,
+        bg: #3C4A63
+    ),
+    tr: (
+        base: #FFFFFF
+    ),
+    tr-focus: (
+        bg-color: rgba(63, 94, 171, 0.25)
+    )
+);
+
 $text-color-axis: #6D7078;
 $text-color-chart-label: #6D7078;
 $text-color: #1A1C29;
@@ -44,7 +148,24 @@ $text-color-normal: #24334F;
 $text-color-title: #3F5EAB;
 
 $menu-dark: #3C4A63;
-$menu-inactive: rgba(255, 255, 255, 0.05);;
+$menu-inactive: rgba(255, 255, 255, 0.05);
+
+$chkbox-icon-color: #FFFFFF;
+$download-btn-bg-color: #FCCB6F;
+$download-btn-color: #000000;
+
+$chkbox-box-bg-color: #2F8E94;
+$chkbox-box-border-color: #73C8CC;
+$chkbox-col-border-color: #EDEDED;
+$overlay-panel-bg-color: #FFFFFF;
+$h3-light-color: #FFFFFF;
+$h3-light-bg-color: #5BB0B5;
+
+$input-border-color: #5BB0B5;
+
+$table-scrollbar-track-bg-color: #E1F4F5;
+$table-scrollbar-thumb-bg-color: #A6DDE0;
+$table-scrollbar-thumb-hover-bg-color: #A6DDE0;
 
 $breakpoints: (
     'ex-small': (max-width: 600px),
@@ -59,3 +180,14 @@ $brand-color-background: transparent;
 $brand-color-content: black;
 
 $brand-color-lighter: lighten($brand-color-content, 50%);
+
+// retrieve color from map ie. `color(primary, base)`
+@function color($color-name, $color-variant:null) {
+    // color variant is optional
+    @if ($color-variant != null) {
+        // map inception
+        @return map-get(map-get($colors, $color-name), $color-variant);
+    } @else {
+        @return map-get($colors, $color-name);
+    }
+}
