@@ -175,7 +175,7 @@
     margin: 0px;
     line-height: normal;
     font-size: $font-size-x-regular;
-    color: $text-color-normal;
+    color: color(text, secondary);
     max-height: 250px;
     overflow-y: auto;
     background: #FFFFFF;
@@ -190,15 +190,15 @@
     cursor: pointer;
     padding: 5px 10px;
     height: 60px;
-    color: $text-color-normal;
+    color: color(text, secondary);
     line-height: normal;
     font-size: $font-size-regular;
-    color: $text-color-normal;
+    color: color(text, secondary);
     padding-left: 4%;
 
     p {
         @include lato-font('bold');
-        color: $text-color-normal;
+        color: color(text, secondary);
     }
 
     border-bottom: 1px solid #EDEDED;

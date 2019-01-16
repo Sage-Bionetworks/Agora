@@ -7,7 +7,7 @@
     width: auto; /* Scale the div to the parent width */
 
     #keywords:focus {
-      box-shadow: 0px 0px 4px 2px $input-border-color;
+      box-shadow: 0px 0px 4px 2px $secondary-background;
       border-radius: 6px;
       outline-offset: -2px;
       outline: 0;
@@ -21,25 +21,25 @@
 
         /* Track */
         ::-webkit-scrollbar-track {
-            background: color(table-scrollbar-track, bg);
+            background: $quaternary-background;
         }
 
         /* Handle */
         ::-webkit-scrollbar-thumb {
-            background: color(table-scrollbar-thumb, bg);
+            background: $tertiary-background;
             border-radius: 14px;
             height: 47px;
         }
 
         /* Handle on hover */
         ::-webkit-scrollbar-thumb:hover {
-            background: color(table-scrollbar-thumb, bg-hover);
+            background: $tertiary-background;
         }
     }
 
     tr:hover {
         background: rgba(63, 94, 171, 0.25) !important;
-        color: color(tr, base);
+        color: $background;
     }
 
     th:last-child{
@@ -65,7 +65,7 @@
     }
 
     .link-heading {
-        color: color(link-text, table);
+        color: color(text, secondary);
         float: left;
         margin-left: 50%;
         transform: translate(-50%);
@@ -150,7 +150,7 @@
         i {
             position: absolute;
             z-index: 2;
-            color: color(i);
+            color: $contrast-color;
             width: 32px;
 
             @include respond-to('ex-small') {
@@ -185,7 +185,7 @@
         .span-add-this {
             @include lato-font('bold');
 
-            color: color(span, add);
+            color: color(text, secondary);
             margin-right: 20px;
         }
     }
@@ -202,12 +202,12 @@
         >tr>th {
             @include lato-font('bold');
 
-            background: color(th, bg) !important;
+            background: $span-color !important;
             border: none;
             height: 58px;
             line-height: 40px;
             font-size: 18px;
-            color: color(th, base) !important;
+            color: $background !important;
 
         }
 
@@ -375,7 +375,7 @@
     }
 
     .ui-sortable-column-icon {
-        color: color(h1, light-bg) !important;
+        color: $secondary-background !important;
     }
     .btn-nom{
         cursor: pointer;

@@ -78,7 +78,7 @@ footer {
 }
 
 a {
-    color: color(a, primary);
+    color: $background;
 }
 
 a:hover {
@@ -103,7 +103,7 @@ span {
     line-height: normal;
     font-size: $font-size-x-regular;
     text-align: center;
-    color: color(span, base);
+    color: $span-color;
 }
 
 input::-ms-clear {
@@ -161,7 +161,7 @@ p-dialog {
         background: white;
         line-height: normal;
         font-size: 24px !important;
-        color: $text-color-normal;
+        color: color(text, secondary);
         text-align: center;
         padding-top: 10% ;
 
@@ -174,7 +174,7 @@ p-dialog {
     .ui-dialog-title {
         @include lato-font('bold');
         font-size: 24px !important;
-        color: $text-color-title;
+        color: color(text, title);
     }
 
     .ui-dialog-titlebar-icon {
@@ -453,7 +453,7 @@ p-dialog {
             @include lato-font('normal');
 
             line-height: 40px;
-            color: $text-color-normal;
+            color: color(text, secondary);
             height: 40px;
         }
 
@@ -560,7 +560,7 @@ p-dialog {
     .ui-toast-message {
         @include lato-font('normal');
 
-        color: $text-color-normal;
+        color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-x-regular;
     }
@@ -568,13 +568,13 @@ p-dialog {
     .ui-toast-summary {
         @include lato-font('bold');
 
-        color: $text-color-normal;
+        color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-xx-regular;
     }
 
     .ui-toast-close-icon {
-        color: $text-color-normal;
+        color: color(text, secondary);
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;

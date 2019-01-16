@@ -292,7 +292,7 @@
         font-size: $font-size-x-regular;
       }
 
-      color: $text-color-normal !important;
+      color: color(text, secondary) !important;
       height: 40px;
     }
 

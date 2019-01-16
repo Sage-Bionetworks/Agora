@@ -11,10 +11,10 @@
     text-align: center;
     line-height: normal;
     border: 0px;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 4px #C7C5C5;
+    background: $background;
+    box-shadow: 0px 0px 4px color(box-shadow);
     border-radius: 2px;
-    color: black;
+    color: color(text, fill);
 }
 
 .bplot-content {
@@ -38,7 +38,7 @@
         width: 100%;
         padding-left: 60px;
 
-        color: #6D7078;
+        color: $chart-grey;
     }
 }
 
@@ -55,9 +55,9 @@
     padding: 14px;
     text-align: center;
     line-height: normal;
-    color: white;
+    color: $background;
     font-size: $font-size-regular;
-    background: #2F8E94;
+    background: $quinary-background;
     border: 0px;
     border-radius: 8px;
 }
@@ -67,16 +67,16 @@
     height: 100%;
 
     g.row text {
-        fill: black;
+        fill: color(text, fill);
     }
 
     path.domain {
-        stroke: #EDEDED;
+        stroke: $grey-border-color;
         stroke-width: 4px;
     }
 
     .axis line {
-        stroke: white;
+        stroke: $background;
     }
 
     g.axis text {
@@ -84,8 +84,8 @@
 
         line-height: normal;
         font-size: $font-size-regular;
-        color: #6D7078;
-        fill: #6D7078;
+        color: $chart-grey;
+        fill: $chart-grey;
     }
 
     g.axis.x {
@@ -98,8 +98,8 @@
             pointer-events: auto;
 
             font-size: $font-size-x-regular;
-            color: $text-color;
-            fill: $text-color;
+            color: color(text, primary);
+            fill: color(text, primary);
         }
     }
 
@@ -109,14 +109,14 @@
         line-height: normal;
         font-size: $font-size-regular;
         text-align: center;
-        color: #6D7078;
+        color: $chart-grey;
     }
 
     width: 100%;
     height: 100%;
 
     .box > line, rect {
-        stroke: #BCC0CA !important;
+        stroke: color(rect, stroke) !important;
         stroke-width: 3px !important;
     }
 

@@ -4,7 +4,7 @@
 .info-header {
     padding-right: 5% !important;
     span{
-        color: $text-color-title;
+        color: color(text, title);
         margin-left: 5px;
         vertical-align: middle;
     }
@@ -381,7 +381,7 @@
 
         text-align: left;
         line-height: normal;
-        color: $text-color-normal;
+        color: color(text, secondary);
         font-size: $font-size-xxxx-regular;
     }
 
@@ -411,7 +411,7 @@
 
         text-align: left;
         line-height: normal;
-        color: $text-color-normal;
+        color: color(text, secondary);
         font-size: $font-size-xxxx-regular;
     }
 
