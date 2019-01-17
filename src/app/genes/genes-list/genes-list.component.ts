@@ -6,7 +6,7 @@ import {
     NavigationService
 } from '../../core/services';
 
-import { GeneInfo, NominatedTarget, GeneResponse } from '../../models';
+import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../../models';
 
 import {
     Message,
@@ -39,14 +39,13 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol' },
             { field: 'nominations', header: 'Nominations' },
-            { field: 'nominatedtarget', header: 'Teams' },
-            { field: 'ensembl_gene_id', header: 'ID'}
+            { field: 'nominatedtarget', header: 'Teams' }
         ];
 
-        this.apiService.getTableData().subscribe((data) => {
-            this.datasource = (data['items']) ? data['items'] as GeneInfo[] : [];
+        this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
+            this.datasource = (data.items) ? data.items : [];
             this.genesInfo = this.datasource;
-            this.totalRecords = (data['totalRecords']) ? (data['totalRecords']) : 0;
+            this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
 
             // Starts table with the nominations columns sorted in descending order
             this.customSort({

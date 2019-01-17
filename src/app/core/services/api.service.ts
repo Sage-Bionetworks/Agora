@@ -73,7 +73,7 @@ export class ApiService {
         return this.http.get('/api/genes/page', { headers, params });
     }
 
-    getTableData(): Observable<object> {
+    getTableData(): Observable<GeneInfosResponse> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
@@ -82,7 +82,7 @@ export class ApiService {
         });
         const params = new HttpParams();
 
-        return this.http.get('/api/genes/table', { headers, params });
+        return this.http.get<GeneInfosResponse>('/api/genes/table', { headers, params });
     }
 
     getInfosMatchId(id: string): Observable<GeneInfosResponse> {

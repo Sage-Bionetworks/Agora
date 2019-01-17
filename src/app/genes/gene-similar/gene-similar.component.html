@@ -19,13 +19,14 @@
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
-        [customSort]="true">
+        [customSort]="true"
+        [tableStyle]="{'table-layout':'auto'}">
         <ng-template pTemplate="header" let-columns>
             <tr>
-            <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="col.field">
-                {{col.header}}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
-            </th>
+                <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="getSortColumnField(i, col)">
+                    {{col.header}}
+                    <p-sortIcon [field]="getSortColumnField(i, col)"></p-sortIcon>
+                </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">

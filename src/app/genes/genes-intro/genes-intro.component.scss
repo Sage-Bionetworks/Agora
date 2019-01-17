@@ -31,7 +31,7 @@
 }
 
 .intro-search {
-    box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 2px 0px color(black-box-shadow, a35);
     margin-bottom: 2%;
     padding-top: 0px;
 
@@ -46,7 +46,7 @@
 }
 
 gene-search {
-    box-shadow: 0 2px 2px 0px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 2px 0px color(black-box-shadow, a35);
     margin-bottom: 2%;
     padding-top: 0px;
 
@@ -61,7 +61,7 @@ gene-search {
 }
 
 .intro-nomlist-desc {
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 2px 6px color(black-box-shadow, a50);
     margin-bottom: 2%;
 
     .nom-targets-heading {
@@ -74,26 +74,14 @@ gene-search {
 }
 
 .intro-contrib-desc {
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 2px 6px color(black-box-shadow, a50);
     margin-bottom: 2%;
 }
 
-.genes-list-header {
-    a {
-        cursor: pointer;
-        color: #28448A;
-        text-decoration: none;
-
-        &:hover {
-            color: rgb(63, 108, 221) !important;
-        }
-    }
-}
-
 .list-button {
-    background: #FCCB6F !important;
+    background:$contrast-color !important;
     border: 0px !important;
-    color: black !important;
+    color: color(text, fill) !important;
     border-radius: 100px;
     width: 64%;
 

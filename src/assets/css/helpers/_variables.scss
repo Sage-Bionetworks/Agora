@@ -38,6 +38,10 @@ $font-size-xxxx-large-odd: 65px;
 $font-size-huge-odd: 97px;
 
 $colors: (
+    black-box-shadow: (
+        a35: rgba(0, 0, 0, 0.35),
+        a50: rgba(0, 0, 0, 0.5)
+    ),
     box-shadow: #C7C5C5,
     input-placeholder: #6C7489,
     italic-text: (
@@ -50,7 +54,7 @@ $colors: (
         primary: #1A1C29,
         secondary: #24334F,
         fill: #000000,
-        title: #3F5EAB
+        title: #5171C0
     ),
     tr-focus: (
         bg-color: rgba(63, 94, 171, 0.25)

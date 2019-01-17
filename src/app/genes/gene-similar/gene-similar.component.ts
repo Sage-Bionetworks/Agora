@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GeneNetwork,
-    LinksListResponse,
+import {
+    GeneNetwork,
     GeneResponse,
     GeneInfosResponse,
-    GeneInfo } from '../../models';
+    GeneInfo,
+    Druggability
+} from '../../models';
 
 import {
     ApiService,
@@ -41,6 +43,7 @@ export class GeneSimilarComponent implements OnInit {
     genesInfo: any;
     totalRecords: any;
     loading: boolean;
+    sortColumnIndex: number;
 
     constructor(
         private router: Router,
@@ -57,52 +60,57 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'nominations', header: 'Nominated Target' },
             { field: 'haseqtl', header: 'Brain eQTL' },
             { field: 'isIGAP', header: 'Genetic Association with LOAD'},
-            { field: 'druggability', subfield: 'pharos_class', header: 'Druggability Bucket'},
-            { field: 'druggability', header: 'Pharos Class'}
+            { field: 'druggability', subfield: 'sm_druggability_bucket',
+                header: 'Druggability Bucket'},
+            { field: 'druggability', subfield: 'pharos_class', header: 'Pharos Class'}
         ];
         // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+
         if (!!this.forceService.getGeneClickedList() &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneClickedList();
             const nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
-                this.genesInfo = datas['items'];
-                this.totalRecords = datas['items'].length;
+            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
+                this.genesInfo = datas.items;
+                this.totalRecords = datas.items.length;
                 this.loading = false;
-                this.dataLoaded = true;
                 this.dataLoaded = true;
             });
         } else if (!!this.forceService.getGeneOriginalList() &&
             this.forceService.getGeneOriginalList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneOriginalList();
             const nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
-                this.genesInfo = datas['items'];
-                this.totalRecords = datas['items'].length;
+            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
+                this.genesInfo = datas.items;
+                this.totalRecords = datas.items.length;
                 this.loading = false;
                 this.dataLoaded = true;
             });
         } else {
             const dn = this.forceService.getGeneClickedList();
             const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas) => {
-                this.genesInfo = datas['items'];
-                this.totalRecords = datas['items'].length;
+            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
+                this.genesInfo = datas.items;
+                this.totalRecords = datas.items.length;
                 this.loading = false;
             });
         }
     }
 
-    druggabilitypc(druggability): string {
-        if (!druggability) { return '-'; }
-        return druggability.map((dg) => dg['pharos_class']);
+    druggabilitypc(druggability: Druggability[]): string {
+        if (!druggability || !druggability.length || !druggability[0].pharos_class) { return '-'; }
+        return druggability[0].pharos_class;
     }
 
-    druggability(druggability): string {
-        if (!druggability) { return '-'; }
-        return druggability.map((dg) => `${dg['sm_druggability_bucket']}: ${dg['classification']}`);
+    druggability(druggability: Druggability[]): string {
+        if (!druggability || !druggability.length || !druggability[0].sm_druggability_bucket ||
+            !druggability[0].classification
+        ) {
+            return '-';
+        }
+        return `${druggability[0].sm_druggability_bucket}: ${druggability[0].classification}`;
     }
 
     onRowSelect(event) {
@@ -166,11 +174,11 @@ export class GeneSimilarComponent implements OnInit {
 
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
-            const value1 = (Array.isArray(data1[event.field])) ?
-                data1[event.field].map((nt) => nt.team).join(', ') :
+            const value1 = (!data1[event.field] && data1.druggability) ?
+                data1.druggability[0][event.field] :
                 data1[event.field];
-            const value2 = (Array.isArray(data2[event.field])) ?
-                data2[event.field].map((nt) => nt.team).join(', ') :
+            const value2 = (!data2[event.field] && data2.druggability) ?
+                data2.druggability[0][event.field] :
                 data2[event.field];
             let result = null;
 
@@ -188,6 +196,14 @@ export class GeneSimilarComponent implements OnInit {
 
             return (event.order * result);
         });
+    }
+
+    getSortColumnField(index: number, col: any) {
+        if (index < 4) {
+            return col.field;
+        } else {
+            return col.subfield;
+        }
     }
 
     goToRoute(path: string, outlets?: any) {

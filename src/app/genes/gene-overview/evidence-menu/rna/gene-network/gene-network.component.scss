@@ -122,6 +122,14 @@
 .brainregion-col {
     margin-top: auto;
     margin-bottom: auto;
+
+    .fa-angle-right:before {
+        -moz-transform: scale(1.6,1); /* Firefox */
+        -o-transform: scale(1.6,1); /* Opera */
+        -webkit-transform: scale(1.6,1); /* Safari And Chrome */
+        transform: scale(1.6,1); /* Standard Property */
+        color: $secondary-background;
+    }
 }
 
 .pathboxes-row {
