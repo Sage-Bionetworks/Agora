@@ -5,7 +5,7 @@ export interface LinksListResponse {
 }
 
 export interface GenesResponse {
-    items: Gene[];
+    items?: Gene[];
     geneEntries: Gene[];
     maxFC: number;
     minFC: number;
@@ -15,6 +15,10 @@ export interface GenesResponse {
     maxAdjPValue: number;
     geneTissues: string[];
     geneModels: string[];
+}
+
+export interface GenesSameIdResponse {
+    geneEntries: Gene[];
 }
 
 export interface GeneResponse {

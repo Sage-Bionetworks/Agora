@@ -133,12 +133,38 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     initChart() {
+        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(
+
+        /*this.dim = this.dataService.getDimension(
             this.info,
             this.currentGene
         );
-        this.group = this.dataService.getGroup(this.info);
+        this.group = this.dataService.getGroup(this.info);*/
+
+        const fpDim = {
+            filter: () => {
+                //
+            },
+            filterAll: () => {
+                //
+            }
+        };
+
+        const fpGroup = {
+            all() {
+                return self.chartService.filteredData['fpGroup'].values;
+            },
+            order() {
+                //
+            },
+            top() {
+                //
+            }
+        };
+
+        this.dim = fpDim;
+        this.group = fpGroup;
 
         this.title = this.info.title;
         this.getChartPromise().then((chart) => {
@@ -184,8 +210,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .valueAccessor((d) => {
                     return self.dataService.getSignificantValue(+d.value.logfc);
                 })
+                .keyAccessor((d) => {
+                    return d.key[0];
+                })
                 .label((d) => {
-                    return d.key;
+                    return d.key[0];
                 })
                 .on('preRender', function(chart) {
                     self.max = -Infinity;
@@ -232,9 +261,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     });
                 })
                 .othersGrouper(null)
-                .ordinalColors(this.colors)
-                .dimension(this.dim)
-                .group(this.group)
+                .ordinalColors(self.colors)
+                .dimension(self.dim)
+                .group(self.group)
                 .transitionDuration(0);
 
             resolve(chartInst);
@@ -273,7 +302,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     updateChartExtras(chart: dc.RowChart, svg?: any, width?: number, height?: number) {
         const self = this;
-        let rectHeight = parseInt(chart.select('g.row rect').attr('height'), 10);
+        let rectHeight = (!chart.select('g.row rect').empty()) ?
+            parseInt(chart.select('g.row rect').attr('height'), 10) :
+            52;
         rectHeight = (isNaN(rectHeight)) ? 52 : rectHeight;
         const squareSize = 18;
         const lineWidth = 60;
@@ -457,14 +488,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                    return d.key[0] === g.tissue;
                 });
 
                 if (gene) {
                     const val = chart.x()(gene.ci_l);
                     return (isNaN(val)) ? 0.0 : val;
                 } else {
-                    // return chart.x()(d.value.logfc) - lineWidth / 2;
                     return 0.0;
                 }
             })
@@ -473,14 +503,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             })
             .attr('x2', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                    return d.key[0] === g.tissue;
                 });
 
                 if (gene) {
                     const val = chart.x()(gene.ci_r);
                     return (isNaN(val)) ? 0.0 : val;
                 } else {
-                    // return chart.x()(d.value.logfc) + lineWidth / 2;
                     return 0.0;
                 }
             })
@@ -499,11 +528,22 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
         const posQueryString = (isNeg) ? '-left' : '-right';
         const queryString = 'g.row g.confidence-text' + posQueryString + ' text';
+        chart.group({
+            all() {
+                return self.chartService.filteredData['fpGroup'].values;
+            },
+            order() {
+                //
+            },
+            top() {
+                //
+            }
+        });
         chart.selectAll(queryString)
             // ES6 method shorthand for object literals
             .attr('x', (d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                    return d.key[0] === g.tissue;
                 });
 
                 let scaledX = 0;
@@ -537,7 +577,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             .attr('text-anchor', 'middle')
             .text((d) => {
                 const gene = currentGenes.slice().find((g) => {
-                    return self.compareAttributeValue(+d.value.logfc, g.logfc);
+                    return d.key[0] === g.tissue;
                 });
 
                 let ciValue = '0.0';

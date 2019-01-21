@@ -1,10 +1,12 @@
-import { Gene, GeneInfo } from '../../app/models';
+import { DecimalPipe } from '@angular/common';
+import { Gene, GeneInfo, GeneResponse } from '../../app/models';
 import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
 import * as awsParamStore from 'aws-param-store';
+import * as crossfilter from 'crossfilter2';
 
 const router = express.Router();
 const database = { url: '' };
@@ -54,15 +56,45 @@ connection.once('open', () => {
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
+    const decimalPipe: DecimalPipe = new DecimalPipe('en-US');
+
+    const defaultTissue: string = 'CBE';
+    const currentModel: string = this.defaultModel;
+
+    // Crossfilter variables
+    const dimensions = {
+        smDim: null,
+        bpDim: null,
+        fpDim: null
+    };
+    const groups = {
+        smGroup: null,
+        bpGroup: null,
+        fpGroup: null
+        // mcGroup: null
+    };
+    let ndx;
+    let rowChartNdx;
+    let hgncDim;
+    const chartInfos: Map<string, any> = new Map<string, any>();
+    // To be used by the DecimalPipe from Angular. This means
+    // a minimum of 1 digit will be shown before decimal point,
+    // at least, but not more than, 2 digits after decimal point
+    const significantDigits: string = '1.2-2';
+    // This is a second configuration used because the adjusted
+    // p-val goes up to 4 significant digits. It is used to compare
+    // the log fold change with adjusted p-val for chart rendering
+    // methods
+    const compSignificantDigits: string = '1.2-4';
 
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
         [
             {
                 $sort: {
-                    hgnc_symbol: -1,
+                    hgnc_symbol: 1,
                     model: 1,
-                    tissue: -1
+                    tissue: 1
                 }
             },
             {
@@ -84,8 +116,7 @@ connection.once('open', () => {
     ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
-        // Unique genes, ordered by hgnc_symbol
-        const seen = {};
+        /*const seen = {};
         await genes.slice().filter((g) => {
             if (allTissues.indexOf(g['tissue']) === -1) {
                 allTissues.push(g['tissue']);
@@ -96,13 +127,74 @@ connection.once('open', () => {
             if (seen[g['hgnc_symbol']]) { return; }
             seen[g['hgnc_symbol']] = true;
             return g['hgnc_symbol'];
+        });*/
+
+        await allGenes.forEach((g) => {
+            // Separate the columns we need
+            g.logfc = getSignificantValue(+g.logfc, true);
+            g.fc = getSignificantValue(+g.fc, true);
+            g.adj_p_val = getSignificantValue(+g.adj_p_val, true);
+            g.hgnc_symbol = g.hgnc_symbol;
+            g.model = g.model;
+            g.study = g.study;
+            g.tissue = g.tissue;
+
+            if (allTissues.indexOf(g['tissue']) === -1) {
+                allTissues.push(g['tissue']);
+            }
+            if (allModels.indexOf(g['model']) === -1) {
+                allModels.push(g['model']);
+            }
         });
         await allTissues.sort();
         await allModels.sort();
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // Crossfilter part
+
+        ndx = await crossfilter(allGenes);
+        rowChartNdx = await crossfilter(allGenes.slice());
+
+        hgncDim = await ndx.dimension((d) => {
+            return d.hgnc_symbol;
+        });
+
+        loadChartData().then(async (status) => {
+            // Load all dimensions and groups
+            // Select-menu
+            dimensions.smDim = await getDimension(getChartInfo('select-model'));
+            dimensions.bpDim = await ndx.dimension((d) => d.tissue);
+            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'));
+            groups.smGroup = await dimensions.smDim.group();
+            groups.bpGroup = await dimensions.bpDim.group().reduce(
+                function(p, v) {
+                    // Retrieve the data value, if not Infinity or null add it.
+                    const dv = Math.log2(v.fc);
+                    if (dv !== Infinity && dv !== null) {
+                        p.push(dv);
+                    }
+                    return p;
+                },
+                function(p, v) {
+                    // Retrieve the data value, if not Infinity or null remove it.
+                    const dv = Math.log2(v.fc);
+                    if (dv !== Infinity && dv !== null) {
+                        p.splice(p.indexOf(dv), 1);
+                    }
+                    return p;
+                },
+                function() {
+                    return [];
+                }
+            );
+            groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
+        });
+
+        //////////////////////////////////////////////////////////////////////////////////////////
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: -1, tissue: -1, model: -1 }).exec(async (err, genes, next) => {
+        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec(async (err, genes, next) => {
         if (err) {
             next(err);
         } else {
@@ -122,6 +214,39 @@ connection.once('open', () => {
         res.send({ title: 'Genes API Entry Point' });
     });
 
+    router.get('/refresh', async (req, res, next) => {
+        const results = {};
+        const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
+        const id = req.query.id;
+
+        if (Object.keys(groups).length > 0) {
+            await Object.keys(dimensions).forEach(async (dimension) => {
+
+                const groupName = dimension.substring(0, 2) + 'Group';
+                if (dimension !== 'fpDim') {
+                    if (dimension === 'smDim') {
+                        // If this is a string we are using the select menu chart
+                        await dimensions.smDim.filterExact(filter);
+                    }
+
+                    results[groupName] = {
+                        values: groups[groupName].all(),
+                        top: (groupName === 'fpGroup') ?
+                            null :
+                            groups[groupName].top(1)[0].value
+                    };
+                } else {
+                    const newGroup = await rmEmptyBinsFP(groups.fpGroup, filter, id);
+                    results[groupName] = {
+                        values: newGroup.all()
+                    };
+                }
+            });
+        }
+
+        await res.send(results);
+    });
+
     // Routes to get genes information
     router.get('/genes', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
@@ -139,10 +264,6 @@ connection.once('open', () => {
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };
-            const resObj = {
-                items: [],
-                geneEntries: []
-            };
 
             // Find all the Genes with the current id
             await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
@@ -153,7 +274,6 @@ connection.once('open', () => {
                     if (!genes.length) {
                         res.json({items: genes});
                     } else {
-                        const chartGenes = allGenes.slice();
                         const geneEntries = genes.slice();
                         const geneTissues = [];
                         const geneModels = [];
@@ -194,7 +314,6 @@ connection.once('open', () => {
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
                         await res.json({
-                            items: chartGenes,
                             geneEntries,
                             minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
                             maxFC,
@@ -643,6 +762,276 @@ connection.once('open', () => {
             });
         }
     });
+
+    // Get all genes using an id
+    router.get('/genes/same', async (req, res, next) => {
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('Get a gene with an id');
+            console.log(req.query.id);
+        }
+
+        // Return an empty array in case no id was passed or no params
+        if (!req.params || !Object.keys(req.query).length) {
+            if (env === 'development') {
+                console.log('no id');
+            }
+            res.json({ item: null });
+        } else {
+            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
+            const queryObj = { [fieldName]: req.query.id };
+
+            if (req.query.tissue) {
+                queryObj['tissue'] = req.query.tissue;
+            }
+            if (req.query.model) {
+                queryObj['model'] = req.query.model;
+            }
+
+            // Find all the Genes with the current id
+            await Genes.find(queryObj).exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    // Adding this condition because UglifyJS can't handle ES2015,
+                    // only needed for the server
+                    if (env === 'development') {
+                        console.log('The genes with id');
+                        console.log(genes);
+                    }
+
+                    res.setHeader(
+                        'Cache-Control', 'no-cache, no-store, must-revalidate'
+                    );
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    await res.json({
+                        geneEntries: genes
+                    });
+                }
+            });
+        }
+    });
+
+    function getSignificantDigits(compare?: boolean): string {
+        return ((compare) ? compSignificantDigits : significantDigits) || '1.2-2';
+    }
+
+    function getSignificantValue(value: number, compare?: boolean): number {
+        return +decimalPipe.transform(value, getSignificantDigits(compare));
+    }
+
+    function addChartInfo(label: string, chartObj: any) {
+        if (label && !chartInfos.has(label)) { chartInfos.set(label, chartObj); }
+    }
+
+    function getChartInfo(label: string): any {
+        return chartInfos.get(label);
+    }
+
+    function registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
+        addChartInfo(
+            label,
+            {
+                dimension: ['tissue', 'model'],
+                group: 'self',
+                type: 'box-plot',
+                title: '',
+                filter: 'default',
+                xAxisLabel: '',
+                yAxisLabel,
+                format: 'array',
+                attr,
+                constraints
+            }
+        );
+    }
+
+    function loadChartData(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            addChartInfo(
+                'volcano-plot',
+                {
+                    dimension: ['logfc', 'adj_p_val', 'hgnc_symbol'],
+                    group: 'self',
+                    type: 'scatter-plot',
+                    title: 'Volcano Plot',
+                    xAxisLabel: 'Log Fold Change',
+                    yAxisLabel: '-log10(Adjusted p-value)',
+                    x: ['logfc'],
+                    y: ['adj_p_val']
+                }
+            );
+            addChartInfo(
+                'forest-plot',
+                {
+                    dimension: ['tissue'],
+                    group: 'self',
+                    type: 'forest-plot',
+                    title: 'Log fold forest plot',
+                    filter: 'default',
+                    attr: 'logfc'
+                }
+            );
+            addChartInfo(
+                'select-model',
+                {
+                    dimension: ['model'],
+                    group: 'self',
+                    type: 'select-menu',
+                    title: '',
+                    filter: 'default'
+                }
+            );
+            registerBoxPlot(
+                'box-plot',
+                [
+                    {
+                        name: defaultTissue,
+                        attr: 'tissue'
+                    },
+                    {
+                        name: currentModel,
+                        attr: 'model'
+                    }
+                ],
+                'log2(fold change)',
+                'fc'
+            );
+
+            resolve(true);
+        });
+    }
+
+    function getNdx(auxNdx?: boolean): any {
+        return (auxNdx) ? rowChartNdx : ndx;
+    }
+
+    // Charts crossfilter handling part
+    function getDimension(info: any, auxNdx?: boolean): crossfilter.Dimension<any, any> {
+        const dimValue = info.dimension;
+
+        const dim = ((auxNdx) ? getNdx(auxNdx) : getNdx()).dimension((d) => {
+            switch (info.type) {
+                case 'forest-plot':
+                    // The key returned
+                    return [d[dimValue[0]], d.hgnc_symbol, d.model];
+                case 'scatter-plot':
+                    const x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
+                    const y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
+
+                    return [x, y, d[dimValue[2]]];
+                case 'box-plot':
+                    return 1;
+                case 'select-menu':
+                    return d[dimValue[0]];
+                default:
+                    return [
+                        Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]],
+                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]]
+                    ];
+            }
+        });
+
+        info.dim = dim;
+        return info.dim;
+    }
+
+    function getGroup(info: any, auxDim?: any): crossfilter.Group<any, any, any> {
+        let group = (auxDim) ? auxDim.group() : info.dim.group();
+
+        // If we want to reduce based on certain parameters
+        if (info.attr || info.format) {
+            group.reduce(
+                // callback for when data is added to the current filter results
+                reduceAdd(
+                    info.attr,
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
+                ),
+                reduceRemove(
+                    info.attr,
+                    (info.format) ? info.format : null,
+                    (info.constraints) ? info.constraints : null
+                ),
+                (info.format) ? reduceInitial : reduceInit
+            );
+        }
+
+        if (info.filter) {
+            group = rmEmptyBinsDefault(group);
+        }
+        info.g = group;
+        return info.g;
+    }
+
+    // Reduce functions for constraint charts
+    function reduceAdd(attr: string, format?: string, constraints?: any[]) {
+        return (p, v) => {
+            let val = +v[attr];
+
+            if (format && format === 'array') {
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.push(val); }
+                }
+                return p;
+            } else {
+                p[attr] += val;
+            }
+            ++p.count;
+            return p;
+        };
+    }
+
+    function reduceRemove(attr: string, format?: string, constraints?: any[]) {
+        return (p, v) => {
+            let val = +v[attr];
+
+            if (format && format === 'array') {
+                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
+                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
+                    if (!Number.isNaN(val)) { p.splice(p.indexOf(val), 1); }
+                }
+                return p;
+            } else {
+                p[attr] -= val;
+            }
+            --p.count;
+            return p;
+        };
+    }
+
+    function reduceInit(): any {
+        return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
+    }
+
+    // Box-plot uses a different function name in dc.js
+    function reduceInitial(): any[] {
+        return [];
+    }
+
+    const rmEmptyBinsDefault = (sourceGroup): any => {
+        return {
+            all: () => {
+                return sourceGroup.all().filter(function(d) {
+                    // Add your filter condition here
+                    return d.key !== null && d.key !== '';
+                });
+            }
+        };
+    };
+
+    const rmEmptyBinsFP = async (sourceGroup: any, filter: any, id: string) => {
+        return {
+            all: () => {
+                return sourceGroup.all().filter(function(d) {
+                    // Add your filter condition here
+                    return d.key[2] === filter && d.key[1] === id && d.value.logfc !== 0;
+                });
+            }
+        };
+    };
 });
 
 export default router;

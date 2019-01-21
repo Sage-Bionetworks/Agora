@@ -55,6 +55,21 @@ export class ApiService {
         return this.http.get<GenesResponse>('/api/genes', { headers, params });
     }
 
+    getGenesSameId(id: string): Observable<GenesResponse> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+        const params = new HttpParams().set(
+            'id', id
+        );
+
+        // Get all the genes to render the charts
+        return this.http.get<GenesResponse>('/api/genes/same', { headers, params });
+    }
+
     getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -240,5 +255,20 @@ export class ApiService {
             'Expires': '0'
         });
         return this.http.get('/api/models/gene', { headers });
+    }
+
+    refreshChart(filter: any, id: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+
+        const params = new HttpParams().set(
+            'id', id
+        );
+
+        return this.http.get('/api/refresh?filter=' + JSON.stringify(filter), { headers, params });
     }
 }

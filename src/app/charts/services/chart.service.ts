@@ -9,13 +9,20 @@ import { Subject } from 'rxjs';
 export class ChartService {
     chartInfos: Map<string, any> = new Map<string, any>();
     chartNames: Map<string, boolean> = new Map([
-        ['median-chart', false],
+        ['median-chart', true],
         ['box-plot', false],
         ['forest-plot', false],
         ['select-model', false]
     ]);
     tissueToFilter: string = '';
     modelToFilter: string = '';
+    queryFilter: any = {
+        smGroup: null,
+        bpGroup: null,
+        fpGroup: null,
+        mcGroup: null
+    };
+    filteredData: any = null;
 
     // Observable string sources
     chartsReadySource = new Subject<boolean>();

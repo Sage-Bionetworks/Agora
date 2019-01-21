@@ -50,4 +50,13 @@ export class ApiServiceStub {
     getAllTeams(): Observable<object> {
         return of([mockTeam1]);
     }
+
+    refreshChart(filter: any, id: string): Observable<any> {
+        return of({
+            smGroup: {
+                values: [],
+                top: {}
+            }
+        });
+    }
 }

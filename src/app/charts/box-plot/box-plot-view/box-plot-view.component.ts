@@ -13,10 +13,8 @@ import { PlatformLocation } from '@angular/common';
 
 import { Router, NavigationStart } from '@angular/router';
 
-import { Gene } from '../../../models';
-
 import { ChartService } from '../../services';
-import { DataService, GeneService } from '../../../core/services';
+import { DataService, GeneService, ApiService } from '../../../core/services';
 
 import { Subscription } from 'rxjs';
 
@@ -47,9 +45,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     firstRender: boolean = true;
     max: number = -Infinity;
+    oldMax: number = -Infinity;
     display: boolean = false;
     counter: number = 0;
-    geneEntries: Gene[] = [];
     routerSubscription: Subscription;
     chartSubscription: Subscription;
 
@@ -122,6 +120,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         this.display = true;
         // Registers this chart
+        console.log(this.label);
         this.chartService.addChartName(this.label);
     }
 
@@ -143,38 +142,39 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     initChart() {
-        this.geneEntries = this.dataService.getGeneEntries();
+        const self = this;
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getNdx().dimension((d) => d.tissue);
 
-        this.group = this.dim.group().reduce(
-            function(p, v) {
-                // Retrieve the data value, if not Infinity or null add it.
-                const dv = Math.log2(v.fc);
-                if (dv !== Infinity && dv !== null) {
-                    p.push(dv);
-                }
-                return p;
+        const bpDim = {
+            filter: () => {
+                //
             },
-            function(p, v) {
-                // Retrieve the data value, if not Infinity or null remove it.
-                const dv = Math.log2(v.fc);
-                if (dv !== Infinity && dv !== null) {
-                    p.splice(p.indexOf(dv), 1);
-                }
-                return p;
-            },
-            function() {
-                return [];
+            filterAll: () => {
+                //
             }
-        );
+        };
+
+        const bpGroup = {
+            all() {
+                return self.chartService.filteredData['bpGroup'].values;
+            },
+            order() {
+                //
+            },
+            top() {
+                //
+            }
+        };
+
+        this.dim = bpDim;
+        this.group = bpGroup;
 
         this.getChartPromise().then((chart: any) => {
             this.chart = chart;
 
             if (this.info.attr !== 'fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
 
-            // Remove filtering for these charts
+            // Remove filtering for this chart
             chart.filter = function() {
                 //
             };
@@ -230,6 +230,18 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
 
             resolve(chartInst);
+        });
+    }
+
+    updateYDomain() {
+        // Draw the horizontal lines
+        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+        currentGenes.forEach((g) => {
+            if (Math.abs(+g.logfc) > this.max) {
+                this.max = Math.abs(+g.logfc);
+            }
         });
     }
 

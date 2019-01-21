@@ -89,8 +89,8 @@ describe('Component: GeneRNASeqDE', () => {
         expect(bpEl).toEqual(null);
         const rcEl = fixture.debugElement.query(By.css('row-chart'));
         expect(rcEl).toEqual(null);
-        const mcEl = fixture.debugElement.query(By.css('median-chart'));
-        expect(mcEl).toEqual(null);
+        // const mcEl = fixture.debugElement.query(By.css('median-chart'));
+        // expect(mcEl).toEqual(null);
         const smEl = fixture.debugElement.query(By.css('select-menu'));
         expect(smEl).toEqual(null);
     });
@@ -103,8 +103,8 @@ describe('Component: GeneRNASeqDE', () => {
         expect(bpEl).toBeDefined();
         const rcEl = fixture.debugElement.query(By.css('row-chart'));
         expect(rcEl).toBeDefined();
-        const mcEl = fixture.debugElement.query(By.css('median-chart'));
-        expect(mcEl).toBeDefined();
+        // const mcEl = fixture.debugElement.query(By.css('median-chart'));
+        // expect(mcEl).toBeDefined();
         const smEl = fixture.debugElement.query(By.css('select-menu'));
         expect(smEl).toBeDefined();
     });

@@ -15,6 +15,30 @@ export class ChartServiceStub {
         ['forest-plot', false],
         ['select-model', false]
     ]);
+    queryFilter: any = {
+        smGroup: null,
+        bpGroup: null,
+        fpGroup: null,
+        mcGroup: null
+    };
+    filteredData: any = {
+        smGroup: {
+            values: [],
+            top: {}
+        },
+        bpGroup: {
+            values: [],
+            top: {}
+        },
+        fpGroup: {
+            values: [],
+            top: {}
+        },
+        mcGroup: {
+            values: [],
+            top: {}
+        }
+    };
     tissueToFilter: string = '';
     modelToFilter: string = '';
 

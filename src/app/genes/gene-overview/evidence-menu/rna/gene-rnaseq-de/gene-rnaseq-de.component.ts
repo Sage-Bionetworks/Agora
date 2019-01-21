@@ -18,11 +18,12 @@ import { Gene, GeneInfo, GeneResponse } from '../../../../../models';
 import { ChartService } from '../../../../../charts/services';
 import {
     ApiService,
-    DataService,
     GeneService
 } from '../../../../../core/services';
 
 import { SelectItem } from 'primeng/api';
+
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'gene-rnaseq-de',
@@ -56,13 +57,12 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     isEmptyGene: boolean = true;
     isViewReady: boolean = false;
     canFilter: boolean = false;
+    chartSubscription: Subscription;
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private apiService: ApiService,
         private geneService: GeneService,
-        private dataService: DataService,
         private chartService: ChartService,
         private location: PlatformLocation
     ) { }
@@ -79,49 +79,43 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.isEmptyGene = true;
         });
 
-        // The data wasn't loaded yet, redirect for now
-        if (!this.dataService.getNdx()) {
-            this.id = this.route.snapshot.paramMap.get('id');
-            this.router.navigate([
-                '/genes',
-                {
-                    outlets: {
-                        'genes-router':
-                        [
-                            'gene-details', this.id
-                        ]
-                    }
-                }
-            ]);
-        } else {
-            this.loadChartData().then((status) => {
-                const rTissues = this.geneService.getGeneTissues().sort();
-                rTissues.forEach((t) => {
-                    this.tissues.push({label: t.toUpperCase(), value: t});
-                });
-                const rModels = this.geneService.getGeneModels().sort();
-                rModels.forEach((t) => {
-                    this.models.push({label: t.toUpperCase(), value: t});
-                });
-                const index = this.tissues.findIndex((t) => {
-                    return t.value === this.geneService.getDefaultTissue();
-                });
-                this.selectedTissues = (index !== -1) ?
-                    this.tissues.slice(index, index + 1).map((a) => a.value) :
-                    this.tissues.slice(0, 1).map((a) => a.value);
-                this.geneService.setDefaultTissue(this.selectedTissues[0]);
+        this.loadChartData().then((status) => {
+            const rTissues = this.geneService.getGeneTissues().sort();
+            rTissues.forEach((t) => {
+                this.tissues.push({label: t.toUpperCase(), value: t});
+            });
+            const rModels = this.geneService.getGeneModels().sort();
+            rModels.forEach((t) => {
+                this.models.push({label: t.toUpperCase(), value: t});
+            });
+            const index = this.tissues.findIndex((t) => {
+                return t.value === this.geneService.getDefaultTissue();
+            });
+            this.index = index;
+            this.selectedTissues = (index !== -1) ?
+                this.tissues.slice(index, index + 1).map((a) => a.value) :
+                this.tissues.slice(0, 1).map((a) => a.value);
+            this.geneService.setDefaultTissue(this.selectedTissues[0]);
 
-                this.selectedModels = this.models.slice(0, 1).map((a) => a.value);
+            this.selectedModels = this.models.slice(0, 1).map((a) => a.value);
 
-                this.geneService.setDefaultTissue(this.selectedTissues[0]);
-                this.geneService.setDefaultModel(this.selectedModels[0]);
+            this.geneService.setDefaultTissue(this.selectedTissues[0]);
+            this.geneService.setDefaultModel(this.selectedModels[0]);
 
-                this.geneService.updateEmptyGeneState();
-                this.isEmptyGene = this.geneService.getEmptyGeneState();
+            this.geneService.updateEmptyGeneState();
+            this.isEmptyGene = this.geneService.getEmptyGeneState();
 
+            // First load of dimension and groups, set a default model so we don't load all the
+            // data
+            this.chartService.queryFilter.smGroup = 'AD Diagnosis (males and females)';
+            this.apiService.refreshChart(
+                this.chartService.queryFilter.smGroup,
+                this.gene.hgnc_symbol
+            ).subscribe((d) => {
+                this.chartService.filteredData = d;
                 this.dataLoaded = true;
             });
-        }
+        });
     }
 
     ngAfterViewChecked() {

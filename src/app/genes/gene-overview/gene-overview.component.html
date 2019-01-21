@@ -1,5 +1,4 @@
 <div *ngIf="dataLoaded" (window:resize)="onResize()">
-    <!-- <p-panelMenu *ngIf="showMobileMenu" #overviewMenu [model]="items" [styleClass]="'overview-tab-menu-mobile'" [multiple]="false" (click)="activateMenu($event, item)"></p-panelMenu> -->
     <p-tabMenu *ngIf="showMobileMenu" #overviewMenu [activeItem]="activeItem" [model]="items" [ngClass]="{'close':mobileOpen}" [styleClass]="'overview-tab-menu-mobile'" class="mobilemenu-container" (click)="mobileActivate()"></p-tabMenu>
     <div class="section-hero">
         <div class="section-thin overview-header " tabindex="0">

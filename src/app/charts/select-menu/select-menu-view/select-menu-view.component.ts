@@ -35,7 +35,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() info: any;
     @Input() promptText: string;
     @Input() filterStrings: string[] = [];
-    @Input() defaultValue: string;
+    @Input() defaultValue: string = 'AD Diagnosis (males and females)';
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() tissues = this.geneService.getGeneTissues();
     @Input() models = this.geneService.getGeneModels();
@@ -85,13 +85,40 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
     initChart() {
         const self = this;
-        this.info = this.chartService.getChartInfo(this.label);
-        this.dim = this.dataService.getDimension(this.info);
 
-        this.getChartPromise().then((chartInst) => {
+        const smDim = {
+            filter: (f, e) => {
+                if (f) {
+                    // Main change routine is inside the option click. This is the only place
+                    // called to filter all charts
+                    dc.redrawAll();
+                }
+            },
+            filterAll: () => {
+                //
+            }
+        };
+
+        const smGroup = {
+            all() {
+                return self.chartService.filteredData['smGroup'].values;
+            },
+            order() {
+                //
+            },
+            top() {
+                //
+            }
+        };
+
+        this.info = this.chartService.getChartInfo(this.label);
+        this.dim = smDim;
+        this.group = smGroup;
+
+        this.getChartPromise().then(async (chartInst) => {
             self.chart = chartInst;
 
-            chartInst.filterHandler((dimension, filters) => {
+            chartInst.filterHandler(async (dimension, filters) => {
                 if (filters.length === 0) {
                     // The empty case (no filtering)
                     dimension.filter(null);
@@ -111,17 +138,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         self.geneService.setCurrentModel(filters[0]);
                     }
 
-                    if (self.geneService.getCurrentModel() &&
-                        self.geneService.getCurrentTissue()) {
-                        self.geneService.setCurrentGene(self.dataService.getGeneEntries()
-                            .slice().find((g) => {
-                                return g.model === self.geneService.getCurrentModel() &&
-                                    g.tissue === self.geneService.getCurrentTissue();
-                            })
-                        );
-                    }
-
-                    dimension.filterExact(filters[0]);
+                    await dimension.filter(filters[0], true);
                 } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
                     // Single range-based filter
                     dimension.filterRange(filters[0]);
@@ -138,13 +155,14 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         return false;
                     });
                 }
+
                 return filters;
             });
+
             chartInst.promptText(this.promptText);
 
-            chartInst.on('postRender', () => {
+            chartInst.on('postRender', (chart) => {
                 if (self.firstReplace) {
-
                     self.firstReplace = false;
                     self.replaceSelect().then(() => {
                         // Registers this chart
@@ -266,7 +284,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         return new Promise((resolve, reject) => {
             const chartInst = dc.selectMenu(this.selectMenu.nativeElement)
                 .dimension(this.dim)
-                .group(this.dim.group())
+                .group(this.group)
                 .controlsUseVisibility(true)
                 .title((d) => {
                     return d.key;
@@ -323,12 +341,26 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             c['index'] = j - 1;
             if (j === 1) { c.setAttribute('class', 'same-as-selected'); }
 
-            c.addEventListener('click', function(e) {
+            // Click event for the select menu options
+            c.addEventListener('click', async function(e) {
                 self.menuSelection = d3.select(self.selectMenu.nativeElement)
                     .select('select.dc-select-menu');
                 const options = self.menuSelection.selectAll('option');
                 options['_groups'][0][e.target['index']]['selected'] = 'selected';
-                self.menuSelection.dispatch('change');
+
+                // Regenerate the groups inside this option callback
+                const cPromise = new Promise(async (resolve, reject) => {
+                    self.chartService.queryFilter.smGroup = c.innerHTML;
+                    const gene = self.geneService.getCurrentGene().hgnc_symbol;
+                    await self.apiService.refreshChart(self.chartService.queryFilter.smGroup, gene)
+                        .subscribe(async (results) => {
+                        self.chartService.filteredData = await results;
+                        resolve(true);
+                    });
+                });
+                cPromise.then(() => {
+                    self.menuSelection.dispatch('change');
+                });
 
                 // When an item is clicked, update the original select box,
                 // and the selected item

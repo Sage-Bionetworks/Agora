@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 
 import { ApiService, ForceService } from '.';
 
-import { Gene, GenesResponse, LinksListResponse } from '../../models';
+import { Gene, GenesResponse } from '../../models';
 
 import { Observable, forkJoin } from 'rxjs';
 
@@ -74,7 +74,7 @@ export class DataService {
 
     loadGenes(data: GenesResponse) {
         if (data.geneEntries) { this.geneEntries = data.geneEntries; }
-        data.items.forEach((d: Gene) => {
+        /*data.items.forEach((d: Gene) => {
             // Separate the columns we need
             d.logfc = this.getSignificantValue(+d.logfc, true);
             d.fc = this.getSignificantValue(+d.fc, true);
@@ -91,11 +91,15 @@ export class DataService {
 
         this.hgncDim = this.ndx.dimension((d) => {
             return d.hgnc_symbol;
-        });
+        });*/
     }
 
     getGeneEntries(): Gene[] {
         return this.geneEntries;
+    }
+
+    setGeneEntries(genes: Gene[]) {
+        this.geneEntries = genes;
     }
 
     getSignificantDigits(compare?: boolean): string {
