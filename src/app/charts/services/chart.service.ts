@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 export class ChartService {
     chartInfos: Map<string, any> = new Map<string, any>();
     chartNames: Map<string, boolean> = new Map([
-        ['median-chart', true],
+        ['median-chart', false],
         ['box-plot', false],
         ['forest-plot', false],
         ['select-model', false]

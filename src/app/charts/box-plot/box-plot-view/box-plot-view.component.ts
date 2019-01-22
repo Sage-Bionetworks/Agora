@@ -120,7 +120,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         this.display = true;
         // Registers this chart
-        console.log(this.label);
         this.chartService.addChartName(this.label);
     }
 

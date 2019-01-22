@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Gene, GeneInfo, GeneResponse } from '../../app/models';
+import { Gene, GeneInfo, GeneResponse, MedianExpression } from '../../app/models';
 import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 
 import * as express from 'express';
@@ -71,11 +71,8 @@ connection.once('open', () => {
         smGroup: null,
         bpGroup: null,
         fpGroup: null
-        // mcGroup: null
     };
     let ndx;
-    let rowChartNdx;
-    let hgncDim;
     const chartInfos: Map<string, any> = new Map<string, any>();
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
@@ -116,18 +113,6 @@ connection.once('open', () => {
     ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
-        /*const seen = {};
-        await genes.slice().filter((g) => {
-            if (allTissues.indexOf(g['tissue']) === -1) {
-                allTissues.push(g['tissue']);
-            }
-            if (allModels.indexOf(g['model']) === -1) {
-                allModels.push(g['model']);
-            }
-            if (seen[g['hgnc_symbol']]) { return; }
-            seen[g['hgnc_symbol']] = true;
-            return g['hgnc_symbol'];
-        });*/
 
         await allGenes.forEach((g) => {
             // Separate the columns we need
@@ -153,11 +138,6 @@ connection.once('open', () => {
         // Crossfilter part
 
         ndx = await crossfilter(allGenes);
-        rowChartNdx = await crossfilter(allGenes.slice());
-
-        hgncDim = await ndx.dimension((d) => {
-            return d.hgnc_symbol;
-        });
 
         loadChartData().then(async (status) => {
             // Load all dimensions and groups
@@ -903,15 +883,15 @@ connection.once('open', () => {
         });
     }
 
-    function getNdx(auxNdx?: boolean): any {
-        return (auxNdx) ? rowChartNdx : ndx;
+    function getNdx(): any {
+        return ndx;
     }
 
     // Charts crossfilter handling part
-    function getDimension(info: any, auxNdx?: boolean): crossfilter.Dimension<any, any> {
+    function getDimension(info: any): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = ((auxNdx) ? getNdx(auxNdx) : getNdx()).dimension((d) => {
+        const dim = getNdx().dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned

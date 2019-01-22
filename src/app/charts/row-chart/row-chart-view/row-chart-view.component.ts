@@ -136,12 +136,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
 
-        /*this.dim = this.dataService.getDimension(
-            this.info,
-            this.currentGene
-        );
-        this.group = this.dataService.getGroup(this.info);*/
-
         const fpDim = {
             filter: () => {
                 //

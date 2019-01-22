@@ -15,7 +15,7 @@
             anything greater than 0.7 Log CPM, which is equivalent to 5 CPM. This threshold is depicted by the red line in the
             plot.
         </p>
-        <!--<div #stme>
+        <div #stme>
             <ng-container *ngIf="!isEmptyGene; else noDataMedian">
                 <median-chart [geneinfo]="geneInfo"></median-chart>
             </ng-container>
@@ -24,7 +24,7 @@
             <div class="no-median-data">
                 <h2 class="placeholder-text">No expression data is currently available.</h2>
             </div>
-        </ng-template>-->
+        </ng-template>
     </div>
 
     <div class="section-thin rna-seq-bplot no-vertical-padding">
@@ -44,7 +44,6 @@
                             [promptText]="'All'"
                             [label]="'select-model'"
                             [columnName]="'select-column-model'">
-                            <!--[defaultValue]="getModel(1)">-->
                         </select-menu>
                         <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
                             [options]="emptySelection"
