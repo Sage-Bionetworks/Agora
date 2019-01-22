@@ -93,7 +93,6 @@ export class ChartService {
                 dimension.filterAll();
             }
             dc.chartRegistry.deregister(chart);
-            chart.dimension().dispose();
         }
     }
 
