@@ -12,9 +12,12 @@ import {
     ApiService,
     GeneService,
     ForceService,
-    NavigationService
+    NavigationService,
+    DataService
 } from '../../core/services';
 import { SortEvent, Message } from 'primeng/api';
+
+import { throwError } from 'rxjs';
 
 @Component({
     selector: 'gene-similar',
@@ -47,10 +50,10 @@ export class GeneSimilarComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private apiService: ApiService,
         private navService: NavigationService,
         private geneService: GeneService,
+        private dataService: DataService,
         private forceService: ForceService
     ) { }
 
@@ -64,39 +67,95 @@ export class GeneSimilarComponent implements OnInit {
                 header: 'Druggability Bucket'},
             { field: 'druggability', subfield: 'pharos_class', header: 'Pharos Class'}
         ];
-        // The data wasn't loaded yet, redirect for now
-        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
-        if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
 
+        this.gene = this.geneService.getCurrentGene();
+        this.geneInfo = this.geneService.getCurrentInfo();
+        this.id = this.navService.getId();
+
+        // If we don't have a Gene or any Models/Tissues here, or in case we are
+        // reloading the page, try to get it from the server and move on
+        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
+            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
+            this.geneService.getCurrentGene().hgnc_symbol
+        ) {
+            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+                if (!data.info) {
+                    this.navService.goToRoute('/genes');
+                } else {
+                    if (!data.item) {
+                        // Fill in a new gene with the info attributes
+                        data.item = this.geneService.getEmptyGene(
+                            data.info.ensembl_gene_id, data.info.hgnc_symbol
+                        );
+                        this.geneService.setInfoDataState(true);
+                    }
+                    this.geneService.updatePreviousGene();
+                    this.geneService.updateGeneData(data);
+                    this.gene = data.item;
+                    this.geneInfo = data.info;
+                }
+            }, (error) => {
+                console.log('Error loading gene overview! ' + error.message);
+            }, () => {
+                this.initTissuesModels();
+            });
+        } else {
+            this.initTissuesModels();
+        }
+    }
+
+    initTissuesModels() {
+        // Check if we have a database id at this point
+        if (this.gene) {
+            if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
+                this.dataService.loadData(this.gene).subscribe((responseList) => {
+                    // Genes response
+                    if (!responseList.length) {
+                        this.dataLoaded = true;
+                        return;
+                    } else {
+                        if (responseList[0].geneModels) {
+                            this.geneService.setGeneModels(responseList[0].geneModels);
+                        }
+                        if (responseList[0].geneTissues) {
+                            this.geneService.setGeneTissues(responseList[0].geneTissues);
+                        }
+                        this.dataService.loadGenes(responseList[0]);
+                        this.forceService.processSelectedNode(responseList[1], this.gene);
+                    }
+                }, (error) => {
+                    console.error('Error loading the data!');
+                    return throwError(error);  // Angular 6/RxJS 6
+                }, () => {
+                    this.initGeneClickedList();
+                });
+            } else {
+                this.initGeneClickedList();
+            }
+        } else {
+            this.geneService.setGeneTissues([]);
+            this.geneService.setGeneModels([]);
+            this.initGeneClickedList();
+        }
+    }
+
+    initGeneClickedList() {
+        let nodesIds;
         if (!!this.forceService.getGeneClickedList() &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneClickedList();
-            const nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
-                this.genesInfo = datas.items;
-                this.totalRecords = datas.items.length;
-                this.loading = false;
-                this.dataLoaded = true;
-            });
+            nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
         } else if (!!this.forceService.getGeneOriginalList() &&
             this.forceService.getGeneOriginalList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneOriginalList();
-            const nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
-                this.genesInfo = datas.items;
-                this.totalRecords = datas.items.length;
-                this.loading = false;
-                this.dataLoaded = true;
-            });
-        } else {
-            const dn = this.forceService.getGeneClickedList();
-            const nodesIds = dn.nodes.map((gene) => gene.ensembl_gene_id );
-            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
-                this.genesInfo = datas.items;
-                this.totalRecords = datas.items.length;
-                this.loading = false;
-            });
+            nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
         }
+        this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
+            this.genesInfo = datas.items;
+            this.totalRecords = datas.items.length;
+            this.loading = false;
+            this.dataLoaded = true;
+        });
     }
 
     druggabilitypc(druggability: Druggability[]): string {

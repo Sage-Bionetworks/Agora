@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import { Gene, GeneInfo, GeneResponse, MedianExpression } from '../../app/models';
+import { Gene, GeneInfo } from '../../app/models';
 import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
 
 import * as express from 'express';
@@ -57,21 +57,10 @@ connection.once('open', () => {
     const allTissues: string[] = [];
     const allModels: string[] = [];
     const decimalPipe: DecimalPipe = new DecimalPipe('en-US');
-
     const defaultTissue: string = 'CBE';
     const currentModel: string = this.defaultModel;
 
-    // Crossfilter variables
-    const dimensions = {
-        smDim: null,
-        bpDim: null,
-        fpDim: null
-    };
-    const groups = {
-        smGroup: null,
-        bpGroup: null,
-        fpGroup: null
-    };
+    // Crossfilter instance
     let ndx;
     const chartInfos: Map<string, any> = new Map<string, any>();
     // To be used by the DecimalPipe from Angular. This means
@@ -139,37 +128,6 @@ connection.once('open', () => {
 
         ndx = await crossfilter(allGenes);
 
-        loadChartData().then(async (status) => {
-            // Load all dimensions and groups
-            // Select-menu
-            dimensions.smDim = await getDimension(getChartInfo('select-model'));
-            dimensions.bpDim = await ndx.dimension((d) => d.tissue);
-            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'));
-            groups.smGroup = await dimensions.smDim.group();
-            groups.bpGroup = await dimensions.bpDim.group().reduce(
-                function(p, v) {
-                    // Retrieve the data value, if not Infinity or null add it.
-                    const dv = Math.log2(v.fc);
-                    if (dv !== Infinity && dv !== null) {
-                        p.push(dv);
-                    }
-                    return p;
-                },
-                function(p, v) {
-                    // Retrieve the data value, if not Infinity or null remove it.
-                    const dv = Math.log2(v.fc);
-                    if (dv !== Infinity && dv !== null) {
-                        p.splice(p.indexOf(dv), 1);
-                    }
-                    return p;
-                },
-                function() {
-                    return [];
-                }
-            );
-            groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
-        });
-
         //////////////////////////////////////////////////////////////////////////////////////////
     });
 
@@ -199,32 +157,76 @@ connection.once('open', () => {
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
 
-        if (Object.keys(groups).length > 0) {
-            await Object.keys(dimensions).forEach(async (dimension) => {
+        // Guarantees multiple requests
+        loadChartData().then(async (status) => {
+            // Crossfilter variables
+            const dimensions = {
+                smDim: null,
+                bpDim: null,
+                fpDim: null
+            };
+            const groups = {
+                smGroup: null,
+                bpGroup: null,
+                fpGroup: null
+            };
 
-                const groupName = dimension.substring(0, 2) + 'Group';
-                if (dimension !== 'fpDim') {
-                    if (dimension === 'smDim') {
-                        // If this is a string we are using the select menu chart
-                        await dimensions.smDim.filterExact(filter);
+            // Load all dimensions and groups
+            // Select-menu
+            dimensions.smDim = await getDimension(getChartInfo('select-model'));
+            dimensions.bpDim = await ndx.dimension((d) => d.tissue);
+            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'));
+            groups.smGroup = await dimensions.smDim.group();
+            groups.bpGroup = await dimensions.bpDim.group().reduce(
+                function(p, v) {
+                    // Retrieve the data value, if not Infinity or null add it.
+                    const dv = Math.log2(v.fc);
+                    if (dv !== Infinity && dv !== null) {
+                        p.push(dv);
                     }
-
-                    results[groupName] = {
-                        values: groups[groupName].all(),
-                        top: (groupName === 'fpGroup') ?
-                            null :
-                            groups[groupName].top(1)[0].value
-                    };
-                } else {
-                    const newGroup = await rmEmptyBinsFP(groups.fpGroup, filter, id);
-                    results[groupName] = {
-                        values: newGroup.all()
-                    };
+                    return p;
+                },
+                function(p, v) {
+                    // Retrieve the data value, if not Infinity or null remove it.
+                    const dv = Math.log2(v.fc);
+                    if (dv !== Infinity && dv !== null) {
+                        p.splice(p.indexOf(dv), 1);
+                    }
+                    return p;
+                },
+                function() {
+                    return [];
                 }
-            });
-        }
+            );
+            groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
 
-        await res.send(results);
+            if (Object.keys(groups).length > 0) {
+                await Object.keys(dimensions).forEach(async (dimension) => {
+
+                    const groupName = dimension.substring(0, 2) + 'Group';
+                    if (dimension !== 'fpDim') {
+                        if (dimension === 'smDim') {
+                            // If this is a string we are using the select menu chart
+                            await dimensions.smDim.filterExact(filter);
+                        }
+
+                        results[groupName] = {
+                            values: groups[groupName].all(),
+                            top: (groupName === 'fpGroup') ?
+                                null :
+                                groups[groupName].top(1)[0].value
+                        };
+                    } else {
+                        const newGroup = await rmEmptyBinsFP(groups.fpGroup, filter, id);
+                        results[groupName] = {
+                            values: newGroup.all()
+                        };
+                    }
+                });
+            }
+
+            await res.send(results);
+        });
     });
 
     // Routes to get genes information

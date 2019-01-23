@@ -124,6 +124,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
 
     initChart() {
         const self = this;
+        dc['config'].defaultColors(d3.schemeCategory10);
         this.chart = dc.barChart(this.medianChart.nativeElement)
             .yAxisLabel('LOG CPM', 20);
         this.chart.margins({

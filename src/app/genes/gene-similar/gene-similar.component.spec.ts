@@ -13,13 +13,20 @@ import {
     RouterStub,
     ForceServiceStub,
     GeneServiceStub,
+    DataServiceStub,
     mockInfo1,
     NavigationServiceStub
 } from '../../testing';
 
 import { GeneSimilarComponent } from './gene-similar.component';
 
-import { ApiService, NavigationService, ForceService, GeneService } from '../../core/services';
+import {
+    ApiService,
+    NavigationService,
+    ForceService,
+    GeneService,
+    DataService
+} from '../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -32,6 +39,7 @@ describe('Component: GeneSimilar', () => {
     let fixture: ComponentFixture<GeneSimilarComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
+    let dataService: DataServiceStub;
     let navService: NavigationServiceStub;
     let forceService: ForceServiceStub;
     let activatedRoute: any;
@@ -53,6 +61,7 @@ describe('Component: GeneSimilar', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ForceService, useValue: new ForceServiceStub() },
                 { provide: Location, useValue: locationStub }
             ]
@@ -66,6 +75,7 @@ describe('Component: GeneSimilar', () => {
         apiService = fixture.debugElement.injector.get(ApiService);
         navService = fixture.debugElement.injector.get(NavigationService);
         forceService = fixture.debugElement.injector.get(ForceService);
+        dataService = fixture.debugElement.injector.get(DataService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 

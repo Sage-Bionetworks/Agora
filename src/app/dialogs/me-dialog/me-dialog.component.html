@@ -1,5 +1,5 @@
 <p-dialog [header]="header" [(visible)]="display" [modal]="true" [responsive]="true"
-        [minWidth]="330" [minY]="256" [baseZIndex]="10000">
+    [minY]="256" [baseZIndex]="10000" [ngStyle]="{'minWidth': 330}">
     <div *ngIf="description" class="row content-row" dir="ltr">
         The tissue types in which the RNA-seq gene coexpression connection was observed.
     </div>
