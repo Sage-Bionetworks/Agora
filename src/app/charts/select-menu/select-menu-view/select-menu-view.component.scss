@@ -3,7 +3,7 @@
 
 .select-column-tissue, .select-column-model {
     width: 100%;
-    background: white;
+    background: $background;
     position: relative;
 
     select {
@@ -38,7 +38,7 @@
         height: 52px;
         line-height: 52px;
         padding-left: 15px;
-        background: #FFFFFF;
+        background: $background;
         box-shadow: 0px 0px 4px #C7C5C5;
         cursor: pointer;
         font-size: $font-size-x-regular;
@@ -79,7 +79,7 @@
     /*style items (options):*/
     .select-items {
         position: absolute;
-        background-color: white;
+        background-color: $background;
         top: 100%;
         left: 0;
         right: 0;

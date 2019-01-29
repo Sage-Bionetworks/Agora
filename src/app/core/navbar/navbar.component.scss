@@ -9,7 +9,7 @@
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
-    background: #FFFFFF;
+    background: $background;
     z-index: 100000;
 
     .ui-state-active {
@@ -40,7 +40,7 @@
     span {
         @include lato-font('normal');
         font-size: $font-size-xx-regular;
-        color: #3C4A63;
+        color: $span-color;
     }
 }
 
@@ -49,7 +49,7 @@
 }
 
 .logo-bg {
-    background: #FFFFFF;
+    background: $background;
     height: 87px;
     cursor: pointer;
 
@@ -126,7 +126,7 @@
     }
 
     .ui-tabmenuitem {
-        background-color: white !important;
+        background-color: $background !important;
         border: none;
         height: 80px;
 
@@ -150,7 +150,7 @@ p-button {
     top: 0px;
     height: 100%;
     padding-right: calc(5.5vw);
-    background-color: white !important;
+    background-color: $background !important;
     border: none;
     height: $navbar-height;
     outline: none;
@@ -164,7 +164,7 @@ p-button {
         outline: none;
         height: $navbar-height  !important;
         line-height: $navbar-height !important;
-        background-color: white !important;
+        background-color: $background !important;
         border: none;
 
         span {
@@ -197,7 +197,7 @@ p-button {
     button {
         margin: 0px;
         border-color: transparent;
-        background: white;
+        background: $background;
 
         .ui-button-text {
             padding-left: 0px !important;
@@ -212,62 +212,5 @@ p-button {
         float: right;
         position: -webkit-sticky; /* Safari */
         position: sticky;
-    }
-}
-
-.ui-menu.ui-menu-dynamic {
-    background-color: #3C4A63;
-    left: 0px !important;
-    width: 100%;
-    height: calc(100vh - #{$navbar-height});
-    top: $navbar-height !important;
-    padding: 0px;
-    margin: 0px;
-    overflow-y: scroll;
-
-    span {
-        text-transform: uppercase;
-        color: white;
-    }
-
-    li:nth-child(3) > a {
-        :after {
-            content: '';
-            border-bottom: 1px solid #E0E0E0 !important;
-            display: block;
-            position: relative;
-            bottom: -1px;
-        }
-    }
-
-    li:nth-child(4) > a > span,
-    li:nth-child(5) > a > span,
-    li:nth-child(6) > a > span {
-        color: #D3D5DB;
-    }
-
-    li {
-        text-align: left;
-        text-align-last: left;
-        height: 90px !important;
-        line-height: 90px;
-        text-transform: uppercase;
-        margin: 0px;
-
-        a {
-            width: 100%;
-            padding-left: 33px !important;
-            padding-right: 33px !important;
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
-        }
-
-        :hover {
-            background-color: #FCCB6F !important;
-
-            span {
-                color: #3C4A63 !important;
-            }
-        }
     }
 }

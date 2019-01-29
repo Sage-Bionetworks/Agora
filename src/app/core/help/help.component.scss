@@ -41,9 +41,9 @@
 }
 
 .help-button {
-    background: #FCCB6F !important;
+    background: $contrast-color !important;
     border: 0px !important;
-    color: black !important;
+    color: color(text, fill) !important;
     border-radius: 100px;
     width: 100%;
     height: 100%;

@@ -4,20 +4,20 @@
 .footer-row {
     @include lato-font('normal');
 
-    background: #FFFFFF;
+    background: $background;
     height: $footer-height;
     margin-right: 0px;
     line-height: normal;
     font-size: $font-size-regular;
-    color: #0D1C38;
+    color: $show-more-color$show-more-color;
     z-index: 2;
     align-items: center;
-    border-top: 1px solid #C7C5C5;
+    border-top: 1px solid color(box-shadow);
 
     a.contact-us-footer {
         @include lato-font('normal');
 
-        color: #0D1C38;
+        color: $show-more-color;
         line-height: normal;
         text-decoration: none;
         font-size: $font-size-regular;
@@ -100,7 +100,7 @@
     margin-right: 5%;
     line-height: normal;
     font-size: $font-size-regular;
-    color: #0D1C38;
+    color: $show-more-color;
     cursor: pointer;
 }
 
@@ -118,7 +118,7 @@
     line-height: normal;
     font-size: 14px;
     text-align: right;
-    color: #A6A6A6;
+    color: color(text, span-grey);
 }
 
 .footer-span:hover {

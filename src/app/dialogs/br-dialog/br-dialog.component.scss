@@ -20,9 +20,9 @@
         cursor: pointer;
 
         :hover {
-            border-color: #c0c0c0;
-            background-color: #eeeeee;
-            color: #212121;
+            border-color: color(li, border-color-default);
+            background-color: $tertiary-background;
+            color: color(text, primary);
         }
     }
 }

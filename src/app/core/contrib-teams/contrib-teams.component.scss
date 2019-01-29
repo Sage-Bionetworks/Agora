@@ -7,7 +7,7 @@
     }
     .overview-header {
         .fa-star::before {
-            color: #FACFAF;
+            color: $contrast-color;
         }
 
         .row {
@@ -30,7 +30,7 @@
 
     .overview-desc {
         box-shadow: none;
-        border-top: 2px solid #E0E0E0;
+        border-top: 2px solid $secondary-grey-border-color;
         padding-top: 2em;
         margin-top: 0;
     }

@@ -1,46 +1,38 @@
 @import "../../../../../../assets/css/helpers/variables";
 @import "../../../../../../assets/css/helpers/mixins";
 
-.rna-seq-sel {
-    background: rgba(245, 245, 245, 0.5);
-
-    .fa-info-circle:before {
-        color: #9DA3B3;
-    }
-}
-
 .rna-seq-me {
     padding-bottom: 4em;
 
     .fa-info-circle:before {
-        color: #9DA3B3;
+        color: $info-circle-color;
     }
 }
 
 .rna-seq-bplot {
     .bplot-filter-row {
-        background: rgba(245, 245, 245, 0.5);
-        border-top: 2px solid #E0E0E0;
+        background: $faded-grey-background;
+        border-top: 2px solid $secondary-grey-border-color;
     }
 
     @include respond-to('medium') {
-        border-right-color: rgba(245, 245, 245, 0.5);
+        border-right-color: $faded-grey-background;
         padding-top: 2em;
         padding-bottom: 2em;
     }
     @include respond-to('large') {
-        border-right-color: rgba(245, 245, 245, 0.5);
+        border-right-color: $faded-grey-background;
         padding-top: 2em;
         padding-bottom: 2em;
     }
     @include respond-to('ex-large') {
-        border-right-color: rgba(245, 245, 245, 0.5);
+        border-right-color: $faded-grey-background;
         padding-top: 2em;
         padding-bottom: 2em;
     }
 
     .fa-info-circle:before {
-        color: #9DA3B3;
+        color: $info-circle-color;
     }
 
     select {
@@ -69,28 +61,28 @@
         .ui-multiselect-panel
         {
             width: 100%;
-            color: black;
+            color: color(text, fill);
         }
 
         .ui-multiselect-items {
             vertical-align: middle;
 
             >:hover {
-                background: rgba(91, 176, 181, 0.25) !important;
-                background-color: rgba(91, 176, 181, 0.25) !important;
+                background: $faded-secondary-background !important;
+                background-color: $faded-secondary-background !important;
             }
         }
 
         .ui-multiselect:not(.ui-state-disabled):hover {
-            background: white;
+            background: $background;
         }
 
         .ui-multiselect-item:not(.ui-state-highlight):hover {
-            background-color: rgba(91, 176, 181, 0.25);
+            background-color: $faded-secondary-background;
         }
 
         .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
-            background-color: rgba(91, 176, 181, 0.25);
+            background-color: $faded-secondary-background;
         }
 
         .ui-multiselect-label-container {
@@ -117,8 +109,8 @@
             color: color(text, secondary);
             height: 52px;
             line-height: 52px;
-            background: #FFFFFF;
-            box-shadow: 0px 0px 4px #C7C5C5;
+            background: $background;
+            box-shadow: 0px 0px 4px color(box-shadow);
         }
 
         .ui-chkbox {
@@ -134,7 +126,7 @@
             border-radius: 6px;
 
             .ui-chkbox-icon {
-                color: white;
+                color: $background;
             }
 
             span {
@@ -173,26 +165,26 @@
 
             color: color(text, secondary);
             padding-left: 30px !important;
-            border-bottom: 1px solid #EDEDED !important;
+            border-bottom: 1px solid $grey-border-color !important;
             height: 51px;
             vertical-align: middle;
 
             .ui-state-default {
-                background: #FFFFFF;
-                border: 2px solid #C7C5C5;
+                background: $background;
+                border: 2px solid color(box-shadow);
                 box-sizing: border-box;
-                box-shadow: inset 0px 0px 4px rgba(199, 197, 197, 0.5);
+                box-shadow: inset 0px 0px 4px color(keyword, border-color);
                 border-radius: 6px;
-                border-color: #c0c0c0;
-                background-color: white;
+                border-color: color(li, border-color-default);
+                background-color: $background;
             }
 
             .ui-state-active {
-                background: #2F8E94;
-                border: 2px solid #73C8CC;
+                background: color(li, background-active);
+                border: 2px solid color(li, border-color-active);
                 box-sizing: border-box;
                 border-radius: 6px;
-                color: white;
+                color: $background;
             }
 
             label {
@@ -203,8 +195,8 @@
         }
 
         .ui-state-highlight {
-            background: white !important;
-            background-color: white !important;
+            background: $background !important;
+            background-color: $background !important;
             color: color(text, secondary);
         }
 
@@ -221,13 +213,13 @@
         }
 
         .ui-multiselect-trigger {
-            color: #5BB0B5 !important;
+            color: $secondary-background !important;
             width: 32px;
             border: none;
             padding-right: 5%;
 
             .ui-multiselect-trigger-icon {
-                color: #5BB0B5 !important;
+                color: $secondary-background !important;
                 top: 0%;
                 width: 12px;
             }
@@ -259,7 +251,7 @@
 
     .filters-header {
         .fa-info-circle:before {
-            color: #9DA3B3;
+            color: $info-circle-color;
         }
 
         h3 {
@@ -272,11 +264,11 @@
     }
 
     .bplot-col {
-        background: rgba(245, 245, 245, 0.5);
+        background: $faded-grey-background;
     }
 
     .empty-bplot-col {
-        background: rgba(245, 245, 245, 0.5);
+        background: $faded-grey-background;
         height: 450px;
     }
 }
@@ -310,9 +302,9 @@
         cursor: pointer;
 
         :hover {
-            border-color: #c0c0c0;
-            background-color: #eeeeee;
-            color: #212121;
+            border-color: color(li, border-color-default);
+            background-color: $background;
+            color: color(text, primary);
         }
     }
 }
@@ -336,23 +328,23 @@
         cursor: pointer;
 
         :hover {
-            border-color: #c0c0c0;
-            background-color: #eeeeee;
-            color: #212121;
+            border-color: color(li, border-color-default);
+            background-color: $background;
+            color: color(text, primary);
         }
     }
 }
 
 .rna-seq-fplot {
     .fa-info-circle:before {
-        color: #9DA3B3;
+        color: $info-circle-color;
     }
 
     .rc-empty-plot-content {
         height: 450px;
         position: relative;
         display: block;
-        background: rgba(245, 245, 245, 0.5);
+        background: $faded-grey-background;
     }
 }
 
@@ -369,7 +361,7 @@
 }
 
 .no-side-padding {
-    background: rgba(245, 245, 245, 0);
+    background: $transparent-background;
     padding-left: 0px;
     padding-right: 0px;
 }
@@ -381,5 +373,5 @@
 .no-median-data {
     position: relative;
     height: 350px;
-    background: rgba(245, 245, 245, 0.5);
+    background: $faded-grey-background;
 }

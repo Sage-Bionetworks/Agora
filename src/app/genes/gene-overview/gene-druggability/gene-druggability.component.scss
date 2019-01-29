@@ -21,11 +21,11 @@
     }
 
     .ui-table .ui-table-tbody > tr {
-        background-color: #fafafb;
+        background-color: $half-faded-background;
     }
 
     .ui-table .ui-table-tbody > tr:nth-child(even) {
-        background-color: #ffffff;
+        background-color: $background;
     }
 
     .ui-table-thead {
@@ -35,12 +35,12 @@
     .dg-property-text {
         @include lato-font('bold');
         font-size: $font-size-xx-regular;
-        color: #24334F;
+        color: color(text, secondary);
     }
 
     .dg-value-text {
         font-size: $font-size-x-regular;
-        color: #24334F;
+        color: color(text, secondary);
     }
 
     .ui-table-tbody {
@@ -70,7 +70,7 @@
                 font-size: $font-size-x-regular;
             }
 
-            color: #24334F !important;
+            color: color(text, secondary) !important;
             height: 40px;
         }
 

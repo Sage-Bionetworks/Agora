@@ -6,9 +6,9 @@
 
     .ui-tabmenu-nav {
         padding: 0px !important;
-        background: #3C4A63;
-        background-color: #3C4A63 !important;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+        background: $menu-dark;
+        background-color: $menu-dark !important;
+        box-shadow: 0px 4px 6px color(black-box-shadow, a50);
         position: relative;
 
         text-align: left;
@@ -85,14 +85,14 @@
     }
 
     li {
-        background: #3C4A63;
-        background-color: #3C4A63 !important;
+        background: $span-color;
+        background-color: $span-color !important;
         height: 70px;
         line-height: 70px;
         margin: 0px !important;
         width: 100%;
         border: none;
-        color: white;
+        color: $background;
 
         a {
             padding: 0px !important;
@@ -101,7 +101,7 @@
 
             span {
                 opacity: 0.5;
-                color: white;
+                color: $background;
             }
         }
     }
