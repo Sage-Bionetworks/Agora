@@ -5,14 +5,13 @@
     min-height: 600px;
     overflow-y: hidden;
     width: 100%;
+    height: 100%;
     margin-left: 0px;
     margin-right: 0px;
     display: flex;
+
     @include respond-to('ex-small') {
         display: block;
-    }
-    force-chart {
-        width: 100%;
     }
 
     .fa-info-circle:before {
@@ -31,18 +30,13 @@
     background: $faded-grey-background;
     position: relative;
     min-height: 200px;
-    display: flex;
-    flex-direction: column;
+
     .force-chart-container {
         height: 100%;
-        .container {
-            height: 100%;
-            div {
-                height: 100%;
-                div {
-                    height: 100%;
-                }
-            }
+
+        force-chart {
+            width: 100%;
+            height: inherit;
         }
     }
 }

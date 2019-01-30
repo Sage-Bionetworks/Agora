@@ -11,8 +11,7 @@ import {
     SimpleChange,
     SimpleChanges
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DataService, GeneService } from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
@@ -31,6 +30,9 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     @Input() networkData: GeneNetwork;
     @ViewChild('chart') forceChart: ElementRef;
 
+    g: any;
+    zoomHandler: any;
+
     private linkElements: any;
     private nodeElements: any;
     private textElements: any;
@@ -38,17 +40,13 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     private pnode: any;
     private loaded: boolean = false;
     private pathways: GeneNode[] = [];
-    private nodes: GeneNode[];
-    private links: GeneLink[];
     private width: any;
     private height: any;
     private simulation: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
+
     constructor(
-        private dataService: DataService,
-        private geneService: GeneService,
-        private router: Router,
-        private route: ActivatedRoute
+        private geneService: GeneService
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -60,38 +58,39 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit() {
         setTimeout(() => {
-            this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-            this.height = this.forceChart.nativeElement.offsetHeight;
-            if (this.height < 600) {
-                this.height = 500;
-            }
+            console.log(this.forceChart.nativeElement);
+            this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
+            this.height = this.forceChart.nativeElement.parentElement.parentElement
+                .parentElement.parentElement.offsetHeight - 30;
             this.loaded = true;
             this.simulation = d3.forceSimulation()
-                .force('charge', d3.forceManyBody().strength(-10))
-                .force('center', d3.forceCenter(this.width / 2, this.height / 2));
+                .force('charge', (d) => {
+                    let charge = -500;
+                    if (d === 0) { charge = 10 * charge; }
+                    return charge;
+                })
+                .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+                .force('collision', d3.forceCollide().radius(function(d) {
+                    return 35;
+                }));
             this.renderChart();
         }, 300);
     }
 
     onResize(event?: any) {
-        this.width = this.forceChart.nativeElement.parentElement.offsetWidth;
-        this.height = this.forceChart.nativeElement.offsetHeight - 30;
-        if (this.height > 900 || this.height < 500) {
-            this.height = 500;
-            this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
-            this.height = this.forceChart.nativeElement.offsetHeight - 30;
-        }
-        this.forceChart.nativeElement.children[0].setAttribute('width', this.width);
-        this.forceChart.nativeElement.children[0].setAttribute('height', this.height);
+        this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
+        this.height = this.forceChart.nativeElement.parentElement.parentElement.offsetHeight - 30;
 
-        this.simulation.force('center', d3.forceCenter(this.width / 2, this.height / 2));
-        this.simulation.force('charge', d3.forceManyBody());
-        this.simulation.force('link', d3.forceLink(this.networkData.links)
-            .links(this.networkData.links).id((d: any) => d.id)
-            .distance(this.width / 3))
-            .force('collide', d3.forceCollide()
-                .radius(18)
-                .strength(0.5))
+        this.zoomHandler(this.svg);
+        this.simulation.force('charge', (d) => {
+                let charge = -500;
+                if (d === 0) { charge = 10 * charge; }
+                return charge;
+            })
+            .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+            .force('collision', d3.forceCollide().radius(function(d) {
+                return 35;
+            }))
             .alpha(0.3)
             .restart();
     }
@@ -104,53 +103,70 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         if (!this.loaded) {
             return;
         }
+
+        console.log(this.height);
         this.svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
             .attr('width', this.width)
             .attr('height', this.height);
 
-        this.linkElements = this.svg.append('g')
-                    .attr('class', 'line')
-                    .selectAll('line')
-                    .data(this.networkData.links,
-                     (d) =>  d.source.id + '-' + d.target.id)
-                    .enter().append('line')
-                    .attr('stroke-width', 2 )
-                    .attr('stroke', this.getLinkColor);
+        this.g = this.svg.append('g')
+            .attr('class', 'everything');
+        this.zoomHandler = d3.zoom()
+            // Don’t allow the zoomed area to be bigger than the viewport.
+            .scaleExtent([1, Infinity])
+            .translateExtent([[0, 0], [this.width, this.height]])
+            .extent([[0, 0], [this.width, this.height]])
+            .on('zoom', () => {
+                // Zoom functions, this in this context is the svg
+                this.svg.select('g.everything')
+                    .style('transform', 'scale(' + d3.event.transform.k + ')');
+            });
+        this.zoomHandler(this.svg);
+        this.svg.call(this.zoomHandler);
 
-        this.nodeElements = this.svg.append('g')
-                    .attr('class', 'node')
-                    .selectAll('.hex')
-                    .data(this.networkData.nodes, (d) =>  d.id)
-                    .enter()
-                    .append('path')
-                    .attr('d', this.hex)
-                    .attr('origin', (d) =>
-                    this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
-                    .attr('r', 4)
-                    .attr('fill', this.getNodeColor)
-                    .attr('class', 'hex')
-                    .on('click', (d: any, i, nodes ) => {
-                        if (this.pnode) {
-                            d3.select(nodes[this.pnode.index])
-                            .attr('fill', this.getNodeColor(this.pnode.node,
-                                    this.pnode.index,
-                                    []));
-                        }
-                        this.pnode = {index: i, node: d};
-                        d3.select(nodes[i]).attr('fill', '#4F6FC3');
-                        this.buildPath(d);
-                    });
+        this.linkElements = this.g.append('g')
+            .attr('class', 'line')
+            .selectAll('line')
+            .data(this.networkData.links,
+                (d) =>  d.source.id + '-' + d.target.id)
+            .enter().append('line')
+            .attr('stroke-width', 2 )
+            .attr('stroke', this.getLinkColor);
 
-        this.textElements = this.svg.append('g')
-                    .attr('class', 'text')
-                    .selectAll('text')
+        this.nodeElements = this.g.append('g')
+            .attr('class', 'node')
+            .selectAll('.hex')
             .data(this.networkData.nodes, (d) =>  d.id)
-                    .enter().append('text')
-                    .text((node: any) => node.hgnc_symbol)
-                    .attr('font-size', 12)
-                    .attr('dx', 13)
-                    .attr('dy', 4);
+            .enter()
+            .append('path')
+            .attr('d', this.hex)
+            .attr('origin', (d) =>
+            this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
+            .attr('r', 4)
+            .attr('fill', this.getNodeColor)
+            .attr('class', 'hex')
+            .on('click', (d: any, i, nodes ) => {
+                if (this.pnode) {
+                    d3.select(nodes[this.pnode.index])
+                    .attr('fill', this.getNodeColor(this.pnode.node,
+                            this.pnode.index,
+                            []));
+                }
+                this.pnode = {index: i, node: d};
+                d3.select(nodes[i]).attr('fill', '#4F6FC3');
+                this.buildPath(d);
+            });
+
+        this.textElements = this.g.append('g')
+            .attr('class', 'text')
+            .selectAll('text')
+            .data(this.networkData.nodes, (d) =>  d.id)
+            .enter().append('text')
+            .text((node: any) => node.hgnc_symbol)
+            .attr('font-size', 12)
+            .attr('dx', 13)
+            .attr('dy', 4);
 
         this.simulation.nodes(this.networkData.nodes).on('tick', () => {
             this.nodeElements
@@ -165,10 +181,13 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 .attr('x', (node: any) => node.x)
                 .attr('y', (node: any) => node.y)
                 .attr('dx', (node: any) => {
-                    if (this.width / 2 < node.x) {
-                        return -Math.abs(node.hgnc_symbol.length * 6) - 32;
-                    }
-                    return '23';
+                    // A font size of 12 has 16 pixels per letter, so we pick
+                    // half the word and make a negative dx. The anchor is in
+                    // the middle so we half the result again
+                    return (((-node.hgnc_symbol.length * 16) / 2) / 2);
+                })
+                .attr('dy', (node: any) => {
+                    return 35;
                 });
 
             this.linkElements
@@ -180,10 +199,9 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
         this.simulation.force('link', d3.forceLink(this.networkData.links)
             .links(this.networkData.links).id((d: GeneNode) => d.id)
-            .distance(this.width / 3))
-            .force('collide', d3.forceCollide()
-                .radius(18)
-                .strength(0.5));
+            .strength((d) => {
+                return d.value / 100.0;
+            }));
 
         this.nodeElements.call(this.dragDrop());
     }
@@ -196,8 +214,8 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 }
                 node.fx = node.x;
                 node.fy = node.y;
-            })
-            .on('drag', (node: any) => {
+            });
+            /*.on('drag', (node: any) => {
                 this.simulation.alphaTarget(0).restart();
                 node.fx = d3.event.x;
                 node.fy = d3.event.y;
@@ -208,7 +226,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 }
                 node.fx = null;
                 node.fy = null;
-            });
+            });*/
     }
 
     private updateChart() {

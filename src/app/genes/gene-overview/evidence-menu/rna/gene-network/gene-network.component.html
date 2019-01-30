@@ -1,5 +1,5 @@
 <div *ngIf="dataLoaded" class="network-content">
-    <div class="col-xl-8 col-12 network-container"  *ngIf="!noData; else noDataImage">
+    <div class="col-md-8 col-sm-8 col-12 network-container"  *ngIf="!noData; else noDataImage">
         <div class="filter" *ngIf="filterlvl">
             <div class="col-xs-12 col-sm-4">
                 <h4 class="filter-title">Filter by Number of Edges</h4>
@@ -29,11 +29,11 @@
         </div>
     </div>
     <ng-template #noDataImage>
-        <div class="col-xl-8 col-12 network-container">
+        <div class="col-md-8 col-sm-8 col-12 network-container">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </ng-template>
-    <div class="col-xl-4 col-12 currentGene">
+    <div class="col-md-4 col-sm-4 col-12 currentGene">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h3>{{geneInfo.hgnc_symbol}}</h3>
