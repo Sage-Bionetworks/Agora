@@ -55,7 +55,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         private location: PlatformLocation,
         private router: Router,
         private route: ActivatedRoute,
-        private dataService: DataService,
         private geneService: GeneService,
         private apiService: ApiService,
         private chartService: ChartService
@@ -91,7 +90,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 if (f) {
                     // Main change routine is inside the option click. This is the only place
                     // called to filter all charts
-                    dc.redrawAll();
+                    // dc.redrawAll();
                 }
             },
             filterAll: () => {

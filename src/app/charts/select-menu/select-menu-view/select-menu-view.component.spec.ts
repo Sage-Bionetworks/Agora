@@ -21,7 +21,7 @@ import {
 
 import { SelectMenuViewComponent } from './select-menu-view.component';
 
-import { GeneService, DataService, ApiService } from '../../../core/services';
+import { GeneService, ApiService } from '../../../core/services';
 import { ChartService } from '../../services';
 
 import { of, empty, Observable } from 'rxjs';
@@ -34,7 +34,6 @@ describe('Component: SelectMenuView', () => {
     let router: RouterStub;
     let geneService: GeneServiceStub;
     let chartService: ChartServiceStub;
-    let dataService: DataServiceStub;
     let apiService: ApiServiceStub;
     let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
@@ -50,7 +49,6 @@ describe('Component: SelectMenuView', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
@@ -65,7 +63,6 @@ describe('Component: SelectMenuView', () => {
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
-        dataService = fixture.debugElement.injector.get(DataService);
         chartService = fixture.debugElement.injector.get(ChartService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });

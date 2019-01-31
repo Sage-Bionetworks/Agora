@@ -44,6 +44,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     private height: any;
     private simulation: any;
     private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
+    private resizeTimer;
 
     constructor(
         private geneService: GeneService
@@ -58,10 +59,11 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit() {
         setTimeout(() => {
-            console.log(this.forceChart.nativeElement);
             this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
-            this.height = this.forceChart.nativeElement.parentElement.parentElement
-                .parentElement.parentElement.offsetHeight - 30;
+            console.log(this.forceChart.nativeElement.parentElement.parentElement
+                .parentElement.parentElement);
+            this.height = (d3.select('.currentGene').node() as HTMLBaseElement)
+                .getBoundingClientRect().height;
             this.loaded = true;
             this.simulation = d3.forceSimulation()
                 .force('charge', (d) => {
@@ -78,11 +80,16 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     }
 
     onResize(event?: any) {
+        const self = this;
         this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
-        this.height = this.forceChart.nativeElement.parentElement.parentElement.offsetHeight - 30;
 
+        this.zoomHandler
+            // Don't allow the zoomed area to be bigger than the viewport.
+            .scaleExtent([0.8, 10])
+            .translateExtent([[-200, -200], [this.width + 200, this.height + 200]]);
         this.zoomHandler(this.svg);
-        this.simulation.force('charge', (d) => {
+        this.simulation
+            .force('charge', (d) => {
                 let charge = -500;
                 if (d === 0) { charge = 10 * charge; }
                 return charge;
@@ -91,8 +98,12 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .force('collision', d3.forceCollide().radius(function(d) {
                 return 35;
             }))
-            .alpha(0.3)
-            .restart();
+            .alpha(1);
+
+        clearTimeout(this.resizeTimer);
+        this.resizeTimer = setTimeout(() => {
+            self.simulation.restart();
+        }, 100);
     }
 
     getPathways(): any[] {
@@ -104,7 +115,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             return;
         }
 
-        console.log(this.height);
         this.svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
             .attr('width', this.width)
@@ -113,14 +123,12 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         this.g = this.svg.append('g')
             .attr('class', 'everything');
         this.zoomHandler = d3.zoom()
-            // Don’t allow the zoomed area to be bigger than the viewport.
-            .scaleExtent([1, Infinity])
-            .translateExtent([[0, 0], [this.width, this.height]])
-            .extent([[0, 0], [this.width, this.height]])
+            // Don't allow the zoomed area to be bigger than the viewport.
+            .scaleExtent([0.8, 10])
+            .translateExtent([[-200, -200], [this.width + 200, this.height + 200]])
             .on('zoom', () => {
                 // Zoom functions, this in this context is the svg
-                this.svg.select('g.everything')
-                    .style('transform', 'scale(' + d3.event.transform.k + ')');
+                this.svg.select('g.everything').attr('transform', d3.event.transform);
             });
         this.zoomHandler(this.svg);
         this.svg.call(this.zoomHandler);
@@ -288,8 +296,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         this.simulation.nodes(this.networkData.nodes);
         this.simulation.force('link').links(this.networkData.links);
         this.simulation.alpha(1).restart();
-
-        // this.onResize();
     }
 
     private getNodeColor(node: GeneNode , index, arr): string {

@@ -29,14 +29,18 @@
 .network-container {
     background: $faded-grey-background;
     position: relative;
-    min-height: 200px;
+    height: 100%;
 
     .force-chart-container {
-        height: 100%;
+        height: 1173px;
 
         force-chart {
             width: 100%;
-            height: inherit;
+            height: 100%;
+        }
+
+        svg {
+            height: 1173px;
         }
     }
 }
