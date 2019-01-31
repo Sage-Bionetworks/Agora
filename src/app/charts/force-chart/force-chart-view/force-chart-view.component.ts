@@ -14,6 +14,7 @@ import {
 import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
+import * as d3s from 'd3-symbol-extra';
 
 import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
 
@@ -81,13 +82,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     onResize(event?: any) {
         const self = this;
-        this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
 
-        this.zoomHandler
-            // Don't allow the zoomed area to be bigger than the viewport.
-            .scaleExtent([0.8, 10])
-            .translateExtent([[-200, -200], [this.width + 200, this.height + 200]]);
-        this.zoomHandler(this.svg);
         this.simulation
             .force('charge', (d) => {
                 let charge = -500;
@@ -114,6 +109,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
         if (!this.loaded) {
             return;
         }
+        const self = this;
 
         this.svg = d3.select(this.forceChart.nativeElement)
             .append('svg:svg')
@@ -124,8 +120,8 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .attr('class', 'everything');
         this.zoomHandler = d3.zoom()
             // Don't allow the zoomed area to be bigger than the viewport.
-            .scaleExtent([0.8, 10])
-            .translateExtent([[-200, -200], [this.width + 200, this.height + 200]])
+            .scaleExtent([1, 1])
+            .translateExtent([[-200, -300], [this.width + 200, this.height + 300]])
             .on('zoom', () => {
                 // Zoom functions, this in this context is the svg
                 this.svg.select('g.everything').attr('transform', d3.event.transform);
@@ -143,17 +139,33 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .attr('stroke', this.getLinkColor);
 
         this.nodeElements = this.g.append('g')
-            .attr('class', 'node')
-            .selectAll('.hex')
+            .selectAll('.node')
             .data(this.networkData.nodes, (d) =>  d.id)
             .enter()
             .append('path')
-            .attr('d', this.hex)
+            .attr('class', 'node')
+            .attr('transform', 'translate(0, 0)')
+            .attr('d', d3.symbol()
+                .size(function(d) {
+                    return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                    300 :
+                    100;
+                })
+                .type(function(d) {
+                    return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                    d3s.symbolHexagon :
+                    d3.symbolCircle;
+                })
+            )
             .attr('origin', (d) =>
-            this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id)
-            .attr('r', 4)
+                this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id
+            )
+            .attr('r', (d) => {
+                return (this.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                38 :
+                17;
+            })
             .attr('fill', this.getNodeColor)
-            .attr('class', 'hex')
             .on('click', (d: any, i, nodes ) => {
                 if (this.pnode) {
                     d3.select(nodes[this.pnode.index])
@@ -162,8 +174,36 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                             []));
                 }
                 this.pnode = {index: i, node: d};
-                d3.select(nodes[i]).attr('fill', '#4F6FC3');
+                d3.select(nodes[i]).attr('fill', '#FCCB6F');
                 this.buildPath(d);
+            })
+            .on('mouseover', function() {
+                d3.select(this).attr('d', d3.symbol()
+                    .size(function(d) {
+                        return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                        300 :
+                        200;
+                    })
+                    .type(function(d) {
+                        return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                        d3s.symbolHexagon :
+                        d3.symbolCircle;
+                    })
+                );
+            })
+            .on('mouseout', function() {
+                d3.select(this).attr('d', d3.symbol()
+                    .size(function(d) {
+                        return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                        300 :
+                        100;
+                    })
+                    .type(function(d) {
+                        return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                        d3s.symbolHexagon :
+                        d3.symbolCircle;
+                    })
+                );
             });
 
         this.textElements = this.g.append('g')
@@ -183,7 +223,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 .attr('cy', (node: any) => node.y = Math.max(24,
                     Math.min(this.height - 24, node.y)))
                 .attr('transform',
-                    (d: any) => 'translate(' + (d.x - 22) + ',' + (d.y - 22) + ') scale(1.75)');
+                    (d: any) => 'translate(' + (d.x) + ',' + (d.y) + ') scale(1.75)');
 
             this.textElements
                 .attr('x', (node: any) => node.x)
@@ -211,7 +251,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 return d.value / 100.0;
             }));
 
-        this.nodeElements.call(this.dragDrop());
+        // this.nodeElements.call(this.dragDrop());
     }
 
     private dragDrop() {
@@ -280,7 +320,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             })
             .merge(this.nodeElements);
 
-        this.nodeElements.call(this.dragDrop());
+        // this.nodeElements.call(this.dragDrop());
 
         // text elements
         this.textElements = this.textElements
@@ -300,34 +340,34 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     private getNodeColor(node: GeneNode , index, arr): string {
         if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
-            return '#F38070';
+            return '#F47E6C';
         }
         if (this.networkData && this.networkData.origin.ensembl_gene_id === node.ensembl_gene_id) {
-            return '#F38070';
+            return '#F47E6C';
         }
         if (node.brainregions.length >= 6) {
-            return '#11656A';
+            return '#0C656B';
         }
         if (node.brainregions.length >= 4) {
-            return '#5DAFB4';
+            return '#5BB0B5';
         }
         if (node.brainregions.length >= 2) {
-            return '#A7DDDF';
+            return '#73C8CC';
         }
-        return '#BCC0CA';
+        return '#D3D5DB';
     }
 
     private getLinkColor(link: GeneLink , index, arr): string {
         if (link.value >= 6) {
-            return '#11656A';
+            return '#0C656B';
         }
         if (link.value >= 4) {
-            return '#5DAFB4';
+            return '#5BB0B5';
         }
         if (link.value >= 2) {
-            return '#A7DDDF';
+            return '#73C8CC';
         }
-        return '#BCC0CA';
+        return '#D3D5DB';
     }
 
     private buildPath(gene: Gene) {

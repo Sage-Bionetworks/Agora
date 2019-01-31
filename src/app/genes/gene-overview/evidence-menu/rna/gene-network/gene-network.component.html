@@ -1,10 +1,10 @@
 <div *ngIf="dataLoaded" class="network-content">
-    <div class="col-md-8 col-sm-8 col-12 network-container"  *ngIf="!noData; else noDataImage">
-        <div class="filter" *ngIf="filterlvl">
-            <div class="col-xs-12 col-sm-4">
-                <h4 class="filter-title">Filter by Number of Edges</h4>
+    <div class="col-md-8 col-sm-8 col-12 network-container" *ngIf="!noData; else noDataImage">
+        <div class="row filter" *ngIf="filterlvl">
+            <div class="col-md-7 col-sm-12 col-12">
+                <span class="filter-title">Filter by Number of Edges</span>
             </div>
-            <div class="col-xs-12 col-sm-7 right">
+            <div class="col-md-5 col-sm-12 col-12">
                 <ul class="steps">
                     <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
                         <a (click)="filterNodes(i)" class="steps-marker"></a>
@@ -17,15 +17,15 @@
                 </div>
             </div>
         </div>
-        <div class="force-chart-container">
+        <div class="row force-chart-container">
             <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
         </div>
-        <div class="network-legend">
-            <div><span class="dot current"></span>&nbsp;Current gene</div>
-            <div><span class="dot selected"></span>&nbsp;Selected gene</div>
-            <div><span class="dot first"></span>&nbsp;2-3 Edges</div>
-            <div><span class="dot second"></span>&nbsp;4-5 Edges</div>
-            <div><span class="dot third"></span>&nbsp;6-7 Edges</div>
+        <div class="row network-legend">
+            <div class="hexagon current"></div>&nbsp;Current gene&nbsp;
+            <div class="dot selected"></div>&nbsp;Selected gene&nbsp;
+            <div class="dot first"></div>&nbsp;2-3 Edges&nbsp;
+            <div class="dot second"></div>&nbsp;4-5 Edges&nbsp;
+            <div class="dot third"></div>&nbsp;6-7 Edges&nbsp;
         </div>
     </div>
     <ng-template #noDataImage>

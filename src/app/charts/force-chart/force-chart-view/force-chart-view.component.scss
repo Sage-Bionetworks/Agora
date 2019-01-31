@@ -24,9 +24,10 @@
     }
 }
 
-.hex:hover {
+.node:hover {
+    fill: $contrast-color;
     stroke-width: 1px;
-    stroke: $network-chart-hover-color;
+    stroke: $contrast-color;
     stroke-opacity: 0.5;
 }
 

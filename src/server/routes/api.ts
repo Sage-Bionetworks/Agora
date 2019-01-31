@@ -12,9 +12,10 @@ const router = express.Router();
 const database = { url: '' };
 const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 
-if (env === 'development') {
-    mongoose.set('debug', true);
-}
+// Uncomment when in need of versbose debugging
+// if (env === 'development') {
+//     mongoose.set('debug', true);
+// }
 
 // Set the database url
 if (process.env.MONGODB_HOST && process.env.MONGODB_PORT && process.env.APP_ENV) {

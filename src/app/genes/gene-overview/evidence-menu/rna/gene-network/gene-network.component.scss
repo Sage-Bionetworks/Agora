@@ -174,8 +174,41 @@
     }
 }
 
+.hexagon {
+    &.current{
+        background-color: color(dot, background-color-current);
+    }
+
+    position: relative;
+    width: 17px;
+    height: 9.81px;
+    background-color: color(dot, background-color-current);
+    margin: 4.91px 0;
+}
+
+.hexagon:before,
+.hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 8.5px solid transparent;
+    border-right: 8.5px solid transparent;
+}
+
+.hexagon:before {
+    bottom: 100%;
+    border-bottom: 4.91px solid color(dot, background-color-current);
+}
+
+.hexagon:after {
+    top: 100%;
+    width: 0;
+    border-top: 4.91px solid color(dot, background-color-current);
+}
+
 .network-legend {
     padding: 20px;
+
     div {
         display: inline;
         padding-right: 15px;
@@ -192,9 +225,8 @@
 
 .steps {
     margin-top: 25px;
-    @include respond-to('medium') {
-        -webkit-padding-start: 0px;
-    }
+    padding: 0px;
+
     .steps-marker {
         height: 0.7rem;
         width: 0.7rem;
@@ -206,6 +238,7 @@
         position: relative;
         z-index: 10;
     }
+
     a {
         color: $contrast-color;
         cursor: pointer;
@@ -268,13 +301,11 @@
 ul {
     list-style: none;
 }
-.filter{
+.filter {
     margin-top: 20px;
-    div{
-        float: left;
-    }
-    .filter-title{
-        white-space: nowrap;
+
+    .filter-title {
+        @include lato-font('bold');
     }
     .filter-reference {
         span{
