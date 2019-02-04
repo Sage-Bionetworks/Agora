@@ -68,9 +68,9 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'druggability', subfield: 'pharos_class', header: 'Pharos Class'}
         ];
 
-        this.gene = this.geneService.getCurrentGene();
-        this.geneInfo = this.geneService.getCurrentInfo();
-        this.id = this.navService.getId();
+        if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
+        if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
+        if (!this.id) { this.id = this.navService.getId(); }
 
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
@@ -142,14 +142,17 @@ export class GeneSimilarComponent implements OnInit {
     initGeneClickedList() {
         let nodesIds;
         if (!!this.forceService.getGeneClickedList() &&
+            this.forceService.getGeneClickedList().origin &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneClickedList();
             nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
         } else if (!!this.forceService.getGeneOriginalList() &&
+            this.forceService.getGeneOriginalList().origin &&
             this.forceService.getGeneOriginalList().origin.ensembl_gene_id === this.id) {
             this.selectedGeneData = this.forceService.getGeneOriginalList();
             nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
         }
+
         this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
             this.genesInfo = datas.items;
             this.totalRecords = datas.items.length;

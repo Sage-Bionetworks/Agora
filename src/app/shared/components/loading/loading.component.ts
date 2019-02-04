@@ -16,7 +16,7 @@ export class LoadingComponent {
         this.videoTag = this.getVideoTag();
     }
 
-    private getVideoTag(): SafeHtml {
+    getVideoTag(): SafeHtml {
         return this.sanitizer.bypassSecurityTrustHtml(
             `<video class="loading-video" id="vd" width="200" height="200" muted loop
                 autoplay playsinline disableRemotePlayback>

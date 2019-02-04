@@ -14,11 +14,14 @@ import {
     ForceServiceStub,
     GeneServiceStub,
     DataServiceStub,
+    mockGene1,
     mockInfo1,
     NavigationServiceStub
 } from '../../testing';
 
 import { GeneSimilarComponent } from './gene-similar.component';
+
+import { MoreInfoComponent } from 'app/dialogs/more-info';
 
 import {
     ApiService,
@@ -49,6 +52,7 @@ describe('Component: GeneSimilar', () => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneSimilarComponent,
+                MockComponent(MoreInfoComponent),
                 MockComponent(Table),
                 ArraySortPipe
             ],
@@ -80,6 +84,10 @@ describe('Component: GeneSimilar', () => {
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
         component = fixture.componentInstance; // Component test instance
+
+        component.geneInfo = mockInfo1;
+        component.gene = mockGene1;
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -91,6 +99,21 @@ describe('Component: GeneSimilar', () => {
         expect(el).toBeDefined();
 
         const aEl = fixture.debugElement.queryAll(By.css('p-table'));
+        expect(aEl.length).toEqual(1);
+    });
+
+    it('should have extra info component', () => {
+        const el = fixture.debugElement.query(By.css('more-info'));
+        expect(el).toBeDefined();
+
+        // When using ng-mocks, we need to pick the component instance,
+        // pass in the input value so we can assert it after
+        const ci = el.componentInstance as MoreInfoComponent;
+        ci.name = 'sp';
+        fixture.detectChanges();
+        expect(ci.name).toEqual('sp');
+
+        const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(1);
     });
 });

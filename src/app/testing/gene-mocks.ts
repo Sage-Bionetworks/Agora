@@ -118,6 +118,14 @@ export const mockInfo1: GeneInfo = {
             data_synapseid: ['syn3606086', 'syn5759376', 'syn7170616']
         }
     ],
+    'druggability': [
+        {
+            sm_druggability_bucket: 9,
+            classification: 'unknown SM druggability',
+            druggable_class: 'Non-IDG',
+            pharos_class: 'Tbio'
+        }
+    ],
     'nominations': 1
 };
 

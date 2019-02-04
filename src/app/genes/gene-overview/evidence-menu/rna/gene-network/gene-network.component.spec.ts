@@ -3,6 +3,7 @@ import {
     ComponentFixture,
     TestBed
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -27,6 +28,8 @@ import {
     NavigationService
 } from '../../../../../core/services';
 
+import { MoreInfoComponent } from 'app/dialogs/more-info';
+
 import { MockComponent } from 'ng-mocks';
 
 import { ArraySortPipe } from '../../../../../shared/pipes';
@@ -44,6 +47,7 @@ describe('Component: GeneNetwork', () => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneNetworkComponent,
+                MockComponent(MoreInfoComponent),
                 MockComponent(GeneNetworkComponent),
                 ArraySortPipe
             ],
@@ -136,5 +140,29 @@ describe('Component: GeneNetwork', () => {
 
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
+    });
+
+    it('should have extra info components', () => {
+        component.dataLoaded = true;
+        component.noData = false;
+        fixture.detectChanges();
+
+        const els = fixture.debugElement.queryAll(By.css('more-info'));
+        els.forEach((el) => {
+            expect(el).toBeDefined();
+        });
+
+        // When using ng-mocks, we need to pick the component instance,
+        // pass in the input value so we can assert it after
+        const ci = els[0].componentInstance as MoreInfoComponent;
+        ci.name = 'brn';
+        const ci2 = els[1].componentInstance as MoreInfoComponent;
+        ci2.name = 'sgn';
+        fixture.detectChanges();
+        expect(ci.name).toEqual('brn');
+        expect(ci2.name).toEqual('sgn');
+
+        const aEl = fixture.debugElement.queryAll(By.css('more-info'));
+        expect(aEl.length).toEqual(2);
     });
 });

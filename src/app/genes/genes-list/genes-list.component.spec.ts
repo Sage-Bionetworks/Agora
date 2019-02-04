@@ -26,8 +26,12 @@ import { SynapseAccountComponent } from '../../core/synapse-account';
 import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
 
+import { MoreInfoComponent } from 'app/dialogs/more-info';
+
 import { ApiService, GeneService, NavigationService } from '../../core/services';
 import { OrderBy } from '../../shared/pipes';
+
+import { MockComponent } from 'ng-mocks';
 
 import { of } from 'rxjs';
 
@@ -42,6 +46,7 @@ describe('Component: GenesList', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
+                MockComponent(MoreInfoComponent),
                 AboutComponent,
                 HelpComponent,
                 TermsComponent,
@@ -123,4 +128,19 @@ describe('Component: GenesList', () => {
         fixture.detectChanges();
         expect(gsSpy.calls.any()).toEqual(true);
     }));
+
+    it('should have extra info component', () => {
+        const el = fixture.debugElement.query(By.css('more-info'));
+        expect(el).toBeDefined();
+
+        // When using ng-mocks, we need to pick the component instance,
+        // pass in the input value so we can assert it after
+        const ci = el.componentInstance as MoreInfoComponent;
+        ci.name = 'nt';
+        fixture.detectChanges();
+        expect(ci.name).toEqual('nt');
+
+        const aEl = fixture.debugElement.queryAll(By.css('more-info'));
+        expect(aEl.length).toEqual(1);
+    });
 });

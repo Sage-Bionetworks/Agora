@@ -47,6 +47,10 @@ export class ApiServiceStub {
         return of({ items: [mockInfo1], isEnsembl: false });
     }
 
+    getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
+        return of({ items: [mockInfo1], isEnsembl: false });
+    }
+
     getAllTeams(): Observable<object> {
         return of([mockTeam1]);
     }
