@@ -7,6 +7,8 @@ import { Router, NavigationEnd } from '@angular/router';
 
 export const ROOT_SELECTOR = 'app';
 
+import * as browserUpdate from 'browser-update';
+
 /**
  * App Component
  * Top Level Component
@@ -26,6 +28,20 @@ export class AppComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        browserUpdate({
+            required: {
+                e: -2,
+                i: 11,
+                f: -3,
+                o: -3,
+                s: 10.1,
+                c: '64.0.3282.16817',
+                samsung: 7.0,
+                vivaldi: 1.2
+            },
+            insecure: true
+        });
+
         this.router.events.subscribe((evt) => {
             if (!(evt instanceof NavigationEnd)) {
                 return;

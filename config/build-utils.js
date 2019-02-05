@@ -119,7 +119,7 @@ function ngcWebpackSetup(prod, metadata) {
       parser: { system: true }  // enable SystemJS
     },
     ...buildOptimizer
-      ? [ { test: /\.js$/, use: [ buildOptimizerLoader ] } ]
+      ? [ { test: /\.js$/, use: [ buildOptimizerLoader ], exclude: [/node_modules\/browser-update/] } ]
       : []
   ];
 

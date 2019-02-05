@@ -108,7 +108,6 @@ module.exports = function (env) {
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
       chunkFilename: '[name].[chunkhash].chunk.js'
-
     },
 
     module: {
