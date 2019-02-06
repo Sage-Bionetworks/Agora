@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import { GeneService } from '../../../core/services';
+import { GeneService, ApiService } from '../../../core/services';
 
 @Component({
     selector: 'soe',
@@ -21,7 +21,8 @@ export class SOEComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private apiService: ApiService
     ) {}
 
     ngOnInit() {
@@ -79,9 +80,10 @@ export class SOEComponent implements OnInit {
             },
             {
                 property: 'Association with Hallmarks of AD',
-                state: false,
-                hasLink: false,
-                extraText: 'Coming Soon'
+                state: true,
+                hasLink: true,
+                extraText: 'View Hallmarks of AD',
+                command: (event) => this.viewHallmarks()
             },
             {
                 property: 'Protein Expression Change in AD Brain',
@@ -136,5 +138,17 @@ export class SOEComponent implements OnInit {
     viewPathways() {
         window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
             this.gene.ensembl_gene_id, '_blank');
+    }
+
+    viewHallmarks() {
+        this.apiService.getHallmarkEFO(this.gene.ensembl_gene_id).subscribe((data) => {
+            console.log(data);
+            if (data && data.data && data.data.length > 0 && data.data[0].disease.id) {
+                window.open('https://www.targetvalidation.org/evidence/' +
+                    this.gene.ensembl_gene_id + '/' +
+                    data.data[0].disease.id, '_blank'
+                );
+            }
+        });
     }
 }

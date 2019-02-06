@@ -61,8 +61,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     ngAfterViewInit() {
         setTimeout(() => {
             this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
-            console.log(this.forceChart.nativeElement.parentElement.parentElement
-                .parentElement.parentElement);
             this.height = (d3.select('.currentGene').node() as HTMLBaseElement)
                 .getBoundingClientRect().height;
             this.loaded = true;
