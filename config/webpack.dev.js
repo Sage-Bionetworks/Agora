@@ -2,10 +2,12 @@
  * @author: @AngularClass
  */
 
+const webpack = require('webpack');
 const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const autoprefixer = require('autoprefixer');
 
 /**
  * Webpack Plugins
@@ -88,7 +90,7 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: ['style-loader', 'css-loader', 'postcss-loader'],
           include: [helpers.root('src', 'styles')]
         },
 
@@ -99,7 +101,13 @@ module.exports = function (options) {
          */
         {
           test: /\.scss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: ['style-loader', 'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true,
+                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+            }
+          }, 'sass-loader'],
           include: [helpers.root('src', 'styles')]
         },
 
@@ -113,9 +121,8 @@ module.exports = function (options) {
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      new LoaderOptionsPlugin({
-        debug: true,
-        options: {}
+      new webpack.LoaderOptionsPlugin({
+        debug: true
       })
     ],
 

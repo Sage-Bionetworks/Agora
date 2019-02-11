@@ -10,6 +10,7 @@ const helpers = require('./helpers');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const autoprefixer = require('autoprefixer');
 
 const VERSION = JSON.stringify(require('../package.json')['version']);
 const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
@@ -143,7 +144,13 @@ module.exports = function () {
          */
         {
           test: /\.scss$/,
-          loader: ['raw-loader', 'css-loader', 'sass-loader'],
+          loader: ['raw-loader', 'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true,
+                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+            }
+          }, 'sass-loader'],
           exclude: [helpers.root('src/index.html')]
         },
 

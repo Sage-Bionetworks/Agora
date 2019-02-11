@@ -21,6 +21,7 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const rxPaths = require('rxjs/_esm2015/path-mapping');
+const autoprefixer = require('autoprefixer');
 
 const buildUtils = require('./build-utils');
 
@@ -126,14 +127,12 @@ module.exports = function (options) {
         ...ngcWebpackConfig.loaders,
 
         /**
-         * To string and css loader support for *.css files (from Angular components)
-         * Returns file content as string
-         *
+         * Extract CSS files from .src/styles directory to external CSS file
          */
         {
           test: /\.css$/,
           use: ['to-string-loader', 'css-loader'],
-          exclude: [helpers.root('src', 'styles')]
+          include: [helpers.root('src', 'styles')]
         },
 
         /**
@@ -143,7 +142,13 @@ module.exports = function (options) {
          */
         {
           test: /\.scss$/,
-          use: ['to-string-loader', 'css-loader', 'sass-loader'],
+          use: ['to-string-loader', 'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true,
+                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+            }
+          }, 'sass-loader'],
           exclude: [helpers.root('src', 'styles')]
         },
 

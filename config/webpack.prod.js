@@ -17,9 +17,11 @@ const commonConfig = require('./webpack.common.js');
  * Webpack Plugins
  */
 
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 /***
  * Ref: https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
@@ -119,7 +121,7 @@ module.exports = function (env) {
          */
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
           include: [helpers.root('src', 'styles')]
         },
 
@@ -128,7 +130,13 @@ module.exports = function (env) {
          */
         {
           test: /\.scss$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true,
+                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+            }
+          }, 'sass-loader'],
           include: [helpers.root('src', 'styles')]
         },
       ]
@@ -164,7 +172,14 @@ module.exports = function (env) {
      */
     plugins: [
       new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
-      new HashedModuleIdsPlugin()
+      new HashedModuleIdsPlugin(),
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          postcss: [
+            autoprefixer()
+          ]
+        }
+      })
     ],
 
     /**
