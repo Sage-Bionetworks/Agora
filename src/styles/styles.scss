@@ -836,11 +836,11 @@ p-dialog {
         }
 
         tr:nth-child(even) {
-            background: #fafafb;
+            background: $table-row-even;
         }
 
         tr:nth-child(odd) {
-            background: #FFF
+            background: $table-row-odd;
         }
     }
 }

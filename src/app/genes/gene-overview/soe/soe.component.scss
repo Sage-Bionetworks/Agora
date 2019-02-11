@@ -7,11 +7,11 @@
     }
 
     .ui-table .ui-table-tbody > tr {
-        background-color: #fafafb;
+        background-color: $table-row-even;
     }
 
     .ui-table .ui-table-tbody > tr:nth-child(even) {
-        background-color: #ffffff;
+        background-color: $table-row-odd;
     }
 
     .ui-table-thead {

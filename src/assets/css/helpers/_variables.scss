@@ -105,6 +105,8 @@ $info-circle-color: #9DA3B3;
 $span-color: #3C4A63;
 $menu-dark: #3C4A63;
 $menu-inactive: rgba(255, 255, 255, 0.05);
+$table-row-odd: $background;
+$table-row-even: #fafafb;
 
 $breakpoints: (
     'ex-small': (max-width: 600px),

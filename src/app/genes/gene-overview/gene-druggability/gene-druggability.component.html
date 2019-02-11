@@ -21,7 +21,16 @@
         <tr>
             <td *ngFor="let col of columns; let j = index;">
                 <ng-container *ngIf="j !== 0">
-                    <span [ngClass]="'dg-value-text'">{{rowData[col.field]}}</span>
+                    <td *ngIf="i === 0" class="img-td">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket)">
+                            <div>{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <span *ngIf="i === 0" [ngClass]="'dg-value-title'">{{getDruggabilityTitle(geneInfo.druggability[0].sm_druggability_bucket)}}</span>
+                        <br *ngIf="i === 0">
+                        <span [ngClass]="'dg-value-text'">{{rowData[col.field]}}</span>
+                    </td>
                 </ng-container>
                 <ng-container *ngIf="j === 0">
                     <span [ngClass]="'dg-property-text'">{{rowData[col.field]}}</span>
