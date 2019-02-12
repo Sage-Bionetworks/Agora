@@ -1,13 +1,9 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.me-dialog {
+.dg-dialog {
     .ui-dialog {
         max-height: 90% !important;
-    }
-
-    .ui-dialog-titlebar {
-        padding-bottom: 73px !important;
     }
 
     .ui-dialog-content {
@@ -15,7 +11,6 @@
         padding-bottom: 132px !important;
         padding-left: 6% !important;
         padding-right: 6% !important;
-
     }
 
     .first-bp-dia-row {
@@ -27,12 +22,13 @@
     }
 
     .ui-dialog-titlebar-icon {
+
         cursor: pointer;
 
         :hover {
-        border-color: color(li, border-color-default);
-        background-color: $tertiary-background;
-        color: color(text, primary);
+            border-color: color(li, border-color-default);
+            background-color: $background;
+            color: color(text, primary);
         }
     }
 }

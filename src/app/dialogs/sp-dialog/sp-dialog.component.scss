@@ -6,8 +6,9 @@
         max-height: 90% !important;
     }
 
-    .ui-dialog-titlebar {
-        padding-bottom: 73px !important;
+    .header-span {
+        @include lato-font('bold');
+        color: color(text, title);
     }
 
     .ui-dialog-content {

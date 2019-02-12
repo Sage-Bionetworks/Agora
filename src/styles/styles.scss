@@ -146,7 +146,6 @@ p-dialog {
             left: 10% !important;
         }
 
-        // max-width: 80%;
         top: 109px;
         max-height: 80%;
         overflow: auto;
@@ -154,6 +153,7 @@ p-dialog {
     }
 
     .ui-dialog-titlebar {
+        padding-bottom: 39px !important;
         @include lato-font('bold');
 
         padding-top: 59px !important;;

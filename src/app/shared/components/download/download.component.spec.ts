@@ -109,16 +109,4 @@ describe('Component: Download', () => {
         const aEl = fixture.debugElement.queryAll(By.css('p-checkbox'));
         expect(aEl.length).toEqual(1);
     });
-
-    it('should have a button', () => {
-        const img = fixture.debugElement.nativeElement.querySelector('img');
-        img.click();
-        fixture.detectChanges();
-
-        const el = fixture.debugElement.query(By.css('p-button'));
-        expect(el).toBeDefined();
-
-        const aEl = fixture.debugElement.queryAll(By.css('p-button'));
-        expect(aEl.length).toEqual(1);
-    });
 });

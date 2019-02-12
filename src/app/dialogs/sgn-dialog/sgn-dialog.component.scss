@@ -6,8 +6,11 @@
         max-height: 90% !important;
     }
 
-    h1{
+    h1 {
         text-align-last: auto;
+        @include lato-font('bold');
+        font-size: 24px !important;
+        color: color(text, title);
     }
 
     .ui-dialog-content {

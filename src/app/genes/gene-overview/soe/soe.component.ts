@@ -62,15 +62,22 @@ export class SOEComponent implements OnInit {
                 property: 'Gene Ontology',
                 state: true,
                 hasLink: true,
-                extraText: 'View Gene Ontology',
+                extraText: 'Visit Ensembl',
                 command: (event) => this.viewGeneOntology()
             },
             {
                 property: 'Reactome Pathways',
                 state: true,
                 hasLink: true,
-                extraText: 'View Reactome Pathways',
+                extraText: 'Visit Ensembl',
                 command: (event) => this.viewPathways()
+            },
+            {
+                property: 'Evidence for AD Association',
+                state: true,
+                hasLink: true,
+                extraText: 'Visit Open Targets',
+                command: (event) => this.viewHallmarks()
             },
             {
                 property: 'Cell Type Specificity',
@@ -80,10 +87,9 @@ export class SOEComponent implements OnInit {
             },
             {
                 property: 'Association with Hallmarks of AD',
-                state: true,
-                hasLink: true,
-                extraText: 'View Hallmarks of AD',
-                command: (event) => this.viewHallmarks()
+                state: false,
+                hasLink: false,
+                extraText: 'Coming Soon'
             },
             {
                 property: 'Protein Expression Change in AD Brain',
@@ -141,14 +147,8 @@ export class SOEComponent implements OnInit {
     }
 
     viewHallmarks() {
-        this.apiService.getHallmarkEFO(this.gene.ensembl_gene_id).subscribe((data) => {
-            console.log(data);
-            if (data && data.data && data.data.length > 0 && data.data[0].disease.id) {
-                window.open('https://www.targetvalidation.org/evidence/' +
-                    this.gene.ensembl_gene_id + '/' +
-                    data.data[0].disease.id, '_blank'
-                );
-            }
-        });
+        window.open('https://www.targetvalidation.org/evidence/' +
+            this.gene.ensembl_gene_id + '/EFO_0000249', '_blank'
+        );
     }
 }

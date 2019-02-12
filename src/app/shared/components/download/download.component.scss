@@ -49,9 +49,11 @@
         padding-left: 19px;
         padding-right: 19px;
         padding-top: 12px;
-        padding-bottom: 12px;
+        padding-bottom: 11px;
         color: $background;
         background: $secondary-background;
+        @include lato-font('bold');
+        font-size: $font-size-x-regular;
     }
 
     p-checkbox {
