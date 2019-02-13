@@ -30,6 +30,11 @@ export class GeneDruggabilityComponent implements OnInit {
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
 
+        this.initSummary();
+        this.initCols();
+    }
+
+    initSummary() {
         this.summary = [
             {
                 property: 'Small Molecule Druggability Bucket',
@@ -51,7 +56,9 @@ export class GeneDruggabilityComponent implements OnInit {
                     'No Data' : this.geneInfo.druggability[0].pharos_class
             }
         ];
+    }
 
+    initCols() {
         this.cols = [
             { field: 'property', header: 'Property' },
             { field: 'value', header: 'Value' }
