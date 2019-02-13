@@ -68,10 +68,12 @@ describe('Component: Download', () => {
         expect(component.overlayPanel.visible).toEqual(false);
     }));
 
-    it('should have an img element', () => {
+    it('should have a download img element', () => {
         const el = fixture.debugElement.query(By.css('img'));
         expect(el).toBeDefined();
+        expect(el.nativeElement.classList).toContain('download-img');
 
+        // Only one img before opening the overlayPanel
         const aEl = fixture.debugElement.queryAll(By.css('img'));
         expect(aEl.length).toEqual(1);
     });

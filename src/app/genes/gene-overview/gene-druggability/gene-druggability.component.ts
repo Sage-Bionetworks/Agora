@@ -35,12 +35,10 @@ export class GeneDruggabilityComponent implements OnInit {
                 property: 'Small Molecule Druggability Bucket',
                 value: (this.geneInfo.druggability[0].sm_druggability_bucket === undefined) ?
                     'No Data' :
-                    this.getDruggabilityText(this.geneInfo.druggability[0].sm_druggability_bucket)
-            },
-            {
-                property: 'Classification',
-                value: (this.geneInfo.druggability[0].classification === undefined) ?
-                    'No Data' : this.geneInfo.druggability[0].classification
+                    // this.getDruggabilityText(
+                    //    this.geneInfo.druggability[0].sm_druggability_bucket
+                    // )
+                    this.geneInfo.druggability[0].classification
             },
             {
                 property: 'Druggable Class',

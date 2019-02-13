@@ -49,7 +49,6 @@ describe('Component: GeneOverview', () => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneOverviewComponent,
-                MockComponent(GeneOverviewComponent),
                 MockComponent(TabMenu),
                 MockComponent(LoadingComponent)
             ],

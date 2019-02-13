@@ -22,25 +22,26 @@ import * as browserUpdate from 'browser-update';
 export class AppComponent implements OnInit {
     name = 'Agora';
     showDevModule: boolean = environment.showDevModule;
+    buParams: any = {
+        required: {
+            e: -2,
+            i: 11,
+            f: -3,
+            o: -3,
+            s: 10.1,
+            c: '64.0.3282.16817',
+            samsung: 7.0,
+            vivaldi: 1.2
+        },
+        insecure: true
+    };
 
     constructor(
         private router: Router
     ) {}
 
     ngOnInit() {
-        browserUpdate({
-            required: {
-                e: -2,
-                i: 11,
-                f: -3,
-                o: -3,
-                s: 10.1,
-                c: '64.0.3282.16817',
-                samsung: 7.0,
-                vivaldi: 1.2
-            },
-            insecure: true
-        });
+        this.initBrowserUpdate(browserUpdate, this.buParams);
 
         this.router.events.subscribe((evt) => {
             if (!(evt instanceof NavigationEnd)) {
@@ -48,5 +49,9 @@ export class AppComponent implements OnInit {
             }
             window.scrollTo(0, 0);
         });
+    }
+
+    initBrowserUpdate(bu: any, bup: any) {
+        bu(bup);
     }
 }
