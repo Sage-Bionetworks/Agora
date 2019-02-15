@@ -137,14 +137,14 @@ describe('Component: GeneSearch', () => {
         const errorObj = {
             status: 404
         };
-        spyOn(component, 'search').and.callFake((queryString: string) => {
+        const sSpy = spyOn(component, 'search').and.callFake((queryString: string) => {
             if (queryString === '!') {
                 return throwError(errorObj);
             } else {
                 of([mockInfo1]);
             }
         });
-        spyOn(component, 'initQueryField').and.callThrough();
+        const iqfSpy = spyOn(component, 'initQueryField').and.callThrough();
         component.initQueryField();
         component.queryField.valueChanges.subscribe(async (data) => {
             expect(data).toEqual('!');
@@ -152,6 +152,8 @@ describe('Component: GeneSearch', () => {
                 // There shouldn't be anything here
             }, (error) => {
                 expect(error).toEqual(errorObj);
+                expect(sSpy).toHaveBeenCalled();
+                expect(iqfSpy).toHaveBeenCalled();
 
                 // Without this both subscriptions stay in queue, leading
                 // to an error when testing
