@@ -3,11 +3,13 @@ import {
     ComponentFixture,
     TestBed,
     fakeAsync,
-    tick
+    tick,
+    discardPeriodicTasks
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import {
     RouterStub,
@@ -21,7 +23,7 @@ import { GeneSearchComponent } from './gene-search.component';
 
 import { ApiService, GeneService, NavigationService } from '../../core/services';
 
-import { of, empty, Observable } from 'rxjs';
+import { of, empty, Observable, throwError } from 'rxjs';
 
 import { ProgressSpinner } from 'primeng/progressspinner';
 
@@ -34,6 +36,9 @@ describe('Component: GeneSearch', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                ReactiveFormsModule
+            ],
             declarations: [
                 GeneSearchComponent,
                 MockComponent(ProgressSpinner)
@@ -128,7 +133,39 @@ describe('Component: GeneSearch', () => {
         }); // search an empty gene id
     }));
 
-    it('should search for a typed gene', fakeAsync(() => {
+    it('should throw an error for invalid genes', fakeAsync(() => {
+        const errorObj = {
+            status: 404
+        };
+        spyOn(component, 'search').and.callFake((queryString: string) => {
+            if (queryString === '!') {
+                return throwError(errorObj);
+            } else {
+                of([mockInfo1]);
+            }
+        });
+        spyOn(component, 'initQueryField').and.callThrough();
+        component.initQueryField();
+        component.queryField.valueChanges.subscribe(async (data) => {
+            expect(data).toEqual('!');
+            await component.search(data).subscribe((sd) => {
+                // There shouldn't be anything here
+            }, (error) => {
+                expect(error).toEqual(errorObj);
+
+                // Without this both subscriptions stay in queue, leading
+                // to an error when testing
+                discardPeriodicTasks();
+            });
+        }); // search an invalid gene id
+
+        const el = fixture.debugElement.query(By.css('input'));
+        el.nativeElement.value = '!';
+        el.nativeElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+    }));
+
+    it('should search for a non-empty gene', fakeAsync(() => {
         const dsSpy = spyOn(apiService, 'getInfosMatchId').and.returnValue(
             of([mockInfo1])
         );

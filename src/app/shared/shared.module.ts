@@ -40,7 +40,7 @@ import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 import * as Rollbar from 'rollbar';
 
 const rollbarConfig = {
-    accessToken: '4c63d90456aa4ae8a76598195c420cf6',
+    accessToken: 'e788198867474855a996485580b08d03',
     captureUncaught: true,
     captureUnhandledRejections: true
 };

@@ -6,9 +6,8 @@
         max-height: 90% !important;
     }
 
-    .header-span {
-        @include lato-font('bold');
-        color: color(text, title);
+    .top-row {
+        padding-bottom: 20px;
     }
 
     .ui-dialog-content {

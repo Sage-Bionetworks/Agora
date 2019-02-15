@@ -10,8 +10,8 @@ import {
 } from '../../core/services';
 
 // Updating to rxjs 6 import statement
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Observable, empty } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { Observable, empty, throwError } from 'rxjs';
 
 @Component({
     selector: 'gene-search',
@@ -37,6 +37,10 @@ export class GeneSearchComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.initQueryField();
+    }
+
+    initQueryField() {
         this.queryField.valueChanges
             .pipe(
                 debounceTime(300),
@@ -50,7 +54,8 @@ export class GeneSearchComponent implements OnInit {
                         this.results = [];
                         return empty();
                     }
-                })
+                }),
+                catchError((err) => throwError(err))
             )
             // If you add a complete callback, it is never called here
             .subscribe((data: GeneInfosResponse) => {
@@ -63,13 +68,18 @@ export class GeneSearchComponent implements OnInit {
                     this.results = (data.items) ? data.items : [];
                 }
             }, (error) => {
+                this.queryField = new FormControl();
+                this.results = [];
+                this.initQueryField();
                 this.isSearching = false;
             });
     }
 
     search(queryString: string): Observable<any> {
         if (queryString) {
-            return this.apiService.getInfosMatchId(queryString);
+            const response = this.apiService.getInfosMatchId(queryString);
+            console.log(response);
+            return response;
         } else {
             this.isSearching = false;
             return empty();

@@ -384,17 +384,21 @@ connection.once('open', () => {
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) {
-            res.json({ items: [], isEnsembl });
+            res.status(404).send('Not found');
         } else {
             GenesInfo.find(queryObj).exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);
                     } else {
-                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                        res.setHeader('Pragma', 'no-cache');
-                        res.setHeader('Expires', 0);
-                        res.json({ items: geneInfos, isEnsembl });
+                        if (geneInfos.length === 0) {
+                            res.status(404).send('Not found');
+                        } else {
+                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                            res.setHeader('Pragma', 'no-cache');
+                            res.setHeader('Expires', 0);
+                            res.json({ items: geneInfos, isEnsembl });
+                        }
                     }
                 });
         }
@@ -439,7 +443,7 @@ connection.once('open', () => {
             if (env === 'development') {
                 console.log('no id');
             }
-            res.json({ item: null });
+            res.status(404).send('Not found');
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };

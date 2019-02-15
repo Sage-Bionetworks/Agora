@@ -44,6 +44,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     }
                     errorMessage = errorMessage + '\n' + errorSummary;
 
+                    // Displays error message on screen
                     self.messageService.clear();
                     self.messageService.add({
                         severity: 'error',
@@ -53,6 +54,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                         life: 3000
                     });
 
+                    // Send the error message to Rollbar
                     rollbar.error(error);
                     return throwError({ errorSummary, errorMessage });
                 })

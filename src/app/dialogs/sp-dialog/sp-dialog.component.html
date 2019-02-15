@@ -1,12 +1,21 @@
 <div class="ui-rtl" dir="rtl">
-    <p-dialog header="" [(visible)]="display" [modal]="true" [responsive]="true" [minY]="256"
+    <p-dialog header="Similar Genes" [(visible)]="display" [modal]="true" [responsive]="true" [minY]="256"
     [baseZIndex]="10000" [styleClass]="'sp-dialog'" [ngStyle]="{'minWidth': 330}">
+        <div class="row content-row top-row" dir="ltr">
+            <div class="col-md-12 col-sm-12 col-12">
+                <span dir="ltr">
+                    This table shows a list of genes that show similarity to the selected gene based on coexpression network analysis. The other fields in the table are as follows:
+                </span>
+            </div>
+        </div>
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
-                    Nominated:
+                    Nominated Target:
                 </span>
-                &nbsp;Indicates whether this gene has been nominated by the AMP-AD consortium as a nascent target for AD treatment.
+                <span dir="ltr">
+                    Indicates whether this gene has been nominated by the AMP-AD consortium as a nascent target for AD treatment.
+                </span>
             </div>
         </div>
         <div class="row content-row" dir="ltr">
@@ -14,23 +23,29 @@
                 <span class="header-span" dir="ltr">
                     Brain eQTL:
                 </span>
-                &nbsp;Significant expression Quantitative Trait Locus (eQTL) based on AMP-AD consortium unpublished work.
+                <span>
+                    Significant expression Quantitative Trait Locus (eQTL) based on AMP-AD consortium unpublished work.
+                </span>
             </div>
         </div>
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
-                    Genetic Association:
+                    Genetic Association with LOAD:
                 </span>
-                &nbsp;Significant genetic association with Late Onset AD (LOAD) based on the International Genomics of Alzheimer's Project (IGAP) genome-wide association study.
+                <span>
+                    Significant genetic association with Late Onset AD (LOAD) based on the International Genomics of Alzheimer's Project (IGAP) genome-wide association study.
+                </span>
             </div>
         </div>
         <div class="row content-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12">
                 <span class="header-span" dir="ltr">
-                    Druggability:
+                    Druggability Bucket:
                 </span>
-                &nbsp;Targets have been scored for likely suitability for small-molecule drugs (SM ligandability) in a multi-step process. In brief, targets are placed into buckets that are ordered according to preference for small-molecule (SM) drug development, with smaller bucket numbers being generally accepted as easier or more likely to result in successful drug development than larger numbered buckets.
+                <span>
+                    Targets have been scored for likely suitability for small-molecule drugs (SM ligandability) in a multi-step process. In brief, targets are placed into buckets that are ordered according to preference for small-molecule (SM) drug development, with smaller bucket numbers being generally accepted as easier or more likely to result in successful drug development than larger numbered buckets.
+                </span>
             </div>
         </div>
         <div class="row content-row" dir="ltr">
@@ -38,7 +53,9 @@
                 <span class="header-span" dir="ltr">
                     Pharos Class:
                 </span>
-                &nbsp;This indicates the <q>Development Level</q> of the selected target as classified by Pharos Targets are assigned a classification related to the amount of knowledge about the target, where Tclin > Tchem > Tbio > Tdark. Targets categorized as Tclin have approved drugs with known mechanisms of action, whereas targets categorized as Tdark have virtually nothing is known about them.
+                <span>
+                    This indicates the Development Level of the selected target as classified by Pharos Targets are assigned a classification related to the amount of knowledge about the target, where Tclin > Tchem > Tbio > Tdark. Targets categorized as Tclin have approved drugs with known mechanisms of action, whereas targets categorized as Tdark have virtually nothing is known about them.
+                </span>
             </div>
         </div>
     </p-dialog>
