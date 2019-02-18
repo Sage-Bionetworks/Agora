@@ -6,13 +6,13 @@ import {
     mockGeneStatistics,
     mockDataLink1,
     mockDataLink2,
-    mockInfo1
-} from './gene-mocks';
-import { mockTeam1 } from './team-info-mocks';
+    mockInfo1,
+    mockTeam1
+} from '../testing';
 
-import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse } from '../models';
+import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse, TeamMember } from '../models';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, empty } from 'rxjs';
 
 @Injectable()
 export class ApiServiceStub {
@@ -53,6 +53,10 @@ export class ApiServiceStub {
 
     getAllTeams(): Observable<object> {
         return of([mockTeam1]);
+    }
+
+    getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
+        return of([]);
     }
 
     refreshChart(filter: any, id: string): Observable<any> {

@@ -50,17 +50,29 @@ export class ContribTeamsPageComponent implements OnInit {
             data = this.orderBy.transform(data, ['team']);
             data.forEach((ti, i) => {
                 this.teamsImageURLs[i] = [];
+
+                // Reorder all the teamInfos based on the primary investigator.
+                // This call is for the images order in particular
+                this.reorderTeamInfo(ti);
+
                 this.teamsImages[i] = this.loadMembers(ti.members, i);
             });
             // With the images in order we need to update the async
             // array that has the info or the images will be correct
             // but the teams will be in the original order
             this.obsTeams = this.obsTeams.pipe(
-                map((ti: TeamInfo[]) => {
-                    ti.sort((a, b) => {
+                map((tis: TeamInfo[]) => {
+                    // Order the team infos based on crescent alphabetical order
+                    tis.sort((a, b) => {
                         return a.team.toLowerCase() < b.team.toLowerCase() ? -1 : 1;
                     });
-                    return ti;
+                    tis.forEach((ti) => {
+                        // Reorder all the teamInfos based on the primary investigator.
+                        // This call is for the displayed names order in particular
+                        this.reorderTeamInfo(ti);
+                    });
+
+                    return tis;
                 })
             );
         }, (error) => {
@@ -79,11 +91,31 @@ export class ContribTeamsPageComponent implements OnInit {
             }));
         }
         const memberNames: TeamMember[] = members.map((m) => {
-            return { name: m.name, isprimaryinvestigator: false };
+            return { name: m.name, isprimaryinvestigator: m.isprimaryinvestigator };
         });
 
         // Request member images in parallel
         return this.apiService.getTeamMemberImages(memberNames);
+    }
+
+    findPrimaryIndex(members: TeamMember[]): number {
+        return members.findIndex((mn) => {
+            return mn.isprimaryinvestigator === true;
+        });
+    }
+
+    // Reorders the team info based on the primary investigator
+    reorderTeamInfo(ti: TeamInfo) {
+        this.reorderPrimaryInvestigator(ti.members, this.findPrimaryIndex(ti.members), 0);
+    }
+
+    // Helper method to move the primary investigator to the first position
+    // in the memberNames array
+    reorderPrimaryInvestigator(memberNames: TeamMember[], from: number, to: number): TeamMember[] {
+        // Only reorder the members of a team if we have a primary investigator
+        if (from !== -1 && to !== -1) {
+            return memberNames.splice(to, 0, memberNames.splice(from, 1)[0]);
+        }
     }
 
     getImageUrl(rawImage: object, teamImages: object[], i: number, j: number): SafeStyle {

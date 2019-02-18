@@ -21,3 +21,23 @@ export const mockTeam1: TeamInfo = {
         }
     ]
 };
+
+export const mockTeam2: TeamInfo = {
+    team: 'Harvard-MIT',
+    description: 'The Harvard-MIT team, lead by Bruce Yankner and Li-Huei Tsai, focuses ' +
+        'on elucidating the regulatory role of the REST network in protecting aging neurons ' +
+        'from age-related stressors, reducing neuroinflammation and preserving cognitive ' +
+        'function.',
+    members: [
+        {
+            name: 'Bruce Yankner',
+            isprimaryinvestigator: true,
+            url: 'http://www.hms.harvard.edu/dms/neuroscience/fac/yankner.php'
+        },
+        {
+            name: 'Li-Hue Tsai',
+            isprimaryinvestigator: true,
+            url: 'http://tsailaboratory.mit.edu/li-huei-tsai/'
+        }
+    ]
+};
