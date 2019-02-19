@@ -35,6 +35,10 @@
         margin-top: 0;
     }
 
+    .desired-width {
+        max-width: 80ch;
+    }
+
     .members-row {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -43,13 +47,18 @@
         .member-thumb {
             text-align: center;
         }
+
+        .member-url {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
         h3 {
             text-align: center;
             font-size: 16px;
             color: $brand-color-content;
         }
     }
-
 
     .member-img {
         width: 86px;

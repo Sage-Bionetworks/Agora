@@ -141,4 +141,14 @@ export class ContribTeamsPageComponent implements OnInit {
     toTitleCase(index: number, field: string): string {
         return this.titleCase.transform(this.ntInfoArray[index][field]);
     }
+
+    getInvestigatorClass(member: TeamMember) {
+        return member.url ? 'member-url' : '';
+    }
+
+    openInvestigatorURL(member: TeamMember) {
+        if (member.url) {
+            window.open(member.url, '_blank');
+        }
+    }
 }

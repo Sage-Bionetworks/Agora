@@ -149,7 +149,7 @@
     "@types/d3": "^5.0.1",
     "@types/d3-shape": "^1.2.6",
     "@types/hammerjs": "^2.0.36",
-    "@types/jasmine": "^3.3.1",
+    "@types/jasmine": "^3.3.9",
     "@types/mongodb": "^3.1.17",
     "@types/mongoose": "^5.3.3",
     "@types/node": "^10.12.12",
