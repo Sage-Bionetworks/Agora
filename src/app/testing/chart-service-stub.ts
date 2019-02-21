@@ -59,11 +59,23 @@ export class ChartServiceStub {
     addChartName(name: string) {
         if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
 
-        if (this.allChartsLoaded()) { this.chartsReadySource.next(true); }
+        if (this.allChartsLoaded()) {
+            this.chartsReadySource.next(true);
+        } else {
+            this.chartsReadySource.next(false);
+        }
     }
 
     allChartsLoaded() {
-        return true;
+        let loaded = true;
+        for (const value of this.chartNames.values()) {
+            if (!value) {
+                loaded = false;
+                break;
+            }
+        }
+
+        return loaded;
     }
 
     getChartInfo(label: string): any {
@@ -81,6 +93,10 @@ export class ChartServiceStub {
             dc.chartRegistry.deregister(chart);
             chart.resetSvg();
         }
+    }
+
+    removeChartName(name: string) {
+        //
     }
 
     getTooltipText(text: string): string {

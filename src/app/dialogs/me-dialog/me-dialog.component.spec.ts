@@ -53,6 +53,7 @@ describe('Component: MEDialog', () => {
     });
 
     it('should have a dialog element', () => {
+        component.display = true;
         const el = fixture.debugElement.query(By.css('p-dialog'));
         expect(el).toBeDefined();
 

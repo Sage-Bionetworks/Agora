@@ -86,7 +86,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
         // If we move away from the overview page, remove
         // the charts
-        this.router.events.subscribe((event) => {
+        this.routerSubscription = this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
                 this.removeSelf();
             }
@@ -136,7 +136,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const self = this;
         this.info = this.chartService.getChartInfo(this.label);
 
-        const fpDim = {
+        this.dim = {
             filter: () => {
                 //
             },
@@ -144,8 +144,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 //
             }
         };
-
-        const fpGroup = {
+        this.group = {
             all() {
                 return self.chartService.filteredData['fpGroup'].values;
             },
@@ -156,9 +155,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 //
             }
         };
-
-        this.dim = fpDim;
-        this.group = fpGroup;
 
         this.title = this.info.title;
         this.getChartPromise().then((chart) => {

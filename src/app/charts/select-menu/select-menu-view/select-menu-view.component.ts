@@ -175,12 +175,16 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     }
 
     removeSelf() {
-        d3.selectAll('.select-selected, .select-items.select-hide').html(null);
-        this.removeChart();
-        if (this.routerSubscription) {
-            this.routerSubscription.unsubscribe();
+        const selection: d3.Selection<d3.BaseType, {}, HTMLElement, any> =
+            d3.selectAll('.select-selected, .select-items.select-hide');
+        if (!selection.empty()) {
+            selection.html(null);
+            this.removeChart();
+            if (this.routerSubscription) {
+                this.routerSubscription.unsubscribe();
+            }
+            this.geneService.setEmptyGeneState(true);
         }
-        this.geneService.setEmptyGeneState(true);
     }
 
     multivalueFilter(values) {
@@ -363,20 +367,23 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
                 // When an item is clicked, update the original select box,
                 // and the selected item
-                const s = this.parentNode.parentNode
-                    .parentNode['getElementsByTagName']('select')[0];
-                const h = this.parentNode.previousSibling;
-                for (let i = 0; i < s.length; i++) {
-                    if (s.options[i].innerHTML === this.innerHTML) {
-                        s.selectedIndex = i;
-                        h['innerHTML'] = this.innerHTML;
-                        const y = this.parentNode['getElementsByClassName']('same-as-selected');
-                        y[0].removeAttribute('class');
-                        this.setAttribute('class', 'same-as-selected');
-                        break;
+                if (this && this.parentNode) {
+                    const s = this.parentNode.parentNode
+                        .parentNode['getElementsByTagName']('select')[0];
+                    const h = this.parentNode.previousSibling;
+                    for (let i = 0; i < s.length; i++) {
+                        if (s.options[i].innerHTML === this.innerHTML) {
+                            s.selectedIndex = i;
+                            h['innerHTML'] = this.innerHTML;
+                            const y = this.parentNode['getElementsByClassName']('same-as-selected');
+                            y[0].removeAttribute('class');
+                            this.setAttribute('class', 'same-as-selected');
+                            break;
+                        }
                     }
+                    h['click']();
                 }
-                h['click']();
+                // Add error here
             });
             b.appendChild(c);
         }

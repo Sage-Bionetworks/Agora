@@ -41,7 +41,11 @@ export class ChartService {
     addChartName(name: string) {
         if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
 
-        if (this.allChartsLoaded()) { this.chartsReadySource.next(true); }
+        if (this.allChartsLoaded()) {
+            this.chartsReadySource.next(true);
+        } else {
+            this.chartsReadySource.next(false);
+        }
     }
 
     removeChartName(name: string) {

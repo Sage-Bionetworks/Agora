@@ -6,6 +6,7 @@ import {
     tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { SpyLocation } from '@angular/common/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -36,7 +37,7 @@ describe('Component: SelectMenuView', () => {
     let chartService: ChartServiceStub;
     let apiService: ApiServiceStub;
     let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
+    let location: SpyLocation;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -52,7 +53,7 @@ describe('Component: SelectMenuView', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: SpyLocation, useValue: new SpyLocation() }
             ]
         })
         .compileComponents();
@@ -66,15 +67,18 @@ describe('Component: SelectMenuView', () => {
         chartService = fixture.debugElement.injector.get(ChartService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+        location = fixture.debugElement.injector.get(SpyLocation);
 
         component = fixture.componentInstance; // Component test instance
+        component.columnName = '';
+        component.defaultValue = '';
     }));
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should call init if a label is present', () => {
+    it('should get label and call init if there is no label', () => {
         const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
         const icSpy = spyOn(component, 'initChart').and.callThrough();
 
@@ -82,12 +86,62 @@ describe('Component: SelectMenuView', () => {
         component.ngOnInit();
         fixture.detectChanges();
         expect(oiSpy).toHaveBeenCalled();
-        component.label = 'select-menu';
+        expect(icSpy).toHaveBeenCalled();
+    });
 
+    it('should call init if a label is present', () => {
+        const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
+        const icSpy = spyOn(component, 'initChart').and.callThrough();
+
+        component.label = 'select-menu';
         component.ngOnInit();
         fixture.detectChanges();
 
         expect(oiSpy).toHaveBeenCalled();
         expect(icSpy).toHaveBeenCalled();
+    });
+
+    it('should remove chart on navigation start', () => {
+        const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
+        const rnSpy = spyOn(router, 'navigate').and.callThrough();
+        router.events = router.asObs;
+        component.ngOnInit();
+        router.navigate(['/']);
+        fixture.detectChanges();
+        expect(rsSpy).toHaveBeenCalled();
+        expect(rnSpy).toHaveBeenCalled();
+    });
+
+    it('should remove chart on location pop state', () => {
+        // spyOn(component, 'ngOnInit').and.callThrough();
+        const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
+        // location.go('/genes');
+        component.ngOnInit();
+        location.subscribe((value: any) => {
+            // Since onPopState from PlatformLocation is not triggered
+            // we manually remove the charts if we receive a popstate
+            expect(value.type).toEqual('popstate');
+            if (value.type === 'popstate') {
+                component.removeSelf();
+            }
+
+            expect(rsSpy).toHaveBeenCalled();
+        });
+        fixture.detectChanges();
+        location.simulateUrlPop('/genes');
+    });
+
+    it('should not remove chart if there is no chart', () => {
+        const csrcSpy = spyOn(chartService, 'removeChart').and.callThrough();
+        const csrcnSpy = spyOn(chartService, 'removeChartName').and.callThrough();
+        const gsspgSpy = spyOn(geneService, 'setPreviousGene').and.callThrough();
+        const rcSpy = spyOn(component, 'removeChart').and.callThrough();
+        component.chart = null;
+        component.removeChart();
+        fixture.detectChanges();
+        expect(rcSpy).toHaveBeenCalled();
+        expect(csrcSpy).not.toHaveBeenCalled();
+        expect(csrcnSpy).not.toHaveBeenCalled();
+        expect(gsspgSpy).not.toHaveBeenCalled();
     });
 });

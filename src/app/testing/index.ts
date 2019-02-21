@@ -8,6 +8,7 @@ export * from './gene-service-stub';
 export * from './gene-mocks';
 export * from './local-storage-stub';
 export * from './navigation-service-stub';
+export * from './platform-location-stub';
 export * from './router-stub';
 export * from './router-outlet-stub';
 export * from './router-link-stub';

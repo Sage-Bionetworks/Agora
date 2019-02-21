@@ -355,11 +355,14 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 });
 
-            const parentNode = chart.select('g.axis.x').node().parentNode;
-            const xAxisNode = chart.select('g.axis.x').node();
-            const firstChild = parentNode.firstChild;
-            if (firstChild) {
-                parentNode.insertBefore(xAxisNode, firstChild);
+            const selection = chart.select('g.axis.x').node();
+            if (selection !== null) {
+                const parentNode = selection.parentNode;
+                const xAxisNode = selection;
+                const firstChild = parentNode.firstChild;
+                if (firstChild) {
+                    parentNode.insertBefore(xAxisNode, firstChild);
+                }
             }
         } else {
             chart.selectAll('circle').each(function(el, i) {

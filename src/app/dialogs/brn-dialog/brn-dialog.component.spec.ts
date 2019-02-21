@@ -35,8 +35,7 @@ describe('Component: BRNDialog', () => {
         TestBed.configureTestingModule({
             declarations: [
                 BRAinRegionNetworkComponent,
-                MockComponent(Dialog),
-                MockComponent(BRAinRegionNetworkComponent)
+                MockComponent(Dialog)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

@@ -124,6 +124,8 @@ describe('Component: GenesList', () => {
     it('should unselect gene', fakeAsync(() => {
         const gsSpy = spyOn(geneService, 'setCurrentGene');
 
+        component.ngOnInit();
+        fixture.detectChanges();
         component.onRowUnselect({ data: mockInfo1 }); // trigger click on row
         fixture.detectChanges();
         expect(gsSpy.calls.any()).toEqual(true);
