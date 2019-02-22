@@ -73,7 +73,8 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 .force('center', d3.forceCenter(this.width / 2, this.height / 2))
                 .force('collision', d3.forceCollide().radius(function(d) {
                     return 35;
-                }));
+                }))
+                .alphaDecay(0.5);
             this.renderChart();
         }, 300);
     }

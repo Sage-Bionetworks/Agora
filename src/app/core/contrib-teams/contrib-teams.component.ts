@@ -98,24 +98,13 @@ export class ContribTeamsPageComponent implements OnInit {
         return this.apiService.getTeamMemberImages(memberNames);
     }
 
-    findPrimaryIndex(members: TeamMember[]): number {
-        return members.findIndex((mn) => {
-            return mn.isprimaryinvestigator === true;
-        });
-    }
-
     // Reorders the team info based on the primary investigator
     reorderTeamInfo(ti: TeamInfo) {
-        this.reorderPrimaryInvestigator(ti.members, this.findPrimaryIndex(ti.members), 0);
-    }
-
-    // Helper method to move the primary investigator to the first position
-    // in the memberNames array
-    reorderPrimaryInvestigator(memberNames: TeamMember[], from: number, to: number): TeamMember[] {
-        // Only reorder the members of a team if we have a primary investigator
-        if (from !== -1 && to !== -1) {
-            return memberNames.splice(to, 0, memberNames.splice(from, 1)[0]);
-        }
+        ti.members.sort((a, b) => (
+            a.isprimaryinvestigator > b.isprimaryinvestigator) ? -1 :
+            (a.isprimaryinvestigator === b.isprimaryinvestigator) ?
+            ((a.name > b.name) ? 1 : -1) : 1
+        );
     }
 
     getImageUrl(rawImage: object, teamImages: object[], i: number, j: number): SafeStyle {

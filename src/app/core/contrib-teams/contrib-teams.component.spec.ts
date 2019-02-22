@@ -12,9 +12,10 @@ import {
     GeneServiceStub,
     NavigationServiceStub,
     mockTeam1,
-    mockTeam2
+    mockTeam2,
+    mockTeam3
 } from '../../testing';
-import { TeamMember, TeamInfo } from '../../models';
+import { TeamInfo } from '../../models';
 
 import { ApiService, GeneService, NavigationService } from '../services';
 import { OrderBy } from '../../shared/pipes';
@@ -28,7 +29,6 @@ describe('Component: ContribTeamsPage', () => {
     let fixture: ComponentFixture<ContribTeamsPageComponent>;
     let apiService: ApiServiceStub;
     const findTeam: TeamInfo = JSON.parse(JSON.stringify(mockTeam1)) as TeamInfo;
-    const reorderTeam: TeamInfo = JSON.parse(JSON.stringify(mockTeam1)) as TeamInfo;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -58,15 +58,6 @@ describe('Component: ContribTeamsPage', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
-    });
-
-    it('should find the primary investigator index', () => {
-        const rpiSpy = spyOn(component, 'findPrimaryIndex').and.callThrough();
-
-        const piIndex: number = component.findPrimaryIndex(findTeam.members);
-        fixture.detectChanges();
-        expect(piIndex).toEqual(2);
-        expect(rpiSpy).toHaveBeenCalled();
     });
 
     // Had to add these two tests here almost duplicated, Jasmine won't
@@ -146,29 +137,14 @@ describe('Component: ContribTeamsPage', () => {
         // This is needed or else the inplace modification to the mockTeam1 makes
         // the other tests error
         const auxTeam: TeamInfo = JSON.parse(JSON.stringify(mockTeam1)) as TeamInfo;
+        const reorderedTeam: TeamInfo = JSON.parse(JSON.stringify(mockTeam3)) as TeamInfo;
         const rtiSpy = spyOn(component, 'reorderTeamInfo').and.callThrough();
-        const rpiSpy = spyOn(component, 'reorderPrimaryInvestigator').and.callThrough();
-        const fpiSpy = spyOn(component, 'findPrimaryIndex').and.returnValue(2);
 
         component.reorderTeamInfo(auxTeam);
         fixture.detectChanges();
 
         // The mockTeam1 is the Duke team
         expect(rtiSpy).toHaveBeenCalled();
-        expect(rpiSpy).toHaveBeenCalled();
-        expect(fpiSpy).toHaveBeenCalled();
-
-        expect(rpiSpy).toHaveBeenCalledWith(auxTeam.members, 2, 0);
-    });
-
-    it('should reorder the primary investigator', () => {
-        const rpiSpy = spyOn(component, 'reorderPrimaryInvestigator').and.callThrough();
-
-        component.reorderPrimaryInvestigator(reorderTeam.members, 2, 0);
-        fixture.detectChanges();
-        // The mockTeam1 is the Duke team
-        expect(rpiSpy).toHaveBeenCalled();
-        expect(rpiSpy).toHaveBeenCalledWith(reorderTeam.members, 2, 0);
-        expect(reorderTeam.members[0].name).toBe('Rima Kaddurah-Daouk');
+        expect(auxTeam).toEqual(reorderedTeam);
     });
 });

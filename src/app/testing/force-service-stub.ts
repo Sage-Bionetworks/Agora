@@ -1,6 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Gene, GeneNetwork, GeneNetworkLinks, LinksListResponse } from '../models';
+import { GeneService } from 'app/core/services';
+import { GeneServiceStub } from './gene-service-stub';
 
 @Injectable()
 export class ForceServiceStub {
@@ -13,7 +15,7 @@ export class ForceServiceStub {
     dicNodes = [];
     dicLinks = [];
     dicGroup = [];
-    rawData = [];
+    rawData;
     genes: GeneNetwork = {
         links: [],
         nodes: [],
@@ -34,19 +36,13 @@ export class ForceServiceStub {
         this.dicNodes = [];
         this.dicLinks = [];
         this.dicGroup = [];
-        this.genes = {
-            links: [],
-            nodes: [],
-            origin: undefined,
-            filterLvl: 0
-        };
     }
 
     getGenes(): EventEmitter<GeneNetwork> {
         return this.datachange;
     }
 
-    getGeneOriginalList() {
+    getGeneOriginalList(): GeneNetwork {
         if (this.genes.links.length && this.genes.nodes.length) {
             return this.genes;
         }

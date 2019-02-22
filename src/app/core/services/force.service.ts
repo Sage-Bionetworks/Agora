@@ -48,12 +48,6 @@ export class ForceService {
         this.dicNodes = [];
         this.dicLinks = [];
         this.dicGroup = [];
-        this.genes = {
-            links: [],
-            nodes: [],
-            origin: undefined,
-            filterLvl: 0
-        };
     }
 
     emitDataChangeEvent(data: GeneNetwork) {
