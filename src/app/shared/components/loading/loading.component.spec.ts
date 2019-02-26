@@ -1,6 +1,5 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { DomSanitizer, By } from '@angular/platform-browser';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { LoadingComponent } from './';
 
@@ -12,18 +11,6 @@ describe('Component: Loading', () => {
         TestBed.configureTestingModule({
             declarations: [
                 LoadingComponent
-            ],
-            // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
-            // elements and attributes
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [
-                {
-                    provide: DomSanitizer,
-                    useValue: {
-                        sanitize: () => 'safeString',
-                        bypassSecurityTrustHtml: () => 'safeString'
-                    }
-                }
             ]
         })
         .compileComponents();
@@ -37,19 +24,23 @@ describe('Component: Loading', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have the video container', () => {
-        component.videoTag = component.getVideoTag();
-        const el = fixture.debugElement.query(By.css('div'));
-        expect(el).toBeDefined();
-        expect(el.nativeElement.innerHTML).toEqual('');
+    it('should have the spinner HTML elements', () => {
+        const loaderEl = fixture.debugElement.query(By.css('.loader'));
+        expect(loaderEl).toBeDefined();
 
-        fixture.detectChanges();
-        expect(el.nativeElement.innerHTML).toEqual(component.videoTag);
+        const spinnerEl = fixture.debugElement.query(By.css('.spinner'));
+        expect(spinnerEl).toBeDefined();
+
+        const containerEl = fixture.debugElement.query(By.css('.spinner-container'));
+        expect(containerEl).toBeDefined();
+
+        const loaderElArray = fixture.debugElement.queryAll(By.css('.loader'));
+        expect(loaderElArray.length).toEqual(1);
+
+        const spinnerElArray = fixture.debugElement.queryAll(By.css('.spinner'));
+        expect(spinnerElArray.length).toEqual(3);
+
+        const containerElArray = fixture.debugElement.queryAll(By.css('.spinner-container'));
+        expect(containerElArray.length).toEqual(3);
     });
-
-    it('should have the video object', inject([DomSanitizer], (domSanitizer: DomSanitizer) => {
-        fixture.detectChanges();
-
-        expect(component.videoTag).not.toEqual(undefined);
-    }));
 });

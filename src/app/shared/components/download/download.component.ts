@@ -3,7 +3,7 @@ import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/api';
 
-import * as domtoimage from 'dom-to-image';
+import * as domtoimage from 'dom-to-image-more';
 import { saveAs } from 'file-saver';
 
 @Component({

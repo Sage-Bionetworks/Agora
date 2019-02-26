@@ -37,14 +37,6 @@ export class DataService {
         private decimalPipe: DecimalPipe
     ) {}
 
-    getNdx(auxNdx?: boolean): any {
-        return (auxNdx) ? this.rowChartNdx : this.ndx;
-    }
-
-    clearNdx() {
-        this.ndx.remove();
-    }
-
     loadData(gene: Gene): Observable<any[]> {
         const genesResponse = this.apiService.getGenes(gene.hgnc_symbol);
         const nodesResponse = this.apiService.getLinksList(gene);
@@ -74,24 +66,6 @@ export class DataService {
 
     loadGenes(data: GenesResponse) {
         if (data.geneEntries) { this.geneEntries = data.geneEntries; }
-        /*data.items.forEach((d: Gene) => {
-            // Separate the columns we need
-            d.logfc = this.getSignificantValue(+d.logfc, true);
-            d.fc = this.getSignificantValue(+d.fc, true);
-            d.adj_p_val = this.getSignificantValue(+d.adj_p_val, true);
-            d.hgnc_symbol = d.hgnc_symbol;
-            d.model = d.model;
-            d.study = d.study;
-            d.tissue = d.tissue;
-        });
-
-        this.ndx = crossfilter(data.items);
-        this.rowChartNdx = crossfilter(data.items.slice());
-        this.data = data.items;
-
-        this.hgncDim = this.ndx.dimension((d) => {
-            return d.hgnc_symbol;
-        });*/
     }
 
     getGeneEntries(): Gene[] {
@@ -116,41 +90,6 @@ export class DataService {
 
     getGenesDimension(): crossfilter.Dimension<any, any> {
         return this.hgncDim;
-    }
-
-    // Charts crossfilter handling part
-    getDimension(info: any, filterGene?: Gene, auxNdx?: boolean): crossfilter.Dimension<any, any> {
-        const dimValue = info.dimension;
-
-        const dim = ((auxNdx) ? this.getNdx(auxNdx) : this.getNdx()).dimension((d) => {
-            switch (info.type) {
-                case 'forest-plot':
-                    // The key returned
-                    let rvalue: any = '';
-
-                    if (d.hgnc_symbol === filterGene.hgnc_symbol) {
-                        rvalue = d[dimValue[0]];
-                    }
-                    return rvalue;
-                case 'scatter-plot':
-                    const x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
-                    const y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
-
-                    return [x, y, d[dimValue[2]]];
-                case 'box-plot':
-                    return 1;
-                case 'select-menu':
-                    return d[dimValue[0]];
-                default:
-                    return [
-                        Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]],
-                        Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]]
-                    ];
-            }
-        });
-
-        info.dim = dim;
-        return info.dim;
     }
 
     getGroup(info: any, auxDim?: any): crossfilter.Group<any, any, any> {

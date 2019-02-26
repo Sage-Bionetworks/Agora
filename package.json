@@ -134,7 +134,7 @@
     "rollbar": "^2.5.1",
     "rxjs": "^6.3.3",
     "ts-loader": "^5.3.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.29"
   },
   "devDependencies": {
     "@angular-devkit/build-optimizer": "^0.11.1",
@@ -176,7 +176,7 @@
     "dc": "^3.0.9",
     "debug": "^4.1.0",
     "doiuse": "^4.2.0",
-    "dom-to-image": "git://github.com/MichalBryxi/dom-to-image.git",
+    "dom-to-image-more": "^2.7.5",
     "exports-loader": "^0.7.0",
     "expose-loader": "^0.7.5",
     "file-loader": "^2.0.0",

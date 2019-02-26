@@ -1,4 +1,12 @@
-import { Gene, GeneInfo, GeneNetworkLinks, GeneNetwork, GeneStatistics } from '../models';
+import {
+    Gene,
+    GeneInfo,
+    GeneNetworkLinks,
+    GeneNetwork,
+    GeneStatistics,
+    GenesResponse,
+    LinksListResponse
+} from '../models';
 
 export const mockGene1: Gene = {
     _id: '5afa0be1310e7e82fde5112c',
@@ -160,3 +168,20 @@ export const mockModels: string [] = [
     'AD Diagnosis x Sex (females only)',
     'AD Diagnosis x Sex (males only)'
 ];
+
+export const mockGenesResponse: GenesResponse = {
+    items: [mockGene1],
+    geneEntries: [mockGene1, mockGene2],
+    maxFC: Math.max(mockGene1.fc, mockGene2.fc),
+    minFC: Math.min(mockGene1.fc, mockGene2.fc),
+    minLogFC: Math.max(mockGene1.logfc, mockGene2.logfc),
+    maxLogFC: Math.min(mockGene1.logfc, mockGene2.logfc),
+    minAdjPValue: Math.min(mockGene1.adj_p_val, mockGene2.adj_p_val),
+    maxAdjPValue: Math.max(mockGene1.adj_p_val, mockGene2.adj_p_val),
+    geneTissues: mockTissues,
+    geneModels: mockModels
+};
+
+export const mockLinksListResponse: LinksListResponse = {
+    items: [mockDataLink1, mockDataLink2]
+};
