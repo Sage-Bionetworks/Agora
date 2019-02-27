@@ -188,10 +188,10 @@ describe('Component: GeneOverview', () => {
         tick();
         fixture.detectChanges();
 
-        const el = fixture.debugElement.query(By.css('.info-header'));
+        const el = fixture.debugElement.query(By.css('.go-info-header'));
         expect(el).toBeDefined();
 
-        const aEl = fixture.debugElement.queryAll(By.css('.info-header'));
+        const aEl = fixture.debugElement.queryAll(By.css('.go-info-header'));
         expect(aEl.length).toEqual(1);
 
         const dEl = fixture.debugElement.query(By.css('.overview-desc'));

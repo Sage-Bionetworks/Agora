@@ -7,7 +7,7 @@
     }
 }
 
-.download-terms-desc {
+.about-desc {
     margin-bottom: 2%;
 
     .about-paragraph {
@@ -15,13 +15,20 @@
     }
 }
 
-.h2-anchor {
-    @include lato-font('bold');
-
-    text-align: left;
-    line-height: normal;
+.about-anchor {
     color: $secondary-background;
-    text-decoration: underline;
-    cursor: pointer;
+}
+
+.contact-us {
+    @include lato-font('normal');
+
+    color: $secondary-background;
+    line-height: normal;
     font-size: $font-size-x-regular;
+}
+.content-row{
+    @include lato-font('normal');
+    margin-bottom: 45px;
+    font-size: 18px;
+    color: color(text, secondary);
 }

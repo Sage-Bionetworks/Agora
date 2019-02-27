@@ -225,6 +225,18 @@ p-dialog {
     }
 }
 
+.pointer {
+    cursor: pointer;
+}
+
+.info-header {
+    padding-right: 5% !important;
+
+    > h1 {
+        text-align: center
+    }
+}
+
 .nomlist-list {
     margin-top: -0.1em;
     background-color: transparent !important;

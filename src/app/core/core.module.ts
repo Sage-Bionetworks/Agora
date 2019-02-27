@@ -15,6 +15,7 @@ import {
 } from './services';
 
 import { AboutComponent } from './about';
+import { NewsComponent } from './news';
 import { HelpComponent } from './help';
 import { TermsComponent } from './terms';
 import { SynapseAccountComponent } from './synapse-account';
@@ -39,6 +40,7 @@ import '../../styles/headings.scss';
         FooterComponent,
         NoContentComponent,
         AboutComponent,
+        NewsComponent,
         HelpComponent,
         TermsComponent,
         ContribTeamsPageComponent,

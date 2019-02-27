@@ -1,9 +1,10 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.info-header {
+.go-info-header {
     padding-right: 5% !important;
-    span{
+
+    span {
         color: color(text, title);
         margin-left: 5px;
         vertical-align: middle;

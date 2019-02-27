@@ -35,10 +35,8 @@
     </p>
     <div class="row help-control-row">
         <div class="col-md-12 col-sm-12 col-12">
-            <p-button (click)="sendEmail('mailto:agora@sagebionetworks.org?Subject=Agora%20Help')"
-                label="Contact us"
-                [styleClass]="'help-button'" tabindex="0">
-            </p-button>
+            <img class="info-icon pointer" src="/assets/img/contact-us.svg" (click)="sendEmail('mailto:agora@sagebionetworks.org?Subject=Agora%20Help')"
+                tabindex="0">
         </div>
     </div>
 </div>

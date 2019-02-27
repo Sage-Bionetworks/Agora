@@ -1,11 +1,14 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
+
 .similar-page {
-    .info-header {
-            padding-right: 5% !important;
+    .sp-info-header {
+        padding-right: 5% !important;
+
         h1 {
             text-align: center;
         }
+
         .info-icon {
             content: url("/assets/icon/info-icon2.svg");
         }
