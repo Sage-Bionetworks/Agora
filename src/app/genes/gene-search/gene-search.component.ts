@@ -77,8 +77,9 @@ export class GeneSearchComponent implements OnInit {
 
     search(queryString: string): Observable<any> {
         if (queryString) {
-            const response = this.apiService.getInfosMatchId(queryString);
-            return response;
+            // const response = this.apiService.getInfosMatchId(queryString);
+            // return response;
+            return this.apiService.getInfosMatchId(queryString);
         } else {
             this.isSearching = false;
             return empty();

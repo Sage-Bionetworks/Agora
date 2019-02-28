@@ -29,7 +29,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             .pipe(
                 retry(1),
                 catchError((error: HttpErrorResponse) => {
-                    const rollbar = this.injector.get(RollbarService);
+                    const rollbar = self.injector.get(RollbarService);
                     let errorMessage = '';
                     let errorSummary = '';
                     let errorDetail = '';
@@ -46,10 +46,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                         if (tmpSlashArray.length > 0) {
                             // Get the last part of the error message string,
                             // it should start with the gene searched id
-                            const tmpSpaceArray = tmpSlashArray[tmpSlashArray.length - 1].
-                                split[' '];
+                            const tmpString = tmpSlashArray[tmpSlashArray.length - 1];
+                            const tmpSpaceArray: string[] = tmpString.split(' ');
+                            const finalString = tmpSpaceArray[0].slice(0, -1);
                             if (tmpSpaceArray.length > 0) {
-                                tmpError = `Message: Gene ${tmpSlashArray[0]} not found!`;
+                                tmpError = `Message: Gene ${finalString} not found!`;
                             }
                         }
                         errorDetail = tmpError;
