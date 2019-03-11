@@ -169,7 +169,7 @@ module.exports = function () {
         /* File loader for supporting fonts, for example, in CSS files.
         */
         {
-          test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+          test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/,
           use: 'file-loader',
           include: [helpers.root('node_modules/lato-font')]
         },

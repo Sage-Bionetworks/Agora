@@ -22,6 +22,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const rxPaths = require('rxjs/_esm2015/path-mapping');
 const autoprefixer = require('autoprefixer');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 const buildUtils = require('./build-utils');
 
@@ -175,7 +176,7 @@ module.exports = function (options) {
         /* File loader for supporting fonts, for example, in CSS files.
         */
         {
-          test: /\.(eot|woff2?|svg|ttf)([\?]?.*)$/,
+          test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/,
           use: 'file-loader'
         }
 
@@ -316,6 +317,15 @@ module.exports = function (options) {
         files: '**/*.s?(a|c)ss',
         failOnError: false,
         quiet: false
+      }),
+
+      new PreloadWebpackPlugin({
+        rel: 'preload',
+        as(entry) {
+          if (/\.(woff|woff2|ttf|otf)$/.test(entry)) return 'font';
+        },
+        fileWhitelist: [/\.(woff|woff2|ttf|otf)$/],
+        include: 'allAssets'
       })
     ]],
 

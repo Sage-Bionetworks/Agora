@@ -69,6 +69,12 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     min-height: 100%;
+
+    @include lato-font('regular');
+    @include lato-font('bold');
+    @include lato-font('normal');
+    @include lato-font('normal', italic);
+    @include lato-font('medium');
 }
 
 footer {
