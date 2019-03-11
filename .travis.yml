@@ -48,6 +48,7 @@ jobs:
             develop: agora-develop
             staging: agora-staging
             prod: agora-prod
+            DISABLE_OPENCOLLECTIVE: true
           on:
             all_branches: true
           access_key_id: AKIAI2DBAWLFUMILTMWA
