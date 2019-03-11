@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneNetwork, LinksListResponse, GeneResponse } from '../../../../../models';
 
@@ -44,15 +43,13 @@ export class GeneNetworkComponent implements OnInit {
         private apiService: ApiService,
         private dataService: DataService,
         private geneService: GeneService,
-        private forceService: ForceService,
-        private activatedRoute: ActivatedRoute
+        private forceService: ForceService
     ) { }
 
     ngOnInit() {
         if (!this.noData) { this.noData = this.geneService.getInfoDataState(); }
-        // The data wasn't loaded yet, redirect for now
         this.geneInfo = this.geneService.getCurrentInfo();
-        if (!this.id) { this.id = this.navService.getRoute().snapshot.paramMap.get('id'); }
+        if (!this.id) { this.id = this.navService.id; }
 
         if (!!this.forceService.getGeneOriginalList() &&
             this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {

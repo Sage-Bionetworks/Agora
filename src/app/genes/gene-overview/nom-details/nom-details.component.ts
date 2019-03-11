@@ -37,7 +37,7 @@ export class NominationDetailsComponent implements OnInit {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
-        if (!this.id) { this.id = this.navService.getRoute().snapshot.paramMap.get('id'); }
+        if (!this.id) { this.id = this.navService.id; }
 
         // Check if we tried to load this path straight away
         if (!this.geneInfo) {
