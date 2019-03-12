@@ -18,8 +18,7 @@
     "updateMode": "prefetch",
     "resources": {
       "files": [
-        "/assets/**",
-        "/fonts/**"
+        "/assets/**"
       ]
     }
   }]
