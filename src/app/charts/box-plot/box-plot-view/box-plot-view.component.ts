@@ -14,7 +14,7 @@ import { PlatformLocation } from '@angular/common';
 import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
-import { DataService, GeneService, ApiService } from '../../../core/services';
+import { DataService, GeneService } from '../../../core/services';
 
 import { Subscription } from 'rxjs';
 
