@@ -46,7 +46,7 @@ interface StoreType {
         AppSharedModule.forRoot(),
         NgxWebstorageModule.forRoot(),
         CoreModule,
-        ServiceWorkerModule.register('/ngsw-worker.js')
+        ServiceWorkerModule.register('./ngsw-worker.js')
     ],
     /**
      * Expose our Services and Providers into Angular's dependency injection.
