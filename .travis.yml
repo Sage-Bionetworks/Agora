@@ -43,6 +43,7 @@ jobs:
           bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
+          local_dir: dist
           app: agora-ampad
           env:
             develop: agora-develop
