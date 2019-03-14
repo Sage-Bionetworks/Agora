@@ -225,8 +225,7 @@ module.exports = function (options) {
       new CopyWebpackPlugin(
         [
           { from: 'src/assets', to: 'assets' },
-          { from: 'src/meta' },
-          { from: helpers.root('ngsw-config.json') }
+          { from: 'src/meta' }
         ],
         isProd ? { ignore: ['mock-data/**/*'] } : undefined
       ),
@@ -318,9 +317,7 @@ module.exports = function (options) {
         files: '**/*.s?(a|c)ss',
         failOnError: false,
         quiet: false
-      }),
-
-      new PreloadWebpackPlugin()
+      })
     ]],
 
     /**
