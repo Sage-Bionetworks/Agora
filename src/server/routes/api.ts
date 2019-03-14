@@ -206,7 +206,7 @@ connection.once('open', () => {
 
                     const groupName = dimension.substring(0, 2) + 'Group';
                     if (dimension !== 'fpDim') {
-                        if (dimension === 'smDim') {
+                        if (dimension === 'smDim' && filter !== '') {
                             // If this is a string we are using the select menu chart
                             await dimensions.smDim.filterExact(filter);
                         }
@@ -218,7 +218,8 @@ connection.once('open', () => {
                                 groups[groupName].top(1)[0].value
                         };
                     } else {
-                        const newGroup = await rmEmptyBinsFP(groups.fpGroup, filter, id);
+                        const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ? filter :
+                            'AD Diagnosis (males and females)', id);
                         results[groupName] = {
                             values: newGroup.all()
                         };

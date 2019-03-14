@@ -63,7 +63,6 @@ export class GeneNetworkComponent implements OnInit {
                 this.selectedGeneData.origin = dn.origin;
                 this.dataLoaded = true;
                 this.networkData = dn;
-                console.log(this.currentGene);
             } else {
                 this.loadGenes();
             }
