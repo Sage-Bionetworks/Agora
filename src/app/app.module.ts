@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 // Our other developed modules
 import { AppSharedModule } from './shared';
@@ -45,8 +44,7 @@ interface StoreType {
         RouterModule,
         AppSharedModule.forRoot(),
         NgxWebstorageModule.forRoot(),
-        CoreModule,
-        ServiceWorkerModule.register('./ngsw-worker.js')
+        CoreModule
     ],
     /**
      * Expose our Services and Providers into Angular's dependency injection.
