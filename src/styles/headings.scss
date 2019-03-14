@@ -2,7 +2,7 @@
 @import "../assets/css/helpers/mixins";
 
 h1 {
-    @include lato-font('medium');
+    @include lato-font('bold');
 
     text-align: left;
     line-height: normal;
@@ -11,11 +11,11 @@ h1 {
 }
 
 h2 {
-    @include lato-font('medium');
+    @include lato-font('semibold');
 
     text-align: left;
     line-height: normal;
-    color: color(text, title);
+    color: color(text, span-title);
     font-size: $font-size-large;
 }
 
