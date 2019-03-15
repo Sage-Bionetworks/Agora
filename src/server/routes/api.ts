@@ -393,7 +393,7 @@ connection.once('open', () => {
                         next(err);
                     } else {
                         if (geneInfos.length === 0) {
-                            res.status(404).send('Not found');
+                            res.json({ items: [], isEnsembl });
                         } else {
                             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                             res.setHeader('Pragma', 'no-cache');
@@ -413,7 +413,8 @@ connection.once('open', () => {
         }
 
         // Return an empty array in case no id was passed or no params
-        if (!req.query || !req.query.ids) { res.json({ items: [] });
+        if (!req.query || !req.query.ids) {
+            res.json({ items: [] });
         } else {
             const ids = req.query.ids.split(',');
 

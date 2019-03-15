@@ -17,22 +17,15 @@
     .fa-star::before {
         color: $contrast-color;
     }
+
     .row {
         align-items: center;
     }
-    h1{
+
+    h1 {
+        @include lato-font('bold');
+
         text-align: left;
-    }
-    p-button {
-        @include respond-to('ex-small') {
-            width: 70%;
-        }
-        width: 100%;
-        height: 100%;
-        button {
-            width: 100%;
-            height: 100%;
-        }
     }
 }
 
@@ -178,7 +171,6 @@
         }
     }
 }
-
 
 .overview-tab-menu {
     padding: 0px !important;

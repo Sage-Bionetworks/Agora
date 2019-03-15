@@ -29,6 +29,8 @@ export class GeneSearchComponent implements OnInit {
     hasFocus: boolean = false;
     isSearching: boolean = false;
     gene: Gene;
+    notFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
+    isNotFound: boolean = false;
 
     constructor(
         private navService: NavigationService,
@@ -60,12 +62,33 @@ export class GeneSearchComponent implements OnInit {
             // If you add a complete callback, it is never called here
             .subscribe((data: GeneInfosResponse) => {
                 this.isSearching = false;
-                if (data.isEnsembl) {
-                    // It is safe to get the first index here because there will be only
-                    // one match when using the ensembl id
-                    this.viewGene(data.items[0]);
+
+                // If we got an empty array as response, or no genes found
+                if (!data.items.length) {
+                    this.isNotFound = true;
+                    this.results = [{
+                        '_id': this.notFoundString,
+                        'ensembl_gene_id': this.notFoundString,
+                        'name': this.notFoundString,
+                        'hgnc_symbol': this.notFoundString,
+                        'type_of_gene': this.notFoundString,
+                        'go.MF': [],
+                        'isIGAP': false,
+                        'haseqtl': false,
+                        'isChangedInADBrain': false,
+                        'medianexpression': [],
+                        'nominatedtarget': [],
+                        'nominations': 0
+                    } as GeneInfo];
                 } else {
-                    this.results = (data.items) ? data.items : [];
+                    this.isNotFound = false;
+                    if (data.isEnsembl) {
+                        // It is safe to get the first index here because there will be only
+                        // one match when using the ensembl id
+                        this.viewGene(data.items[0]);
+                    } else {
+                        this.results = data.items;
+                    }
                 }
             }, (error) => {
                 this.queryField = new FormControl();
@@ -99,12 +122,14 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(info: GeneInfo) {
-        this.navService.setOvMenuTabIndex(0);
-        if (!this.geneService.getCurrentGene()) {
-            this.getGene(info.hgnc_symbol);
-        } else {
-            if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
+        if (info.name !== this.notFoundString) {
+            this.navService.setOvMenuTabIndex(0);
+            if (!this.geneService.getCurrentGene()) {
                 this.getGene(info.hgnc_symbol);
+            } else {
+                if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
+                    this.getGene(info.hgnc_symbol);
+                }
             }
         }
     }

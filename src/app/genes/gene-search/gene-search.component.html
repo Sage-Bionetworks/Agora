@@ -3,13 +3,14 @@
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
             <input type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
-                (blur)="closeSearchList($event.target)" placeholder="Search Gene Symbol or Ensembl ID">
+                [class.input-text]="searchedGenes.value"
+                (blur)="closeSearchList($event.target)" placeholder="Search Gene Symbol or Ensembl ID" #searchedGenes>
             <p-progressSpinner *ngIf="isSearching" strokeWidth="8" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
             <i class="fa fa-search fa-lg"></i>
         </div>
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
             <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
-                <p class="gene-name">
+                <p class="gene-name" [class.italic-result]="isNotFound">
                     {{result.hgnc_symbol}}
                 </p>
                 <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>
