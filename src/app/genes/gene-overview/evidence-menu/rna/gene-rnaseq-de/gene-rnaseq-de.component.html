@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataLoaded">
+<ng-container>
     <div class="section-thin rna-seq-me no-padding-top">
         <h3 *ngIf="isEmptyGene" class="filters-header">
             Overall Expression of Selected Gene Across Tissues
@@ -17,11 +17,12 @@
         </p>
         <div #stme>
             <ng-container *ngIf="!isEmptyGene; else noDataMedian">
-                <median-chart [geneinfo]="geneInfo"></median-chart>
+                <median-chart *ngIf="dataLoaded" [geneinfo]="geneInfo"></median-chart>
+                <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
             </ng-container>
         </div>
         <ng-template #noDataMedian>
-            <div class="no-median-data">
+            <div *ngIf="isEmptyGene" class="no-median-data">
                 <h2 class="placeholder-text">No expression data is currently available.</h2>
             </div>
         </ng-template>
@@ -40,7 +41,7 @@
                 </h2>
                 <div class="row">
                     <div class="col-md-10 col-sm-12 col-12">
-                        <select-menu *ngIf="!isEmptyGene"
+                        <select-menu *ngIf="dataLoaded && !isEmptyGene"
                             [promptText]="'All'"
                             [label]="'select-model'"
                             [columnName]="'select-column-model'">
@@ -58,6 +59,7 @@
                     </div>
                 </div>
             </div>
+            <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
         </div>
         <h3 *ngIf="isEmptyGene">
             Differential Expression of Selected Gene
@@ -78,7 +80,8 @@
             </div>
         </div>
         <div #stbp>
-            <box-plot *ngIf="!isEmptyGene" [label]="'box-plot'"></box-plot>
+            <box-plot *ngIf="dataLoaded && !isEmptyGene" [label]="'box-plot'"></box-plot>
+            <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
         </div>
         <div class="row">
             <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
@@ -99,7 +102,8 @@
             have similar log-fold change value across tissues.
         </p>
         <div #stfp>
-            <row-chart *ngIf="!isEmptyGene"></row-chart>
+            <row-chart *ngIf="dataLoaded && !isEmptyGene"></row-chart>
+            <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
         </div>
         <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">
             <h2 class="placeholder-text">No expression data is currently available.</h2>

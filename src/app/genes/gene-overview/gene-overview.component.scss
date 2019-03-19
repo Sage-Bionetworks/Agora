@@ -393,3 +393,7 @@
         position: absolute;
     }
 }
+
+.loading-full-height {
+    height: calc(100vh - 187px);
+}

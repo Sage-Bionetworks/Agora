@@ -36,6 +36,20 @@ export const mockGene2: Gene = {
     model: 'AD Diagnosis (males and females)'
 };
 
+export const emptyGene: Gene = {
+    _id: '',
+    ensembl_gene_id: '',
+    hgnc_symbol: '',
+    logfc: 0,
+    ci_l: 0,
+    ci_r: 0,
+    adj_p_val: 0,
+    fc: 0,
+    tissue: '',
+    study: '',
+    model: ''
+};
+
 export const mockGeneStatistics: GeneStatistics = {
     maxFC: 1.246,
     minFC: 0.5,

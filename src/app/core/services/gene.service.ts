@@ -9,6 +9,8 @@ import {
     GeneResponse
 } from '../../models';
 
+import { emptyGene } from 'app/testing';
+
 import { ApiService } from './api.service';
 
 @Injectable()
@@ -182,18 +184,7 @@ export class GeneService {
     }
 
     getEmptyGene(ensemblGeneId?: string, hgncSymbol?: string): Gene {
-        const eGene = {
-            _id: '',
-            ensembl_gene_id: '',
-            hgnc_symbol: '',
-            logfc: 0,
-            ci_l: 0,
-            ci_r: 0,
-            adj_p_val: 0,
-            tissue: '',
-            study: '',
-            model: ''
-        } as Gene;
+        const eGene = emptyGene;
         if (ensemblGeneId) { eGene.ensembl_gene_id = ensemblGeneId; }
         if (hgncSymbol) { eGene.hgnc_symbol = hgncSymbol; }
         return eGene;

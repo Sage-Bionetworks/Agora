@@ -11,9 +11,11 @@ import {
     AfterViewChecked
 } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Gene, GeneInfo, GeneResponse } from '../../../../../models';
+
+import { emptyGene } from 'app/testing';
 
 import { ChartService } from '../../../../../charts/services';
 import {
@@ -34,7 +36,7 @@ import { Subscription } from 'rxjs';
 export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     @Input() styleClass: string = 'rnaseq-panel';
     @Input() style: any;
-    @Input() gene: Gene;
+    @Input() gene: Gene = emptyGene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
     @ViewChild('noDataMedian') noMedianEl: ElementRef;

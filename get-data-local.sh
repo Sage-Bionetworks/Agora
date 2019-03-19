@@ -23,8 +23,10 @@ DATA_MANIFEST_ID=$(cat $DATA_DIR/data-manifest-$travisbranch.json | grep data-ma
 TEAM_IMAGES_ID=$(cat $DATA_DIR/data-manifest-$travisbranch.json | grep team-images-id | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
 echo "data-manifest-$travisbranch.json DATA_VERSION = $DATA_VERSION"
 
+sed -i "s/\"data-version\": \"[^\"][^\"]*\"/\"data-version\": \"$DATA_VERSION\"/g" package.json
+
 # Version key/value should be on his own line
-DATA_VERSION=$(cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[^"]*"/$DATA_VERSION/g'
 
 synapse -u ${synapseusername} -p ${synapsepassword} cat --version $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
   synapse -u ${synapseusername} -p ${synapsepassword} get --downloadLocation ../data/ -v $version $id ;

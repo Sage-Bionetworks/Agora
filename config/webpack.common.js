@@ -27,7 +27,8 @@ const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const buildUtils = require('./build-utils');
 
 const VERSION = JSON.stringify(require('../package.json')['version']);
-const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-file'] + '-v' +
+  require('../package.json')['data-version']);
 
 /**
  * Webpack configuration
