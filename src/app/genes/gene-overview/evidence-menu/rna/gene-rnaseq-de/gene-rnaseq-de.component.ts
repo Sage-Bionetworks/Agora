@@ -114,6 +114,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                 this.chartService.queryFilter.smGroup,
                 this.gene.hgnc_symbol
             ).subscribe((d) => {
+                console.log('loaded');
+                console.log(d);
                 this.chartService.filteredData = d;
                 this.dataLoaded = true;
             });

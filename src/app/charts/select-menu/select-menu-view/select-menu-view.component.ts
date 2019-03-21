@@ -5,7 +5,8 @@ import {
     Input,
     ElementRef,
     ViewChild,
-    OnDestroy
+    OnDestroy,
+    AfterViewInit
 } from '@angular/core';
 
 import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
@@ -100,6 +101,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
         const smGroup = {
             all() {
+                console.log(self.chartService.filteredData['smGroup'].values);
                 return self.chartService.filteredData['smGroup'].values;
             },
             order() {
@@ -114,7 +116,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.dim = smDim;
         this.group = smGroup;
 
-        this.getChartPromise().then(async (chartInst) => {
+        this.getChartPromise().then((chartInst) => {
             self.chart = chartInst;
 
             chartInst.filterHandler(async (dimension, filters) => {
@@ -160,10 +162,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
             chartInst.promptText(this.promptText);
 
-            chartInst.on('postRender', (chart) => {
+            chartInst.on('preRender', (chart) => {
+                chart.group(self.group);
+            });
+            chartInst.on('postRender', async (chart) => {
                 if (self.firstReplace) {
                     self.firstReplace = false;
-                    self.replaceSelect().then(() => {
+                    await self.replaceSelect().then(() => {
                         // Registers this chart
                         self.chartService.addChartName(self.label);
                     });
@@ -238,10 +243,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     }
 
     replaceSelect(): Promise<any> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (this.defaultValue) {
-                this.generateSelect();
-                this.removeFirstOption();
+                await this.generateSelect();
+                await this.removeFirstOption();
             }
 
             resolve(true);
@@ -292,6 +297,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 .title((d) => {
                     return d.key;
                 })
+                .filterDisplayed(() => {
+                    return true;
+                })
                 .on('filtered', (chart, filter) => {
                     if (self.label === 'select-tissue') {
                         if (filter instanceof Array) {
@@ -329,6 +337,8 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         const a = document.createElement('DIV');
         a.setAttribute('class', 'select-selected');
 
+        console.log(oriSelEl);
+        console.log(oriSelEl.options[1]);
         a.innerHTML = oriSelEl.options[1].innerHTML;
         const newSelElmnt = document.getElementsByClassName(this.columnName)[0];
         newSelElmnt.appendChild(a);
@@ -355,9 +365,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 const cPromise = new Promise(async (resolve, reject) => {
                     self.chartService.queryFilter.smGroup = c.innerHTML;
                     const gene = self.geneService.getCurrentGene().hgnc_symbol;
+                    console.log(self.chartService.queryFilter.smGroup);
                     await self.apiService.refreshChart(self.chartService.queryFilter.smGroup, gene)
-                        .subscribe(async (results) => {
-                        self.chartService.filteredData = await results;
+                        .subscribe((results) => {
+                        self.chartService.filteredData = results;
+                        console.log(self.chartService.filteredData);
                         resolve(true);
                     });
                 });

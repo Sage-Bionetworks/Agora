@@ -62,7 +62,6 @@ connection.once('open', () => {
     const currentModel: string = this.defaultModel;
 
     // Crossfilter instance
-    let ndx;
     const chartInfos: Map<string, any> = new Map<string, any>();
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
@@ -125,11 +124,6 @@ connection.once('open', () => {
         await allModels.sort();
 
         //////////////////////////////////////////////////////////////////////////////////////////
-        // Crossfilter part
-
-        ndx = await crossfilter(allGenes);
-
-        //////////////////////////////////////////////////////////////////////////////////////////
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
@@ -158,8 +152,9 @@ connection.once('open', () => {
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
 
-        // Guarantees multiple requests
-        loadChartData().then(async (status) => {
+        loadChartData(filter).then(async (status) => {
+            let indx = await crossfilter(allGenes);
+
             // Crossfilter variables
             const dimensions = {
                 smDim: null,
@@ -173,10 +168,11 @@ connection.once('open', () => {
             };
 
             // Load all dimensions and groups
-            // Select-menu
-            dimensions.smDim = await getDimension(getChartInfo('select-model'));
-            dimensions.bpDim = await ndx.dimension((d) => d.tissue);
-            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'));
+            dimensions.smDim = await indx.dimension((d) => d.model);
+            dimensions.bpDim = await indx.dimension((d) => d.tissue);
+            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'), indx);
+
+            dimensions.smDim.filterAll();
             groups.smGroup = await dimensions.smDim.group();
             groups.bpGroup = await dimensions.bpDim.group().reduce(
                 function(p, v) {
@@ -202,32 +198,47 @@ connection.once('open', () => {
             groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
 
             if (Object.keys(groups).length > 0) {
-                await Object.keys(dimensions).forEach(async (dimension) => {
+                const rPromise = new Promise((resolve, reject) => {
+                    Object.keys(dimensions).forEach(async (dimension) => {
 
-                    const groupName = dimension.substring(0, 2) + 'Group';
-                    if (dimension !== 'fpDim') {
-                        if (dimension === 'smDim' && filter !== '') {
-                            // If this is a string we are using the select menu chart
-                            await dimensions.smDim.filterExact(filter);
+                        const groupName = dimension.substring(0, 2) + 'Group';
+                        if (dimension !== 'fpDim') {
+                            if (dimension === 'smDim') {
+                                if (filter !== '') {
+                                    console.log('not empty');
+                                    console.log(filter);
+                                    // If this is a string we are using the select menu chart
+                                    await dimensions.smDim.filterExact(filter);
+                                } else {
+                                    await dimensions.smDim.filterAll();
+                                }
+                            }
+
+                            results[groupName] = {
+                                values: groups[groupName].all(),
+                                top: (groupName === 'fpGroup') ?
+                                    null :
+                                    groups[groupName].top(1)[0].value
+                            };
+                        } else {
+                            const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ? filter :
+                                'AD Diagnosis (males and females)', id);
+                            results[groupName] = {
+                                values: newGroup.all()
+                            };
                         }
+                    });
 
-                        results[groupName] = {
-                            values: groups[groupName].all(),
-                            top: (groupName === 'fpGroup') ?
-                                null :
-                                groups[groupName].top(1)[0].value
-                        };
-                    } else {
-                        const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ? filter :
-                            'AD Diagnosis (males and females)', id);
-                        results[groupName] = {
-                            values: newGroup.all()
-                        };
+                    resolve(results);
+                });
+                rPromise.then((r: any) => {
+                    if (r) {
+                        indx = null;
+
+                        res.send(r);
                     }
                 });
             }
-
-            await res.send(results);
         });
     });
 
@@ -836,7 +847,7 @@ connection.once('open', () => {
         );
     }
 
-    function loadChartData(): Promise<any> {
+    function loadChartData(model: string): Promise<any> {
         return new Promise((resolve, reject) => {
             addChartInfo(
                 'volcano-plot',
@@ -872,35 +883,16 @@ connection.once('open', () => {
                     filter: 'default'
                 }
             );
-            registerBoxPlot(
-                'box-plot',
-                [
-                    {
-                        name: defaultTissue,
-                        attr: 'tissue'
-                    },
-                    {
-                        name: currentModel,
-                        attr: 'model'
-                    }
-                ],
-                'log2(fold change)',
-                'fc'
-            );
 
             resolve(true);
         });
     }
 
-    function getNdx(): any {
-        return ndx;
-    }
-
     // Charts crossfilter handling part
-    function getDimension(info: any): crossfilter.Dimension<any, any> {
+    function getDimension(info: any, ndx: any): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = getNdx().dimension((d) => {
+        const dim = ndx.dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned
