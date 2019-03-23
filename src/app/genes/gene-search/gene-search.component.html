@@ -9,8 +9,8 @@
             <i class="fa fa-search fa-lg"></i>
         </div>
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
-            <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
-                <p class="gene-name" [class.italic-result]="isNotFound">
+            <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)" [class.italic-result]="isNotFound">
+                <p class="gene-name">
                     {{result.hgnc_symbol}}
                 </p>
                 <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>

@@ -15,9 +15,16 @@
     position: relative;
 
     .italic-result {
-        @include lato-font('normal', italic);
+        > p {
+            @include lato-font('normal', italic);
+            color: color(italic-text, base) !important;
+        }
 
-        color: color(italic-text, base) !important;
+        cursor: context-menu;
+    }
+
+    .italic-result:hover {
+        background: $background;
     }
 
     .input-text {
@@ -63,34 +70,6 @@
         }
         @include respond-to('ex-large') {
             left: 91.5%;
-        }
-    }
-
-    p-progressSpinner {
-        position: absolute;
-        z-index: 2;
-        color: color(text, title);
-        top: 35%;
-
-        .ui-progress-spinner {
-            width: 20px;
-            height: 20px;
-        }
-
-        @include respond-to('ex-small') {
-            left: 83.5%;
-        }
-        @include respond-to('small') {
-            left: 88%;
-        }
-        @include respond-to('medium') {
-            left: 88.5%;
-        }
-        @include respond-to('large') {
-            left: 87.5%;
-        }
-        @include respond-to('ex-large') {
-            left: 86.5%;
         }
     }
 }

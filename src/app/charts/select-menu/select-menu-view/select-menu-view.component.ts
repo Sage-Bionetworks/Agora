@@ -46,6 +46,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @ViewChild('sm') selectMenu: ElementRef;
 
     isDisabled: boolean = true;
+    isActive: boolean = true;
     destroyed: boolean = false;
     firstTime: boolean = true;
     firstReplace: boolean = true;
@@ -89,9 +90,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         const smDim = {
             filter: (f, e) => {
                 if (f) {
-                    // Main change routine is inside the option click. This is the only place
-                    // called to filter all charts
-                    // dc.redrawAll();
+                    //
                 }
             },
             filterAll: () => {
@@ -101,7 +100,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
         const smGroup = {
             all() {
-                console.log(self.chartService.filteredData['smGroup'].values);
                 return self.chartService.filteredData['smGroup'].values;
             },
             order() {
@@ -336,9 +334,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
         const a = document.createElement('DIV');
         a.setAttribute('class', 'select-selected');
-
-        console.log(oriSelEl);
-        console.log(oriSelEl.options[1]);
         a.innerHTML = oriSelEl.options[1].innerHTML;
         const newSelElmnt = document.getElementsByClassName(this.columnName)[0];
         newSelElmnt.appendChild(a);
@@ -365,11 +360,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 const cPromise = new Promise(async (resolve, reject) => {
                     self.chartService.queryFilter.smGroup = c.innerHTML;
                     const gene = self.geneService.getCurrentGene().hgnc_symbol;
-                    console.log(self.chartService.queryFilter.smGroup);
+                    self.isActive = false;
                     await self.apiService.refreshChart(self.chartService.queryFilter.smGroup, gene)
                         .subscribe((results) => {
                         self.chartService.filteredData = results;
-                        console.log(self.chartService.filteredData);
+                        self.isActive = true;
                         resolve(true);
                     });
                 });
