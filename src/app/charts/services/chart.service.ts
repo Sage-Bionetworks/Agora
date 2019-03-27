@@ -116,6 +116,8 @@ export class ChartService {
                 return 'Superior Temporal Gyrus';
             case 'TCX':
                 return 'Temporal Cortex';
+            default:
+                return '';
         }
     }
 }
