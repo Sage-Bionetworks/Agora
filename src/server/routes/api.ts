@@ -172,7 +172,6 @@ connection.once('open', () => {
             dimensions.bpDim = await indx.dimension((d) => d.tissue);
             dimensions.fpDim = await getDimension(getChartInfo('forest-plot'), indx);
 
-            dimensions.smDim.filterAll();
             groups.smGroup = await dimensions.smDim.group();
             groups.bpGroup = await dimensions.bpDim.group().reduce(
                 function(p, v) {
@@ -205,11 +204,12 @@ connection.once('open', () => {
                         if (dimension !== 'fpDim') {
                             if (dimension === 'smDim') {
                                 if (filter !== '') {
-                                    console.log('not empty');
-                                    console.log(filter);
-                                    // If this is a string we are using the select menu chart
+                                    // If this is a string we are using the select menu chart.
+                                    // The initial string is the default model
                                     await dimensions.smDim.filterExact(filter);
                                 } else {
+                                    // Should not be used, this resets the models and returns
+                                    // everything
                                     await dimensions.smDim.filterAll();
                                 }
                             }
