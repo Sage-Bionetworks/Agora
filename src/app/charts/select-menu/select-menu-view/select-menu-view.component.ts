@@ -100,7 +100,62 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
         const smGroup = {
             all() {
-                return self.chartService.filteredData['smGroup'].values;
+                // This logic assumes always the same models, we can add
+                // fake entries when filtering them. This is to speed up
+                // server generation of dimensions and groups
+                switch (self.chartService.filteredData['smGroup'].values[0] ?
+                    self.chartService.filteredData['smGroup'].values[0].key :
+                    'AD Diagnosis (males and females)') {
+                    case 'AD Diagnosis (males and females)':
+                        return [
+                            ...self.chartService.filteredData['smGroup'].values,
+                            ...[
+                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                            ]
+                        ];
+                    case 'AD Diagnosis x AOD (males and females)':
+                        return [
+                            ...[
+                                { key: 'AD Diagnosis (males and females)', value: 0 }
+                            ],
+                            ...self.chartService.filteredData['smGroup'].values,
+                            ...[
+                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                            ]
+                        ];
+                    case 'AD Diagnosis x Sex (females only)':
+                        return [
+                            ...[
+                                { key: 'AD Diagnosis (males and females)', value: 0 },
+                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 }
+                            ],
+                            ...self.chartService.filteredData['smGroup'].values,
+                            ...[
+                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                            ]
+                        ];
+                    case 'AD Diagnosis x Sex (males only)':
+                        return [
+                            ...[
+                                { key: 'AD Diagnosis (males and females)', value: 0 },
+                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (females only)', value: 0 }
+                            ],
+                            ...self.chartService.filteredData['smGroup'].values
+                        ];
+                    default:
+                        return [
+                            ...self.chartService.filteredData['smGroup'].values,
+                            ...[
+                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                            ]
+                        ];
+                }
             },
             order() {
                 //

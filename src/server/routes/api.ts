@@ -54,6 +54,10 @@ connection.once('open', () => {
     let tableGenesById: GeneInfo[] = [];
     let tableGenesByNom: GeneInfo[] = [];
     let allGenes: Gene[] = [];
+    const genesADDMF: Gene[] = [];
+    const genesADDAODMF: Gene[] = [];
+    const genesADDSF: Gene[] = [];
+    const genesADDSM: Gene[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -119,6 +123,23 @@ connection.once('open', () => {
             if (allModels.indexOf(g['model']) === -1) {
                 allModels.push(g['model']);
             }
+
+            switch (g.model) {
+                case 'AD Diagnosis (males and females)':
+                    genesADDMF.push(g);
+                    break;
+                case 'AD Diagnosis x AOD (males and females)':
+                    genesADDAODMF.push(g);
+                    break;
+                case 'AD Diagnosis x Sex (females only)':
+                    genesADDSF.push(g);
+                    break;
+                case 'AD Diagnosis x Sex (males only)':
+                    genesADDSM.push(g);
+                    break;
+                default:
+                    break;
+            }
         });
         await allTissues.sort();
         await allModels.sort();
@@ -153,7 +174,25 @@ connection.once('open', () => {
         const id = req.query.id;
 
         loadChartData(filter).then(async (status) => {
-            let indx = await crossfilter(allGenes);
+            let indx: any = null;
+
+            switch (filter) {
+                case 'AD Diagnosis (males and females)':
+                    indx = await crossfilter(genesADDMF);
+                    break;
+                case 'AD Diagnosis x AOD (males and females)':
+                    indx = await crossfilter(genesADDAODMF);
+                    break;
+                case 'AD Diagnosis x Sex (females only)':
+                    indx = await crossfilter(genesADDSF);
+                    break;
+                case 'AD Diagnosis x Sex (males only)':
+                    indx = await crossfilter(genesADDSM);
+                    break;
+                default:
+                    indx = await crossfilter(allGenes);
+                    break;
+            }
 
             // Crossfilter variables
             const dimensions = {
@@ -202,18 +241,6 @@ connection.once('open', () => {
 
                         const groupName = dimension.substring(0, 2) + 'Group';
                         if (dimension !== 'fpDim') {
-                            if (dimension === 'smDim') {
-                                if (filter !== '') {
-                                    // If this is a string we are using the select menu chart.
-                                    // The initial string is the default model
-                                    await dimensions.smDim.filterExact(filter);
-                                } else {
-                                    // Should not be used, this resets the models and returns
-                                    // everything
-                                    await dimensions.smDim.filterAll();
-                                }
-                            }
-
                             results[groupName] = {
                                 values: groups[groupName].all(),
                                 top: (groupName === 'fpGroup') ?
