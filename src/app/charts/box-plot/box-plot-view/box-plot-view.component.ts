@@ -155,6 +155,28 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const bpGroup = {
             all() {
+                const currentGenes = self.dataService.getGeneEntries().slice().filter((g) => {
+                    return g.model === self.geneService.getCurrentModel();
+                });
+                if (currentGenes.length !==
+                    self.chartService.filteredData['bpGroup'].values.length &&
+                    currentGenes.length <
+                    self.chartService.filteredData['bpGroup'].values.length) {
+                    const indices: number[] = [];
+                    self.chartService.filteredData['bpGroup'].values.
+                        forEach((v: any, i: number) => {
+                        // We got an extra group entry, currentGenes is correct, but the
+                        // group coming from the server isn't
+                        if (!currentGenes.some((g) => g.tissue === v.key)) {
+                            indices.push(i);
+                        }
+                    });
+                    if (indices.length > 0) {
+                        for (let i = indices.length - 1; i >= 0; i--) {
+                            self.chartService.filteredData['bpGroup'].values.splice(indices[i], 1);
+                        }
+                    }
+                }
                 return self.chartService.filteredData['bpGroup'].values;
             },
             order() {

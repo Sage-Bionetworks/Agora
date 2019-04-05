@@ -7,7 +7,8 @@
             Overall Expression of {{gene.hgnc_symbol}} Across Tissues
             <span class="icon-spacing"></span>
             <span class="icon-spacing"></span>
-            <download [target]="stme" [name]="getDownloadFileName('Overall Expression')"></download>
+            <!-- Hide for now -->
+            <!--<download [target]="stme" [name]="getDownloadFileName('Overall Expression')"></download>-->
         </h3>
         <p class="black-paragraph text-max">
             This plot depicts the median expression of the selected gene across tissues (brain regions) in
@@ -67,7 +68,8 @@
         <h3 *ngIf="!isEmptyGene">
             Differential Expression of {{gene.hgnc_symbol}}
             <span class="icon-spacing"></span>
-            <download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>
+            <!-- Hide for now -->
+            <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
         </h3>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-12 col-fixer">
@@ -94,7 +96,8 @@
         <h3>
             Consistency of Change in Expression
             <span class="icon-spacing"></span>
-            <download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>
+            <!-- Hide for now -->
+            <!--<download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>-->
         </h3>
         <p class="black-paragraph text-max">
             This forest plot indicates the estimate of the log fold change with standard errors across the

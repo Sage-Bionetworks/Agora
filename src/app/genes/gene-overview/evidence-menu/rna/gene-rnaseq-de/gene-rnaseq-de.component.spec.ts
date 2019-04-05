@@ -112,7 +112,8 @@ describe('Component: GeneRNASeqDE', () => {
         expect(smEl).toBeDefined();
     });
 
-    it('should have three download widgets if we have a gene', fakeAsync(() => {
+    // TODO: add this again if the download components get uncommented
+    /*it('should have three download widgets if we have a gene', fakeAsync(() => {
         component.isEmptyGene = false;
         tick();
         fixture.detectChanges();
@@ -122,7 +123,7 @@ describe('Component: GeneRNASeqDE', () => {
 
         const aEl = fixture.debugElement.queryAll(By.css('download'));
         expect(aEl.length).toEqual(3);
-    }));
+    }));*/
 
     it('should have extra info component', () => {
         component.dataLoaded = true;

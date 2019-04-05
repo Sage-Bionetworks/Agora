@@ -24,6 +24,14 @@ export let TeamInfoSchema: Schema = new Schema(
             required: true,
             type: String,
         },
+        team_full: {
+            required: true,
+            type: String,
+        },
+        program: {
+            required: true,
+            type: String,
+        },
         description: {
             required: true,
             type: String,

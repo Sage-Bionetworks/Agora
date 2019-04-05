@@ -10,6 +10,8 @@ export interface TeamMember {
 
 export interface TeamInfo {
     team: string;
+    team_full: string;
+    program: string;
     description: string;
     members: TeamMember[];
 }
