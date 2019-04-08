@@ -47,23 +47,28 @@ export class NominationDetailsComponent implements OnInit {
                 }
             });
         } else {
-            // We don't need to check for data here since the parent component
-            // handled that
-            this.ntInfoArray = this.geneInfo.nominatedtarget;
             this.loadTeams();
         }
     }
 
     loadTeams() {
         const info = this.geneService.getCurrentInfo();
-        this.apiService.getTeams(info).subscribe((data) => {
-            if (!data['items']) { this.navService.getRouter().navigate(['/genes']); }
-            this.teams.length = data['items'].length;
-            const ntTeamsArray = this.ntInfoArray.slice().map((nti) => nti.team);
-            data['items'].forEach((item) => {
-                const index = ntTeamsArray.indexOf(item.team);
-                this.teams[index] = item;
+        this.apiService.getTeams(info).subscribe((data: TeamInfo[]) => {
+            if (!data) { this.navService.getRouter().navigate(['/genes']); }
+            // Data array has the correct teams order already
+            this.teams = data;
+
+            // Team names with the correct order
+            const tiTeamsArray = data.slice().map((ti) => ti.team);
+            // Team infos out of order from geneInfo.nominatedTarget
+            const ntInfoArray = this.geneInfo.nominatedtarget.slice().map((ti) => ti.team);
+
+            // This will be the new ordered array
+            const newNtInfoArray: NominatedTarget[] = [];
+            tiTeamsArray.forEach((team: string) => {
+                newNtInfoArray.push(this.geneInfo.nominatedtarget[ntInfoArray.indexOf(team)]);
             });
+            this.ntInfoArray = newNtInfoArray;
 
             this.geneService.setCurrentTeams(this.teams);
         }, (error) => {

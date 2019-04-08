@@ -11,7 +11,7 @@
             {{getFullDisplayName(team.program, team.team_full)}}
         </h2>
         <p class="black-paragraph text-max desired-width">
-            {{team.description}}
+            {{decodeString(team.description)}}
         </p>
         <div class="row members-row desired-width">
             <div *ngFor="let member of team.members; let j = index" class="col-md-2 col-sm-3 col-4 member-thumb">

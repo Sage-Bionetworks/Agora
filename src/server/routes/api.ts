@@ -584,14 +584,20 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); } else {
             const arr = req.query.teams.split(', ');
 
-            TeamsInfo.find({ team: { $in: arr } }).exec((err, team) => {
+            TeamsInfo.find({ team: { $in: arr } }).exec((err, teams) => {
                 if (err) {
                     next(err);
                 } else {
+                    teams.sort((a, b) => {
+                        const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
+                        const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
+                        return aTeamFull.toLowerCase() < bTeamFull.toLowerCase() ? -1 : 1;
+                    });
+
                     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                     res.setHeader('Pragma', 'no-cache');
                     res.setHeader('Expires', 0);
-                    res.json({ items: team });
+                    res.json(teams);
                 }
             });
         }
@@ -608,6 +614,15 @@ connection.once('open', () => {
             if (err) {
                 next(err);
             } else {
+                teams.sort((a, b) => {
+                    const aProgram: string = (a.program) ? a.program.toLowerCase() : '';
+                    const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
+                    const bProgram: string = (b.program) ? b.program.toLowerCase() : '';
+                    const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
+                    return aProgram.toLowerCase() + aTeamFull.toLowerCase() <
+                        bProgram.toLowerCase() + bTeamFull.toLowerCase() ? -1 : 1;
+                });
+
                 res.json(teams);
             }
         });

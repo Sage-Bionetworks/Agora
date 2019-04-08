@@ -47,7 +47,6 @@ export class ContribTeamsPageComponent implements OnInit {
             // The team info comes unordered, so we order it
             // and ask for images in order
             this.teamsImageURLs.length = data.length;
-            data = this.orderBy.transform(data, ['team_full']);
             data.forEach((ti, i) => {
                 this.teamsImageURLs[i] = [];
 
@@ -62,10 +61,6 @@ export class ContribTeamsPageComponent implements OnInit {
             // but the teams will be in the original order
             this.obsTeams = this.obsTeams.pipe(
                 map((tis: TeamInfo[]) => {
-                    // Order the team infos based on crescent alphabetical order
-                    tis.sort((a, b) => {
-                        return a.team_full.toLowerCase() < b.team_full.toLowerCase() ? -1 : 1;
-                    });
                     tis.forEach((ti) => {
                         // Reorder all the teamInfos based on the primary investigator.
                         // This call is for the displayed names order in particular
@@ -129,6 +124,10 @@ export class ContribTeamsPageComponent implements OnInit {
 
     getFullDisplayName(program: string, teamFullName: string): string {
         return (program) ? program + ': ' + teamFullName : teamFullName;
+    }
+
+    decodeString(text: string): string {
+        return (text) ? text.replace('‚Äô', '\'') : '';
     }
 
     toTitleCase(index: number, field: string): string {
