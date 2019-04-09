@@ -310,8 +310,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         )
                         .style('top',
                             (
-                                self.bpCol.nativeElement.offsetParent.offsetTop
-                                + chart.height() + 60
+                                self.bpCol.nativeElement.offsetTop
+                                + chart.height()
                             ) + 'px'
                         );
                 })
