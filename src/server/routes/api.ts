@@ -680,7 +680,6 @@ connection.once('open', () => {
                                     if (env === 'development') {
                                         console.log('The team file isnt png');
                                     }
-                                    console.log(name, NAMEJPEG, namePNG);
                                     res.status(204).send('Could not find member!');
                                 }
                             });

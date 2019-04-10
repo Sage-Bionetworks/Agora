@@ -257,17 +257,6 @@ export class ApiService {
         return this.http.get('/api/models/gene', { headers });
     }
 
-    // Get the EFO id from opentargets
-    getHallmarkEFO(id: string): Observable<any> {
-        const headers = new HttpHeaders({
-            Accept: 'application/json'
-        });
-
-        const otURL = 'https://api.opentargets.io/v3/platform/public/evidence/filter?' +
-            'target=' + id + '&scorevalue_min=0&size=1';
-        return this.http.get(otURL, { headers });
-    }
-
     refreshChart(filter: any, id: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
