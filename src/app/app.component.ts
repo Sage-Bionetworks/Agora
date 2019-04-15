@@ -9,6 +9,8 @@ export const ROOT_SELECTOR = 'app';
 
 import * as browserUpdate from 'browser-update';
 
+import { filter } from 'rxjs/operators';
+
 /**
  * App Component
  * Top Level Component
@@ -38,7 +40,16 @@ export class AppComponent implements OnInit {
 
     constructor(
         private router: Router
-    ) {}
+    ) {
+        const navEndEvent$ = router.events.pipe(
+            filter(e => e instanceof NavigationEnd)
+        );
+        navEndEvent$.subscribe((e: NavigationEnd) => {
+            (<any>window).dataLayer.push({
+                'page_path': e.urlAfterRedirects
+            })
+        });
+    }
 
     ngOnInit() {
         this.initBrowserUpdate(browserUpdate, this.buParams);
