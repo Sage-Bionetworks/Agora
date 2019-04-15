@@ -42,12 +42,12 @@ export class AppComponent implements OnInit {
         private router: Router
     ) {
         const navEndEvent$ = router.events.pipe(
-            filter(e => e instanceof NavigationEnd)
+            filter((e) => e instanceof NavigationEnd)
         );
         navEndEvent$.subscribe((e: NavigationEnd) => {
-            (<any>window).dataLayer.push({
-                'page_path': e.urlAfterRedirects
-            })
+            (window as any).dataLayer.push({
+                page_path: e.urlAfterRedirects
+            });
         });
     }
 
