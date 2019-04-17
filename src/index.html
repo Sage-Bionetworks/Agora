@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122458040-1"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-122458040-1');
-        </script>
-
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +13,6 @@
         <%= webpackConfig.htmlElements.headTags %>
         <% } %>
 
-
         <%= htmlWebpackPlugin.files.webpackManifest %>
 
         <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
@@ -33,10 +22,11 @@
 
         <!-- Async Google Tag Manager: change gtmKey value inside config.prod.conf to your to be your site's ID-->
         <% if (htmlWebpackPlugin.options.gtmKey) { %>
-        <!-- Data layer fields here before the Google Tag Manager snippet-->
+        <!-- Data layer fields here before the Google Tag Manager snippet. Add entries if needed
         <script type="text/javascript">
             dataLayer = [];
         </script>
+        -->
         <!-- End of Data layer initialization-->
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

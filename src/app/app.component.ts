@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
         );
         navEndEvent$.subscribe((e: NavigationEnd) => {
             (window as any).dataLayer.push({
-                page_path: e.urlAfterRedirects
+                event: 'pageView',
+                url: e.urlAfterRedirects
             });
         });
     }
