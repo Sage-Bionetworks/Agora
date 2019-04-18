@@ -39,11 +39,15 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol' },
             { field: 'nominations', header: 'Nominations' },
-            { field: 'nominatedtarget', header: 'Teams' }
+            { field: 'teams', header: 'Teams' }
         ];
 
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.datasource = (data.items) ? data.items : [];
+            this.datasource.forEach((de) => {
+                de.teams = (de.nominatedtarget.length) ? de.nominatedtarget.map(
+                    (nt) => nt.team).join(', ') : '';
+            });
             this.genesInfo = this.datasource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
 

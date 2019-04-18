@@ -25,6 +25,9 @@ export interface GeneInfo {
     medianexpression: MedianExpression[];
     nominatedtarget: NominatedTarget[];
     nominations: number;
+    // Extra field for the genes list table. This will be
+    // all the teams in a single string separated by commas
+    teams?: string;
 }
 
 export interface MedianExpression {

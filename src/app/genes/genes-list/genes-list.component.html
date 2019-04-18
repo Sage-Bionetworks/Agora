@@ -34,11 +34,25 @@
             </p>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of cols; let i = index;"
-                    [pSortableColumn]="col.field">
-                    {{col.header}}
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
+            <tr class="nomlist-flex-header">
+                <th class="nomlist-flex-header" *ngFor="let col of cols; let i = index;"
+                    [ngSwitch]="col.field">
+                    <div class="col-md-5 col-sm-5 col-5 nomlist-first-col">
+                        {{col.header}}
+                    </div>
+                    <div [pSortableColumn]="col.field" class="col-md-1 col-sm-1 col-1 nomlist-second-col">
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-6" *ngSwitchCase="'hgnc_symbol'">
+                        <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, col.filterMatchMode)">
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-6" *ngSwitchCase="'nominations'">
+                        <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, col.filterMatchMode)">
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-6" *ngSwitchCase="'teams'">
+                        <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, col.filterMatchMode)">
+                    </div>
+                    <div class="col-md-1"></div>
                 </th>
             </tr>
         </ng-template>
@@ -51,7 +65,7 @@
                     {{rowData[columns[1].field]}}
                 </td>
                 <td>
-                    {{getTeams(rowData[columns[2].field])}}
+                    {{rowData[columns[2].field]}}
                 </td>
             </tr>
         </ng-template>
