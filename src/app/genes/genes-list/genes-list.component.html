@@ -50,7 +50,7 @@
                         <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, col.filterMatchMode)">
                     </div>
                     <div class="col-md-5 col-sm-6 col-6" *ngSwitchCase="'teams'">
-                        <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, col.filterMatchMode)">
+                        <input pInputText type="text" (input)="gl.filter($event.target.value, col.field, 'contains')">
                     </div>
                     <div class="col-md-1"></div>
                 </th>
