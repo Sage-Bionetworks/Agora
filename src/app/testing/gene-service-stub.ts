@@ -72,8 +72,20 @@ export class GeneServiceStub {
         return this.defaultModel;
     }
 
+    setCurrentModel(model: string) {
+        this.currentModel = model;
+    }
+
     getCurrentModel(): string {
         return this.currentModel;
+    }
+
+    setCurrentTissue(tissue: string) {
+        this.currentTissue = tissue;
+    }
+
+    getCurrentTissue(): string {
+        return this.currentTissue;
     }
 
     setDefaultModel(model: string) {

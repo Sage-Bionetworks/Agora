@@ -1,11 +1,8 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { SpyLocation } from '@angular/common/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,7 +10,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
     RouterStub,
     GeneServiceStub,
-    DataServiceStub,
     ChartServiceStub,
     ActivatedRouteStub,
     ApiServiceStub,
@@ -27,7 +23,8 @@ import { ChartService } from '../../services';
 
 import { of, empty, Observable } from 'rxjs';
 
-import { MockComponent } from 'ng-mocks';
+import * as d3 from 'd3';
+import * as dc from 'dc';
 
 describe('Component: SelectMenuView', () => {
     let component: SelectMenuViewComponent;
@@ -113,9 +110,8 @@ describe('Component: SelectMenuView', () => {
     });
 
     it('should remove chart on location pop state', () => {
-        // spyOn(component, 'ngOnInit').and.callThrough();
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
-        // location.go('/genes');
+
         component.ngOnInit();
         location.subscribe((value: any) => {
             // Since onPopState from PlatformLocation is not triggered
@@ -144,4 +140,120 @@ describe('Component: SelectMenuView', () => {
         expect(csrcnSpy).not.toHaveBeenCalled();
         expect(gsspgSpy).not.toHaveBeenCalled();
     });
+
+    // Two tests here not to copy this wall of text below
+    it('should render the second select, and update the filter when a change occurs', async(() => {
+        component.label = 'select-model';
+        component.defaultValue = 'AD Diagnosis (males and females)';
+        component.columnName = 'select-column-model';
+        chartService.filteredData = [
+            { key: 'AD Diagnosis (males and females)', value: 12 },
+            { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+            { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+            { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+        ];
+
+        const smDim = {
+            filter: (f, e) => {
+                if (f) {
+                    //
+                }
+            },
+            filterAll: () => {
+                //
+            }
+        };
+
+        const smGroup = {
+            all() {
+                return chartService.filteredData;
+            },
+            order() {
+                //
+            },
+            top() {
+                //
+            }
+        };
+
+        const gcpSpy = spyOn(component, 'getChartPromise').and.callFake(() => {
+            component.dim = smDim;
+            component.group = smGroup;
+
+            return Promise.resolve(dc.selectMenu(component.selectMenu.nativeElement)
+                .dimension(component.dim)
+                .group(component.group)
+                .controlsUseVisibility(true)
+                .title((d) => {
+                    return d.key;
+                })
+                .filterDisplayed(() => {
+                    return true;
+                })
+                .on('filtered', (chart, filter) => {
+                    if (component.label === 'select-tissue') {
+                        if (filter instanceof Array) {
+                            geneService.setCurrentTissue(filter[0][0]);
+                        } else {
+                            geneService.setCurrentTissue(filter);
+                        }
+                    }
+                    if (component.label === 'select-model') {
+                        if (filter instanceof Array) {
+                            geneService.setCurrentModel(filter[0][0]);
+                        } else {
+                            geneService.setCurrentModel(filter);
+                        }
+                    }
+
+                    component.isDisabled = (filter) ? false : true;
+                })
+            );
+        });
+
+        const gcp = component.getChartPromise();
+        fixture.detectChanges();
+        gcp.then(async (chartInst) => {
+            component.chart = chartInst;
+
+            expect(component.chart).toBeDefined();
+            expect(component.chart.group).toBeDefined();
+            expect(component.chart.group().all()[0].value).toEqual(12);
+
+            component.initFilterHandler(component.chart);
+
+            chartInst.render();
+            fixture.detectChanges();
+
+            chartService.filteredData = [
+                { key: 'AD Diagnosis (males and females)', value: 0 },
+                { key: 'AD Diagnosis x AOD (males and females)', value: 14 },
+                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+            ];
+            component.isActive = true;
+
+            component.menuSelection = d3.select(component.selectMenu.nativeElement)
+                .select('select.dc-select-menu');
+            expect(component.menuSelection).toBeDefined();
+
+            // Select the second entry for testing, the second 1 index is
+            // the option clicked
+            const options = component.menuSelection.selectAll('option');
+            expect(options).toBeDefined();
+            // Before removing the first option
+            expect(options['_groups'][0].length).toEqual(5);
+            options['_groups'][0][1]['selected'] = 'selected';
+            await component.menuSelection.dispatch('change');
+
+            fixture.detectChanges();
+            expect(component.chart.group().all()[0].value).toEqual(0);
+            expect(component.chart.group().all()[1].value).toEqual(14);
+
+            component.filterAll();
+            fixture.detectChanges();
+            expect(component.isDisabled).toEqual(true);
+            expect(gcpSpy).toHaveBeenCalled();
+        });
+    }));
 });

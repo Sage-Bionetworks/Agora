@@ -103,7 +103,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 // This logic assumes always the same models, we can add
                 // fake entries when filtering them. This is to speed up
                 // server generation of dimensions and groups
-                switch (self.chartService.filteredData['smGroup'].values[0] ?
+                switch ((self.chartService.filteredData['smGroup'] &&
+                    self.chartService.filteredData['smGroup'].values &&
+                    self.chartService.filteredData['smGroup'].values[0]) ?
                     self.chartService.filteredData['smGroup'].values[0].key :
                     'AD Diagnosis (males and females)') {
                     case 'AD Diagnosis (males and females)':
@@ -172,46 +174,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         this.getChartPromise().then((chartInst) => {
             self.chart = chartInst;
 
-            chartInst.filterHandler(async (dimension, filters) => {
-                if (filters.length === 0) {
-                    // The empty case (no filtering)
-                    dimension.filter(null);
-                } else if (filters.length === 1 && !filters[0].isFiltered) {
-                    // Single value and not a function-based filter
-                    // Before filters are applied, update the gene
-                    if (self.label === 'select-tissue') {
-                        self.geneService.setCurrentTissue(filters[0]);
-
-                        if (self.firstTime) {
-                            self.firstTime = false;
-                        } else {
-                            self.getNewGene();
-                        }
-                    }
-                    if (self.label === 'select-model') {
-                        self.geneService.setCurrentModel(filters[0]);
-                    }
-
-                    await dimension.filter(filters[0], true);
-                } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
-                    // Single range-based filter
-                    dimension.filterRange(filters[0]);
-                } else {
-                    // An array of values, or an array of filter objects
-                    dimension.filterFunction((d) => {
-                        filters.forEach((filter) => {
-                            if (filter.isFiltered && filter.isFiltered(d)) {
-                                return true;
-                            } else if (filter <= d && filter >= d) {
-                                return true;
-                            }
-                        });
-                        return false;
-                    });
-                }
-
-                return filters;
-            });
+            self.initFilterHandler(chartInst);
 
             chartInst.promptText(this.promptText);
 
@@ -229,6 +192,50 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             });
 
             chartInst.render();
+        });
+    }
+
+    initFilterHandler(chart: dc.SelectMenu) {
+        const self = this;
+        chart.filterHandler(async (dimension, filters) => {
+            if (filters.length === 0) {
+                // The empty case (no filtering)
+                dimension.filter(null);
+            } else if (filters.length === 1 && !filters[0].isFiltered) {
+                // Single value and not a function-based filter
+                // Before filters are applied, update the gene
+                if (self.label === 'select-tissue') {
+                    self.geneService.setCurrentTissue(filters[0]);
+
+                    if (self.firstTime) {
+                        self.firstTime = false;
+                    } else {
+                        self.getNewGene();
+                    }
+                }
+                if (self.label === 'select-model') {
+                    self.geneService.setCurrentModel(filters[0]);
+                }
+
+                await dimension.filter(filters[0], true);
+            } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
+                // Single range-based filter
+                dimension.filterRange(filters[0]);
+            } else {
+                // An array of values, or an array of filter objects
+                dimension.filterFunction((d) => {
+                    filters.forEach((filter) => {
+                        if (filter.isFiltered && filter.isFiltered(d)) {
+                            return true;
+                        } else if (filter <= d && filter >= d) {
+                            return true;
+                        }
+                    });
+                    return false;
+                });
+            }
+
+            return filters;
         });
     }
 
