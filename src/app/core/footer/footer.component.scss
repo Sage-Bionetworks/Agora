@@ -52,9 +52,17 @@
     .links-col {
         @include respond-to('ex-small') {
             text-align: center;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            vertical-align: middle;
         }
         @include respond-to('small') {
             text-align: center;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            vertical-align: middle;
         }
         @include respond-to('medium') {
             text-align: left;
@@ -70,9 +78,17 @@
     .version-col {
         @include respond-to('ex-small') {
             text-align: center;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            vertical-align: middle;
         }
         @include respond-to('small') {
             text-align: center;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            vertical-align: middle;
         }
         @include respond-to('medium') {
             text-align: right;
@@ -82,6 +98,18 @@
         }
         @include respond-to('ex-large') {
             text-align: right;
+        }
+    }
+
+    .version-col-left {
+        @include respond-to('medium') {
+            text-align: left;
+        }
+        @include respond-to('large') {
+            text-align: left;
+        }
+        @include respond-to('ex-large') {
+            text-align: left;
         }
     }
 }
@@ -109,7 +137,15 @@
 }
 
 .version-span {
-    margin-left: 5%;
+    @include respond-to('medium') {
+        margin-left: 5%;
+    }
+    @include respond-to('large') {
+        margin-left: 5%;
+    }
+    @include respond-to('ex-large') {
+        margin-left: 5%;
+    }
 }
 
 .dark-grey-span {

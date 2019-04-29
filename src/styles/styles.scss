@@ -110,6 +110,11 @@ input::-ms-clear {
     display: none;
 }
 
+input[placeholder] {
+    overflow: auto;
+    text-overflow: ellipsis;
+}
+
 textarea::-ms-clear {
     display: none;
 }

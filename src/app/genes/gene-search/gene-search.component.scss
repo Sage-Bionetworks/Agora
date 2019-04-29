@@ -35,41 +35,44 @@
 
 .keyword-wrapper {
     display: flex;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
-    justify-content: center;
+    // justify-content: center;
     text-align: left;
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 2;
+    padding-left: 8%;
 
-    text-align: justify;
-    text-align-last: left;
+    background: $background;
+    box-shadow: inset 0px 0px 5px color(keyword, box-shadow);
+    border-radius: 6px;
 
-    #keyword {
-        width: 100%;
-    }
+    .input-search-icon {
+        width: 15%;
+        vertical-align: middle;
+        margin: auto;
 
-    i {
-        position: absolute;
-        z-index: 2;
-        color: $contrast-color;
-        top: 20%;
-        content: url("/assets/icon/search_icon.png") !important;
+        i {
+            @include respond-to('ex-small') {
+                width: 60%;
+            }
+            @include respond-to('small') {
+                width: 50%;
+            }
+            @include respond-to('medium') {
+                width: 45%;
+            }
+            @include respond-to('large') {
+                width: 40%;
+            }
+            @include respond-to('ex-large') {
+                width: 35%;
+            }
 
-        @include respond-to('ex-small') {
-            left: 84.5%;
-        }
-        @include respond-to('small') {
-            left: 90%;
-        }
-        @include respond-to('medium') {
-            left: 90%;
-        }
-        @include respond-to('large') {
-            left: 92.0%;
-        }
-        @include respond-to('ex-large') {
-            left: 91.5%;
+            z-index: 2;
+            vertical-align: middle;
+            color: $contrast-color;
+            content: url("/assets/icon/search_icon.png") !important;
         }
     }
 }
@@ -94,32 +97,16 @@
 #keyword {
     @include lato-font('normal');
 
-    @include respond-to('ex-small') {
-        padding-left: 10%;
-    }
-    @include respond-to('small') {
-        padding-left: 6.2%;
-    }
-    @include respond-to('medium') {
-        padding-left: 5%;
-    }
-    @include respond-to('large') {
-        padding-left: 5%;
-    }
-    @include respond-to('ex-large') {
-        padding-left: 5%;
-    }
-
     resize: none;
-    width: 100%;
-    background: $background;
-    -moz-box-shadow: inset 0 0 5px color(keyword, box-shadow);
-    -webkit-box-shadow: inset 0 0 5px color(keyword, box-shadow);
-    box-shadow: inset 0px 0px 5px color(keyword, box-shadow);
-    border-radius: 6px;
+    width: 85%;
+    background: transparent;
     line-height: 63px;
     border-color: color(keyword, border-color);
     border: 2px;
+
+    text-align: left;
+    text-align-last: left;
+    overflow: auto;
 
     // Opera Mini workaround
     outline-offset:-2px;
@@ -138,7 +125,7 @@
 
 }
 
-#keyword:focus {
+.keyword-wrapper:focus-within {
     box-shadow: 0px 0px 4px 2px $secondary-background;
     border-radius: 6px;
 
