@@ -1,6 +1,10 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
+.more-info-header {
+    min-height: 40px;
+}
+
 .link-heading {
     white-space: nowrap;
 }
@@ -13,20 +17,6 @@
     left: 0;
     opacity: 0.5;
 }
-
-/*.ui-dialog-content {
-    max-width: 80ch;
-    margin: auto;
-    >div:first-of-type {
-        text-align-last: center;
-        div {
-            span {
-                color: color(text, span-title);
-                font-size: 28px;
-            }
-        }
-    }
-}*/
 
 .link {
     font-family: Lato;

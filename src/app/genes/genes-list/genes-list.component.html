@@ -23,9 +23,17 @@
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true">
         <ng-template pTemplate="caption">
-            <input type="text" pInputText size="50" id="keywords" placeholder="Search Gene Symbol or Ensembl ID"
-                (input)="gl.filterGlobal($event.target.value, 'contains')">
-            <i class="fa fa-search fa-lg"></i>
+            <div class="row search-row">
+                <section class="filter-wrapper">
+                    <div class="keyword-wrapper">
+                        <input type="text" pInputText size="50" id="keyword" placeholder="Search Gene Symbol or Ensembl ID"
+                            (input)="gl.filterGlobal($event.target.value, 'contains')">
+                        <div class="input-search-icon">
+                            <i class="fa fa-search fa-lg"></i>
+                        </div>
+                    </div>
+                </section>
+            </div>
             <p>
                 <span class="span-add-this">
                     Would you like to add to this list?

@@ -31,6 +31,10 @@
         }
     }
 
+    .ui-menu.ui-menu-dynamic {
+        padding: 12px;
+    }
+
     p-splitButton {
         position: absolute;
         right: 10px;
@@ -67,7 +71,12 @@
 
 .mobile-menu-open-btn {
     .ui-button-icon-left:before {
-        content: url('/assets/icon/close-modal-icon.svg');
+        content: '';
+        background: url('/assets/icon/close-modal-icon.svg') center center no-repeat;
+        vertical-align: middle;
+        background-size: 16px auto;
+        padding-left: 20px;
+        padding-top: 5px;
     }
 }
 
