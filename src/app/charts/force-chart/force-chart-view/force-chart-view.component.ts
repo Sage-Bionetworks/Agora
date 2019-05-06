@@ -4,6 +4,7 @@ import {
     ViewChild,
     ElementRef,
     Input,
+    OnInit,
     AfterViewInit,
     Output,
     EventEmitter,
@@ -11,7 +12,14 @@ import {
     SimpleChange,
     SimpleChanges
 } from '@angular/core';
+
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
+
 import { GeneService } from '../../../core/services';
+
+import { Subscription } from 'rxjs';
 
 import * as d3 from 'd3';
 import * as d3s from 'd3-symbol-extra';
@@ -24,7 +32,7 @@ import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
     styleUrls: ['./force-chart-view.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class ForceChartViewComponent implements AfterViewInit, OnChanges {
+export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges {
     @Output() updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
     @Input() name: string;
     @Input() currentGene = this.geneService.getCurrentGene();
@@ -33,6 +41,7 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
 
     g: any;
     zoomHandler: any;
+    routerSubscription: Subscription;
 
     private linkElements: any;
     private nodeElements: any;
@@ -48,8 +57,23 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
     private resizeTimer;
 
     constructor(
+        private location: PlatformLocation,
+        private router: Router,
         private geneService: GeneService
     ) {}
+
+    ngOnInit() {
+        // If we move away from the overview page, remove
+        // the charts
+        this.routerSubscription = this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                this.removeSelf();
+            }
+        });
+        this.location.onPopState(() => {
+            this.removeSelf();
+        });
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         const data: SimpleChange = changes.networkData;
@@ -77,6 +101,21 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
                 .alphaDecay(0.5);
             this.renderChart();
         }, 300);
+    }
+
+    // Resets the forceSimulation variables and hides the display
+    removeSelf() {
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+        }
+        if (this.simulation) {
+            this.textElements = [];
+            this.nodeElements = [];
+            this.linkElements = [];
+            this.simulation.nodes([]);
+            this.simulation.force('link').links([]);
+            this.loaded = false;
+        }
     }
 
     onResize(event?: any) {
@@ -249,31 +288,6 @@ export class ForceChartViewComponent implements AfterViewInit, OnChanges {
             .strength((d) => {
                 return d.value / 100.0;
             }));
-
-        // this.nodeElements.call(this.dragDrop());
-    }
-
-    private dragDrop() {
-        return d3.drag()
-            .on('start', (node: any) => {
-                if (!d3.event.active) {
-                    this.simulation.alphaTarget(0).restart();
-                }
-                node.fx = node.x;
-                node.fy = node.y;
-            });
-            /*.on('drag', (node: any) => {
-                this.simulation.alphaTarget(0).restart();
-                node.fx = d3.event.x;
-                node.fy = d3.event.y;
-            })
-            .on('end', (node: any) => {
-                if (!d3.event.active) {
-                    this.simulation.alphaTarget(0);
-                }
-                node.fx = null;
-                node.fy = null;
-            });*/
     }
 
     private updateChart() {

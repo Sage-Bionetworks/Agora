@@ -1,5 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
+import { PlatformLocation } from '@angular/common';
+
+import { Router, NavigationStart } from '@angular/router';
+
 import { Gene, GeneNetwork, LinksListResponse, GeneResponse } from '../../../../../models';
 
 import {
@@ -9,6 +13,8 @@ import {
     ForceService,
     NavigationService
 } from '../../../../../core/services';
+
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'gene-network',
@@ -32,6 +38,7 @@ export class GeneNetworkComponent implements OnInit {
         origin: undefined,
         filterLvl: 0
     };
+    routerSubscription: Subscription;
 
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
@@ -39,6 +46,8 @@ export class GeneNetworkComponent implements OnInit {
     private filterlvlN: number = 0;
 
     constructor(
+        private location: PlatformLocation,
+        private router: Router,
         private navService: NavigationService,
         private apiService: ApiService,
         private dataService: DataService,
@@ -51,22 +60,42 @@ export class GeneNetworkComponent implements OnInit {
         this.geneInfo = this.geneService.getCurrentInfo();
         if (!this.id) { this.id = this.navService.id; }
 
-        if (!!this.forceService.getGeneOriginalList() &&
+        // If we move away from the overview page, remove
+        // the charts
+        this.routerSubscription = this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                this.removeForceServiceData();
+            }
+        });
+        this.location.onPopState(() => {
+            this.removeForceServiceData();
+        });
+
+        if (this.forceService.getGeneOriginalList() === null ||
             this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
             this.loadGenes();
         } else {
-            if (this.forceService.getGeneOriginalList()) {
-                const dn = this.forceService.getGeneOriginalList();
-                this.filterlvl = dn.filterLvl;
-                this.selectedGeneData.nodes = dn.nodes.slice(1);
-                this.selectedGeneData.links = dn.links.slice().reverse();
-                this.selectedGeneData.origin = dn.origin;
-                this.dataLoaded = true;
-                this.networkData = dn;
-            } else {
-                this.loadGenes();
-            }
+            const dn = this.forceService.getGeneOriginalList();
+            this.filterlvl = dn.filterLvl;
+            this.selectedGeneData.nodes = dn.nodes.slice(1);
+            this.selectedGeneData.links = dn.links.slice().reverse();
+            this.selectedGeneData.origin = dn.origin;
+            this.dataLoaded = true;
+            this.networkData = dn;
         }
+    }
+
+    // Prevents duplicated networks
+    removeForceServiceData() {
+        const genes: GeneNetwork = {
+            links: [],
+            nodes: [],
+            origin: undefined,
+            filterLvl: 0
+        };
+        this.forceService.genes = genes;
+        this.forceService.genesClicked = genes;
+        this.forceService.genesFiltered = genes;
     }
 
     getText(state?: boolean): string {
@@ -101,8 +130,6 @@ export class GeneNetworkComponent implements OnInit {
 
     updategene(event: Gene) {
         const self = this;
-        console.log(event);
-        console.log(this.geneService.getCurrentGene().hgnc_symbol);
         if (event.hgnc_symbol !== this.geneService.getCurrentGene().hgnc_symbol) {
             this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
                 const lsnPromise = new Promise((resolve, reject) => {
