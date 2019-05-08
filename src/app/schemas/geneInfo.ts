@@ -138,7 +138,8 @@ GeneInfoSchema.set('autoIndex', false);
 GeneInfoSchema.index(
     {
         hgnc_symbol: 'text',
-        ensembl_gene_id: 'text'
+        ensembl_gene_id: 'text',
+        alias: 'text'
     }
 );
 

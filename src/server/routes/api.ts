@@ -419,7 +419,14 @@ connection.once('open', () => {
 
         const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
         const isEnsembl = (req.params.id.startsWith('ENSG')) ? true : false;
-        const queryObj = { [fieldName]: { $regex: req.params.id.trim(), $options: 'i' } };
+        const queryObj = { $or: [
+            {
+                [fieldName]: { $regex: req.params.id.trim(), $options: 'i' }
+            },
+            {
+                alias: { $regex: req.params.id.trim(), $options: 'i' }
+            }
+        ]};
 
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) {
