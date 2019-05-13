@@ -354,10 +354,24 @@ p-dialog {
 
     .link-heading {
         color: color(text, secondary);
-        float: left;
-        margin-left: 50%;
-        transform: translate(-50%);
-        margin-bottom: 20px;
+        @include respond-to('medium') {
+            float: left;
+            margin-left: 50%;
+            transform: translate(-50%);
+            margin-bottom: 20px;
+        }
+        @include respond-to('large') {
+            float: left;
+            margin-left: 50%;
+            transform: translate(-50%);
+            margin-bottom: 20px;
+        }
+        @include respond-to('ex-large') {
+            float: left;
+            margin-left: 50%;
+            transform: translate(-50%);
+            margin-bottom: 20px;
+        }
     }
 
     .info-icon {
@@ -950,6 +964,10 @@ p-dialog {
 .section-hero {
     background-image: url('/assets/img/hero-background.svg');
     background-size: cover !important;
+
+    > h1 {
+        text-align-last: center;
+    }
 }
 
 .overview-desc {
@@ -1232,7 +1250,7 @@ p-dialog {
         text {
             @include lato-font('bold');
             @include respond-to('ex-small') {
-                font-size: $font-size-small;
+                font-size: $font-size-tiny;
             }
 
             pointer-events: auto;
@@ -1414,7 +1432,21 @@ g.textGroup text {
         background: $background;
         box-shadow: 0px 0px 4px color(box-shadow);
         cursor: pointer;
-        font-size: $font-size-x-regular;
+        @include respond-to('ex-small') {
+            font-size: $font-size-regular;
+        }
+        @include respond-to('small') {
+            font-size: $font-size-regular;
+        }
+        @include respond-to('medium') {
+            font-size: $font-size-x-regular;
+        }
+        @include respond-to('large') {
+            font-size: $font-size-x-regular;
+        }
+        @include respond-to('ex-large') {
+            font-size: $font-size-x-regular;
+        }
         margin-bottom: 40px;
     }
 
@@ -1442,7 +1474,21 @@ g.textGroup text {
 
         color: color(text, secondary);
         cursor: pointer;
-        font-size: $font-size-regular;
+        @include respond-to('ex-small') {
+            font-size: $font-size-x-small;
+        }
+        @include respond-to('small') {
+            font-size: $font-size-regular;
+        }
+        @include respond-to('medium') {
+            font-size: $font-size-regular;
+        }
+        @include respond-to('large') {
+            font-size: $font-size-regular;
+        }
+        @include respond-to('ex-large') {
+            font-size: $font-size-regular;
+        }
         padding-left: 30px;
         height: 52px;
         line-height: 52px;
@@ -1591,7 +1637,7 @@ g.textGroup text {
         text {
             @include lato-font('bold');
             @include respond-to('ex-small') {
-                font-size: $font-size-small;
+                font-size: $font-size-tiny;
             }
 
             pointer-events: auto;

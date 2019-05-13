@@ -6,7 +6,9 @@
 }
 
 .link-heading {
-    white-space: nowrap;
+    white-space: pre-wrap;
+    text-align: left;
+    text-align-last: left;
 }
 
 .ui-dialog-mask {

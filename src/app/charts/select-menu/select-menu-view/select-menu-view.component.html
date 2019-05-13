@@ -1,11 +1,11 @@
 <div class="row controls-row">
-    <div class="col-md-10 col-sm-10 col-10">
+    <div class="col-md-10 col-sm-10 col-11">
         <div [ngClass]="columnName" [class.select-inactive]="!isActive">
         </div>
         <div #sm class="ori-sel-chart">
         </div>
     </div>
-    <div class="col-md-2 col-sm-2 col-2">
+    <div class="col-md-2 col-sm-2 col-1">
         <p-progressSpinner *ngIf="!isActive" strokeWidth="8" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
     </div>
 </div>
