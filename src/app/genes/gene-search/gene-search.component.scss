@@ -132,6 +132,7 @@
     padding-left: 4%;
 
     p {
+        width: 100%;
         @include lato-font('bold');
         color: color(text, secondary);
         margin-top: 0.75em;
@@ -141,7 +142,7 @@
 
     .fa-star {
         position: relative;
-        left: 44%;
+        left: 92%;
         top: 32%;
         color: $contrast-color;
     }

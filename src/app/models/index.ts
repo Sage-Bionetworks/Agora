@@ -4,3 +4,4 @@ export * from './geneLink';
 export * from './geneStatistics';
 export * from './teamInfo';
 export * from './response';
+export * from './proteomics';

@@ -14,6 +14,9 @@
             <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)" [class.italic-result]="isNotFound">
                 <p class="gene-name">
                     {{result.hgnc_symbol}}
+                    <span *ngIf="hasAlias(result.hgnc_symbol)" class="gene-name">
+                        &nbsp;(Also known as&nbsp;{{currentQuery.toUpperCase()}})
+                    </span>
                 </p>
                 <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>
             </li>

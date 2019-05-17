@@ -31,6 +31,7 @@ export class GeneSearchComponent implements OnInit {
     gene: Gene;
     notFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
     isNotFound: boolean = false;
+    currentQuery: string = '';
 
     constructor(
         private navService: NavigationService,
@@ -49,9 +50,11 @@ export class GeneSearchComponent implements OnInit {
                 distinctUntilChanged(),
                 switchMap((query) => {
                     if (query) {
+                        this.currentQuery = query;
                         this.isSearching = true;
                         return this.search(query);
                     } else {
+                        this.currentQuery = '';
                         this.isSearching = false;
                         this.results = [];
                         return empty();
@@ -162,5 +165,10 @@ export class GeneSearchComponent implements OnInit {
         }, (error) => {
             console.log('Routing error! ' + error.message);
         });
+    }
+
+    hasAlias(hgncSymbol: string): boolean {
+        return !hgncSymbol.includes(this.currentQuery) &&
+            this.currentQuery.length === hgncSymbol.length;
     }
 }
