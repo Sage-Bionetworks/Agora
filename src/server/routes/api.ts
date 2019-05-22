@@ -424,7 +424,7 @@ connection.once('open', () => {
                 [fieldName]: { $regex: req.params.id.trim(), $options: 'i' }
             },
             {
-                alias: { $regex: req.params.id.trim(), $options: 'i' }
+                alias: new RegExp('^' + req.params.id.trim() + '$', 'i')
             }
         ]};
 

@@ -17,8 +17,8 @@
                     <span *ngIf="hasAlias(result.hgnc_symbol)" class="gene-name">
                         &nbsp;(Also known as&nbsp;{{currentQuery.toUpperCase()}})
                     </span>
+                    <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>
                 </p>
-                <i *ngIf="result.nominations" class="fa fa-star fa-lg"></i>
             </li>
         </ul>
     </section>

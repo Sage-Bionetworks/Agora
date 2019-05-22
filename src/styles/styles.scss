@@ -280,8 +280,7 @@ p-dialog {
 }
 
 ::selection {
-    background-color: transparent !important;
-    color: color(text, primary) !important;
+    color: $background !important;
 }
 
 .pointer {
@@ -605,8 +604,6 @@ p-dialog {
         .sort-icon {
             max-width: 22px;
         }
-
-
 
         @include respond-to('ex-small') {
             >tr>th:first-child {
