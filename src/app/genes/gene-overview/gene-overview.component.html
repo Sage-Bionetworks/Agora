@@ -1,5 +1,5 @@
 <div *ngIf="dataLoaded" (window:resize)="onResize()">
-    <p-tabMenu *ngIf="showMobileMenu" #overviewMenu [activeItem]="activeItem" [model]="items" [ngClass]="{'close':mobileOpen}" [styleClass]="'overview-tab-menu-mobile'" class="mobilemenu-container" (click)="mobileActivate()"></p-tabMenu>
+    <p-tabMenu *ngIf="showMobileMenu" #overviewMenu [activeItem]="activeItem" [model]="items" [ngClass]="{'close':mobileOpen}" [styleClass]="'overview-tab-menu-mobile'" class="mobilemenu-container" (click)="mobileActivate($event)"></p-tabMenu>
     <div class="section-hero">
         <div class="section-thin overview-header " tabindex="0">
             <div class="row no-gutters">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <p-tabMenu *ngIf="showDesktopMenu" #overviewMenu [model]="items" [activeItem]="activeItem" [styleClass]="'overview-tab-menu'" (click)="activateMenu()"></p-tabMenu>
+    <p-tabMenu *ngIf="showDesktopMenu" #overviewMenu [model]="items" [activeItem]="activeItem" [styleClass]="'overview-tab-menu'" (click)="activateMenu($event)"></p-tabMenu>
 </div>
 <div *ngIf="!dataLoaded" class="container-fluid small-padding-top loading-full-height">
     <loading-page></loading-page>

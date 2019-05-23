@@ -11,6 +11,7 @@ import { NominationDetailsComponent } from './nom-details';
 import { SOEComponent } from './soe';
 import { EvidenceMenuComponent } from './evidence-menu';
 import { RNAComponent } from './evidence-menu/rna';
+import { ProteomicsComponent } from './evidence-menu/proteomics';
 import { GeneRNASeqDEComponent } from './evidence-menu/rna/gene-rnaseq-de';
 import { BoxPlotsViewComponent } from './evidence-menu/rna/gene-rnaseq-de/box-plots-view';
 import { GeneNetworkComponent } from './evidence-menu/rna/gene-network';
@@ -23,6 +24,7 @@ import { GeneDruggabilityComponent } from './gene-druggability';
         NominationDetailsComponent,
         EvidenceMenuComponent,
         RNAComponent,
+        ProteomicsComponent,
         GeneRNASeqDEComponent,
         BoxPlotsViewComponent,
         GeneNetworkComponent,

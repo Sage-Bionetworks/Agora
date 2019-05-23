@@ -6,12 +6,16 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
+import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
 import { GeneService, NavigationService } from '../../../core/services';
 
 import { MenuItem } from 'primeng/api';
+import { TabMenu } from 'primeng/tabmenu';
+
+import { throwError, Subscription } from 'rxjs';
 
 @Component({
     selector: 'evidence-menu',
@@ -23,13 +27,21 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
-    @ViewChild('overviewMenu') menu: MenuItem[];
+    @ViewChild('evidenceMenu') menu: TabMenu;
+
+    extras: NavigationExtras = {
+        relativeTo: this.navService.getRoute(),
+        skipLocationChange: true
+    };
 
     activeItem: MenuItem;
     currentGeneData = [];
+    routerSub: Subscription;
     subscription: any;
     items: MenuItem[];
     neverActivated: boolean = true;
+    disableMenu: boolean = false;
+    firstTimeCheck: boolean = true;
 
     constructor(
         private navService: NavigationService,
@@ -39,51 +51,126 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     ngOnInit() {
         // Populate the tab menu
         this.items = [
-            {label: 'RNA'},
-            {label: 'Protein'},
-            {label: 'Metabolomics'},
-            {label: 'Single Cell RNA-Seq'},
-            {label: 'Genomic'}
+            { label: 'RNA', disabled: this.disableMenu },
+            { label: 'Protein', disabled: this.disableMenu },
+            { label: 'Metabolomics', disabled: true },
+            { label: '', disabled: true},
+            { label: '', disabled: true}
         ];
 
         this.geneInfo = this.geneService.getCurrentInfo();
-        this.setActiveItem();
-    }
 
-    activateMenu() {
-        this.activeItem = this.menu['activeItem'];
-        if (this.activeItem) {
-            switch (this.activeItem.label) {
-                case 'RNA':
-                    this.navService.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
+        this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
+            if (re instanceof NavigationEnd) {
+                if (this.geneService.getCurrentGene()) {
+                    // The url id is undefined here because the route didn't change at
+                    // this point like in the gene overview component. Check only for
+                    // the evidence-menu part of the url for now
+                    const evidenceTabIndex: number = (this.geneInfo) ? (this.geneInfo.nominations ?
+                        2 : 1) : 2;
+                    if (!re.url.includes('/genes/(genes-router:gene-details/') ||
+                        this.navService.getOvMenuTabIndex() !== evidenceTabIndex) {
+                        const urlToGo: string = this.navService.getOvMenuTabIndex() === 0 ?
+                            'nom-details' : this.navService.getOvMenuTabIndex() === 1 ?
+                            'soe' : 'druggability';
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': [urlToGo],
+                                'evidence-menu': null
+                            }
+                        }, this.extras);
+
+                        if (this.routerSub) {
+                            this.routerSub.unsubscribe();
                         }
-                    });
-                    break;
-                default:
-                    this.navService.goToRoute('/genes', {
-                        outlets: {
-                            'genes-router': ['gene-details', this.id],
-                            'gene-overview': ['nom-details']
+                        if (this.subscription) {
+                            this.subscription.unsubscribe();
                         }
-                    });
+                    } else {
+                        if (this.disableMenu) {
+                            // Improve this part, 0.8 seconds to re-activate the menu items
+                            setTimeout(() => {
+                                this.items.forEach((i) => {
+                                    i.disabled = false;
+                                });
+                                this.disableMenu = false;
+                            }, 800);
+                        }
+                    }
+                }
             }
-        }
+        });
     }
 
-    ngAfterContentChecked() {
-        if (this.menu && this.neverActivated) {
+    activateMenu(event) {
+        if (((!this.disableMenu && ((this.activeItem && this.menu.activeItem)
+            ? (this.activeItem.label !== this.menu.activeItem.label) : false)
+            ) || this.neverActivated) || event) {
             this.neverActivated = false;
-            this.activateMenu();
+            this.disableMenu = true;
+            this.items.forEach((i) => {
+                i.disabled = true;
+            });
+
+            this.activeItem = (this.menu.activeItem) ? this.menu.activeItem :
+                event ? {label: event.target.textContent} : {label: 'RNA'};
+            if (this.activeItem) {
+                switch (this.activeItem.label) {
+                    case 'RNA':
+                        this.navService.setEvidenceMenuTabIndex(0);
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['rna']
+                            }
+                        }, this.extras);
+                        break;
+                    case 'Protein':
+                        this.navService.setEvidenceMenuTabIndex(1);
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['proteomics']
+                            }
+                        }, this.extras);
+                        break;
+                    case 'Metabolomics':
+                        this.navService.setEvidenceMenuTabIndex(2);
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['metabolomics']
+                            }
+                        }, this.extras);
+                        break;
+                    default:
+                        this.navService.setEvidenceMenuTabIndex(0);
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['rna']
+                            }
+                        }, this.extras);
+                }
+            }
         }
     }
 
     setActiveItem() {
         if (this.geneInfo) {
-            this.items[0].visible = true;
-            this.activeItem = this.items[0];
+            this.activeItem = this.items[this.navService.getEvidenceMenuTabIndex()];
+        }
+    }
+
+    ngAfterContentChecked() {
+        // Small size
+        if (this.firstTimeCheck) {
+            this.firstTimeCheck = false;
+        }
+        if (this.menu && this.neverActivated) {
+            this.activateMenu(null);
+            this.setActiveItem();
         }
     }
 }

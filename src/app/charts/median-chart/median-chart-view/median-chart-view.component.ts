@@ -150,46 +150,45 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .colors(['#5171C0'])
             .renderTitle(false)
             .on('renderlet', (chart) => {
-                const yDomainLength = Math.abs(this.chart.y().domain()[1]
-                - this.chart.y().domain()[0]);
-                // if (chart.select('rect').attr('y') === '240' ) {
-                //     chart.select('rect').attr('y', 290 );
-                // }
-                chart.selectAll('rect').each((el, i, tree) => {
-                    if (el && el.y <= 0) {
-                        tree[i].setAttribute('height', 0);
-                    }
-                 });
-                chart.selectAll('rect').attr('pointer-events', 'none');
-                chart.selectAll('text').each((el, i, tree) => {
-                    if (el && el['data'] && el['data'].value < 0) {
-                        el['data'].value = '';
-                        el.y = '';
-                        tree[i].innerHTML = '';
-                    }
-                });
-                // const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
-                const mult = chart.effectiveHeight() / yDomainLength;
-                const lefty = 0;
-                const righty = 0; // use real statistics here!
-                const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
-                { x: chart.x().range()[1], y: chart.y()(righty) }];
-                const line = d3.line()
-                    .x((d: any) =>  d.x)
-                    .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log10(5)) * mult));
-                const chartBody = chart.select('g.chart-body');
-                let path = chartBody.selectAll('path.extra').data([extradata]);
-                path = path
-                    .enter()
-                    .append('path')
-                    .attr('class', 'extra')
-                    .attr('stroke', 'red')
-                    .attr('id', 'extra-line')
-                    .merge(path);
-                path.attr('d', line);
+                if (chart) {
+                    const yDomainLength = Math.abs(chart.y().domain()[1]
+                        - chart.y().domain()[0]);
+                    chart.selectAll('rect').each((el, i, tree) => {
+                        if (el && el.y <= 0) {
+                            tree[i].setAttribute('height', 0);
+                        }
+                    });
+                    chart.selectAll('rect').attr('pointer-events', 'none');
+                    chart.selectAll('text').each((el, i, tree) => {
+                        if (el && el['data'] && el['data'].value < 0) {
+                            el['data'].value = '';
+                            el.y = '';
+                            tree[i].innerHTML = '';
+                        }
+                    });
+                    // const svgEl = (chart.selectAll('g.axis.y').node() as SVGGraphicsElement);
+                    const mult = chart.effectiveHeight() / yDomainLength;
+                    const lefty = 0;
+                    const righty = 0; // use real statistics here!
+                    const extradata = [{ x: chart.x().range()[0], y: chart.y()(lefty) },
+                    { x: chart.x().range()[1], y: chart.y()(righty) }];
+                    const line = d3.line()
+                        .x((d: any) =>  d.x)
+                        .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log10(5)) * mult));
+                    const chartBody = chart.select('g.chart-body');
+                    let path = chartBody.selectAll('path.extra').data([extradata]);
+                    path = path
+                        .enter()
+                        .append('path')
+                        .attr('class', 'extra')
+                        .attr('stroke', 'red')
+                        .attr('id', 'extra-line')
+                        .merge(path);
+                    path.attr('d', line);
 
-                // Adds tooltip below the x axis labels
-                self.addXAxisTooltips(chart);
+                    // Adds tooltip below the x axis labels
+                    self.addXAxisTooltips(chart);
+                }
             });
 
         this.chart.yAxis().ticks(3);

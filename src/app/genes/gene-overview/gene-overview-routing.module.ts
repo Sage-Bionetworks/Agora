@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { GeneOverviewComponent } from './gene-overview.component';
 
 export const routes: Routes = [
-    { path: '', component: GeneOverviewComponent },
+    { path: '', component: GeneOverviewComponent }
 ];
 
 @NgModule({

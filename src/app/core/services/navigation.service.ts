@@ -7,6 +7,7 @@ export class NavigationService {
     // The menu tab that we route to when loading the overview component.
     // Defaults to the first one
     ovMenuTabIndex: number = 0;
+    evidenceMenuTabIndex: number = 0;
 
     constructor(
         private router: Router,
@@ -43,11 +44,20 @@ export class NavigationService {
         return this.id;
     }
 
+    // These methods could be generalized
     getOvMenuTabIndex(): number {
         return this.ovMenuTabIndex;
     }
 
     setOvMenuTabIndex(index: number) {
         this.ovMenuTabIndex = index;
+    }
+
+    getEvidenceMenuTabIndex(): number {
+        return this.evidenceMenuTabIndex;
+    }
+
+    setEvidenceMenuTabIndex(index: number) {
+        this.evidenceMenuTabIndex = index;
     }
 }

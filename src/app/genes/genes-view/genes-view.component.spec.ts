@@ -33,13 +33,14 @@ describe('Component: GenesView', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have two router-outlets', () => {
+    it('should have three router-outlets', () => {
         const aEl = fixture.debugElement.queryAll(By.css('router-outlet'));
-        expect(aEl.length).toEqual(2);
+        expect(aEl.length).toEqual(3);
 
         // Could not test their names here, no name property in the
         // router-outlet Angular class
         expect(aEl[0]).toBeDefined();
         expect(aEl[1]).toBeDefined();
+        expect(aEl[2]).toBeDefined();
     });
 });

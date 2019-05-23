@@ -20,10 +20,9 @@ import {
 } from '../../core/services';
 
 import { MenuItem } from 'primeng/api';
+import { TabMenu } from 'primeng/tabmenu';
 
 import { throwError, Subscription } from 'rxjs';
-
-import { TabMenu } from 'primeng/tabmenu';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
@@ -45,14 +44,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() dataLoaded: boolean = false;
     @ViewChild('overviewMenu') menu: TabMenu;
 
-    showMobileMenu: boolean = false;
-    showDesktopMenu: boolean = false;
-    firstTimeCheck: boolean = true;
-
     extras: NavigationExtras = {
         relativeTo: this.navService.getRoute(),
         skipLocationChange: true
     };
+
     activeItem: MenuItem;
     currentGeneData = [];
     subscription: Subscription;
@@ -61,6 +57,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     items: MenuItem[];
     neverActivated: boolean = true;
     disableMenu: boolean = false;
+    showMobileMenu: boolean = false;
+    showDesktopMenu: boolean = false;
+    firstTimeCheck: boolean = true;
 
     private resizeTimer;
     private mobileOpen: boolean = true;
@@ -245,7 +244,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['rna']
+                                'evidence-menu': ['evidence']
                             }
                         }, this.extras);
                         break;
@@ -279,6 +278,14 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                 }
+
+                if (this.items.some((i) => i.disabled)) {
+                    this.items.forEach((i) => {
+                        i.disabled = false;
+                    });
+                    this.disableMenu = false;
+                }
+
             }
         }
     }

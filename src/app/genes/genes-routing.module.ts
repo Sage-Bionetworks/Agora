@@ -11,6 +11,7 @@ import { SOEComponent } from './gene-overview/soe';
 import { NominationDetailsComponent } from './gene-overview/nom-details';
 import { EvidenceMenuComponent } from './gene-overview/evidence-menu';
 import { RNAComponent } from './gene-overview/evidence-menu/rna';
+import { ProteomicsComponent } from './gene-overview/evidence-menu/proteomics';
 import { GeneDruggabilityComponent } from './gene-overview/gene-druggability';
 
 export const routes: Routes = [
@@ -30,6 +31,7 @@ export const routes: Routes = [
         { path: 'nom-details', component: NominationDetailsComponent, outlet: 'gene-overview' },
         { path: 'evidence', component: EvidenceMenuComponent, outlet: 'evidence-menu' },
         { path: 'rna', component: RNAComponent, outlet: 'gene-overview' },
+        { path: 'proteomics', component: ProteomicsComponent, outlet: 'gene-overview' },
         { path: 'druggability', component: GeneDruggabilityComponent, outlet: 'gene-overview'}
     ] },
     { path: '', redirectTo: 'genes', pathMatch: 'full' }

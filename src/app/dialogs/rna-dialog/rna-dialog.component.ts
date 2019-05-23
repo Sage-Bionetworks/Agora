@@ -9,7 +9,7 @@ import { NavigationService } from '../../core/services';
     styleUrls: ['./rna-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class RNAComponent {
+export class RNADialogComponent {
     @Input() display: boolean = false;
     @Input() description: boolean = false;
     @Input() header: string = '';

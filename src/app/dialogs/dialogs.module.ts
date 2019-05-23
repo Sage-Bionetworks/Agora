@@ -12,7 +12,7 @@ import { MoreInfoComponent } from './more-info';
 import { NOMinatedTargetComponent } from './nt-dialog';
 import { BRAinRegionNetworkComponent } from './brn-dialog';
 import { SimilarGenesNetworkComponent } from './sgn-dialog';
-import { RNAComponent } from './rna-dialog';
+import { RNADialogComponent } from './rna-dialog';
 import { SIMilarPageDialogComponent } from './sp-dialog';
 
 import { DialogsService } from './services';
@@ -33,7 +33,7 @@ import { DialogsService } from './services';
         NOMinatedTargetComponent,
         BRAinRegionNetworkComponent,
         SimilarGenesNetworkComponent,
-        RNAComponent,
+        RNADialogComponent,
         SIMilarPageDialogComponent
     ],
     exports: [
@@ -47,7 +47,7 @@ import { DialogsService } from './services';
         NOMinatedTargetComponent,
         BRAinRegionNetworkComponent,
         SimilarGenesNetworkComponent,
-        RNAComponent,
+        RNADialogComponent,
         SIMilarPageDialogComponent
     ],
     providers: [

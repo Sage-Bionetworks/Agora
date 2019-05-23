@@ -15,7 +15,7 @@ import {
     NavigationServiceStub
 } from '../../testing';
 
-import { RNAComponent } from './rna-dialog.component';
+import { RNADialogComponent } from './rna-dialog.component';
 
 import { DialogsService } from '../services';
 import { NavigationService } from '../../core/services';
@@ -25,8 +25,8 @@ import { Dialog } from 'primeng/dialog';
 import { MockComponent } from 'ng-mocks';
 
 describe('Component: RNADialog', () => {
-    let component: RNAComponent;
-    let fixture: ComponentFixture<RNAComponent>;
+    let component: RNADialogComponent;
+    let fixture: ComponentFixture<RNADialogComponent>;
     let router: RouterStub;
     let dialogsService: DialogsServiceStub;
     let activatedRoute: any;
@@ -34,9 +34,9 @@ describe('Component: RNADialog', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                RNAComponent,
+                RNADialogComponent,
                 MockComponent(Dialog),
-                MockComponent(RNAComponent)
+                MockComponent(RNADialogComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -50,7 +50,7 @@ describe('Component: RNADialog', () => {
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(RNAComponent);
+        fixture = TestBed.createComponent(RNADialogComponent);
 
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
