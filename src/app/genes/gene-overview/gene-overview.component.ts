@@ -312,6 +312,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         if (responseList[0].geneTissues) {
                             this.geneService.setGeneTissues(responseList[0].geneTissues);
                         }
+                        if (responseList[0].geneProteomics) {
+                            this.geneService.setGeneProteomics(responseList[0].geneProteomics);
+                        }
                         this.dataService.loadGenes(responseList[0]);
                         this.forceService.processSelectedNode(responseList[1], this.gene);
                     }

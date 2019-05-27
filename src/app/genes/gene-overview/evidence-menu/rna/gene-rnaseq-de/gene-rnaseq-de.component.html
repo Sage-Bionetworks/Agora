@@ -45,7 +45,9 @@
                         <select-menu *ngIf="dataLoaded && !isEmptyGene"
                             [promptText]="'All'"
                             [label]="'select-model'"
-                            [columnName]="'select-column-model'">
+                            [columnName]="'select-column-model'"
+                            [defaultValue]="'AD Diagnosis (males and females)'"
+                            [type]="'RNA'">
                         </select-menu>
                         <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
                             [options]="emptySelection"

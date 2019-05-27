@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Gene, GeneInfo } from '../../app/models';
-import { Genes, GenesInfo, GenesLinks, TeamsInfo } from '../../app/schemas';
+import { Genes, GenesInfo, GenesLinks, TeamsInfo, Proteomics } from '../../app/schemas';
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
@@ -62,11 +62,10 @@ connection.once('open', () => {
     const allTissues: string[] = [];
     const allModels: string[] = [];
     const decimalPipe: DecimalPipe = new DecimalPipe('en-US');
-    const defaultTissue: string = 'CBE';
-    const currentModel: string = this.defaultModel;
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
+    const pChartInfos: Map<string, any> = new Map<string, any>();
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
     // at least, but not more than, 2 digits after decimal point
@@ -166,6 +165,89 @@ connection.once('open', () => {
     /* GET genes listing. */
     router.get('/', (req, res) => {
         res.send({ title: 'Genes API Entry Point' });
+    });
+
+    router.get('/refreshp', async (req, res, next) => {
+        const results = {};
+        const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
+        const id = req.query.id;
+
+        loadChartData(filter).then(async (status) => {
+            let indx: any = null;
+
+            // All the proteomics entries for this Gene id
+            let geneProteomics = null;
+            const queryObj = { hgnc_symbol: id };
+            await Proteomics.find(queryObj).exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    if (genes.length) {
+                        geneProteomics = genes.slice();
+                        indx = await crossfilter(geneProteomics);
+
+                        // Crossfilter variables
+                        const dimensions = {
+                            spDim: null,
+                            bpDim: null
+                        };
+                        const groups = {
+                            spGroup: null,
+                            bpGroup: null
+                        };
+
+                        // Load all dimensions and groups
+                        dimensions.spDim = await indx.dimension((d) => d.uniprotid);
+                        dimensions.bpDim = await indx.dimension((d) => d.tissue);
+
+                        groups.spGroup = await dimensions.spDim.group();
+                        groups.bpGroup = await dimensions.bpDim.group().reduce(
+                            function(p, v) {
+                                // Retrieve the data value, if not Infinity or null add it.
+                                const dv = Math.log2(v.fc);
+                                if (dv !== Infinity && dv !== null) {
+                                    p.push(dv);
+                                }
+                                return p;
+                            },
+                            function(p, v) {
+                                // Retrieve the data value, if not Infinity or null remove it.
+                                const dv = Math.log2(v.fc);
+                                if (dv !== Infinity && dv !== null) {
+                                    p.splice(p.indexOf(dv), 1);
+                                }
+                                return p;
+                            },
+                            function() {
+                                return [];
+                            }
+                        );
+
+                        if (Object.keys(groups).length > 0) {
+                            const rPromise = new Promise((resolve, reject) => {
+                                Object.keys(dimensions).forEach(async (dimension) => {
+                                    const groupName = dimension.substring(0, 2) + 'Group';
+                                    results[groupName] = {
+                                        values: groups[groupName].all(),
+                                        top: groups[groupName].top(1)[0].value
+                                    };
+
+                                });
+
+                                resolve(results);
+                            });
+                            rPromise.then((r: any) => {
+                                if (r) {
+                                    indx = null;
+
+                                    res.send(r);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        });
     });
 
     router.get('/refresh', async (req, res, next) => {
@@ -287,6 +369,20 @@ connection.once('open', () => {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };
 
+            // All the proteomics entries for this Gene id
+            let geneProteomics = null;
+            await Proteomics.find(queryObj).exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    if (!genes.length) {
+                        res.json({items: genes});
+                    } else {
+                        geneProteomics = genes.slice();
+                    }
+                }
+            });
+
             // Find all the Genes with the current id
             await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
                 .exec(async (err, genes) => {
@@ -345,7 +441,8 @@ connection.once('open', () => {
                             minAdjPValue,
                             maxAdjPValue,
                             geneModels,
-                            geneTissues
+                            geneTissues,
+                            geneProteomics
                         });
                     }
                 }
@@ -869,30 +966,21 @@ connection.once('open', () => {
         return +decimalPipe.transform(value, getSignificantDigits(compare));
     }
 
-    function addChartInfo(label: string, chartObj: any) {
-        if (label && !chartInfos.has(label)) { chartInfos.set(label, chartObj); }
+    function addChartInfo(label: string, chartObj: any, type: string = 'RNA') {
+        let localChartInfos: Map<string, any> = null;
+        if (type === 'RNA') {
+            localChartInfos = chartInfos;
+        } else if (type === 'Proteomics') {
+            localChartInfos = pChartInfos;
+        }
+
+        if (chartInfos) {
+            if (label && !localChartInfos.has(label)) { localChartInfos.set(label, chartObj); }
+        }
     }
 
     function getChartInfo(label: string): any {
         return chartInfos.get(label);
-    }
-
-    function registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
-        addChartInfo(
-            label,
-            {
-                dimension: ['tissue', 'model'],
-                group: 'self',
-                type: 'box-plot',
-                title: '',
-                filter: 'default',
-                xAxisLabel: '',
-                yAxisLabel,
-                format: 'array',
-                attr,
-                constraints
-            }
-        );
     }
 
     function loadChartData(model: string): Promise<any> {
@@ -930,6 +1018,17 @@ connection.once('open', () => {
                     title: '',
                     filter: 'default'
                 }
+            );
+            addChartInfo(
+                'select-protein',
+                {
+                    dimension: ['uniprotid'],
+                    group: 'self',
+                    type: 'select-menu',
+                    title: '',
+                    filter: 'default'
+                },
+                'Proteomics'
             );
 
             resolve(true);

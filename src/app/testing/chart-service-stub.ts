@@ -15,11 +15,20 @@ export class ChartServiceStub {
         ['forest-plot', false],
         ['select-model', false]
     ]);
+    pChartInfos: Map<string, any> = new Map<string, any>();
+    pChartNames: Map<string, boolean> = new Map([
+        ['pbox-plot', false],
+        ['select-protein', false]
+    ]);
     queryFilter: any = {
         smGroup: null,
         bpGroup: null,
         fpGroup: null,
         mcGroup: null
+    };
+    pQueryFilter: any = {
+        spGroup: null,
+        bpGroup: null
     };
     filteredData: any = {
         smGroup: {
@@ -35,6 +44,10 @@ export class ChartServiceStub {
             top: {}
         },
         mcGroup: {
+            values: [],
+            top: {}
+        },
+        spGroup: {
             values: [],
             top: {}
         }

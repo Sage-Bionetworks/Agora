@@ -41,6 +41,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     @Input() id: string;
     @ViewChild('noDataMedian') noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
+
     tissues: SelectItem[] = [];
     models: SelectItem[] = [];
     emptySelection: SelectItem[] = [];
@@ -172,7 +173,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                         attr: 'model'
                     }
                 ],
-                'log2(fold change)',
+                'LOG 2 FOLD CHANGE',
                 'fc'
             );
 
@@ -233,7 +234,9 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         return this.gene.hgnc_symbol + ' ' + suffix + '_' + this.geneService.getCurrentModel();
     }
 
-    registerBoxPlot(label: string, constraints: any[], yAxisLabel: string, attr: string) {
+    registerBoxPlot(
+        label: string, constraints: any[], yAxisLabel: string, attr: string, type: string = 'RNA'
+    ) {
         this.chartService.addChartInfo(
             label,
             {
@@ -247,7 +250,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
                 format: 'array',
                 attr,
                 constraints
-            }
+            },
+            type
         );
     }
 

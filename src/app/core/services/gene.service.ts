@@ -6,7 +6,8 @@ import {
     TeamInfo,
     TissuesResponse,
     ModelsResponse,
-    GeneResponse
+    GeneResponse,
+    Proteomics
 } from '../../models';
 
 import { emptyGene } from 'app/testing';
@@ -29,6 +30,7 @@ export class GeneService {
     geneModels: string[] = [];
     tissues: string[] = [];
     geneTissues: string[] = [];
+    geneProteomics: Proteomics[] = [];
     minFC: number = 0;
     maxFC: number = 10;
     minLogFC: number = 0;
@@ -150,6 +152,14 @@ export class GeneService {
 
     setGeneModels(models: string[]) {
         this.geneModels = models;
+    }
+
+    getGeneProteomics(): Proteomics[] {
+        return this.geneProteomics;
+    }
+
+    setGeneProteomics(proteomics: Proteomics[]) {
+        this.geneProteomics = proteomics;
     }
 
     setLogFC(min: number, max: number) {

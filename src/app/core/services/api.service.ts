@@ -257,7 +257,7 @@ export class ApiService {
         return this.http.get('/api/models/gene', { headers });
     }
 
-    refreshChart(filter: any, id: string): Observable<any> {
+    refreshChart(filter: any, id: string, type: string = 'RNA'): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
@@ -269,6 +269,8 @@ export class ApiService {
             'id', id
         );
 
-        return this.http.get('/api/refresh?filter=' + JSON.stringify(filter), { headers, params });
+        const baseUrl = '/api/refresh' +
+            ((type === 'RNA') ? '?filter=' + JSON.stringify(filter) : 'p');
+        return this.http.get(baseUrl, { headers, params });
     }
 }

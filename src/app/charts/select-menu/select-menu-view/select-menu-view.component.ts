@@ -42,6 +42,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() models = this.geneService.getGeneModels();
     @Input() dim: any;
     @Input() group: any;
+    @Input() type: string = 'RNA';
 
     @ViewChild('sm') selectMenu: ElementRef;
 
@@ -87,7 +88,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     initChart() {
         const self = this;
 
-        const smDim = {
+        const spDim = {
             filter: (f, e) => {
                 if (f) {
                     //
@@ -98,65 +99,69 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             }
         };
 
-        const smGroup = {
+        const spGroup = {
             all() {
-                // This logic assumes always the same models, we can add
-                // fake entries when filtering them. This is to speed up
-                // server generation of dimensions and groups
-                switch ((self.chartService.filteredData['smGroup'] &&
-                    self.chartService.filteredData['smGroup'].values &&
-                    self.chartService.filteredData['smGroup'].values[0]) ?
-                    self.chartService.filteredData['smGroup'].values[0].key :
-                    'AD Diagnosis (males and females)') {
-                    case 'AD Diagnosis (males and females)':
-                        return [
-                            ...self.chartService.filteredData['smGroup'].values,
-                            ...[
-                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
-                            ]
-                        ];
-                    case 'AD Diagnosis x AOD (males and females)':
-                        return [
-                            ...[
-                                { key: 'AD Diagnosis (males and females)', value: 0 }
-                            ],
-                            ...self.chartService.filteredData['smGroup'].values,
-                            ...[
-                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
-                            ]
-                        ];
-                    case 'AD Diagnosis x Sex (females only)':
-                        return [
-                            ...[
-                                { key: 'AD Diagnosis (males and females)', value: 0 },
-                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 }
-                            ],
-                            ...self.chartService.filteredData['smGroup'].values,
-                            ...[
-                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
-                            ]
-                        ];
-                    case 'AD Diagnosis x Sex (males only)':
-                        return [
-                            ...[
-                                { key: 'AD Diagnosis (males and females)', value: 0 },
-                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (females only)', value: 0 }
-                            ],
-                            ...self.chartService.filteredData['smGroup'].values
-                        ];
-                    default:
-                        return [
-                            ...self.chartService.filteredData['smGroup'].values,
-                            ...[
-                                { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (females only)', value: 0 },
-                                { key: 'AD Diagnosis x Sex (males only)', value: 0 }
-                            ]
-                        ];
+                if (self.type === 'RNA') {
+                    // This logic assumes always the same models, we can add
+                    // fake entries when filtering them. This is to speed up
+                    // server generation of dimensions and groups
+                    switch ((self.chartService.filteredData['smGroup'] &&
+                        self.chartService.filteredData['smGroup'].values &&
+                        self.chartService.filteredData['smGroup'].values[0]) ?
+                        self.chartService.filteredData['smGroup'].values[0].key :
+                        'AD Diagnosis (males and females)') {
+                        case 'AD Diagnosis (males and females)':
+                            return [
+                                ...self.chartService.filteredData['smGroup'].values,
+                                ...[
+                                    { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                                ]
+                            ];
+                        case 'AD Diagnosis x AOD (males and females)':
+                            return [
+                                ...[
+                                    { key: 'AD Diagnosis (males and females)', value: 0 }
+                                ],
+                                ...self.chartService.filteredData['smGroup'].values,
+                                ...[
+                                    { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                                ]
+                            ];
+                        case 'AD Diagnosis x Sex (females only)':
+                            return [
+                                ...[
+                                    { key: 'AD Diagnosis (males and females)', value: 0 },
+                                    { key: 'AD Diagnosis x AOD (males and females)', value: 0 }
+                                ],
+                                ...self.chartService.filteredData['smGroup'].values,
+                                ...[
+                                    { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                                ]
+                            ];
+                        case 'AD Diagnosis x Sex (males only)':
+                            return [
+                                ...[
+                                    { key: 'AD Diagnosis (males and females)', value: 0 },
+                                    { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (females only)', value: 0 }
+                                ],
+                                ...self.chartService.filteredData['smGroup'].values
+                            ];
+                        default:
+                            return [
+                                ...self.chartService.filteredData['smGroup'].values,
+                                ...[
+                                    { key: 'AD Diagnosis x AOD (males and females)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (females only)', value: 0 },
+                                    { key: 'AD Diagnosis x Sex (males only)', value: 0 }
+                                ]
+                            ];
+                    }
+                } else if (self.type === 'Proteomics') {
+                    return self.chartService.filteredData['spGroup'].values;
                 }
             },
             order() {
@@ -168,8 +173,8 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         };
 
         this.info = this.chartService.getChartInfo(this.label);
-        this.dim = smDim;
-        this.group = smGroup;
+        this.dim = spDim;
+        this.group = spGroup;
 
         this.getChartPromise().then((chartInst) => {
             self.chart = chartInst;
@@ -186,7 +191,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     self.firstReplace = false;
                     await self.replaceSelect().then(() => {
                         // Registers this chart
-                        self.chartService.addChartName(self.label);
+                        self.chartService.addChartName(self.label, self.type);
                     });
                 }
             });
@@ -216,6 +221,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 if (self.label === 'select-model') {
                     self.geneService.setCurrentModel(filters[0]);
                 }
+                // if (self.label === 'select-model') {
+                //    self.geneService.setCurrentModel(filters[0]);
+                // }
 
                 await dimension.filter(filters[0], true);
             } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
@@ -420,15 +428,33 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
                 // Regenerate the groups inside this option callback
                 const cPromise = new Promise(async (resolve, reject) => {
-                    self.chartService.queryFilter.smGroup = c.innerHTML;
-                    const gene = self.geneService.getCurrentGene().hgnc_symbol;
-                    self.isActive = false;
-                    await self.apiService.refreshChart(self.chartService.queryFilter.smGroup, gene)
-                        .subscribe((results) => {
-                        self.chartService.filteredData = results;
-                        self.isActive = true;
-                        resolve(true);
-                    });
+                    console.log('must show?');
+                    if (self.type === 'RNA') {
+                        self.chartService.queryFilter.smGroup = c.innerHTML;
+                        const gene = self.geneService.getCurrentGene().hgnc_symbol;
+                        self.isActive = false;
+
+                        await self.apiService.refreshChart(
+                            self.chartService.queryFilter.smGroup, gene)
+                            .subscribe((results) => {
+                            self.chartService.filteredData = results;
+                            self.isActive = true;
+                            resolve(true);
+                        });
+                    } else if (self.type === 'Proteomics') {
+                        self.chartService.pQueryFilter.spGroup = c.innerHTML;
+                        const gene = self.geneService.getCurrentGene().hgnc_symbol;
+                        self.isActive = false;
+
+                        console.log('must show');
+                        await self.apiService.refreshChart(
+                            self.chartService.pQueryFilter.spGroup, gene, self.type)
+                            .subscribe((results) => {
+                            self.chartService.filteredData = results;
+                            self.isActive = true;
+                            resolve(true);
+                        });
+                    }
                 });
                 cPromise.then(() => {
                     self.menuSelection.dispatch('change');

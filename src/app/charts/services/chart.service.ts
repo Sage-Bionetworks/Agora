@@ -14,6 +14,11 @@ export class ChartService {
         ['forest-plot', false],
         ['select-model', false]
     ]);
+    pChartInfos: Map<string, any> = new Map<string, any>();
+    pChartNames: Map<string, boolean> = new Map([
+        ['pbox-plot', false],
+        ['select-protein', false]
+    ]);
     tissueToFilter: string = '';
     modelToFilter: string = '';
     queryFilter: any = {
@@ -21,6 +26,10 @@ export class ChartService {
         bpGroup: null,
         fpGroup: null,
         mcGroup: null
+    };
+    pQueryFilter: any = {
+        spGroup: null,
+        bpGroup: null
     };
     filteredData: any = null;
 
@@ -34,35 +43,67 @@ export class ChartService {
         //
     }
 
-    addChartInfo(label: string, chartObj: any) {
-        if (label && !this.chartInfos.has(label)) { this.chartInfos.set(label, chartObj); }
-    }
+    addChartInfo(label: string, chartObj: any, type: string = 'RNA') {
+        let chartInfos: Map<string, any> = null;
+        if (type === 'RNA') {
+            chartInfos = this.chartInfos;
+        } else if (type === 'Proteomics') {
+            chartInfos = this.pChartInfos;
+        }
 
-    addChartName(name: string) {
-        if (name && this.chartNames.has(name)) { this.chartNames.set(name, true); }
-
-        if (this.allChartsLoaded()) {
-            this.chartsReadySource.next(true);
-        } else {
-            this.chartsReadySource.next(false);
+        if (chartInfos) {
+            if (label && !chartInfos.has(label)) { chartInfos.set(label, chartObj); }
         }
     }
 
-    removeChartName(name: string) {
-        if (name && this.chartNames.has(name)) {
-            this.chartNames.set(name, false);
+    addChartName(name: string, type: string = 'RNA') {
+        let chartNames: Map<string, boolean> = null;
+        if (type === 'RNA') {
+            chartNames = this.chartNames;
+        } else if (type === 'Proteomics') {
+            chartNames = this.pChartNames;
+        }
+
+        if (chartNames) {
+            if (name && chartNames.has(name)) { chartNames.set(name, true); }
+
+            if (this.allChartsLoaded(type)) {
+                this.chartsReadySource.next(true);
+            } else {
+                this.chartsReadySource.next(false);
+            }
+        }
+    }
+
+    removeChartName(name: string, type: string = 'RNA') {
+        let chartNames: Map<string, boolean> = null;
+        if (type === 'RNA') {
+            chartNames = this.chartNames;
+        } else if (type === 'Proteomics') {
+            chartNames = this.pChartNames;
+        }
+
+        if (name && chartNames.has(name)) {
+            chartNames.set(name, false);
             this.chartsReadySource.next(false);
         }
 
-        if (this.allEmptyCharts()) {
+        if (this.allEmptyCharts(type)) {
             d3.selectAll('dc-chart').remove();
             dc.chartRegistry.clear();
         }
     }
 
-    allEmptyCharts(): boolean {
+    allEmptyCharts(type: string = 'RNA'): boolean {
         let allEmpty = true;
-        for (const value of this.chartNames.values()) {
+        let chartNames: Map<string, boolean> = null;
+        if (type === 'RNA') {
+            chartNames = this.chartNames;
+        } else if (type === 'Proteomics') {
+            chartNames = this.pChartNames;
+        }
+
+        for (const value of chartNames.values()) {
             if (value) {
                 allEmpty = false;
                 break;
@@ -72,9 +113,16 @@ export class ChartService {
         return allEmpty;
     }
 
-    allChartsLoaded(): boolean {
+    allChartsLoaded(type: string = 'RNA'): boolean {
         let loaded = true;
-        for (const value of this.chartNames.values()) {
+        let chartNames: Map<string, boolean> = null;
+        if (type === 'RNA') {
+            chartNames = this.chartNames;
+        } else if (type === 'Proteomics') {
+            chartNames = this.pChartNames;
+        }
+
+        for (const value of chartNames.values()) {
             if (!value) {
                 loaded = false;
                 break;
@@ -84,8 +132,15 @@ export class ChartService {
         return loaded;
     }
 
-    getChartInfo(label: string): any {
-        return this.chartInfos.get(label);
+    getChartInfo(label: string, type: string = 'RNA'): any {
+        let chartInfos: Map<string, any> = null;
+        if (type === 'RNA') {
+            chartInfos = this.chartInfos;
+        } else if (type === 'Proteomics') {
+            chartInfos = this.pChartInfos;
+        }
+
+        return chartInfos.get(label);
     }
 
     removeChart(chart: any, group?: any, dimension?: any) {
