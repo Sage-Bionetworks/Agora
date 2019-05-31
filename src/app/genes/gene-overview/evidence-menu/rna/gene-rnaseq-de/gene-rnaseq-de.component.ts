@@ -110,7 +110,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
             // First load of dimension and groups, set a default model so we don't load all the
             // data
-            this.chartService.queryFilter.smGroup = this.geneService.defaultModel;
+            this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
             this.apiService.refreshChart(
                 this.chartService.queryFilter.smGroup,
                 this.gene.hgnc_symbol

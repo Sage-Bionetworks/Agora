@@ -31,22 +31,22 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
-            <td>
+            <td class="default-td">
                {{rowData[columns[0].field]}}
             </td>
-            <td>
+            <td class="default-td">
                 {{rowData[columns[1].field]?'YES':'NO'}}
             </td>
-            <td>
+            <td class="default-td">
                 {{rowData[columns[2].field]}}
             </td>
-            <td>
+            <td class="default-td">
                 {{rowData[columns[3].field]}}
             </td>
-            <td>
+            <td class="default-td">
                 {{druggability(rowData[columns[4].field])}}
             </td>
-            <td>
+            <td class="default-td">
                 {{druggabilitypc(rowData[columns[5].field])}}
             </td>
             </tr>

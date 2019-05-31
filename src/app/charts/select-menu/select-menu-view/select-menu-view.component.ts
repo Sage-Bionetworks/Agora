@@ -221,9 +221,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 if (self.label === 'select-model') {
                     self.geneService.setCurrentModel(filters[0]);
                 }
-                // if (self.label === 'select-model') {
-                //    self.geneService.setCurrentModel(filters[0]);
-                // }
+                if (self.label === 'select-protein') {
+                    self.geneService.setCurrentProtein(filters[0]);
+                }
 
                 await dimension.filter(filters[0], true);
             } else if (filters.length === 1 && filters[0].filterType === 'RangedFilter') {
@@ -337,6 +337,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
             newOptions = oldOptions;
         }
 
+        let index: number = 0;
         for (const no of newOptions['_groups'][0]) {
             if (this.label === 'select-tissue') {
                 if (no.innerHTML === this.geneService.getDefaultTissue()) {
@@ -350,6 +351,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     break;
                 }
             }
+            if (this.label === 'select-protein') {
+                if (index === 0) {
+                    this.chart.replaceFilter([[no.innerHTML]]).redrawGroup();
+                    break;
+                }
+            }
+            index++;
         }
 
         this.defaultValue = '';
@@ -381,6 +389,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                             self.geneService.setCurrentModel(filter[0][0]);
                         } else {
                             self.geneService.setCurrentModel(filter);
+                        }
+                    }
+                    if (self.label === 'select-protein') {
+                        if (filter instanceof Array) {
+                            self.geneService.setCurrentProtein(filter[0][0]);
+                        } else {
+                            self.geneService.setCurrentProtein(filter);
                         }
                     }
                     self.isDisabled = (filter) ? false : true;
@@ -428,14 +443,14 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
 
                 // Regenerate the groups inside this option callback
                 const cPromise = new Promise(async (resolve, reject) => {
-                    console.log('must show?');
                     if (self.type === 'RNA') {
                         self.chartService.queryFilter.smGroup = c.innerHTML;
                         const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
                         await self.apiService.refreshChart(
-                            self.chartService.queryFilter.smGroup, gene)
+                            self.chartService.queryFilter.smGroup, gene
+                        )
                             .subscribe((results) => {
                             self.chartService.filteredData = results;
                             self.isActive = true;
@@ -446,7 +461,6 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
-                        console.log('must show');
                         await self.apiService.refreshChart(
                             self.chartService.pQueryFilter.spGroup, gene, self.type)
                             .subscribe((results) => {

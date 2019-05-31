@@ -279,6 +279,10 @@ p-dialog {
     background-color: $background;
 }
 
+.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
+    top: 0px;
+}
+
 ::selection {
     color: $background !important;
 }

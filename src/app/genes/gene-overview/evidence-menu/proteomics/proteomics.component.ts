@@ -50,9 +50,6 @@ export class ProteomicsComponent implements OnInit {
         });
 
         this.loadChartData().then((status) => {
-            this.geneService.updateEmptyGeneState();
-            this.isEmptyGene = this.geneService.getEmptyGeneState();
-
             // First load of dimension and groups, set a default model so we don't load all the
             // data
             this.chartService.pQueryFilter.spGroup = '';
@@ -62,6 +59,12 @@ export class ProteomicsComponent implements OnInit {
                 'Proteomics'
             ).subscribe((d) => {
                 this.chartService.filteredData = d;
+                // Check if we have any log2fc value
+                if (!d.bpGroup || !d.bpGroup.top || !d.bpGroup.top.length || !d.bpGroup.top[0]) {
+                    this.isEmptyGene = true;
+                } else {
+                    this.isEmptyGene = false;
+                }
                 this.dataLoaded = true;
             });
         });
@@ -84,12 +87,12 @@ export class ProteomicsComponent implements OnInit {
                 'pbox-plot',
                 [
                     {
-                        name: 'DLPFC',
+                        name: 'AntPFC',
                         attr: 'tissue'
                     }
                 ],
                 'LOG 2 FOLD CHANGE',
-                'fc',
+                'log2fc',
                 'Proteomics'
             );
 

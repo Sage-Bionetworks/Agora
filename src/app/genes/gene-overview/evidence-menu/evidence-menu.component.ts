@@ -42,6 +42,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     neverActivated: boolean = true;
     disableMenu: boolean = false;
     firstTimeCheck: boolean = true;
+    previousUrl: string;
 
     constructor(
         private navService: NavigationService,
@@ -62,14 +63,25 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
 
         this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
-                if (this.geneService.getCurrentGene()) {
+                if (this.geneService.getCurrentGene() &&
+                    this.geneService.getCurrentGene().hgnc_symbol) {
                     // The url id is undefined here because the route didn't change at
                     // this point like in the gene overview component. Check only for
                     // the evidence-menu part of the url for now
                     const evidenceTabIndex: number = (this.geneInfo) ? (this.geneInfo.nominations ?
                         2 : 1) : 2;
-                    if (!re.url.includes('/genes/(genes-router:gene-details/') ||
-                        this.navService.getOvMenuTabIndex() !== evidenceTabIndex) {
+                    if (
+                        (
+                            !re.url.includes('/genes/(genes-router:gene-details/') &&
+                            (
+                                !this.previousUrl ||
+                                !this.previousUrl.includes(
+                                    '/genes/(genes-router:gene-details/'
+                                )
+                            )
+                        ) ||
+                        this.navService.getOvMenuTabIndex() !== evidenceTabIndex
+                    ) {
                         const urlToGo: string = this.navService.getOvMenuTabIndex() === 0 ?
                             'nom-details' : this.navService.getOvMenuTabIndex() === 1 ?
                             'soe' : 'druggability';
@@ -99,6 +111,8 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                         }
                     }
                 }
+
+                this.previousUrl = re.url;
             }
         });
     }

@@ -15,6 +15,16 @@
     }
 }
 
+.default-td {
+    width: 15%;
+}
+
+.ui-paginator-bottom {
+    .ui-paginator-element {
+        color: color(text, secondary);
+    }
+}
+
 .overview-header {
     &.similar-page{
         text-align: center;

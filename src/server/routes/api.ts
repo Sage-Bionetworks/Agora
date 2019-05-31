@@ -178,12 +178,22 @@ connection.once('open', () => {
             // All the proteomics entries for this Gene id
             let geneProteomics = null;
             const queryObj = { hgnc_symbol: id };
-            await Proteomics.find(queryObj).exec(async (err, genes) => {
+            // Using lean so that the answer is not a document
+            await Proteomics.find(queryObj).lean().exec(async (err, genes) => {
                 if (err) {
                     next(err);
                 } else {
                     if (genes.length) {
                         geneProteomics = genes.slice();
+                        await geneProteomics.forEach((g) => {
+                            // Separate the columns we need
+                            g.uniqid = g.uniqid;
+                            g.uniprotid = g.uniprotid;
+                            g.log2fc = (g.log2fc) ? +g.log2fc : 0;
+                            g.hgnc_symbol = g.hgnc_symbol;
+                            g.pval = (g.pval) ? +g.pval : 0;
+                            g.tissue = g.tissue;
+                        });
                         indx = await crossfilter(geneProteomics);
 
                         // Crossfilter variables
@@ -204,17 +214,15 @@ connection.once('open', () => {
                         groups.bpGroup = await dimensions.bpDim.group().reduce(
                             function(p, v) {
                                 // Retrieve the data value, if not Infinity or null add it.
-                                const dv = Math.log2(v.fc);
-                                if (dv !== Infinity && dv !== null) {
-                                    p.push(dv);
+                                if (v.log2fc !== Infinity && v.log2fc !== null) {
+                                    p.push(v.log2fc);
                                 }
                                 return p;
                             },
                             function(p, v) {
                                 // Retrieve the data value, if not Infinity or null remove it.
-                                const dv = Math.log2(v.fc);
-                                if (dv !== Infinity && dv !== null) {
-                                    p.splice(p.indexOf(dv), 1);
+                                if (v.log2fc !== Infinity && v.log2fc !== null) {
+                                    p.splice(p.indexOf(v.log2fc), 1);
                                 }
                                 return p;
                             },

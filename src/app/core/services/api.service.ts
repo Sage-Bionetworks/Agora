@@ -270,7 +270,12 @@ export class ApiService {
         );
 
         const baseUrl = '/api/refresh' +
-            ((type === 'RNA') ? '?filter=' + JSON.stringify(filter) : 'p');
+            (
+                (type === 'Proteomics') ? 'p' :
+                (
+                    (filter) ? '?filter=' + JSON.stringify(filter) : ''
+                )
+            );
         return this.http.get(baseUrl, { headers, params });
     }
 }

@@ -29,11 +29,11 @@
         </div>
     </div>
     <ng-template #noDataImage>
-        <div class="col-md-8 col-sm-8 col-12 network-container">
+        <div class="col-md-8 col-sm-8 col-12 network-container no-data-vertical">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </ng-template>
-    <div class="col-md-4 col-sm-4 col-12 currentGene">
+    <div class="col-md-4 col-sm-4 col-12 currentGene" *ngIf="!noData; else noDataSecImage">
         <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h3>{{geneInfo.hgnc_symbol}}</h3>
@@ -52,7 +52,7 @@
                 </h4>
             </div>
         </div>
-        <div class="row cg-row" *ngIf="!noData;">
+        <!--<div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h3 class="smaller-h3">
                     Tissue Specificity of Gene Connections
@@ -82,8 +82,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row cg-row" *ngIf="!noData;">
+        </div>-->
+        <div class="row cg-row">
             <div class="col-md-12 col-sm-12 col-12 cg-col">
                 <h3 class="smaller-h3">
                     Similar Genes
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
                         <span class="btn brainregion-button"
-                            (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', selectedGeneData.origin.ensembl_gene_id ], 'gene-overview': null} })">
+                            (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', geneService.getCurrentGene().ensembl_gene_id ], 'gene-overview': null, 'evidence-menu': null} })">
                             <i class="fa fa-angle-right fa-lg"></i>
                         </span>
                     </div>
@@ -107,4 +107,9 @@
             </div>
         </div>
     </div>
+    <ng-template #noDataSecImage>
+        <div class="col-md-4 col-sm-4 col-12 currentGene">
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
+        </div>
+    </ng-template>
 </div>

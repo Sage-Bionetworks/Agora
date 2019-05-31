@@ -26,6 +26,7 @@ export class GeneService {
     defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string = this.defaultTissue;
     currentModel: string = this.defaultModel;
+    currentProtein: string = '';
     models: string[] = [];
     geneModels: string[] = [];
     tissues: string[] = [];
@@ -104,6 +105,14 @@ export class GeneService {
 
     getCurrentModel(): string {
         return this.currentModel;
+    }
+
+    setCurrentProtein(protein: string) {
+        this.currentProtein = protein;
+    }
+
+    getCurrentProtein(): string {
+        return this.currentProtein;
     }
 
     getDefaultTissue(): string {

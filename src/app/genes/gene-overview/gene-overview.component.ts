@@ -102,7 +102,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
-        this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
+        this.routerSub = this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
                 if (this.geneService.getCurrentGene()) {
                     if (!re.url.includes('/genes/(genes-router:gene-details/' +

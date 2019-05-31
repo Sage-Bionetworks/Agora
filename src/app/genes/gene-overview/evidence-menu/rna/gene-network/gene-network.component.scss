@@ -45,6 +45,11 @@
     }
 }
 
+.network-container.no-data-vertical {
+    vertical-align: middle;
+    height: 600px;
+}
+
 .genelink {
     @include lato-font('bold');
 

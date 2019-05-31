@@ -142,7 +142,7 @@ describe('Component: GeneNetwork', () => {
         expect(textColorClass).toEqual(italicRed);
     });
 
-    it('should have extra info components', () => {
+    /*it('should have extra info components', () => {
         component.dataLoaded = true;
         component.noData = false;
         fixture.detectChanges();
@@ -164,5 +164,5 @@ describe('Component: GeneNetwork', () => {
 
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(2);
-    });
+    });*/
 });

@@ -131,8 +131,8 @@
     color: color(text, secondary);
     padding-left: 4%;
 
-    p {
-        // width: 100%;
+    span {
+        width: 90%;
         @include lato-font('bold');
         color: color(text, secondary);
         margin-top: 0.75em;
@@ -141,8 +141,8 @@
     border-bottom: 1px solid $grey-border-color;
 
     .fa-star {
-        position: relative;
-        left: 80%;
+        //position: relative;
+        //left: 80%;
         color: $contrast-color;
     }
 
@@ -150,9 +150,14 @@
 }
 
 .gene-name {
-    // position: absolute;
-
+    margin: auto;
+    width: 100%;
+    line-height: 50px;
     font-size: $font-size-xx-regular;
+
+    .gene-symbol {
+        font-weight: normal;
+    }
 }
 
 .filter-select-list:hover {

@@ -39,6 +39,7 @@ export class GeneNetworkComponent implements OnInit {
         filterLvl: 0
     };
     routerSubscription: Subscription;
+    previousUrl: string;
 
     private currentGene = this.geneService.getCurrentGene();
     private geneInfo: any;
@@ -57,31 +58,44 @@ export class GeneNetworkComponent implements OnInit {
 
     ngOnInit() {
         if (!this.noData) { this.noData = this.geneService.getInfoDataState(); }
-        this.geneInfo = this.geneService.getCurrentInfo();
-        if (!this.id) { this.id = this.navService.id; }
 
-        // If we move away from the overview page, remove
-        // the charts
-        this.routerSubscription = this.router.events.subscribe((event) => {
-            if (event instanceof NavigationStart) {
-                this.removeForceServiceData();
+        // Only process things if we have data
+        if (!this.noData) {
+            this.gene = this.geneService.getCurrentGene();
+            this.geneInfo = this.geneService.getCurrentInfo();
+            this.id = this.navService.getId();
+
+            // If we move away from the overview page, remove
+            // the charts
+            this.routerSubscription = this.router.events.subscribe((event) => {
+                if (event instanceof NavigationStart) {
+                    if (!event.url.includes('gene-similar')) {
+                        this.removeForceServiceData();
+                    }
+
+                    this.previousUrl = event.url;
+                }
+            });
+            this.location.onPopState(() => {
+                if (!this.previousUrl.includes('gene-similar')) {
+                    this.removeForceServiceData();
+                }
+            });
+
+            if (this.forceService.getGeneOriginalList() === null ||
+                this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
+                this.loadGenes();
+            } else {
+                const dn = this.forceService.getGeneOriginalList();
+                this.filterlvl = dn.filterLvl;
+                this.selectedGeneData.nodes = dn.nodes.slice(1);
+                this.selectedGeneData.links = dn.links.slice().reverse();
+                this.selectedGeneData.origin = dn.origin;
+                this.dataLoaded = true;
+                this.networkData = dn;
             }
-        });
-        this.location.onPopState(() => {
-            this.removeForceServiceData();
-        });
-
-        if (this.forceService.getGeneOriginalList() === null ||
-            this.id !== this.forceService.getGeneOriginalList().origin.ensembl_gene_id) {
-            this.loadGenes();
         } else {
-            const dn = this.forceService.getGeneOriginalList();
-            this.filterlvl = dn.filterLvl;
-            this.selectedGeneData.nodes = dn.nodes.slice(1);
-            this.selectedGeneData.links = dn.links.slice().reverse();
-            this.selectedGeneData.origin = dn.origin;
             this.dataLoaded = true;
-            this.networkData = dn;
         }
     }
 

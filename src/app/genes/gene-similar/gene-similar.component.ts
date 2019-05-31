@@ -140,7 +140,8 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     initGeneClickedList() {
-        let nodesIds;
+        let nodesIds: string[];
+
         if (!!this.forceService.getGeneClickedList() &&
             this.forceService.getGeneClickedList().origin &&
             this.forceService.getGeneClickedList().origin.ensembl_gene_id === this.id) {
@@ -153,12 +154,14 @@ export class GeneSimilarComponent implements OnInit {
             nodesIds = this.selectedGeneData.nodes.map((gene) => gene.ensembl_gene_id);
         }
 
-        this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
-            this.genesInfo = datas.items;
-            this.totalRecords = datas.items.length;
-            this.loading = false;
-            this.dataLoaded = true;
-        });
+        if (nodesIds && nodesIds.length) {
+            this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
+                this.genesInfo = datas.items;
+                this.totalRecords = datas.items.length;
+                this.loading = false;
+                this.dataLoaded = true;
+            });
+        }
     }
 
     druggabilitypc(druggability: Druggability[]): string {

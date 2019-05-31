@@ -196,7 +196,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getChartPromise().then((chart: any) => {
             this.chart = chart;
 
-            if (this.info.attr !== 'fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
+            if (this.info.attr !== 'log2fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
 
             // Remove filtering for this chart
             chart.filter = function() {
@@ -335,21 +335,22 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
         const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
+        const currentProteomics = this.geneService.getGeneProteomics().slice().filter((p) => {
+            return p.uniprotid === this.geneService.getCurrentProtein();
         });
+
         const logVals: number[] = [];
         const phrases: string[] = [];
         const significanceTexts: string[] = [];
-        currentGenes.forEach((g) => {
-            logVals.push(this.dataService.getSignificantValue(g.logfc));
-            significanceTexts.push((g.adj_p_val <= 0.05) ?
+        currentProteomics.forEach((p) => {
+            logVals.push(p.log2fc);
+            significanceTexts.push((p.pval <= 0.05) ?
             ' ' : 'not ');
-            phrases.push(g.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
+            phrases.push(p.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
-                g.tissue +
-                ' with a log fold change value of ' + g.logfc + ' and an adjusted p-value of ' +
-                g.adj_p_val + '.');
+                p.tissue +
+                ' with a log fold change value of ' + p.log2fc + ' and an adjusted p-value of ' +
+                p.pval + '.');
         });
 
         if (!translate) {
