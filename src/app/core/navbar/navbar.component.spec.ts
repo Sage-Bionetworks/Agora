@@ -172,7 +172,8 @@ describe('Component: Navbar', () => {
                 '/genes', {
                     outlets: {
                         'genes-router': [ 'genes-list' ],
-                        'gene-overview': null
+                        'gene-overview': null,
+                        'evidence-menu': null
                     }
                 }
             ],

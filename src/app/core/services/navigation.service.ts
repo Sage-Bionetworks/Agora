@@ -15,7 +15,9 @@ export class NavigationService {
     ) {
         this.router.events.subscribe((val) => {
             if (val instanceof ActivationEnd) {
-                if (val.snapshot.params && val.snapshot.params.id) {
+                // Can show up as an 'undefined' string value for id
+                if (val.snapshot.params && val.snapshot.params.id &&
+                    val.snapshot.params.id !== 'undefined') {
                     this.id = val.snapshot.params.id;
                 }
             }

@@ -127,11 +127,26 @@ export class GeneSearchComponent implements OnInit {
     viewGene(info: GeneInfo) {
         if (info.name !== this.notFoundString) {
             this.navService.setOvMenuTabIndex(0);
+            // We don't have a gene
             if (!this.geneService.getCurrentGene()) {
                 this.getGene(info.hgnc_symbol);
             } else {
+                this.geneService.updatePreviousGene();
+                // We have a gene, but it's a new one
                 if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
                     this.getGene(info.hgnc_symbol);
+                } else {
+                    this.navService.goToRoute(
+                        '/genes',
+                        {
+                            outlets: {
+                                'genes-router': [
+                                    'gene-details',
+                                    this.geneService.getCurrentGene().ensembl_gene_id
+                                ]
+                            }
+                        }
+                    );
                 }
             }
         }
@@ -158,7 +173,14 @@ export class GeneSearchComponent implements OnInit {
                 updatePromise.then(() => {
                     this.navService.goToRoute(
                         '/genes',
-                        { outlets: {'genes-router': [ 'gene-details', this.gene.ensembl_gene_id ] }}
+                        {
+                            outlets: {
+                                'genes-router': [
+                                    'gene-details',
+                                    this.geneService.getCurrentGene().ensembl_gene_id
+                                ]
+                            }
+                        }
                     );
                 });
             }
@@ -170,6 +192,6 @@ export class GeneSearchComponent implements OnInit {
     // The parameter is the gene hgnc_symbol from the server. To be calssified as an alias,
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
-        return !hgncSymbol.includes(this.currentQuery);
+        return !hgncSymbol.includes(this.currentQuery.toUpperCase());
     }
 }

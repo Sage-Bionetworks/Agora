@@ -74,15 +74,17 @@ export class GenesListComponent implements OnInit {
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
+        // We don't have a gene
         if (!this.geneService.getCurrentGene()) {
             this.getGene(this.selectedInfo.hgnc_symbol);
         } else {
             this.geneService.updatePreviousGene();
+            // We have a gene, but it's a new one
             if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
                 this.navService.setOvMenuTabIndex(0);
                 this.getGene(this.selectedInfo.hgnc_symbol);
             } else {
-                this.goToRoute(
+                this.navService.goToRoute(
                     '/genes',
                     {
                         outlets: {
@@ -102,7 +104,7 @@ export class GenesListComponent implements OnInit {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
-            this.goToRoute(
+            this.navService.goToRoute(
                 '/genes',
                 {
                     outlets: {
@@ -156,9 +158,5 @@ export class GenesListComponent implements OnInit {
 
     getTeams(nomTargets: NominatedTarget[]): string {
         return nomTargets.map((nt) => nt.team).join(', ');
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        this.navService.goToRoute(path, outlets);
     }
 }

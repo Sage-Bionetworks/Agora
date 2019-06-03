@@ -54,7 +54,8 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
                 this.goToRoute('/genes', {
                     outlets: {
                         'genes-router': [ 'genes-list' ],
-                        'gene-overview': null
+                        'gene-overview': null,
+                        'evidence-menu': null
                 }});
             }},
             { label: 'Teams', routerLink: ['teams-contributing'] },
@@ -165,7 +166,8 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             this.goToRoute('/genes', {
                 outlets: {
                     'genes-router': [ 'genes-list' ],
-                    'gene-overview': null
+                    'gene-overview': null,
+                    'evidence-menu': null
                 }
             });
         } else if (path === 'Teams') {

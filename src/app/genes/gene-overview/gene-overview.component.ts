@@ -143,6 +143,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         ) {
             this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
                 if (!data.info) {
+                    console.log('here?');
                     this.navService.goToRoute('/genes');
                 } else {
                     if (!data.item) {
