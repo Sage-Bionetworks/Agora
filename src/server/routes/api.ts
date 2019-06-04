@@ -384,7 +384,7 @@ connection.once('open', () => {
                     next(err);
                 } else {
                     if (!genes.length) {
-                        res.json({items: genes});
+                        geneProteomics = [];
                     } else {
                         geneProteomics = genes.slice();
                     }
