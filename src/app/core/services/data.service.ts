@@ -65,7 +65,10 @@ export class DataService {
     }
 
     loadGenes(data: GenesResponse) {
-        if (data.geneEntries) { this.geneEntries = data.geneEntries; }
+        console.log(data);
+        if (data.geneEntries) {
+            this.setGeneEntries(data.geneEntries);
+        }
     }
 
     getGeneEntries(): Gene[] {
