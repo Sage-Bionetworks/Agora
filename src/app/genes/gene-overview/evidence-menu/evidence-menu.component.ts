@@ -15,7 +15,9 @@ import { GeneService, NavigationService } from '../../../core/services';
 import { MenuItem } from 'primeng/api';
 import { TabMenu } from 'primeng/tabmenu';
 
-import { throwError, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+
+import * as d3 from 'd3';
 
 @Component({
     selector: 'evidence-menu',
@@ -54,7 +56,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
         this.items = [
             { label: 'RNA', disabled: this.disableMenu },
             { label: 'Protein', disabled: this.disableMenu },
-            { label: 'Metabolomics', disabled: true },
+            // { label: 'Metabolomics', disabled: true },
             { label: '', disabled: true},
             { label: '', disabled: true}
         ];

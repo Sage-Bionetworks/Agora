@@ -1549,7 +1549,7 @@ g.textGroup text {
 
 // Box-plot chart
 
-.bp-axis-tooltip {
+.bp-axis-tooltip, .pbp-axis-tooltip {
     @include lato-font('regular');
 
     position: absolute;
@@ -1594,7 +1594,7 @@ g.textGroup text {
     }
 }
 
-.bp-tooltip {
+.bp-tooltip, .pbp-tooltip {
     @include lato-font('normal');
 
     position: absolute;

@@ -55,12 +55,12 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
-        .attr('class', 'bp-tooltip')
+        .attr('class', 'pbp-tooltip')
         .style('width', 50)
         .style('height', 160)
         .style('opacity', 0);
     sDiv: any = d3.select('body').append('div')
-        .attr('class', 'bp-axis-tooltip')
+        .attr('class', 'pbp-axis-tooltip')
         .style('width', 50)
         .style('height', 160)
         .style('opacity', 0);
@@ -126,6 +126,14 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
+        // Remove tooltips
+        d3.select('.bp-tooltip').remove();
+        d3.select('.bp-axis-tooltip').remove();
+        d3.select('.rc-tooltip').remove();
+        d3.select('.mc-tooltip').remove();
+        d3.select('.pbp-tooltip').remove();
+        d3.select('.pbp-axis-tooltip').remove();
+
         this.chartService.removeChart(this.chart);
     }
 
@@ -279,6 +287,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     const left = self.bpCol.nativeElement.getBoundingClientRect().left;
                     // Total column width, including padding
                     const colWidth = self.bpCol.nativeElement.offsetWidth;
+                    console.log(colWidth);
                     // Shows the tooltip
                     self.sDiv.transition()
                         .duration(200)
@@ -288,13 +297,13 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     // The tooltip element, we need half of the width
                     const tooltip =
-                        document.getElementsByClassName('bp-axis-tooltip')[0] as HTMLElement;
+                        document.getElementsByClassName('pbp-axis-tooltip')[0] as HTMLElement;
                     // Represents the width of each x axis tick section
                     // We get the total column width, minus both side paddings,
-                    // and we divide by all tissues plus 1. Eight sections total
+                    // and we divide by all tissues plus 1. Five sections total
                     const tickSectionWidth = (
                         (colWidth - (self.paddingLR * 2)) /
-                        (self.geneService.getNumOfTissues() + 1)
+                        (self.geneService.getNumOfPTissues() + 1)
                     );
                     // The start position for the current section tick will be
                     // the width of a section * current index + one
@@ -307,7 +316,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                                 // plus the left padding, plus half the width of a
                                 // vertical bar, plus the current tick position and we
                                 // subtract half the width of the tooltip
-                                left + self.paddingLR + 35 + xTickPos -
+                                left + self.paddingLR + 30 + xTickPos -
                                 (tooltip.offsetWidth / 2.0)
                             ) + 'px'
                         )
@@ -335,9 +344,11 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
         const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
-        const currentProteomics = this.geneService.getGeneProteomics().slice().filter((p) => {
-            return p.uniprotid === this.geneService.getCurrentProtein();
-        });
+        const currentProteomics = this.geneService.getGeneProteomics().slice().filter(
+            (p: Proteomics) => {
+                return p.log2fc;
+            }
+        );
 
         const logVals: number[] = [];
         const phrases: string[] = [];

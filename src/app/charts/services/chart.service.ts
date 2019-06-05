@@ -17,7 +17,7 @@ export class ChartService {
     pChartInfos: Map<string, any> = new Map<string, any>();
     pChartNames: Map<string, boolean> = new Map([
         ['pbox-plot', false],
-        ['select-protein', false]
+        ['select-protein', true]
     ]);
     tissueToFilter: string = '';
     modelToFilter: string = '';
@@ -171,6 +171,10 @@ export class ChartService {
                 return 'Superior Temporal Gyrus';
             case 'TCX':
                 return 'Temporal Cortex';
+            case 'AntPFC':
+                return 'Anterior Prefrontal Cortex';
+            case 'MFG':
+                return 'Middle Frontal Gyrus';
             default:
                 return '';
         }

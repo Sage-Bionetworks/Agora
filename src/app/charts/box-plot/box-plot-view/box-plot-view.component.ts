@@ -124,6 +124,14 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
+        // Remove tooltips
+        d3.select('.bp-tooltip').remove();
+        d3.select('.bp-axis-tooltip').remove();
+        d3.select('.rc-tooltip').remove();
+        d3.select('.mc-tooltip').remove();
+        d3.select('.pbp-tooltip').remove();
+        d3.select('.pbp-axis-tooltip').remove();
+
         this.chartService.removeChart(this.chart);
     }
 
@@ -304,7 +312,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                                 // plus the left padding, plus half the width of a
                                 // vertical bar, plus the current tick position and we
                                 // subtract half the width of the tooltip
-                                left + self.paddingLR + 35 + xTickPos -
+                                left + self.paddingLR + 30 + xTickPos -
                                 (tooltip.offsetWidth / 2.0)
                             ) + 'px'
                         )

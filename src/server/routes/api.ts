@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
-import { Gene, GeneInfo } from '../../app/models';
-import { Genes, GenesInfo, GenesLinks, TeamsInfo, Proteomics } from '../../app/schemas';
+import { Gene, GeneInfo, Proteomics } from '../../app/models';
+import { Genes, GenesInfo, GenesLinks, TeamsInfo, GenesProteomics } from '../../app/schemas';
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
@@ -58,6 +58,7 @@ connection.once('open', () => {
     const genesADDAODMF: Gene[] = [];
     const genesADDSF: Gene[] = [];
     const genesADDSM: Gene[] = [];
+    let geneProteomics: Proteomics[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -147,7 +148,8 @@ connection.once('open', () => {
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 }).exec(async (err, genes, next) => {
+        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+        .exec(async (err, genes: GeneInfo[], next) => {
         if (err) {
             next(err);
         } else {
@@ -162,52 +164,74 @@ connection.once('open', () => {
         }
     });
 
+    GenesProteomics.find({}).lean().exec(async (err, genes: Proteomics[], next) => {
+        if (err) {
+            next(err);
+        } else {
+            if (genes.length) {
+                geneProteomics = genes.slice();
+                await geneProteomics.forEach((g) => {
+                    // Separate the columns we need
+                    g.uniqid = g.uniqid;
+                    g.uniprotid = g.uniprotid;
+                    g.log2fc = (g.log2fc) ? +g.log2fc : 0;
+                    g.hgnc_symbol = g.hgnc_symbol;
+                    g.pval = (g.pval) ? +g.pval : 0;
+                    g.tissue = g.tissue;
+                });
+            }
+        }
+    });
+
     /* GET genes listing. */
     router.get('/', (req, res) => {
         res.send({ title: 'Genes API Entry Point' });
     });
 
-    router.get('/refreshp', async (req, res, next) => {
+    router.get('/refreshp', async (req, res) => {
         const results = {};
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
 
         loadChartData(filter).then(async (status) => {
             let indx: any = null;
+            indx = await crossfilter(geneProteomics.slice());
 
-            // All the proteomics entries for this Gene id
-            let geneProteomics = null;
-            const queryObj = { hgnc_symbol: id };
-            // Using lean so that the answer is not a document
-            await Proteomics.find(queryObj).lean().exec(async (err, genes) => {
+            // Crossfilter variables
+            const dimensions = {
+                spDim: null,
+                bpDim: null
+            };
+            const groups = {
+                spGroup: null,
+                bpGroup: null
+            };
+
+            // Load all dimensions and groups
+            const genePTissues: string[] = [];
+            await GenesProteomics.find({
+                $and: [
+                    {
+                        hgnc_symbol: id
+                    },
+                    {
+                        log2fc: { $ne: null }
+                    }
+                ]
+            }).lean().exec(async (err, genes: Proteomics[], next) => {
                 if (err) {
                     next(err);
                 } else {
                     if (genes.length) {
-                        geneProteomics = genes.slice();
-                        await geneProteomics.forEach((g) => {
-                            // Separate the columns we need
-                            g.uniqid = g.uniqid;
-                            g.uniprotid = g.uniprotid;
-                            g.log2fc = (g.log2fc) ? +g.log2fc : 0;
-                            g.hgnc_symbol = g.hgnc_symbol;
-                            g.pval = (g.pval) ? +g.pval : 0;
-                            g.tissue = g.tissue;
+                        genes.forEach((p: Proteomics) => {
+                            genePTissues.push(p.tissue);
                         });
-                        indx = await crossfilter(geneProteomics);
 
-                        // Crossfilter variables
-                        const dimensions = {
-                            spDim: null,
-                            bpDim: null
-                        };
-                        const groups = {
-                            spGroup: null,
-                            bpGroup: null
-                        };
-
-                        // Load all dimensions and groups
-                        dimensions.spDim = await indx.dimension((d) => d.uniprotid);
+                        dimensions.spDim = await indx.dimension((d) => {
+                            const tissueIndex = genePTissues.indexOf(d.tissue);
+                            return (d.hgnc_symbol === id && tissueIndex > -1 && d.log2fc) ?
+                                d.uniprotid : null;
+                        });
                         dimensions.bpDim = await indx.dimension((d) => d.tissue);
 
                         groups.spGroup = await dimensions.spDim.group();
@@ -235,11 +259,17 @@ connection.once('open', () => {
                             const rPromise = new Promise((resolve, reject) => {
                                 Object.keys(dimensions).forEach(async (dimension) => {
                                     const groupName = dimension.substring(0, 2) + 'Group';
-                                    results[groupName] = {
-                                        values: groups[groupName].all(),
-                                        top: groups[groupName].top(1)[0].value
-                                    };
-
+                                    if (dimension !== 'bpDim') {
+                                        results[groupName] = {
+                                            values: rmEmptyBinsDefault(groups[groupName]).all(),
+                                            top: groups[groupName].top(1)[0].value
+                                        };
+                                    } else {
+                                        results[groupName] = {
+                                            values: groups[groupName].all(),
+                                            top: groups[groupName].top(1)[0].value
+                                        };
+                                    }
                                 });
 
                                 resolve(results);
@@ -268,19 +298,19 @@ connection.once('open', () => {
 
             switch (filter) {
                 case 'AD Diagnosis (males and females)':
-                    indx = await crossfilter(genesADDMF);
+                    indx = await crossfilter(genesADDMF.slice());
                     break;
                 case 'AD Diagnosis x AOD (males and females)':
-                    indx = await crossfilter(genesADDAODMF);
+                    indx = await crossfilter(genesADDAODMF.slice());
                     break;
                 case 'AD Diagnosis x Sex (females only)':
-                    indx = await crossfilter(genesADDSF);
+                    indx = await crossfilter(genesADDSF.slice());
                     break;
                 case 'AD Diagnosis x Sex (males only)':
-                    indx = await crossfilter(genesADDSM);
+                    indx = await crossfilter(genesADDSM.slice());
                     break;
                 default:
-                    indx = await crossfilter(allGenes);
+                    indx = await crossfilter(allGenes.slice());
                     break;
             }
 
@@ -328,7 +358,6 @@ connection.once('open', () => {
             if (Object.keys(groups).length > 0) {
                 const rPromise = new Promise((resolve, reject) => {
                     Object.keys(dimensions).forEach(async (dimension) => {
-
                         const groupName = dimension.substring(0, 2) + 'Group';
                         if (dimension !== 'fpDim') {
                             results[groupName] = {
@@ -338,7 +367,8 @@ connection.once('open', () => {
                                     groups[groupName].top(1)[0].value
                             };
                         } else {
-                            const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ? filter :
+                            const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ?
+                                filter :
                                 'AD Diagnosis (males and females)', id);
                             results[groupName] = {
                                 values: newGroup.all()
@@ -376,20 +406,6 @@ connection.once('open', () => {
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };
-
-            // All the proteomics entries for this Gene id
-            let geneProteomics = null;
-            await Proteomics.find(queryObj).exec(async (err, genes) => {
-                if (err) {
-                    next(err);
-                } else {
-                    if (!genes.length) {
-                        geneProteomics = [];
-                    } else {
-                        geneProteomics = genes.slice();
-                    }
-                }
-            });
 
             // Find all the Genes with the current id
             await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })

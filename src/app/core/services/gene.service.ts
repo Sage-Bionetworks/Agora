@@ -40,6 +40,7 @@ export class GeneService {
     minAdjPValue: number = Math.pow(10, -20);
     noInfoData: boolean = false;
     tissuesNum: number = 7;
+    pTissuesNum: number = 4;
     isEmptyGene: boolean = true;
 
     constructor(private apiService: ApiService) {}
@@ -200,6 +201,10 @@ export class GeneService {
 
     getNumOfTissues(): number {
         return this.tissuesNum;
+    }
+
+    getNumOfPTissues(): number {
+        return this.pTissuesNum;
     }
 
     getEmptyGene(ensemblGeneId?: string, hgncSymbol?: string): Gene {

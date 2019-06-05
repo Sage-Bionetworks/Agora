@@ -50,8 +50,8 @@ export class ProteomicsComponent implements OnInit {
         });
 
         this.loadChartData().then((status) => {
-            // First load of dimension and groups, set a default model so we don't load all the
-            // data
+            // First load of dimension and groups, set a default model so we don't
+            // load all the data
             this.chartService.pQueryFilter.spGroup = '';
             this.apiService.refreshChart(
                 this.chartService.queryFilter.spGroup,
@@ -60,7 +60,7 @@ export class ProteomicsComponent implements OnInit {
             ).subscribe((d) => {
                 this.chartService.filteredData = d;
                 // Check if we have any log2fc value
-                if (!d.bpGroup || !d.bpGroup.top || !d.bpGroup.top.length || !d.bpGroup.top[0]) {
+                if (!d.bpGroup || !d.bpGroup.top || !d.bpGroup.top.length) {
                     this.isEmptyGene = true;
                 } else {
                     this.isEmptyGene = false;

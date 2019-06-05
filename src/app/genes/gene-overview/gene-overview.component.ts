@@ -9,7 +9,14 @@ import {
 } from '@angular/core';
 import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
-import { Gene, GeneInfo, GeneNetwork, GeneResponse, GenesResponse } from '../../models';
+import {
+    Gene,
+    GeneInfo,
+    GeneNetwork,
+    GeneResponse,
+    GenesResponse,
+    Proteomics
+} from '../../models';
 
 import {
     ApiService,
@@ -313,7 +320,21 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             this.geneService.setGeneTissues(responseList[0].geneTissues);
                         }
                         if (responseList[0].geneProteomics) {
-                            this.geneService.setGeneProteomics(responseList[0].geneProteomics);
+                            this.geneService.setGeneProteomics(responseList[0].geneProteomics
+                                .sort((a: Proteomics, b: Proteomics) => {
+                                    const tissueA = a.tissue.toLowerCase();
+                                    const tissueB = b.tissue.toLowerCase();
+                                    // Sort string ascending
+                                    if (tissueA < tissueB) {
+                                        return -1;
+                                    }
+                                    if (tissueA > tissueB) {
+                                        return 1;
+                                    }
+                                    // Default return value (no sorting)
+                                    return 0;
+                                })
+                            );
                         }
                         this.dataService.loadGenes(responseList[0]);
                         this.forceService.processSelectedNode(responseList[1], this.gene);
