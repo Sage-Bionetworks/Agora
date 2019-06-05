@@ -169,13 +169,13 @@ describe('Component: GeneSearch', () => {
 
     it('should search for a non-empty gene', fakeAsync(() => {
         const dsSpy = spyOn(apiService, 'getInfosMatchId').and.returnValue(
-            of([mockInfo1])
+            of({ items: [mockInfo1]})
         );
 
         spyOn(component, 'search').and.callThrough();
         component.search(mockInfo1.hgnc_symbol).subscribe((data) => {
             expect(dsSpy.calls.any()).toEqual(true);
-            expect(data).toEqual([mockInfo1]);
+            expect(data).toEqual({ items: [mockInfo1]});
         }); // search a gene id
     }));
 });
