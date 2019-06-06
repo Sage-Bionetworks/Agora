@@ -195,7 +195,8 @@ connection.once('open', () => {
 
         loadChartData(filter).then(async (status) => {
             let indx: any = null;
-            indx = await crossfilter(geneProteomics.slice());
+            const localGeneProteomics = geneProteomics.slice();
+            indx = await crossfilter(localGeneProteomics);
 
             // Crossfilter variables
             const dimensions = {
@@ -218,7 +219,7 @@ connection.once('open', () => {
                         log2fc: { $ne: null }
                     }
                 ]
-            }).lean().exec(async (err, genes: Proteomics[], next) => {
+            }).exec(async (err, genes: Proteomics[], next) => {
                 if (err) {
                     next(err);
                 } else {
