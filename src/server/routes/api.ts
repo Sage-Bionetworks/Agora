@@ -196,7 +196,7 @@ connection.once('open', () => {
         loadChartData(filter).then(async (status) => {
             let indx: any = null;
             const localGeneProteomics = geneProteomics.slice();
-            indx = await crossfilter(localGeneProteomics);
+            indx = await crossfilter(geneProteomics.slice());
 
             // Crossfilter variables
             const dimensions = {
@@ -209,7 +209,7 @@ connection.once('open', () => {
             };
 
             if (!indx) {
-                res.send({});
+                res.send({test: 'Empty index'});
             }
 
             // Load all dimensions and groups
@@ -288,7 +288,7 @@ connection.once('open', () => {
                             });
                         }
                     } else {
-                        res.send({});
+                        res.send({test: 'Empty genes'});
                     }
                 }
             });
