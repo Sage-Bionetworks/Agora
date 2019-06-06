@@ -188,7 +188,7 @@ connection.once('open', () => {
         res.send({ title: 'Genes API Entry Point' });
     });
 
-    router.get('/refreshp', async (req, res) => {
+    router.get('/refreshp', async (req, res, next) => {
         const results = {};
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
@@ -210,7 +210,7 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             const genePTissues: string[] = [];
-            await GenesProteomics.find({
+            GenesProteomics.find({
                 $and: [
                     {
                         hgnc_symbol: id
@@ -219,7 +219,7 @@ connection.once('open', () => {
                         log2fc: { $ne: null }
                     }
                 ]
-            }).lean().exec(async (err, genes: Proteomics[], next) => {
+            }).lean().exec(async (err, genes: Proteomics[]) => {
                 if (err) {
                     next(err);
                 } else {
