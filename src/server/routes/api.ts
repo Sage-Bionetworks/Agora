@@ -208,6 +208,10 @@ connection.once('open', () => {
                 bpGroup: null
             };
 
+            if (!indx) {
+                res.send({});
+            }
+
             // Load all dimensions and groups
             const genePTissues: string[] = [];
             GenesProteomics.find({
@@ -283,6 +287,8 @@ connection.once('open', () => {
                                 }
                             });
                         }
+                    } else {
+                        res.send({});
                     }
                 }
             });
