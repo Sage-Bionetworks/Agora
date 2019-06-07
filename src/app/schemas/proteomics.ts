@@ -37,7 +37,7 @@ ProteomicsSchema.index(
     {
         hgnc_symbol: 'text',
         ensembl_gene_id: 'text',
-        uniqid: 'text',
+        tissue: 'text',
         uniprotid: 'text'
     }
 );
