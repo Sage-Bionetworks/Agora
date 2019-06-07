@@ -213,7 +213,7 @@ connection.once('open', () => {
             }
 
             // Load all dimensions and groups
-            const genePTissues: string[] = [];
+            let genePTissues: string[] = [];
             const queryFilter = {
                 $and: [
                     {
@@ -224,75 +224,74 @@ connection.once('open', () => {
                     }
                 ]
             };
-            await GenesProteomics.find(queryFilter).exec(async (err, genes: Proteomics[]) => {
-                if (err) {
-                    next(err);
-                } else {
-                    if (genes.length) {
-                        genes.forEach((p: Proteomics) => {
-                            genePTissues.push(p.tissue);
-                        });
-
-                        dimensions.spDim = await indx.dimension((d) => {
-                            const tissueIndex = genePTissues.indexOf(d.tissue);
-                            return (d.hgnc_symbol === id && tissueIndex > -1 && d.log2fc) ?
-                                d.uniprotid : null;
-                        });
-                        dimensions.bpDim = await indx.dimension((d) => d.tissue);
-
-                        groups.spGroup = await dimensions.spDim.group();
-                        groups.bpGroup = await dimensions.bpDim.group().reduce(
-                            function(p, v) {
-                                // Retrieve the data value, if not Infinity or null add it.
-                                if (v.log2fc !== Infinity && v.log2fc !== null) {
-                                    p.push(v.log2fc);
-                                }
-                                return p;
-                            },
-                            function(p, v) {
-                                // Retrieve the data value, if not Infinity or null remove it.
-                                if (v.log2fc !== Infinity && v.log2fc !== null) {
-                                    p.splice(p.indexOf(v.log2fc), 1);
-                                }
-                                return p;
-                            },
-                            function() {
-                                return [];
-                            }
-                        );
-
-                        if (Object.keys(groups).length > 0) {
-                            const rPromise = new Promise((resolve, reject) => {
-                                Object.keys(dimensions).forEach(async (dimension) => {
-                                    const groupName = dimension.substring(0, 2) + 'Group';
-                                    if (dimension !== 'bpDim') {
-                                        results[groupName] = {
-                                            values: rmEmptyBinsDefault(groups[groupName]).all(),
-                                            top: groups[groupName].top(1)[0].value
-                                        };
-                                    } else {
-                                        results[groupName] = {
-                                            values: groups[groupName].all(),
-                                            top: groups[groupName].top(1)[0].value
-                                        };
-                                    }
-                                });
-
-                                resolve(results);
-                            });
-                            rPromise.then((r: any) => {
-                                if (r) {
-                                    indx = null;
-
-                                    res.send(r);
-                                }
-                            });
-                        }
-                    } else {
-                        res.send({error: 'Empty Proteomics array', items: genes});
-                    }
-                }
+            const idGenesProteomics = geneProteomics.filter((p) => {
+                return p.hgnc_symbol === id && p.log2fc !== null
             });
+            if (idGenesProteomics.length) {
+                idGenesProteomics.forEach((p: Proteomics) => {
+                    genePTissues.push(p.tissue);
+                });
+                const distinctTissues = [...new Set(genePTissues)];
+                genePTissues = distinctTissues;
+
+                dimensions.spDim = await indx.dimension((d) => {
+                    const tissueIndex = genePTissues.indexOf(d.tissue);
+                    return (d.hgnc_symbol === id && tissueIndex > -1 && d.log2fc) ?
+                        d.uniprotid : null;
+                });
+                dimensions.bpDim = await indx.dimension((d) => d.tissue);
+
+                groups.spGroup = await dimensions.spDim.group();
+                groups.bpGroup = await dimensions.bpDim.group().reduce(
+                    function(p, v) {
+                        // Retrieve the data value, if not Infinity or null add it.
+                        if (v.log2fc !== Infinity && v.log2fc !== null) {
+                            p.push(v.log2fc);
+                        }
+                        return p;
+                    },
+                    function(p, v) {
+                        // Retrieve the data value, if not Infinity or null remove it.
+                        if (v.log2fc !== Infinity && v.log2fc !== null) {
+                            p.splice(p.indexOf(v.log2fc), 1);
+                        }
+                        return p;
+                    },
+                    function() {
+                        return [];
+                    }
+                );
+
+                if (Object.keys(groups).length > 0) {
+                    const rPromise = new Promise((resolve, reject) => {
+                        Object.keys(dimensions).forEach(async (dimension) => {
+                            const groupName = dimension.substring(0, 2) + 'Group';
+                            if (dimension !== 'bpDim') {
+                                results[groupName] = {
+                                    values: rmEmptyBinsDefault(groups[groupName]).all(),
+                                    top: groups[groupName].top(1)[0].value
+                                };
+                            } else {
+                                results[groupName] = {
+                                    values: groups[groupName].all(),
+                                    top: groups[groupName].top(1)[0].value
+                                };
+                            }
+                        });
+
+                        resolve(results);
+                    });
+                    rPromise.then((r: any) => {
+                        if (r) {
+                            indx = null;
+
+                            res.send(r);
+                        }
+                    });
+                }
+            } else {
+                res.send({error: 'Empty Proteomics array', items: genes});
+            }
         });
     });
 
