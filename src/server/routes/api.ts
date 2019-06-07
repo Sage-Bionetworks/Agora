@@ -223,7 +223,7 @@ connection.once('open', () => {
                         log2fc: { $ne: null }
                     }
                 ]
-            }).exec(async (err, genes: Proteomics[]) => {
+            }).lean().exec(async (err, genes: Proteomics[]) => {
                 if (err) {
                     next(err);
                 } else {
