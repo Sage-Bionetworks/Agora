@@ -168,17 +168,16 @@ connection.once('open', () => {
         if (err) {
             next(err);
         } else {
-            if (genes.length) {
-                geneProteomics = genes.slice();
-                await geneProteomics.forEach((g: Proteomics) => {
-                    g.uniqid = g.uniqid;
-                    g.uniprotid = g.uniprotid;
-                    g.log2fc = (g.log2fc) ? +g.log2fc : 0;
-                    g.hgnc_symbol = g.hgnc_symbol;
-                    g.pval = (g.pval) ? +g.pval : 0;
-                    g.tissue = g.tissue;
-                });
-            }
+            console.log('humm');
+            geneProteomics = genes.slice();
+            await geneProteomics.forEach((g: Proteomics) => {
+                g.uniqid = g.uniqid;
+                g.uniprotid = g.uniprotid;
+                g.log2fc = (g.log2fc) ? +g.log2fc : 0;
+                g.hgnc_symbol = g.hgnc_symbol;
+                g.pval = (g.pval) ? +g.pval : 0;
+                g.tissue = g.tissue;
+            });
         }
     });
 

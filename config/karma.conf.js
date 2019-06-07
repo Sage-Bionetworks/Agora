@@ -1,4 +1,4 @@
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+process.env.CHROME_BIN = process.env.CHROME_BIN || require('puppeteer').executablePath();
 
 /**
  * @author: tipe.io
