@@ -164,14 +164,14 @@ connection.once('open', () => {
         }
     });
 
-    GenesProteomics.find({}).lean().exec(async (err, genes: Proteomics[], next) => {
+    GenesProteomics.find({}).exec(async (err, genes: Proteomics[], next) => {
         if (err) {
             next(err);
         } else {
             if (genes.length) {
+                console.log('humm');
                 geneProteomics = genes.slice();
-                await geneProteomics.forEach((g) => {
-                    // Separate the columns we need
+                await geneProteomics.forEach((g: Proteomics) => {
                     g.uniqid = g.uniqid;
                     g.uniprotid = g.uniprotid;
                     g.log2fc = (g.log2fc) ? +g.log2fc : 0;
@@ -196,7 +196,7 @@ connection.once('open', () => {
         loadChartData(filter).then(async (status) => {
             let indx: any = null;
             const localGeneProteomics = geneProteomics.slice();
-            indx = await crossfilter(geneProteomics.slice());
+            indx = await crossfilter(localGeneProteomics);
 
             // Crossfilter variables
             const dimensions = {
@@ -209,7 +209,7 @@ connection.once('open', () => {
             };
 
             if (!indx) {
-                res.send({test: 'Empty index'});
+                res.send({error: 'Empty Crossfilter'});
             }
 
             // Load all dimensions and groups
@@ -288,7 +288,7 @@ connection.once('open', () => {
                             });
                         }
                     } else {
-                        res.send({test: 'Empty genes', items: genes});
+                        res.send({error: 'Empty Proteomics array'});
                     }
                 }
             });

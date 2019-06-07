@@ -7,8 +7,8 @@ export interface Proteomics {
     uniprotid: string;
     ensembl_gene_id: string;
     tissue: string;
-    log2fc: number;
-    pval: number;
+    log2fc?: number;
+    pval?: number;
 }
 
 export type ProteomicsDocument = Proteomics & Document;

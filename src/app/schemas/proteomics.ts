@@ -26,6 +26,14 @@ export let ProteomicsSchema: Schema = new Schema (
         tissue: {
             required: true,
             type: String
+        },
+        log2fc: {
+            required: false,
+            type: Number
+        },
+        pval: {
+            required: false,
+            type: Number
         }
     }, {
         timestamps: true
