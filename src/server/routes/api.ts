@@ -214,7 +214,7 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             const genePTissues: string[] = [];
-            GenesProteomics.find({
+            await GenesProteomics.find({
                 $and: [
                     {
                         hgnc_symbol: id
