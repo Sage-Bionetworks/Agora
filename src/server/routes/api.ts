@@ -227,7 +227,7 @@ connection.once('open', () => {
                 if (err) {
                     next(err);
                 } else {
-                    if (genes) {
+                    if (genes.length) {
                         genes.forEach((p: Proteomics) => {
                             genePTissues.push(p.tissue);
                         });
