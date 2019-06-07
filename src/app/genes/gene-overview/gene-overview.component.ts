@@ -322,8 +322,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         if (responseList[0].geneProteomics) {
                             this.geneService.setGeneProteomics(responseList[0].geneProteomics
                                 .sort((a: Proteomics, b: Proteomics) => {
-                                    const tissueA = (a.tissue) ? a.tissue.toLowerCase() : '';
-                                    const tissueB = (b.tissue) ? b.tissue.toLowerCase() : '';
+                                    const tissueA = (a.Tissue) ? a.Tissue.toLowerCase() : '';
+                                    const tissueB = (b.Tissue) ? b.Tissue.toLowerCase() : '';
                                     // Sort string ascending
                                     if (tissueA < tissueB) {
                                         return -1;

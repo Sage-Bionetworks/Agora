@@ -170,12 +170,13 @@ connection.once('open', () => {
         } else {
             geneProteomics = genes.slice();
             await geneProteomics.forEach((g: Proteomics) => {
-                g.uniqid = g.uniqid;
-                g.uniprotid = g.uniprotid;
-                g.log2fc = (g.log2fc) ? +g.log2fc : 0;
-                g.hgnc_symbol = g.hgnc_symbol;
-                g.pval = (g.pval) ? +g.pval : 0;
-                g.tissue = g.tissue;
+                g.UniqID = g.UniqID;
+                g.UniProtID = g.UniProtID;
+                g.Log2FC = (g.Log2FC) ? +g.Log2FC : 0;
+                g.GeneName = g.GeneName;
+                g.PVal = (g.PVal) ? +g.PVal : 0;
+                g.Cor_PVal = (g.Cor_PVal) ? +g.Cor_PVal : 0;
+                g.Tissue = g.Tissue;
             });
         }
     });
@@ -212,11 +213,11 @@ connection.once('open', () => {
             // Load all dimensions and groups
             let genePTissues: string[] = [];
             const idGenesProteomics = localGeneProteomics.filter((p: Proteomics) => {
-                return p.hgnc_symbol === id && p.log2fc;
+                return p.GeneName === id && p.Log2FC !== null;
             });
             if (idGenesProteomics.length) {
                 idGenesProteomics.forEach((p: Proteomics) => {
-                    genePTissues.push(p.tissue);
+                    genePTissues.push(p.Tissue);
                 });
                 const distinctTissues = genePTissues.filter((value, index, self) => {
                     return self.indexOf(value) === index;
@@ -224,25 +225,25 @@ connection.once('open', () => {
                 genePTissues = distinctTissues;
 
                 dimensions.spDim = await indx.dimension((d) => {
-                    const tissueIndex = genePTissues.indexOf(d.tissue);
-                    return (d.hgnc_symbol === id && tissueIndex > -1 && d.log2fc) ?
-                        d.uniprotid : null;
+                    const tissueIndex = genePTissues.indexOf(d.Tissue);
+                    return (d.GeneName === id && tissueIndex > -1 && d.Log2FC) ?
+                        d.UniProtID : null;
                 });
-                dimensions.bpDim = await indx.dimension((d) => d.tissue);
+                dimensions.bpDim = await indx.dimension((d) => d.Tissue);
 
                 groups.spGroup = await dimensions.spDim.group();
                 groups.bpGroup = await dimensions.bpDim.group().reduce(
                     function(p, v) {
                         // Retrieve the data value, if not Infinity or null add it.
-                        if (v.log2fc !== Infinity && v.log2fc !== null) {
-                            p.push(v.log2fc);
+                        if (v.Log2FC !== Infinity && v.Log2FC !== null) {
+                            p.push(v.Log2FC);
                         }
                         return p;
                     },
                     function(p, v) {
                         // Retrieve the data value, if not Infinity or null remove it.
-                        if (v.log2fc !== Infinity && v.log2fc !== null) {
-                            p.splice(p.indexOf(v.log2fc), 1);
+                        if (v.Log2FC !== Infinity && v.Log2FC !== null) {
+                            p.splice(p.indexOf(v.Log2FC), 1);
                         }
                         return p;
                     },

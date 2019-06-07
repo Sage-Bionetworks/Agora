@@ -3,15 +3,15 @@ import { ProteomicsDocument } from '../models';
 
 export let ProteomicsSchema: Schema = new Schema (
     {
-        uniqid: {
+        UniqID: {
             required: true,
             type: String
         },
-        hgnc_symbol: {
+        GeneName: {
             required: true,
             type: String
         },
-        uniprotid: {
+        UniProtID: {
             required: true,
             type: String
         },
@@ -19,19 +19,23 @@ export let ProteomicsSchema: Schema = new Schema (
             required: true,
             type: String
         },
-        ensembl_gene_id: {
+        ENSG: {
             required: true,
             type: Number
         },
-        tissue: {
+        Tissue: {
             required: true,
             type: String
         },
-        log2fc: {
+        Log2FC: {
             required: false,
             type: Number
         },
-        pval: {
+        PVal: {
+            required: false,
+            type: Number
+        },
+        Cor_PVal: {
             required: false,
             type: Number
         }
@@ -43,10 +47,10 @@ export let ProteomicsSchema: Schema = new Schema (
 ProteomicsSchema.set('autoIndex', false);
 ProteomicsSchema.index(
     {
-        hgnc_symbol: 'text',
-        ensembl_gene_id: 'text',
-        tissue: 'text',
-        uniprotid: 'text'
+        GeneName: 'text',
+        ENSG: 'text',
+        Tissue: 'text',
+        UniProtID: 'text'
     }
 );
 

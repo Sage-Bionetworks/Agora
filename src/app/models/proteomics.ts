@@ -2,13 +2,14 @@ import { Document } from 'mongoose';
 
 export interface Proteomics {
     _id: string;
-    uniqid: string;
-    hgnc_symbol: string;
-    uniprotid: string;
-    ensembl_gene_id: string;
-    tissue: string;
-    log2fc?: number;
-    pval?: number;
+    UniqID: string;
+    GeneName: string;
+    UniProtID: string;
+    ENSG: string;
+    Tissue: string;
+    Log2FC?: number;
+    PVal?: number;
+    Cor_PVal?: number;
 }
 
 export type ProteomicsDocument = Proteomics & Document;

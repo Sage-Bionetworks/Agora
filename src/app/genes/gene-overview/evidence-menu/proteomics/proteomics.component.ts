@@ -92,7 +92,7 @@ export class ProteomicsComponent implements OnInit {
                     }
                 ],
                 'LOG 2 FOLD CHANGE',
-                'log2fc',
+                'Log2FC',
                 'Proteomics'
             );
 

@@ -178,7 +178,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         forEach((v: any, i: number) => {
                         // We got an extra group entry, currentGenes is correct, but the
                         // group coming from the server isn't
-                        if (!currentGenes.some((g: Proteomics) => g.tissue === v.key)) {
+                        if (!currentGenes.some((g: Proteomics) => g.Tissue === v.key)) {
                             indices.push(i);
                         }
                     });
@@ -204,7 +204,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getChartPromise().then((chart: any) => {
             this.chart = chart;
 
-            if (this.info.attr !== 'log2fc') { chart.yAxis().tickFormat(d3.format('.1e')); }
+            if (this.info.attr !== 'Log2FC') { chart.yAxis().tickFormat(d3.format('.1e')); }
 
             // Remove filtering for this chart
             chart.filter = function() {
@@ -346,7 +346,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
         const currentProteomics = this.geneService.getGeneProteomics().slice().filter(
             (p: Proteomics) => {
-                return p.log2fc;
+                return p.Log2FC;
             }
         );
 
@@ -354,14 +354,14 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const phrases: string[] = [];
         const significanceTexts: string[] = [];
         currentProteomics.forEach((p) => {
-            logVals.push(p.log2fc);
-            significanceTexts.push((p.pval <= 0.05) ?
+            logVals.push(p.Log2FC);
+            significanceTexts.push((p.PVal <= 0.05) ?
             ' ' : 'not ');
-            phrases.push(p.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
+            phrases.push(p.GeneName + ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
-                p.tissue +
-                ' with a log fold change value of ' + p.log2fc + ' and an adjusted p-value of ' +
-                p.pval + '.');
+                p.Tissue +
+                ' with a log fold change value of ' + p.Log2FC + ' and an adjusted p-value of ' +
+                p.PVal + '.');
         });
 
         if (!translate) {
