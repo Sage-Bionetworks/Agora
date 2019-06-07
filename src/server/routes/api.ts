@@ -214,16 +214,6 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             let genePTissues: string[] = [];
-            const queryFilter = {
-                $and: [
-                    {
-                        hgnc_symbol: id
-                    },
-                    {
-                        log2fc: { $ne: null }
-                    }
-                ]
-            };
             const idGenesProteomics = geneProteomics.filter((p) => {
                 return p.hgnc_symbol === id && p.log2fc !== null;
             });
