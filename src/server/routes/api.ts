@@ -227,7 +227,7 @@ connection.once('open', () => {
                 if (err) {
                     next(err);
                 } else {
-                    if (genes.length) {
+                    if (genes) {
                         genes.forEach((p: Proteomics) => {
                             genePTissues.push(p.tissue);
                         });
@@ -288,7 +288,7 @@ connection.once('open', () => {
                             });
                         }
                     } else {
-                        res.send({test: 'Empty genes'});
+                        res.send({test: 'Empty genes', items: genes});
                     }
                 }
             });
