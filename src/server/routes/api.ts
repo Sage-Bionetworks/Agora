@@ -290,7 +290,7 @@ connection.once('open', () => {
                     });
                 }
             } else {
-                res.send({error: 'Empty Proteomics array', items: genes});
+                res.send({error: 'Empty Proteomics array', items: idGenesProteomics});
             }
         });
     });
