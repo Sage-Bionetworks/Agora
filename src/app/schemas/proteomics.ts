@@ -52,4 +52,4 @@ ProteomicsSchema.index(
 
 // Mongoose forces a lowcase name for collections when using the queries
 export const GenesProteomics: Model<ProteomicsDocument> =
-                model<ProteomicsDocument>('proteomics', ProteomicsSchema);
+                model<ProteomicsDocument>('genesproteomics', ProteomicsSchema);
