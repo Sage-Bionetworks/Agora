@@ -214,7 +214,7 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             const genePTissues: string[] = [];
-            await GenesProteomics.find({
+            const queryFilter = {
                 $and: [
                     {
                         hgnc_symbol: id
@@ -223,7 +223,8 @@ connection.once('open', () => {
                         log2fc: { $ne: null }
                     }
                 ]
-            }).lean().exec(async (err, genes: Proteomics[]) => {
+            };
+            await GenesProteomics.find(queryFilter).exec(async (err, genes: Proteomics[]) => {
                 if (err) {
                     next(err);
                 } else {
@@ -288,7 +289,7 @@ connection.once('open', () => {
                             });
                         }
                     } else {
-                        res.send({error: 'Empty Proteomics array'});
+                        res.send({error: 'Empty Proteomics array', items: genes});
                     }
                 }
             });
