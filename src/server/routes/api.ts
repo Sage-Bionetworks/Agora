@@ -168,7 +168,6 @@ connection.once('open', () => {
         if (err) {
             next(err);
         } else {
-            console.log('humm');
             geneProteomics = genes.slice();
             await geneProteomics.forEach((g: Proteomics) => {
                 g.uniqid = g.uniqid;
@@ -212,7 +211,7 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             let genePTissues: string[] = [];
-            const idGenesProteomics = geneProteomics.filter((p) => {
+            const idGenesProteomics = localGeneProteomics.filter((p) => {
                 return p.hgnc_symbol === id && p.log2fc !== null;
             });
             if (idGenesProteomics.length) {
@@ -280,7 +279,7 @@ connection.once('open', () => {
                     });
                 }
             } else {
-                res.send({error: 'Empty Proteomics array', items: idGenesProteomics});
+                res.send({error: 'Empty Proteomics array', items: geneProteomics});
             }
         });
     });
