@@ -30,8 +30,8 @@ import * as crossfilter from 'crossfilter2';
     encapsulation: ViewEncapsulation.None
 })
 export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('barchart') medianChart: ElementRef;
-    @ViewChild('bccol') bcCol: ElementRef;
+    @ViewChild('barchart', {static: true}) medianChart: ElementRef;
+    @ViewChild('bccol', {static: true}) bcCol: ElementRef;
     @Input() geneinfo: any;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;

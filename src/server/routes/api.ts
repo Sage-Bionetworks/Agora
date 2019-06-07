@@ -169,7 +169,6 @@ connection.once('open', () => {
             next(err);
         } else {
             if (genes.length) {
-                console.log('humm');
                 geneProteomics = genes.slice();
                 await geneProteomics.forEach((g: Proteomics) => {
                     g.uniqid = g.uniqid;
@@ -221,7 +220,9 @@ connection.once('open', () => {
                 idGenesProteomics.forEach((p: Proteomics) => {
                     genePTissues.push(p.tissue);
                 });
-                const distinctTissues = [...new Set(genePTissues)];
+                const distinctTissues = genePTissues.filter((value, index, self) => {
+                    return self.indexOf(value) === index;
+                });
                 genePTissues = distinctTissues;
 
                 dimensions.spDim = await indx.dimension((d) => {

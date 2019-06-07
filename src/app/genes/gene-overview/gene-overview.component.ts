@@ -49,7 +49,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
     @Input() dataLoaded: boolean = false;
-    @ViewChild('overviewMenu') menu: TabMenu;
+    @ViewChild('overviewMenu', {static: false}) menu: TabMenu;
 
     extras: NavigationExtras = {
         relativeTo: this.navService.getRoute(),

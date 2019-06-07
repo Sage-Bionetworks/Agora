@@ -3,8 +3,11 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class PlatformLocationStub extends PlatformLocation {
+    href: string;
+    protocol: string;
+    hostname: string;
+    port: string;
     private _location: any;
-    // private _history: any;
 
     constructor() {
         super();
@@ -16,21 +19,6 @@ export class PlatformLocationStub extends PlatformLocation {
             search: '',
             hash: ''
         };
-        /*this._history = {
-            forward: () => {
-                //
-            },
-            back: () => {
-                //
-                history.back();
-            },
-            pushState: (state: any, title: any, url: any) => {
-                //
-            },
-            replaceState: (state: any, title: any, url: any) => {
-                //
-            }
-        };*/
     }
     get location(): any { return this._location; }
     getBaseHrefFromDOM(): string { return ''; }
@@ -53,5 +41,9 @@ export class PlatformLocationStub extends PlatformLocation {
     forward(): void { history.forward(); }
     back(): void {
         //
+    }
+    getState(): unknown {
+        //
+        return true;
     }
 }

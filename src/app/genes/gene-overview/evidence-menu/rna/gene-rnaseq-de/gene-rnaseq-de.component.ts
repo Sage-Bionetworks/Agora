@@ -39,7 +39,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     @Input() gene: Gene = emptyGene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
-    @ViewChild('noDataMedian') noMedianEl: ElementRef;
+    @ViewChild('noDataMedian', {static: false}) noMedianEl: ElementRef;
     @ViewChildren('t', { read: ViewContainerRef }) entries: QueryList<ViewContainerRef>;
 
     tissues: SelectItem[] = [];

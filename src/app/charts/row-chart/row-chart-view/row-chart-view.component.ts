@@ -49,8 +49,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
 
-    @ViewChild('chart') rowChart: ElementRef;
-    @ViewChild('studies') stdCol: ElementRef;
+    @ViewChild('chart', {static: false}) rowChart: ElementRef;
+    @ViewChild('studies', {static: false}) stdCol: ElementRef;
 
     max: number = -Infinity;
     currentModel: string;

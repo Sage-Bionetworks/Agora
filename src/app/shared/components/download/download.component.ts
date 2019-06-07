@@ -16,7 +16,7 @@ import { saveAs } from 'file-saver';
 export class DownloadComponent {
     @Input() target: HTMLElement;
     @Input() name: string = 'example';
-    @ViewChild('op') overlayPanel: OverlayPanel;
+    @ViewChild('op', {static: false}) overlayPanel: OverlayPanel;
     selectedTypes: string[] = ['png'];
     types: any[] = [
         {

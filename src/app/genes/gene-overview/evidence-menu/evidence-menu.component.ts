@@ -17,8 +17,6 @@ import { TabMenu } from 'primeng/tabmenu';
 
 import { Subscription } from 'rxjs';
 
-import * as d3 from 'd3';
-
 @Component({
     selector: 'evidence-menu',
     templateUrl: './evidence-menu.component.html',
@@ -29,7 +27,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
-    @ViewChild('evidenceMenu') menu: TabMenu;
+    @ViewChild('evidenceMenu', {static: false}) menu: TabMenu;
 
     extras: NavigationExtras = {
         relativeTo: this.navService.getRoute(),

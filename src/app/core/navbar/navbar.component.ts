@@ -22,8 +22,8 @@ import { TabMenu } from 'primeng/tabmenu';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit, AfterContentChecked {
-    @ViewChild('navMenu') menu: TabMenu;
-    @ViewChild('mobileMenu') mobileMenu: SplitButton;
+    @ViewChild('navMenu', {static: false}) menu: TabMenu;
+    @ViewChild('mobileMenu', {static: false}) mobileMenu: SplitButton;
     items: MenuItem[];
     mobileItems: MenuItem[];
     activeItem: MenuItem;

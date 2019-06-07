@@ -30,8 +30,8 @@ import * as dc from 'dc';
     encapsulation: ViewEncapsulation.None
 })
 export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('chart') boxPlot: ElementRef;
-    @ViewChild('bpcol') bpCol: ElementRef;
+    @ViewChild('chart', {static: false}) boxPlot: ElementRef;
+    @ViewChild('bpcol', {static: false}) bpCol: ElementRef;
     @Input() paddingLR: number = 15;
     @Input() paddingUD: number = 0;
     @Input() title: string;

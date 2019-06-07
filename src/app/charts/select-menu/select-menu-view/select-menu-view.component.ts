@@ -44,7 +44,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     @Input() group: any;
     @Input() type: string = 'RNA';
 
-    @ViewChild('sm') selectMenu: ElementRef;
+    @ViewChild('sm', {static: true}) selectMenu: ElementRef;
 
     isDisabled: boolean = true;
     isActive: boolean = true;

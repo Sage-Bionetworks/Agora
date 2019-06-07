@@ -7,7 +7,7 @@ describe('App', () => {
     await browser.get('/');
   });
 
-  it('should have a title', async () => {
+  /*it('should have a title', async () => {
     const subject = await browser.getTitle();
     const result  = 'Agora';
     expect(subject).toEqual(result);
@@ -20,7 +20,6 @@ describe('App', () => {
   });
 
   // Add new app.e2e.ts tests
-  /*
   it('should have <home>', async () => {
     const subject = await element(by.css('app home')).isPresent();
     const result  = true;

@@ -37,7 +37,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     @Input() name: string;
     @Input() currentGene = this.geneService.getCurrentGene();
     @Input() networkData: GeneNetwork;
-    @ViewChild('chart') forceChart: ElementRef;
+    @ViewChild('chart', {static: false}) forceChart: ElementRef;
 
     g: any;
     zoomHandler: any;
