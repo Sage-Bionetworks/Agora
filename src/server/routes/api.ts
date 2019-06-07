@@ -211,8 +211,8 @@ connection.once('open', () => {
 
             // Load all dimensions and groups
             let genePTissues: string[] = [];
-            const idGenesProteomics = localGeneProteomics.filter((p) => {
-                return p.hgnc_symbol === id && p.log2fc !== null;
+            const idGenesProteomics = localGeneProteomics.filter((p: Proteomics) => {
+                return p.hgnc_symbol === id && p.log2fc;
             });
             if (idGenesProteomics.length) {
                 idGenesProteomics.forEach((p: Proteomics) => {
