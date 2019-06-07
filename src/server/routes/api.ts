@@ -225,7 +225,7 @@ connection.once('open', () => {
                 ]
             };
             const idGenesProteomics = geneProteomics.filter((p) => {
-                return p.hgnc_symbol === id && p.log2fc !== null
+                return p.hgnc_symbol === id && p.log2fc !== null;
             });
             if (idGenesProteomics.length) {
                 idGenesProteomics.forEach((p: Proteomics) => {
