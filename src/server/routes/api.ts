@@ -188,100 +188,141 @@ connection.once('open', () => {
 
     router.get('/refreshp', async (req, res, next) => {
         const results = {};
-        const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
+        let filter = '';
 
-        loadChartData(filter).then(async (status) => {
-            let indx: any = null;
-            const localGeneProteomics = geneProteomics.slice();
-            indx = await crossfilter(localGeneProteomics);
-
-            // Crossfilter variables
-            const dimensions = {
-                spDim: null,
-                bpDim: null
-            };
-            const groups = {
-                spGroup: null,
-                bpGroup: null
-            };
-
-            if (!indx) {
-                res.send({error: 'Empty Crossfilter'});
-            }
-
-            // Load all dimensions and groups
-            let genePTissues: string[] = [];
-            const idGenesProteomics = localGeneProteomics.filter((p: Proteomics) => {
-                return p.GeneName === id && p.Log2FC !== null;
-            });
-            if (idGenesProteomics.length) {
-                idGenesProteomics.forEach((p: Proteomics) => {
-                    genePTissues.push(p.Tissue);
-                });
-                const distinctTissues = genePTissues.filter((value, index, self) => {
-                    return self.indexOf(value) === index;
-                });
-                genePTissues = distinctTissues;
-
-                dimensions.spDim = await indx.dimension((d) => {
-                    const tissueIndex = genePTissues.indexOf(d.Tissue);
-                    return (d.GeneName === id && tissueIndex > -1 && d.Log2FC) ?
-                        d.UniProtID : null;
-                });
-                dimensions.bpDim = await indx.dimension((d) => d.Tissue);
-
-                groups.spGroup = await dimensions.spDim.group();
-                groups.bpGroup = await dimensions.bpDim.group().reduce(
-                    function(p, v) {
-                        // Retrieve the data value, if not Infinity or null add it.
-                        if (v.Log2FC !== Infinity && v.Log2FC !== null) {
-                            p.push(v.Log2FC);
-                        }
-                        return p;
+        const fPromise = new Promise(async (resolve, reject) => {
+            if (req.query.filter) {
+                filter = JSON.parse(req.query.filter);
+                resolve(true);
+            } else {
+                await GenesProteomics.findOne({ $and: [
+                    {
+                        GeneName: id
                     },
-                    function(p, v) {
-                        // Retrieve the data value, if not Infinity or null remove it.
-                        if (v.Log2FC !== Infinity && v.Log2FC !== null) {
-                            p.splice(p.indexOf(v.Log2FC), 1);
-                        }
-                        return p;
-                    },
-                    function() {
-                        return [];
+                    {
+                        UniProtID: { $ne: null }
                     }
-                );
+                ]}).exec((err, gene: Proteomics) => {
+                    if (err) {
+                        next(err);
+                    } else {
+                        filter = gene.UniProtID;
+                        resolve(true);
+                    }
+                });
+            }
+        });
+        fPromise.then((filterStatus) => {
+            loadChartData().then(async (status) => {
+                let indx: any = null;
+                const localGeneProteomics = geneProteomics.slice().filter((p: Proteomics) => {
+                    return p.Log2FC && p.UniProtID === filter;
+                });
 
-                if (Object.keys(groups).length > 0) {
-                    const rPromise = new Promise((resolve, reject) => {
-                        Object.keys(dimensions).forEach(async (dimension) => {
-                            const groupName = dimension.substring(0, 2) + 'Group';
-                            if (dimension !== 'bpDim') {
-                                results[groupName] = {
-                                    values: rmEmptyBinsDefault(groups[groupName]).all(),
-                                    top: groups[groupName].top(1)[0].value
-                                };
-                            } else {
-                                results[groupName] = {
-                                    values: groups[groupName].all(),
-                                    top: groups[groupName].top(1)[0].value
-                                };
+                // Crossfilter variables
+                const dimensions = {
+                    spDim: null,
+                    bpDim: null
+                };
+                const groups = {
+                    spGroup: null,
+                    bpGroup: null
+                };
+
+                // Load all dimensions and groups
+                let genePTissues: string[] = [];
+                const idGenesProteomics = localGeneProteomics.filter((p: Proteomics) => {
+                    return p.GeneName === id && p.Log2FC && p.UniProtID === filter;
+                });
+
+                if (idGenesProteomics.length) {
+                    // All tissues for one UniProtID
+                    idGenesProteomics.forEach((p: Proteomics) => {
+                        genePTissues.push(p.Tissue);
+                    });
+                    const distinctTissues = genePTissues.filter((value, index, self) => {
+                        return self.indexOf(value) === index;
+                    });
+                    // Only unique tissues
+                    genePTissues = distinctTissues;
+
+                    // Only genes with the unique tissues
+                    indx = await crossfilter(geneProteomics.slice().filter((p: Proteomics) => {
+                        return genePTissues.indexOf(p.Tissue) > -1;
+                    }));
+
+                    if (!indx) {
+                        res.send({error: 'Empty Crossfilter'});
+                    }
+
+                    dimensions.spDim = await indx.dimension((d) => {
+                        return (d.GeneName === id && d.Log2FC) ? d.UniProtID : null;
+                    });
+
+                    // Filter is the UniProtID
+                    dimensions.bpDim = await indx.dimension((d) => {
+                        return (genePTissues.indexOf(d.Tissue) > -1) ? d.Tissue : null;
+                    });
+
+                    groups.spGroup = await dimensions.spDim.group();
+                    groups.bpGroup = await dimensions.bpDim.group().reduce(
+                        function(p, v) {
+                            // Retrieve the data value, if not Infinity or null add it.
+                            if (v.Log2FC !== Infinity && v.Log2FC) {
+                                p.push(v.Log2FC);
+                            }
+                            return p;
+                        },
+                        function(p, v) {
+                            // Retrieve the data value, if not Infinity or null remove it.
+                            if (v.Log2FC !== Infinity && v.Log2FC) {
+                                p.splice(p.indexOf(v.Log2FC), 1);
+                            }
+                            return p;
+                        },
+                        function() {
+                            return [];
+                        }
+                    );
+
+                    if (Object.keys(groups).length > 0) {
+                        const rPromise = new Promise((resolve, reject) => {
+                            Object.keys(dimensions).forEach(async (dimension) => {
+                                const groupName = dimension.substring(0, 2) + 'Group';
+                                if (dimension !== 'bpDim') {
+                                    results[groupName] = {
+                                        values: rmEmptyBinsDefault(groups[groupName]).all().
+                                            filter(
+                                                (obj, pos, arr) => {
+                                                    return arr.map((mapObj) => mapObj['key']).
+                                                        indexOf(obj['key']) === pos;
+                                                }
+                                            ),
+                                        top: groups[groupName].top(1)[0].value
+                                    };
+                                } else {
+                                    results[groupName] = {
+                                        values: groups[groupName].all(),
+                                        top: groups[groupName].top(1)[0].value
+                                    };
+                                }
+                            });
+
+                            resolve(results);
+                        });
+                        rPromise.then((r: any) => {
+                            if (r) {
+                                indx = null;
+
+                                res.send(r);
                             }
                         });
-
-                        resolve(results);
-                    });
-                    rPromise.then((r: any) => {
-                        if (r) {
-                            indx = null;
-
-                            res.send(r);
-                        }
-                    });
+                    }
+                } else {
+                    res.send({error: 'Empty Proteomics array', items: geneProteomics});
                 }
-            } else {
-                res.send({error: 'Empty Proteomics array', items: geneProteomics});
-            }
+            });
         });
     });
 
@@ -290,7 +331,7 @@ connection.once('open', () => {
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
 
-        loadChartData(filter).then(async (status) => {
+        loadChartData().then(async (status) => {
             let indx: any = null;
 
             switch (filter) {
@@ -1004,7 +1045,7 @@ connection.once('open', () => {
         return chartInfos.get(label);
     }
 
-    function loadChartData(model: string): Promise<any> {
+    function loadChartData(): Promise<any> {
         return new Promise((resolve, reject) => {
             addChartInfo(
                 'volcano-plot',

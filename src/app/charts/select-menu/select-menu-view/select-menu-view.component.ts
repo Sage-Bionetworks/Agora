@@ -461,6 +461,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
+                        console.log(self.chartService.pQueryFilter.spGroup);
                         await self.apiService.refreshChart(
                             self.chartService.pQueryFilter.spGroup, gene, self.type)
                             .subscribe((results) => {

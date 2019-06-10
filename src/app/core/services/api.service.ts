@@ -269,13 +269,9 @@ export class ApiService {
             'id', id
         );
 
-        const baseUrl = '/api/refresh' +
-            (
-                (type === 'Proteomics') ? 'p' :
-                (
-                    (filter) ? '?filter=' + JSON.stringify(filter) : ''
-                )
-            );
+        let baseUrl = '/api/refresh' + ((type === 'Proteomics') ? 'p' : '');
+        baseUrl += ((filter) ? '?filter=' + JSON.stringify(filter) : '');
+
         return this.http.get(baseUrl, { headers, params });
     }
 }

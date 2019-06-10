@@ -287,7 +287,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     const left = self.bpCol.nativeElement.getBoundingClientRect().left;
                     // Total column width, including padding
                     const colWidth = self.bpCol.nativeElement.offsetWidth;
-                    console.log(colWidth);
                     // Shows the tooltip
                     self.sDiv.transition()
                         .duration(200)
@@ -346,7 +345,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
         const currentProteomics = this.geneService.getGeneProteomics().slice().filter(
             (p: Proteomics) => {
-                return p.Log2FC;
+                return p.Log2FC && p.UniProtID === self.geneService.getCurrentProtein();
             }
         );
 
