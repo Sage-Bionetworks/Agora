@@ -257,7 +257,7 @@ connection.once('open', () => {
                     }
 
                     dimensions.spDim = await indx.dimension((d) => {
-                        return (d.GeneName === id && d.Log2FC) ? d.UniProtID : null;
+                        return (d.GeneName === id) ? d.UniProtID : null;
                     });
 
                     // Filter is the UniProtID

@@ -237,25 +237,22 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 .elasticX(true)
                 .elasticY(true)
                 .yRangePadding(this.rcRadius * 1.5)
+                .on('preRedraw', function(chart) {
+                    // Always remove circles
+                    d3.selectAll('circle').remove();
+                })
                 .on('renderlet', function(chart) {
-                    if (!chart.selectAll('g.box circle').empty()) {
-                        dc.events.trigger(function() {
-                            self.renderRedCircles(chart, true);
-                        });
-                    }
+                    dc.events.trigger(function() {
+                        chart.selectAll('rect.box')
+                            .attr('rx', self.boxRadius);
+
+                        if (chart.selectAll('g.box circle').empty()) {
+                            self.renderRedCircles(chart);
+                        }
+                    });
 
                     if (self.firstRender) {
                         self.firstRender = false;
-
-                        dc.events.trigger(function() {
-                            chart.selectAll('rect.box')
-                                .attr('rx', self.boxRadius);
-
-                            if (chart.selectAll('g.box circle').empty()) {
-                                self.renderRedCircles(chart);
-                            }
-                        });
-
                         // Adds tooltip below the x axis labels
                         self.addXAxisTooltips(chart);
                     }
@@ -338,7 +335,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         chart.selectAll('g.box circle').remove();
     }
 
-    renderRedCircles(chart: dc.BoxPlot, translate?: boolean) {
+    renderRedCircles(chart: dc.BoxPlot) {
         const self = this;
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
@@ -352,7 +349,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const logVals: number[] = [];
         const phrases: string[] = [];
         const significanceTexts: string[] = [];
-        currentProteomics.forEach((p) => {
+        currentProteomics.forEach((p: Proteomics) => {
             logVals.push(p.Log2FC);
             significanceTexts.push((p.PVal <= 0.05) ?
             ' ' : 'not ');
@@ -363,64 +360,41 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 p.PVal + '.');
         });
 
-        if (!translate) {
-            chart.selectAll('g.box').each(function(el, i) {
-                const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
-                const fcy = (isNaN(cy) ? 0.0 : cy);
-                d3.select(this)
-                    .insert('circle', ':last-child')
-                    .attr('cx', lineCenter.attr('x1'))
-                    .attr('cy', fcy)
-                    .attr('fill', '#F47E6C')
-                    .style('stroke', '#F47E6C')
-                    .style('stroke-width', 3)
-                    .attr('r', self.rcRadius)
-                    .attr('opacity', 1)
-                    .on('mouseover', function() {
-                        self.div.transition()
-                            .duration(200)
-                            .style('opacity', .9);
-                        self.div.html(phrases[i])
-                            .style('left', (d3.event.pageX - 60) + 'px')
-                            .style('top', (d3.event.pageY + 20) + 'px');
-                    })
-                    .on('mouseout', function() {
-                        self.div.transition()
-                            .duration(500)
-                            .style('opacity', 0);
-                    });
+        chart.selectAll('g.box').each(function(el, i) {
+            const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
+            const fcy = (isNaN(cy) ? 0.0 : cy);
+            d3.select(this)
+                .insert('circle', ':last-child')
+                .attr('cx', lineCenter.attr('x1'))
+                .attr('cy', fcy)
+                .attr('fill', '#F47E6C')
+                .style('stroke', '#F47E6C')
+                .style('stroke-width', 3)
+                .attr('r', self.rcRadius)
+                .attr('opacity', 1)
+                .on('mouseover', function() {
+                    self.div.transition()
+                        .duration(200)
+                        .style('opacity', .9);
+                    self.div.html(phrases[i])
+                        .style('left', (d3.event.pageX - 60) + 'px')
+                        .style('top', (d3.event.pageY + 20) + 'px');
+                })
+                .on('mouseout', function() {
+                    self.div.transition()
+                        .duration(500)
+                        .style('opacity', 0);
                 });
-
-            const selection = chart.select('g.axis.x').node();
-            if (selection !== null) {
-                const parentNode = selection.parentNode;
-                const xAxisNode = selection;
-                const firstChild = parentNode.firstChild;
-                if (firstChild) {
-                    parentNode.insertBefore(xAxisNode, firstChild);
-                }
-            }
-        } else {
-            chart.selectAll('circle').each(function(el, i) {
-                const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
-                const fcy = (isNaN(cy) ? 0.0 : cy);
-                d3.select(this)
-                    .attr('cx', lineCenter.attr('x1'))
-                    .attr('cy', fcy)
-                    .on('mouseover', function() {
-                        self.div.transition()
-                            .duration(200)
-                            .style('opacity', .9);
-                        self.div.html(phrases[i])
-                            .style('left', (d3.event.pageX - 60) + 'px')
-                            .style('top', (d3.event.pageY + 20) + 'px');
-                    })
-                    .on('mouseout', function() {
-                        self.div.transition()
-                            .duration(500)
-                            .style('opacity', 0);
-                    });
             });
+
+        const selection = chart.select('g.axis.x').node();
+        if (selection !== null) {
+            const parentNode = selection.parentNode;
+            const xAxisNode = selection;
+            const firstChild = parentNode.firstChild;
+            if (firstChild) {
+                parentNode.insertBefore(xAxisNode, firstChild);
+            }
         }
     }
 
