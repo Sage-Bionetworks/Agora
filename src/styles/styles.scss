@@ -222,8 +222,10 @@ p-dialog {
     }
 
     .ui-dialog-title {
-        @include lato-font('bold');
-        font-size: 24px !important;
+        @include lato-font('semi-bold');
+        font-weight: 500;
+        font-size: 28px !important;
+        line-height: 34px;
         color: color(text, title);
     }
 
@@ -331,6 +333,22 @@ p-dialog {
         ::-webkit-scrollbar-thumb:hover {
             background: $tertiary-background;
         }
+
+        .ui-table {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .header-row {
+            padding-top: 0px;
+            padding-bottom: 49px;
+            margin: 0px;
+        }
+
+        .header-col {
+            padding: 0px;
+            padding-top: 44px;
+        }
     }
 
     tr:hover {
@@ -378,14 +396,60 @@ p-dialog {
     }
 
     .info-icon {
-        content:url("/assets/icon/info-icon2.svg");
+        content: url("/assets/icon/info-icon2.svg");
     }
-
-    background-size: cover;
-    background-position: top; /* Position the image to the top center of the div */
 
     .top-section {
         padding-bottom: 0px;
+
+        background-size: cover;
+        background-position: top; /* Position the image to the top center of the div */
+
+        > h1, p {
+            text-align: left !important;
+            text-align-last: left !important;
+        }
+
+        p {
+            margin-bottom: 34px;
+        }
+
+        .link-heading {
+            float: none;
+            margin: 0px;
+            transform: none;
+        }
+
+        @include respond-to('ex-small') {
+            padding-top: 2em;
+            padding-left: 9%;
+            padding-bottom: 2em;
+            padding-right: 9%;
+        }
+        @include respond-to('small') {
+            padding-top: 2em;
+            padding-left: 9%;
+            padding-bottom: 2em;
+            padding-right: 9%;
+        }
+        @include respond-to('medium') {
+            padding-top: 2em;
+            padding-left: 10%;
+            padding-bottom: 2em;
+            padding-right: 10%;
+        }
+        @include respond-to('large') {
+            padding-top: 2em;
+            padding-left: 10%;
+            padding-bottom: 2em;
+            padding-right: 10%;
+        }
+        @include respond-to('ex-large') {
+            padding-top: 2em;
+            padding-left: 10%;
+            padding-bottom: 2em;
+            padding-right: 10%;
+        }
     }
 
     .ui-table-tbody {
@@ -414,27 +478,7 @@ p-dialog {
         .search-row {
             display: block;
             height: 63px;
-
-            @include respond-to('ex-small') {
-                width: 100%;
-                margin-left: 0px;
-            }
-            @include respond-to('small') {
-                width: 100%;
-                margin-left: 0px;
-            }
-            @include respond-to('medium') {
-                width: 60%;
-                margin: auto;
-            }
-            @include respond-to('large') {
-                width: 40%;
-                margin: auto;
-            }
-            @include respond-to('ex-large') {
-                width: 40%;
-                margin: auto;
-            }
+            width: 100%;
         }
 
         .filter-wrapper {
@@ -445,6 +489,23 @@ p-dialog {
             flex-flow: column wrap;
             position: relative;
             width: 100%;
+            margin-right: 20px;
+
+            @include respond-to('ex-small') {
+                margin-left: 0px;
+            }
+            @include respond-to('small') {
+                margin-left: 0px;
+            }
+            @include respond-to('medium') {
+                margin-left: 10px;
+            }
+            @include respond-to('large') {
+                margin-left: 10px;
+            }
+            @include respond-to('ex-large') {
+                margin-left: 10px;
+            }
 
             .italic-result {
                 > p {
@@ -471,7 +532,7 @@ p-dialog {
             resize: none;
             width: 85%;
             background: transparent;
-            line-height: 63px;
+            line-height: 18px;
             border-color: color(keyword, border-color);
             border: 2px;
 
@@ -515,15 +576,41 @@ p-dialog {
 
             color: color(text, secondary);
 
+            @include respond-to('ex-small') {
+                margin-left: 0px;
+            }
+            @include respond-to('small') {
+                margin-left: 0px;
+            }
             @include respond-to('medium') {
-                margin-right: 20px;
+                margin-left: 10px;
             }
             @include respond-to('large') {
-                margin-right: 20px;
+                margin-left: 10px;
             }
             @include respond-to('ex-large') {
-                margin-right: 20px;
+                margin-left: 10px;
             }
+            margin-right: 20px;
+        }
+
+        .span-add-this-left {
+            width: 100%;
+            text-align: left;
+            text-align-last: left;
+        }
+
+        .span-add-this-right {
+            width: 100%;
+            text-align: right;
+            text-align-last: right;
+        }
+
+        .img-right {
+            text-align: right;
+            width: 100%;
+            margin-left: 20px;
+            margin-right: 20px;
         }
     }
 
@@ -1013,7 +1100,8 @@ p-dialog {
     padding-left: 5%;
 
     background: $background;
-    box-shadow: inset 0px 0px 5px color(keyword, box-shadow);
+    border: 1px solid #000000;
+    box-shadow: inset 0px 0px 4px color(keyword, box-shadow);
     border-radius: 6px;
 
     .input-search-icon {
@@ -1029,13 +1117,13 @@ p-dialog {
                 width: 50%;
             }
             @include respond-to('medium') {
-                width: 45%;
+                width: 60%;
             }
             @include respond-to('large') {
-                width: 40%;
+                width: 55%;
             }
             @include respond-to('ex-large') {
-                width: 35%;
+                width: 45%;
             }
 
             z-index: 2;

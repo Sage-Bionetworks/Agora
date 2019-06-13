@@ -20,7 +20,7 @@ $font-size-xx-regular: 20px;
 $font-size-xxx-regular: 22px;
 $font-size-xxxx-regular: 24px;
 $font-size-large: 28px;
-$font-size-x-large: 30px;
+$font-size-x-large: 40px;
 $font-size-xx-large: 48px;
 $font-size-xxx-large: 60px;
 $font-size-xxxx-large: 64px;
@@ -67,7 +67,7 @@ $colors: (
         background-active: #2F8E94
     ),
     keyword: (
-        box-shadow: rgba(128, 133, 146, 0.6),
+        box-shadow: #C7C5C5,
         border-color: rgba(197, 199, 196, 0.5)
     ),
 
@@ -78,7 +78,7 @@ $colors: (
         primary: #1A1C29,
         secondary: #24334F,
         fill: #000000,
-        title: #5171C0,
+        title: #3F5EAB,
         span-title: #3F5EAB,
         span-grey: #A6A6A6
     ),
