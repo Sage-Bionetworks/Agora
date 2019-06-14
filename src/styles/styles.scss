@@ -461,7 +461,7 @@ p-dialog {
 
     .ui-table-scrollable-header-box {
         margin-right: 0px !important;
-        border-right: solid 17px $menu-dark !important;
+
         @include respond-to('ex-small') {
             border-right: 0px!important;
         }
@@ -634,6 +634,21 @@ p-dialog {
             color: $background !important;
         }
 
+        .nomlist-first-col {
+            text-align-last: right;
+            text-align: right;
+            vertical-align: middle;
+            margin: auto;
+        }
+
+        .nomlist-second-col {
+            padding: 0px;
+            text-align: left;
+            text-align-last: left;
+            vertical-align: middle;
+            margin: auto;
+        }
+
         .nomlist-flex-header {
             display: flex;
             width: 100%;
@@ -641,16 +656,7 @@ p-dialog {
             line-height: 58px !important;
             align-items: center;
 
-            .nomlist-first-col {
-                text-align-last: right;
-                text-align: right;
-            }
 
-            .nomlist-second-col {
-                padding: 0px;
-                text-align: left;
-                text-align-last: left;
-            }
 
             >th {
                 padding: 0px;
@@ -865,6 +871,10 @@ p-dialog {
 
     .btn-nom{
         cursor: pointer;
+    }
+
+    .ui-table-scrollable-header-table {
+        border-right: solid 17px $menu-dark !important;
     }
 }
 

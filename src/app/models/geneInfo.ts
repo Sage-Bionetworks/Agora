@@ -28,6 +28,8 @@ export interface GeneInfo {
     // Extra field for the genes list table. This will be
     // all the teams in a single string separated by commas
     teams?: string;
+    study?: string;
+    input_data?: string;
 }
 
 export interface MedianExpression {
@@ -42,6 +44,8 @@ export interface NominatedTarget {
     predicted_therapeutic_direction: string;
     data_used_to_support_target_selection: string;
     data_synapseid: string[];
+    study: string;
+    input_data: string;
 }
 
 export interface Druggability {

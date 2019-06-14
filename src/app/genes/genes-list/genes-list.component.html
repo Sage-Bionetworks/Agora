@@ -57,13 +57,15 @@
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
-            <tr class="nomlist-flex-header">
-                <th class="nomlist-flex-header" *ngFor="let col of cols; let i = index;" [ngSwitch]="col.field">
-                    <div class="col-md-7 col-sm-7 col-7 nomlist-first-col">
-                        {{col.header}}
-                    </div>
-                    <div [pSortableColumn]="col.field" class="col-md-5 col-sm-5 col-5 nomlist-second-col">
-                        <p-sortIcon [field]="col.field"></p-sortIcon>
+            <tr class="">
+                <th class="" *ngFor="let col of cols; let i = index;" [ngSwitch]="col.field">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-9 col-9 nomlist-first-col">
+                            {{col.header}}
+                        </div>
+                        <div [pSortableColumn]="col.field" class="col-md-3 col-sm-3 col-3 nomlist-second-col">
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </div>
                     </div>
                 </th>
             </tr>
@@ -78,6 +80,12 @@
                 </td>
                 <td>
                     {{rowData[columns[2].field]}}
+                </td>
+                <td>
+                    {{rowData[columns[3].field]}}
+                </td>
+                <td>
+                    {{rowData[columns[4].field]}}
                 </td>
             </tr>
         </ng-template>

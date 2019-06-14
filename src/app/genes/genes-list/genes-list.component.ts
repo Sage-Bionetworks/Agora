@@ -39,14 +39,33 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol' },
             { field: 'nominations', header: 'Nominations' },
-            { field: 'teams', header: 'Teams' }
+            { field: 'teams', header: 'Nominating Teams' },
+            { field: 'study', header: 'Cohort Study' },
+            { field: 'input_data', header: 'Input Data' }
         ];
 
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.datasource = (data.items) ? data.items : [];
-            this.datasource.forEach((de) => {
-                de.teams = (de.nominatedtarget.length) ? de.nominatedtarget.map(
-                    (nt) => nt.team).join(', ') : '';
+            this.datasource.forEach((de: GeneInfo) => {
+                // First map all entries nested in the data to a new array
+                let teamsArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
+                    (nt: NominatedTarget) => nt.team) : [];
+                let studyArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
+                    (nt: NominatedTarget) => nt.study) : [];
+                let inputDataArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
+                    (nt: NominatedTarget) => nt.input_data) : [];
+
+                // Check if there are any strings with commas inside,
+                // if there are separate those into new split strings
+                teamsArray = this.commaFlattenArray(teamsArray);
+                studyArray = this.commaFlattenArray(studyArray);
+                inputDataArray = this.commaFlattenArray(inputDataArray);
+
+                // Join the final strings into a new array removing duplicates
+                de.teams = (teamsArray.length) ? teamsArray.filter(this.getUnique).join(', ') : '';
+                de.study = (studyArray.length) ? studyArray.filter(this.getUnique).join(', ') : '';
+                de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique).
+                    join(', ') : '';
             });
             this.genesInfo = this.datasource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
@@ -61,6 +80,33 @@ export class GenesListComponent implements OnInit {
 
             this.loading = false;
         });
+    }
+
+    commaFlattenArray(array: any[]): any[] {
+        const finalArray: any[] = [];
+        if (array.length) {
+            array.forEach((t) => {
+                if (t) {
+                    const i = t.indexOf(', ');
+                    if (i > -1) {
+                        const tmpArray = t.split(', ');
+                        finalArray.push(tmpArray[0]);
+                        finalArray.push(tmpArray[1]);
+                    } else {
+                        finalArray.push(t);
+                    }
+                } else {
+                    finalArray.push('');
+                }
+            });
+            array = finalArray;
+        }
+
+        return array;
+    }
+
+    getUnique(value, index, self) {
+        return self.indexOf(value) === index;
     }
 
     getAlignment(i: number, max: number): string {
