@@ -6,6 +6,7 @@ import { BPDialogComponent } from './bp-dialog';
 import { BRDialogComponent } from './br-dialog';
 import { DRUggabilityComponent } from './dg-dialog';
 import { MEDialogComponent } from './me-dialog';
+import { PTDialogComponent } from './pt-dialog';
 import { SOEDialogComponent } from './soe-dialog';
 import { SGDialogComponent } from './sg-dialog';
 import { MoreInfoComponent } from './more-info';
@@ -27,6 +28,7 @@ import { DialogsService } from './services';
         BPDialogComponent,
         BRDialogComponent,
         MEDialogComponent,
+        PTDialogComponent,
         SGDialogComponent,
         SOEDialogComponent,
         DRUggabilityComponent,
@@ -41,6 +43,7 @@ import { DialogsService } from './services';
         BPDialogComponent,
         BRDialogComponent,
         MEDialogComponent,
+        PTDialogComponent,
         SGDialogComponent,
         SOEDialogComponent,
         DRUggabilityComponent,

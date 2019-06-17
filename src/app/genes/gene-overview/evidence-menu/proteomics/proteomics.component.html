@@ -1,23 +1,28 @@
 <div *ngIf="dataLoaded">
-    <div class="section-thin overview-header nom-details-oh" tabindex="0">
+    <div class="section-thin overview-header nom-details-pt" tabindex="0">
         <div class="row no-gutters">
-            <div class="">
-                <h2>Proteomics</h2>
-            </div>
+            <h2 class="full-width no-margin-bottom">Proteomics</h2>
+            <h2 class="vmi-wrapper full-width no-margin-top">
+                <more-info [name]="'pt'">
+                    <pt-dialog [name]="'pt'"></pt-dialog>
+                </more-info>
+            </h2>
+        </div>
+        <div class="row no-gutters header-row">
+            The results shown on this page are derived from proteomics analysis of post-mortem brains from AD
+            cases and controls. The samples were obtained from four human cohort studies across a total of four different brain regions.
         </div>
     </div>
     <div class="section-thin rna-seq-bplot no-vertical-padding">
-        <div class="row bplot-filter-row">
-            <div class="col-md-6 col-sm-12 col-12 col-fixer">
+        <div class="row pt-filter-row">
+            <div class="col-md-12 col-sm-12 col-12 col-fixer">
                 <h4 class="filters-header">
-                    Filter the following charts by protein
+                    Filter the following chart by protein
                 </h4>
-                <h2 class="vmi-wrapper">
-                    <more-info [name]="'bp'">
-                        <bp-dialog [name]="'bp'"></bp-dialog>
-                    </more-info>
-                </h2>
-                <div class="row">
+                <div class="row filter-description">
+                    Multiple proteins map to a single gene. Please select a protein of interest from the dropdown.
+                </div>
+                <div class="row select-row">
                     <div class="col-md-12 col-sm-12 col-12">
                         <select-menu *ngIf="dataLoaded && !isEmptyGene"
                             [promptText]="'All'"
@@ -52,10 +57,14 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-12 col-fixer">
                 <p class="black-paragraph de-paragraph text-max">
-                    After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
-                    between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
-                    (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
-                    by hovering over the red dots.
+                    After selecting a protein from the dropdown menu, you will be able to see whether the selected protein product is
+                    differentially expressed between AD cases and controls. The box plot depicts how the differential expression of the
+                    selected protein of interest (red dot) compares with expression of other proteins in a given brain region. Summary
+                    statistics for each tissue can be viewed by hovering over the red dots.
+                </p>
+                <p class="black-paragraph de-paragraph text-max">
+                    Note that proteins may not be detected in all four brain regions; for these proteins, the plot will show fewer than
+                    four brain regions.
                 </p>
             </div>
         </div>

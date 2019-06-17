@@ -11,7 +11,8 @@ import {
     GeneService,
     DataService,
     ForceService,
-    NavigationService
+    NavigationService,
+    MenuService
 } from './services';
 
 import { AboutComponent } from './about';
@@ -66,6 +67,7 @@ import '../../styles/headings.scss';
         GeneService,
         ForceService,
         NavigationService,
+        MenuService,
         DecimalPipe,
         TitleCasePipe
     ]

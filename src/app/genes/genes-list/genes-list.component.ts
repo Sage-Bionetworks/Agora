@@ -62,10 +62,12 @@ export class GenesListComponent implements OnInit {
                 inputDataArray = this.commaFlattenArray(inputDataArray);
 
                 // Join the final strings into a new array removing duplicates
-                de.teams = (teamsArray.length) ? teamsArray.filter(this.getUnique).join(', ') : '';
-                de.study = (studyArray.length) ? studyArray.filter(this.getUnique).join(', ') : '';
-                de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique).
-                    join(', ') : '';
+                de.teams = (teamsArray.length) ? teamsArray.filter(this.getUnique)
+                    .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+                de.study = (studyArray.length) ? studyArray.filter(this.getUnique)
+                    .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+                de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
+                    .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
             });
             this.genesInfo = this.datasource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;

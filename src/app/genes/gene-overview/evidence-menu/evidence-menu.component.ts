@@ -10,7 +10,7 @@ import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import { GeneService, NavigationService } from '../../../core/services';
+import { GeneService, NavigationService, MenuService } from '../../../core/services';
 
 import { MenuItem } from 'primeng/api';
 import { TabMenu } from 'primeng/tabmenu';
@@ -37,6 +37,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     activeItem: MenuItem;
     currentGeneData = [];
     routerSub: Subscription;
+    menuSub: Subscription;
     subscription: any;
     items: MenuItem[];
     neverActivated: boolean = true;
@@ -46,6 +47,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
 
     constructor(
         private navService: NavigationService,
+        private menuService: MenuService,
         private geneService: GeneService
     ) {}
 
@@ -53,13 +55,19 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
         // Populate the tab menu
         this.items = [
             { label: 'RNA', disabled: this.disableMenu },
-            { label: 'Protein', disabled: this.disableMenu },
+            { label: 'Protein', disabled: true },
             // { label: 'Metabolomics', disabled: true },
             { label: '', disabled: true},
             { label: '', disabled: true}
         ];
 
         this.geneInfo = this.geneService.getCurrentInfo();
+
+        this.menuSub = this.menuService.emReady$.subscribe((state: boolean) => {
+            if (state) {
+                this.items[1].disabled = this.disableMenu;
+            }
+        });
 
         this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
