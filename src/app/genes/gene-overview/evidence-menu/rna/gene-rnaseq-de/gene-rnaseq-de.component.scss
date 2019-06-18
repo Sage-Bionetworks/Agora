@@ -91,10 +91,10 @@
             font-size: 18px;
 
             @include respond-to('ex-small') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
             @include respond-to('small') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
             @include respond-to('medium') {
                 font-size: 18px;
@@ -111,6 +111,11 @@
             line-height: 52px;
             background: $background;
             box-shadow: 0px 0px 4px color(box-shadow);
+
+            .ui-multiselect-label {
+                margin: auto;
+                line-height: 52px;
+            }
         }
 
         .ui-chkbox {
@@ -154,13 +159,13 @@
                 font-size: 14px;
             }
             @include respond-to('medium') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
             @include respond-to('large') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
             @include respond-to('ex-large') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
 
             color: color(text, secondary);

@@ -58,7 +58,8 @@
     resize: none;
     width: 85%;
     background: transparent;
-    line-height: 63px;
+    line-height: 18px;
+    font-size: $font-size-x-small-odd;
     border-color: color(keyword, border-color);
     border: 2px;
 
@@ -78,7 +79,6 @@
         white-space:pre-line;
         position:relative;
         color: color(input-placeholder);
-        font-size: $font-size-x-small-odd;
     }
 }
 

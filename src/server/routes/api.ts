@@ -205,10 +205,14 @@ connection.once('open', () => {
                     }
                 ]}).exec((err, gene: Proteomics) => {
                     if (err) {
-                        next(err);
+                        res.send({error: 'Empty Proteomics array', items: []});
                     } else {
-                        filter = gene.UniProtID;
-                        resolve(true);
+                        if (gene) {
+                            filter = gene.UniProtID;
+                            resolve(true);
+                        } else {
+                            res.send({error: 'Empty Proteomics array', items: []});
+                        }
                     }
                 });
             }

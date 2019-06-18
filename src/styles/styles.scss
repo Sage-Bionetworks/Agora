@@ -127,30 +127,13 @@ p-checkbox {
 }
 
 p-progressSpinner {
-    position: absolute;
     z-index: 2;
     color: color(text, title);
-    top: 35%;
 
     .ui-progress-spinner {
-        width: 20px;
-        height: 20px;
-    }
-
-    @include respond-to('ex-small') {
-        left: 83.5%;
-    }
-    @include respond-to('small') {
-        left: 88%;
-    }
-    @include respond-to('medium') {
-        left: 88.5%;
-    }
-    @include respond-to('large') {
-        left: 87.5%;
-    }
-    @include respond-to('ex-large') {
-        left: 86.5%;
+        width: 10px;
+        height: 10px;
+        position: static;
     }
 }
 
@@ -538,6 +521,7 @@ p-dialog {
 
             text-align: left;
             text-align-last: left;
+            font-size: $font-size-x-small-odd;
             overflow: auto;
 
             // Opera Mini workaround
@@ -552,7 +536,6 @@ p-dialog {
                 white-space:pre-line;
                 position:relative;
                 color: color(input-placeholder);
-                font-size: $font-size-x-small-odd;
             }
         }
 
@@ -635,16 +618,6 @@ p-dialog {
         }
 
         .nomlist-first-col {
-            text-align-last: right;
-            text-align: right;
-            vertical-align: middle;
-            margin: auto;
-        }
-
-        .nomlist-second-col {
-            padding: 0px;
-            text-align: left;
-            text-align-last: left;
             vertical-align: middle;
             margin: auto;
         }
@@ -679,7 +652,7 @@ p-dialog {
                     line-height: 40px;
                     box-shadow: inset 0px 0px 4px color(box-shadow);
                     text-align-last: left;
-                    font-size: 16px;
+                    font-size: $font-size-regular;
                     border: 0px;
 
                     ::-moz-placeholder,
@@ -724,7 +697,7 @@ p-dialog {
             }
 
             .ui-sortable-column {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
         }
         @include respond-to('medium') {
@@ -791,7 +764,7 @@ p-dialog {
                 font-size: 12px;
             }
             @include respond-to('small') {
-                font-size: 16px;
+                font-size: $font-size-regular;
             }
             @include respond-to('medium') {
                 font-size: 18px;
@@ -1118,28 +1091,20 @@ p-dialog {
     box-shadow: inset 0px 0px 4px color(keyword, box-shadow);
     border-radius: 6px;
 
+    .row {
+        width: 100%;
+    }
+
+    .input-search-col {
+        vertical-align: middle;
+        margin: auto;
+    }
+
     .input-search-icon {
-        width: 15%;
         vertical-align: middle;
         margin: auto;
 
         i {
-            @include respond-to('ex-small') {
-                width: 60%;
-            }
-            @include respond-to('small') {
-                width: 50%;
-            }
-            @include respond-to('medium') {
-                width: 60%;
-            }
-            @include respond-to('large') {
-                width: 55%;
-            }
-            @include respond-to('ex-large') {
-                width: 45%;
-            }
-
             z-index: 2;
             vertical-align: middle;
             color: $contrast-color;
@@ -1209,7 +1174,7 @@ p-dialog {
     transform: translate(-50%, -50%);
     text-align: center;
     line-height: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     text-align: center;
     color: #9DA3B3;
 }

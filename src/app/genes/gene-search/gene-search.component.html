@@ -2,12 +2,20 @@
 <div class="row search-row">
     <section class="filter-wrapper">
         <div class="keyword-wrapper">
-            <input type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
-                [class.input-text]="searchedGenes.value"
-                (blur)="closeSearchList($event.target)" placeholder="Search Gene Symbol or Ensembl ID" #searchedGenes>
-            <p-progressSpinner *ngIf="isSearching" strokeWidth="8" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
-            <div class="input-search-icon">
-                <i class="fa fa-search fa-lg"></i>
+            <div class="row">
+                <div class="col-md-10 input-search-col">
+                    <input type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
+                        [class.input-text]="searchedGenes.value"
+                        (blur)="closeSearchList($event.target)"
+                        placeholder="Search Gene Symbol or Ensembl ID"
+                        #searchedGenes>
+                </div>
+                <div class="col-md-1 input-search-icon">
+                    <i class="fa fa-search fa-lg"></i>
+                </div>
+                <div class="col-md-1 input-search-col">
+                    <p-progressSpinner *ngIf="isSearching" strokeWidth="4" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
+                </div>
             </div>
         </div>
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
