@@ -15,133 +15,184 @@
     min-height: 120px;
 }
 
-.gd-table {
-    .ui-table{
-        padding-bottom: 70px;
-    }
+.gd-accordion {
+    .ui-accordion-header {
+        height: 81px;
 
-    .ui-table .ui-table-tbody > tr {
-        background-color: $table-row-even;
-    }
-
-    .ui-table .ui-table-tbody > tr:nth-child(even) {
-        background-color: $table-row-odd;
-    }
-
-    .ui-table-thead {
-        display: none;
-    }
-
-    .dg-property-text {
-        @include lato-font('bold');
-        font-size: $font-size-xx-regular;
-        color: color(text, secondary);
-    }
-
-    .dg-value-text {
-        font-size: $font-size-x-regular;
-        color: color(text, secondary);
-    }
-
-    .dg-value-title {
-        @include lato-font('bold');
-        font-size: $font-size-x-regular;
-        color: color(text, secondary);
-    }
-
-    .ui-table-tbody {
-        height: 100%;
-
-        td:nth-child(even) {
-            min-width: 75%;
+        a {
+            height: 81px;
+            display: flex;
+            vertical-align: middle;
+            margin-top: auto;
+            margin-bottom: auto;
+            padding: 0px;
         }
 
-        td:nth-child(odd) {
-            width: 25%;
+        p-header {
+            height: 81px;
+            width: 100%;
+        }
+    }
+
+    .grey-background {
+        .ui-accordion-header {
+            background: $table-row-even;
         }
 
-        .img-td {
-            width: 60px !important;
+        background: $table-row-even;
+    }
+
+    span {
+        vertical-align: middle;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .content-row {
+        min-height: 392px;
+
+        .inner-row {
+            height: 100%;
         }
 
-        >tr>td {
+        .content-title {
             @include lato-font('normal');
+            line-height: $font-size-x-small;
+            font-size: $font-size-small;
+            vertical-align: middle;
+        }
 
-            border: 0px;
-            padding: 1em .5em;
+        .vertical-auto {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
 
+        .bottom-auto {
+            margin-bottom: auto;
+        }
+    }
+
+    .container {
+        display: inline-block;
+        color: color(text, secondary);
+        height: 81px;
+
+        .header-title {
+            @include lato-font('bold');
+            line-height: $font-size-xxxx-regular;
+            font-size: $font-size-xx-regular;
+        }
+
+        .header-description {
+            @include lato-font('normal');
+            line-height: $font-size-xxx-regular;
+            font-size: $font-size-x-regular;
+        }
+
+        .row {
+            height: 81px;
+
+            > [class*="col-"] {
+                vertical-align: middle;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+        }
+    }
+
+    .icon {
+        display: inline-block;
+        border-radius: 100%;
+        border-radius: 50%;
+        width: 36px !important;
+        margin: 22.5px;
+        cursor: pointer;
+    }
+
+    .icon-wrapper {
+        width: 81px !important;
+        display: inline-block;
+    }
+
+    .icon div {
+        @include lato-font('normal');
+        position: relative;
+        height: 0;
+        padding: 50% 0;
+        top: -11px;
+        font-size: $font-size-xxx-regular;
+        line-height: $font-size-xl-regular;
+        text-align: center;
+    }
+
+    .icon-class {
+        width: 81px;
+        @include lato-font('normal');
+        line-height: $font-size-x-small;
+        font-size: $font-size-small;
+        text-align: center;
+    }
+
+    .class-description-title {
+        @include lato-font('normal');
+        line-height: $font-size-x-small;
+        font-size: $font-size-small;
+    }
+
+    .class-description {
+        align-items: center;
+        vertical-align: middle;
+        height: 100%;
+    }
+
+    .ui-accordion {
+        a, .content-row {
             @include respond-to('ex-small') {
-                font-size: 14px;
+                padding-left: 3.5%;
+                padding-right: 3.5%;
             }
             @include respond-to('small') {
-                font-size: $font-size-regular;
+                padding-left: 4.0%;
+                padding-right: 4.0%;
             }
             @include respond-to('medium') {
-                font-size: $font-size-x-regular;
+                padding-left: 4.5%;
+                padding-right: 4.5%;
             }
             @include respond-to('large') {
-                font-size: $font-size-x-regular;
+                padding-left: 5.5%;
+                padding-right: 5.5%;
             }
             @include respond-to('ex-large') {
-                font-size: $font-size-x-regular;
+                padding-left: 7.5%;
+                padding-right: 7.5%;
             }
+        }
 
-            color: color(text, secondary) !important;
-            height: 40px;
+        .ui-accordion-content {
+            padding-top: 0px;
+            padding-bottom: 0px;
         }
 
         @include respond-to('ex-small') {
-            >tr>td {
-                padding-left: 3.5%;
-                padding-right: 3.5%;
-                text-align: left;
-            }
+            padding-top: 2em;
+            padding-bottom: 2em;
         }
         @include respond-to('small') {
-            >tr>td {
-                padding-left: 4.0%;
-                padding-right: 4.0%;
-                text-align: left;
-            }
+            padding-top: 2em;
+            padding-bottom: 2em;
         }
         @include respond-to('medium') {
-            >tr>td {
-                padding-left: 4.5%;
-                padding-right: 4.5%;
-                text-align: left;
-            }
+            padding-top: 2em;
+            padding-bottom: 2em;
         }
         @include respond-to('large') {
-            >tr>td {
-                padding-left: 5.5%;
-                padding-right: 5.5%;
-                text-align: left;
-            }
+            padding-top: 2em;
+            padding-bottom: 2em;
         }
         @include respond-to('ex-large') {
-            >tr>td {
-                padding-left: 7.5%;
-                padding-right: 7.5%;
-                text-align: left;
-            }
-        }
-
-        .icon {
-            display: inline-block;
-            border-radius: 100%;
-            border-radius: 50%;
-            min-width: 15px;
-            padding: 0.5em;
-            margin: 0.5em;
-        }
-
-        .icon div {
-            @include lato-font('bold');
-            position: relative;
-            height: 0;
-            padding: 50% 0;
-            top: -11px;
-            font-size: 18px;
+            padding-top: 2em;
+            padding-bottom: 2em;
         }
     }
 }

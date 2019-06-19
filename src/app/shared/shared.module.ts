@@ -19,6 +19,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
+import { AccordionModule } from 'primeng/accordion';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { MessageService } from 'primeng/api';
@@ -83,7 +84,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         PanelMenuModule,
         ProgressBarModule,
         MultiSelectModule,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        AccordionModule
     ],
     exports: [
         // Angular modules
@@ -107,6 +109,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         ProgressBarModule,
         MultiSelectModule,
         ProgressSpinnerModule,
+        AccordionModule,
         // Other declarations
         AlertComponent,
         DownloadComponent,

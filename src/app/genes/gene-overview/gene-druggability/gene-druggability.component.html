@@ -3,40 +3,108 @@
         Druggability of {{geneInfo.hgnc_symbol}}
     </h2>
     <p class="text-max">
-        Nominated targets have been scored for likely suitability for small-molecule drugs using a multi-step process.
+        AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources
+        and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.
     </p>
     <more-info [name]="'dg'">
         <dg-dialog [name]="'dg'"></dg-dialog>
     </more-info>
 </div>
-<p-table [ngClass]="'gd-table'" [columns]="cols" [value]="summary">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col.header}}
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
-        <tr>
-            <td *ngFor="let col of columns; let j = index;">
-                <ng-container *ngIf="j !== 0">
-                    <td *ngIf="i === 0" class="img-td">
+
+<p-accordion [multiple]="true" [ngClass]="'gd-accordion'">
+    <p-accordionTab [ngClass]="'grey-background'">
+        <p-header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 header-title">
+                        Small Molecule Modality
+                    </div>
+                    <div class="col-md-2 text-center">
                         <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket)">
                             <div>{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
                         </div>
-                    </td>
-                    <td>
-                        <!-- To be added -->
-                        <!--<span *ngIf="i === 0" [ngClass]="'dg-value-title'">{{getDruggabilityTitle(geneInfo.druggability[0].sm_druggability_bucket)}}</span>
-                        <br *ngIf="i === 0">-->
-                        <span [ngClass]="'dg-value-text'">{{rowData[col.field]}}</span>
-                    </td>
-                </ng-container>
-                <ng-container *ngIf="j === 0">
-                    <span [ngClass]="'dg-property-text'">{{rowData[col.field]}}</span>
-                </ng-container>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+                    </div>
+                    <div class="col-md-7 header-description">
+                        {{geneInfo.druggability[0].classification}}
+                    </div>
+                </div>
+            </div>
+        </p-header>
+        <div class="row grey-background content-row">
+            <div class="col-md-12 bucket-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 content-title vertical-auto">
+                        Bucket
+                    </div>
+                    <div class="col-md-11 vertical-auto">
+
+                        <div class="icon-wrapper" *ngFor="let bucket of buckets">
+                            <div class="icon" [style.background-color]="getBucketStyle(bucket)" (click)="setCurrentBucket(bucket)">
+                                <div>{{bucket}}</div>
+                            </div>
+                            <div class="icon-class">
+                                {{getClassText(bucket)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 class-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 content-title vertical-auto">
+                        {{getClassText(currentBucket)}}
+                    </div>
+                    <div class="col-md-11 class-description-title" [style.background-color]="getBucketStyle(currentBucket)">
+                        <div class="row no-gutters class-description vertical-auto">
+                            {{getDruggabilityText(currentBucket)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-accordionTab>
+    <p-accordionTab>
+        <p-header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 header-title">
+                        Antibody Modality
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket)">
+                            <div>{{geneInfo.druggability[0].abability_bucket}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-7 header-description">
+                        {{geneInfo.druggability[0].abability_bucket_definition}}
+                    </div>
+                </div>
+            </div>
+        </p-header>
+        <div class="row">
+            Test
+        </div>
+   </p-accordionTab>
+    <p-accordionTab [ngClass]="'grey-background'">
+        <p-header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 header-title">
+                        Safety
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket)">
+                            <div>{{geneInfo.druggability[0].safety_bucket}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-7 header-description">
+                        {{geneInfo.druggability[0].safety_bucket_definition}}
+                    </div>
+                </div>
+            </div>
+        </p-header>
+        <div class="row grey-background">
+            Test
+        </div>
+    </p-accordionTab>
+</p-accordion>

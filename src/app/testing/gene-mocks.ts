@@ -144,10 +144,27 @@ export const mockInfo1: GeneInfo = {
     ],
     'druggability': [
         {
-            sm_druggability_bucket: 9,
-            classification: 'unknown SM druggability',
-            druggable_class: 'Non-IDG',
-            pharos_class: 'Tbio'
+            sm_druggability_bucket: 1,
+            safety_bucket: 3,
+            feasibility_bucket: 3,
+            abability_bucket: 1,
+            new_modality_bucket: 4,
+            tissue_engagement_bucket: 3,
+            pharos_class: 'Tchem',
+            classification: 'Small molecule druggable: Protein with a small molecule ligand ' +
+            'identified from ChEMBL, meeting TCRD activity criteria.',
+            safety_bucket_definition: 'Potential risks, proceed with caution. Two or fewer of: ' +
+            'high off-target gene expression, cander driver, essential gene, associated ' +
+            'deleterious genetic disorder, HPO phenotype associated gene, or black box ' +
+            'warning on clinically used drug.',
+            feasibility_bucket_definition: 'High target qualification but low feasibility – ' +
+            'Tier C  for drug development. Attempt to address gaps and re-evaluate if additional ' +
+            'feasibility tools found. Either move to category 1 or 2 if successful, or park in ' +
+            'category 5 if not.',
+            abability_bucket_definition: 'Secreted protein. Highly accessible to antibody-based ' +
+            'therapies.',
+            new_modality_bucket_definition: 'Not specified suitable for degradation/inhibition ' +
+            'by user.'
         }
     ],
     'nominations': 1

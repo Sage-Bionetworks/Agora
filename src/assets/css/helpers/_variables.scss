@@ -19,6 +19,7 @@ $font-size-x-regular: 18px;
 $font-size-xx-regular: 20px;
 $font-size-xxx-regular: 22px;
 $font-size-xxxx-regular: 24px;
+$font-size-xl-regular: 26px;
 $font-size-large: 28px;
 $font-size-x-large: 40px;
 $font-size-xx-large: 48px;
@@ -110,7 +111,7 @@ $span-color: #3C4A63;
 $menu-dark: #3C4A63;
 $menu-inactive: rgba(255, 255, 255, 0.05);
 $table-row-odd: $background;
-$table-row-even: #fafafb;
+$table-row-even: #FAFAFA;
 
 $breakpoints: (
     'ex-small': (max-width: 600px),

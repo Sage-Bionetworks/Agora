@@ -18,6 +18,9 @@ export class GeneDruggabilityComponent implements OnInit {
 
     cols: any[];
     summary: any[];
+    buckets: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    currentBucket: number = 1;
+    classes: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     constructor(
         private route: ActivatedRoute,
@@ -29,40 +32,6 @@ export class GeneDruggabilityComponent implements OnInit {
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
-
-        this.initSummary();
-        this.initCols();
-    }
-
-    initSummary() {
-        this.summary = [
-            {
-                property: 'Small Molecule Druggability Bucket',
-                value: (this.geneInfo.druggability[0].sm_druggability_bucket === undefined) ?
-                    'No Data' :
-                    // this.getDruggabilityText(
-                    //    this.geneInfo.druggability[0].sm_druggability_bucket
-                    // )
-                    this.geneInfo.druggability[0].classification
-            },
-            {
-                property: 'Druggable Class',
-                value: (this.geneInfo.druggability[0].druggable_class === undefined) ?
-                    'No Data' : this.geneInfo.druggability[0].druggable_class
-            },
-            {
-                property: 'Pharos Class',
-                value: (this.geneInfo.druggability[0].pharos_class === undefined) ?
-                    'No Data' : this.geneInfo.druggability[0].pharos_class
-            }
-        ];
-    }
-
-    initCols() {
-        this.cols = [
-            { field: 'property', header: 'Property' },
-            { field: 'value', header: 'Value' }
-        ];
     }
 
     getDruggabilityTitle(bucket: number): string {
@@ -130,19 +99,27 @@ export class GeneDruggabilityComponent implements OnInit {
             case 1:
                 return '#9ACCAB';
             case 2:
+                return '#90D098';
             case 3:
+                return '#8DD485';
             case 4:
-                return '#F8CC7D';
+                return '#98D97A';
             case 5:
+                return '#A9DD6F';
             case 6:
-                return '#F1A86F';
+                return '#C1E163';
             case 7:
+                return '#E0E656';
             case 8:
+                return '#EACD49';
             case 9:
+                return '#EEA83C';
             case 10:
+                return '#F37A2E';
             case 11:
-                return '#EFA0C5';
+                return '#F4884A';
             case 12:
+                return '#E16560';
             case 13:
                 return '#C3C7D1';
             case 14:
@@ -150,5 +127,36 @@ export class GeneDruggabilityComponent implements OnInit {
             default:
                 return '#FFFFFF';
         }
+    }
+
+    getClassText(bucket: number): any {
+        switch (bucket) {
+            case 1:
+                return 'Class A';
+            case 2:
+            case 3:
+            case 4:
+                return 'Class B';
+            case 5:
+            case 6:
+                return 'Class C';
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return 'Class D';
+            case 12:
+            case 13:
+                return 'Class E';
+            case 14:
+                return 'Class F';
+            default:
+                return 'Class A';
+        }
+    }
+
+    setCurrentBucket(bucket: number) {
+        this.currentBucket = bucket;
     }
 }

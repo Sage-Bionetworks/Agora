@@ -57,14 +57,6 @@ describe('Component: GeneDruggability', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have a table', () => {
-        const el = fixture.debugElement.query(By.css('p-table'));
-        expect(el).toBeDefined();
-
-        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
-        expect(aEl.length).toEqual(1);
-    });
-
     it('should have extra info component', () => {
         const el = fixture.debugElement.query(By.css('more-info'));
         expect(el).toBeDefined();
@@ -80,7 +72,7 @@ describe('Component: GeneDruggability', () => {
         expect(aEl.length).toEqual(1);
     });
 
-    it('should have a table', () => {
+    /*it('should have a table', () => {
         const el = fixture.debugElement.query(By.css('p-table'));
         expect(el).toBeDefined();
 
@@ -100,7 +92,7 @@ describe('Component: GeneDruggability', () => {
 
         expect(component.summary.length).toEqual(3);
         expect(component.cols.length).toEqual(2);
-    });
+    });*/
 
     it('should get the correct druggability title', () => {
         const gdtSpy = spyOn(component, 'getDruggabilityTitle').and.callThrough();
@@ -186,27 +178,30 @@ describe('Component: GeneDruggability', () => {
         let title: string = '';
         title = component.getBucketStyle(1);
         expect(title).toEqual('#9ACCAB');
-
         title = component.getBucketStyle(2);
+        expect(title).toEqual('#90D098');
         title = component.getBucketStyle(3);
+        expect(title).toEqual('#8DD485');
         title = component.getBucketStyle(4);
-        expect(title).toEqual('#F8CC7D');
-
+        expect(title).toEqual('#98D97A');
         title = component.getBucketStyle(5);
+        expect(title).toEqual('#A9DD6F');
         title = component.getBucketStyle(6);
-        expect(title).toEqual('#F1A86F');
-
+        expect(title).toEqual('#C1E163');
         title = component.getBucketStyle(7);
+        expect(title).toEqual('#E0E656');
         title = component.getBucketStyle(8);
+        expect(title).toEqual('#EACD49');
         title = component.getBucketStyle(9);
+        expect(title).toEqual('#EEA83C');
         title = component.getBucketStyle(10);
+        expect(title).toEqual('#F37A2E');
         title = component.getBucketStyle(11);
-        expect(title).toEqual('#EFA0C5');
-
+        expect(title).toEqual('#F4884A');
         title = component.getBucketStyle(12);
+        expect(title).toEqual('#E16560');
         title = component.getBucketStyle(13);
         expect(title).toEqual('#C3C7D1');
-
         title = component.getBucketStyle(14);
         expect(title).toEqual('#AFDDDF');
 
