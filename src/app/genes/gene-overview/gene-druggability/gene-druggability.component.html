@@ -16,30 +16,33 @@
         <p-header>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 header-title">
+                    <div class="col-md-3 col-sm-8 col-8 header-title">
                         Small Molecule Modality
                     </div>
-                    <div class="col-md-2 text-center">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket)">
+                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].sm_druggability_bucket)">
                             <div>{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 header-description">
+                    <div class="col-md-7 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].classification}}
                     </div>
                 </div>
             </div>
         </p-header>
         <div class="row grey-background content-row">
-            <div class="col-md-12 bucket-col">
+            <div class="col-md-12 col-sm-12 col-12 bucket-col">
                 <div class="row inner-row">
-                    <div class="col-md-1 content-title vertical-auto">
+                    <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
                         Bucket
                     </div>
-                    <div class="col-md-11 vertical-auto">
+                    <div class="col-md-11 col-sm-10 col-9 vertical-auto">
 
                         <div class="icon-wrapper" *ngFor="let bucket of buckets">
-                            <div class="icon" [style.background-color]="getBucketStyle(bucket)" (click)="setCurrentBucket(bucket)">
+                            <div class="icon-class">
+                                <i *ngIf="bucket === currentBucket" class="fa fa-sort-down fa-lg" [style.color]="getBucketStyle(bucket)"></i>
+                            </div>
+                            <div class="icon" [style.background-color]="getBucketStyle(bucket)" [style.color]="getBucketTextColor(bucket)" (click)="setCurrentBucket(bucket)">
                                 <div>{{bucket}}</div>
                             </div>
                             <div class="icon-class">
@@ -49,16 +52,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 class-col">
+            <div class="col-md-12 col-sm-12 col-12 class-col">
                 <div class="row inner-row">
-                    <div class="col-md-1 content-title vertical-auto">
-                        {{getClassText(currentBucket)}}
+                    <div class="col-md-1 col-sm-2 col-3 content-title">
+                        Criteria
                     </div>
-                    <div class="col-md-11 class-description-title" [style.background-color]="getBucketStyle(currentBucket)">
-                        <div class="row no-gutters class-description vertical-auto">
-                            {{getDruggabilityText(currentBucket)}}
+                    <div class="col-md-5 col-sm-7 col-9 class-description-title">
+                        <div class="row no-gutters class-description" [style.background-color]="getBucketStyle(currentBucket)">
+                            <span [style.color]="getBucketTextColor(currentBucket)">{{getDruggabilityTitle(currentBucket)}}</span>
+                            <span [style.color]="getBucketTextColor(currentBucket)">{{getDruggabilityText(currentBucket)}}</span>
                         </div>
                     </div>
+                    <div class="col-md-6 col-sm-3 d-none d-sm-block"></div>
                 </div>
             </div>
         </div>
@@ -67,15 +72,15 @@
         <p-header>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 header-title">
+                    <div class="col-md-3 col-sm-8 col-8 header-title">
                         Antibody Modality
                     </div>
-                    <div class="col-md-2 text-center">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket)">
+                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].abability_bucket)">
                             <div>{{geneInfo.druggability[0].abability_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 header-description">
+                    <div class="col-md-7 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].abability_bucket_definition}}
                     </div>
                 </div>
@@ -89,15 +94,15 @@
         <p-header>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 header-title">
+                    <div class="col-md-3 col-sm-8 col-8 header-title">
                         Safety
                     </div>
-                    <div class="col-md-2 text-center">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket)">
+                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].safety_bucket)">
                             <div>{{geneInfo.druggability[0].safety_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 header-description">
+                    <div class="col-md-7 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].safety_bucket_definition}}
                     </div>
                 </div>

@@ -17,10 +17,11 @@
 
 .gd-accordion {
     .ui-accordion-header {
-        height: 81px;
+        min-height: 99px;
+        padding: 15px;
 
         a {
-            height: 81px;
+            min-height: 99px;
             display: flex;
             vertical-align: middle;
             margin-top: auto;
@@ -29,7 +30,7 @@
         }
 
         p-header {
-            height: 81px;
+            min-height: 99px;
             width: 100%;
         }
     }
@@ -53,6 +54,7 @@
 
         .inner-row {
             height: 100%;
+            min-height: 200px;
         }
 
         .content-title {
@@ -75,12 +77,39 @@
     .container {
         display: inline-block;
         color: color(text, secondary);
-        height: 81px;
+        min-height: 99px;
+        width: 100%;
+        max-width: 100%;
+        padding-left: 60px;
 
         .header-title {
             @include lato-font('bold');
             line-height: $font-size-xxxx-regular;
             font-size: $font-size-xx-regular;
+        }
+
+        .header-title, .header-score, .header-description {
+            @include respond-to('ex-small') {
+                min-height: 43px;
+                // margin-bottom: 25.5px !important;
+                margin-top: 25.5px;
+                line-height: $font-size-large;
+            }
+            @include respond-to('small') {
+                min-height: 43px;
+                // margin-bottom: 25.5px !important;
+                margin-top: 25.5px;
+                line-height: $font-size-large;
+            }
+            @include respond-to('medium') {
+                min-height: 0px;
+            }
+            @include respond-to('large') {
+                min-height: 0px;
+            }
+            @include respond-to('ex-large') {
+                min-height: 0px;
+            }
         }
 
         .header-description {
@@ -90,7 +119,7 @@
         }
 
         .row {
-            height: 81px;
+            min-height: 99px;
 
             > [class*="col-"] {
                 vertical-align: middle;
@@ -105,7 +134,8 @@
         border-radius: 100%;
         border-radius: 50%;
         width: 36px !important;
-        margin: 22.5px;
+        margin-left: 22.5px;
+        margin-right: 22.5px;
         cursor: pointer;
     }
 
@@ -119,7 +149,8 @@
         position: relative;
         height: 0;
         padding: 50% 0;
-        top: -11px;
+        top: -12px;
+        left: -1px;
         font-size: $font-size-xxx-regular;
         line-height: $font-size-xl-regular;
         text-align: center;
@@ -131,6 +162,8 @@
         line-height: $font-size-x-small;
         font-size: $font-size-small;
         text-align: center;
+        margin-bottom: 12px;
+        margin-top: 12px;
     }
 
     .class-description-title {
@@ -140,9 +173,12 @@
     }
 
     .class-description {
-        align-items: center;
-        vertical-align: middle;
-        height: 100%;
+        height: 75%;
+        padding: 15px;
+
+        span {
+            text-align: left;
+        }
     }
 
     .ui-accordion {
@@ -172,6 +208,7 @@
         .ui-accordion-content {
             padding-top: 0px;
             padding-bottom: 0px;
+            min-height: 392px;
         }
 
         @include respond-to('ex-small') {

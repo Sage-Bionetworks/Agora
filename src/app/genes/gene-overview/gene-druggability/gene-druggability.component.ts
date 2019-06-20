@@ -37,25 +37,33 @@ export class GeneDruggabilityComponent implements OnInit {
     getDruggabilityTitle(bucket: number): string {
         switch (bucket) {
             case 1:
-                return 'SM Druggable';
+                return 'Small molecule druggable';
             case 2:
-            case 3:
-            case 4:
                 return 'Targetable by Homology';
+            case 3:
+                return 'Targetable by structure';
+            case 4:
+                return 'Targetable by homologous structure';
             case 5:
+                return 'Probably small molecule druggable';
             case 6:
-                return 'Probably SM Druggable';
+                return 'Probably small molecule druggable by homology';
             case 7:
+                return 'Potentially small molecule druggable by family (active ligand)';
             case 8:
+                return 'Potentially small molecule druggable by family (low activity ligand)';
             case 9:
+                return 'Potentially targetable by protein family structure';
             case 10:
+                return 'Endogenous ligand';
             case 11:
-                return 'Potentially Targetable by Protein Family Structure';
+                return 'Druggable protein class, no other information';
             case 12:
+                return 'Potentially low ligandability';
             case 13:
-                return 'Potentially Low Ligandability';
+                return 'Unknown';
             case 14:
-                return 'Non-Protein Target';
+                return 'Non-protein target';
             default:
                 return '';
         }
@@ -64,62 +72,80 @@ export class GeneDruggabilityComponent implements OnInit {
     getDruggabilityText(bucket: number): string {
         switch (bucket) {
             case 1:
-                return 'Protein with a SM ligand identified from' +
-                    ' ChEMBL, meeting TCRD activity criteria';
+                return 'Protein with a small molecule ligand identified from ChEMBL, meeting ' +
+                'TCRD activity criteria';
             case 2:
+                return '>=40% homologous to a protein with a small molecule ligand identified ' +
+                'from ChEMBL, meeting TCRD activity criteria';
             case 3:
+                return 'Structurally druggable protein, based on the presence of a druggable ' +
+                'pocket in the protein (DrugEBIlity/CanSAR)';
             case 4:
-                return '>=4-% homologous to a protein with' +
-                    ' a SM ligand identified from ChEMBL, meeting TCRD activity criteria';
+                return '>=40% homologous to a structurally druggable protein, based on the ' +
+                'presence of a druggable pocket in the homologous protein (DrugEBIlity/CanSAR)';
             case 5:
+                return 'Protein with a small molecule ligand identified from ChEMBL data, but ' +
+                'the ligand does not meeting TCRD activity criteria';
             case 6:
-                return 'Protein with a SM ligand identified' +
-                    ' from ChEMBL data, but the ligand does not meet TCRD activity criteria';
+                return '>=40% homologous to a protein with a small molecule ligand identified ' +
+                'from ChEMBL data, but the ligand does not meeting TCRD activity criteria';
             case 7:
+                return 'Is a member of a gene family which has a member with an small molecule ' +
+                'ligand identified from ChEMBL data, meeting TCRD activity criteria';
             case 8:
+                return 'Is a member of a gene family which has a protein member with a ligand ' +
+                'which does not meet TCRD activity criteria';
             case 9:
+                return 'is a member of a gene family which has a protein member with a druggable ' +
+                'pocket in the protein structure';
             case 10:
+                return 'Has an identified endogenous ligand according from IUPHAR';
             case 11:
-                return 'Is a member' +
-                ' of a gene family which has a protein member with a druggable pocket in' +
-                ' the protein structure';
+                return 'Is a member of a PHAROS druggable class of protein (enzyme, receptor, ' +
+                'ion channel, nuclear hormone receptor, kinase) but does not meet any of the ' +
+                'criteria above';
             case 12:
+                return 'Has a structure but there is no evidence of a druggable pocket';
             case 13:
-                return 'Has a structure but there is no' +
-                ' evidence of a druggable pocket';
+                return 'There is no information on ligands or structure in any of the categories ' +
+                'above';
             case 14:
-                return 'Non-Protein Target<br>New modality indicated';
+                return 'New modality indicated';
             default:
                 return '';
         }
     }
 
-    getBucketStyle(bucket: number): any {
+    getBucketTextColor(bucket: number): string {
+        return (bucket < 13) ? '#FFFFFF' : '#000000';
+    }
+
+    getBucketStyle(bucket: number): string {
         switch (bucket) {
             case 1:
-                return '#9ACCAB';
+                return '#20A386';
             case 2:
-                return '#90D098';
+                return '#1F968B';
             case 3:
-                return '#8DD485';
+                return '#238A8D';
             case 4:
-                return '#98D97A';
+                return '#277D8E';
             case 5:
-                return '#A9DD6F';
+                return '#2D708E';
             case 6:
-                return '#C1E163';
+                return '#32648E';
             case 7:
-                return '#E0E656';
+                return '#39558C';
             case 8:
-                return '#EACD49';
+                return '#3F4788';
             case 9:
-                return '#EEA83C';
+                return '#453781';
             case 10:
-                return '#F37A2E';
+                return '#482677';
             case 11:
-                return '#F4884A';
+                return '#481568';
             case 12:
-                return '#E16560';
+                return '#440D54';
             case 13:
                 return '#C3C7D1';
             case 14:
