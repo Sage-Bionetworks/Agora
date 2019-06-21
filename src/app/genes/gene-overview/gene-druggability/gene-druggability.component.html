@@ -2,7 +2,7 @@
     <h2>
         Druggability of {{geneInfo.hgnc_symbol}}
     </h2>
-    <p class="text-max">
+    <p class="druggability-description">
         AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources
         and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.
     </p>
@@ -11,8 +11,8 @@
     </more-info>
 </div>
 
-<p-accordion [multiple]="true" [ngClass]="'gd-accordion'">
-    <p-accordionTab [ngClass]="'grey-background'">
+<p-accordion [multiple]="true" [ngClass]="'gd-accordion'" [expandIcon]="'pi pi-fw pi-plus'" [collapseIcon]="'pi pi-fw pi-minus'">
+    <p-accordionTab>
         <p-header>
             <div class="container">
                 <div class="row">
@@ -20,7 +20,7 @@
                         Small Molecule Modality
                     </div>
                     <div class="col-md-2 col-sm-4 col-4 text-center header-score">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].sm_druggability_bucket)">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket, 'sm')" [style.color]="getBucketTextColor(geneInfo.druggability[0].sm_druggability_bucket, 'sm')">
                             <div>{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
                         </div>
                     </div>
@@ -37,12 +37,11 @@
                         Bucket
                     </div>
                     <div class="col-md-11 col-sm-10 col-9 vertical-auto">
-
-                        <div class="icon-wrapper" *ngFor="let bucket of buckets">
-                            <div class="icon-class">
-                                <i *ngIf="bucket === currentBucket" class="fa fa-sort-down fa-lg" [style.color]="getBucketStyle(bucket)"></i>
+                        <div class="icon-wrapper" *ngFor="let bucket of bucketsSM">
+                            <div class="icon-class caret-wrapper">
+                                <div *ngIf="bucket === currentBucketSM" class="custom-caret-down" [style.border-top]="getIconStyle(bucket, 'sm')"></div>
                             </div>
-                            <div class="icon" [style.background-color]="getBucketStyle(bucket)" [style.color]="getBucketTextColor(bucket)" (click)="setCurrentBucket(bucket)">
+                            <div class="icon" [style.background-color]="getBucketStyle(bucket, 'sm')" [style.color]="getBucketTextColor(bucket, 'sm')" (click)="setCurrentBucket(bucket, 'sm')">
                                 <div>{{bucket}}</div>
                             </div>
                             <div class="icon-class">
@@ -58,9 +57,13 @@
                         Criteria
                     </div>
                     <div class="col-md-5 col-sm-7 col-9 class-description-title">
-                        <div class="row no-gutters class-description" [style.background-color]="getBucketStyle(currentBucket)">
-                            <span [style.color]="getBucketTextColor(currentBucket)">{{getDruggabilityTitle(currentBucket)}}</span>
-                            <span [style.color]="getBucketTextColor(currentBucket)">{{getDruggabilityText(currentBucket)}}</span>
+                        <div class="container no-gutters class-description" [style.background-color]="getBucketStyle(currentBucketSM, 'sm')">
+                            <div class="row criteria-row">
+                                <span class="criteria-title full-width" [style.color]="getBucketTextColor(currentBucketSM, 'sm')">{{getDruggabilitySMTitle(currentBucketSM)}}</span>
+                            </div>
+                            <div class="row criteria-row">
+                                <span class="criteria-description full-width" [style.color]="getBucketTextColor(currentBucketSM, 'sm')">{{getDruggabilitySMText(currentBucketSM)}}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-3 d-none d-sm-block"></div>
@@ -76,7 +79,7 @@
                         Antibody Modality
                     </div>
                     <div class="col-md-2 col-sm-4 col-4 text-center header-score">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].abability_bucket)">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket, 'ab')" [style.color]="getBucketTextColor(geneInfo.druggability[0].abability_bucket, 'ab')">
                             <div>{{geneInfo.druggability[0].abability_bucket}}</div>
                         </div>
                     </div>
@@ -86,11 +89,45 @@
                 </div>
             </div>
         </p-header>
-        <div class="row">
-            Test
+        <div class="row grey-background content-row">
+            <div class="col-md-12 col-sm-12 col-12 bucket-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
+                        Bucket
+                    </div>
+                    <div class="col-md-11 col-sm-10 col-9 vertical-auto">
+                        <div class="icon-wrapper" *ngFor="let bucket of bucketsAB">
+                            <div class="icon-class caret-wrapper">
+                                <div *ngIf="bucket === currentBucketAB" class="custom-caret-down" [style.border-top]="getIconStyle(bucket, 'ab')"></div>
+                            </div>
+                            <div class="icon" [style.background-color]="getBucketStyle(bucket, 'ab')" [style.color]="getBucketTextColor(bucket, 'ab')" (click)="setCurrentBucket(bucket, 'ab')">
+                                <div>{{bucket}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-12 class-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 col-sm-2 col-3 content-title">
+                        Criteria
+                    </div>
+                    <div class="col-md-5 col-sm-7 col-9 class-description-title">
+                        <div class="container no-gutters class-description" [style.background-color]="getBucketStyle(currentBucketAB, 'ab')">
+                            <div class="row criteria-row">
+                                <span class="criteria-title full-width" [style.color]="getBucketTextColor(currentBucketAB, 'ab')">{{getDruggabilityABTitle(currentBucketAB)}}</span>
+                            </div>
+                            <div class="row criteria-row">
+                                <span class="criteria-description full-width" [style.color]="getBucketTextColor(currentBucketAB, 'ab')">{{getDruggabilityABText(currentBucketAB)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-3 d-none d-sm-block"></div>
+                </div>
+            </div>
         </div>
    </p-accordionTab>
-    <p-accordionTab [ngClass]="'grey-background'">
+    <p-accordionTab>
         <p-header>
             <div class="container">
                 <div class="row">
@@ -98,7 +135,7 @@
                         Safety
                     </div>
                     <div class="col-md-2 col-sm-4 col-4 text-center header-score">
-                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket)" [style.color]="getBucketTextColor(geneInfo.druggability[0].safety_bucket)">
+                        <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket, 'sf')" [style.color]="getBucketTextColor(geneInfo.druggability[0].safety_bucket, 'sf')">
                             <div>{{geneInfo.druggability[0].safety_bucket}}</div>
                         </div>
                     </div>
@@ -108,8 +145,42 @@
                 </div>
             </div>
         </p-header>
-        <div class="row grey-background">
-            Test
+        <div class="row grey-background content-row">
+            <div class="col-md-12 col-sm-12 col-12 bucket-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
+                        Bucket
+                    </div>
+                    <div class="col-md-11 col-sm-10 col-9 vertical-auto">
+                        <div class="icon-wrapper" *ngFor="let bucket of bucketsSF">
+                            <div class="icon-class caret-wrapper">
+                                <div *ngIf="bucket === currentBucketSF" class="custom-caret-down" [style.border-top]="getIconStyle(bucket, 'sf')"></div>
+                            </div>
+                            <div class="icon" [style.background-color]="getBucketStyle(bucket, 'sf')" [style.color]="getBucketTextColor(bucket, 'sf')" (click)="setCurrentBucket(bucket, 'sf')">
+                                <div>{{bucket}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-12 class-col">
+                <div class="row inner-row">
+                    <div class="col-md-1 col-sm-2 col-3 content-title">
+                        Criteria
+                    </div>
+                    <div class="col-md-5 col-sm-7 col-9 class-description-title">
+                        <div class="container no-gutters class-description" [style.background-color]="getBucketStyle(currentBucketSF, 'sf')">
+                            <div class="row criteria-row">
+                                <span class="criteria-title full-width" [style.color]="getBucketTextColor(currentBucketSF, 'sf')">{{getDruggabilitySFTitle(currentBucketSF)}}</span>
+                            </div>
+                            <div class="row criteria-row">
+                                <span class="criteria-description full-width" [style.color]="getBucketTextColor(currentBucketSF, 'sf')">{{getDruggabilitySFText(currentBucketSF)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-3 d-none d-sm-block"></div>
+                </div>
+            </div>
         </div>
     </p-accordionTab>
 </p-accordion>

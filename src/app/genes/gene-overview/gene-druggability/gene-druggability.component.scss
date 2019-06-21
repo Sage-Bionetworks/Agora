@@ -15,10 +15,17 @@
     min-height: 120px;
 }
 
+.druggability-description {
+    width: 75%;
+}
+
 .gd-accordion {
     .ui-accordion-header {
         min-height: 99px;
         padding: 15px;
+        border: 2px solid #DDDDDF;
+        margin-top: 0px;
+        margin-bottom: 0px;
 
         a {
             min-height: 99px;
@@ -41,6 +48,8 @@
         }
 
         background: $table-row-even;
+        border: 1px solid #DDDDDF;
+        box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 
     span {
@@ -51,10 +60,11 @@
 
     .content-row {
         min-height: 392px;
+        padding-top: 30px;
+        padding-bottom: 30px;
 
         .inner-row {
             height: 100%;
-            min-height: 200px;
         }
 
         .content-title {
@@ -62,6 +72,7 @@
             line-height: $font-size-x-small;
             font-size: $font-size-small;
             vertical-align: middle;
+            padding-left: 30px;
         }
 
         .vertical-auto {
@@ -80,7 +91,7 @@
         min-height: 99px;
         width: 100%;
         max-width: 100%;
-        padding-left: 60px;
+        padding-left: 0px;
 
         .header-title {
             @include lato-font('bold');
@@ -91,23 +102,24 @@
         .header-title, .header-score, .header-description {
             @include respond-to('ex-small') {
                 min-height: 43px;
-                // margin-bottom: 25.5px !important;
-                margin-top: 25.5px;
+                margin-top: 25.5px !important;
                 line-height: $font-size-large;
             }
             @include respond-to('small') {
                 min-height: 43px;
-                // margin-bottom: 25.5px !important;
-                margin-top: 25.5px;
+                margin-top: 25.5px !important;
                 line-height: $font-size-large;
             }
             @include respond-to('medium') {
+                margin-top: auto !important;
                 min-height: 0px;
             }
             @include respond-to('large') {
+                margin-top: auto !important;
                 min-height: 0px;
             }
             @include respond-to('ex-large') {
+                margin-top: auto !important;
                 min-height: 0px;
             }
         }
@@ -166,6 +178,20 @@
         margin-top: 12px;
     }
 
+    .custom-caret-down {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+    .caret-wrapper {
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 10px;
+        margin-left: calc(50% - 10px);
+    }
+
     .class-description-title {
         @include lato-font('normal');
         line-height: $font-size-x-small;
@@ -173,7 +199,6 @@
     }
 
     .class-description {
-        height: 75%;
         padding: 15px;
 
         span {
@@ -181,33 +206,66 @@
         }
     }
 
+    .criteria-row {
+        padding-left: 15px;
+        padding-right: 15px;
+        min-height: 0px !important;
+    }
+
+    .criteria-description {
+        @include lato-font('normal');
+        line-height: $font-size-x-regular-odd;
+        font-size: $font-size-regular;
+        margin-top: 0px;
+
+    }
+
+    .criteria-title {
+        margin-top: 0px;
+        margin-bottom: 9px;
+        @include lato-font('bold');
+        line-height: $font-size-xxx-regular;
+        font-size: $font-size-x-regular;
+    }
+
     .ui-accordion {
-        a, .content-row {
+        .content-row, .ui-accordion-header {
             @include respond-to('ex-small') {
-                padding-left: 3.5%;
-                padding-right: 3.5%;
+                margin-left: 3.5%;
+                margin-right: 3.5%;
             }
             @include respond-to('small') {
-                padding-left: 4.0%;
-                padding-right: 4.0%;
+                margin-left: 4.0%;
+                margin-right: 4.0%;
             }
             @include respond-to('medium') {
-                padding-left: 4.5%;
-                padding-right: 4.5%;
+                margin-left: 4.5%;
+                margin-right: 4.5%;
             }
             @include respond-to('large') {
-                padding-left: 5.5%;
-                padding-right: 5.5%;
+                margin-left: 5.5%;
+                margin-right: 5.5%;
             }
             @include respond-to('ex-large') {
-                padding-left: 7.5%;
-                padding-right: 7.5%;
+                margin-left: 7.5%;
+                margin-right: 7.5%;
             }
         }
 
+        .ui-accordion-toggle-icon {
+            position: absolute;
+            right: 60px;
+            top: calc(50% - 14px);
+            font-size: 24px;
+        }
+
+        a {
+            padding-left: 15px;
+            padding-right: 144px;
+        }
+
         .ui-accordion-content {
-            padding-top: 0px;
-            padding-bottom: 0px;
+            padding: 0px;
             min-height: 392px;
         }
 

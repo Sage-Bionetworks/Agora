@@ -5,6 +5,8 @@ import { Gene, GeneInfo } from '../../../models';
 
 import { GeneService } from '../../../core/services';
 
+import * as d3 from 'd3';
+
 @Component({
     selector: 'gene-druggability',
     templateUrl: './gene-druggability.component.html',
@@ -18,8 +20,12 @@ export class GeneDruggabilityComponent implements OnInit {
 
     cols: any[];
     summary: any[];
-    buckets: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    currentBucket: number = 1;
+    bucketsSM: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    bucketsAB: number[] = [1, 2, 3, 4, 5, 6, 7];
+    bucketsSF: number[] = [1, 2, 3, 4, 5, 6];
+    currentBucketSM: number = 1;
+    currentBucketAB: number = 1;
+    currentBucketSF: number = 1;
     classes: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
 
     constructor(
@@ -34,7 +40,7 @@ export class GeneDruggabilityComponent implements OnInit {
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
     }
 
-    getDruggabilityTitle(bucket: number): string {
+    getDruggabilitySMTitle(bucket: number): string {
         switch (bucket) {
             case 1:
                 return 'Small molecule druggable';
@@ -69,7 +75,47 @@ export class GeneDruggabilityComponent implements OnInit {
         }
     }
 
-    getDruggabilityText(bucket: number): string {
+    getDruggabilityABTitle(bucket: number): string {
+        switch (bucket) {
+            case 1:
+                return 'Ideal';
+            case 2:
+                return 'Highly accessible';
+            case 3:
+                return 'Accessible';
+            case 4:
+                return 'Probably accessible';
+            case 5:
+                return 'Probably inaccessible';
+            case 6:
+                return 'Inaccessible';
+            case 7:
+                return 'Unknown';
+            default:
+                return '';
+        }
+    }
+
+    getDruggabilitySFTitle(bucket: number): string {
+        switch (bucket) {
+            case 1:
+                return 'Lowest risk, most stringent requirements met';
+            case 2:
+                return 'Lower risk';
+            case 3:
+                return 'Potential risks, proceed with caution';
+            case 4:
+                return 'Probable safety risks requiring mitigation';
+            case 5:
+                return 'Potentially not safe in humans';
+            case 6:
+                return 'Unknown';
+            default:
+                return '';
+        }
+    }
+
+    getDruggabilitySMText(bucket: number): string {
         switch (bucket) {
             case 1:
                 return 'Protein with a small molecule ligand identified from ChEMBL, meeting ' +
@@ -116,43 +162,97 @@ export class GeneDruggabilityComponent implements OnInit {
         }
     }
 
-    getBucketTextColor(bucket: number): string {
-        return (bucket < 13) ? '#FFFFFF' : '#000000';
-    }
-
-    getBucketStyle(bucket: number): string {
+    getDruggabilityABText(bucket: number): string {
         switch (bucket) {
             case 1:
-                return '#20A386';
+                return 'Secreted protein. Highly accessible to antibody-based therapies';
             case 2:
-                return '#1F968B';
+                return 'Component of the extracellular matrix (ECM). Highly accessible to ' +
+                'antibody-based therapies, but potentially less so than secreted proteins';
             case 3:
-                return '#238A8D';
+                return 'Cell membrane-bound proteins. Highly accessible to antibody-based ' +
+                'therapies, but potentially less so than secreted proteins or ECM components';
             case 4:
-                return '#277D8E';
+                return 'Limited evidence that target is a secreted protein, ECM component or ' +
+                'cell membrane-bound protein';
             case 5:
-                return '#2D708E';
+                return 'Protein located in the cytosol. Not practically accessible to ' +
+                'antibody-based therapies, but may be more easily accessible to other modalities';
             case 6:
-                return '#32648E';
+                return 'Protein located in intracellular compartment';
             case 7:
-                return '#39558C';
-            case 8:
-                return '#3F4788';
-            case 9:
-                return '#453781';
-            case 10:
-                return '#482677';
-            case 11:
-                return '#481568';
-            case 12:
-                return '#440D54';
-            case 13:
-                return '#C3C7D1';
-            case 14:
-                return '#AFDDDF';
+                return 'Dark target. Paucity of biological knowledge means progress will be ' +
+                'difficult';
             default:
-                return '#FFFFFF';
+                return '';
         }
+    }
+
+    getDruggabilitySFText(bucket: number): string {
+        switch (bucket) {
+            case 1:
+                return 'Target has a drug in phase IV in the appropriate modality, with good ' +
+                'safety profile';
+            case 2:
+                return 'No major issues found from gene expression, genetic or pharmacological ' +
+                'profiling, but has not been extensively tested in humans';
+            case 3:
+                return 'Two or fewer of: high off-target gene expression, cancer driver, ' +
+                'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
+                'associated gene, or black box warning on clinically used drug';
+            case 4:
+                return 'More than two of: high off target gene expression, cancer driver, ' +
+                'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
+                'associated gene, or black box warning on clinically used drug';
+            case 5:
+                return 'Evidence of on-target toxicity that may preclude clinical use in the ' +
+                'desired modality';
+            case 6:
+                return 'Insufficient data available';
+            default:
+                return '';
+        }
+    }
+
+    getBucketTextColor(bucket: number, section: string): string {
+        let range: number;
+
+        if (section === 'sm') {
+            range = 13;
+        } else if (section === 'ab') {
+            range = 7;
+        } else if (section === 'sf') {
+            range = 6;
+        }
+
+        return (bucket < range) ? '#FFFFFF' : '#000000';
+    }
+
+    getIconStyle(bucket: number, section: string): string {
+        return '16px solid ' + this.getBucketStyle(bucket, section);
+    }
+
+    getBucketStyle(bucket: number, section: string): string {
+        const i = d3.interpolateRgb('#20A386', '#440D54');
+        let range: number;
+
+        if (section === 'sm') {
+            range = 12;
+        } else if (section === 'ab') {
+            range = 6;
+        } else if (section === 'sf') {
+            range = 5;
+        }
+
+        if (bucket <= range && bucket > 0) {
+            return d3.hcl(i(bucket / range)).hex();
+        } else if (bucket === range + 1) {
+            return '#C3C7D1';
+        } else if (bucket === range + 2) {
+            return '#AFDDDF';
+        }
+
+        return '#FFFFFF';
     }
 
     getClassText(bucket: number): any {
@@ -182,7 +282,13 @@ export class GeneDruggabilityComponent implements OnInit {
         }
     }
 
-    setCurrentBucket(bucket: number) {
-        this.currentBucket = bucket;
+    setCurrentBucket(bucket: number, section: string) {
+        if (section === 'sm') {
+            this.currentBucketSM = bucket;
+        } else if (section === 'ab') {
+            this.currentBucketAB = bucket;
+        } else if (section === 'sf') {
+            this.currentBucketSF = bucket;
+        }
     }
 }
