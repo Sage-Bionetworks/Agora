@@ -5,7 +5,7 @@ h1 {
     @include lato-font('semibold');
 
     text-align: left;
-    line-height: normal;
+    line-height: 48px;
     color: color(text, title);
     font-weight: 500;
     font-size: $font-size-x-large;
@@ -15,16 +15,16 @@ h2 {
     @include lato-font('semibold');
 
     text-align: left;
-    line-height: normal;
+    line-height: 34px;
     color: color(text, span-title);
     font-size: $font-size-large;
 }
 
 h3 {
-    @include lato-font('medium');
+    @include lato-font('normal');
 
     text-align: left;
-    line-height: normal;
+    line-height: 29px;
     color: color(text, title);
     font-size: $font-size-xxxx-regular;
 }

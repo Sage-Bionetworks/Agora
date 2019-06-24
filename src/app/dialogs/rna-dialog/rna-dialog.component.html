@@ -1,22 +1,55 @@
 <div class="ui-rtl" dir="rtl">
-    <p-dialog header="RNA Expression Analysis" [(visible)]="display" [modal]="true" [blockScroll]="false" [responsive]="true" [minY]="256"
+    <p-dialog header="About the RNAseq Analysis" [(visible)]="display" [modal]="true" [blockScroll]="false" [responsive]="true" [minY]="256"
         [baseZIndex]="10000" [styleClass]="'rna-dialog'" [ngStyle]="{'minWidth': 330}">
         <div class="row content-row first-bp-dia-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12">
-                RNA-seq data used for these analyses was generated from over 2100 samples from post-mortem brains of more than 1100
-                individuals. In total there are seven distinct brain regions (Dorsolateral Prefrontal Cortex (DLPFC), Temporal Cortex
-                (TCX), Cerebellum (CBE), Parahippocampal Gyrus (PHG), Inferior Frontal Gyrus (IFG), Superior Temporal Gyrus (STG),
-                Frontal Pole (FP)) from three human cohort studies (<a class="link" href="https://www.synapse.org/#!Synapse:syn3219045" target="_blank">Religious Orders Study and Memory and Aging Project</a>,
-                <a class="link" href="https://www.synapse.org/#!Synapse:syn5550404" target="_blank">Mayo RNAseq</a>,
-                and <a class="link" href="https://www.synapse.org/#!Synapse:syn3159438" target="_blank">Mount Sinai Brain Bank</a>).
-
-                RNA-seq data from these studies was processed through a harmonized <a class="link" href="https://www.synapse.org/#!Synapse:syn9702085" target="_blank">computational pipeline</a> to reveal overall expression
-                levels, measure differential expression between AD cases and controls and describe the gene coexpression network. The
-                data is publicly available through these links: RNA-seq <a class="link" href="https://www.synapse.org/#!Synapse:syn14237651" target="_blank">differential expression summary statistics</a>, RNA-seq network
-                coexpression analysis.
-
-                You will need a <a class="link" href="https://www.synapse.org/" target="_blank">Synapse</a> account to access the RNA-seq data and analytical results. To establish a Synapse account,
-                please follow the instructions on <span class="link" (click)="goToRoute('/synapse-account')">this page</span>.
+            <div class="col-md-12 col-sm-12 col-12 container-col">
+                <div class="row first-content-row">
+                    RNA-seq data used for these analyses was generated from over 2100 samples from post-mortem brains of more
+                    than 1100 individuals. In total there are seven distinct brain regions from three human cohort studies:
+                </div>
+                <div class="row header-row">
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        Cohort Study
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        Brain Region(s)
+                    </div>
+                </div>
+                <div class="row body-row colored-row">
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        <a class="link no-bold" href="https://www.synapse.org/#!Synapse:syn3219045" target="_blank">Religious Orders Study and Memory and Aging Project (ROSMAP)</a>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        Dorsolateral Prefrontal Cortex (DLPFC)
+                    </div>
+                </div>
+                <div class="row body-row">
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        <a class="link no-bold" href="https://www.synapse.org/#!Synapse:syn5550404" target="_blank">Mayo RNAseq (MAYO)</a>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        Cerebellum (CBE), Temporal Cortex (TCX)
+                    </div>
+                </div>
+                <div class="row body-row colored-row">
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        <a class="link no-bold" href="https://www.synapse.org/#!Synapse:syn3159438" target="_blank">Mount Sinai Brain Bank (MSBB)</a>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 auto-col">
+                        Frontal Pole (FP), Inferior Frontal Gyrus (IFG), Parahippocampal Gyrus (PHG), Superior Temporal Gyrus (STG)
+                    </div>
+                </div>
+                <div class="row last-content-row">
+                    Note that not all genes are detected in all brain regions; for these genes, the plots show fewer than seven brain regions.
+                </div>
+                <div class="row last-content-row">
+                    RNA-seq data from these studies was processed through a&nbsp;<a class="link auto-width no-bold" href="https://www.synapse.org/#!Synapse:syn9702085" target="_blank">harmonized computational pipeline</a>&nbsp;to reveal overall expression levels, measure differential expression between AD cases and controls, and describe the gene coexpression network.
+                </div>
+                <div class="row last-content-row">
+                    The data is publicly available in&nbsp;<a class="link auto-width no-bold" href="https://www.synapse.org/" target="_blank">Synapse</a>&nbsp;through
+                    these links:&nbsp;<a class="link auto-width no-bold" href="https://www.synapse.org/#!Synapse:syn14237651" target="_blank">RNA-seq differential expression summary statistics;</a>&nbsp;
+                    <a class="link auto-width no-bold" href="https://doi.org/10.1101/510420" target="_blank">RNA-seq network coexpression analysis </a>.
+                </div>
             </div>
         </div>
     </p-dialog>

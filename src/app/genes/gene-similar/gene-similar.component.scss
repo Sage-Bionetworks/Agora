@@ -25,11 +25,9 @@
 }
 
 .overview-header {
-    &.similar-page{
+    &.similar-page {
         text-align: center;
-        .row {
-            align-items: center;
-        }
+
         .link-heading {
             color: color(text, secondary);
             float: left;
@@ -37,12 +35,15 @@
             transform: translate(-50%);
             margin-bottom: 20px;
         }
+
         p-button {
             @include respond-to('ex-small') {
                 width: 70%;
             }
+
             width: 100%;
             height: 100%;
+
             button {
                 width: 100%;
                 height: 100%;

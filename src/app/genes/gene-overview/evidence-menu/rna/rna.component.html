@@ -2,6 +2,11 @@
     <div class="section-thin overview-header nom-rna-oh" tabindex="0">
         <div class="row no-gutters">
             <h2 class="full-width no-margin-bottom">RNA Expression</h2>
+            <p class="black-paragraph">
+                The results shown on this page are derived from a harmonized RNA-seq analysis
+                of post-mortem brains from AD cases and controls. The samples were obtained
+                from three human cohort studies across a total of seven different brain regions.
+            </p>
             <h2 class="vmi-wrapper full-width no-margin-top">
                 <more-info [name]="'rna'">
                     <rna-dialog [header]="'RNA Expression Analysis'"></rna-dialog>
@@ -17,12 +22,16 @@
             <div class="col-md-9 col-sm-12 col-12">
                 <h3>Similarly Expressed Genes</h3>
                 <p class="black-paragraph">
-                    Here we show results of a coexpression network analysis based on the RNA-seq
-                    data. The network analysis uses an ensemble methodology to identify networks
-                    of genes that show similar coexpression across patients. In the network
-                    diagram below, the color of the edge and nodes indicates how frequently
-                    significant coexpression was identified across brain regions. Darker edges
-                    indicate significant coexpression in more brain regions.
+                    The network diagram below is based on a coexpression network analysis of
+                    RNA-seq data from AD cases and controls. The network analysis uses an
+                    ensemble methodology to identify genes that show similar coexpression
+                    across individuals.
+                </p>
+                <p class="black-paragraph">
+                    The color of the edges and nodes indicates how frequently significant
+                    coexpression was identified. Each node represents a different gene and
+                    the amount of edges within the network. Darker edges represent coexpression
+                    in more brain regions.
                 </p>
             </div>
         </div>

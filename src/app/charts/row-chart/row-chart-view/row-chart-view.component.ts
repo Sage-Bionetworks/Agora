@@ -313,7 +313,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             self.insertTextsInRows(chart, 'confidence-text-right');
 
             // Add a label to the x axis
-            self.addXLabel(this.chart, 'LOG FOLD CHANGE', svg, width, height);
+            self.addXLabel(this.chart, 'LOG 2 FOLD CHANGE', svg, width, height);
         }
 
         // Finally redraw the lines in each row

@@ -6,10 +6,6 @@
         color: $contrast-color;
     }
 
-    .row {
-        align-items: center;
-    }
-
     p-button {
         @include respond-to('ex-small') {
             width: 70%;

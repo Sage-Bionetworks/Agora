@@ -17,16 +17,6 @@
     .fa-star::before {
         color: $contrast-color;
     }
-
-    .row {
-        align-items: center;
-    }
-
-    h1 {
-        @include lato-font('bold');
-
-        text-align: left;
-    }
 }
 
 .custom-desc {

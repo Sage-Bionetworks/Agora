@@ -1,7 +1,7 @@
 <ng-container>
     <div class="section-thin rna-seq-me no-padding-top">
         <h3 *ngIf="isEmptyGene" class="filters-header">
-            Overall Expression of Selected Gene Across Tissues
+            Overall Expression of Selected Gene Across Brain Regions
         </h3>
         <h3 *ngIf="!isEmptyGene" class="filters-header">
             Overall Expression of {{gene.hgnc_symbol}} Across Tissues
@@ -11,10 +11,10 @@
             <!--<download [target]="stme" [name]="getDownloadFileName('Overall Expression')"></download>-->
         </h3>
         <p class="black-paragraph">
-            This plot depicts the median expression of the selected gene across tissues (brain regions) in
-            the dataset, as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is considered to be
-            anything greater than 0.7 Log CPM, which is equivalent to 5 CPM. This threshold is depicted by the red line in the
-            plot.
+            This plot depicts the median expression of the selected gene across brain regions,
+            as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression
+            is considered to be anything greater than 5 CPM, which is depicted by the red line
+            in the plot.
         </p>
         <div #stme>
             <ng-container *ngIf="!isEmptyGene; else noDataMedian">
@@ -65,10 +65,10 @@
             <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
         </div>
         <h3 *ngIf="isEmptyGene">
-            Differential Expression of Selected Gene
+            Differential Expression of Selected Gene Across Brain Regions
         </h3>
         <h3 *ngIf="!isEmptyGene">
-            Differential Expression of {{gene.hgnc_symbol}}
+            Differential Expression of {{gene.hgnc_symbol}} Across Brain Regions
             <span class="icon-spacing"></span>
             <!-- Hide for now -->
             <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
@@ -102,9 +102,10 @@
             <!--<download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>-->
         </h3>
         <p class="black-paragraph">
-            This forest plot indicates the estimate of the log fold change with standard errors across the
-            tissues in the chosen model. Genes that show consistent patterns of differential expression will
-            have similar log-fold change value across tissues.
+            This forest plot indicates the estimate of the log fold change with standard errors
+            across the brain regions in the model chosen using the filter above. Genes that
+            show consistent patterns of differential expression will have similar log-fold change
+            value across brain regions.
         </p>
         <div #stfp>
             <row-chart *ngIf="dataLoaded && !isEmptyGene"></row-chart>

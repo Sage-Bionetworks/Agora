@@ -8,7 +8,7 @@
 
     .ui-dialog-content {
         padding-top: 0% !important;
-        padding-bottom: 132px !important;
+        padding-bottom: 60px !important;
         padding-left: 6% !important;
         padding-right: 6% !important;
     }
@@ -29,5 +29,51 @@
             background-color: $tertiary-background;
             color: color(text, primary);
         }
+    }
+
+    .container-col {
+        padding-left: 20%;
+        padding-right: 18%;
+    }
+
+    .auto-col {
+        margin: auto;
+    }
+
+    .first-content-row {
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
+
+    .last-content-row {
+        padding-top: 25px;
+    }
+
+    .header-row {
+        height: 36px;
+        line-height: 22px;
+
+        @include lato-font('bold');
+    }
+
+    .body-row {
+        height: 71px;
+        line-height: 22px;
+    }
+
+    .auto-width {
+        width: auto;
+    }
+
+    .no-bold {
+        font-weight: normal;
+    }
+
+    .colored-row {
+        background: rgba(245, 245, 245, 0.5);
+    }
+
+    .link {
+        display: contents;
     }
 }

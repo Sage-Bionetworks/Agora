@@ -1,18 +1,15 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.contrib-teams{
-    .section-thin{
+.contrib-teams {
+    .section-thin {
         margin-top: 0;
     }
+
     .overview-header {
         .fa-star::before {
             color: $contrast-color;
         }
-
-        .row {
-            align-items: center;
-            }
 
         p-button {
             @include respond-to('ex-small') {
