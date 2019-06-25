@@ -18,7 +18,10 @@ import {
 
 import { SelectMenuViewComponent } from './select-menu-view.component';
 
-import { GeneService, ApiService } from '../../../core/services';
+import {
+    GeneService,
+    ApiService
+} from '../../../core/services';
 import { ChartService } from '../../services';
 
 import { of, empty, Observable } from 'rxjs';

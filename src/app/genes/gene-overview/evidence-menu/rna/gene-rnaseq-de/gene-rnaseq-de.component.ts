@@ -20,8 +20,7 @@ import { emptyGene } from 'app/testing';
 import { ChartService } from '../../../../../charts/services';
 import {
     ApiService,
-    GeneService,
-    MenuService
+    GeneService
 } from '../../../../../core/services';
 
 import { SelectItem } from 'primeng/api';
@@ -68,7 +67,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         private apiService: ApiService,
         private geneService: GeneService,
         private chartService: ChartService,
-        private menuService: MenuService,
         private location: PlatformLocation
     ) { }
 
@@ -119,7 +117,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             ).subscribe((d) => {
                 this.chartService.filteredData = d;
                 this.dataLoaded = true;
-                this.menuService.evidenceMenuReady();
             });
         });
     }

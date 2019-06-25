@@ -188,6 +188,8 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
 
                     // Adds tooltip below the x axis labels
                     self.addXAxisTooltips(chart);
+
+                    self.chartService.addChartRendered(self.label);
                 }
             });
 

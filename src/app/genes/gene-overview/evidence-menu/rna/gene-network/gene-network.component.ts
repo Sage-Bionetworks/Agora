@@ -77,7 +77,7 @@ export class GeneNetworkComponent implements OnInit {
                 }
             });
             this.location.onPopState(() => {
-                if (!this.previousUrl.includes('gene-similar')) {
+                if (this.previousUrl && !this.previousUrl.includes('gene-similar')) {
                     this.removeForceServiceData();
                 }
             });

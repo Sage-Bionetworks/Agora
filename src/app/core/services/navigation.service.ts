@@ -30,8 +30,12 @@ export class NavigationService {
     }
 
     goToRouteRelative(path: string, outlets?: any) {
-        (outlets) ? this.router.navigate([path, outlets], { relativeTo: this.route }) :
-            this.router.navigate([path], { relativeTo: this.route });
+        (outlets) ? this.router.navigate(
+            [path, outlets],
+            {
+                relativeTo: this.route
+        }) :
+        this.router.navigate([path], { relativeTo: this.route });
     }
 
     getRouter(): Router {

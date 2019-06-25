@@ -93,6 +93,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
         this.location.onPopState(() => {
             this.removeSelf();
+            this.display = false;
         });
 
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
@@ -248,6 +249,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                             width,
                             height
                         );
+                        self.chartService.addChartRendered(self.label);
                     });
                 })
                 .othersGrouper(null)

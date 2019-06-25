@@ -14,6 +14,12 @@ export class ChartService {
         ['forest-plot', false],
         ['select-model', false]
     ]);
+    chartRendered: Map<string, boolean> = new Map([
+        ['median-chart', false],
+        ['box-plot', false],
+        ['forest-plot', false],
+        ['select-model', false]
+    ]);
     pChartInfos: Map<string, any> = new Map<string, any>();
     pChartNames: Map<string, boolean> = new Map([
         ['pbox-plot', false],
@@ -35,9 +41,11 @@ export class ChartService {
 
     // Observable string sources
     chartsReadySource = new Subject<boolean>();
+    chartsRenderedSource = new Subject<boolean>();
 
     // Observable string streams
     chartsReady$ = this.chartsReadySource.asObservable();
+    chartsRendered$ = this.chartsRenderedSource.asObservable();
 
     constructor() {
         //
@@ -75,6 +83,18 @@ export class ChartService {
         }
     }
 
+    addChartRendered(name: string) {
+        if (this.chartRendered) {
+            if (name && this.chartRendered.has(name)) { this.chartRendered.set(name, true); }
+
+            if (this.allChartsRendered()) {
+                this.chartsRenderedSource.next(true);
+            } else {
+                this.chartsRenderedSource.next(false);
+            }
+        }
+    }
+
     removeChartName(name: string, type: string = 'RNA') {
         let chartNames: Map<string, boolean> = null;
         if (type === 'RNA') {
@@ -91,6 +111,13 @@ export class ChartService {
         if (this.allEmptyCharts(type)) {
             d3.selectAll('dc-chart').remove();
             dc.chartRegistry.clear();
+        }
+    }
+
+    removeChartRendered(name: string) {
+        if (name && this.chartRendered.has(name)) {
+            this.chartRendered.set(name, false);
+            this.chartsRenderedSource.next(false);
         }
     }
 
@@ -123,6 +150,19 @@ export class ChartService {
         }
 
         for (const value of chartNames.values()) {
+            if (!value) {
+                loaded = false;
+                break;
+            }
+        }
+
+        return loaded;
+    }
+
+    allChartsRendered(): boolean {
+        let loaded = true;
+
+        for (const value of this.chartRendered.values()) {
             if (!value) {
                 loaded = false;
                 break;

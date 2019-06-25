@@ -25,6 +25,7 @@ import * as d3 from 'd3';
 import * as d3s from 'd3-symbol-extra';
 
 import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
+import { SimulationNodeDatum } from 'd3';
 
 @Component({
     selector: 'force-chart',
@@ -284,7 +285,8 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         });
 
         this.simulation.force('link', d3.forceLink(this.networkData.links)
-            .links(this.networkData.links).id((d: GeneNode) => d.id)
+            .links(this.networkData.links)
+            .id((d: SimulationNodeDatum) => d['id'])
             .strength((d) => {
                 return d.value / 100.0;
             }));

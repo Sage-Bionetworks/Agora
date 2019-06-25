@@ -15,6 +15,12 @@ export class ChartServiceStub {
         ['forest-plot', false],
         ['select-model', false]
     ]);
+    chartRendered: Map<string, boolean> = new Map([
+        ['median-chart', false],
+        ['box-plot', false],
+        ['forest-plot', false],
+        ['select-model', false]
+    ]);
     pChartInfos: Map<string, any> = new Map<string, any>();
     pChartNames: Map<string, boolean> = new Map([
         ['pbox-plot', false],
@@ -57,9 +63,11 @@ export class ChartServiceStub {
 
     // Observable string sources
     chartsReadySource = new Subject<boolean>();
+    chartsRenderedSource = new Subject<boolean>();
 
     // Observable string streams
     chartsReady$ = this.chartsReadySource.asObservable();
+    chartsRendered$ = this.chartsRenderedSource.asObservable();
 
     constructor() {
         //
@@ -91,6 +99,19 @@ export class ChartServiceStub {
         return loaded;
     }
 
+    allChartsRendered(): boolean {
+        let loaded = true;
+
+        for (const value of this.chartRendered.values()) {
+            if (!value) {
+                loaded = false;
+                break;
+            }
+        }
+
+        return loaded;
+    }
+
     getChartInfo(label: string): any {
         return mockInfo1;
     }
@@ -105,6 +126,18 @@ export class ChartServiceStub {
             }
             dc.chartRegistry.deregister(chart);
             chart.resetSvg();
+        }
+    }
+
+    addChartRendered(name: string) {
+        if (this.chartRendered) {
+            if (name && this.chartRendered.has(name)) { this.chartRendered.set(name, true); }
+
+            if (this.allChartsRendered()) {
+                this.chartsRenderedSource.next(true);
+            } else {
+                this.chartsRenderedSource.next(false);
+            }
         }
     }
 

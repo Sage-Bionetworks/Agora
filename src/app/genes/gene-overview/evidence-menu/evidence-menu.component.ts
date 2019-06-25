@@ -10,7 +10,8 @@ import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import { GeneService, NavigationService, MenuService } from '../../../core/services';
+import { GeneService, NavigationService } from '../../../core/services';
+import { ChartService } from 'app/charts/services';
 
 import { MenuItem } from 'primeng/api';
 import { TabMenu } from 'primeng/tabmenu';
@@ -37,6 +38,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     activeItem: MenuItem;
     currentGeneData = [];
     routerSub: Subscription;
+    chartSub: Subscription;
     menuSub: Subscription;
     subscription: any;
     items: MenuItem[];
@@ -44,28 +46,30 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     disableMenu: boolean = false;
     firstTimeCheck: boolean = true;
     previousUrl: string;
+    currentMenuTab: number = -1;
 
     constructor(
         private navService: NavigationService,
-        private menuService: MenuService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private chartService: ChartService
     ) {}
 
     ngOnInit() {
         // Populate the tab menu
         this.items = [
-            { label: 'RNA', disabled: this.disableMenu },
-            { label: 'Protein', disabled: true },
-            // { label: 'Metabolomics', disabled: true },
-            { label: '', disabled: true},
-            { label: '', disabled: true}
+            { label: 'RNA', disabled: false } as MenuItem,
+            { label: 'Protein', disabled: true } as MenuItem,
+            { label: 'Metabolomics', disabled: true } as MenuItem,
+            { label: '', disabled: true} as MenuItem,
+            { label: '', disabled: true} as MenuItem
         ];
 
         this.geneInfo = this.geneService.getCurrentInfo();
 
-        this.menuSub = this.menuService.emReady$.subscribe((state: boolean) => {
+        this.chartSub = this.chartService.chartsRendered$.subscribe((state: boolean) => {
             if (state) {
-                this.items[1].disabled = this.disableMenu;
+                this.items[1].disabled = false;
+                this.items[2].disabled = false;
             }
         });
 
@@ -90,6 +94,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                         ) ||
                         this.navService.getOvMenuTabIndex() !== evidenceTabIndex
                     ) {
+                        console.log('here');
                         const urlToGo: string = this.navService.getOvMenuTabIndex() === 0 ?
                             'nom-details' : this.navService.getOvMenuTabIndex() === 1 ?
                             'soe' : 'druggability';
@@ -107,16 +112,6 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                         if (this.subscription) {
                             this.subscription.unsubscribe();
                         }
-                    } else {
-                        if (this.disableMenu) {
-                            // Improve this part, 0.8 seconds to re-activate the menu items
-                            setTimeout(() => {
-                                this.items.forEach((i) => {
-                                    i.disabled = false;
-                                });
-                                this.disableMenu = false;
-                            }, 800);
-                        }
                     }
                 }
 
@@ -130,13 +125,23 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
             ? (this.activeItem.label !== this.menu.activeItem.label) : false)
             ) || this.neverActivated) || event) {
             this.neverActivated = false;
-            this.disableMenu = true;
-            this.items.forEach((i) => {
-                i.disabled = true;
-            });
 
             this.activeItem = (this.menu.activeItem) ? this.menu.activeItem :
-                event ? {label: event.target.textContent} : {label: 'RNA'};
+                event ? {label: event.target.textContent, disabled: false} :
+                {label: 'RNA', disabled: false};
+
+            if (this.activeItem.disabled ||
+                (
+                    this.currentMenuTab !== -1 &&
+                    (
+                        this.activeItem.label ===
+                        this.items[this.navService.getEvidenceMenuTabIndex()].label
+                    )
+                )
+            ) {
+                return;
+            }
+
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'RNA':
@@ -175,6 +180,8 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                             }
                         }, this.extras);
                 }
+
+                this.currentMenuTab = this.navService.getEvidenceMenuTabIndex();
             }
         }
     }

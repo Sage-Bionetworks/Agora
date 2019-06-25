@@ -14,7 +14,7 @@ import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 
 import { ChartService } from '../../services';
-import { GeneService, DataService, ApiService } from '../../../core/services';
+import { GeneService, ApiService } from '../../../core/services';
 
 import { GeneResponse } from '../../../models';
 
@@ -192,6 +192,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                     await self.replaceSelect().then(() => {
                         // Registers this chart
                         self.chartService.addChartName(self.label, self.type);
+                        self.chartService.addChartRendered(self.label);
                     });
                 }
             });

@@ -1,4 +1,4 @@
-<div class="section-thin" tabindex="0">
+<div *ngIf="geneInfo" class="section-thin" tabindex="0">
     <h2>
         Druggability of {{geneInfo.hgnc_symbol}}
     </h2>
@@ -11,7 +11,7 @@
     </more-info>
 </div>
 
-<p-accordion [multiple]="true" [ngClass]="'gd-accordion'" [expandIcon]="'pi pi-fw pi-plus'" [collapseIcon]="'pi pi-fw pi-minus'">
+<p-accordion *ngIf="geneInfo" [multiple]="true" [ngClass]="'gd-accordion'" [expandIcon]="'pi pi-fw pi-plus'" [collapseIcon]="'pi pi-fw pi-minus'">
     <p-accordionTab>
         <p-header>
             <div class="container">

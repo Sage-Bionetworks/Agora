@@ -255,6 +255,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         // Adds tooltip below the x axis labels
                         self.addXAxisTooltips(chart);
+
+                        self.chartService.addChartRendered(self.label);
                     }
                 });
 

@@ -26,8 +26,7 @@ import { MoreInfoComponent } from 'app/dialogs/more-info';
 import {
     ApiService,
     DataService,
-    GeneService,
-    MenuService
+    GeneService
 } from '../../../../../core/services';
 
 import { ChartService } from '../../../../../charts/services';
@@ -64,8 +63,7 @@ describe('Component: GeneRNASeqDE', () => {
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
-                { provide: Location, useValue: locationStub },
-                MenuService
+                { provide: Location, useValue: locationStub }
             ]
         })
         .compileComponents();
