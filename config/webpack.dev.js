@@ -105,7 +105,7 @@ module.exports = function (options) {
             loader: 'postcss-loader',
             options: {
                 sourceMap: true,
-                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+                plugins: () => [autoprefixer()]
             }
           }, 'sass-loader'],
           include: [helpers.root('src', 'styles')]

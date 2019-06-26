@@ -19,10 +19,9 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const StyleLintPlugin = require('stylelint-bare-webpack-plugin');
 const rxPaths = require('rxjs/_esm2015/path-mapping');
 const autoprefixer = require('autoprefixer');
-const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 const buildUtils = require('./build-utils');
 
@@ -150,7 +149,7 @@ module.exports = function (options) {
             loader: 'postcss-loader',
             options: {
                 sourceMap: true,
-                plugins: () => [autoprefixer({ browsers: ['iOS >= 7', 'Android >= 4.1'] })],
+                plugins: () => [autoprefixer()]
             }
           }, 'sass-loader'],
           exclude: [helpers.root('src', 'styles')]
