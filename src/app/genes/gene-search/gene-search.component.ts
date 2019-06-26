@@ -49,6 +49,8 @@ export class GeneSearchComponent implements OnInit {
                 debounceTime(300),
                 distinctUntilChanged(),
                 switchMap((query) => {
+                    this.results = [];
+
                     if (query) {
                         this.currentQuery = query;
                         this.isSearching = true;
@@ -56,7 +58,6 @@ export class GeneSearchComponent implements OnInit {
                     } else {
                         this.currentQuery = '';
                         this.isSearching = false;
-                        this.results = [];
                         return empty();
                     }
                 }),
