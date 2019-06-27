@@ -11,7 +11,7 @@
     </more-info>
 </div>
 
-<p-accordion *ngIf="geneInfo" [multiple]="true" [ngClass]="'gd-accordion'" [expandIcon]="'pi pi-fw pi-plus'" [collapseIcon]="'pi pi-fw pi-minus'">
+<p-accordion *ngIf="geneInfo" [multiple]="true" [ngClass]="'gd-accordion'" [expandIcon]="'pi pi-fw pi-plus'" [collapseIcon]="'pi pi-fw pi-minus'" (onOpen)="resetBucket($event)">
     <p-accordionTab>
         <p-header>
             <div class="container">

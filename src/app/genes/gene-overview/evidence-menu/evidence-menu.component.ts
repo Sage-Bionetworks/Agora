@@ -6,7 +6,7 @@ import {
     ViewChild,
     AfterContentChecked
 } from '@angular/core';
-import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
+import { NavigationExtras } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
@@ -37,15 +37,11 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
 
     activeItem: MenuItem;
     currentGeneData = [];
-    routerSub: Subscription;
     chartSub: Subscription;
-    menuSub: Subscription;
-    subscription: any;
     items: MenuItem[];
     neverActivated: boolean = true;
     disableMenu: boolean = false;
     firstTimeCheck: boolean = true;
-    previousUrl: string;
     currentMenuTab: number = -1;
 
     constructor(
@@ -70,52 +66,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
             if (state) {
                 this.items[1].disabled = false;
                 this.items[2].disabled = false;
-            }
-        });
-
-        this.routerSub =  this.navService.getRouter().events.subscribe((re: RouterEvent) => {
-            if (re instanceof NavigationEnd) {
-                if (this.geneService.getCurrentGene() &&
-                    this.geneService.getCurrentGene().hgnc_symbol) {
-                    // The url id is undefined here because the route didn't change at
-                    // this point like in the gene overview component. Check only for
-                    // the evidence-menu part of the url for now
-                    const evidenceTabIndex: number = (this.geneInfo) ? (this.geneInfo.nominations ?
-                        2 : 1) : 2;
-                    if (
-                        (
-                            !re.url.includes('/genes/(genes-router:gene-details/') &&
-                            (
-                                !this.previousUrl ||
-                                !this.previousUrl.includes(
-                                    '/genes/(genes-router:gene-details/'
-                                )
-                            )
-                        ) ||
-                        this.navService.getOvMenuTabIndex() !== evidenceTabIndex
-                    ) {
-                        console.log('here');
-                        const urlToGo: string = this.navService.getOvMenuTabIndex() === 0 ?
-                            'nom-details' : this.navService.getOvMenuTabIndex() === 1 ?
-                            'soe' : 'druggability';
-                        this.navService.goToRoute('/genes', {
-                            outlets: {
-                                'genes-router': ['gene-details', this.id],
-                                'gene-overview': [urlToGo],
-                                'evidence-menu': null
-                            }
-                        }, this.extras);
-
-                        if (this.routerSub) {
-                            this.routerSub.unsubscribe();
-                        }
-                        if (this.subscription) {
-                            this.subscription.unsubscribe();
-                        }
-                    }
-                }
-
-                this.previousUrl = re.url;
+                this.items[2].disabled = false;
             }
         });
     }

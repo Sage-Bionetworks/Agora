@@ -219,69 +219,54 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'NOMINATION DETAILS':
-                        if (this.geneInfo.nominations) {
-                            this.navService.setOvMenuTabIndex(0);
-                        }
+                        this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['nom-details']
+                                'gene-overview': ['nom-details'],
+                                'evidence-menu': null
                             }
                         }, this.extras);
                         break;
                     case 'SUMMARY':
-                        if (this.geneInfo.nominations) {
-                            this.navService.setOvMenuTabIndex(1);
-                        } else {
-                            this.navService.setOvMenuTabIndex(0);
-                        }
+                        this.navService.setOvMenuTabIndex(this.items.length - 3);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['soe']
+                                'gene-overview': ['soe'],
+                                'evidence-menu': null
                             }
                         }, this.extras);
                         break;
                     case 'EVIDENCE':
-                        if (this.geneInfo.nominations) {
-                            this.navService.setOvMenuTabIndex(2);
-                        } else {
-                            this.navService.setOvMenuTabIndex(1);
-                        }
+                        this.navService.setOvMenuTabIndex(this.items.length - 2);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'evidence-menu': ['evidence']
+                                'evidence-menu': ['evidence'],
+                                'gene-overview': ['rna']
                             }
                         }, this.extras);
                         break;
                     case 'DRUGGABILITY':
-                        if (this.geneInfo.nominations) {
-                            if (this.geneInfo.druggability) {
-                                this.navService.setOvMenuTabIndex(3);
-                            }
-                        } else {
-                            if (this.geneInfo.druggability) {
-                                this.navService.setOvMenuTabIndex(2);
-                            }
+                        if (this.geneInfo.druggability) {
+                            this.navService.setOvMenuTabIndex(this.items.length - 1);
                         }
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['druggability']
+                                'gene-overview': ['druggability'],
+                                'evidence-menu': null
                             }
                         }, this.extras);
                         break;
                     default:
-                        if (this.geneInfo.nominations) {
-                            this.navService.setOvMenuTabIndex(0);
-                        } else {
-                            this.navService.setOvMenuTabIndex(1);
-                        }
+                        this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['nom-details']
+                                'gene-overview': ['nom-details'],
+                                'evidence-menu': null
                             }
                         }, this.extras);
                 }
@@ -322,8 +307,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         if (responseList[0].geneProteomics) {
                             this.geneService.setGeneProteomics(responseList[0].geneProteomics
                                 .sort((a: Proteomics, b: Proteomics) => {
-                                    const tissueA = (a.Tissue) ? a.Tissue.toLowerCase() : '';
-                                    const tissueB = (b.Tissue) ? b.Tissue.toLowerCase() : '';
+                                    const tissueA = (a.tissue) ? a.tissue.toLowerCase() : '';
+                                    const tissueB = (b.tissue) ? b.tissue.toLowerCase() : '';
                                     // Sort string ascending
                                     if (tissueA < tissueB) {
                                         return -1;

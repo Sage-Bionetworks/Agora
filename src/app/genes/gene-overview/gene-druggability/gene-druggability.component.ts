@@ -38,6 +38,13 @@ export class GeneDruggabilityComponent implements OnInit {
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+
+        // Update the initial buckets
+        if (this.geneInfo) {
+            this.currentBucketSM = this.geneInfo.druggability[0].sm_druggability_bucket;
+            this.currentBucketAB = this.geneInfo.druggability[0].abability_bucket;
+            this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
+        }
     }
 
     getDruggabilitySMTitle(bucket: number): string {
@@ -289,6 +296,18 @@ export class GeneDruggabilityComponent implements OnInit {
             this.currentBucketAB = bucket;
         } else if (section === 'sf') {
             this.currentBucketSF = bucket;
+        }
+    }
+
+    resetBucket(event: any) {
+        if (this.geneInfo && event.index !== undefined) {
+            if (event.index === 0) {
+                this.currentBucketSM = this.geneInfo.druggability[0].sm_druggability_bucket;
+            } else if (event.index === 1) {
+                this.currentBucketAB = this.geneInfo.druggability[0].abability_bucket;
+            } else if (event.index === 2) {
+                this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
+            }
         }
     }
 }

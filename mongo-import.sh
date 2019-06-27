@@ -7,6 +7,7 @@ mongoimport --db agora --collection geneslinks --jsonArray --drop --file ./netwo
 mongoimport --db agora --collection geneinfo --jsonArray --drop --file ./gene_info.json
 mongoimport --db agora --collection teaminfo --jsonArray --drop --file ./team_info.json
 mongoimport --db agora --collection genesproteomics --jsonArray --drop --file ./proteomics.json
+mongoimport --db agora --collection genesmetabolomics --jsonArray --drop --file ./metabolomics.json
 
 cd ./team_images
 ls -1r *.jpg *.jpeg *.png | while read x; do mongofiles -d agora -v put $x --replace; echo $x; done
