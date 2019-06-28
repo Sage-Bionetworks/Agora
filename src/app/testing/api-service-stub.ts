@@ -6,12 +6,13 @@ import {
     mockDataLink1,
     mockDataLink2,
     mockInfo1,
-    mockTeam1
+    mockTeam1,
+    mockMetabolomics
 } from '../testing';
 
 import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse, TeamMember } from '../models';
 
-import { Observable, of, empty } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { mockGenesResponse, mockTissues, mockModels } from './gene-mocks';
 
 @Injectable()
@@ -63,5 +64,9 @@ export class ApiServiceStub {
 
     getGeneModels(): Observable<any> {
         return of(mockModels);
+    }
+
+    getGeneMetabolomics(id: string): Observable<object> {
+        return of(mockMetabolomics);
     }
 }

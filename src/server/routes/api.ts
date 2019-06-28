@@ -1,6 +1,13 @@
 import { DecimalPipe } from '@angular/common';
-import { Gene, GeneInfo, Proteomics } from '../../app/models';
-import { Genes, GenesInfo, GenesLinks, TeamsInfo, GenesProteomics } from '../../app/schemas';
+import { Gene, GeneInfo, Proteomics, Metabolomics } from '../../app/models';
+import {
+    Genes,
+    GenesInfo,
+    GenesLinks,
+    TeamsInfo,
+    GenesProteomics,
+    GenesMetabolomics
+} from '../../app/schemas';
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
@@ -1018,6 +1025,49 @@ connection.once('open', () => {
                     res.setHeader('Expires', 0);
                     await res.json({
                         geneEntries: genes
+                    });
+                }
+            });
+        }
+    });
+
+    router.get('/metabolomics/:id', async (req, res, next) => {
+        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
+        if (env === 'development') {
+            console.log('Get a gene metabolomics with an id');
+            console.log(req.query.id);
+        }
+
+        // Return an empty array in case no id was passed or no params
+        if (!req.params || !Object.keys(req.query).length) {
+            if (env === 'development') {
+                console.log('no id');
+            }
+            res.json({ item: null });
+        } else {
+            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl.gene.id' :
+                'associated.gene.name';
+            const queryObj = { [fieldName]: req.query.id };
+
+            // Find all the Genes with the current id
+            await GenesMetabolomics.findOne(queryObj).exec(async (err, gene) => {
+                if (err) {
+                    next(err);
+                } else {
+                    // Adding this condition because UglifyJS can't handle ES2015,
+                    // only needed for the server
+                    if (env === 'development') {
+                        console.log('The gene metabolomics with id');
+                        console.log(gene);
+                    }
+
+                    res.setHeader(
+                        'Cache-Control', 'no-cache, no-store, must-revalidate'
+                    );
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    await res.json({
+                        geneMetabolomics: gene
                     });
                 }
             });

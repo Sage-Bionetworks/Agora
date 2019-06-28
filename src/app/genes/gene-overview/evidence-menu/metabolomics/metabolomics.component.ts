@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Gene, GeneInfo } from '../../../../models';
+import { Gene, GeneInfo, Metabolomics } from '../../../../models';
 
-import { GeneService } from '../../../../core/services';
+import { GeneService, ApiService } from '../../../../core/services';
 
 import * as d3 from 'd3';
 
@@ -18,8 +18,13 @@ export class MetabolomicsComponent implements OnInit {
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
 
+    metabolomics: Metabolomics;
+    dataLoaded: boolean = false;
+    isEmptyGene: boolean = true;
+
     constructor(
         private route: ActivatedRoute,
+        private apiService: ApiService,
         private geneService: GeneService
     ) {}
 
@@ -27,6 +32,23 @@ export class MetabolomicsComponent implements OnInit {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
 
+        if (this.gene && this.geneInfo) { this.isEmptyGene = false; }
+
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+
+        this.initData();
+    }
+
+    initData() {
+        this.apiService.getGeneMetabolomics(this.geneService.getCurrentGene().ensembl_gene_id).
+            subscribe((d: any) => {
+            if (d.geneMetabolomics) {
+                this.metabolomics = d.geneMetabolomics;
+            } else {
+                this.isEmptyGene = true;
+            }
+
+            this.dataLoaded = true;
+        });
     }
 }

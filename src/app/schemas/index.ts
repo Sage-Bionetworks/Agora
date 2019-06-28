@@ -3,3 +3,4 @@ export * from './geneInfo';
 export * from './geneLink';
 export * from './teamInfo';
 export * from './proteomics';
+export * from './metabolomics';

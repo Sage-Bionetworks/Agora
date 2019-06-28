@@ -5,6 +5,7 @@ import {
     GeneNetwork,
     GeneStatistics,
     GenesResponse,
+    Metabolomics,
     LinksListResponse
 } from '../models';
 
@@ -201,6 +202,42 @@ export const mockModels: string [] = [
     'AD Diagnosis x Sex (females only)',
     'AD Diagnosis x Sex (males only)'
 ];
+
+export const mockMetabolomics: Metabolomics = {
+    'associated.gene.name': 'VGF',
+    'ensembl.gene.id': 'ENSG00000128564',
+    'metabolite.id': 'PC.ae.C36.4',
+    'metabolite.full.name': 'PC ae C36:4',
+    'association.p': 4.6840012252077e-05,
+    'gene.wide.p.threshold.1KGP': 7.27802037845706e-05,
+    'n.per.group': [
+        362,
+        302
+    ],
+    'boxplot.group.names': [
+        'CN',
+        'AD'
+    ],
+    'AD.diagnosis.p.value': [
+        0.14581678853452
+    ],
+    'transposed.boxplot.stats': [
+        [
+            -2.80747928431701,
+            -0.666279090282903,
+            -0.021045311527237,
+            0.810313336061741,
+            2.95738287401986
+        ],
+        [
+            -2.4183583617742,
+            -0.653260557186807,
+            -0.114231130055799,
+            0.609836972086108,
+            2.04075458691275
+        ]
+    ]
+};
 
 export const mockGenesResponse: GenesResponse = {
     items: [mockGene1],

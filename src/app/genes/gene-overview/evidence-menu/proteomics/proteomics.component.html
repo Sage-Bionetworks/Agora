@@ -1,81 +1,79 @@
-<div *ngIf="dataLoaded">
-    <div class="section-thin overview-header nom-details-pt" tabindex="0">
-        <div class="row no-gutters">
-            <h2 class="full-width no-margin-bottom">Proteomics</h2>
-            <h2 class="vmi-wrapper full-width no-margin-top">
-                <more-info [name]="'pt'">
-                    <pt-dialog [name]="'pt'"></pt-dialog>
-                </more-info>
-            </h2>
+<div class="section-thin overview-header nom-details-pt" tabindex="0">
+    <div class="row no-gutters">
+        <h2 class="full-width no-margin-bottom">Proteomics</h2>
+        <h2 class="vmi-wrapper full-width no-margin-top">
+            <more-info [name]="'pt'">
+                <pt-dialog [name]="'pt'"></pt-dialog>
+            </more-info>
+        </h2>
+    </div>
+    <div class="row no-gutters header-row">
+        The results shown on this page are derived from proteomics analysis of post-mortem brains from AD
+        cases and controls. The samples were obtained from four human cohort studies across a total of four different brain regions.
+    </div>
+</div>
+<div class="section-thin rna-seq-bplot no-vertical-padding">
+    <div class="row pt-filter-row">
+        <div class="col-md-12 col-sm-12 col-12 col-fixer">
+            <h4 class="filters-header">
+                Filter the following chart by protein
+            </h4>
+            <div class="row filter-description">
+                Multiple proteins map to a single gene. Please select a protein of interest from the dropdown.
+            </div>
+            <div class="row select-row">
+                <div class="col-md-12 col-sm-12 col-12">
+                    <select-menu *ngIf="dataLoaded && !isEmptyGene"
+                        [promptText]="'All'"
+                        [label]="'select-protein'"
+                        [columnName]="'select-column-model'"
+                        [type]="'Proteomics'">
+                    </select-menu>
+                    <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
+                        [options]="emptySelection"
+                        [(ngModel)]="selectedProteins"
+                        [showToggleAll]="false"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [defaultLabel]="emptySelectionLabel"
+                        [dropdownIcon]="getDropdownIcon()"
+                        [disabled]="true">
+                    </p-multiSelect>
+                </div>
+            </div>
         </div>
-        <div class="row no-gutters header-row">
-            The results shown on this page are derived from proteomics analysis of post-mortem brains from AD
-            cases and controls. The samples were obtained from four human cohort studies across a total of four different brain regions.
+        <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
+    </div>
+    <h3 *ngIf="isEmptyGene">
+        Differential Expression of Selected Gene
+    </h3>
+    <h3 *ngIf="!isEmptyGene">
+        Differential Expression of {{gene.hgnc_symbol}} and Selected Protein
+        <span class="icon-spacing"></span>
+        <!-- Hide for now -->
+        <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
+    </h3>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12 col-fixer">
+            <p class="black-paragraph de-paragraph">
+                After selecting a protein from the dropdown menu, you will be able to see whether the selected protein product is
+                differentially expressed between AD cases and controls. The box plot depicts how the differential expression of the
+                selected protein of interest (red dot) compares with expression of other proteins in a given brain region. Summary
+                statistics for each tissue can be viewed by hovering over the red dots.
+            </p>
+            <p class="black-paragraph de-paragraph">
+                Note that proteins may not be detected in all four brain regions; for these proteins, the plot will show fewer than
+                four brain regions.
+            </p>
         </div>
     </div>
-    <div class="section-thin rna-seq-bplot no-vertical-padding">
-        <div class="row pt-filter-row">
-            <div class="col-md-12 col-sm-12 col-12 col-fixer">
-                <h4 class="filters-header">
-                    Filter the following chart by protein
-                </h4>
-                <div class="row filter-description">
-                    Multiple proteins map to a single gene. Please select a protein of interest from the dropdown.
-                </div>
-                <div class="row select-row">
-                    <div class="col-md-12 col-sm-12 col-12">
-                        <select-menu *ngIf="dataLoaded && !isEmptyGene"
-                            [promptText]="'All'"
-                            [label]="'select-protein'"
-                            [columnName]="'select-column-model'"
-                            [type]="'Proteomics'">
-                        </select-menu>
-                        <p-multiSelect #egmsc2 *ngIf="isEmptyGene"
-                            [options]="emptySelection"
-                            [(ngModel)]="selectedProteins"
-                            [showToggleAll]="false"
-                            [showHeader]="false"
-                            [panelStyle]="{minWidth:'12em'}"
-                            [defaultLabel]="emptySelectionLabel"
-                            [dropdownIcon]="getDropdownIcon()"
-                            [disabled]="true">
-                        </p-multiSelect>
-                    </div>
-                </div>
-            </div>
-            <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
-        </div>
-        <h3 *ngIf="isEmptyGene">
-            Differential Expression of Selected Gene
-        </h3>
-        <h3 *ngIf="!isEmptyGene">
-            Differential Expression of {{gene.hgnc_symbol}} and Selected Protein
-            <span class="icon-spacing"></span>
-            <!-- Hide for now -->
-            <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
-        </h3>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-12 col-fixer">
-                <p class="black-paragraph de-paragraph">
-                    After selecting a protein from the dropdown menu, you will be able to see whether the selected protein product is
-                    differentially expressed between AD cases and controls. The box plot depicts how the differential expression of the
-                    selected protein of interest (red dot) compares with expression of other proteins in a given brain region. Summary
-                    statistics for each tissue can be viewed by hovering over the red dots.
-                </p>
-                <p class="black-paragraph de-paragraph">
-                    Note that proteins may not be detected in all four brain regions; for these proteins, the plot will show fewer than
-                    four brain regions.
-                </p>
-            </div>
-        </div>
-        <div #stbp>
-            <pbox-plot *ngIf="dataLoaded && !isEmptyGene" [label]="'pbox-plot'"></pbox-plot>
-            <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
-        </div>
-        <div class="row">
-            <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
-                <h2 class="placeholder-text">No expression data is currently available.</h2>
-            </div>
+    <div #stbp>
+        <pbox-plot *ngIf="dataLoaded && !isEmptyGene" [label]="'pbox-plot'"></pbox-plot>
+        <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
+    </div>
+    <div class="row">
+        <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>
     </div>
 </div>

@@ -188,6 +188,7 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     }
                 }
+                console.log(self.chartService.filteredData['bpGroup']);
                 return self.chartService.filteredData['bpGroup'].values;
             },
             order() {

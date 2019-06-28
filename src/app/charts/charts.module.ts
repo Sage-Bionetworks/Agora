@@ -5,6 +5,7 @@ import { AppSharedModule } from '../shared';
 
 import { BoxPlotViewComponent } from './box-plot/box-plot-view';
 import { PBoxPlotViewComponent } from './box-plot/pbox-plot-view';
+import { SBoxPlotViewComponent } from './box-plot/sbox-plot-view';
 import { SelectMenuViewComponent } from './select-menu/select-menu-view';
 import { RowChartViewComponent } from './row-chart/row-chart-view';
 import { ForceChartViewComponent } from './force-chart/force-chart-view';
@@ -16,6 +17,7 @@ import { ChartService } from './services';
     declarations: [
         BoxPlotViewComponent,
         PBoxPlotViewComponent,
+        SBoxPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,
         ForceChartViewComponent,
@@ -28,6 +30,7 @@ import { ChartService } from './services';
     exports: [
         BoxPlotViewComponent,
         PBoxPlotViewComponent,
+        SBoxPlotViewComponent,
         SelectMenuViewComponent,
         RowChartViewComponent,
         ForceChartViewComponent,
