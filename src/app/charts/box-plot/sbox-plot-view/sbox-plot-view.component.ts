@@ -5,7 +5,8 @@ import {
     ViewChild,
     ElementRef,
     Input,
-    OnDestroy
+    OnDestroy,
+    AfterViewInit
 } from '@angular/core';
 
 import { PlatformLocation } from '@angular/common';
@@ -24,11 +25,11 @@ import * as dc from 'dc';
 
 @Component({
     selector: 'sbox-plot',
-    templateUrl: './simple-box-plot-view.component.html',
-    styleUrls: [ './simple-box-plot-view.component.scss' ],
+    templateUrl: './sbox-plot-view.component.html',
+    styleUrls: [ './sbox-plot-view.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class SBoxPlotViewComponent implements OnInit, OnDestroy {
+export class SBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('chart', {static: false}) boxPlot: ElementRef;
     @ViewChild('bpcol', {static: false}) bpCol: ElementRef;
     @Input() paddingLR: number = 15;
@@ -45,7 +46,6 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
     @Input() boxRadius: number = 9;
     @Input() metabolomics: Metabolomics;
 
-    display: boolean = false;
     counter: number = 0;
     routerSubscription: Subscription;
 
@@ -69,12 +69,9 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
         this.location.onPopState(() => {
             this.removeSelf();
         });
-
-        this.initChart();
     }
 
     removeSelf() {
-        this.display = false;
         this.removeChart();
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
@@ -88,6 +85,10 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
             this.chart = null;
             this.geneService.setPreviousGene(this.geneService.getCurrentGene());
         }
+    }
+
+    ngAfterViewInit() {
+        this.initChart();
     }
 
     ngOnDestroy() {
@@ -108,7 +109,7 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
         this.getChartPromise().then((chart: any) => {
             this.chart = chart;
 
-            chart.yAxis().tickFormat(d3.format('.1e'));
+            // chart.yAxis().tickFormat(d3.format('.1e'));
 
             // Remove filtering for this chart
             chart.filter = function() {
@@ -132,7 +133,7 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
 
             const chartInst = dc.boxPlot(this.boxPlot.nativeElement)
                 .dimension(this.dim)
-                .yAxisLabel(self.metabolomics['metabolite.full.name'] + ' levels', 20)
+                .yAxisLabel(self.metabolomics.metabolite_full_name + ' LEVELS', 20)
                 .group(this.group)
                 .renderTitle(true)
                 ['showOutliers'](false)
@@ -156,9 +157,9 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy {
 
     updateChartGroup(metabolomics: Metabolomics) {
         const valuesArray: any[] = [];
-        metabolomics['transposed.boxplot.stats'].forEach((bps, index) => {
+        metabolomics.transposed_boxplot_stats.forEach((bps, index) => {
             valuesArray.push({
-                key: metabolomics['boxplot.boxplot.group.names'][index],
+                key: metabolomics.boxplot_group_names[index],
                 value: bps
             });
         });

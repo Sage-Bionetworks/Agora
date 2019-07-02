@@ -204,24 +204,24 @@ export const mockModels: string [] = [
 ];
 
 export const mockMetabolomics: Metabolomics = {
-    'associated.gene.name': 'VGF',
-    'ensembl.gene.id': 'ENSG00000128564',
-    'metabolite.id': 'PC.ae.C36.4',
-    'metabolite.full.name': 'PC ae C36:4',
-    'association.p': 4.6840012252077e-05,
-    'gene.wide.p.threshold.1KGP': 7.27802037845706e-05,
-    'n.per.group': [
+    associated_gene_name: 'VGF',
+    ensembl_gene_id: 'ENSG00000128564',
+    metabolite_id: 'PC.ae.C36.4',
+    metabolite_full_name: 'PC ae C36:4',
+    association_p: 4.6840012252077e-05,
+    gene_wide_p_threshold_1KGP: 7.27802037845706e-05,
+    n_per_group: [
         362,
         302
     ],
-    'boxplot.group.names': [
+    boxplot_group_names: [
         'CN',
         'AD'
     ],
-    'AD.diagnosis.p.value': [
+    AD_diagnosis_p_value: [
         0.14581678853452
     ],
-    'transposed.boxplot.stats': [
+    transposed_boxplot_stats: [
         [
             -2.80747928431701,
             -0.666279090282903,

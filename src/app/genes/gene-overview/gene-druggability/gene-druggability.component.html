@@ -19,12 +19,12 @@
                     <div class="col-md-3 col-sm-8 col-8 header-title">
                         Small Molecule Modality
                     </div>
-                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                    <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].sm_druggability_bucket, 'sm')" [style.color]="getBucketTextColor(geneInfo.druggability[0].sm_druggability_bucket, 'sm')">
                             <div>{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-sm-12 col-12 header-description">
+                    <div class="col-md-6 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].classification}}
                     </div>
                 </div>
@@ -78,12 +78,12 @@
                     <div class="col-md-3 col-sm-8 col-8 header-title">
                         Antibody Modality
                     </div>
-                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                    <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].abability_bucket, 'ab')" [style.color]="getBucketTextColor(geneInfo.druggability[0].abability_bucket, 'ab')">
                             <div>{{geneInfo.druggability[0].abability_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-sm-12 col-12 header-description">
+                    <div class="col-md-6 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].abability_bucket_definition}}
                     </div>
                 </div>
@@ -134,12 +134,12 @@
                     <div class="col-md-3 col-sm-8 col-8 header-title">
                         Safety
                     </div>
-                    <div class="col-md-2 col-sm-4 col-4 text-center header-score">
+                    <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div class="icon" [style.background-color]="getBucketStyle(geneInfo.druggability[0].safety_bucket, 'sf')" [style.color]="getBucketTextColor(geneInfo.druggability[0].safety_bucket, 'sf')">
                             <div>{{geneInfo.druggability[0].safety_bucket}}</div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-sm-12 col-12 header-description">
+                    <div class="col-md-6 col-sm-12 col-12 header-description">
                         {{geneInfo.druggability[0].safety_bucket_definition}}
                     </div>
                 </div>
@@ -184,3 +184,33 @@
         </div>
     </p-accordionTab>
 </p-accordion>
+
+<div *ngIf="geneInfo" class="section-thin" tabindex="0">
+    <h2>
+        Additional Resources
+    </h2>
+    <div class="row tab-row">
+        <div class="col-md-3 col-sm-8 col-8 header-title">
+            Open Targets
+        </div>
+        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+            <a class="link no-bold" href="'https://www.targetvalidation.org/evidence/' + gene.ensembl_gene_id + '/EFO_0000249'" target="_blank">Visit Open Targets</a>
+        </div>
+        <div class="col-md-6 col-sm-12 col-12 header-description">
+            View this Gene on Open Targets, a resource that provides evidence on the validity of therapeutic
+            targets based on genome-scale experiments and analysis.
+        </div>
+    </div>
+    <div class="row tab-row last-row">
+        <div class="col-md-3 col-sm-8 col-8 header-title">
+            Pharos
+        </div>
+        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+            <a class="link no-bold" href="'https://pharos.nih.gov/idg/targets/' + gene.hgnc_symbol" target="_blank">Visit Pharos</a>
+        </div>
+        <div class="col-md-6 col-sm-12 col-12 header-description">
+            View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the
+            Illuminating the Druggable Genome program.
+        </div>
+    </div>
+</div>

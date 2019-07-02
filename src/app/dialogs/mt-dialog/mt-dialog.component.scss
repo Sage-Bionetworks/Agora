@@ -1,0 +1,63 @@
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.mt-dialog {
+    .ui-dialog {
+        max-height: 90% !important;
+    }
+
+    .ui-dialog-content {
+        padding-top: 0% !important;
+        padding-bottom: 60px !important;
+        padding-left: 6% !important;
+        padding-right: 6% !important;
+    }
+
+    .first-bp-dia-row {
+        padding-bottom: 25px !important;
+    }
+
+    .content-vspacing {
+        padding-bottom: 215px;
+    }
+
+    .ui-dialog-titlebar-icon {
+        cursor: pointer;
+
+        :hover {
+            border-color: color(li, border-color-default);
+            background-color: $tertiary-background;
+            color: color(text, primary);
+        }
+    }
+
+    .container-col {
+        padding-left: 20%;
+        padding-right: 18%;
+    }
+
+    .auto-col {
+        margin: auto;
+    }
+
+    .first-content-row {
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
+
+    .last-content-row {
+        padding-top: 25px;
+    }
+
+    .no-bold {
+        font-weight: normal;
+    }
+
+    .colored-row {
+        background: rgba(245, 245, 245, 0.5);
+    }
+
+    .link {
+        display: contents;
+    }
+}

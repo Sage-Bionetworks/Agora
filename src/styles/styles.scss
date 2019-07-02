@@ -268,9 +268,9 @@ p-dialog {
     top: 0px;
 }
 
-::selection {
-    color: $background !important;
-}
+//::selection {
+//    color: $background !important;
+//}
 
 .pointer {
     cursor: pointer;
@@ -1740,7 +1740,7 @@ g.textGroup text {
     .y-axis-label {
         @include lato-font('bold');
 
-        line-height: normal;
+        line-height: 19px;
         font-size: $font-size-regular;
         text-align: center;
         color: $chart-grey;

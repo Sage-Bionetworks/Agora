@@ -268,7 +268,7 @@ export class ApiService {
             'id', id
         );
 
-        return this.http.get('/api/metabolomics/', { headers, params });
+        return this.http.get('/api/metabolomics', { headers, params });
     }
 
     refreshChart(filter: any, id: string, type: string = 'RNA'): Observable<any> {

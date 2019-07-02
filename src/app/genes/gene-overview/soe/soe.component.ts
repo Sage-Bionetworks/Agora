@@ -81,9 +81,10 @@ export class SOEComponent implements OnInit {
             },
             {
                 property: 'Cell Type Specificity',
-                state: false,
-                hasLink: false,
-                extraText: 'Coming Soon'
+                state: true,
+                hasLink: true,
+                extraText: 'Visit Brain RNAseq',
+                command: (event) => this.viewBrainRNAseq()
             },
             {
                 property: 'Association with Hallmarks of AD',
@@ -150,5 +151,9 @@ export class SOEComponent implements OnInit {
         window.open('https://www.targetvalidation.org/evidence/' +
             this.gene.ensembl_gene_id + '/EFO_0000249', '_blank'
         );
+    }
+
+    viewBrainRNAseq() {
+        window.open('http://www.brainrnaseq.org/', '_blank');
     }
 }

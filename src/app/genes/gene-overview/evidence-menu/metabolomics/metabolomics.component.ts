@@ -51,4 +51,8 @@ export class MetabolomicsComponent implements OnInit {
             this.dataLoaded = true;
         });
     }
+
+    getSignificantText(pval: number): string {
+        return (pval <= 0.05) ? ' is ' : ' is not ';
+    }
 }

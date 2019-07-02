@@ -1,1 +1,1 @@
-export * from './simple-box-plot-view.component';
+export * from './sbox-plot-view.component';

@@ -1,16 +1,16 @@
 import { Document } from 'mongoose';
 
 export interface Metabolomics {
-    'associated.gene.name': string;
-    'ensembl.gene.id': string;
-    'metabolite.id': string;
-    'metabolite.full.name': string;
-    'association.p': number;
-    'gene.wide.p.threshold.1KGP': number;
-    'n.per.group': number[];
-    'boxplot.group.names': string[];
-    'AD.diagnosis.p.value': number[];
-    'transposed.boxplot.stats': number[][];
+    associated_gene_name: string;
+    ensembl_gene_id: string;
+    metabolite_id: string;
+    metabolite_full_name: string;
+    association_p: number;
+    gene_wide_p_threshold_1KGP: number;
+    n_per_group: number[];
+    boxplot_group_names: string[];
+    AD_diagnosis_p_value: number[];
+    transposed_boxplot_stats: number[][];
 }
 
 export type MetabolomicsDocument = Metabolomics & Document;

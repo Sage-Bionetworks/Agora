@@ -48,7 +48,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     firstRender: boolean = true;
     max: number = -Infinity;
     oldMax: number = -Infinity;
-    display: boolean = false;
     counter: number = 0;
     routerSubscription: Subscription;
     chartSubscription: Subscription;
@@ -96,7 +95,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     removeSelf() {
-        this.display = false;
         this.removeChart();
         if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
@@ -120,7 +118,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.display = true;
         // Registers this chart
         this.chartService.addChartName(this.label, 'Proteomics');
     }
@@ -188,7 +185,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     }
                 }
-                console.log(self.chartService.filteredData['bpGroup']);
                 return self.chartService.filteredData['bpGroup'].values;
             },
             order() {
@@ -352,13 +348,13 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const significanceTexts: string[] = [];
         currentProteomics.forEach((p: Proteomics) => {
             logVals.push(p.log2_fc);
-            significanceTexts.push((p.pval <= 0.05) ?
+            significanceTexts.push((p.cor_pval <= 0.05) ?
             ' ' : 'not ');
             phrases.push(p.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
                 p.tissue +
                 ' with a log fold change value of ' + p.log2_fc + ' and an adjusted p-value of ' +
-                p.pval + '.');
+                p.cor_pval + '.');
         });
 
         chart.selectAll('g.box').each(function(el, i) {

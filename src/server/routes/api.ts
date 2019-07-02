@@ -1031,7 +1031,7 @@ connection.once('open', () => {
         }
     });
 
-    router.get('/metabolomics/:id', async (req, res, next) => {
+    router.get('/metabolomics', async (req, res, next) => {
         // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
         if (env === 'development') {
             console.log('Get a gene metabolomics with an id');
@@ -1045,8 +1045,8 @@ connection.once('open', () => {
             }
             res.json({ item: null });
         } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl.gene.id' :
-                'associated.gene.name';
+            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' :
+                'associated_gene_name';
             const queryObj = { [fieldName]: req.query.id };
 
             // Find all the Genes with the current id

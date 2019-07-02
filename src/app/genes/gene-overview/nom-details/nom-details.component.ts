@@ -86,4 +86,8 @@ export class NominationDetailsComponent implements OnInit {
     toTitleCase(index: number, field: string): string {
         return this.titleCase.transform(this.ntInfoArray[index][field]);
     }
+
+    getFullDisplayName(program: string, teamFullName: string): string {
+        return (program) ? program + ': ' + teamFullName : teamFullName;
+    }
 }

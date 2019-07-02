@@ -3,43 +3,43 @@ import { MetabolomicsDocument } from '../models';
 
 export let MetabolomicsSchema: Schema = new Schema (
     {
-        'associated.gene.name': {
+        associated_gene_name: {
             required: true,
             type: String
         },
-        'ensembl.gene.id': {
+        ensembl_gene_id: {
             required: true,
             type: String
         },
-        'metabolite.id': {
+        metabolite_id: {
             required: true,
             type: String
         },
-        'metabolite.full.name': {
+        metabolite_full_name: {
             required: true,
             type: String
         },
-        'association.p': {
+        association_p: {
             required: true,
             type: Number
         },
-        'gene.wide.p.threshold.1KGP': {
+        gene_wide_p_threshold_1KGP: {
             required: true,
             type: Number
         },
-        'n.per.group': {
+        n_per_group: {
             required: false,
             type: [Number]
         },
-        'boxplot.group.names': {
+        boxplot_group_names: {
             required: false,
             type: [String]
         },
-        'AD.diagnosis.p.value': {
+        AD_diagnosis_p_value: {
             required: false,
             type: [Number]
         },
-        'transposed.boxplot.stats': {
+        transposed_boxplot_stats: {
             required: false,
             type: [[Number]]
         }
@@ -51,8 +51,8 @@ export let MetabolomicsSchema: Schema = new Schema (
 MetabolomicsSchema.set('autoIndex', false);
 MetabolomicsSchema.index(
     {
-        'metabolite.id': 'text',
-        'ensembl.gene.id': 'text'
+        metabolite_id: 'text',
+        ensembl_gene_id: 'text'
     }
 );
 
