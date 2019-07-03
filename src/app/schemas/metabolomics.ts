@@ -23,7 +23,7 @@ export let MetabolomicsSchema: Schema = new Schema (
             required: true,
             type: Number
         },
-        gene_wide_p_threshold_1KGP: {
+        gene_wide_p_threshold_1kgp: {
             required: true,
             type: Number
         },
@@ -35,7 +35,7 @@ export let MetabolomicsSchema: Schema = new Schema (
             required: false,
             type: [String]
         },
-        AD_diagnosis_p_value: {
+        ad_diagnosis_p_value: {
             required: false,
             type: [Number]
         },
@@ -52,7 +52,8 @@ MetabolomicsSchema.set('autoIndex', false);
 MetabolomicsSchema.index(
     {
         metabolite_id: 'text',
-        ensembl_gene_id: 'text'
+        ensembl_gene_id: 'text',
+        associated_gene_name: 'text'
     }
 );
 

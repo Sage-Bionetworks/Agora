@@ -23,7 +23,7 @@
         <div class="col-md-12 col-sm-12 col-12 col-fixer">
             <p *ngIf="dataLoaded" class="black-paragraph de-paragraph">
                 Genetic mapping revealed that the top metabolite associated with {{gene.hgnc_symbol}} is
-                {{metabolomics.metabolite_full_name}}, with a p-value of {{metabolomics.association_p}}.
+                {{metabolomics.metabolite_full_name}}, with a p-value of {{metabolomics.gene_wide_p_threshold_1kgp}}.
             </p>
         </div>
     </div>
@@ -38,7 +38,7 @@
         <div class="col-md-12 col-sm-12 col-12 col-fixer">
             <p *ngIf="dataLoaded" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
-                individuals (CN). This comparison {{getSignificantText(metabolomics.AD_diagnosis_p_value)}}
+                individuals (CN). This comparison {{getSignificantText(metabolomics.ad_diagnosis_p_value)}}
                 signficantly different with a p-value of {{metabolomics.ad_diagnosis_p_value}}.
             </p>
         </div>
