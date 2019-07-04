@@ -215,26 +215,26 @@ describe('Component: GeneDruggability', () => {
     });
 
     it('should get the correct bucket style', () => {
-        const gbsSpy = spyOn(component, 'getBucketStyle').and.callThrough();
+        const gbsSpy = spyOn(component, 'getBucketBGColor').and.callThrough();
         const i = d3.interpolateRgb('#20A386', '#440D54');
 
         let title: string = '';
-        title = component.getBucketStyle(1, 'sm');
+        title = component.getBucketBGColor(1, 'sm');
         expect(title).toEqual(d3.hcl(i(1 / 12)).hex());
 
-        title = component.getBucketStyle(2, 'ab');
+        title = component.getBucketBGColor(2, 'ab');
         expect(title).toEqual(d3.hcl(i(2 / 6)).hex());
 
-        title = component.getBucketStyle(3, 'sf');
+        title = component.getBucketBGColor(3, 'sf');
         expect(title).toEqual(d3.hcl(i(3 / 5)).hex());
 
-        title = component.getBucketStyle(13, 'sm');
+        title = component.getBucketBGColor(13, 'sm');
         expect(title).toEqual('#C3C7D1');
 
-        title = component.getBucketStyle(14, 'sm');
+        title = component.getBucketBGColor(14, 'sm');
         expect(title).toEqual('#AFDDDF');
 
-        title = component.getBucketStyle(-1, 'sm');
+        title = component.getBucketBGColor(-1, 'sm');
         expect(title).toEqual('#FFFFFF');
 
         expect(gbsSpy).toHaveBeenCalled();

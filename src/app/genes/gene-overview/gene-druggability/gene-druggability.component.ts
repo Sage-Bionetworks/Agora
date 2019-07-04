@@ -236,10 +236,10 @@ export class GeneDruggabilityComponent implements OnInit {
     }
 
     getIconStyle(bucket: number, section: string): string {
-        return '16px solid ' + this.getBucketStyle(bucket, section);
+        return '16px solid ' + this.getBucketBGColor(bucket, section);
     }
 
-    getBucketStyle(bucket: number, section: string): string {
+    getBucketBGColor(bucket: number, section: string): string {
         const i = d3.interpolateRgb('#20A386', '#440D54');
         let range: number;
 
@@ -260,6 +260,21 @@ export class GeneDruggabilityComponent implements OnInit {
         }
 
         return '#FFFFFF';
+    }
+
+    getBucketIconStyle(isSelection: boolean): object {
+        const widthString = (isSelection) ? '62px' : '36px';
+        const marginStringString = (isSelection) ? '9.5px' : '22.5px';
+        const iconClass: object = {
+            'display': 'inline-block',
+            'border-radius': '50%',
+            'width': widthString,
+            'margin-left': marginStringString,
+            'margin-right': marginStringString,
+            'cursor': 'pointer'
+        };
+
+        return iconClass;
     }
 
     getClassText(bucket: number): any {
@@ -287,6 +302,10 @@ export class GeneDruggabilityComponent implements OnInit {
             default:
                 return 'Class A';
         }
+    }
+
+    getClassTextMargin(isSelection: boolean): string {
+        return (isSelection) ? '6px' : '12px';
     }
 
     setCurrentBucket(bucket: number, section: string) {

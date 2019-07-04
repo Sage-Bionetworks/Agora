@@ -52,6 +52,10 @@
         box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 
+    .inner-row-header {
+        height: 46px;
+    }
+
     span {
         vertical-align: middle;
         margin-top: auto;
@@ -59,12 +63,30 @@
     }
 
     .content-row {
-        min-height: 392px;
         padding-top: 30px;
         padding-bottom: 30px;
 
         .inner-row {
-            height: 100%;
+            .header-title {
+                line-height: $font-size-x-regular-odd;
+                font-size: $font-size-regular;
+                text-align: center;
+                margin-bottom: 15px;
+                margin-top: 12px;
+            }
+        }
+
+        .bucket-inner-row {
+            padding-bottom: 30px;
+        }
+
+        .content-header-description {
+            @include lato-font('normal', italic);
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: $font-size-x-small;
+            font-size: $font-size-small;
+            height: 46px;
         }
 
         .content-title {
@@ -85,6 +107,12 @@
         }
     }
 
+    .header-title {
+        @include lato-font('bold');
+        line-height: $font-size-xxxx-regular;
+        font-size: $font-size-xx-regular;
+    }
+
     .container {
         display: inline-block;
         color: color(text, secondary);
@@ -92,12 +120,6 @@
         width: 100%;
         max-width: 100%;
         padding-left: 0px;
-
-        .header-title {
-            @include lato-font('bold');
-            line-height: $font-size-xxxx-regular;
-            font-size: $font-size-xx-regular;
-        }
 
         .header-title, .header-score, .header-description {
             @include respond-to('ex-small') {
@@ -141,28 +163,18 @@
         }
     }
 
-    .icon {
-        display: inline-block;
-        border-radius: 100%;
-        border-radius: 50%;
-        width: 36px !important;
-        margin-left: 22.5px;
-        margin-right: 22.5px;
-        cursor: pointer;
-    }
-
     .icon-wrapper {
         width: 81px !important;
-        display: inline-block;
+        display: inline-table;
     }
 
-    .icon div {
+    .icon-description {
         @include lato-font('normal');
         position: relative;
         height: 0;
         padding: 50% 0;
         top: -12px;
-        left: -1px;
+        left: -0.5px;
         font-size: $font-size-xxx-regular;
         line-height: $font-size-xl-regular;
         text-align: center;
@@ -266,7 +278,6 @@
 
         .ui-accordion-content {
             padding: 0px;
-            min-height: 392px;
         }
 
         @include respond-to('ex-small') {

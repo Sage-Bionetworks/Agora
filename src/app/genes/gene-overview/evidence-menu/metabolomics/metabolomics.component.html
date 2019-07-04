@@ -1,4 +1,4 @@
-<div class="section-thin overview-header nom-details-pt" tabindex="0">
+<div class="section-thin overview-header nom-details-pt no-padding-bottom" tabindex="0">
     <div class="row no-gutters">
         <h2 class="full-width no-margin-bottom">Metabolomics</h2>
         <h2 class="vmi-wrapper full-width no-margin-top">
@@ -8,38 +8,54 @@
         </h2>
     </div>
     <div class="row no-gutters header-row">
-        The results shown on this page are derived from an analysis of metabolite levels from AD cases and controls.
-        The samples were obtained from approximately 1400 individuals from the ADNI study. Metabolites are associated
-        with genes using genetic mapping and the metabolite with the highest genetic association is shown for each gene.
+        <p class="black-paragraph de-paragraph">
+            The results shown on this page are derived from an analysis of metabolite levels from AD cases and controls.
+            The samples were obtained from approximately 1400 individuals from the ADNI study. Metabolites are associated
+            with genes using genetic mapping and the metabolite with the highest genetic association is shown for each gene.
+        </p>
     </div>
+    <h1 class="inner-section-divider"></h1>
 </div>
-<h1 class="inner-section-divider"></h1>
-<div *ngIf="!isEmptyGene" class="section-thin rna-seq-bplot no-vertical-padding">
-    <h3>
+<div class="section-thin rna-seq-bplot no-vertical-padding">
+    <h3 *ngIf="!isEmptyGene" >
         Mapping of Metabolites to {{gene.hgnc_symbol}}
         <span class="icon-spacing"></span>
     </h3>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-12 col-fixer">
-            <p *ngIf="dataLoaded" class="black-paragraph de-paragraph">
-                Genetic mapping revealed that the top metabolite associated with {{gene.hgnc_symbol}} is
-                {{metabolomics.metabolite_full_name}}, with a p-value of {{metabolomics.gene_wide_p_threshold_1kgp}}.
-            </p>
-        </div>
-    </div>
-</div>
-<h1 class="inner-section-divider"></h1>
-<div *ngIf="!isEmptyGene" class="section-thin rna-seq-bplot no-vertical-padding">
-    <h3 *ngIf="dataLoaded">
-        Levels of {{metabolomics.metabolite_full_name}} by Disease Status
+    <h3 *ngIf="isEmptyGene" >
+        Mapping of Metabolites to Gene
         <span class="icon-spacing"></span>
     </h3>
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-12 col-fixer">
-            <p *ngIf="dataLoaded" class="black-paragraph de-paragraph">
+        <div *ngIf="dataLoaded" class="col-md-12 col-sm-12 col-12 col-fixer">
+            <p *ngIf="!isEmptyGene" class="black-paragraph de-paragraph">
+                Genetic mapping revealed that the top metabolite associated with {{gene.hgnc_symbol}} is
+                {{metabolomics.metabolite_full_name}}, with a p-value of {{metabolomics.gene_wide_p_threshold_1kgp}}.
+            </p>
+            <p *ngIf="isEmptyGene" class="black-paragraph de-paragraph italic-paragraph empty-gene-paragraph">
+                No expression data is currently available.
+            </p>
+        </div>
+    </div>
+    <h1 class="inner-section-divider"></h1>
+</div>
+<div class="section-thin rna-seq-bplot no-vertical-padding">
+    <h3 *ngIf="dataLoaded && !isEmptyGene">
+        Levels of {{metabolomics.metabolite_full_name}} by Disease Status
+        <span class="icon-spacing"></span>
+    </h3>
+    <h3 *ngIf="dataLoaded && isEmptyGene">
+        Levels of Metabolite by Disease Status
+        <span class="icon-spacing"></span>
+    </h3>
+    <div class="row">
+        <div *ngIf="dataLoaded" class="col-md-12 col-sm-12 col-12 col-fixer">
+            <p *ngIf="!isEmptyGene" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
                 individuals (CN). This comparison {{getSignificantText(metabolomics.ad_diagnosis_p_value)}}
                 signficantly different with a p-value of {{metabolomics.ad_diagnosis_p_value}}.
+            </p>
+            <p *ngIf="isEmptyGene" class="black-paragraph de-paragraph">
+                This plot shows differences in metabolite levels in AD cases and controls.
             </p>
         </div>
     </div>
@@ -47,7 +63,7 @@
         <sbox-plot *ngIf="dataLoaded && !isEmptyGene" [label]="'sbox-plot'" [metabolomics]="metabolomics"></sbox-plot>
         <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
     </div>
-    <div class="row">
+    <div class="row last-row">
         <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
             <h2 class="placeholder-text">No expression data is currently available.</h2>
         </div>

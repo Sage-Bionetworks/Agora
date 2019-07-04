@@ -883,7 +883,7 @@ p-dialog {
 }
 
 .black-paragraph {
-    color: #24334F;
+    color: color(text, secondary);
 }
 
 .italic-paragraph {
@@ -891,7 +891,7 @@ p-dialog {
 
     line-height: normal;
     font-size: 18px;
-    color: #8D919E;
+    color: color(italic-text, base);
 }
 
 .no-gutters {
