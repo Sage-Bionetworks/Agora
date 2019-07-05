@@ -69,7 +69,8 @@ export class GeneNetworkComponent implements OnInit {
             // the charts
             this.routerSubscription = this.router.events.subscribe((event) => {
                 if (event instanceof NavigationStart) {
-                    if (!event.url.includes('gene-similar')) {
+                    if (!event.url.includes('gene-similar') &&
+                        !event.url.includes('gene-overview:rna')) {
                         this.removeForceServiceData();
                     }
 
@@ -77,7 +78,8 @@ export class GeneNetworkComponent implements OnInit {
                 }
             });
             this.location.onPopState(() => {
-                if (this.previousUrl && !this.previousUrl.includes('gene-similar')) {
+                if (this.previousUrl && !this.previousUrl.includes('gene-similar') &&
+                    !this.previousUrl.includes('gene-overview:rna')) {
                     this.removeForceServiceData();
                 }
             });

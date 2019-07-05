@@ -240,7 +240,7 @@
             Open Targets
         </div>
         <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="'https://www.targetvalidation.org/evidence/' + gene.ensembl_gene_id + '/EFO_0000249'" target="_blank">Visit Open Targets</a>
+            <a class="link no-bold" href="https://www.targetvalidation.org/evidence/{{gene.ensembl_gene_id}}/EFO_0000249" target="_blank">Visit Open Targets</a>
         </div>
         <div class="col-md-6 col-sm-12 col-12 header-description">
             View this Gene on Open Targets, a resource that provides evidence on the validity of therapeutic
@@ -252,7 +252,7 @@
             Pharos
         </div>
         <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="'https://pharos.nih.gov/idg/targets/' + gene.hgnc_symbol" target="_blank">Visit Pharos</a>
+            <a class="link no-bold" href="https://pharos.nih.gov/idg/targets/{{gene.hgnc_symbol}}" target="_blank">Visit Pharos</a>
         </div>
         <div class="col-md-6 col-sm-12 col-12 header-description">
             View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the
