@@ -116,9 +116,9 @@ connection.once('open', () => {
 
         await allGenes.forEach((g) => {
             // Separate the columns we need
-            g.logfc = getSignificantValue(+g.logfc, true);
-            g.fc = getSignificantValue(+g.fc, true);
-            g.adj_p_val = getSignificantValue(+g.adj_p_val, true);
+            g.logfc = getSignificantFigures(+g.logfc);
+            g.fc = getSignificantFigures(+g.fc);
+            g.adj_p_val = getSignificantFigures(+g.adj_p_val);
             g.hgnc_symbol = g.hgnc_symbol;
             g.model = g.model;
             g.study = g.study;
@@ -1074,12 +1074,9 @@ connection.once('open', () => {
         }
     });
 
-    function getSignificantDigits(compare?: boolean): string {
-        return ((compare) ? compSignificantDigits : significantDigits) || '1.2-2';
-    }
-
-    function getSignificantValue(value: number, compare?: boolean): number {
-        return +decimalPipe.transform(value, getSignificantDigits(compare));
+    function getSignificantFigures(n: number, sig: number = 2) {
+        const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+        return Math.round(n * mult) / mult;
     }
 
     function addChartInfo(label: string, chartObj: any, type: string = 'RNA') {

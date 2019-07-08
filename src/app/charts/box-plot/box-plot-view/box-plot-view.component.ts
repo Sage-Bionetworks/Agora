@@ -349,7 +349,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const phrases: string[] = [];
         const significanceTexts: string[] = [];
         currentGenes.forEach((g) => {
-            logVals.push(this.dataService.getSignificantValue(g.logfc));
+            logVals.push(this.dataService.getSignificantFigures(g.logfc));
             significanceTexts.push((g.adj_p_val <= 0.05) ?
             ' ' : 'not ');
             phrases.push(g.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +

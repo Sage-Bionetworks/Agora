@@ -196,10 +196,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 .gap(4)
                 .title(function(d) {
                     return 'Log Fold Change: ' +
-                        self.dataService.getSignificantValue(+d.value.logfc);
+                        self.dataService.getSignificantFigures(+d.value.logfc);
                 })
                 .valueAccessor((d) => {
-                    return self.dataService.getSignificantValue(+d.value.logfc);
+                    return self.dataService.getSignificantFigures(+d.value.logfc);
                 })
                 .keyAccessor((d) => {
                     return d.key[0];
@@ -583,7 +583,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     // Compares the current value from a group to the gene expected value
     compareAttributeValue(cValue: number, gValue: number): boolean {
-        return this.dataService.getSignificantValue(cValue, true) === gValue;
+        return this.dataService.getSignificantFigures(cValue) === gValue;
     }
 
     // Changes the chart row rects into squares of the square size

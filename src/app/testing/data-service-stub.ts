@@ -62,7 +62,7 @@ export class DataServiceStub {
         return [mockGene1, mockGene2];
     }
 
-    getSignificantValue(value: number, compare?: boolean): number {
+    getSignificantFigures(n: number, sig: number = 2) {
         return 0.011;
     }
 }

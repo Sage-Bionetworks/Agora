@@ -3,9 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo, Metabolomics } from '../../../../models';
 
-import { GeneService, ApiService } from '../../../../core/services';
-
-import * as d3 from 'd3';
+import { GeneService, ApiService, DataService } from '../../../../core/services';
 
 @Component({
     selector: 'metabolomics',
@@ -25,6 +23,7 @@ export class MetabolomicsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,
+        private dataService: DataService,
         private geneService: GeneService
     ) {}
 

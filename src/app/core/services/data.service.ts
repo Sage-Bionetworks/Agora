@@ -78,12 +78,9 @@ export class DataService {
         this.geneEntries = genes;
     }
 
-    getSignificantDigits(compare?: boolean): string {
-        return ((compare) ? this.compSignificantDigits : this.significantDigits) || '1.2-2';
-    }
-
-    getSignificantValue(value: number, compare?: boolean): number {
-        return +this.decimalPipe.transform(value, this.getSignificantDigits(compare));
+    getSignificantFigures(n: number, sig: number = 2) {
+        const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+        return Math.round(n * mult) / mult;
     }
 
     setSignificantDigits(sd: string) {

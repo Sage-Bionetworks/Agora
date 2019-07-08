@@ -9,6 +9,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import {
     GeneServiceStub,
+    DataServiceStub,
     ChartServiceStub,
     ApiServiceStub,
     ActivatedRouteStub,
@@ -19,7 +20,7 @@ import {
 import { MetabolomicsComponent } from './metabolomics.component';
 import { MoreInfoComponent } from '../../../../dialogs/more-info';
 
-import { ApiService, GeneService } from '../../../../core/services';
+import { ApiService, GeneService, DataService } from '../../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -27,6 +28,7 @@ describe('Component: Metabolomics', () => {
     let component: MetabolomicsComponent;
     let fixture: ComponentFixture<MetabolomicsComponent>;
     let apiService: ApiServiceStub;
+    let dataService: DataServiceStub;
     let activatedRoute: any;
 
     beforeEach(async(() => {
@@ -40,6 +42,7 @@ describe('Component: Metabolomics', () => {
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: ApiService, useValue: new ApiServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() }
             ]
@@ -49,6 +52,7 @@ describe('Component: Metabolomics', () => {
         fixture = TestBed.createComponent(MetabolomicsComponent);
 
         apiService = fixture.debugElement.injector.get(ApiService);
+        dataService = fixture.debugElement.injector.get(DataService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 

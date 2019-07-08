@@ -29,7 +29,7 @@
         <div *ngIf="dataLoaded" class="col-md-12 col-sm-12 col-12 col-fixer">
             <p *ngIf="!isEmptyGene" class="black-paragraph de-paragraph">
                 Genetic mapping revealed that the top metabolite associated with {{gene.hgnc_symbol}} is
-                {{metabolomics.metabolite_full_name}}, with a p-value of {{metabolomics.gene_wide_p_threshold_1kgp}}.
+                {{metabolomics.metabolite_full_name}}, with a p-value of {{dataService.getSignificantFigures(metabolomics.gene_wide_p_threshold_1kgp, 2)}}.
             </p>
             <p *ngIf="isEmptyGene" class="black-paragraph de-paragraph italic-paragraph empty-gene-paragraph">
                 No expression data is currently available.
@@ -51,8 +51,8 @@
         <div *ngIf="dataLoaded" class="col-md-12 col-sm-12 col-12 col-fixer">
             <p *ngIf="!isEmptyGene" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
-                individuals (CN). This comparison {{getSignificantText(metabolomics.ad_diagnosis_p_value)}}
-                signficantly different with a p-value of {{metabolomics.ad_diagnosis_p_value}}.
+                individuals (CN). This comparison {{getSignificantText(metabolomics.ad_diagnosis_p_value[0])}}
+                signficantly different with a p-value of {{dataService.getSignificantFigures(metabolomics.ad_diagnosis_p_value[0], 2)}}.
             </p>
             <p *ngIf="isEmptyGene" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases and controls.
