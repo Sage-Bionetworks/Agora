@@ -163,9 +163,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const bpGroup = {
             all() {
                 const currentGenes: Proteomics[] = self.geneService.getGeneProteomics().slice();
-                // .filter((g) => {
-                    // return g.model === self.geneService.getCurrentModel();
-                // });
                 if (currentGenes.length !==
                     self.chartService.filteredData['bpGroup'].values.length &&
                     currentGenes.length <
