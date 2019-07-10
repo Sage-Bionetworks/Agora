@@ -185,6 +185,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     }
                 }
+
                 return self.chartService.filteredData['bpGroup'].values;
             },
             order() {

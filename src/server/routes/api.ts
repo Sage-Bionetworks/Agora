@@ -124,11 +124,11 @@ connection.once('open', () => {
             g.study = g.study;
             g.tissue = g.tissue;
 
-            if (allTissues.indexOf(g['tissue']) === -1) {
-                allTissues.push(g['tissue']);
+            if (allTissues.indexOf(g.tissue) === -1) {
+                allTissues.push(g.tissue);
             }
-            if (allModels.indexOf(g['model']) === -1) {
-                allModels.push(g['model']);
+            if (allModels.indexOf(g.model) === -1) {
+                allModels.push(g.model);
             }
 
             switch (g.model) {
@@ -383,18 +383,16 @@ connection.once('open', () => {
             groups.smGroup = await dimensions.smDim.group();
             groups.bpGroup = await dimensions.bpDim.group().reduce(
                 function(p, v) {
-                    // Retrieve the data value, if not Infinity or null add it.
-                    const dv = Math.log2(v.fc);
-                    if (dv !== Infinity && dv !== null) {
-                        p.push(dv);
+                    // Retrieve the data value, if not Infinity or null add it
+                    if (v.logfc !== Infinity && v.logfc !== null) {
+                        p.push(v.logfc);
                     }
                     return p;
                 },
                 function(p, v) {
-                    // Retrieve the data value, if not Infinity or null remove it.
-                    const dv = Math.log2(v.fc);
-                    if (dv !== Infinity && dv !== null) {
-                        p.splice(p.indexOf(dv), 1);
+                    // Retrieve the data value, if not Infinity or null remove it
+                    if (v.logfc !== Infinity && v.logfc !== null) {
+                        p.splice(p.indexOf(v.logfc), 1);
                     }
                     return p;
                 },
