@@ -171,14 +171,12 @@ export class GeneNetworkComponent implements OnInit {
         }
     }
 
-    filterNodes(lvl) {
+    filterNodes(lvl: number) {
         this.filterlvlN = lvl;
         this.geneInfo = this.geneService.getCurrentInfo();
         this.networkData = this.forceService.getGeneOriginalList();
-        this.selectedGeneData.nodes = this.networkData.nodes.slice(1);
-        this.selectedGeneData.links = this.networkData.links.slice().reverse();
-        this.selectedGeneData.origin = this.networkData.origin;
-        if (!lvl) {
+
+        if (lvl === undefined || lvl < 0) {
             this.filter = false;
         } else {
             this.forceService.filterLink(lvl).then((network) => {

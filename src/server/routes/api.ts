@@ -299,7 +299,7 @@ connection.once('open', () => {
 
                     if (Object.keys(groups).length > 0) {
                         const rPromise = new Promise((resolve, reject) => {
-                            Object.keys(dimensions).forEach(async (dimension) => {
+                            Object.keys(dimensions).forEach((dimension) => {
                                 const groupName = dimension.substring(0, 2) + 'Group';
                                 if (dimension !== 'bpDim') {
                                     results[groupName] = {
@@ -404,7 +404,7 @@ connection.once('open', () => {
 
             if (Object.keys(groups).length > 0) {
                 const rPromise = new Promise((resolve, reject) => {
-                    Object.keys(dimensions).forEach(async (dimension) => {
+                    Object.keys(dimensions).forEach((dimension) => {
                         const groupName = dimension.substring(0, 2) + 'Group';
                         if (dimension !== 'fpDim') {
                             results[groupName] = {
@@ -414,7 +414,7 @@ connection.once('open', () => {
                                     groups[groupName].top(1)[0].value
                             };
                         } else {
-                            const newGroup = await rmEmptyBinsFP(groups.fpGroup, (filter) ?
+                            const newGroup = rmEmptyBinsFP(groups.fpGroup, (filter) ?
                                 filter :
                                 'AD Diagnosis (males and females)', id);
                             results[groupName] = {
@@ -1270,7 +1270,7 @@ connection.once('open', () => {
         };
     };
 
-    const rmEmptyBinsFP = async (sourceGroup: any, filter: any, id: string) => {
+    const rmEmptyBinsFP = (sourceGroup: any, filter: any, id: string) => {
         return {
             all: () => {
                 return sourceGroup.all().filter(function(d) {

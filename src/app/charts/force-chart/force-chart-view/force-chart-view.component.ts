@@ -293,6 +293,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     }
 
     private updateChart() {
+        const self = this;
         if (!this.loaded) {
             return;
         }
@@ -314,18 +315,44 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
 
         // node elements
         this.nodeElements = this.nodeElements
-            .data(this.networkData.nodes, (d) =>  d.id);
+            .data(this.networkData.nodes, (d) => d.id);
         this.nodeElements.exit().remove();
         this.nodeElements = this.nodeElements.enter()
             .append('path')
-            .attr('d', this.hex)
-            .attr('r', 4)
+            .attr('class', (d) => {
+                return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                'hex' :
+                'node';
+            })
+            .attr('transform', 'translate(0, 0)')
+            .attr('d', (d: any) => {
+                return (self.networkData.origin.ensembl_gene_id !== d.ensembl_gene_id) ?
+                (d3.symbol()
+                    .size((dd) => {
+                        return (self.networkData.origin.ensembl_gene_id ===
+                            dd.ensembl_gene_id) ?
+                            300 :
+                            100;
+                    })
+                    .type((dd) => {
+                        return (self.networkData.origin.ensembl_gene_id ===
+                            dd.ensembl_gene_id) ?
+                            d3s.symbolHexagon :
+                            d3.symbolCircle;
+                    }))(this)
+                :
+                self.hex;
+            })
+            .attr('r', (d) => {
+                return (self.networkData.origin.ensembl_gene_id === d.ensembl_gene_id) ?
+                38 :
+                17;
+            })
             .attr('fill', this.getNodeColor)
-            .attr('class', 'hex')
             .on('click', (d: any, i, nodes) => {
                 if (this.pnode) {
                     d3.select(nodes[this.pnode.index])
-                        .attr('fill', this.getNodeColor(this.pnode.node,
+                        .attr('fill', self.getNodeColor(this.pnode.node,
                             this.pnode.index,
                             []));
                 }
@@ -334,8 +361,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                 this.buildPath(d);
             })
             .merge(this.nodeElements);
-
-        // this.nodeElements.call(this.dragDrop());
+        console.log(this.nodeElements);
 
         // text elements
         this.textElements = this.textElements
