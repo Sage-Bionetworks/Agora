@@ -9,6 +9,7 @@
     margin-left: 0px;
     margin-right: 0px;
     display: flex;
+    flex-wrap: wrap;
 
     @include respond-to('ex-small') {
         display: block;
@@ -27,12 +28,13 @@
 }
 
 .network-container {
-    background: $faded-grey-background;
     position: relative;
     height: 100%;
+    padding-bottom: 45px;
 
     .force-chart-container {
         height: 1173px;
+        background: $faded-grey-background;
 
         force-chart {
             width: 100%;
@@ -61,7 +63,7 @@
     color: $secondary-background;
 }
 
-.currentGene {
+.current-gene-col {
 
     .cg-row {
         margin: 0px;
@@ -98,7 +100,8 @@
         }
 
         padding-bottom: 15px;
-        border-bottom: 1px solid $secondary-grey-border-color;
+        padding-left: 40px;
+        padding-right: 40px;
 
         @include respond-to('ex-small') {
             padding-right: 3.5%;
@@ -106,7 +109,17 @@
         }
     }
 
+    .top-cg-col {
+        border-bottom: 1px solid $secondary-grey-border-color;
+    }
+
+    .bottom-cg-col {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
     padding: 0px;
+    padding-bottom: 45px;
 }
 
 .brainregions {
@@ -126,10 +139,7 @@
     margin-bottom: auto;
 
     .fa-angle-right:before {
-        -moz-transform: scale(1.6,1); /* Firefox */
-        -o-transform: scale(1.6,1); /* Opera */
-        -webkit-transform: scale(1.6,1); /* Safari And Chrome */
-        transform: scale(1.6,1); /* Standard Property */
+        transform: scale(1.6,1);
         color: $secondary-background;
     }
 }
@@ -213,12 +223,20 @@
 
 .network-legend {
     padding: 20px;
+    border-bottom: 4px solid #EDEDED;
+    background: $faded-grey-background;
 
     div {
         display: inline;
         padding-right: 15px;
         color: color(italic-text, base);
         font-size: $font-size-regular;
+    }
+
+    .legend-text {
+        padding-left: 5px;
+        padding-right: 25px;
+        color: color(text, secondary);
     }
 }
 
@@ -300,16 +318,20 @@
 .steps-segment:after {
     background-color: $contrast-color;
 }
+
 .steps-segment.is-active:after {
     background-color: color(box-shadow);
 }
+
 ul {
     list-style: none;
 }
+
 .filter {
     margin-top: 40px;
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 40px;
 
     .filter-title {
         @include lato-font('bold');

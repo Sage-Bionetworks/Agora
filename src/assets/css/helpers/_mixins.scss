@@ -5,27 +5,19 @@
 */
 @mixin center($axis: "both") {
     position: absolute;
+    // Autoprefixer adds prefixes to the transforms
     @if $axis == "y" {
         top: 50%;
-        -moz-transform: translateY(-50%); /* Firefox */
-        -o-transform: translateY(-50%); /* Opera */
-        -webkit-transform: translateY(-50%); /* Safari And Chrome */
-        transform: translateY(-50%); /* Standard Property */
+        transform: translateY(-50%);
     }
     @if $axis == "x" {
         left: 50%;
-        -moz-transform: translateY(-50%); /* Firefox */
-        -o-transform: translateY(-50%); /* Opera */
-        -webkit-transform: translateY(-50%); /* Safari And Chrome */
-        transform: translateY(-50%); /* Standard Property */
+        transform: translateY(-50%);
     }
     @if $axis == "both" {
         top: 50%;
         left: 50%;
-        -moz-transform: translateY(-50%, -50%); /* Firefox */
-        -o-transform: translateY(-50%, -50%); /* Opera */
-        -webkit-transform: translateY(-50%, -50%); /* Safari And Chrome */
-        transform: translateY(-50%, -50%); /* Standard Property */
+        transform: translateY(-50%, -50%);
     }
 }
 

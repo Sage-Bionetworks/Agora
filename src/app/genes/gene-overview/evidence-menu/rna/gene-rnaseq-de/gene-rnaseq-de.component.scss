@@ -43,9 +43,6 @@
         font-size: 18px;
         color: color(text, secondary);
         padding-left: 3%;
-
-        -webkit-appearance: none;
-        -moz-appearance: none;
         appearance: none;
     }
 
@@ -211,10 +208,7 @@
             left: 21.5%;
             top: 15%;
             margin: 0 auto;
-            -moz-transform: scale(1.2,1); /* Firefox */
-            -o-transform: scale(1.2,1); /* Opera */
-            -webkit-transform: scale(1.2,1); /* Safari And Chrome */
-            transform: scale(1.2,1); /* Standard Property */
+            transform: scale(1.2,1);
         }
 
         .ui-multiselect-trigger {
@@ -230,10 +224,7 @@
             }
 
             .pi-caret-down, .pi-caret-up, .fa-caret-down, .fa-caret-up {
-                -moz-transform: scale(2.4, 2.4); /* Firefox */
-                -o-transform: scale(2.4, 2.4); /* Opera */
-                -webkit-transform: scale(2.4, 2.4); /* Safari And Chrome */
-                transform: scale(2.4, 2.4); /* Standard Property */
+                transform: scale(2.4, 2.4);
             }
 
             .ui-clickable {

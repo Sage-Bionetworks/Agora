@@ -72,10 +72,7 @@
     outline: none;
 
     // Input placehold for search
-    :-moz-placeholder,
-    ::-moz-placeholder,
-    ::-ms-input-placeholder,
-    ::-webkit-input-placeholder {
+    ::placeholder {
         white-space:pre-line;
         position:relative;
         color: color(input-placeholder);
@@ -100,7 +97,6 @@
     z-index: 1;
 
     top: 95%;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     left: 0px;
     list-style: none;

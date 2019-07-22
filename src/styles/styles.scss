@@ -534,10 +534,7 @@ p-dialog {
             outline: none;
 
             // Input placehold for search
-            :-moz-placeholder,
-            ::-moz-placeholder,
-            ::-ms-input-placeholder,
-            ::-webkit-input-placeholder {
+            ::placeholder {
                 white-space:pre-line;
                 position:relative;
                 color: color(input-placeholder);
@@ -660,9 +657,7 @@ p-dialog {
                     font-size: $font-size-regular;
                     border: 0px;
 
-                    ::-moz-placeholder,
-                    ::-ms-input-placeholder,
-                    ::-webkit-input-placeholder {
+                    ::placeholder {
                         color: color(input-placeholder);
                     }
                 }
@@ -956,8 +951,6 @@ p-dialog {
 }
 
 .row-shadow {
-    -moz-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -1189,9 +1182,6 @@ p-dialog {
     position: absolute;
     top: 50%;
     left: 50%;
-    -moz-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     text-align: center;
     line-height: normal;

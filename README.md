@@ -134,24 +134,56 @@ In both cases the final URL will be the remote machine public ip.
 After you have installed all dependencies and got every requirement ready you can run the app. Open the project in an IDE or navigate to the root project folder and, in a terminal opened in that folder, you can run:
 
 ```bash
+npm run start:mongo:windows
+```
+
+This starts the MongoDB and open a connection using the port `27017`. The server relies on this connection to work so if you try to start the server without a valid
+MongoDB connection it won't work.
+
+Open a second terminal and run the following command:
+
+```bash
+npm run watch
+```
+
+This command is going to build the client-side and `watch` for changes. If you need more control over the process you can use a two-step process, first build the client:
+
+```bash
 npm run build:dev
 ```
 
-This builds the client-side of the application. If you need to watch for changes use `watch` instead of `build`. The client configuration can run webpack with the `--watch` flag, so any change made to the `src/` folder (except the `src/server` folder) will rebuild the application. At the moment, you need to reload the application manually after changing the files on the client-side. If you want to reload it automatically, use the `webpack-dev-server` by running the command `npm run server:dev` **only**, no need to run the next command.
+As the name suggests, this builds the client-side of the application with the development flag set to true. The main difference between this command and the previous one
+is that the first one just builds the application and outputs it to the `dist` folder (for the AoT build a different temporary folder is used before going to `dist`). The previous one runs Webpack with the `--watch` flag, so any change made to the `src/` folder (except the `src/server` folder) will trigger a rebuild of the application
+bundle.
 
-If you just built the application you are set for the next command. If you used the `watch` flag, leave that terminal open and open another one. In the second one you can issue our second command to get the server up and running.
+At the moment, you need to reload the application on the browser manually after changing the client-side files to see the changes being rendered. If you want to use the
+hot module replacement from Webpack to make the application reload and redraw on the browser automatically, you can use the `webpack-dev-server` by running the command `npm run server:dev` **only**, you don't need to start the server using the regular command described below. Be aware that using the `webpack-dev-server` requires you
+to manually configure and register all the endpoints and mocks within this development server (see the `devServer` in the `webpack.dev.js` file for a sample configuration). It should be used for development only.
+
+With the application built and the database waiting for connections, we issue the next command for the server. Open a third terminal and run the following command:
 
 ```bash
 npm start
 ```
 
-The server configuration uses the `nodemon-webpack-plugin` when building, so if you run the server with `npm run server` or `npm start`, it will reload if you change files in the `src/server` folder.
+This is going to build the server using the configuration from the `nodemon-webpack-plugin`. Nodemon already watches for changes so any change done to files inside the `src/server` folder is going to rebuild the server.
 
-You don't need to stop the server when changing client-side files. This is because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+As a side note, you don't need to stop the server when changing client-side files, because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
 
-The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so that MongoDB won't crash**.
+The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so that MongoDB won't crash**. To sum it up:
 
-### build files
+### database
+```bash
+# start the MongoDB database and opens a connection
+npm run start:mongo:windows
+```
+
+### watches and bundles the build, client-side
+```bash
+npm run watch
+```
+
+### bundles for different builds
 ```bash
 # development
 npm run build:dev
@@ -178,11 +210,6 @@ go to [http://0.0.0.0:8080](http://0.0.0.0:8080) in your browser.
 npm run server:dev:hmr
 ```
 
-### watch and build files
-```bash
-npm run watch
-```
-
 ### run unit tests
 ```bash
 npm run test
@@ -203,7 +230,9 @@ npm run e2e
 
 ### continuous integration (run unit tests and e2e tests together)
 ```bash
-# this will test both your JIT and AoT builds
+# faster testing for builds, uses the AoT build, run this before pushing new code
+npm run ci:travis
+# a complete test using both the JIT and AoT builds
 npm run ci
 ```
 
@@ -286,7 +315,7 @@ We have good experience using these editors:
 ### Visual Studio Code + Debugger for Chrome
 > Install [Debugger for Chrome](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome) and see docs for instructions to launch Chrome
 
-The included `.vscode` automatically connects to the webpack development server on port `8080`.
+The included `.vscode` automatically connects to the Webpack development server on port `8080`.
 
 # Types
 > When you include a module that doesn't include Type Definitions inside of the module you can include external Type Definitions with @types
@@ -380,22 +409,25 @@ This project follows the directions provided by the official [angular style guid
 
 ```
 Agora/
- ├──config/                        * our configuration
- |   ├──build-utils.js             * common config and shared functions for prod and dev
- |   ├──config.common.json         * config for both environments prod and dev such title and description of index.html
- │   │                              (note: you can load your own config file, just set the evn ANGULAR_CONF_FILE with the path of your own file)
- |   ├──helpers.js                 * helper functions for our configuration files
- |   ├──spec-bundle.js             * ignore this magic that sets up our Angular testing environment
- |   ├──karma.conf.js              * karma config for our unit tests
- |   ├──protractor.conf.js         * protractor config for our end-to-end tests
- │   ├──webpack.common.js          * common tasks for webpack build process shared for dev and prod
- │   ├──webpack.dev.js             * our development webpack config
- │   ├──webpack.prod.js            * our production webpack config
- │   ├──webpack.server.js          * our server webpack config
- │   └──webpack.test.js            * our testing webpack config
+ ├──config/                           * configuration root folder
+ |   ├──build-utils.js                * common config and shared functions for prod and dev
+ |   ├──config.common.json            * config for both environments prod and dev such title and description of index.html
+ │   │                                 (note: you can load your own config file, just set the evn ANGULAR_CONF_FILE with the path of your own file)
+ |   ├──config.dev.json               * google analytics key, development
+ |   ├──config.prod.json              * google analytics key, production
+ |   ├──helpers.js                    * helper functions for our configuration files
+ |   ├──spec-bundle.js                * ignore this magic that sets up our Angular testing environment
+ |   ├──karma.conf.js                 * karma config for our unit tests
+ |   ├──protractor.conf.js            * protractor config for our end-to-end tests
+ │   ├──webpack.common.js             * common tasks for Webpack build process shared for dev and prod
+ │   ├──webpack.dev.js                * development Webpack config
+ │   ├──webpack.github-deploy.js      * Github pages deploy Webpack config
+ │   ├──webpack.prod.js               * production Webpack config
+ │   ├──webpack.server.js             * server Webpack config
+ │   └──webpack.test.js               * testing Webpack config
  │
- ├──src/                           * our source files that will be compiled to javascript
- |   ├──main.browser.ts            * our entry file for our browser environment
+ ├──src/                              * source files that will be compiled to javascript
+ |   ├──main.browser.ts               * entry file for browser environment
  │   │
  |   ├──index.html                    * Index.html: where we generate our index page
  │   │
@@ -403,36 +435,35 @@ Agora/
  │   │
  │   ├──app/                          * WebApp: folder
  │   │   ├──charts                    * the charts module main folder, chart specific code
- │   │   ├   |──charts.module.ts      * the charts module file
- │   │   ├   |──services              * the core services folder, to be used by different modules
- │   │   ├   |   |──chart.service.ts  * chart related service, to be used only in this module
- │   │   ├   |   |──...               * other nested files
- │   │   ├   |──...                   * other nested files
+ │   │   ├   |──charts.module.ts      * the charts module file, to be used by different modules
+ │   │   ├   |──services              * the charts services folder
+ │   │   ├   |   |──chart.service.ts  * chart related service with different utility methods
+ │   │   ├   |   |──...               * other files
+ │   │   ├   |──...                   * other nested folders and files including the charts themselves
  │   │   ├──core                      * the core module main folder, imports the other modules
  │   │   ├   |──core.module.ts        * the core module file, to be imported once by the app module
  │   │   ├   |──services              * the core services folder, to be used by different modules
  │   │   ├   |   |──data.service.ts   * data related service, e.g. loading data into the app
  │   │   ├   |   |──gene.service.ts   * gene related service, e.g. current selected gene
- │   │   ├   |   |──...               * other nested files
+ │   │   ├   |   |──...               * other files
+ │   │   ├   |──...                   * other nested folders and files
+ │   │   ├──genes                     * genes module main folder
+ │   │   ├   |──genes.module.ts       * the genes module file, to be imported by different modules
  │   │   ├   |──...                   * other nested files
- │   │   ├──genes                     * our genes module main folder
- │   │   ├   |──genes.module.ts       * the genes module file
- │   │   ├   |──...                   * other nested files
- │   │   ├──models                    * our interface definitions
+ │   │   ├──models                    * interface definitions
  │   │   ├   |──gene.ts               * the gene interface
  │   │   ├   |──geneLink.ts           * connection between genes interface
+ │   │   ├   |──...                   * other files
  │   │   ├   |──index.ts              * exports all models
- │   │   ├──schemas                   * our schemas to be used by Mongoose
+ │   │   ├──schemas                   * schemas to be used by Mongoose
  │   │   ├   |──gene.ts               * the gene schema
  │   │   ├   |──geneLink.ts           * the connection between genes schema
+ │   │   ├   |──...                   * other files
  │   │   ├   |──index.ts              * exports all schemas
- │   │   ├──shared                    * our shared module main folder, to be imported by other modules
- │   │   ├   |──shared.module.ts      * the shared module file
- │   │   ├   |──...                   * other nested files
- │   │   ├──shared                    * our shared module main folder, to be imported by other modules
- │   │   ├   |──shared.module.ts      * the shared module file
- │   │   ├   |──...                   * other nested files
- │   │   ├──testing                   * our shared module main folder, to be imported by other modules
+ │   │   ├──shared                    * shared module main folder
+ │   │   ├   |──shared.module.ts      * the shared module file, to be imported by other modules
+ │   │   ├   |──...                   * other files
+ │   │   ├──testing                   * our shared module main folder
  │   │   ├   |──gene-mocks.ts         * mocks for genes
  │   │   ├   |──data-service-stub.ts  * mock for the data service
  │   │   ├   |──gene-service-stub.ts  * mock for the gene service
@@ -450,15 +481,21 @@ Agora/
  │       ├──icon/                     * our list of icons from www.favicon-generator.org
  │       ├──service-worker.js         * ignore this. Web App service worker that's not complete yet
  │       ├──robots.txt                * for search engines to crawl your website
- │       └──humans.txt                * for humans to know who the developers are
+ │       ├──humans.txt                * for humans to know who the developers are
+ │       └──...                       * other files
  │
  │
+ ├──get-data-aws.sh                   * shell script to download the data using amazon credentials from the bastian
+ ├──get-data-local-aws.sh             * shell script to download the data using amazon credentials locally
+ ├──get-data-local.sh                 * shell script to download the data locally using Synapse credentials
+ ├──set-agora-version.sh              * shell script to set the Agora version based on the remote branch latest commit SHA id
+ ├──start-mongo.sh                    * shell script to start the MongoDB
  ├──tslint.json                       * typescript lint config
  ├──typedoc.json                      * typescript documentation generator
  ├──tsconfig.json                     * typescript config used outside webpack
- ├──tsconfig.webpack.json             * config that webpack uses for typescript
+ ├──tsconfig.webpack.json             * config that Webpack uses for typescript
  ├──package.json                      * what npm uses to manage its dependencies
- └──webpack.config.js                 * webpack main configuration file
+ └──webpack.config.js                 * Webpack main configuration file
 ```
 
 # Database
