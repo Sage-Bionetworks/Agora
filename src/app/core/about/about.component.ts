@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+
+import { NavigationService } from '../services';
 
 @Component({
     selector: 'about',
@@ -6,12 +8,19 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
     styleUrls: [ './about.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class AboutComponent implements OnInit {
-    ngOnInit() {
+export class AboutComponent {
+
+    constructor(
+        private navService: NavigationService
+    ) {
         //
     }
 
     viewSynapseReg() {
         window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
+    }
+
+    goToRoute(path: string, outlets?: any) {
+        this.navService.goToRouteRelative(path, outlets);
     }
 }

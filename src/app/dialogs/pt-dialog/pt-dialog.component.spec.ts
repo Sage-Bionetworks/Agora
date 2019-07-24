@@ -45,7 +45,7 @@ describe('Component: RNADialog', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: DialogsService, useValue: new DialogsServiceStub() },
-                { provide: NavigationService, useValue: new NavigationServiceStub() },
+                { provide: NavigationService, useValue: new NavigationServiceStub() }
             ]
         })
             .compileComponents();

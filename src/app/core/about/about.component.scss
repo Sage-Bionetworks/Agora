@@ -3,6 +3,7 @@
 
 .about-desc {
     margin-bottom: 2%;
+    padding-top: 74px;
 
     .about-paragraph {
         margin-bottom: 40px;
@@ -25,4 +26,19 @@
     margin-bottom: 45px;
     font-size: 18px;
     color: color(text, secondary);
+}
+
+.italic-bold {
+    @include lato-font('bold', italic);
+    font-size: 18px;
+    color: color(text, secondary);
+
+    .italic-bold-link {
+        color: #5BB0B5 !important;
+        cursor: pointer;
+
+        :hover {
+            text-decoration: underline;
+        }
+    }
 }
