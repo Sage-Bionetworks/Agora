@@ -1,5 +1,4 @@
-import { DecimalPipe } from '@angular/common';
-import { Gene, GeneInfo, Proteomics, Metabolomics } from '../../app/models';
+import { Gene, GeneInfo, Proteomics } from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -14,15 +13,23 @@ import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
 import * as awsParamStore from 'aws-param-store';
 import * as crossfilter from 'crossfilter2';
+import * as util from 'util';
 
 const router = express.Router();
 const database = { url: '' };
 const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
 
-// Uncomment when in need of versbose debugging
-// if (env === 'development') {
-//     mongoose.set('debug', true);
-// }
+// Uncomment when in need of verbose debugging
+/* mongoose.set('debug', function(coll, method, query, doc) {
+    console.log(
+        '\n\n',
+        ' => Query executed: ',
+        '\ncollection => ' + coll,
+        '\nmethod => ' + method,
+        '\ndata => ' + util.inspect(query),
+        '\n',
+        doc && ('doc => ' + util.inspect(doc)), '\n')
+}); */
 
 // Set the database url
 if (process.env.MONGODB_HOST && process.env.MONGODB_PORT && process.env.APP_ENV) {
@@ -69,20 +76,10 @@ connection.once('open', () => {
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
-    const decimalPipe: DecimalPipe = new DecimalPipe('en-US');
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
-    // To be used by the DecimalPipe from Angular. This means
-    // a minimum of 1 digit will be shown before decimal point,
-    // at least, but not more than, 2 digits after decimal point
-    const significantDigits: string = '1.2-2';
-    // This is a second configuration used because the adjusted
-    // p-val goes up to 4 significant digits. It is used to compare
-    // the log fold change with adjusted p-val for chart rendering
-    // methods
-    const compSignificantDigits: string = '1.2-4';
 
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
@@ -438,17 +435,8 @@ connection.once('open', () => {
 
     // Routes to get genes information
     router.get('/genes', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get all chart genes and current gene entries');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.json({ item: null });
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
@@ -523,12 +511,6 @@ connection.once('open', () => {
 
     // Use mongoose to get one page of genes
     router.get('/genes/page', (req, res) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a page of genes');
-            console.log(req.query);
-        }
-
         // Convert the strings
         const skip = (+req.query.first) ? +req.query.first : 0;
         const limit = (+req.query.rows) ? +req.query.rows : 10;
@@ -565,12 +547,6 @@ connection.once('open', () => {
 
     // Use mongoose to get all pages for the table
     router.get('/genes/table', (req, res) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a page of genes');
-            console.log(req.query);
-        }
-
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', 0);
@@ -579,12 +555,6 @@ connection.once('open', () => {
 
     // Get all gene infos that match an id, using the hgnc_symbol or ensembl id
     router.get('/gene/infos/:id', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get the genes that match an id');
-            console.log(req.params.id);
-        }
-
         const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
         const isEnsembl = (req.params.id.startsWith('ENSG')) ? true : false;
         const queryObj = { $or: [
@@ -620,11 +590,6 @@ connection.once('open', () => {
 
     // Get all genes infos that match an array of ids, currently hgnc_symbol
     router.get('/mgenes/infos', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get the genes that match multiple ids');
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.query || !req.query.ids) {
             res.json({ items: [] });
@@ -647,17 +612,8 @@ connection.once('open', () => {
 
     // Get a gene by id, can be hgnc_symbol or ensembl_gene_id
     router.get('/gene', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a gene with an id');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.status(404).send('Not found');
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
@@ -682,14 +638,6 @@ connection.once('open', () => {
                         if (errB) {
                             next(errB);
                         } else {
-                            // Adding this condition because UglifyJS can't handle ES2015,
-                            // only needed for the server
-                            if (env === 'development') {
-                                console.log('The gene info and item');
-                                console.log(info);
-                                console.log(item);
-                            }
-
                             res.setHeader(
                                 'Cache-Control', 'no-cache, no-store, must-revalidate'
                             );
@@ -708,12 +656,6 @@ connection.once('open', () => {
 
     // Get a gene list by id
     router.get('/genelist/:id', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a gene list with an id');
-            console.log(req.params.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) { res.json({ items: [] }); } else {
             GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec(async (err, links) => {
@@ -749,12 +691,6 @@ connection.once('open', () => {
 
     // Get a team by team field
     router.get('/teams', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a team from a nominated gene');
-            console.log(req.query);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); } else {
             const arr = req.query.teams.split(', ');
@@ -780,11 +716,6 @@ connection.once('open', () => {
 
     // Get all team infos
     router.get('/teams/all', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get all team infos');
-        }
-
         TeamsInfo.find().exec((err, teams) => {
             if (err) {
                 next(err);
@@ -804,57 +735,29 @@ connection.once('open', () => {
     });
 
     router.get('/team/image', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a team member image');
-            console.log(req.query);
-        }
-
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ item: null }); } else {
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({ item: null });
+        } else {
             const name = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpg';
             gfs.exist({ filename: name }, (err, hasFile) => {
                 if (hasFile) {
-                    if (env === 'development') {
-                        console.log('The team file exists jpg');
-                        console.log(name);
-                        console.log(hasFile);
-                    }
                     const stream = gfs.createReadStream(name);
                     stream.pipe(res);
                 } else {
-                    if (env === 'development') {
-                        console.log('The team file isnt jpg');
-                    }
                     const NAMEJPEG = req.query.name.toLowerCase().replace(/[- ]/g, '_') + '.jpeg';
                     gfs.exist({ filename: NAMEJPEG }, (err2, hasFile2) => {
                         if (hasFile2) {
-                            if (env === 'development') {
-                                console.log('The team file exists jpeg');
-                                console.log(NAMEJPEG);
-                                console.log(hasFile);
-                            }
                             const stream = gfs.createReadStream(NAMEJPEG);
                             stream.pipe(res);
                         } else {
-                            if (env === 'development') {
-                                console.log('The team file isnt jpeg');
-                            }
                             const namePNG = req.query.name
                             .toLowerCase().replace(/[- ]/g, '_') + '.png';
                             gfs.exist({ filename: namePNG }, (err3, hasFile3) => {
                                 if (hasFile3) {
-                                    if (env === 'development') {
-                                        console.log('The team file exists png');
-                                        console.log(namePNG);
-                                        console.log(hasFile);
-                                    }
                                     const stream = gfs.createReadStream(namePNG);
                                     stream.pipe(res);
                                 } else {
-                                    if (env === 'development') {
-                                        console.log('The team file isnt png');
-                                    }
                                     res.status(204).send('Could not find member!');
                                 }
                             });
@@ -867,12 +770,6 @@ connection.once('open', () => {
 
     // Get all the tissues
     router.get('/tissues', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get all tissues');
-            console.log(allTissues);
-        }
-
         // Return an empty array in case we don't have tissues
         if (!allTissues.length) { res.json({ items: [] }); } else {
             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -884,17 +781,8 @@ connection.once('open', () => {
 
     // Get all the gene tissues
     router.get('/tissues/gene', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get gene tissues with an id');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.json({ item: null });
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
@@ -924,12 +812,6 @@ connection.once('open', () => {
 
     // Get all the models
     router.get('/models', (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get all models');
-            console.log(allModels);
-        }
-
         // Return an empty array in case we don't have models
         if (!allModels.length) { res.json({ items: [] }); } else {
             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -941,17 +823,8 @@ connection.once('open', () => {
 
     // Get all the models
     router.get('/models/gene', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get gene tissues with an id');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.json({ item: null });
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
@@ -981,17 +854,8 @@ connection.once('open', () => {
 
     // Get all genes using an id
     router.get('/genes/same', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a gene with an id');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.json({ item: null });
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
@@ -1009,13 +873,6 @@ connection.once('open', () => {
                 if (err) {
                     next(err);
                 } else {
-                    // Adding this condition because UglifyJS can't handle ES2015,
-                    // only needed for the server
-                    if (env === 'development') {
-                        console.log('The genes with id');
-                        console.log(genes);
-                    }
-
                     res.setHeader(
                         'Cache-Control', 'no-cache, no-store, must-revalidate'
                     );
@@ -1030,17 +887,8 @@ connection.once('open', () => {
     });
 
     router.get('/metabolomics', async (req, res, next) => {
-        // Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-        if (env === 'development') {
-            console.log('Get a gene metabolomics with an id');
-            console.log(req.query.id);
-        }
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
-            if (env === 'development') {
-                console.log('no id');
-            }
             res.json({ item: null });
         } else {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' :
@@ -1052,13 +900,6 @@ connection.once('open', () => {
                 if (err) {
                     next(err);
                 } else {
-                    // Adding this condition because UglifyJS can't handle ES2015,
-                    // only needed for the server
-                    if (env === 'development') {
-                        console.log('The gene metabolomics with id');
-                        console.log(gene);
-                    }
-
                     res.setHeader(
                         'Cache-Control', 'no-cache, no-store, must-revalidate'
                     );
