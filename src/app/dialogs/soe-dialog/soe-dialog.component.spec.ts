@@ -1,8 +1,7 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync
+    TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -14,8 +13,6 @@ import { SOEDialogComponent } from './soe-dialog.component';
 
 import { DialogsService } from '../services';
 
-import { MockComponent } from 'ng-mocks';
-
 describe('Component: SOEDialog', () => {
     let component: SOEDialogComponent;
     let fixture: ComponentFixture<SOEDialogComponent>;
@@ -24,8 +21,7 @@ describe('Component: SOEDialog', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                SOEDialogComponent,
-                MockComponent(SOEDialogComponent)
+                SOEDialogComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

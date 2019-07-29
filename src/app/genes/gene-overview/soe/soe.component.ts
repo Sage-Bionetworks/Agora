@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo } from '../../../models';
 
-import { GeneService, ApiService } from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 @Component({
     selector: 'soe',
@@ -21,8 +21,7 @@ export class SOEComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private geneService: GeneService,
-        private apiService: ApiService
+        private geneService: GeneService
     ) {}
 
     ngOnInit() {

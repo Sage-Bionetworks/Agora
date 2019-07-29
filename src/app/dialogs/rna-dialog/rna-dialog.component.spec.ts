@@ -1,8 +1,7 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync
+    TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -35,8 +34,7 @@ describe('Component: RNADialog', () => {
         TestBed.configureTestingModule({
             declarations: [
                 RNADialogComponent,
-                MockComponent(Dialog),
-                MockComponent(RNADialogComponent)
+                MockComponent(Dialog)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

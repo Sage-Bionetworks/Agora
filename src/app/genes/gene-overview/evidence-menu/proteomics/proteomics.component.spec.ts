@@ -3,7 +3,6 @@ import {
     ComponentFixture,
     TestBed
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import {
@@ -13,13 +12,10 @@ import {
 } from '../../../../testing';
 
 import { ProteomicsComponent } from './proteomics.component';
-import { MoreInfoComponent } from '../../../../dialogs/more-info';
 
 import { ApiService, GeneService } from '../../../../core/services';
 
 import { ChartService } from '../../../../charts/services';
-
-import { MockComponent } from 'ng-mocks';
 
 describe('Component: Proteomics', () => {
     let component: ProteomicsComponent;
@@ -30,8 +26,7 @@ describe('Component: Proteomics', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                ProteomicsComponent,
-                MockComponent(ProteomicsComponent)
+                ProteomicsComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

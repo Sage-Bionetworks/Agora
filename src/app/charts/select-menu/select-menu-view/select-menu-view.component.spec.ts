@@ -24,8 +24,6 @@ import {
 } from '../../../core/services';
 import { ChartService } from '../../services';
 
-import { of, empty, Observable } from 'rxjs';
-
 import * as d3 from 'd3';
 import * as dc from 'dc';
 

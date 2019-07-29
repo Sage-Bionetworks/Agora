@@ -7,8 +7,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { TermsComponent } from './terms.component';
 
-import { MockComponent } from 'ng-mocks';
-
 describe('Component: BPDialog', () => {
     let component: TermsComponent;
     let fixture: ComponentFixture<TermsComponent>;
@@ -16,8 +14,7 @@ describe('Component: BPDialog', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                TermsComponent,
-                MockComponent(TermsComponent)
+                TermsComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

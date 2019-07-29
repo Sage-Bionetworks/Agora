@@ -4,7 +4,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { Gene, GeneInfo, TeamInfo, NominatedTarget, TeamMember } from '../../models';
 
-import { ApiService, NavigationService } from '../services';
+import { ApiService } from '../services';
 import { OrderBy } from '../../shared/pipes';
 
 import { Observable } from 'rxjs';
@@ -31,10 +31,8 @@ export class ContribTeamsPageComponent implements OnInit {
 
     constructor(
         private apiService: ApiService,
-        private navService: NavigationService,
         private titleCase: TitleCasePipe,
-        private sanitizer: DomSanitizer,
-        private orderBy: OrderBy
+        private sanitizer: DomSanitizer
     ) {}
 
     ngOnInit() {

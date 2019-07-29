@@ -1,48 +1,71 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 import { ContribTeamsPageComponent } from './contrib-teams.component';
 import { LoadingComponent } from '../../shared/components/loading';
 
 import {
-    RouterStub,
     ApiServiceStub,
-    GeneServiceStub,
-    NavigationServiceStub,
     mockTeam1,
     mockTeam2,
     mockTeam3
 } from '../../testing';
 import { TeamInfo } from '../../models';
 
-import { ApiService, GeneService, NavigationService } from '../services';
-import { OrderBy } from '../../shared/pipes';
+import { ApiService } from '../services';
 
 import { MockComponent } from 'ng-mocks';
 
 import { of } from 'rxjs';
 
+interface TestSafeHtml extends SafeHtml {
+    changingThisBreaksApplicationSecurity: string;
+    getTypeName: () => string;
+}
+
+interface TestSafeStyle extends SafeStyle {
+    changingThisBreaksApplicationSecurity: string;
+    getTypeName: () => string;
+}
+
+class TestDomSanitizer {
+    bypassSecurityTrustHtml = jasmine.createSpy('bypassSecurityTrustHtml')
+        .and.callFake((html: string) => {
+            return {
+                changingThisBreaksApplicationSecurity: html,
+                getTypeName: () => 'HTML',
+            } as TestSafeHtml;
+        });
+    bypassSecurityTrustStyle = jasmine.createSpy('bypassSecurityTrustStyle')
+        .and.callFake((style: string) => {
+            return {
+                changingThisBreaksApplicationSecurity: style,
+                getTypeName: () => 'Style',
+            } as TestSafeStyle;
+        });
+    sanitize = jasmine.createSpy('sanitize')
+        .and.callFake(() => 'safeString');
+}
+
 describe('Component: ContribTeamsPage', () => {
     let component: ContribTeamsPageComponent;
     let fixture: ComponentFixture<ContribTeamsPageComponent>;
     let apiService: ApiServiceStub;
+    let sanitizer: TestDomSanitizer;
     const findTeam: TeamInfo = JSON.parse(JSON.stringify(mockTeam1)) as TeamInfo;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
                 MockComponent(LoadingComponent),
-                ContribTeamsPageComponent,
-                OrderBy
+                ContribTeamsPageComponent
             ],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: NavigationService, useValue: new NavigationServiceStub() },
+                { provide: DomSanitizer, useClass: TestDomSanitizer },
                 TitleCasePipe
             ]
         })
@@ -52,6 +75,7 @@ describe('Component: ContribTeamsPage', () => {
 
         // Get the injected instances
         apiService = fixture.debugElement.injector.get(ApiService);
+        sanitizer = fixture.debugElement.injector.get(DomSanitizer);
 
         component = fixture.componentInstance;
     }));

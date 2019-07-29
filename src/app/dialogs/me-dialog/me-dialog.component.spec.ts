@@ -1,8 +1,7 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync
+    TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -28,8 +27,7 @@ describe('Component: MEDialog', () => {
         TestBed.configureTestingModule({
             declarations: [
                 MEDialogComponent,
-                MockComponent(Dialog),
-                MockComponent(MEDialogComponent)
+                MockComponent(Dialog)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes

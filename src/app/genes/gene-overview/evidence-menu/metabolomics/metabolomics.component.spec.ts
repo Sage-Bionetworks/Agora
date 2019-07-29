@@ -3,56 +3,53 @@ import {
     ComponentFixture,
     TestBed
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import {
     GeneServiceStub,
-    DataServiceStub,
-    ChartServiceStub,
     ApiServiceStub,
     ActivatedRouteStub,
-    mockInfo1,
-    mockMetabolomics
+    RouterStub,
+    mockMetabolomics,
+    mockInfo1
 } from '../../../../testing';
 
 import { MetabolomicsComponent } from './metabolomics.component';
-import { MoreInfoComponent } from '../../../../dialogs/more-info';
 
-import { ApiService, GeneService, DataService } from '../../../../core/services';
-
-import { MockComponent } from 'ng-mocks';
+import { ApiService, GeneService } from '../../../../core/services';
 
 describe('Component: Metabolomics', () => {
     let component: MetabolomicsComponent;
     let fixture: ComponentFixture<MetabolomicsComponent>;
+    let router: RouterStub;
     let apiService: ApiServiceStub;
-    let dataService: DataServiceStub;
     let activatedRoute: any;
+    let geneService: GeneServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                MetabolomicsComponent,
-                MockComponent(MetabolomicsComponent)
+                MetabolomicsComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
+                { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
-                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() }
+                { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() }
             ]
         })
         .compileComponents();
 
         fixture = TestBed.createComponent(MetabolomicsComponent);
 
+        // Get the injected instances
+        router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
-        dataService = fixture.debugElement.injector.get(DataService);
+        geneService = fixture.debugElement.injector.get(GeneService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 

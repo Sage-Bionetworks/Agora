@@ -7,12 +7,10 @@ import { FooterComponent } from './footer.component';
 
 import {
     RouterStub,
-    DataServiceStub,
-    GeneServiceStub,
     NavigationServiceStub
 } from '../../testing';
 
-import { DataService, GeneService, NavigationService } from '../services';
+import { NavigationService } from '../services';
 
 describe('Component: Footer', () => {
     let component: FooterComponent;
@@ -26,8 +24,6 @@ describe('Component: Footer', () => {
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
             ]

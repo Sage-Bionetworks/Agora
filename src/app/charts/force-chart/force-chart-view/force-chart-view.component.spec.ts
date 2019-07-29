@@ -3,48 +3,48 @@ import {
     ComponentFixture,
     TestBed
 } from '@angular/core/testing';
-import { TitleCasePipe } from '@angular/common';
+import { SpyLocation } from '@angular/common/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
     RouterStub,
-    ApiServiceStub,
-    NavigationServiceStub,
     GeneServiceStub
 } from '../../../testing';
 
-import { NominationDetailsComponent } from './nom-details.component';
+import { ForceChartViewComponent } from './force-chart-view.component';
 
-import { ApiService, GeneService, NavigationService } from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
-describe('Component: NominationDetails', () => {
-    let component: NominationDetailsComponent;
-    let fixture: ComponentFixture<NominationDetailsComponent>;
-    let apiService: ApiServiceStub;
+describe('Component: ForceChartView', () => {
+    let component: ForceChartViewComponent;
+    let fixture: ComponentFixture<ForceChartViewComponent>;
+    let router: RouterStub;
+    let geneService: GeneServiceStub;
+    let location: SpyLocation;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NominationDetailsComponent
+                ForceChartViewComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
-                { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: NavigationService, useValue: new NavigationServiceStub() },
-                TitleCasePipe
+                { provide: SpyLocation, useValue: new SpyLocation() }
             ]
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NominationDetailsComponent);
+        fixture = TestBed.createComponent(ForceChartViewComponent);
 
         // Get the injected instances
-        apiService = fixture.debugElement.injector.get(ApiService);
+        router = fixture.debugElement.injector.get(Router);
+        geneService = fixture.debugElement.injector.get(GeneService);
+        location = fixture.debugElement.injector.get(SpyLocation);
 
         component = fixture.componentInstance; // Component test instance
     }));

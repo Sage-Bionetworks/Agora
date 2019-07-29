@@ -1,9 +1,7 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SpyLocation } from '@angular/common/testing';
@@ -23,10 +21,6 @@ import { RowChartViewComponent } from './row-chart-view.component';
 
 import { GeneService, DataService } from '../../../core/services';
 import { ChartService } from '../../services';
-
-import { of, empty, Observable } from 'rxjs';
-
-import { MockComponent } from 'ng-mocks';
 
 describe('Component: RowChartView', () => {
     let component: RowChartViewComponent;

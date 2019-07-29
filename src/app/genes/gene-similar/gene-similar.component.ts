@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import {
     GeneNetwork,
     GeneResponse,

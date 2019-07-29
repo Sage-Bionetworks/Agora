@@ -5,11 +5,10 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
     ApiServiceStub,
-    ActivatedRouteStub,
     RouterStub,
     ForceServiceStub,
     GeneServiceStub,
@@ -33,8 +32,6 @@ import {
 
 import { MockComponent } from 'ng-mocks';
 
-import { ArraySortPipe } from '../../shared/pipes';
-
 import { Table } from 'primeng/table';
 
 describe('Component: GeneSimilar', () => {
@@ -45,7 +42,6 @@ describe('Component: GeneSimilar', () => {
     let dataService: DataServiceStub;
     let navService: NavigationServiceStub;
     let forceService: ForceServiceStub;
-    let activatedRoute: any;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
@@ -53,8 +49,7 @@ describe('Component: GeneSimilar', () => {
             declarations: [
                 GeneSimilarComponent,
                 MockComponent(MoreInfoComponent),
-                MockComponent(Table),
-                ArraySortPipe
+                MockComponent(Table)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -62,7 +57,6 @@ describe('Component: GeneSimilar', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
@@ -80,8 +74,6 @@ describe('Component: GeneSimilar', () => {
         navService = fixture.debugElement.injector.get(NavigationService);
         forceService = fixture.debugElement.injector.get(ForceService);
         dataService = fixture.debugElement.injector.get(DataService);
-        activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
         component = fixture.componentInstance; // Component test instance
 

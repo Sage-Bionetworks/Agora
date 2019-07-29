@@ -1,22 +1,18 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
+import { SpyLocation } from '@angular/common/testing';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
     ApiServiceStub,
-    ActivatedRouteStub,
     RouterStub,
-    DataServiceStub,
     ChartServiceStub,
-    GeneServiceStub,
-    mockInfo1
+    GeneServiceStub
 } from '../../../../../testing';
 
 import { GeneRNASeqDEComponent } from './gene-rnaseq-de.component';
@@ -25,7 +21,6 @@ import { MoreInfoComponent } from 'app/dialogs/more-info';
 
 import {
     ApiService,
-    DataService,
     GeneService
 } from '../../../../../core/services';
 
@@ -40,17 +35,15 @@ describe('Component: GeneRNASeqDE', () => {
     let fixture: ComponentFixture<GeneRNASeqDEComponent>;
     let router: RouterStub;
     let apiService: ApiServiceStub;
-    let dataService: DataServiceStub;
     let chartService: ChartServiceStub;
-    let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
+    let geneService: GeneServiceStub;
+    let location: SpyLocation;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneRNASeqDEComponent,
                 MockComponent(MoreInfoComponent),
-                MockComponent(GeneRNASeqDEComponent),
                 ArraySortPipe
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
@@ -59,11 +52,9 @@ describe('Component: GeneRNASeqDE', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: SpyLocation, useValue: new SpyLocation() }
             ]
         })
         .compileComponents();
@@ -73,10 +64,9 @@ describe('Component: GeneRNASeqDE', () => {
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
-        dataService = fixture.debugElement.injector.get(DataService);
+        geneService = fixture.debugElement.injector.get(GeneService);
         chartService = fixture.debugElement.injector.get(ChartService);
-        activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+        location = fixture.debugElement.injector.get(SpyLocation);
 
         component = fixture.componentInstance; // Component test instance
 

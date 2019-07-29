@@ -8,11 +8,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
-    ApiServiceStub,
     ActivatedRouteStub,
     RouterStub,
-    DataServiceStub,
-    ForceServiceStub,
     GeneServiceStub,
     mockInfo1
 } from '../../../testing';
@@ -21,7 +18,7 @@ import { SOEComponent } from './soe.component';
 
 import { MoreInfoComponent } from 'app/dialogs/more-info';
 
-import { ApiService, DataService, ForceService, GeneService } from '../../../core/services';
+import { GeneService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -30,20 +27,14 @@ import { Table } from 'primeng/table';
 describe('Component: SOE', () => {
     let component: SOEComponent;
     let fixture: ComponentFixture<SOEComponent>;
-    let router: RouterStub;
-    let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
-    let dataService: DataServiceStub;
-    let forceService: ForceServiceStub;
     let activatedRoute: any;
-    const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
                 SOEComponent,
                 MockComponent(MoreInfoComponent),
-                MockComponent(SOEComponent),
                 MockComponent(Table)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
@@ -51,12 +42,8 @@ describe('Component: SOE', () => {
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
-                { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: DataService, useValue: new DataServiceStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: ForceService, useValue: new ForceServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: GeneService, useValue: new GeneServiceStub() }
             ]
         })
         .compileComponents();
@@ -64,11 +51,7 @@ describe('Component: SOE', () => {
         fixture = TestBed.createComponent(SOEComponent);
 
         // Get the injected instances
-        router = fixture.debugElement.injector.get(Router);
-        apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
-        dataService = fixture.debugElement.injector.get(DataService);
-        forceService = fixture.debugElement.injector.get(ForceService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 

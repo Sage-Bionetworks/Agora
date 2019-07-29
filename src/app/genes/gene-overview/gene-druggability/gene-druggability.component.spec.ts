@@ -34,8 +34,7 @@ describe('Component: GeneDruggability', () => {
             declarations: [
                 GeneDruggabilityComponent,
                 MockComponent(MoreInfoComponent),
-                MockComponent(Table),
-                MockComponent(GeneDruggabilityComponent)
+                MockComponent(Table)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -73,28 +72,6 @@ describe('Component: GeneDruggability', () => {
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(1);
     });
-
-    /*it('should have a table', () => {
-        const el = fixture.debugElement.query(By.css('p-table'));
-        expect(el).toBeDefined();
-
-        const aEl = fixture.debugElement.queryAll(By.css('p-table'));
-        expect(aEl.length).toEqual(1);
-    });
-
-    it('should have the data initialized', () => {
-        const isSpy = spyOn(component, 'initSummary').and.callThrough();
-        const icSpy = spyOn(component, 'initCols').and.callThrough();
-
-        component.initSummary();
-        component.initCols();
-        fixture.detectChanges();
-        expect(isSpy).toHaveBeenCalled();
-        expect(icSpy).toHaveBeenCalled();
-
-        expect(component.summary.length).toEqual(3);
-        expect(component.cols.length).toEqual(2);
-    });*/
 
     it('should get the correct druggability title', () => {
         const gdtSpy = spyOn(component, 'getDruggabilitySMTitle').and.callThrough();

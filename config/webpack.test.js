@@ -230,7 +230,7 @@ module.exports = function () {
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /\@angular(\\|\/)core(\\|\/)esm5/,
+        /\@angular(\\|\/)core(\\|\/)fesm5/,
         helpers.root('src'), // location of your src
         {
           /**

@@ -5,35 +5,35 @@ import {
 } from '@angular/core/testing';
 import { TitleCasePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
 
 import {
-    RouterStub,
-    ApiServiceStub,
+    ChartServiceStub,
     NavigationServiceStub,
     GeneServiceStub
 } from '../../../testing';
 
-import { NominationDetailsComponent } from './nom-details.component';
+import { EvidenceMenuComponent } from './evidence-menu.component';
 
-import { ApiService, GeneService, NavigationService } from '../../../core/services';
+import { GeneService, NavigationService } from '../../../core/services';
+import { ChartService } from '../../../charts/services';
 
-describe('Component: NominationDetails', () => {
-    let component: NominationDetailsComponent;
-    let fixture: ComponentFixture<NominationDetailsComponent>;
-    let apiService: ApiServiceStub;
+describe('Component: EvidenceMenu', () => {
+    let component: EvidenceMenuComponent;
+    let fixture: ComponentFixture<EvidenceMenuComponent>;
+    let geneService: GeneServiceStub;
+    let chartService: ChartServiceStub;
+    let navService: NavigationServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                NominationDetailsComponent
+                EvidenceMenuComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
             schemas: [ NO_ERRORS_SCHEMA ],
             providers: [
-                { provide: Router, useValue: new RouterStub() },
-                { provide: ApiService, useValue: new ApiServiceStub() },
+                { provide: ChartService, useValue: new ChartServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
                 TitleCasePipe
@@ -41,10 +41,12 @@ describe('Component: NominationDetails', () => {
         })
         .compileComponents();
 
-        fixture = TestBed.createComponent(NominationDetailsComponent);
+        fixture = TestBed.createComponent(EvidenceMenuComponent);
 
         // Get the injected instances
-        apiService = fixture.debugElement.injector.get(ApiService);
+        geneService = fixture.debugElement.injector.get(GeneService);
+        chartService = fixture.debugElement.injector.get(ChartService);
+        navService = fixture.debugElement.injector.get(NavigationService);
 
         component = fixture.componentInstance; // Component test instance
     }));

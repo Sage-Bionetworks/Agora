@@ -1,8 +1,7 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync
+    TestBed
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
@@ -14,8 +13,6 @@ import { SIMilarPageDialogComponent } from './sp-dialog.component';
 
 import { DialogsService } from '../services';
 
-import { MockComponent } from 'ng-mocks';
-
 describe('Component: SPDialog', () => {
     let component: SIMilarPageDialogComponent;
     let fixture: ComponentFixture<SIMilarPageDialogComponent>;
@@ -24,8 +21,7 @@ describe('Component: SPDialog', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                SIMilarPageDialogComponent,
-                MockComponent(SIMilarPageDialogComponent)
+                SIMilarPageDialogComponent
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
