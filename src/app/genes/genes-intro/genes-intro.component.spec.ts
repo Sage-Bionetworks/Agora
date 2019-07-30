@@ -120,4 +120,18 @@ describe('Component: GenesIntro', () => {
 
         expect(gsElement).toBeTruthy();
     });
+
+    it('should show the dialog', () => {
+        component.showDialog();
+        fixture.detectChanges();
+
+        expect(component.display).toBeTruthy();
+    });
+
+    it('should play the video', () => {
+        component.playVideo();
+        fixture.detectChanges();
+
+        expect(component.showVideo).toBeTruthy();
+    });
 });

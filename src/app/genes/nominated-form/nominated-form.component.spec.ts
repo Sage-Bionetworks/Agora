@@ -1,13 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { By } from '@angular/platform-browser';
 
 import {
-    RouterOutletStubComponent,
-    RouterStub,
-    ActivatedRouteStub,
-    mockInfo1
+    RouterOutletStubComponent
 } from '../../testing';
 
 import { NominatedFormComponent } from './nominated-form.component';

@@ -72,6 +72,10 @@ export class GeneSimilarComponent implements OnInit {
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         if (!this.id) { this.id = this.navService.getId(); }
 
+        this.initData();
+    }
+
+    initData() {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
         if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id

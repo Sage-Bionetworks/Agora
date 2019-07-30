@@ -15,7 +15,8 @@ import {
     DataServiceStub,
     mockGene1,
     mockInfo1,
-    NavigationServiceStub
+    NavigationServiceStub,
+    emptyGene
 } from '../../testing';
 
 import { GeneSimilarComponent } from './gene-similar.component';
@@ -32,6 +33,8 @@ import {
 
 import { MockComponent } from 'ng-mocks';
 
+import { of } from 'rxjs';
+
 import { Table } from 'primeng/table';
 
 describe('Component: GeneSimilar', () => {
@@ -42,6 +45,7 @@ describe('Component: GeneSimilar', () => {
     let dataService: DataServiceStub;
     let navService: NavigationServiceStub;
     let forceService: ForceServiceStub;
+    let geneService: GeneServiceStub;
     const locationStub: any = jasmine.createSpyObj('location', ['back', 'subscribe']);
 
     beforeEach(async(() => {
@@ -74,6 +78,7 @@ describe('Component: GeneSimilar', () => {
         navService = fixture.debugElement.injector.get(NavigationService);
         forceService = fixture.debugElement.injector.get(ForceService);
         dataService = fixture.debugElement.injector.get(DataService);
+        geneService = fixture.debugElement.injector.get(GeneService);
 
         component = fixture.componentInstance; // Component test instance
 
@@ -107,5 +112,21 @@ describe('Component: GeneSimilar', () => {
 
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(1);
+    });
+
+    it('should get data if we don\'t have the gene or gene info', () => {
+        const gcgSpy = spyOn(geneService, 'getCurrentGene').and.callThrough();
+        const gciSpy = spyOn(geneService, 'getCurrentInfo').and.callThrough();
+        const giSpy = spyOn(navService, 'getId').and.callThrough();
+
+        component.gene = null;
+        component.geneInfo = null;
+        component.id = null;
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        expect(gcgSpy.calls.any()).toEqual(true);
+        expect(gciSpy.calls.any()).toEqual(true);
+        expect(giSpy.calls.any()).toEqual(true);
     });
 });

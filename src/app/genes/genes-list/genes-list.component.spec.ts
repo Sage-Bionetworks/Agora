@@ -11,29 +11,24 @@ import { ActivatedRoute } from '@angular/router';
 
 import {
     ActivatedRouteStub,
-    RouterOutletStubComponent,
     ApiServiceStub,
     GeneServiceStub,
     NavigationServiceStub,
     mockInfo1
 } from '../../testing';
 
-import { AboutComponent } from '../../core/about';
-import { HelpComponent } from '../../core/help';
-import { TermsComponent } from '../../core/terms';
-import { ContribTeamsPageComponent } from '../../core/contrib-teams';
-import { SynapseAccountComponent } from '../../core/synapse-account';
-import { NoContentComponent } from '../../core/no-content';
 import { GenesListComponent } from './genes-list.component';
-
 import { MoreInfoComponent } from 'app/dialogs/more-info';
+import { NOMinatedTargetComponent } from '../../dialogs/nt-dialog';
 
 import { ApiService, GeneService, NavigationService } from '../../core/services';
-import { OrderBy } from '../../shared/pipes';
+import { GeneResponse } from 'app/models';
 
 import { MockComponent } from 'ng-mocks';
 
 import { of } from 'rxjs';
+
+import { Table } from 'primeng/table';
 
 describe('Component: GenesList', () => {
     let component: GenesListComponent;
@@ -46,16 +41,10 @@ describe('Component: GenesList', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
-                MockComponent(MoreInfoComponent),
-                AboutComponent,
-                HelpComponent,
-                TermsComponent,
-                ContribTeamsPageComponent,
-                SynapseAccountComponent,
-                NoContentComponent,
                 GenesListComponent,
-                RouterOutletStubComponent,
-                OrderBy
+                MockComponent(MoreInfoComponent),
+                MockComponent(Table),
+                MockComponent(NOMinatedTargetComponent)
             ],
             // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
             // elements and attributes
@@ -106,11 +95,30 @@ describe('Component: GenesList', () => {
         expect(dsSpy.calls.any()).toEqual(true);
     }));
 
+    it('should get the gene if we don\'t have one', fakeAsync(() => {
+        const dsSpy = spyOn(apiService, 'getGene').and.returnValue(
+            of(mockInfo1)
+        );
+        const gcgSpy = spyOn(geneService, 'getCurrentGene').and.returnValue(
+            null
+        );
+        spyOn(navService.testRouter, 'navigate').and.callThrough();
+
+        component.onRowSelect({ data: mockInfo1 }); // trigger click on row
+        tick();
+        fixture.detectChanges();
+        expect(gcgSpy.calls.any()).toEqual(true);
+        expect(component.selectedInfo).toEqual(mockInfo1);
+        expect(dsSpy.calls.any()).toEqual(true);
+
+        expect(navService.testRouter.navigate).toHaveBeenCalled();
+    }));
+
     it('should tell ROUTER to navigate when selecting gene', fakeAsync(() => {
         const dsSpy = spyOn(apiService, 'getGene').and.returnValue(
             of(mockInfo1)
         );
-        const spy = spyOn(navService.testRouter, 'navigate').and.callThrough();
+        spyOn(navService.testRouter, 'navigate').and.callThrough();
 
         component.onRowSelect({ data: mockInfo1 }); // trigger click on row
         tick();
@@ -119,6 +127,26 @@ describe('Component: GenesList', () => {
         expect(dsSpy.calls.any()).toEqual(true);
 
         expect(navService.testRouter.navigate).toHaveBeenCalled();
+    }));
+
+    it('should redirect when getting invalid gene', fakeAsync(() => {
+        const ggSpy = spyOn(apiService, 'getGene').and.returnValue(
+            of({ item: null })
+        );
+        spyOn(navService.testRouter, 'navigate').and.callThrough();
+
+        component.selectedInfo = mockInfo1;
+        apiService.getGene('VGF').subscribe((data: GeneResponse) => {
+            expect(data.item).toEqual(null);
+        }); // search an empty gene id
+        component.getGene('VGF');
+        tick();
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+            expect(navService.testRouter.navigate).toHaveBeenCalledWith(['/genes']);
+        });
+
+        expect(ggSpy.calls.any()).toEqual(true);
     }));
 
     it('should unselect gene', fakeAsync(() => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TissuesResponse, ModelsResponse } from '../models';
+import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics } from '../models';
 import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels } from './gene-mocks';
 
 @Injectable()
@@ -170,5 +170,9 @@ export class GeneServiceStub {
 
     setInfoDataState(state: boolean) {
         this.noInfoData = state;
+    }
+
+    getGeneProteomics(): Proteomics[] {
+        return [];
     }
 }

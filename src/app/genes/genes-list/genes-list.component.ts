@@ -44,6 +44,10 @@ export class GenesListComponent implements OnInit {
             { field: 'input_data', header: 'Input Data' }
         ];
 
+        this.initData();
+    }
+
+    initData() {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.datasource = (data.items) ? data.items : [];
             this.datasource.forEach((de: GeneInfo) => {
@@ -121,7 +125,9 @@ export class GenesListComponent implements OnInit {
             summary: 'Gene Selected',
             detail: 'Gene: ' + event.data.hgnc_symbol
         }];
+
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
+
         // We don't have a gene
         if (!this.geneService.getCurrentGene()) {
             this.getGene(this.selectedInfo.hgnc_symbol);
