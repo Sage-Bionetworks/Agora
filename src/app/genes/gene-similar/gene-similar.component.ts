@@ -203,7 +203,7 @@ export class GeneSimilarComponent implements OnInit {
                 this.navService.setOvMenuTabIndex(0);
                 this.getGene(this.selectedInfo.hgnc_symbol);
             } else {
-                this.goToRoute(
+                this.navService.goToRoute(
                     '/genes',
                     {
                         outlets: {
@@ -232,7 +232,7 @@ export class GeneSimilarComponent implements OnInit {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
-            this.goToRoute(
+            this.navService.goToRoute(
                 '/genes',
                 {
                     outlets: {
@@ -277,9 +277,5 @@ export class GeneSimilarComponent implements OnInit {
         } else {
             return col.subfield;
         }
-    }
-
-    goToRoute(path: string, outlets?: any) {
-        this.navService.goToRoute(path, outlets);
     }
 }

@@ -19,7 +19,7 @@ export class FooterComponent {
         return ((data) ? DATA_VERSION : VERSION) || '0.0.0';
     }
 
-    goToRoute(path: string) {
-        this.navService.goToRoute('/' + path);
+    getNavService() {
+        return this.navService;
     }
 }

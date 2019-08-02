@@ -193,10 +193,6 @@ export class GeneNetworkComponent implements OnInit {
         return Array(n);
     }
 
-    goToRoute(path: string, outlets?: any) {
-        this.navService.goToRoute(path, outlets);
-    }
-
     onNavigate(url) {
         window.open(url, '_blank');
     }

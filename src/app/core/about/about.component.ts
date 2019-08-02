@@ -20,7 +20,7 @@ export class AboutComponent {
         window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
     }
 
-    goToRoute(path: string, outlets?: any) {
-        this.navService.goToRouteRelative(path, outlets);
+    getNavService() {
+        return this.navService;
     }
 }

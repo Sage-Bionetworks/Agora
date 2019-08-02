@@ -31,7 +31,7 @@ export class NOMinatedTargetComponent {
         this.dialogsService.closeDialog(this.name);
     }
 
-    goToRoute(path: string, outlets?: any) {
-        this.navService.goToRouteRelative(path, outlets);
+    getNavService() {
+        return this.navService;
     }
 }

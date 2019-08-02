@@ -1,8 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Gene, GeneNetwork, GeneNetworkLinks, LinksListResponse } from '../models';
-import { GeneService } from 'app/core/services';
-import { GeneServiceStub } from './gene-service-stub';
 
 @Injectable()
 export class ForceServiceStub {

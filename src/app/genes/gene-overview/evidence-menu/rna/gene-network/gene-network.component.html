@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
                             <span class="btn brainregion-button"
-                                (click)="goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', geneService.getCurrentGene().ensembl_gene_id ], 'gene-overview': null, 'evidence-menu': null} })">
+                                (click)="navService.goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', geneService.getCurrentGene().ensembl_gene_id ], 'gene-overview': null, 'evidence-menu': null} })">
                                 <i class="fa fa-angle-right fa-lg"></i>
                             </span>
                         </div>

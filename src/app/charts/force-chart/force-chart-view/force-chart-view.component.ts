@@ -43,19 +43,18 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     g: any;
     zoomHandler: any;
     routerSubscription: Subscription;
-
-    private linkElements: any;
-    private nodeElements: any;
-    private textElements: any;
-    private svg;
-    private pnode: any;
-    private loaded: boolean = false;
-    private pathways: GeneNode[] = [];
-    private width: any;
-    private height: any;
-    private simulation: any;
-    private hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
-    private resizeTimer;
+    linkElements: any;
+    nodeElements: any;
+    textElements: any;
+    svg;
+    pnode: any;
+    loaded: boolean = false;
+    pathways: GeneNode[] = [];
+    width: any;
+    height: any;
+    simulation: any;
+    hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
+    resizeTimer;
 
     constructor(
         private location: PlatformLocation,
@@ -86,8 +85,8 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     ngAfterViewInit() {
         setTimeout(() => {
             this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
-            this.height = (d3.select('.current-gene-col').node() as HTMLBaseElement)
-                .getBoundingClientRect().height;
+            const geneColNode = d3.select('.current-gene-col').node() as HTMLBaseElement;
+            this.height = (geneColNode) ? geneColNode.getBoundingClientRect().height : 400;
             this.loaded = true;
             this.simulation = d3.forceSimulation()
                 .force('charge', (d) => {
@@ -144,7 +143,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         return this.pathways;
     }
 
-    private renderChart() {
+    renderChart() {
         if (!this.loaded) {
             return;
         }
@@ -292,7 +291,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             }));
     }
 
-    private updateChart() {
+    updateChart() {
         const self = this;
         if (!this.loaded) {
             return;
@@ -379,7 +378,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         this.simulation.alpha(1).restart();
     }
 
-    private getNodeColor(node: GeneNode , index, arr): string {
+    getNodeColor(node: GeneNode , index, arr): string {
         if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
             return '#F47E6C';
         }
@@ -398,7 +397,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         return '#D3D5DB';
     }
 
-    private getLinkColor(link: GeneLink , index, arr): string {
+    getLinkColor(link: GeneLink , index, arr): string {
         if (link.value >= 6) {
             return '#0C656B';
         }
@@ -411,7 +410,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         return '#D3D5DB';
     }
 
-    private buildPath(gene: Gene) {
+    buildPath(gene: Gene) {
         this.updategene.emit(gene);
     }
 }

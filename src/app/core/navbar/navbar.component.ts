@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
         this.mobileItems = [
             { label: 'Gene Search', routerLink: ['genes'] },
             { label: 'Nominated Targets', command: () => {
-                this.goToRoute('/genes', {
+                this.navService.goToRoute('/genes', {
                     outlets: {
                         'genes-router': [ 'genes-list' ],
                         'gene-overview': null,
@@ -92,7 +92,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     }
 
     goHome() {
-        this.goToRoute('/genes');
+        this.navService.goToRoute('/genes');
     }
 
     goToRoute(path: string, outlets?: any) {
@@ -161,9 +161,9 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     changeRoute(path: string) {
         if (path === 'Gene Search') {
-            this.goToRoute('genes');
+            this.navService.goToRoute('genes');
         } else if (path === 'Nominated Targets') {
-            this.goToRoute('/genes', {
+            this.navService.goToRoute('/genes', {
                 outlets: {
                     'genes-router': [ 'genes-list' ],
                     'gene-overview': null,
@@ -171,7 +171,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
                 }
             });
         } else if (path === 'Teams') {
-            this.goToRoute('teams-contributing');
+            this.navService.goToRoute('teams-contributing');
         }
     }
 
