@@ -5,7 +5,8 @@ import {
     GeneResponse,
     GeneInfosResponse,
     GeneInfo,
-    Druggability
+    Druggability,
+    Gene
 } from '../../models';
 
 import {
@@ -37,8 +38,8 @@ export class GeneSimilarComponent implements OnInit {
         filterLvl: 0
     };
 
-    gene = this.geneService.getCurrentGene();
-    geneInfo: any;
+    gene: Gene;
+    geneInfo: GeneInfo;
     msgs: Message[] = [];
     cols: any[];
     selectedInfo: GeneInfo;
@@ -68,11 +69,14 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'druggability', subfield: 'pharos_class', header: 'Pharos Class'}
         ];
 
+        this.updateVariables();
+        this.initData();
+    }
+
+    updateVariables() {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         if (!this.id) { this.id = this.navService.getId(); }
-
-        this.initData();
     }
 
     initData() {

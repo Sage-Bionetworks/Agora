@@ -10,7 +10,14 @@ import {
     mockMetabolomics
 } from '../testing';
 
-import { Gene, LinksListResponse, GenesResponse, GeneInfosResponse, TeamMember } from '../models';
+import {
+    Gene,
+    LinksListResponse,
+    GenesResponse,
+    GeneInfosResponse,
+    TeamMember,
+    GeneResponse
+} from '../models';
 
 import { Observable, of } from 'rxjs';
 import { mockGenesResponse, mockTissues, mockModels } from './gene-mocks';
@@ -22,7 +29,10 @@ export class ApiServiceStub {
     }
 
     getGene(id?: string): Observable<object> {
-        return of(mockGene1);
+        return of({
+            item: mockGene1,
+            info: mockInfo1
+        } as GeneResponse);
     }
 
     getGenes(id: string): Observable<GenesResponse> {
