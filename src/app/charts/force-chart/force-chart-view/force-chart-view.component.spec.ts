@@ -76,7 +76,6 @@ describe('Component: ForceChartView', () => {
     });
 
     it('should remove chart on location pop state', () => {
-        // spyOn(component, 'ngOnInit').and.callThrough();
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
         // location.go('/genes');
         component.ngOnInit();

@@ -193,6 +193,7 @@ export class GeneSearchComponent implements OnInit {
     // The parameter is the gene hgnc_symbol from the server. To be calssified as an alias,
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
-        return !hgncSymbol.includes(this.currentQuery.toUpperCase());
+        return !hgncSymbol.includes(this.currentQuery.toUpperCase()) &&
+            hgncSymbol !== this.notFoundString;
     }
 }

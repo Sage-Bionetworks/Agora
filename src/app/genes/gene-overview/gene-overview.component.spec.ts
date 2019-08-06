@@ -32,6 +32,7 @@ import {
 } from '../../core/services';
 
 import { TabMenu } from 'primeng/tabmenu';
+import { MenuItem } from 'primeng/api';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -43,6 +44,7 @@ describe('Component: GeneOverview', () => {
     let geneService: GeneServiceStub;
     let dataService: DataServiceStub;
     let forceService: ForceServiceStub;
+    let navService: NavigationServiceStub;
     let activatedRoute: any;
 
     beforeEach(async(() => {
@@ -75,6 +77,7 @@ describe('Component: GeneOverview', () => {
         geneService = fixture.debugElement.injector.get(GeneService);
         dataService = fixture.debugElement.injector.get(DataService);
         forceService = fixture.debugElement.injector.get(ForceService);
+        navService = fixture.debugElement.injector.get(NavigationService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
@@ -169,6 +172,67 @@ describe('Component: GeneOverview', () => {
 
         const aEl = fixture.debugElement.queryAll(By.css('p-tabMenu'));
         expect(aEl.length).toEqual(1);
+    }));
+
+    it('should activate the mobile menu', fakeAsync(() => {
+        const ammSpy = spyOn(component, 'activateMobileMenu').and.callThrough();
+        component.dataLoaded = true;
+        component.mobileOpen = false;
+        component.showDesktopMenu = false;
+        component.showMobileMenu = true;
+        tick();
+        fixture.detectChanges();
+        component.activateMobileMenu();
+
+        expect(component.mobileOpen).toEqual(true);
+        expect(ammSpy.calls.any()).toEqual(true);
+    }));
+
+    it('should activate the menu with all cases', fakeAsync(() => {
+        const amSpy = spyOn(component, 'activateMenu').and.callThrough();
+        const gtiSpy = spyOn(navService, 'getOvMenuTabIndex').and.callThrough();
+        const stiSpy = spyOn(navService, 'setOvMenuTabIndex').and.callThrough();
+        component.dataLoaded = true;
+        component.neverActivated = true;
+        component.disableMenu = false;
+        component.populateTabMenu();
+        component.menu.activeItem = null;
+
+        tick();
+        fixture.detectChanges();
+        component.activateMenu(null);
+        // No disabled property in this following test
+        expect(component.activeItem).toEqual({label: component.getFirstMenuTabName()});
+        expect(component.activeItem.label).toEqual(component.getFirstMenuTabName());
+        expect(navService.getOvMenuTabIndex()).toEqual(0);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'SUMMARY'}});
+        expect(component.activeItem).toEqual({label: 'SUMMARY'});
+        expect(component.activeItem.label).toEqual('SUMMARY');
+        expect(navService.getOvMenuTabIndex()).toEqual(1);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'EVIDENCE'}});
+        expect(component.activeItem).toEqual({label: 'EVIDENCE'});
+        expect(component.activeItem.label).toEqual('EVIDENCE');
+        expect(navService.getOvMenuTabIndex()).toEqual(2);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'DRUGGABILITY'}});
+        expect(component.activeItem).toEqual({label: 'DRUGGABILITY'});
+        expect(component.activeItem.label).toEqual('DRUGGABILITY');
+        expect(navService.getOvMenuTabIndex()).toEqual(3);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'TEST'}});
+        expect(component.activeItem).toEqual({label: 'TEST'});
+        expect(component.activeItem.label).toEqual('TEST');
+        expect(navService.getOvMenuTabIndex()).toEqual(0);
+
+        expect(amSpy.calls.any()).toEqual(true);
+        expect(gtiSpy.calls.any()).toEqual(true);
+        expect(stiSpy.calls.any()).toEqual(true);
     }));
 
     it('should show the loading component while loading', fakeAsync(() => {

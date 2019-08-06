@@ -67,9 +67,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     showMobileMenu: boolean = false;
     showDesktopMenu: boolean = false;
     firstTimeCheck: boolean = true;
-
-    private resizeTimer;
-    private mobileOpen: boolean = true;
+    resizeTimer;
+    mobileOpen: boolean = true;
 
     constructor(
         private navService: NavigationService,
@@ -80,34 +79,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     ) { }
 
     ngOnInit() {
+        // Making sure we don't have any charts when this loads
         dc.chartRegistry.clear();
 
         // Populate the tab menu
-        this.items = [
-            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
-            { label: 'SUMMARY', disabled: this.disableMenu },
-            { label: 'EVIDENCE',
-                disabled: this.disableMenu,
-                items: [
-                    {
-                        label: 'RNA'
-                    },
-                    {
-                        label: 'Protein'
-                    },
-                    {
-                        label: 'Metabolomics'
-                    },
-                    {
-                        label: 'Single Cell RNA-Seq'
-                    },
-                    {
-                        label: 'Genomic'
-                    }
-            ]
-            },
-            { label: 'DRUGGABILITY', disabled: this.disableMenu }
-        ];
+        this.populateTabMenu();
 
         this.routerSub = this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
@@ -142,36 +118,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         this.geneInfo = this.geneService.getCurrentInfo();
         this.id = this.navService.getId();
 
-        // If we don't have a Gene or any Models/Tissues here, or in case we are
-        // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
-            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
-            this.geneService.getCurrentGene().hgnc_symbol
-        ) {
-            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
-                if (!data.info) {
-                    this.navService.goToRoute('/genes');
-                } else {
-                    if (!data.item) {
-                        // Fill in a new gene with the info attributes
-                        data.item = this.geneService.getEmptyGene(
-                            data.info.ensembl_gene_id, data.info.hgnc_symbol
-                        );
-                        this.geneService.setInfoDataState(true);
-                    }
-                    this.geneService.updatePreviousGene();
-                    this.geneService.updateGeneData(data);
-                    this.gene = data.item;
-                    this.geneInfo = data.info;
-                }
-            }, (error) => {
-                console.log('Error loading gene overview! ' + error.message);
-            }, () => {
-                this.initTissuesModels();
-            });
-        } else {
-            this.initTissuesModels();
-        }
+        // Get a gene if we don't have one and inits the tissues/models
+        this.initData();
     }
 
     ngAfterContentChecked() {
@@ -185,6 +133,35 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         }
     }
 
+    populateTabMenu() {
+        this.items = [
+            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
+            { label: 'SUMMARY', disabled: this.disableMenu },
+            {
+                label: 'EVIDENCE',
+                disabled: this.disableMenu,
+                items: [
+                    {
+                        label: 'RNA'
+                    },
+                    {
+                        label: 'Protein'
+                    },
+                    {
+                        label: 'Metabolomics'
+                    },
+                    {
+                        label: 'Single Cell RNA-Seq'
+                    },
+                    {
+                        label: 'Genomic'
+                    }
+                ]
+            },
+            { label: 'DRUGGABILITY', disabled: this.disableMenu }
+        ];
+    }
+
     updateVars() {
         // Small size
         if (window.innerWidth < 768) {
@@ -196,7 +173,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         }
     }
 
-    mobileActivate() {
+    activateMobileMenu() {
         this.mobileOpen = !this.mobileOpen;
         this.activateMenu(null);
     }
@@ -215,7 +192,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             });
 
             this.activeItem = (this.menu.activeItem) ? this.menu.activeItem :
-                event ? {label: event.target.textContent} : {label: this.isNominatedTargetMenu()};
+                event ? {label: event.target.textContent} : {label: this.getFirstMenuTabName()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
                     case 'NOMINATION DETAILS':
@@ -285,6 +262,39 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     setActiveItem() {
         if (this.geneInfo) {
             this.activeItem = this.items[this.navService.getOvMenuTabIndex()];
+        }
+    }
+
+    initData() {
+        // If we don't have a Gene or any Models/Tissues here, or in case we are
+        // reloading the page, try to get it from the server and move on
+        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
+            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
+            this.geneService.getCurrentGene().hgnc_symbol
+        ) {
+            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
+                if (!data.info) {
+                    this.navService.goToRoute('/genes');
+                } else {
+                    if (!data.item) {
+                        // Fill in a new gene with the info attributes
+                        data.item = this.geneService.getEmptyGene(
+                            data.info.ensembl_gene_id, data.info.hgnc_symbol
+                        );
+                        this.geneService.setInfoDataState(true);
+                    }
+                    this.geneService.updatePreviousGene();
+                    this.geneService.updateGeneData(data);
+                    this.gene = data.item;
+                    this.geneInfo = data.info;
+                }
+            }, (error) => {
+                console.log('Error loading gene overview! ' + error.message);
+            }, () => {
+                this.initTissuesModels();
+            });
+        } else {
+            this.initTissuesModels();
         }
     }
 
@@ -453,8 +463,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         return (this.geneInfo && this.geneInfo.nominations) ? 'Yes' : 'No';
     }
 
-    isNominatedTargetMenu(): string {
-        return (this.geneInfo && this.geneInfo.nominations) ? 'NOMINATION DETAILS ' : 'SUMMARY';
+    getFirstMenuTabName(): string {
+        return (this.geneInfo && this.geneInfo.nominations) ? 'NOMINATION DETAILS' : 'SUMMARY';
     }
 
     onResize(event?: any) {
