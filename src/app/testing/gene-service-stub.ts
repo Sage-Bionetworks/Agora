@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics } from '../models';
+import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo } from '../models';
 import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels } from './gene-mocks';
 
 @Injectable()
@@ -36,6 +36,10 @@ export class GeneServiceStub {
 
     getCurrentInfo(): GeneInfo {
         return mockInfo1;
+    }
+
+    setCurrentTeams(teams: TeamInfo[]) {
+        //
     }
 
     setLogFC(min: number, max: number) {

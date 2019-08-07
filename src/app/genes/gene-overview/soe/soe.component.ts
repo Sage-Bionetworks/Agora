@@ -30,6 +30,11 @@ export class SOEComponent implements OnInit {
 
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
 
+        // Adds the summary entries
+        this.initData();
+    }
+
+    initData() {
         this.summary = [
             {
                 property: 'Genetic Association with LOAD',

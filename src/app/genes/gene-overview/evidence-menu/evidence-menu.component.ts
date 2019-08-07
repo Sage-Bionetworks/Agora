@@ -52,13 +52,7 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
 
     ngOnInit() {
         // Populate the tab menu
-        this.items = [
-            { label: 'RNA', disabled: false } as MenuItem,
-            { label: 'Protein', disabled: true } as MenuItem,
-            { label: 'Metabolomics', disabled: true } as MenuItem,
-            { label: '', disabled: true} as MenuItem,
-            { label: '', disabled: true} as MenuItem
-        ];
+        this.populateTabMenu();
 
         this.geneInfo = this.geneService.getCurrentInfo();
 
@@ -69,6 +63,16 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
                 this.items[2].disabled = false;
             }
         });
+    }
+
+    populateTabMenu() {
+        this.items = [
+            { label: 'RNA', disabled: false } as MenuItem,
+            { label: 'Protein', disabled: true } as MenuItem,
+            { label: 'Metabolomics', disabled: true } as MenuItem,
+            { label: '', disabled: true} as MenuItem,
+            { label: '', disabled: true} as MenuItem
+        ];
     }
 
     activateMenu(event) {

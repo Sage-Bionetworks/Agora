@@ -16,7 +16,8 @@ import {
     GenesResponse,
     GeneInfosResponse,
     TeamMember,
-    GeneResponse
+    GeneResponse,
+    GeneInfo
 } from '../models';
 
 import { Observable, of } from 'rxjs';
@@ -49,6 +50,10 @@ export class ApiServiceStub {
 
     getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
         return of({ items: [mockInfo1], isEnsembl: false });
+    }
+
+    getTeams(info?: GeneInfo): Observable<object> {
+        return of([mockTeam1]);
     }
 
     getAllTeams(): Observable<object> {

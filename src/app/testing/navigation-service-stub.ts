@@ -11,6 +11,7 @@ export class NavigationServiceStub {
     // The menu tab that we route to when loading the overview component.
     // Defaults to the first one
     ovMenuTabIndex: number = 0;
+    evidenceMenuTabIndex: number = 0;
     testRouter?: RouterStub;
     testRoute?: ActivatedRouteStub;
 
@@ -45,5 +46,13 @@ export class NavigationServiceStub {
 
     setOvMenuTabIndex(index: number) {
         this.ovMenuTabIndex = index;
+    }
+
+    getEvidenceMenuTabIndex(): number {
+        return this.evidenceMenuTabIndex;
+    }
+
+    setEvidenceMenuTabIndex(index: number) {
+        this.evidenceMenuTabIndex = index;
     }
 }

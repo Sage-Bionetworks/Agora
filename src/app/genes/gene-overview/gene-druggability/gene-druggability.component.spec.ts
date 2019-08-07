@@ -73,7 +73,55 @@ describe('Component: GeneDruggability', () => {
         expect(aEl.length).toEqual(1);
     });
 
-    it('should get the correct druggability title', () => {
+    it('should get the correct antibody modality druggability title', () => {
+        const gdtSpy = spyOn(component, 'getDruggabilityABTitle').and.callThrough();
+
+        let title: string = '';
+        title = component.getDruggabilityABTitle(1);
+        expect(title).toEqual('Ideal');
+        title = component.getDruggabilityABTitle(2);
+        expect(title).toEqual('Highly accessible');
+        title = component.getDruggabilityABTitle(3);
+        expect(title).toEqual('Accessible');
+        title = component.getDruggabilityABTitle(4);
+        expect(title).toEqual('Probably accessible');
+        title = component.getDruggabilityABTitle(5);
+        expect(title).toEqual('Probably inaccessible');
+        title = component.getDruggabilityABTitle(6);
+        expect(title).toEqual('Inaccessible');
+        title = component.getDruggabilityABTitle(7);
+        expect(title).toEqual('Unknown');
+
+        title = component.getDruggabilityABTitle(-1);
+        expect(title).toEqual('');
+
+        expect(gdtSpy).toHaveBeenCalled();
+    });
+
+    it('should get the correct safety druggability title', () => {
+        const gdtSpy = spyOn(component, 'getDruggabilitySFTitle').and.callThrough();
+
+        let title: string = '';
+        title = component.getDruggabilitySFTitle(1);
+        expect(title).toEqual('Lowest risk, most stringent requirements met');
+        title = component.getDruggabilitySFTitle(2);
+        expect(title).toEqual('Lower risk');
+        title = component.getDruggabilitySFTitle(3);
+        expect(title).toEqual('Potential risks, proceed with caution');
+        title = component.getDruggabilitySFTitle(4);
+        expect(title).toEqual('Probable safety risks requiring mitigation');
+        title = component.getDruggabilitySFTitle(5);
+        expect(title).toEqual('Potentially not safe in humans');
+        title = component.getDruggabilitySFTitle(6);
+        expect(title).toEqual('Unknown');
+
+        title = component.getDruggabilitySFTitle(-1);
+        expect(title).toEqual('');
+
+        expect(gdtSpy).toHaveBeenCalled();
+    });
+
+    it('should get the correct small molecule druggability title', () => {
         const gdtSpy = spyOn(component, 'getDruggabilitySMTitle').and.callThrough();
 
         let title: string = '';
@@ -114,7 +162,7 @@ describe('Component: GeneDruggability', () => {
         expect(gdtSpy).toHaveBeenCalled();
     });
 
-    it('should get the correct druggability text', () => {
+    it('should get the correct small molecule druggability text', () => {
         const gdtSpy = spyOn(component, 'getDruggabilitySMText').and.callThrough();
 
         let title: string = '';
@@ -191,6 +239,88 @@ describe('Component: GeneDruggability', () => {
         expect(gdtSpy).toHaveBeenCalled();
     });
 
+    it('should get the correct antibody modality druggability text', () => {
+        const gdtSpy = spyOn(component, 'getDruggabilityABText').and.callThrough();
+
+        let title: string = '';
+        title = component.getDruggabilityABText(1);
+        expect(title).toEqual(
+            'Secreted protein. Highly accessible to antibody-based therapies'
+        );
+        title = component.getDruggabilityABText(2);
+        expect(title).toEqual(
+            'Component of the extracellular matrix (ECM). Highly accessible to ' +
+            'antibody-based therapies, but potentially less so than secreted proteins'
+        );
+        title = component.getDruggabilityABText(3);
+        expect(title).toEqual(
+            'Cell membrane-bound proteins. Highly accessible to antibody-based ' +
+            'therapies, but potentially less so than secreted proteins or ECM components'
+        );
+        title = component.getDruggabilityABText(4);
+        expect(title).toEqual(
+            'Limited evidence that target is a secreted protein, ECM component or ' +
+            'cell membrane-bound protein'
+        );
+        title = component.getDruggabilityABText(5);
+        expect(title).toEqual(
+            'Protein located in the cytosol. Not practically accessible to ' +
+            'antibody-based therapies, but may be more easily accessible to other modalities'
+        );
+        title = component.getDruggabilityABText(6);
+        expect(title).toEqual('Protein located in intracellular compartment');
+        title = component.getDruggabilityABText(7);
+        expect(title).toEqual(
+            'Dark target. Paucity of biological knowledge means progress will be ' +
+            'difficult'
+        );
+
+        title = component.getDruggabilityABText(-1);
+        expect(title).toEqual('');
+
+        expect(gdtSpy).toHaveBeenCalled();
+    });
+
+    it('should get the correct safety druggability text', () => {
+        const gdtSpy = spyOn(component, 'getDruggabilitySFText').and.callThrough();
+
+        let title: string = '';
+        title = component.getDruggabilitySFText(1);
+        expect(title).toEqual(
+            'Target has a drug in phase IV in the appropriate modality, with good ' +
+            'safety profile'
+        );
+        title = component.getDruggabilitySFText(2);
+        expect(title).toEqual(
+            'No major issues found from gene expression, genetic or pharmacological ' +
+            'profiling, but has not been extensively tested in humans'
+        );
+        title = component.getDruggabilitySFText(3);
+        expect(title).toEqual(
+            'Two or fewer of: high off-target gene expression, cancer driver, ' +
+            'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
+            'associated gene, or black box warning on clinically used drug'
+        );
+        title = component.getDruggabilitySFText(4);
+        expect(title).toEqual(
+            'More than two of: high off target gene expression, cancer driver, ' +
+            'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
+            'associated gene, or black box warning on clinically used drug'
+        );
+        title = component.getDruggabilitySFText(5);
+        expect(title).toEqual(
+            'Evidence of on-target toxicity that may preclude clinical use in the ' +
+            'desired modality'
+        );
+        title = component.getDruggabilitySFText(6);
+        expect(title).toEqual('Insufficient data available');
+
+        title = component.getDruggabilitySFText(-1);
+        expect(title).toEqual('');
+
+        expect(gdtSpy).toHaveBeenCalled();
+    });
+
     it('should get the correct bucket style', () => {
         const gbsSpy = spyOn(component, 'getBucketBGColor').and.callThrough();
         const i = d3.interpolateRgb('#20A386', '#440D54');
@@ -215,5 +345,31 @@ describe('Component: GeneDruggability', () => {
         expect(title).toEqual('#FFFFFF');
 
         expect(gbsSpy).toHaveBeenCalled();
+    });
+
+    it('should set the current bucket', () => {
+        const scbSpy = spyOn(component, 'setCurrentBucket').and.callThrough();
+        component.setCurrentBucket(1, 'sm');
+        component.setCurrentBucket(2, 'ab');
+        component.setCurrentBucket(3, 'sf');
+
+        expect(scbSpy).toHaveBeenCalled();
+        expect(scbSpy.calls.count()).toEqual(3);
+        expect(component.currentBucketSM).toEqual(1);
+        expect(component.currentBucketAB).toEqual(2);
+        expect(component.currentBucketSF).toEqual(3);
+    });
+
+    it('should reset the bucket', () => {
+        const rbSpy = spyOn(component, 'resetBucket').and.callThrough();
+        component.geneInfo = mockInfo1;
+        component.resetBucket({index: 0});
+        component.resetBucket({index: 1});
+        component.resetBucket({index: 2});
+
+        expect(rbSpy).toHaveBeenCalled();
+        expect(component.currentBucketSM).toEqual(1);
+        expect(component.currentBucketAB).toEqual(1);
+        expect(component.currentBucketSF).toEqual(3);
     });
 });

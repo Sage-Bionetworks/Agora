@@ -32,7 +32,6 @@ import {
 } from '../../core/services';
 
 import { TabMenu } from 'primeng/tabmenu';
-import { MenuItem } from 'primeng/api';
 
 import { MockComponent } from 'ng-mocks';
 
