@@ -451,10 +451,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         return ['gene-coexp-network', this.gene.hgnc_symbol];
     }
 
-    showDialog(dialogString: string) {
-        this[dialogString] = true;
-    }
-
     showDruggability() {
         window.open('https://www.synapse.org/#!Synapse:syn13363443', '_blank');
     }

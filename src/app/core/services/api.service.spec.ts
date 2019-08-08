@@ -238,7 +238,7 @@ describe('Service: Api: TestBed', () => {
     it('should trigger a refresh for the charts on the server', () => {
         const res: string[] = mockModels;
 
-        apiService.refreshChart('AD Diagnosis (males and females)', 'VGF').subscribe(
+        apiService.refreshChartsData('AD Diagnosis (males and females)', 'VGF').subscribe(
             (response) => {
             expect(response).toEqual(res);
         });

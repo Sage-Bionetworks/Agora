@@ -9,20 +9,25 @@ import {
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 import {
     RouterStub,
     ApiServiceStub,
     GeneServiceStub,
     NavigationServiceStub,
-    mockInfo1
+    mockInfo1,
+    mockGene1
 } from '../../testing';
 
 import { GeneSearchComponent } from './gene-search.component';
 
 import { ApiService, GeneService, NavigationService } from '../../core/services';
 
+import { GeneResponse } from 'app/models';
+
+// Updating to rxjs 6 import statement
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { of, empty, Observable, throwError } from 'rxjs';
 
 import { ProgressSpinner } from 'primeng/progressspinner';
@@ -33,6 +38,8 @@ describe('Component: GeneSearch', () => {
     let component: GeneSearchComponent;
     let fixture: ComponentFixture<GeneSearchComponent>;
     let apiService: ApiServiceStub;
+    let geneService: GeneServiceStub;
+    let navService: NavigationService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -59,6 +66,8 @@ describe('Component: GeneSearch', () => {
 
         // Get the injected instances
         apiService = fixture.debugElement.injector.get(ApiService);
+        geneService = fixture.debugElement.injector.get(GeneService);
+        navService = fixture.debugElement.injector.get(NavigationService);
 
         component = fixture.componentInstance; // Component test instance
     }));
@@ -167,6 +176,25 @@ describe('Component: GeneSearch', () => {
         fixture.detectChanges();
     }));
 
+    it('should update the results on query change', fakeAsync(() => {
+        const iqfSpy = spyOn(component, 'initQueryField').and.callThrough();
+        const sSpy = spyOn(component, 'search').and.callThrough();
+        fixture.detectChanges();
+
+        const input = fixture.debugElement.query(By.css('input'));
+        expect(input.nativeElement.value).toEqual('');
+
+        input.nativeElement.focus();
+        input.nativeElement.value = 'PIAS2';
+        input.nativeElement.dispatchEvent(new Event('input'));
+        tick(1000);
+        fixture.detectChanges();
+
+        expect(input.nativeElement.value).toEqual('PIAS2');
+        expect(iqfSpy.calls.any()).toEqual(true);
+        expect(sSpy.calls.any()).toEqual(true);
+    }));
+
     it('should search for a non-empty gene', fakeAsync(() => {
         const dsSpy = spyOn(apiService, 'getInfosMatchId').and.returnValue(
             of({ items: [mockInfo1]})
@@ -177,5 +205,42 @@ describe('Component: GeneSearch', () => {
             expect(dsSpy.calls.any()).toEqual(true);
             expect(data).toEqual({ items: [mockInfo1]});
         }); // search a gene id
+    }));
+
+    it('should redirect if we try to get a gene with no info', fakeAsync(() => {
+        const ggSpy = spyOn(component, 'getGene').and.callThrough();
+        const sotSpy = spyOn(navService, 'setOvMenuTabIndex').and.callThrough();
+        const gtrSpy = spyOn(navService, 'goToRoute').and.callThrough();
+        const gcgSpy = spyOn(geneService, 'getCurrentGene').and.callThrough();
+        const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
+        const data = {
+            item: mockGene1,
+            info: mockInfo1
+        } as GeneResponse;
+        data.info = null;
+        const aggSpy = spyOn(apiService, 'getGene').and.returnValue(of(data));
+
+        component.getGene('VGF');
+        expect(ggSpy.calls.any()).toEqual(true);
+        expect(sotSpy.calls.any()).toEqual(false);
+        expect(gtrSpy.calls.any()).toEqual(true);
+        expect(aggSpy.calls.any()).toEqual(true);
+        expect(gcgSpy.calls.any()).toEqual(false);
+        expect(upgSpy.calls.any()).toEqual(false);
+    }));
+
+    it('should view a gene on click', fakeAsync(() => {
+        const vgSpy = spyOn(component, 'viewGene').and.callThrough();
+        const sotSpy = spyOn(navService, 'setOvMenuTabIndex').and.callThrough();
+        const ggSpy = spyOn(apiService, 'getGene').and.callThrough();
+        const gcgSpy = spyOn(geneService, 'getCurrentGene').and.callThrough();
+        const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
+
+        component.viewGene(mockInfo1);
+        expect(vgSpy.calls.any()).toEqual(true);
+        expect(sotSpy.calls.any()).toEqual(true);
+        expect(ggSpy.calls.any()).toEqual(true);
+        expect(gcgSpy.calls.any()).toEqual(true);
+        expect(upgSpy.calls.any()).toEqual(true);
     }));
 });

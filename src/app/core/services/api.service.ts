@@ -271,7 +271,7 @@ export class ApiService {
         return this.http.get('/api/metabolomics', { headers, params });
     }
 
-    refreshChart(filter: any, id: string, type: string = 'RNA'): Observable<any> {
+    refreshChartsData(filter: any, id: string, type: string = 'RNA'): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',

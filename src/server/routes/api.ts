@@ -222,7 +222,7 @@ connection.once('open', () => {
             }
         });
         fPromise.then((filterStatus) => {
-            loadChartData().then(async (status) => {
+            registerCharts().then(async (status) => {
                 let indx: any = null;
                 const localGeneProteomics = geneProteomics.slice().filter((p: Proteomics) => {
                     return p.log2_fc && p.uniprotid === filter;
@@ -339,7 +339,7 @@ connection.once('open', () => {
         const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
         const id = req.query.id;
 
-        loadChartData().then(async (status) => {
+        registerCharts().then(async (status) => {
             let indx: any = null;
 
             switch (filter) {
@@ -944,7 +944,7 @@ connection.once('open', () => {
         return chartInfos.get(label);
     }
 
-    function loadChartData(): Promise<any> {
+    function registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
             addChartInfo(
                 'volcano-plot',

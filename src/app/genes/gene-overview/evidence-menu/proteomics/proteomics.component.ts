@@ -49,11 +49,16 @@ export class ProteomicsComponent implements OnInit {
             this.isEmptyGene = true;
         });
 
-        this.loadChartData().then((status) => {
+        // Registers all the charts and loads data
+        this.initData();
+    }
+
+    initData() {
+        this.registerCharts().then((status) => {
             // First load of dimension and groups, set a default model so we don't
             // load all the data
             this.chartService.pQueryFilter.spGroup = '';
-            this.apiService.refreshChart(
+            this.apiService.refreshChartsData(
                 this.chartService.queryFilter.spGroup,
                 this.gene.hgnc_symbol,
                 'Proteomics'
@@ -70,7 +75,7 @@ export class ProteomicsComponent implements OnInit {
         });
     }
 
-    loadChartData(): Promise<any> {
+    registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.chartService.addChartInfo(
                 'select-protein',

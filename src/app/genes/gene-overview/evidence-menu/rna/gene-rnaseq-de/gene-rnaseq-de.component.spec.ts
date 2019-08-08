@@ -1,7 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed
+    TestBed,
+    tick,
+    fakeAsync
 } from '@angular/core/testing';
 import { SpyLocation } from '@angular/common/testing';
 import { By } from '@angular/platform-browser';
@@ -102,19 +104,6 @@ describe('Component: GeneRNASeqDE', () => {
         expect(smEl).toBeDefined();
     });
 
-    // TODO: add this again if the download components get uncommented
-    /*it('should have three download widgets if we have a gene', fakeAsync(() => {
-        component.isEmptyGene = false;
-        tick();
-        fixture.detectChanges();
-
-        const el = fixture.debugElement.query(By.css('download'));
-        expect(el).toBeDefined();
-
-        const aEl = fixture.debugElement.queryAll(By.css('download'));
-        expect(aEl.length).toEqual(3);
-    }));*/
-
     it('should have extra info component', () => {
         component.dataLoaded = true;
         fixture.detectChanges();
@@ -131,5 +120,25 @@ describe('Component: GeneRNASeqDE', () => {
 
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(1);
+    });
+
+    it('should refresh the charts data', fakeAsync(() => {
+        const rcdSpy = spyOn(component, 'refreshChartsData').and.callThrough();
+        component.dataLoaded = false;
+        component.refreshChartsData();
+
+        tick();
+        fixture.detectChanges();
+        expect(rcdSpy.calls.any()).toEqual(true);
+        expect(chartService.filteredData).not.toEqual(null);
+        expect(component.dataLoaded).toEqual(true);
+    }));
+
+    it('should get the dropdown icon string', () => {
+        const gdiSpy = spyOn(component, 'getDropdownIcon').and.callThrough();
+        const iconString = component.getDropdownIcon();
+
+        expect(gdiSpy.calls.any()).toEqual(true);
+        expect(iconString).toEqual('fa fa-caret-down');
     });
 });

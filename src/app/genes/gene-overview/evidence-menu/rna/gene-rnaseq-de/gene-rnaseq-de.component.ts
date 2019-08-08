@@ -82,7 +82,16 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.isEmptyGene = true;
         });
 
-        this.loadChartData().then((status) => {
+        // Registers all the charts and loads data
+        this.initData();
+    }
+
+    ngAfterViewChecked() {
+        this.isViewReady = true;
+    }
+
+    initData() {
+        this.registerCharts().then((status) => {
             const rTissues = this.geneService.getGeneTissues().sort();
             rTissues.forEach((t) => {
                 this.tissues.push({label: t.toUpperCase(), value: t});
@@ -108,24 +117,11 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.geneService.updateEmptyGeneState();
             this.isEmptyGene = this.geneService.getEmptyGeneState();
 
-            // First load of dimension and groups, set a default model so we don't load all the
-            // data
-            this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
-            this.apiService.refreshChart(
-                this.chartService.queryFilter.smGroup,
-                this.gene.hgnc_symbol
-            ).subscribe((d) => {
-                this.chartService.filteredData = d;
-                this.dataLoaded = true;
-            });
+            this.refreshChartsData();
         });
     }
 
-    ngAfterViewChecked() {
-        this.isViewReady = true;
-    }
-
-    loadChartData(): Promise<any> {
+    registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.chartService.addChartInfo(
                 'volcano-plot',
@@ -181,53 +177,18 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         });
     }
 
-    getTissue(index: number) {
-        return this.geneService.getGeneTissues()[index];
-    }
-
-    getModel(index: number) {
-        return this.geneService.getGeneModels()[index];
-    }
-
-    getDefaultLabel(): string {
-        return this.geneService.getDefaultTissue() ||
-            (this.tissues.length ? this.tissues[0].value : '');
-    }
-
-    toggleTissueModel() {
-        // Update the current gene for this tissue
-        this.apiService.getGene(
-            this.gene.ensembl_gene_id,
-            this.geneService.getCurrentTissue(),
-            this.geneService.getCurrentModel()
-        ).subscribe(
-            (data: GeneResponse) => {
-                if (!data.info) {
-                    this.router.navigate(['/genes']);
-                } else {
-                    if (!data.item) {
-                        // Fill in a new gene with the info attributes
-                        data.item = this.geneService.getEmptyGene(
-                            data.info.ensembl_gene_id, data.info.hgnc_symbol
-                        );
-                    }
-                }
-
-                this.geneService.updateGeneData(data);
-                this.gene = data.item;
-            }, (error) => {
-                console.log('Error getting gene: ' + error.message);
-            }, () => {
-                // Check if we have a database id at this point
-                if (this.gene && this.gene._id) {
-                    this.geneService.setCurrentTissue(this.gene.tissue);
-                    this.geneService.setCurrentModel(this.gene.model);
-                } else {
-                    this.geneService.updateEmptyGeneState();
-                    this.isEmptyGene = this.geneService.getEmptyGeneState();
-                }
-            }
-        );
+    // Refreshes the charts data
+    refreshChartsData() {
+        // In the first load of dimension and groups, set a default model so we
+        // don't load all the data without filtering it
+        this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
+        this.apiService.refreshChartsData(
+            this.chartService.queryFilter.smGroup,
+            this.gene.hgnc_symbol
+        ).subscribe((d) => {
+            this.chartService.filteredData = d;
+            this.dataLoaded = true;
+        });
     }
 
     getDownloadFileName(suffix: string): string {
@@ -255,23 +216,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         );
     }
 
-    destroyComponent(index: number) {
-        this.componentRefs[index].destroy();
-    }
-
-    openDropdown() {
-        this.dropdownIconClass = 'fa fa-caret-up';
-    }
-
-    closeDropdown() {
-        this.dropdownIconClass = 'fa fa-caret-down';
-    }
-
     getDropdownIcon(): string {
         return this.dropdownIconClass;
-    }
-
-    showDialog(dialogString: string) {
-        this[dialogString] = true;
     }
 }

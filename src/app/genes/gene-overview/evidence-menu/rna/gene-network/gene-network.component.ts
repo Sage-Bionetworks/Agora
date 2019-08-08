@@ -57,7 +57,7 @@ export class GeneNetworkComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.noData) { this.noData = this.geneService.getInfoDataState(); }
+        if (!this.noData) { this.noData = this.geneService.getNoInfoDataState(); }
 
         // Only process things if we have data
         if (!this.noData) {
@@ -264,9 +264,5 @@ export class GeneNetworkComponent implements OnInit {
                     }
                 ]);
             });
-    }
-
-    showDialog(dialogString: string) {
-        this[dialogString] = true;
     }
 }

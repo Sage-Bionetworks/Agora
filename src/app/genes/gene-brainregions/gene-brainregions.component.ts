@@ -23,8 +23,8 @@ export class GeneBRComponent implements OnInit {
         filterLvl: 0
     };
 
-    private gene = this.geneService.getCurrentGene();
-    private geneInfo: any;
+    gene = this.geneService.getCurrentGene();
+    geneInfo: any;
 
     constructor(
         private router: Router,
@@ -35,7 +35,6 @@ export class GeneBRComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // The data wasn't loaded yet, redirect for now
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
         if (!!this.forceService.getGeneClickedList() &&

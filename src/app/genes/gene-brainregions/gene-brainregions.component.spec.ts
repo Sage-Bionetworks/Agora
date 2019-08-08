@@ -1,7 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed
+    TestBed,
+    fakeAsync,
+    tick
 } from '@angular/core/testing';
 import { SpyLocation } from '@angular/common/testing';
 import { By } from '@angular/platform-browser';
@@ -75,4 +77,30 @@ describe('Component: GeneBR', () => {
         const aEl = fixture.debugElement.queryAll(By.css('table'));
         expect(aEl.length).toEqual(1);
     });
+
+    it('should load the data', fakeAsync(() => {
+        const noiSpy = spyOn(component, 'ngOnInit').and.callThrough();
+        const ggclSpy = spyOn(forceService, 'getGeneClickedList').and.callThrough();
+        component.ngOnInit();
+
+        tick();
+        fixture.detectChanges();
+        // Testing the else path in the ngOnInit
+        expect(component.selectedGeneData).not.toEqual(undefined);
+        expect(component.selectedGeneData.nodes.length).toEqual(0);
+        expect(component.selectedGeneData.links.length).not.toEqual(0);
+
+        // Testing the if path in the ngOnInit
+        component.id = 'ENSG00000078043';
+        component.ngOnInit();
+        tick();
+        fixture.detectChanges();
+        expect(component.selectedGeneData).not.toEqual(undefined);
+        expect(component.selectedGeneData.nodes.length).not.toEqual(0);
+        expect(component.selectedGeneData.links.length).not.toEqual(0);
+
+        expect(noiSpy.calls.any()).toEqual(true);
+        expect(ggclSpy.calls.any()).toEqual(true);
+        expect(component.dataLoaded).toEqual(true);
+    }));
 });

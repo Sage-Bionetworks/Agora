@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Gene, GeneInfo, Metabolomics } from '../../../../models';
 
-import { GeneService, ApiService } from '../../../../core/services';
+import { GeneService, ApiService, DataService } from '../../../../core/services';
 
 @Component({
     selector: 'metabolomics',
@@ -23,7 +23,8 @@ export class MetabolomicsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private apiService: ApiService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private dataService: DataService
     ) {}
 
     ngOnInit() {
@@ -52,5 +53,9 @@ export class MetabolomicsComponent implements OnInit {
 
     getSignificantText(pval: number): string {
         return (pval <= 0.05) ? ' is ' : ' is not ';
+    }
+
+    getSignificantFigures(threshold: number, figures: number): number {
+        return this.dataService.getSignificantFigures(threshold, figures);
     }
 }

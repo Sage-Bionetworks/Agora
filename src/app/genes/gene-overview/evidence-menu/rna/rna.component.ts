@@ -27,7 +27,8 @@ export class RNAComponent implements OnInit {
         //
     }
 
-    getInfoState() {
-        return this.geneService.getInfoDataState();
+    // Returns true if we have no data
+    getNoInfoState(): boolean {
+        return this.geneService.getNoInfoDataState();
     }
 }

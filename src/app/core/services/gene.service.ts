@@ -267,7 +267,7 @@ export class GeneService {
             false;
     }
 
-    getInfoDataState() {
+    getNoInfoDataState(): boolean {
         return this.noInfoData;
     }
 

@@ -69,4 +69,11 @@ describe('Component: RNA', () => {
         const aEl = fixture.debugElement.queryAll(By.css('rna-dialog'));
         expect(aEl.length).toEqual(1);
     });
+
+    it('should get the no info data state', () => {
+        const gisSpy = spyOn(component, 'getNoInfoState').and.callThrough();
+        const infoState: boolean = component.getNoInfoState();
+        expect(gisSpy.calls.any()).toEqual(true);
+        expect(infoState).toEqual(false);
+    });
 });

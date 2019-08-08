@@ -449,7 +449,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
-                        await self.apiService.refreshChart(
+                        await self.apiService.refreshChartsData(
                             self.chartService.queryFilter.smGroup, gene
                         )
                             .subscribe((results) => {
@@ -462,7 +462,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
-                        await self.apiService.refreshChart(
+                        await self.apiService.refreshChartsData(
                             self.chartService.pQueryFilter.spGroup, gene, self.type)
                             .subscribe((results) => {
                             self.chartService.filteredData = results;

@@ -168,7 +168,7 @@ export class GeneServiceStub {
             false;
     }
 
-    getInfoDataState() {
+    getNoInfoDataState() {
         return this.noInfoData;
     }
 

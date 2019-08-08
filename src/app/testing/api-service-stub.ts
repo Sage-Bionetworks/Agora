@@ -64,7 +64,7 @@ export class ApiServiceStub {
         return of([]);
     }
 
-    refreshChart(filter: any, id: string): Observable<any> {
+    refreshChartsData(filter: any, id: string): Observable<any> {
         return of({
             smGroup: {
                 values: [],

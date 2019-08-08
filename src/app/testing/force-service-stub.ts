@@ -1,6 +1,15 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Gene, GeneNetwork, GeneNetworkLinks, LinksListResponse } from '../models';
+import {
+    Gene,
+    GeneNetwork,
+    GeneNetworkLinks,
+    LinksListResponse,
+    GeneLink,
+    GeneNode
+} from '../models';
+
+import { mockGene1 } from './gene-mocks';
 
 @Injectable()
 export class ForceServiceStub {
@@ -21,9 +30,22 @@ export class ForceServiceStub {
         filterLvl: 0
     };
     genesClicked: GeneNetwork = {
-        links: [],
-        nodes: [],
-        origin: undefined,
+        links: [{
+            value: 1,
+            source: 'VGF',
+            target: 'PIAS2',
+            brainregions: [],
+            hgnc_symbolA: 'A',
+            hgnc_symbolB: 'B'
+        } as GeneLink],
+        nodes: [{
+            id: 'VGF',
+            ensembl_gene_id: 'VGF',
+            group: 1,
+            hgnc_symbol: 'PIAS2',
+            brainregions: []
+        } as GeneNode],
+        origin: mockGene1,
         filterLvl: 0
     };
     currentGene: Gene;

@@ -12,12 +12,13 @@ import {
     ActivatedRouteStub,
     RouterStub,
     mockMetabolomics,
-    mockInfo1
+    mockInfo1,
+    DataServiceStub
 } from '../../../../testing';
 
 import { MetabolomicsComponent } from './metabolomics.component';
 
-import { ApiService, GeneService } from '../../../../core/services';
+import { ApiService, GeneService, DataService } from '../../../../core/services';
 
 describe('Component: Metabolomics', () => {
     let component: MetabolomicsComponent;
@@ -26,6 +27,7 @@ describe('Component: Metabolomics', () => {
     let apiService: ApiServiceStub;
     let activatedRoute: any;
     let geneService: GeneServiceStub;
+    let dataService: DataServiceStub;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -39,6 +41,7 @@ describe('Component: Metabolomics', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() }
             ]
         })
@@ -50,6 +53,7 @@ describe('Component: Metabolomics', () => {
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
+        dataService = fixture.debugElement.injector.get(DataService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 
@@ -60,5 +64,14 @@ describe('Component: Metabolomics', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should get the significant figures of a number', () => {
+        const gsfSpy = spyOn(component, 'getSignificantFigures').and.callThrough();
+        const value: number = component.getSignificantFigures(0.023456, 2);
+
+        expect(gsfSpy.calls.any()).toEqual(true);
+        // Look in the dataService for the calculations
+        expect(value).toEqual(0.011);
     });
 });
