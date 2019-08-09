@@ -28,6 +28,7 @@ Once you have those, you should install these globals with `npm install --global
 * `webpack`
 * `webpack-dev-server`
 * `karma`
+* `nodemon`
 * `protractor`
 * `rimraf`
 * `typescript`

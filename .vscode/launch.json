@@ -5,7 +5,7 @@
             "name": "Launch Chrome against localhost, with sourcemaps",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:8080/*",
+            "url": "http://localhost:8080/genes",
             "runtimeArgs": [
               "--disable-web-security",
               "--user-data-dir",
@@ -15,10 +15,20 @@
             "webRoot": "${workspaceRoot}"
         },
         {
+            "name": "Launch server.js via nodemon",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "nodemon",
+            "program": "${workspaceRoot}/dist/server.js",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "name": "Attach to Chrome, with sourcemaps",
             "type": "chrome",
             "request": "attach",
-            "url": "http://localhost:8080/*",
+            "url": "http://localhost:8080/genes",
             "port": 9222,
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}"

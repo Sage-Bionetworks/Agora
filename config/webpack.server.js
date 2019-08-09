@@ -51,9 +51,6 @@ module.exports = {
             // What to watch.
             watch: helpers.root('dist/server.js'),
 
-            // Files to ignore.
-            ignore: ['*.js.map'],
-
             // Detailed log.
             verbose: true,
 
