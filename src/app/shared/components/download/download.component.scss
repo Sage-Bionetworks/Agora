@@ -89,6 +89,7 @@
 
             .pi-check:before {
                 font-size: $font-size-xx-regular-odd;
+                content: url("/assets/icon/checked_icon.png") !important;
             }
         }
     }

@@ -1,1 +1,41 @@
-// In styles.scss
+// Most of the table styling in styles.scss to avoid repeating
+// code
+@import "../../../assets/css/helpers/variables";
+@import "../../../assets/css/helpers/mixins";
+
+.nomlist-list {
+    p-table {
+        .ui-table-thead {
+            >tr>th {
+                background: white !important;
+                color: color(text, secondary) !important;
+            }
+        }
+
+        .ui-table-scrollable-header-table {
+            border-right: solid 17px $background !important;
+        }
+
+        .table-icon {
+            color: $background;
+            cursor: pointer;
+            padding-left: 5px;
+            padding-right: 5px;
+            font-size: 1.5em;
+        }
+
+        .absolute-icon {
+            position: absolute;
+            right: 42px;
+            top: 1px;
+        }
+    }
+}
+
+.ui-multiselect-panel {
+    background: white;
+
+    .pi-check::before {
+        color: $secondary-background;
+    }
+}

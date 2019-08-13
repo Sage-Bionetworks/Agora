@@ -10,7 +10,8 @@ import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../.
 
 import {
     Message,
-    SortEvent
+    SortEvent,
+    MenuItem
 } from 'primeng/primeng';
 
 @Component({
@@ -27,7 +28,9 @@ export class GenesListComponent implements OnInit {
     selectedInfo: GeneInfo;
     totalRecords: number;
     cols: any[];
+    selectedColumns: any[];
     loading: boolean = true;
+    defaultIconClass: string = 'pi pi-check';
 
     constructor(
         private navService: NavigationService,
@@ -43,6 +46,8 @@ export class GenesListComponent implements OnInit {
             { field: 'study', header: 'Cohort Study' },
             { field: 'input_data', header: 'Input Data' }
         ];
+
+        this.selectedColumns = this.cols;
 
         this.initData();
     }
@@ -86,6 +91,16 @@ export class GenesListComponent implements OnInit {
 
             this.loading = false;
         });
+    }
+
+    toggleColumn(event: any) {
+        console.log(event);
+        event.item.icon = (event.item.icon) ? '' : this.defaultIconClass;
+        const col = this.cols.find((i) => i.header === event.item.label);
+        console.log(col);
+        event.originalEvent.preventDefault();
+        event.originalEvent.stopPropagation();
+        return false;
     }
 
     commaFlattenArray(array: any[]): any[] {

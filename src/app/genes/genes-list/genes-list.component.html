@@ -10,7 +10,7 @@
         </more-info>
     </div>
     <p-table #gl
-        [columns]="cols" [value]="genesInfo" selectionMode="single"
+        [columns]="selectedColumns" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
@@ -59,10 +59,23 @@
                     </div>
                 </div>
             </div>
+            <div class="row icon-row">
+                <div class="col-md-9 col-sm-9 col-9">
+                </div>
+                <div class="col-md-3 col-sm-3 col-3 icon-col">
+                    <i class="pi pi-download table-icon absolute-icon"></i>
+                    <div style="text-align:right">
+                        <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                                    selectedItemsLabel="" defaultLabel="Choose Columns"
+                                    dropdownIcon="pi pi-bars" [showHeader]="false"
+                                    appendTo="body"></p-multiSelect>
+                    </div>
+                </div>
+            </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
-            <tr class="">
-                <th class="" *ngFor="let col of cols; let i = index;" [ngSwitch]="col.field">
+            <tr>
+                <th class="" *ngFor="let col of columns; let i = index;" [ngSwitch]="col.field">
                     <div class="row">
                         <div [pSortableColumn]="col.field" class="col-md-12 col-sm-12 col-12 nomlist-first-col">
                             {{col.header}}
@@ -74,20 +87,8 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" tabindex="0">
-                <td>
-                    {{rowData[columns[0].field]}}
-                </td>
-                <td>
-                    {{rowData[columns[1].field]}}
-                </td>
-                <td>
-                    {{rowData[columns[2].field]}}
-                </td>
-                <td>
-                    {{rowData[columns[3].field]}}
-                </td>
-                <td>
-                    {{rowData[columns[4].field]}}
+                <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
                 </td>
             </tr>
         </ng-template>

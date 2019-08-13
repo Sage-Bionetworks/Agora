@@ -332,6 +332,38 @@ p-dialog {
             padding: 0px;
             padding-top: 44px;
         }
+
+        .icon-row {
+            height: 58px;
+            background: $menu-dark;
+            margin-right: -8px;
+            margin-left: -8px;
+
+            .icon-col {
+                text-align: right;
+                margin: auto;
+                vertical-align: middle;
+
+                .pi-bars {
+                    transform: rotate(90deg);
+                }
+
+                p-multiselect {
+                    width: 100%;
+                    color: $background;
+
+                    .ui-multiselect-trigger-icon {
+                        transform: rotate(90deg);
+                        font-size: 1.5em;
+                        color: white;
+                    }
+
+                    .ui-multiselect-panel {
+                        background: white;
+                    }
+                }
+            }
+        }
     }
 
     tr:hover {
@@ -611,7 +643,7 @@ p-dialog {
         >tr>th {
             @include lato-font('bold');
 
-            background: $span-color !important;
+            background: $menu-dark !important;
             border: none;
             height: 58px;
             line-height: 40px;
@@ -1209,10 +1241,6 @@ p-dialog {
     left: 50%;
     margin: -100px 0 0 -100px;
     pointer-events: none;
-}
-
-.pi-check:before {
-    content: url("/assets/icon/checked_icon.png") !important;
 }
 
 .link {
