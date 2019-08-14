@@ -260,6 +260,16 @@ p-dialog {
     }
 }
 
+p-multiselectitem {
+    span, .multiselect-option {
+        @include lato-font('normal');
+
+        font-size: 14px;
+        line-height: 29px;
+        margin-top: 4px;
+    }
+}
+
 .ui-menu {
     background-color: $background;
 }
@@ -339,27 +349,86 @@ p-dialog {
             margin-right: -8px;
             margin-left: -8px;
 
+            .title-col {
+                @include lato-font('bold');
+
+                margin: auto;
+                text-align: left;
+                font-size: 18px;
+                vertical-align: middle;
+                color: white;
+                padding-left: 47px;
+            }
+
             .icon-col {
                 text-align: right;
                 margin: auto;
                 vertical-align: middle;
 
-                .pi-bars {
-                    transform: rotate(90deg);
-                }
-
                 p-multiselect {
                     width: 100%;
                     color: $background;
 
+                    p-multiselectitem {
+                        li:hover {
+                            background: $menu-dark !important;
+                            color: $background;
+
+                            .pi-check::before {
+                                color: $background !important;
+                            }
+                        }
+                    }
+
+                    .custom-bars {
+                        content: url("/assets/icon/columns.svg");
+                    }
+
+                    .ui-multiselect-items-wrapper {
+                        padding: 0px;
+                        background: transparent;
+                    }
+
+                    .ui-multiselect-items {
+                        background: white;
+                    }
+
+                    .ui-multiselect-panel {
+                        padding: 0px;
+                        background: transparent;
+                        min-width: 234px !important;
+                        left: -190px !important;
+                        top: 20px !important;
+                        color: color(text, secondary);
+
+                        .pi-check::before {
+                            color: $checkmark-color;
+                        }
+                    }
+
+                    .ui-multiselect-trigger {
+                        height: 0px;
+                    }
+
                     .ui-multiselect-trigger-icon {
-                        transform: rotate(90deg);
                         font-size: 1.5em;
                         color: white;
                     }
 
-                    .ui-multiselect-panel {
-                        background: white;
+                    .ui-multiselect-item {
+                        line-height: 30px;
+                        text-align: left;
+                        padding-left: 15px;
+                        padding-right: 15px;
+                        display: flex !important;
+
+                        .ui-chkbox {
+                            margin-right: 6.8px;
+                        }
+
+                        .ui-chkbox-box {
+                            line-height: 23px;
+                        }
                     }
                 }
             }
@@ -871,7 +940,7 @@ p-dialog {
     }
 
     .ui-sortable-column-icon {
-        color: $secondary-background !important;
+        color: $menu-dark !important;
     }
 
     .btn-nom{

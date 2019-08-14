@@ -30,7 +30,6 @@ export class GenesListComponent implements OnInit {
     cols: any[];
     selectedColumns: any[];
     loading: boolean = true;
-    defaultIconClass: string = 'pi pi-check';
 
     constructor(
         private navService: NavigationService,
@@ -40,7 +39,7 @@ export class GenesListComponent implements OnInit {
 
     ngOnInit() {
         this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene Symbol' },
+            { field: 'hgnc_symbol', header: 'Gene Symbol'},
             { field: 'nominations', header: 'Nominations' },
             { field: 'teams', header: 'Nominating Teams' },
             { field: 'study', header: 'Cohort Study' },
@@ -91,16 +90,6 @@ export class GenesListComponent implements OnInit {
 
             this.loading = false;
         });
-    }
-
-    toggleColumn(event: any) {
-        console.log(event);
-        event.item.icon = (event.item.icon) ? '' : this.defaultIconClass;
-        const col = this.cols.find((i) => i.header === event.item.label);
-        console.log(col);
-        event.originalEvent.preventDefault();
-        event.originalEvent.stopPropagation();
-        return false;
     }
 
     commaFlattenArray(array: any[]): any[] {

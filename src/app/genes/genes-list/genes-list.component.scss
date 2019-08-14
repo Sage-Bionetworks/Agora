@@ -7,13 +7,13 @@
     p-table {
         .ui-table-thead {
             >tr>th {
-                background: white !important;
+                background: $table-rol-filter !important;
                 color: color(text, secondary) !important;
             }
         }
 
         .ui-table-scrollable-header-table {
-            border-right: solid 17px $background !important;
+            border-right: solid 17px $table-rol-filter !important;
         }
 
         .table-icon {
@@ -27,15 +27,7 @@
         .absolute-icon {
             position: absolute;
             right: 42px;
-            top: 1px;
+            top: -1.5px;
         }
-    }
-}
-
-.ui-multiselect-panel {
-    background: white;
-
-    .pi-check::before {
-        color: $secondary-background;
     }
 }

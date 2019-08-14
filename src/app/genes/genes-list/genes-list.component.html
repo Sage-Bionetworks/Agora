@@ -60,15 +60,26 @@
                 </div>
             </div>
             <div class="row icon-row">
-                <div class="col-md-9 col-sm-9 col-9">
+                <div class="col-md-9 col-sm-9 col-9 title-col">
+                    Nominated Target List
                 </div>
                 <div class="col-md-3 col-sm-3 col-3 icon-col">
                     <i class="pi pi-download table-icon absolute-icon"></i>
                     <div style="text-align:right">
-                        <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-                                    selectedItemsLabel="" defaultLabel="Choose Columns"
-                                    dropdownIcon="pi pi-bars" [showHeader]="false"
-                                    appendTo="body"></p-multiSelect>
+                        <p-multiSelect
+                            [options]="cols"
+                            [(ngModel)]="selectedColumns"
+                            optionLabel="header"
+                            selectedItemsLabel=""
+                            defaultLabel=""
+                            dropdownIcon="pi pi-bars custom-bars"
+                            [showHeader]="false"
+                            [panelStyle]="{minWidth:'12em'}"
+                            [appendTo]="body">
+                            <ng-template let-col pTemplate="item">
+                                <div class="multiselect-option">{{col.label}}</div>
+                            </ng-template>
+                        </p-multiSelect>
                     </div>
                 </div>
             </div>
