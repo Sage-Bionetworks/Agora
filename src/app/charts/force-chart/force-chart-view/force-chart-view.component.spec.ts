@@ -94,7 +94,7 @@ describe('Component: ForceChartView', () => {
     });
 
     // Use it as the last test
-    it('should reset the simulation if we have one', fakeAsync(() => {
+    it('should reset the simulation if we have one already', fakeAsync(() => {
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
         const ngAISpy = spyOn(component, 'ngAfterViewInit').and.callThrough();
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
@@ -155,11 +155,11 @@ describe('Component: ForceChartView', () => {
             origin: mockGene1
         } as GeneNetwork;
         component.ngAfterViewInit();
+        tick(1000);
+        fixture.detectChanges();
 
         setTimeout(() => {
             component.removeSelf();
-            // tick(Infinity);
-            // fixture.detectChanges();
             expect(component.textElements).toEqual([]);
             expect(component.nodeElements).toEqual([]);
             expect(component.linkElements).toEqual([]);
@@ -171,8 +171,7 @@ describe('Component: ForceChartView', () => {
             discardPeriodicTasks();
         }, 3000);
 
-        tick(3000);
-        // fixture.detectChanges();
+        tick(5000);
         expect(component.simulation).not.toEqual(undefined);
     }));
 });
