@@ -93,7 +93,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
         this.location.onPopState(() => {
             this.removeSelf();
-            this.display = false;
         });
 
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
@@ -126,6 +125,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             this.chartSubscription.unsubscribe();
         }
         this.geneService.setEmptyGeneState(true);
+        this.firstRender = true;
+        this.display = false;
     }
 
     getModel(): string {

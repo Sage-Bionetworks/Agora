@@ -25,7 +25,7 @@ import * as d3 from 'd3';
 import * as d3s from 'd3-symbol-extra';
 
 import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../models';
-import { SimulationNodeDatum } from 'd3';
+import { SimulationNodeDatum, Simulation, ForceLink } from 'd3';
 
 @Component({
     selector: 'force-chart',
@@ -52,7 +52,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     pathways: GeneNode[] = [];
     width: any;
     height: any;
-    simulation: any;
+    simulation: Simulation<SimulationNodeDatum, undefined>;
     hex = 'M18 2l6 10.5-6 10.5h-12l-6-10.5 6-10.5z';
     resizeTimer;
 
@@ -73,6 +73,8 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         this.location.onPopState(() => {
             this.removeSelf();
         });
+
+        console.log(this.networkData);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -88,7 +90,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             const geneColNode = d3.select('.current-gene-col').node() as HTMLBaseElement;
             this.height = (geneColNode) ? geneColNode.getBoundingClientRect().height : 400;
             this.loaded = true;
-            this.simulation = d3.forceSimulation()
+            this.simulation = d3.forceSimulation<GeneNode, GeneLink>()
                 .force('charge', (d) => {
                     let charge = -500;
                     if (d === 0) { charge = 10 * charge; }
@@ -109,13 +111,15 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             this.routerSubscription.unsubscribe();
         }
         if (this.simulation) {
-            this.textElements = [];
-            this.nodeElements = [];
-            this.linkElements = [];
-            this.simulation.nodes([]);
-            this.simulation.force('link').links([]);
-            this.loaded = false;
+            this.simulation.stop();
         }
+
+        // Could not empty the selection any other way. This turns
+        // the selection object into an empty array
+        this.textElements = [];
+        this.nodeElements = [];
+        this.linkElements = [];
+        this.loaded = false;
     }
 
     onResize(event?: any) {
@@ -360,7 +364,6 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                 this.buildPath(d);
             })
             .merge(this.nodeElements);
-        console.log(this.nodeElements);
 
         // text elements
         this.textElements = this.textElements
@@ -374,7 +377,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             .merge(this.textElements);
 
         this.simulation.nodes(this.networkData.nodes);
-        this.simulation.force('link').links(this.networkData.links);
+        this.simulation.force<ForceLink<GeneNode, GeneLink>>('link').links(this.networkData.links);
         this.simulation.alpha(1).restart();
     }
 

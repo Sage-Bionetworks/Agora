@@ -30,6 +30,18 @@ export interface GeneInfo {
     teams?: string;
     study?: string;
     input_data?: string;
+    sm_druggability_bucket?: string;
+    safety_bucket?: string;
+    feasibility_bucket?: string;
+    abability_bucket?: string;
+    new_modality_bucket?: string;
+    tissue_engagement_bucket?: string;
+    pharos_class?: string;
+    classification?: string;
+    safety_bucket_definition?: string;
+    feasibility_bucket_definition?: string;
+    abability_bucket_definition?: string;
+    new_modality_bucket_definition?: string;
 }
 
 export interface MedianExpression {

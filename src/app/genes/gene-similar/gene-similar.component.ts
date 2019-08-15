@@ -172,6 +172,14 @@ export class GeneSimilarComponent implements OnInit {
         }
     }
 
+    // Using a conversion of 18pt font to 12px and
+    // a spacing of 47px each side of the column header (spacing + letters)
+    getColumnStyleString(col: any): object {
+        return {
+            width: Math.max((94 + (col.header.length * 12)), 250).toString() + 'px'
+        };
+    }
+
     druggabilitypc(druggability: Druggability[]): string {
         if (!druggability || !druggability.length || !druggability[0].pharos_class) { return '-'; }
         return druggability[0].pharos_class;

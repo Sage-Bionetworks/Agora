@@ -164,7 +164,7 @@ export class ForceService {
                 this.processBrainRegion(dicN[obj.geneB_ensembl_gene_id], dicN);
             }
         } else {
-            const link: GeneLink = {
+            const link = {
                 value: 1,
                 source: obj.geneA_ensembl_gene_id,
                 target: obj.geneB_ensembl_gene_id,

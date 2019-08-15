@@ -14,6 +14,7 @@
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
+        [resizableColumns]="true"
         scrollHeight="calc(100vh - 603px)"
         [scrollable]="true"
         [totalRecords]="totalRecords"
@@ -22,6 +23,11 @@
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" [ngStyle]="getColumnStyleString(col)">
+            </colgroup>
+        </ng-template>
         <ng-template pTemplate="caption">
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-12 header-col">
@@ -87,8 +93,8 @@
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th class="" *ngFor="let col of columns; let i = index;" [ngSwitch]="col.field">
-                    <div class="row">
-                        <div [pSortableColumn]="col.field" class="col-md-12 col-sm-12 col-12 nomlist-first-col">
+                    <div class="tr">
+                        <div [pSortableColumn]="col.field" class="th">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </div>

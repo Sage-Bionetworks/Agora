@@ -9,7 +9,7 @@ import {
     GeneNode
 } from '../models';
 
-import { mockGene1 } from './gene-mocks';
+import { mockGene1, mockGene2 } from './gene-mocks';
 
 @Injectable()
 export class ForceServiceStub {
@@ -30,14 +30,38 @@ export class ForceServiceStub {
         filterLvl: 0
     };
     genesClicked: GeneNetwork = {
-        links: [{
-            value: 1,
-            source: 'VGF',
-            target: 'PIAS2',
-            brainregions: [],
-            hgnc_symbolA: 'A',
-            hgnc_symbolB: 'B'
-        } as GeneLink],
+        links: [
+            {
+                brainregions: ['DLPFC'],
+                hgnc_symbolA: 'VGF',
+                hgnc_symbolB: 'COL22A1',
+                source: {
+                    brainregions: ['CBE', 'DLPFC', 'FP', 'IFG', 'PHG', 'STG', 'TCX'],
+                    ensembl_gene_id: 'ENSG00000128564',
+                    group: 38,
+                    hgnc_symbol: 'VGF',
+                    id: 'ENSG00000128564',
+                    index: 0,
+                    vx: 0.6383193392459895,
+                    vy: -4.464810585759529,
+                    x: 365.1162545134067,
+                    y: 609.1416686229836
+                },
+                target: {
+                    brainregions: ['DLPFC'],
+                    ensembl_gene_id: 'ENSG00000169436',
+                    group: 2,
+                    hgnc_symbol: 'COL22A1',
+                    id: 'ENSG00000128564',
+                    index: 1,
+                    vx: 0.6383193392459895,
+                    vy: -4.464810585759529,
+                    x: 365.1162545134067,
+                    y: 609.1416686229836
+                },
+                value: 1
+            } as GeneLink
+        ],
         nodes: [{
             id: 'VGF',
             ensembl_gene_id: 'VGF',

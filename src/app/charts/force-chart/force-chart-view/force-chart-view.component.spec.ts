@@ -20,7 +20,7 @@ import {
 
 import { ForceChartViewComponent } from './force-chart-view.component';
 
-import { GeneNetwork } from 'app/models';
+import { GeneNetwork, GeneLink } from 'app/models';
 
 import { GeneService } from '../../../core/services';
 
@@ -58,6 +58,54 @@ describe('Component: ForceChartView', () => {
         location = fixture.debugElement.injector.get(SpyLocation);
 
         component = fixture.componentInstance; // Component test instance
+
+        const parent = document.createElement('div');
+        const child = document.createElement('div');
+        const mockNode1 = {
+            brainregions: ['CBE', 'DLPFC', 'FP', 'IFG', 'PHG', 'STG', 'TCX'],
+            ensembl_gene_id: 'ENSG00000128564',
+            group: 38,
+            hgnc_symbol: 'VGF',
+            id: 'ENSG00000128564',
+            index: 0,
+            vx: 0.6383193392459895,
+            vy: -4.464810585759529,
+            x: 365.1162545134067,
+            y: 609.1416686229836
+        };
+        const mockNode2 = {
+            brainregions: ['DLPFC'],
+            ensembl_gene_id: 'ENSG00000169436',
+            group: 2,
+            hgnc_symbol: 'COL22A1',
+            id: 'ENSG00000128564',
+            index: 1,
+            vx: 0.6383193392459895,
+            vy: -4.464810585759529,
+            x: 365.1162545134067,
+            y: 609.1416686229836
+        };
+        parent.appendChild(child);
+
+        component.networkData = {
+            filterLvl: 5,
+            nodes: [mockNode1, mockNode2],
+            links: [
+                {
+                    brainregions: ['DLPFC'],
+                    hgnc_symbolA: 'VGF',
+                    hgnc_symbolB: 'COL22A1',
+                    source: mockNode1,
+                    target: mockNode2,
+                    value: 1
+                } as GeneLink
+            ],
+            origin: mockGene1
+        } as GeneNetwork;
+        component.forceChart = new ElementRef(child);
+        component.loaded = true;
+
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -98,62 +146,7 @@ describe('Component: ForceChartView', () => {
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
         const ngAISpy = spyOn(component, 'ngAfterViewInit').and.callThrough();
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
-        const parent = document.createElement('div');
-        const child = document.createElement('div');
-        const mockNode1 = {
-            brainregions: ['CBE', 'DLPFC', 'FP', 'IFG', 'PHG', 'STG', 'TCX'],
-            ensembl_gene_id: 'ENSG00000128564',
-            group: 38,
-            hgnc_symbol: 'VGF',
-            id: 'ENSG00000128564',
-            index: 0,
-            vx: 0.6383193392459895,
-            vy: -4.464810585759529,
-            x: 365.1162545134067,
-            y: 609.1416686229836
-        };
-        const mockNode2 = {
-            brainregions: ['DLPFC'],
-            ensembl_gene_id: 'ENSG00000169436',
-            group: 2,
-            hgnc_symbol: 'COL22A1',
-            id: 'ENSG00000128564',
-            index: 1,
-            vx: 0.6383193392459895,
-            vy: -4.464810585759529,
-            x: 365.1162545134067,
-            y: 609.1416686229836
-        };
-        parent.appendChild(child);
 
-        component.textElements = ['a'];
-        component.nodeElements = [mockNode1, mockNode2];
-        component.linkElements = [
-            {
-                brainregions: ['DLPFC'],
-                hgnc_symbolA: 'VGF',
-                hgnc_symbolB: 'COL22A1',
-                index: 0,
-                source: mockNode1,
-                target: mockNode2,
-                value: 1
-            }
-        ];
-        component.textElements = [
-            {
-                hgnc_symbol: 'PIAS2',
-                x: 1,
-                y: 1
-            }
-        ];
-        component.loaded = true;
-        component.forceChart = new ElementRef(child);
-        component.networkData = {
-            filterLvl: 5,
-            nodes: component.nodeElements,
-            links: component.linkElements,
-            origin: mockGene1
-        } as GeneNetwork;
         component.ngAfterViewInit();
         tick(1000);
         fixture.detectChanges();

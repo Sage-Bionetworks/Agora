@@ -43,10 +43,22 @@ export class GenesListComponent implements OnInit {
             { field: 'nominations', header: 'Nominations' },
             { field: 'teams', header: 'Nominating Teams' },
             { field: 'study', header: 'Cohort Study' },
-            { field: 'input_data', header: 'Input Data' }
+            { field: 'input_data', header: 'Input Data' },
+            { field: 'sm_druggability_bucket', header: 'Small Molecule Modality' },
+            { field: 'safety_bucket', header: 'Safety' },
+            { field: 'feasibility_bucket', header: 'Feasibility' },
+            { field: 'abability_bucket', header: 'Antibody Modality' },
+            { field: 'new_modality_bucket', header: 'New Modality' },
+            { field: 'tissue_engagement_bucket', header: 'Tissue Engagement' },
+            { field: 'pharos_class', header: 'Pharos Class' },
+            { field: 'classification', header: 'Classification' },
+            { field: 'safety_bucket_definition', header: 'Safety Definition' },
+            { field: 'feasibility_bucket_definition', header: 'Feasibility Definition' },
+            { field: 'abability_bucket_definition', header: 'Antibody Modality Definition' },
+            { field: 'new_modality_bucket_definition', header: 'New Modality Definition' }
         ];
 
-        this.selectedColumns = this.cols;
+        this.selectedColumns = this.cols.slice(0, 4);
 
         this.initData();
     }
@@ -76,6 +88,41 @@ export class GenesListComponent implements OnInit {
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
                 de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+
+                // Druggability columns
+                if (de.druggability && de.druggability.length) {
+                    de.sm_druggability_bucket =
+                        de.druggability[0].sm_druggability_bucket.toString();
+                    de.safety_bucket = de.druggability[0].safety_bucket.toString();
+                    de.feasibility_bucket = de.druggability[0].feasibility_bucket.toString();
+                    de.abability_bucket = de.druggability[0].abability_bucket.toString();
+                    de.new_modality_bucket = de.druggability[0].new_modality_bucket.toString();
+                    de.tissue_engagement_bucket =
+                        de.druggability[0].tissue_engagement_bucket.toString();
+                    de.pharos_class = de.druggability[0].pharos_class;
+                    de.classification = de.druggability[0].classification;
+                    de.safety_bucket_definition = de.druggability[0].safety_bucket_definition;
+                    de.feasibility_bucket_definition =
+                        de.druggability[0].feasibility_bucket_definition;
+                    de.abability_bucket_definition =
+                        de.druggability[0].abability_bucket_definition;
+                    de.new_modality_bucket_definition =
+                        de.druggability[0].new_modality_bucket_definition;
+                } else {
+                    const noValue = 'No value';
+                    de.sm_druggability_bucket = noValue;
+                    de.safety_bucket = noValue;
+                    de.feasibility_bucket = noValue;
+                    de.abability_bucket = noValue;
+                    de.new_modality_bucket = noValue;
+                    de.tissue_engagement_bucket = noValue;
+                    de.pharos_class = noValue;
+                    de.classification = noValue;
+                    de.safety_bucket_definition = noValue;
+                    de.feasibility_bucket_definition = noValue;
+                    de.abability_bucket_definition = noValue;
+                    de.new_modality_bucket_definition = noValue;
+                }
             });
             this.genesInfo = this.datasource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
@@ -113,6 +160,14 @@ export class GenesListComponent implements OnInit {
         }
 
         return array;
+    }
+
+    // Using a conversion of 18pt font to 12px and
+    // a spacing of 47px each side of the column header (spacing + letters)
+    getColumnStyleString(col: any): object {
+        return {
+            width: Math.max((94 + (col.header.length * 12)), 250).toString() + 'px'
+        };
     }
 
     getUnique(value, index, self) {

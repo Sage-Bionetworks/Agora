@@ -9,18 +9,25 @@
     </div>
 </div>
 
-<div class="nomlist-list center-justified-last linkstable">
+<div class="nomlist-list center-justified-last linkstable similar-table">
     <p-table #gl [columns]="cols" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="true"
         [rows]="14"
         [totalRecords]="totalRecords"
+        [resizableColumns]="true"
+        scrollHeight="calc(100vh - 603px)"
         [loading]="loading"
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true"
-        [tableStyle]="{'table-layout':'auto'}">
+        [scrollable]="true">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" [ngStyle]="getColumnStyleString(col)">
+            </colgroup>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="getSortColumnField(i, col)">

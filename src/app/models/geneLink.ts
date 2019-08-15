@@ -1,7 +1,8 @@
 import { Document } from 'mongoose';
 import { Gene } from '.';
+import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
-export interface GeneNode {
+export interface GeneNode extends SimulationNodeDatum {
     id: string;
     hgnc_symbol: string;
     brainregions: string[];
@@ -9,10 +10,10 @@ export interface GeneNode {
     ensembl_gene_id: string;
 }
 
-export interface GeneLink {
+export interface GeneLink extends SimulationLinkDatum<SimulationNodeDatum> {
     value: number;
-    source: string;
-    target: string;
+    source: GeneNode;
+    target: GeneNode;
     brainregions: string[];
     hgnc_symbolA: string;
     hgnc_symbolB: string;

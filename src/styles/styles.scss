@@ -307,11 +307,12 @@ p-multiselectitem {
     p-table {
         /* width */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8.75px;
+            height: 8.75px;
         }
 
         /* Track */
-        ::-webkit-scrollbar-track {
+        ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
             background: $quaternary-background;
         }
 
@@ -319,7 +320,7 @@ p-multiselectitem {
         ::-webkit-scrollbar-thumb {
             background: $tertiary-background;
             border-radius: 14px;
-            height: 47px;
+            height: 40.46px;
         }
 
         /* Handle on hover */
@@ -776,63 +777,31 @@ p-multiselectitem {
             max-width: 22px;
         }
 
-        @include respond-to('ex-small') {
-            >tr>th:first-child {
-                text-align: center;
-            }
-            >tr>th:not(:first-child) {
-                text-align: center;
-            }
+        >tr>th {
+            text-align: center;
+        }
 
+        @include respond-to('ex-small') {
             .ui-sortable-column {
                 font-size: 14px;
             }
         }
         @include respond-to('small') {
-            >tr>th:first-child {
-                padding-left: 4%;
-                text-align: center;
-            }
-            >tr>th:not(:first-child) {
-                text-align: center;
-            }
-
             .ui-sortable-column {
                 font-size: $font-size-regular;
             }
         }
         @include respond-to('medium') {
-            >tr>th:first-child {
-                text-align: center;
-            }
-            >tr>th:not(:first-child) {
-                text-align: center;
-            }
-
             .ui-sortable-column {
                 font-size: 18px;
             }
         }
         @include respond-to('large') {
-            >tr>th:first-child {
-                text-align: center;
-            }
-            >tr>th:not(:first-child) {
-                text-align: center;
-            }
-
             .ui-sortable-column {
                 font-size: 18px;
             }
         }
         @include respond-to('ex-large') {
-            >tr>th:first-child {
-                text-align: center;
-            }
-            >tr>th:not(:first-child) {
-                text-align: center;
-            }
-
             .ui-sortable-column {
                 font-size: 18px;
             }
@@ -879,63 +848,7 @@ p-multiselectitem {
 
             color: color(text, secondary) !important;
             height: 40px;
-        }
-        @include respond-to('ex-small') {
-            >tr>td:first-child {
-                padding-left: 4%;
-                text-align: center;
-            }
-            >tr>td:not(:first-child) {
-                text-align: center;
-            }
-            >tr>td:last-child {
-                padding-right: calc(4% - 17px);
-            }
-        }
-        @include respond-to('small') {
-            >tr>td:first-child {
-                padding-left: 4%;
-                text-align: center;
-            }
-            >tr>td:not(:first-child) {
-                text-align: center;
-            }
-            >tr>td:last-child {
-                padding-right: calc(4% - 17px);
-            }
-        }
-        @include respond-to('medium') {
-            >tr>td:first-child {
-                text-align: center;
-            }
-            >tr>td:not(:first-child) {
-                text-align: center;
-            }
-            >tr>td:last-child {
-                padding-right: calc(4% - 17px);
-            }
-        }
-        @include respond-to('large') {
-            >tr>td:first-child {
-                text-align: center;
-            }
-            >tr>td:not(:first-child) {
-                text-align: center;
-            }
-            >tr>td:last-child {
-                padding-right: calc(4% - 17px);
-            }
-        }
-        @include respond-to('ex-large') {
-            >tr>td:first-child {
-                text-align: center;
-            }
-            >tr>td:not(:first-child) {
-                text-align: center;
-            }
-            >tr>td:last-child {
-                padding-right: calc(4% - 17px);
-            }
+            text-align: center;
         }
     }
 
@@ -945,10 +858,6 @@ p-multiselectitem {
 
     .btn-nom{
         cursor: pointer;
-    }
-
-    .ui-table-scrollable-header-table {
-        border-right: solid 17px $menu-dark !important;
     }
 }
 
