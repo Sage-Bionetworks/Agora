@@ -44,18 +44,19 @@ export class GenesListComponent implements OnInit {
             { field: 'teams', header: 'Nominating Teams' },
             { field: 'study', header: 'Cohort Study' },
             { field: 'input_data', header: 'Input Data' },
+            { field: 'pharos_class', header: 'Pharos Class' },
+            { field: 'classification', header: 'Small Molecule Druggability' },
+            { field: 'safety_bucket_definition', header: 'Safety Rating' },
+            { field: 'abability_bucket_definition', header: 'Antibody Modality' }
+            /*
             { field: 'sm_druggability_bucket', header: 'Small Molecule Modality' },
             { field: 'safety_bucket', header: 'Safety' },
             { field: 'feasibility_bucket', header: 'Feasibility' },
             { field: 'abability_bucket', header: 'Antibody Modality' },
             { field: 'new_modality_bucket', header: 'New Modality' },
             { field: 'tissue_engagement_bucket', header: 'Tissue Engagement' },
-            { field: 'pharos_class', header: 'Pharos Class' },
-            { field: 'classification', header: 'Classification' },
-            { field: 'safety_bucket_definition', header: 'Safety Definition' },
             { field: 'feasibility_bucket_definition', header: 'Feasibility Definition' },
-            { field: 'abability_bucket_definition', header: 'Antibody Modality Definition' },
-            { field: 'new_modality_bucket_definition', header: 'New Modality Definition' }
+            { field: 'new_modality_bucket_definition', header: 'New Modality Definition' }*/
         ];
 
         this.selectedColumns = this.cols.slice(0, 4);
