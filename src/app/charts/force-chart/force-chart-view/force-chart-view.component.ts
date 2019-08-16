@@ -73,8 +73,6 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         this.location.onPopState(() => {
             this.removeSelf();
         });
-
-        console.log(this.networkData);
     }
 
     ngOnChanges(changes: SimpleChanges) {

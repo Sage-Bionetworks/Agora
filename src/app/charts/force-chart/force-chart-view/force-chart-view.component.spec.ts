@@ -104,8 +104,6 @@ describe('Component: ForceChartView', () => {
         } as GeneNetwork;
         component.forceChart = new ElementRef(child);
         component.loaded = true;
-
-        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -125,7 +123,6 @@ describe('Component: ForceChartView', () => {
 
     it('should remove chart on location pop state', () => {
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
-        // location.go('/genes');
         component.ngOnInit();
         location.subscribe((value: any) => {
             // Since onPopState from PlatformLocation is not triggered
@@ -147,6 +144,7 @@ describe('Component: ForceChartView', () => {
         const ngAISpy = spyOn(component, 'ngAfterViewInit').and.callThrough();
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
 
+        fixture.detectChanges();
         component.ngAfterViewInit();
         tick(1000);
         fixture.detectChanges();
