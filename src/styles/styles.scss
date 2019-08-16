@@ -97,7 +97,7 @@ p {
 span {
     @include lato-font('normal');
     @include respond-to('ex-small') {
-        font-size: 18px;
+        font-size: $font-size-x-regular;
     }
 
     line-height: normal;
@@ -228,7 +228,7 @@ p-dialog {
         padding-left: 20% !important;
         padding-right: 20% !important;
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         text-align: left;
         text-align-last: left;
         color: #000000;
@@ -264,7 +264,7 @@ p-multiselectitem {
     span, .multiselect-option {
         @include lato-font('normal');
 
-        font-size: 14px;
+        font-size: $font-size-x-small;
         line-height: 29px;
         margin-top: 4px;
     }
@@ -354,15 +354,14 @@ p-multiselectitem {
                 @include lato-font('bold');
 
                 margin: auto;
-                text-align: left;
-                font-size: 18px;
+                text-align: center;
+                font-size: $font-size-x-regular;
                 vertical-align: middle;
                 color: white;
-                padding-left: 47px;
             }
 
             .icon-col {
-                text-align: right;
+                // text-align: right;
                 margin: auto;
                 vertical-align: middle;
 
@@ -717,7 +716,7 @@ p-multiselectitem {
             border: none;
             height: 58px;
             line-height: 40px;
-            font-size: 18px;
+            font-size: $font-size-x-regular;
             color: $background !important;
         }
 
@@ -781,30 +780,8 @@ p-multiselectitem {
             text-align: center;
         }
 
-        @include respond-to('ex-small') {
-            .ui-sortable-column {
-                font-size: 14px;
-            }
-        }
-        @include respond-to('small') {
-            .ui-sortable-column {
-                font-size: $font-size-regular;
-            }
-        }
-        @include respond-to('medium') {
-            .ui-sortable-column {
-                font-size: 18px;
-            }
-        }
-        @include respond-to('large') {
-            .ui-sortable-column {
-                font-size: 18px;
-            }
-        }
-        @include respond-to('ex-large') {
-            .ui-sortable-column {
-                font-size: 18px;
-            }
+        .ui-sortable-column {
+            font-size: $font-size-x-regular;
         }
     }
 
@@ -827,25 +804,8 @@ p-multiselectitem {
             outline: 0;
             border: 0px;
             line-height: 40px;
-
             padding: .25em .5em;
-
-            @include respond-to('ex-small') {
-                font-size: 12px;
-            }
-            @include respond-to('small') {
-                font-size: $font-size-regular;
-            }
-            @include respond-to('medium') {
-                font-size: 18px;
-            }
-            @include respond-to('large') {
-                font-size: 18px;
-            }
-            @include respond-to('ex-large') {
-                font-size: 18px;
-            }
-
+            font-size: $font-size-x-regular;
             color: color(text, secondary) !important;
             height: 40px;
             text-align: center;
@@ -895,7 +855,7 @@ p-multiselectitem {
     @include lato-font('normal', italic);
 
     line-height: normal;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     color: color(italic-text, base);
 }
 
@@ -1090,7 +1050,7 @@ p-multiselectitem {
             text-decoration: underline;
             cursor: pointer;
             line-height: normal;
-            font-size: 18px;
+            font-size: $font-size-x-regular;
             width: 100%;
         }
     }
@@ -1108,7 +1068,6 @@ p-multiselectitem {
     height: 100%;
     position: relative;
     z-index: 2;
-    padding-left: 5%;
 
     background: $background;
     border: 1px solid #000000;
@@ -1116,7 +1075,7 @@ p-multiselectitem {
     border-radius: 6px;
 
     .row {
-        width: 100%;
+        height: 100%;
     }
 
     .input-search-col {

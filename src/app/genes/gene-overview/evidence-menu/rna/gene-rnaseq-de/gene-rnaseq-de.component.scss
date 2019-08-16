@@ -40,7 +40,7 @@
 
         width: 100%;
         line-height: normal;
-        font-size: 18px;
+        font-size: $font-size-x-regular;
         color: color(text, secondary);
         padding-left: 3%;
         appearance: none;
@@ -85,7 +85,7 @@
         .ui-multiselect-label-container {
             padding-left: 10px;
             @include lato-font('normal');
-            font-size: 18px;
+            font-size: $font-size-x-regular;
 
             @include respond-to('ex-small') {
                 font-size: $font-size-regular;
@@ -94,13 +94,13 @@
                 font-size: $font-size-regular;
             }
             @include respond-to('medium') {
-                font-size: 18px;
+                font-size: $font-size-x-regular;
             }
             @include respond-to('large') {
-                font-size: 18px;
+                font-size: $font-size-x-regular;
             }
             @include respond-to('ex-large') {
-                font-size: 18px;
+                font-size: $font-size-x-regular;
             }
 
             color: color(text, secondary);
@@ -150,10 +150,10 @@
             @include lato-font('normal');
 
             @include respond-to('ex-small') {
-                font-size: 14px;
+                font-size: $font-size-x-small;
             }
             @include respond-to('small') {
-                font-size: 14px;
+                font-size: $font-size-x-small;
             }
             @include respond-to('medium') {
                 font-size: $font-size-regular;

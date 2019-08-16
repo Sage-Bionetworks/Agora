@@ -35,7 +35,7 @@
             padding: .25em .5em;
 
             @include respond-to('ex-small') {
-                font-size: 14px;
+                font-size: $font-size-x-small;
             }
             @include respond-to('small') {
                 span {

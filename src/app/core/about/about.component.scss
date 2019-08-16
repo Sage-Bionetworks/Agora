@@ -24,13 +24,13 @@
 .content-row {
     @include lato-font('normal');
     margin-bottom: 45px;
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     color: color(text, secondary);
 }
 
 .italic-bold {
     @include lato-font('bold', italic);
-    font-size: 18px;
+    font-size: $font-size-x-regular;
     color: color(text, secondary);
 
     .italic-bold-link {

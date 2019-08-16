@@ -39,13 +39,15 @@
                     <div class="row search-row header-row">
                         <section class="filter-wrapper">
                             <div class="keyword-wrapper">
-                                <div class="row">
-                                    <div class="col-md-10 input-search-col">
-                                        <input type="text" pInputText size="50" id="keyword" placeholder="Search the columns below"
-                                            (input)="gl.filterGlobal($event.target.value, 'contains')">
-                                    </div>
-                                    <div class="col-md-2 input-search-icon">
-                                        <i class="fa fa-search fa-lg"></i>
+                                <div class="col-md-12 col-sm-12 col-12">
+                                    <div class="row">
+                                        <div class="col-md-10 col-sm-10 col-9 input-search-col">
+                                            <input type="text" pInputText size="50" id="keyword" placeholder="Search the columns below"
+                                                (input)="gl.filterGlobal($event.target.value, 'contains')">
+                                        </div>
+                                        <div class="col-md-2 col-sm-2 col-3 input-search-icon">
+                                            <i class="fa fa-search fa-lg"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -66,10 +68,10 @@
                 </div>
             </div>
             <div class="row icon-row">
-                <div class="col-md-9 col-sm-9 col-9 title-col">
+                <div class="col-md-11 col-sm-11 col-9 title-col">
                     Nominated Target List
                 </div>
-                <div class="col-md-3 col-sm-3 col-3 icon-col">
+                <div class="col-md-1 col-sm-1 col-3 icon-col">
                     <i class="pi pi-download table-icon absolute-icon"></i>
                     <div style="text-align:right">
                         <p-multiSelect

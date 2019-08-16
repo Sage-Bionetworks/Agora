@@ -152,7 +152,7 @@
     @include lato-font('normal');
 
     line-height: normal;
-    font-size: 14px;
+    font-size: $font-size-x-small;
     text-align: right;
     color: color(text, span-grey);
 }
