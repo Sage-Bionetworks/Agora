@@ -115,7 +115,6 @@ describe('Component: ForceChartView', () => {
         router.events = router.asObs;
         component.ngOnInit();
         router.navigate(['/']);
-        fixture.detectChanges();
         expect(rsSpy).toHaveBeenCalled();
         expect(rnSpy).toHaveBeenCalled();
     });
@@ -141,7 +140,10 @@ describe('Component: ForceChartView', () => {
         const ngAISpy = spyOn(component, 'ngAfterViewInit').and.callThrough();
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
 
+        component.ngOnInit();
         component.loaded = true;
+        tick(1000);
+        fixture.detectChanges();
         component.ngAfterViewInit();
         tick(1000);
         fixture.detectChanges();
