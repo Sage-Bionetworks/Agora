@@ -103,7 +103,6 @@ describe('Component: ForceChartView', () => {
             origin: mockGene1
         } as GeneNetwork;
         component.forceChart = new ElementRef(child);
-        fixture.detectChanges();
     }));
 
     it('should create', () => {
@@ -145,6 +144,7 @@ describe('Component: ForceChartView', () => {
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
 
         component.loaded = true;
+        component.ngOnInit();
         component.ngAfterViewInit();
         tick(1000);
         fixture.detectChanges();

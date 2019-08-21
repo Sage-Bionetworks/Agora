@@ -346,6 +346,7 @@ p-multiselectitem {
 
         .icon-row {
             height: 58px;
+            line-height: 58px;
             background: $menu-dark;
             margin-right: -8px;
             margin-left: -8px;
@@ -353,17 +354,14 @@ p-multiselectitem {
             .title-col {
                 @include lato-font('bold');
 
-                margin: auto;
+                height: 100%;
                 text-align: center;
                 font-size: $font-size-x-regular;
-                vertical-align: middle;
                 color: white;
             }
 
             .icon-col {
-                // text-align: right;
-                margin: auto;
-                vertical-align: middle;
+                height: 100%;
 
                 p-multiselect {
                     width: 100%;
@@ -430,6 +428,12 @@ p-multiselectitem {
                             line-height: 23px;
                         }
                     }
+                }
+
+                .absolute-icon {
+                    position: absolute;
+                    top: 16px;
+                    right: 65%;
                 }
             }
         }

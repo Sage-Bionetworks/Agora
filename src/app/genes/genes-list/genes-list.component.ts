@@ -58,6 +58,10 @@ export class GenesListComponent implements OnInit {
             { field: 'feasibility_bucket_definition', header: 'Feasibility Definition' },
             { field: 'new_modality_bucket_definition', header: 'New Modality Definition' }*/
         ];
+        // add position property
+        this.cols.forEach((col, i) => {
+            col.position = i;
+        });
 
         this.selectedColumns = this.cols.slice(0, 4);
 
@@ -161,6 +165,30 @@ export class GenesListComponent implements OnInit {
         }
 
         return array;
+    }
+
+    reorderValues(event) {
+        this.selectedColumns.sort((a: any, b: any) => {
+            return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0);
+        });
+    }
+
+    // Downloads the table as a csv file
+    downloadTable() {
+        const downloadArray = [];
+        // The headers row for the csv file
+        downloadArray[0] = this.cols.map((c) => c.field).join();
+        this.datasource.forEach((de: GeneInfo) => {
+            downloadArray.push('');
+            this.cols.forEach((c, index) => {
+                downloadArray[downloadArray.length - 1] += (c.field === 'hgnc_symbol' || c.field ===
+                'nominations' || c.field === 'pharos_class') ? de[c.field] :
+                    ('"' + de[c.field] + '"');
+                downloadArray[downloadArray.length - 1] += ((index) < (this.cols.length - 1)) ?
+                    ',' : '';
+            });
+        });
+        console.log(downloadArray);
     }
 
     // Using a conversion of 18pt font to 12px and
