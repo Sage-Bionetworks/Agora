@@ -103,6 +103,7 @@ describe('Component: ForceChartView', () => {
             origin: mockGene1
         } as GeneNetwork;
         component.forceChart = new ElementRef(child);
+        fixture.detectChanges();
     }));
 
     it('should create', () => {
