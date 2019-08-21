@@ -22,8 +22,6 @@ import { ChartService } from '../../services';
 
 import * as dc from 'dc';
 
-import * as crossfilter from 'crossfilter2';
-
 describe('Component: MedianChartView', () => {
     let component: MedianChartViewComponent;
     let fixture: ComponentFixture<MedianChartViewComponent>;

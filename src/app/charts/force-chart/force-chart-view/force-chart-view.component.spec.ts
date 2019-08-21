@@ -144,7 +144,6 @@ describe('Component: ForceChartView', () => {
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
 
         component.loaded = true;
-        component.ngOnInit();
         component.ngAfterViewInit();
         tick(1000);
         fixture.detectChanges();
