@@ -15,6 +15,8 @@ import {
 
 import { ApiService, DataService, ForceService } from './';
 
+import * as crossfilter from 'crossfilter2';
+
 describe('Service: Data: TestBed', () => {
     let dataService: DataService;
     let apiService: ApiServiceStub;

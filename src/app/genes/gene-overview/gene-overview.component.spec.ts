@@ -35,6 +35,8 @@ import { TabMenu } from 'primeng/tabmenu';
 
 import { MockComponent } from 'ng-mocks';
 
+import * as crossfilter from 'crossfilter2';
+
 describe('Component: GeneOverview', () => {
     let component: GeneOverviewComponent;
     let fixture: ComponentFixture<GeneOverviewComponent>;
