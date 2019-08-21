@@ -27,7 +27,7 @@ const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'test')
  */
 module.exports = function () {
   return {
-    mode: 'development',
+    mode: 'production',
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
      *
@@ -52,7 +52,11 @@ module.exports = function () {
       /**
        * Make sure root is src
        */
-      modules: [helpers.root('src'), 'node_modules']
+      modules: [helpers.root('src'), 'node_modules'],
+
+      alias: {
+        'crossfilter': 'crossfilter2'
+      }
     },
 
     /**
