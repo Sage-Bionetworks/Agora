@@ -103,10 +103,7 @@ describe('Component: MedianChartView', () => {
     });
 
     it('should remove chart on location pop state', () => {
-        // spyOn(component, 'ngOnInit').and.callThrough();
         const rsSpy = spyOn(component, 'removeSelf').and.callThrough();
-        // location.go('/genes');
-        component.ngOnInit();
         location.subscribe((value: any) => {
             // Since onPopState from PlatformLocation is not triggered
             // we manually remove the charts if we receive a popstate
@@ -117,7 +114,6 @@ describe('Component: MedianChartView', () => {
 
             expect(rsSpy).toHaveBeenCalled();
         });
-        fixture.detectChanges();
         location.simulateUrlPop('/genes');
     });
 
