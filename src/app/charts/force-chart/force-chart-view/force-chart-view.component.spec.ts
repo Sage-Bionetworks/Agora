@@ -140,12 +140,7 @@ describe('Component: ForceChartView', () => {
         const ngAISpy = spyOn(component, 'ngAfterViewInit').and.callThrough();
         const rcSpy = spyOn(component, 'renderChart').and.callThrough();
 
-        component.ngOnInit();
         component.loaded = true;
-        tick(1000);
-        fixture.detectChanges();
-        component.ngAfterViewInit();
-        tick(1000);
         fixture.detectChanges();
 
         setTimeout(() => {
@@ -159,9 +154,9 @@ describe('Component: ForceChartView', () => {
             expect(ngAISpy.calls.any()).toEqual(true);
             component.simulation.stop();
             discardPeriodicTasks();
-        }, 3000);
+        }, 300);
 
-        tick(5000);
+        tick(350);
         expect(component.simulation).not.toEqual(undefined);
     }));
 });

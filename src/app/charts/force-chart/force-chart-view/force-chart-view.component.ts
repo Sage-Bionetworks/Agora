@@ -77,7 +77,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
 
     ngOnChanges(changes: SimpleChanges) {
         const data: SimpleChange = changes.networkData;
-        if (data.previousValue !== data.currentValue) {
+        if (data && data.previousValue !== data.currentValue) {
             this.updateChart();
         }
     }
