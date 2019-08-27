@@ -107,11 +107,13 @@ export class GenesListComponent implements OnInit {
                     de.tissue_engagement_bucket =
                         de.druggability[0].tissue_engagement_bucket.toString();
                     de.pharos_class = de.druggability[0].pharos_class;
-                    de.classification = de.druggability[0].classification;
-                    de.safety_bucket_definition = de.druggability[0].safety_bucket_definition;
+                    de.classification = de.druggability[0].sm_druggability_bucket + ': ' +
+                        de.druggability[0].classification;
+                    de.safety_bucket_definition = de.druggability[0].safety_bucket + ': ' +
+                        de.druggability[0].safety_bucket_definition;
                     de.feasibility_bucket_definition =
                         de.druggability[0].feasibility_bucket_definition;
-                    de.abability_bucket_definition =
+                    de.abability_bucket_definition = de.druggability[0].abability_bucket + ': ' +
                         de.druggability[0].abability_bucket_definition;
                     de.new_modality_bucket_definition =
                         de.druggability[0].new_modality_bucket_definition;

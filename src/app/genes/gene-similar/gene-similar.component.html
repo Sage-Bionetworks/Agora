@@ -1,14 +1,16 @@
-<div class="section-thin section-hero overview-header similar-page" tabindex="0">
-    <div class="row no-gutters">
-        <div class="col-12 sp-info-header">
-            <h1>Similar Genes</h1>
-            <more-info [name]="'sp'" [text]="'Learn more about this table'">
-                <sp-dialog></sp-dialog>
-            </more-info>
-        </div>
+<div class="nomlist-list linkstable similar-table" tabindex="0">
+    <div class="section top-section section-hero">
+        <h1>Similar Genes</h1>
+        <p *ngIf="gene">
+            Genes that are similar to {{gene.hgnc_symbol}} based on network coexpression.
+        </p>
+        <p *ngIf="!gene">
+            Genes that are similar based on network coexpression.
+        </p>
+        <more-info [name]="'sp'" [text]="'Learn more about this table'">
+            <sp-dialog></sp-dialog>
+        </more-info>
     </div>
-</div>
-<div class="nomlist-list center-justified-last linkstable similar-table">
     <p-table #gl
         [columns]="selectedColumns" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
@@ -29,6 +31,7 @@
             </colgroup>
         </ng-template>
         <ng-template pTemplate="caption">
+            <div class="row spacing-row"></div>
             <div class="row icon-row">
                 <div class="col-md-11 col-sm-11 col-9 title-col">
                     Similar Genes

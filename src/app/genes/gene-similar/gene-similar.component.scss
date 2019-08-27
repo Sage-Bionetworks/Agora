@@ -3,11 +3,6 @@
 
 .similar-page {
     .sp-info-header {
-
-        h1 {
-            text-align: center;
-        }
-
         .info-icon {
             content: url("/assets/icon/info-icon2.svg");
         }
@@ -18,6 +13,10 @@
     a.ui-paginator-page.ui-state-active {
         background: $menu-dark;
         color: $background;
+    }
+
+    .spacing-row {
+        padding-top: 37px;
     }
 }
 

@@ -91,6 +91,13 @@ export class SOEComponent implements OnInit {
                 command: (event) => this.viewBrainRNAseq()
             },
             {
+                property: 'Genetic Evidence',
+                state: true,
+                hasLink: true,
+                extraText: 'Visit Alzheimer\'s Genomics Database',
+                command: (event) => this.viewGenomicsDatabase()
+            },
+            {
                 property: 'Association with Hallmarks of AD',
                 state: false,
                 hasLink: false,
@@ -159,5 +166,11 @@ export class SOEComponent implements OnInit {
 
     viewBrainRNAseq() {
         window.open('http://www.brainrnaseq.org/', '_blank');
+    }
+
+    viewGenomicsDatabase() {
+        window.open('https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.' +
+            'GeneRecordClass&source_id=' + this.gene.ensembl_gene_id, '_blank'
+        );
     }
 }

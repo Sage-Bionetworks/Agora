@@ -8,28 +8,22 @@ describe('App', () => {
   });
 
   /*it('should have a title', async () => {
-    const subject = await browser.getTitle();
-    const result  = 'Agora';
-    expect(subject).toEqual(result);
+    await browser.getTitle().then((value) => {
+      console.log(value);
+      expect(value).toEqual('Agora');
+    });
   });
 
   it('should have header', async () => {
-    const subject = await element(by.css('h1')).isPresent();
-    const result  = true;
-    expect(subject).toEqual(result);
+    await element(by.css('h1')).isPresent().then((value) => {
+      expect(value).toEqual(true);
+    });
   });
 
   // Add new app.e2e.ts tests
-  it('should have <home>', async () => {
-    const subject = await element(by.css('app home')).isPresent();
-    const result  = true;
-    expect(subject).toEqual(result);
-  });
-
-  it('should have buttons', async () => {
-    const subject = await element(by.css('button')).getText();
-    const result  = 'Submit Value';
-    expect(subject).toEqual(result);
+  it('should have <app>', async () => {
+    await element(by.css('app')).isPresent().then((value) => {
+      expect(value).toEqual(true);
+    });
   });*/
-
 });
