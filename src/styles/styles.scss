@@ -344,6 +344,20 @@ p-multiselectitem {
             padding-top: 44px;
         }
 
+        .ui-table-thead {
+            >tr>th {
+                background: $table-rol-filter !important;
+                color: color(text, secondary) !important;
+            }
+        }
+
+        .table-icon {
+            color: $background;
+            cursor: pointer;
+            padding-left: 0px;
+            font-size: 1.5em;
+        }
+
         .icon-row {
             height: 58px;
             line-height: 58px;
@@ -355,7 +369,9 @@ p-multiselectitem {
                 @include lato-font('bold');
 
                 height: 100%;
-                text-align: center;
+                text-align: left;
+                text-align-last: left;
+                padding-left: 5%;
                 font-size: $font-size-x-regular;
                 color: white;
             }
@@ -384,7 +400,7 @@ p-multiselectitem {
 
                     .ui-multiselect-items-wrapper {
                         padding: 0px;
-                        background: transparent;
+                        background: white;
                     }
 
                     .ui-multiselect-items {
@@ -706,7 +722,7 @@ p-multiselectitem {
 
     .ui-table-thead {
         .ui-state-highlight {
-            color: $background;
+            color: $menu-dark;
         }
 
         .ui-sortable-column {

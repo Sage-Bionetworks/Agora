@@ -14,14 +14,15 @@ import {
     ApiServiceStub,
     GeneServiceStub,
     NavigationServiceStub,
-    mockInfo1
+    mockInfo1,
+    DataServiceStub
 } from '../../testing';
 
 import { GenesListComponent } from './genes-list.component';
 import { MoreInfoComponent } from 'app/dialogs/more-info';
 import { NOMinatedTargetComponent } from '../../dialogs/nt-dialog';
 
-import { ApiService, GeneService, NavigationService } from '../../core/services';
+import { ApiService, GeneService, DataService, NavigationService } from '../../core/services';
 import { GeneResponse } from 'app/models';
 
 import { MockComponent } from 'ng-mocks';
@@ -35,6 +36,7 @@ describe('Component: GenesList', () => {
     let fixture: ComponentFixture<GenesListComponent>;
     let apiService: ApiServiceStub;
     let geneService: GeneServiceStub;
+    let dataService: DataServiceStub;
     let navService: NavigationServiceStub;
     let activatedRoute: any;
 
@@ -53,6 +55,7 @@ describe('Component: GenesList', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: NavigationService, useValue: new NavigationServiceStub() },
             ]
         })
@@ -63,6 +66,7 @@ describe('Component: GenesList', () => {
         // Get the injected instances
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
+        dataService = fixture.debugElement.injector.get(DataService);
         navService = fixture.debugElement.injector.get(NavigationService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
@@ -91,7 +95,7 @@ describe('Component: GenesList', () => {
         spyOn(component, 'ngOnInit').and.callThrough(); // mock event object to load the table
         fixture.detectChanges();
         tick(1);
-        expect(component.datasource).toEqual(res.items);
+        expect(component.dataSource).toEqual(res.items);
         expect(dsSpy.calls.any()).toEqual(true);
     }));
 

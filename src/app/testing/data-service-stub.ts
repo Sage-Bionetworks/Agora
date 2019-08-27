@@ -54,15 +54,16 @@ export class DataServiceStub {
         this.data = [mockGene1, mockGene2];
     }
 
-    getGroup(info: any, auxDim?: any): crossfilter.Group<any, any, any> {
-        return crossfilter([mockGene1, mockGene2]).dimension(() => '').group();
-    }
-
     getGeneEntries(): Gene[] {
         return [mockGene1, mockGene2];
     }
 
     getSignificantFigures(n: number, sig: number = 2) {
         return 0.011;
+    }
+
+    // Assuming the rows are already properly formatted
+    exportToCsv(filename: string, rows: string[]) {
+        //
     }
 }

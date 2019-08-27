@@ -1,22 +1,2 @@
 // Most of the table styling in styles.scss to avoid repeating
 // code
-@import "../../../assets/css/helpers/variables";
-@import "../../../assets/css/helpers/mixins";
-
-.nomlist-list {
-    p-table {
-        .ui-table-thead {
-            >tr>th {
-                background: $table-rol-filter !important;
-                color: color(text, secondary) !important;
-            }
-        }
-
-        .table-icon {
-            color: $background;
-            cursor: pointer;
-            padding-left: 0px;
-            font-size: 1.5em;
-        }
-    }
-}

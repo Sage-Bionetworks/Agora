@@ -15,10 +15,6 @@
 }
 
 .similar-table {
-    .ui-sortable-column-icon {
-        color: $background !important;
-    }
-
     a.ui-paginator-page.ui-state-active {
         background: $menu-dark;
         color: $background;

@@ -100,88 +100,28 @@ export class DataService {
         return this.hgncDim;
     }
 
-    getGroup(info: any, auxDim?: any): crossfilter.Group<any, any, any> {
-        let group = (auxDim) ? auxDim.group() : info.dim.group();
+    // Assuming the rows are already properly formatted
+    exportToCsv(filename: string, rows: string[]) {
+        let csvFile: string = '';
+        rows.forEach((r) => {
+            csvFile += (r + '\n');
+        });
 
-        // If we want to reduce based on certain parameters
-        if (info.attr || info.format) {
-            group.reduce(
-                // callback for when data is added to the current filter results
-                this.reduceAdd(
-                    info.attr,
-                    (info.format) ? info.format : null,
-                    (info.constraints) ? info.constraints : null
-                ),
-                this.reduceRemove(
-                    info.attr,
-                    (info.format) ? info.format : null,
-                    (info.constraints) ? info.constraints : null
-                ),
-                (info.format) ? this.reduceInitial : this.reduceInit
-            );
+        const blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            const link = document.createElement('a');
+            if (link.download !== undefined) { // feature detection
+                // Browsers that support HTML5 download attribute
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
-
-        if (info.filter) {
-            group = this.rmEmptyBinsDefault(group);
-        }
-        info.g = group;
-        return info.g;
-    }
-
-    // Reduce functions for constraint charts
-    reduceAdd(attr: string, format?: string, constraints?: any[]) {
-        return (p, v) => {
-            let val = +v[attr];
-
-            if (format && format === 'array') {
-                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
-                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
-                    if (!Number.isNaN(val)) { p.push(val); }
-                }
-                return p;
-            } else {
-                p[attr] += val;
-            }
-            ++p.count;
-            return p;
-        };
-    }
-
-    reduceRemove(attr: string, format?: string, constraints?: any[]) {
-        return (p, v) => {
-            let val = +v[attr];
-
-            if (format && format === 'array') {
-                if (val !== 0 && constraints[0].name === v[constraints[0].attr]) {
-                    val = (attr === 'fc') ? Math.log2(val) : Math.log10(val);
-                    if (!Number.isNaN(val)) { p.splice(p.indexOf(val), 1); }
-                }
-                return p;
-            } else {
-                p[attr] -= val;
-            }
-            --p.count;
-            return p;
-        };
-    }
-
-    reduceInit(): any {
-        return {count: 0, sum: 0, logfc: 0, fc: 0, adj_p_val: 0};
-    }
-
-    // Box-plot uses a different function name in dc.js
-    reduceInitial(): any[] {
-        return [];
-    }
-
-    rmEmptyBinsDefault = (sourceGroup): any => {
-        return {
-            all: () => {
-                return sourceGroup.all().filter(function(d) {
-                    // Add your filter condition here
-                    return d.key !== null && d.key !== '';
-                });
-            }
-        };
     }
 }

@@ -3,7 +3,8 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import {
     GeneService,
     ApiService,
-    NavigationService
+    NavigationService,
+    DataService
 } from '../../core/services';
 
 import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../../models';
@@ -23,7 +24,7 @@ import {
 export class GenesListComponent implements OnInit {
     @Input() genesInfo: GeneInfo[];
 
-    datasource: GeneInfo[];
+    dataSource: GeneInfo[];
     msgs: Message[] = [];
     selectedInfo: GeneInfo;
     totalRecords: number;
@@ -34,7 +35,8 @@ export class GenesListComponent implements OnInit {
     constructor(
         private navService: NavigationService,
         private apiService: ApiService,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private dataService: DataService
     ) { }
 
     ngOnInit() {
@@ -70,8 +72,8 @@ export class GenesListComponent implements OnInit {
 
     initData() {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
-            this.datasource = (data.items) ? data.items : [];
-            this.datasource.forEach((de: GeneInfo) => {
+            this.dataSource = (data.items) ? data.items : [];
+            this.dataSource.forEach((de: GeneInfo) => {
                 // First map all entries nested in the data to a new array
                 let teamsArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
                     (nt: NominatedTarget) => nt.team) : [];
@@ -129,12 +131,12 @@ export class GenesListComponent implements OnInit {
                     de.new_modality_bucket_definition = noValue;
                 }
             });
-            this.genesInfo = this.datasource;
+            this.genesInfo = this.dataSource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
 
             // Starts table with the nominations columns sorted in descending order
             this.customSort({
-                data: this.datasource,
+                data: this.dataSource,
                 field: 'nominations',
                 mode: 'single',
                 order: -1
@@ -178,7 +180,7 @@ export class GenesListComponent implements OnInit {
         const downloadArray = [];
         // The headers row for the csv file
         downloadArray[0] = this.cols.map((c) => c.field).join();
-        this.datasource.forEach((de: GeneInfo) => {
+        this.dataSource.forEach((de: GeneInfo) => {
             downloadArray.push('');
             this.cols.forEach((c, index) => {
                 downloadArray[downloadArray.length - 1] += (c.field === 'hgnc_symbol' || c.field ===
@@ -188,7 +190,9 @@ export class GenesListComponent implements OnInit {
                     ',' : '';
             });
         });
-        console.log(downloadArray);
+
+        // Finally export to csv
+        this.dataService.exportToCsv('genes-list.csv', downloadArray);
     }
 
     // Using a conversion of 18pt font to 12px and

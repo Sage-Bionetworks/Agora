@@ -8,54 +8,70 @@
         </div>
     </div>
 </div>
-
 <div class="nomlist-list center-justified-last linkstable similar-table">
-    <p-table #gl [columns]="cols" [value]="genesInfo" selectionMode="single"
+    <p-table #gl
+        [columns]="selectedColumns" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
-        [paginator]="true"
+        [paginator]="false"
         [rows]="14"
-        [totalRecords]="totalRecords"
-        [resizableColumns]="true"
+        [responsive]="true"
         scrollHeight="calc(100vh - 603px)"
+        [scrollable]="true"
+        [totalRecords]="totalRecords"
         [loading]="loading"
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
-        [customSort]="true"
-        [scrollable]="true">
+        [customSort]="true">
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
                 <col *ngFor="let col of columns" [ngStyle]="getColumnStyleString(col)">
             </colgroup>
         </ng-template>
+        <ng-template pTemplate="caption">
+            <div class="row icon-row">
+                <div class="col-md-11 col-sm-11 col-9 title-col">
+                    Similar Genes
+                </div>
+                <div class="col-md-1 col-sm-1 col-3 icon-col">
+                    <i class="pi pi-download table-icon absolute-icon" (click)="downloadTable()"></i>
+                    <p-multiSelect
+                        [options]="cols"
+                        [(ngModel)]="selectedColumns"
+                        optionLabel="header"
+                        selectedItemsLabel=""
+                        maxSelectedLabels="0"
+                        displaySelectedLabel="false"
+                        defaultLabel=""
+                        dropdownIcon="pi pi-bars custom-bars"
+                        [showHeader]="false"
+                        [panelStyle]="{minWidth:'12em'}"
+                        [appendTo]="body"
+                        (onChange)="reorderValues($event)">
+                        <ng-template let-col pTemplate="item">
+                            <div class="multiselect-option">{{col.label}}</div>
+                        </ng-template>
+                    </p-multiSelect>
+                </div>
+            </div>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of cols; let i = index;" [pSortableColumn]="getSortColumnField(i, col)">
-                    {{col.header}}
-                    <p-sortIcon [field]="getSortColumnField(i, col)"></p-sortIcon>
+                <th class="" *ngFor="let col of columns; let i = index;" [ngSwitch]="col.field">
+                    <div class="tr">
+                        <div [pSortableColumn]="col.field" class="th">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </div>
+                    </div>
                 </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
-            <td class="default-td">
-               {{rowData[columns[0].field]}}
-            </td>
-            <td class="default-td">
-                {{rowData[columns[1].field]?'YES':'NO'}}
-            </td>
-            <td class="default-td">
-                {{rowData[columns[2].field]}}
-            </td>
-            <td class="default-td">
-                {{rowData[columns[3].field]}}
-            </td>
-            <td class="default-td">
-                {{druggability(rowData[columns[4].field])}}
-            </td>
-            <td class="default-td">
-                {{druggabilitypc(rowData[columns[5].field])}}
-            </td>
+                <td *ngFor="let col of columns">
+                    {{colFinalValue(rowData, col.field, col.subfield)}}
+                </td>
             </tr>
         </ng-template>
     </p-table>

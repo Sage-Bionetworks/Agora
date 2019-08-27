@@ -40,6 +40,7 @@ import { MockComponent } from 'ng-mocks';
 import { of } from 'rxjs';
 
 import { Table } from 'primeng/table';
+import { TitleCasePipe } from '@angular/common';
 
 describe('Component: GeneSimilar', () => {
     let component: GeneSimilarComponent;
@@ -69,7 +70,8 @@ describe('Component: GeneSimilar', () => {
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ForceService, useValue: new ForceServiceStub() },
-                { provide: Location, useValue: locationStub }
+                { provide: Location, useValue: locationStub },
+                TitleCasePipe
             ]
         })
         .compileComponents();

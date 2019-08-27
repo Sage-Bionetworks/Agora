@@ -42,6 +42,8 @@ export interface GeneInfo {
     feasibility_bucket_definition?: string;
     abability_bucket_definition?: string;
     new_modality_bucket_definition?: string;
+    brain_regions?: string;
+    num_brain_regions?: string;
 }
 
 export interface MedianExpression {
