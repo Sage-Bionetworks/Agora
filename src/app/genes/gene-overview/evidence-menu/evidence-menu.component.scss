@@ -14,63 +14,57 @@
         text-align: left;
         text-align-last: left;
 
+        >li {
+            max-width: 250px;
+        }
+
         @include respond-to('ex-small') {
-            >li:first-child {
+            >li {
                 text-align: left;
                 text-align-last: left;
                 padding-left: 3.5% !important;
             }
             >li:last-child {
-                text-align: right;
-                text-align-last: right;
                 padding-right: 3.5% !important;
             }
         }
         @include respond-to('small') {
-            >li:first-child {
+            >li {
                 text-align: left;
                 text-align-last: left;
                 padding-left: 4.0% !important;
             }
             >li:last-child {
-                text-align: right;
-                text-align-last: right;
                 padding-right: 4.0% !important;
             }
         }
         @include respond-to('medium') {
-            >li:first-child {
+            >li {
                 text-align: left;
                 text-align-last: left;
                 padding-left: 4.5% !important;
             }
             >li:last-child {
-                text-align: right;
-                text-align-last: right;
                 padding-right: 4.5% !important;
             }
         }
         @include respond-to('large') {
-            >li:first-child {
+            >li {
                 text-align: left;
                 text-align-last: left;
                 padding-left: 5.5% !important;
             }
             >li:last-child {
-                text-align: right;
-                text-align-last: right;
                 padding-right: 5.5% !important;
             }
         }
         @include respond-to('ex-large') {
-            >li:first-child {
+            >li {
                 text-align: left;
                 text-align-last: left;
                 padding-left: 7.5% !important;
             }
             >li:last-child {
-                text-align: right;
-                text-align-last: right;
                 padding-right: 7.5% !important;
             }
         }

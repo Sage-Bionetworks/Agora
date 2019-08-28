@@ -69,9 +69,9 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
         this.items = [
             { label: 'RNA', disabled: false } as MenuItem,
             { label: 'Protein', disabled: true } as MenuItem,
-            { label: 'Metabolomics', disabled: true } as MenuItem,
+            { label: 'Metabolomics', disabled: true } as MenuItem/*,
             { label: '', disabled: true} as MenuItem,
-            { label: '', disabled: true} as MenuItem
+            { label: '', disabled: true} as MenuItem*/
         ];
     }
 
