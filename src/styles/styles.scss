@@ -40,6 +40,11 @@
     outline: none;
 }
 
+.fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
 // 5. Custom Global Styles
 html {
     position: relative;
@@ -319,6 +324,7 @@ p-multiselectitem {
         }
 
         .ui-table {
+            background: white;
             padding-left: 10%;
             padding-right: 10%;
         }
@@ -441,6 +447,12 @@ p-multiselectitem {
                     position: absolute;
                     top: 16px;
                     right: 65%;
+                }
+
+                .absolute-icon-left {
+                    position: absolute;
+                    top: 16px;
+                    right: 100%;
                 }
             }
         }

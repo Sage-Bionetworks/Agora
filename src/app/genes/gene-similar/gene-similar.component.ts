@@ -22,6 +22,8 @@ import { SortEvent, Message } from 'primeng/api';
 import { throwError } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
 
+import * as screenfull from 'screenfull';
+
 @Component({
     selector: 'gene-similar',
     templateUrl: './gene-similar.component.html',
@@ -241,6 +243,16 @@ export class GeneSimilarComponent implements OnInit {
         this.dataService.exportToCsv(
             'genes-similar-' + this.gene.ensembl_gene_id + '.csv', downloadArray
         );
+    }
+
+    toggleFullscreen() {
+        const el = document.getElementsByClassName('ui-table');
+
+        if (el[0]) {
+            if (screenfull.enabled) {
+                screenfull.request(el[0]);
+            }
+        }
     }
 
     getUnique(value, index, self) {

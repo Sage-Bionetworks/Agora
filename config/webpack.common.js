@@ -227,7 +227,9 @@ module.exports = function (options) {
       new CopyWebpackPlugin(
         [
           { from: 'src/assets', to: 'assets' },
-          { from: 'src/meta' }
+          { from: 'src/meta' },
+          { from: 'node_modules/screenfull/dist/screenfull.js' },
+          { from: 'node_modules/angular-screenfull/dist/angular-screenfull.min.js' }
         ],
         isProd ? { ignore: ['mock-data/**/*'] } : undefined
       ),

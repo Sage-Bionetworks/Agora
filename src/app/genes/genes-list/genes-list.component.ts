@@ -11,9 +11,10 @@ import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../.
 
 import {
     Message,
-    SortEvent,
-    MenuItem
+    SortEvent
 } from 'primeng/primeng';
+
+import * as screenfull from 'screenfull';
 
 @Component({
     selector: 'genes-list',
@@ -195,6 +196,16 @@ export class GenesListComponent implements OnInit {
 
         // Finally export to csv
         this.dataService.exportToCsv('genes-list.csv', downloadArray);
+    }
+
+    toggleFullscreen() {
+        const el = document.getElementsByClassName('ui-table');
+
+        if (el[0]) {
+            if (screenfull.enabled) {
+                screenfull.request(el[0]);
+            }
+        }
     }
 
     // Using a conversion of 18pt font to 12px and
