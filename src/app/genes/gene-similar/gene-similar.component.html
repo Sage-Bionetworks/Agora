@@ -11,27 +11,28 @@
             <sp-dialog></sp-dialog>
         </more-info>
     </div>
+    <div class="row spacing-row"></div>
     <p-table ngsf-fullscreen #gl
         [columns]="selectedColumns" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
         [responsive]="false"
-        scrollHeight="calc(100vh - 603px)"
+        [scrollHeight]="getFullscreenStyle()"
         [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
-        [customSort]="true">
+        [customSort]="true"
+        [ngClass]="getFullscreenClass()">
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
                 <col *ngFor="let col of columns" [ngStyle]="getColumnStyleString(col)">
             </colgroup>
         </ng-template>
         <ng-template pTemplate="caption">
-            <div class="row spacing-row"></div>
             <div class="row icon-row">
                 <div class="col-md-11 col-sm-11 col-9 title-col">
                     Similar Genes

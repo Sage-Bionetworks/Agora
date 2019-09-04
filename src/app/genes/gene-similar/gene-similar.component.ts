@@ -82,7 +82,7 @@ export class GeneSimilarComponent implements OnInit {
                 header: 'Antibody Modality'}
         ];
 
-        // add position property
+        // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;
         });
@@ -91,6 +91,15 @@ export class GeneSimilarComponent implements OnInit {
 
         this.updateVariables();
         this.initData();
+    }
+
+    getFullscreenClass(): string {
+        return (screenfull && screenfull.isFullscreen) ? 'fullscreen-table' : '';
+    }
+
+    getFullscreenStyle(): string {
+        // The value 116px comes from .icon-row + th from the table, both have 58px
+        return (screenfull && screenfull.isFullscreen) ? 'calc(100vh - 116px)' : '350px';
     }
 
     updateVariables() {

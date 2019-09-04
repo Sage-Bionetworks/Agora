@@ -9,64 +9,67 @@
             <nt-dialog [header]="''" [name]="'nt'"></nt-dialog>
         </more-info>
     </div>
+    <div class="section caption-section">
+        <div class="row">
+            <div class="col-md-6 col-sm-12 col-12 header-col">
+                <div class="row header-row">
+                    <span class="span-add-this span-add-this-left">
+                        Search for or select any gene from the nominated target list to view the evidence that led to its nomination
+                    </span>
+                </div>
+                <div class="row search-row header-row">
+                    <section class="filter-wrapper">
+                        <div class="keyword-wrapper">
+                            <div class="col-md-12 col-sm-12 col-12">
+                                <div class="row">
+                                    <div class="col-md-10 col-sm-10 col-9 input-search-col">
+                                        <input type="text" pInputText size="50" id="keyword" placeholder="Search the columns below"
+                                            (input)="gl.filterGlobal($event.target.value, 'contains')">
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 col-3 input-search-icon">
+                                        <i class="fa fa-search fa-lg"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12 header-col">
+                <div class="row header-row">
+                    <span class="span-add-this span-add-this-right">
+                        Would you like to add to this list?
+                    </span>
+                </div>
+                <div class="row header-row">
+                    <p class="img-right">
+                        <img class="btn-nom" src="/assets/img/nominate-a-target.svg" (click)="getNavService().goToRoute('/genes', { outlets: { 'genes-router': [ 'nominated-form' ] }})">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
     <p-table #gl
         [columns]="selectedColumns" [value]="genesInfo" selectionMode="single"
         [(selection)]="selectedInfo"
         [paginator]="false"
         [rows]="14"
         [responsive]="false"
-        scrollHeight="calc(100vh - 603px)"
+        [scrollHeight]="getFullscreenStyle()"
         [scrollable]="true"
         [totalRecords]="totalRecords"
         [loading]="loading"
         (sortFunction)="customSort($event)"
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
-        [customSort]="true">
+        [customSort]="true"
+        [ngClass]="getFullscreenClass()">
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
                 <col *ngFor="let col of columns" [ngStyle]="getColumnStyleString(col)">
             </colgroup>
         </ng-template>
         <ng-template pTemplate="caption">
-            <div class="row">
-                <div class="col-md-6 col-sm-12 col-12 header-col">
-                    <div class="row header-row">
-                        <span class="span-add-this span-add-this-left">
-                            Search for or select any gene from the nominated target list to view the evidence that led to its nomination
-                        </span>
-                    </div>
-                    <div class="row search-row header-row">
-                        <section class="filter-wrapper">
-                            <div class="keyword-wrapper">
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <div class="row">
-                                        <div class="col-md-10 col-sm-10 col-9 input-search-col">
-                                            <input type="text" pInputText size="50" id="keyword" placeholder="Search the columns below"
-                                                (input)="gl.filterGlobal($event.target.value, 'contains')">
-                                        </div>
-                                        <div class="col-md-2 col-sm-2 col-3 input-search-icon">
-                                            <i class="fa fa-search fa-lg"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12 col-12 header-col">
-                    <div class="row header-row">
-                        <span class="span-add-this span-add-this-right">
-                            Would you like to add to this list?
-                        </span>
-                    </div>
-                    <div class="row header-row">
-                        <p class="img-right">
-                            <img class="btn-nom" src="/assets/img/nominate-a-target.svg" (click)="navService.goToRoute('/genes', { outlets: { 'genes-router': [ 'nominated-form' ] }})">
-                        </p>
-                    </div>
-                </div>
-            </div>
             <div class="row icon-row">
                 <div class="col-md-11 col-sm-11 col-9 title-col">
                     Nominated Target List

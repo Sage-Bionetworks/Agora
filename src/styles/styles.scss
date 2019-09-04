@@ -40,9 +40,13 @@
     outline: none;
 }
 
-.fullscreen {
-    width: 100%;
-    height: 100%;
+.fullscreen-table {
+    .ui-table {
+        width: 100%;
+        height: 100%;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
 }
 
 // 5. Custom Global Styles
@@ -1125,7 +1129,7 @@ p-multiselectitem {
         border-collapse: collapse;
     }
 
-    table{
+    table {
         width: 100%;
 
         tr {
@@ -1142,6 +1146,186 @@ p-multiselectitem {
 
         tr:nth-child(odd) {
             background: $table-row-odd;
+        }
+    }
+
+    .caption-section {
+        @include respond-to('ex-small') {
+            padding-left: 9%;
+            padding-right: 9%;
+        }
+        @include respond-to('small') {
+            padding-left: 9%;
+            padding-right: 9%;
+        }
+        @include respond-to('medium') {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+        @include respond-to('large') {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+        @include respond-to('ex-large') {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        background-color: transparent;
+        background: none;
+        border: none;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        position: relative;
+
+        .row {
+            // margin: 0px;
+
+            .header-row {
+                padding-top: 0px;
+                padding-bottom: 49px;
+                margin: 0px;
+            }
+
+            .header-col {
+                padding: 0px;
+                padding-top: 44px;
+            }
+
+            .search-row {
+                display: block;
+                height: 63px;
+                width: 100%;
+            }
+
+            .filter-wrapper {
+                display: flex;        /* IE < 10, Opera *Presto* Desktop (Now dead) */
+                justify-content: center;
+                text-align: left;
+                height: 63px;
+                flex-flow: column wrap;
+                position: relative;
+                width: 100%;
+                margin-right: 20px;
+
+                @include respond-to('ex-small') {
+                    margin-left: 0px;
+                }
+                @include respond-to('small') {
+                    margin-left: 0px;
+                }
+                @include respond-to('medium') {
+                    margin-left: 15px;
+                }
+                @include respond-to('large') {
+                    margin-left: 15px;
+                }
+                @include respond-to('ex-large') {
+                    margin-left: 15px;
+                }
+
+                .italic-result {
+                    > p {
+                        @include lato-font('normal', italic);
+                        color: color(italic-text, base) !important;
+                    }
+
+                    cursor: context-menu;
+                }
+
+                .italic-result:hover {
+                    background: $background;
+                }
+
+                .input-text {
+                    font-size: $font-size-xx-regular;
+                    color: color(text, primary);
+                }
+            }
+
+            #keyword {
+                @include lato-font('normal');
+
+                resize: none;
+                width: 85%;
+                background: transparent;
+                line-height: 18px;
+                border-color: color(keyword, border-color);
+                border: 2px;
+
+                text-align: left;
+                text-align-last: left;
+                font-size: $font-size-x-small-odd;
+                overflow: auto;
+
+                // Opera Mini workaround
+                outline-offset:-2px;
+                outline: none;
+
+                // Input placehold for search
+                ::placeholder {
+                    white-space:pre-line;
+                    position:relative;
+                    color: color(input-placeholder);
+                }
+            }
+
+            .keyword-wrapper:focus-within {
+                box-shadow: 0px 0px 4px 2px $secondary-background;
+                border-radius: 6px;
+
+                // Opera Mini workaround
+                outline-offset:-2px;
+                outline: none;
+            }
+
+            p {
+                margin-top: 25px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .span-add-this {
+                @include lato-font('bold');
+
+                color: color(text, secondary);
+
+                @include respond-to('ex-small') {
+                    margin-left: 0px;
+                }
+                @include respond-to('small') {
+                    margin-left: 0px;
+                }
+                @include respond-to('medium') {
+                    margin-left: 15px;
+                }
+                @include respond-to('large') {
+                    margin-left: 15px;
+                }
+                @include respond-to('ex-large') {
+                    margin-left: 15px;
+                }
+                margin-right: 25px;
+            }
+
+            .span-add-this-left {
+                width: 100%;
+                text-align: left;
+                text-align-last: left;
+            }
+
+            .span-add-this-right {
+                width: 100%;
+                text-align: right;
+                text-align-last: right;
+            }
+
+            .img-right {
+                text-align: right;
+                width: 100%;
+                margin-left: 25px;
+                margin-right: 25px;
+            }
         }
     }
 }

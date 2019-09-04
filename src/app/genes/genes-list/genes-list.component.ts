@@ -51,17 +51,9 @@ export class GenesListComponent implements OnInit {
             { field: 'classification', header: 'Small Molecule Druggability' },
             { field: 'safety_bucket_definition', header: 'Safety Rating' },
             { field: 'abability_bucket_definition', header: 'Antibody Modality' }
-            /*
-            { field: 'sm_druggability_bucket', header: 'Small Molecule Modality' },
-            { field: 'safety_bucket', header: 'Safety' },
-            { field: 'feasibility_bucket', header: 'Feasibility' },
-            { field: 'abability_bucket', header: 'Antibody Modality' },
-            { field: 'new_modality_bucket', header: 'New Modality' },
-            { field: 'tissue_engagement_bucket', header: 'Tissue Engagement' },
-            { field: 'feasibility_bucket_definition', header: 'Feasibility Definition' },
-            { field: 'new_modality_bucket_definition', header: 'New Modality Definition' }*/
         ];
-        // add position property
+
+        // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;
         });
@@ -69,6 +61,15 @@ export class GenesListComponent implements OnInit {
         this.selectedColumns = this.cols.slice(0, 4);
 
         this.initData();
+    }
+
+    getFullscreenClass(): string {
+        return (screenfull && screenfull.isFullscreen) ? 'fullscreen-table' : '';
+    }
+
+    getFullscreenStyle(): string {
+        // The value 116px comes from .icon-row + th from the table, both have 58px
+        return (screenfull && screenfull.isFullscreen) ? 'calc(100vh - 116px)' : '350px';
     }
 
     initData() {
@@ -199,6 +200,8 @@ export class GenesListComponent implements OnInit {
     }
 
     toggleFullscreen() {
+        // This can be any element
+        console.log('derp');
         const el = document.getElementsByClassName('ui-table');
 
         if (el[0]) {
@@ -218,10 +221,6 @@ export class GenesListComponent implements OnInit {
 
     getUnique(value, index, self) {
         return self.indexOf(value) === index;
-    }
-
-    getAlignment(i: number, max: number): string {
-        return (i < max) ? 'left' : 'right';
     }
 
     onRowSelect(event) {
@@ -256,6 +255,10 @@ export class GenesListComponent implements OnInit {
                 );
             }
         }
+    }
+
+    getNavService() {
+        return this.navService;
     }
 
     getGene(geneSymbol: string) {
