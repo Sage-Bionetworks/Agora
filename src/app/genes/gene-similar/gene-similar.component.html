@@ -38,7 +38,7 @@
                     Similar Genes
                 </div>
                 <div class="col-md-1 col-sm-1 col-3 icon-col">
-                    <i class="pi pi-window-maximize table-icon absolute-icon-left" (click)="toggleFullscreen()"></i>
+                    <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
                     <i class="pi pi-download table-icon absolute-icon" (click)="downloadTable()"></i>
                     <p-multiSelect
                         [options]="cols"

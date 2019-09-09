@@ -679,7 +679,7 @@ p-multiselectitem {
         }
 
         p {
-            margin-top: 25px;
+            margin-top: 22px;
             margin-bottom: 20px;
             text-align: center;
         }
@@ -1107,17 +1107,22 @@ p-multiselectitem {
 
     .input-search-col {
         vertical-align: middle;
-        margin: auto;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 
     .input-search-icon {
         vertical-align: middle;
-        margin: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        text-align: right;
 
         i {
+            width: 24px;
+            height: 24px;
             z-index: 2;
             vertical-align: middle;
-            color: $contrast-color;
+            color: $search-icon-color;
             content: url("/assets/icon/search_icon.png") !important;
         }
     }
@@ -1280,7 +1285,7 @@ p-multiselectitem {
             }
 
             p {
-                margin-top: 25px;
+                margin-top: 22px;
                 margin-bottom: 20px;
                 text-align: center;
             }

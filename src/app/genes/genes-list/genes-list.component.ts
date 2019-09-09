@@ -72,6 +72,12 @@ export class GenesListComponent implements OnInit {
         return (screenfull && screenfull.isFullscreen) ? 'calc(100vh - 116px)' : '350px';
     }
 
+    getWindowClass(): string {
+        return (screenfull && !screenfull.isFullscreen) ?
+            ' pi pi-window-maximize table-icon absolute-icon-left' :
+            ' pi pi-window-minimize table-icon absolute-icon-left'
+    }
+
     initData() {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.dataSource = (data.items) ? data.items : [];
@@ -200,13 +206,15 @@ export class GenesListComponent implements OnInit {
     }
 
     toggleFullscreen() {
-        // This can be any element
-        console.log('derp');
         const el = document.getElementsByClassName('ui-table');
 
         if (el[0]) {
             if (screenfull.enabled) {
-                screenfull.request(el[0]);
+                if (!screenfull.isFullscreen) {
+                    screenfull.request(el[0]);
+                } else {
+                    screenfull.exit();
+                }
             }
         }
     }

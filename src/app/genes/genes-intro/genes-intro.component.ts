@@ -20,7 +20,8 @@ export class GenesIntroComponent implements OnInit {
             this.showVideo = value;
         });
 
-        this.updateState();
+        // Uncomment to only show video on first load
+        // this.updateState();
     }
 
     updateState() {

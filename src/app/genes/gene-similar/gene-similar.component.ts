@@ -102,6 +102,12 @@ export class GeneSimilarComponent implements OnInit {
         return (screenfull && screenfull.isFullscreen) ? 'calc(100vh - 116px)' : '350px';
     }
 
+    getWindowClass(): string {
+        return (screenfull && !screenfull.isFullscreen) ?
+            ' pi pi-window-maximize table-icon absolute-icon-left' :
+            ' pi pi-window-minimize table-icon absolute-icon-left'
+    }
+
     updateVariables() {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
@@ -259,7 +265,11 @@ export class GeneSimilarComponent implements OnInit {
 
         if (el[0]) {
             if (screenfull.enabled) {
-                screenfull.request(el[0]);
+                if (!screenfull.isFullscreen) {
+                    screenfull.request(el[0]);
+                } else {
+                    screenfull.exit();
+                }
             }
         }
     }
