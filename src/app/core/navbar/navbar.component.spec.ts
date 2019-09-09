@@ -87,13 +87,13 @@ describe('Component: Navbar', () => {
         expect(el).not.toBeNull();
     });
 
-    it('should have a Watch the Video button', () => {
+    it('should not have a Watch the Video button', () => {
         component.showDesktopMenu = true;
         component.showMobileMenu = false;
         fixture.detectChanges();
 
         const el = fixture.debugElement.query(By.css('p-button'));
-        expect(el).not.toBeNull();
+        expect(el).toBeNull();
     });
 
     it('should have the correct number of items in each menu', () => {
