@@ -59,7 +59,7 @@
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",
     "ngsw-copy": "cp node_modules/@angular/service-worker/ngsw-worker.js dist/",
     "build-ngsw": "npm run ngsw-config && npm run ngsw-copy",
-    "postinstall": "npm dedupe && npm run webdriver:clean && npm run webdriver:update",
+    "postinstall": "npm dedupe && npm run webdriver:update",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
     "preversion": "npm test",
@@ -99,7 +99,7 @@
     "webdriver:clean": "node ./node_modules/protractor/bin/webdriver-manager clean",
     "webdriver-manager": "node ./node_modules/protractor/bin/webdriver-manager",
     "webdriver:start": "node ./node_modules/protractor/bin/webdriver-manager start",
-    "webdriver:update": "node ./node_modules/protractor/bin/webdriver-manager update --gecko=false --versions.chrome 76.0.3809.87",
+    "webdriver:update": "node ./node_modules/protractor/bin/webdriver-manager update --gecko=false --versions.chrome 74.0.3729.6",
     "webpack-dev-server": "node --max_old_space_size=6000 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
