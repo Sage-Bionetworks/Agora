@@ -179,17 +179,17 @@ p-panel {
 
 p-dialog {
     .ui-dialog {
-        width: 80% !important;
+        width: 65% !important;
 
         @include respond-to('ex-small') {
-            left: 10% !important;
+            left: 17.5% !important;
         }
         @include respond-to('small') {
-            left: 10% !important;
+            left: 17.5% !important;
         }
 
         top: 109px;
-        max-height: 80%;
+        max-height: 62%;
         overflow: auto;
         background: white;
     }
@@ -225,8 +225,8 @@ p-dialog {
         padding: .525em !important;
 
         > span {
-            width: 31px;
-            height: 31px;
+            width: 18px;
+            height: 18px;
         }
     }
 
@@ -264,7 +264,7 @@ p-dialog {
 
     a {
         position: absolute;
-        left: 1%;
+        right: 1%;
         top: 10%;
     }
 }
@@ -335,7 +335,7 @@ p-multiselectitem {
 
         .header-row {
             padding-top: 0px;
-            padding-bottom: 49px;
+            // padding-bottom: 49px;
             margin: 0px;
         }
 
@@ -489,30 +489,8 @@ p-multiselectitem {
         }
     }
 
-    .link-heading {
-        color: color(text, secondary);
-        @include respond-to('medium') {
-            float: left;
-            margin-left: 50%;
-            transform: translate(-50%);
-            margin-bottom: 20px;
-        }
-        @include respond-to('large') {
-            float: left;
-            margin-left: 50%;
-            transform: translate(-50%);
-            margin-bottom: 20px;
-        }
-        @include respond-to('ex-large') {
-            float: left;
-            margin-left: 50%;
-            transform: translate(-50%);
-            margin-bottom: 20px;
-        }
-    }
-
     .info-icon {
-        content: url("/assets/icon/info-icon2.svg");
+        content: url("/assets/icon/info-icon.svg");
     }
 
     .top-section {
@@ -1184,11 +1162,9 @@ p-multiselectitem {
         position: relative;
 
         .row {
-            // margin: 0px;
-
             .header-row {
                 padding-top: 0px;
-                padding-bottom: 49px;
+                // padding-bottom: 49px;
                 margin: 0px;
             }
 
@@ -1201,6 +1177,7 @@ p-multiselectitem {
                 display: block;
                 height: 63px;
                 width: 100%;
+                padding-bottom: 135px;
             }
 
             .filter-wrapper {
