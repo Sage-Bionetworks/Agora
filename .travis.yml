@@ -17,6 +17,7 @@ before_install:
   - npm cache verify
   - travis_retry npm prune
   - travis_retry npm update
+  - export CHROME_BIN=/usr/bin/google-chrome-stable
 
 install:
   - npm install
