@@ -4,7 +4,7 @@ language: node_js
 cache: npm
 
 addons:
-  chrome: stable
+  chrome: beta
 
 matrix:
   fast_finish: true
