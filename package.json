@@ -99,7 +99,7 @@
     "webdriver:clean": "node ./node_modules/protractor/bin/webdriver-manager clean",
     "webdriver-manager": "node ./node_modules/protractor/bin/webdriver-manager",
     "webdriver:start": "node ./node_modules/protractor/bin/webdriver-manager start",
-    "webdriver:update": "node ./node_modules/protractor/bin/webdriver-manager update --gecko=false --versions.chrome 75.0.3770",
+    "webdriver:update": "node ./node_modules/protractor/bin/webdriver-manager update --gecko=false --versions.chrome 76.0.3809.87",
     "webpack-dev-server": "node --max_old_space_size=6000 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
