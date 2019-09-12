@@ -3,9 +3,6 @@ dist: trusty
 language: node_js
 cache: npm
 
-addons:
-  chrome: beta
-
 matrix:
   fast_finish: true
 
