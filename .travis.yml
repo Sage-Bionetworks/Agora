@@ -17,9 +17,6 @@ before_install:
   - npm cache verify
   - travis_retry npm prune
   - travis_retry npm update
-  - google-chrome-stable --version
-  - ./node_modules/.bin/chromedriver --version
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 --no-sandbox --disable-dev-shm-usage http://localhost &
 
 install:
   - npm install
