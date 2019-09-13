@@ -31,11 +31,6 @@
         }
     }
 
-    .container-col {
-        padding-left: 20%;
-        padding-right: 18%;
-    }
-
     .auto-col {
         margin: auto;
     }
@@ -57,8 +52,18 @@
     }
 
     .body-row {
-        height: 71px;
+        height: 110px;
         line-height: 22px;
+
+        a {
+            display: inline-block;
+            width: auto;
+        }
+
+        span {
+            display: contents;
+            width: auto;
+        }
     }
 
     .auto-width {

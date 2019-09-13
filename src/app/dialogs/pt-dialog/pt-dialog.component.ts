@@ -34,4 +34,8 @@ export class PTDialogComponent {
     goToRoute(path: string, outlets?: any) {
         this.navService.goToRouteRelative(path, outlets);
     }
+
+    openWindow(url: string) {
+        window.open(url, '_blank');
+    }
 }

@@ -3,7 +3,7 @@
       [baseZIndex]="10000" [styleClass]="'mt-dialog'" [ngStyle]="{'minWidth': 330}">
         <div class="row content-row first-bp-dia-row" dir="ltr">
             <div class="col-md-12 col-sm-12 col-12 container-col">
-                <div class="row first-content-row">
+                <div class="row last-content-row">
                     Metabolic data for Agora was analyzed using a multi-step process. Metabolite data was obtained
                     from approximately 1,400 samples of the Alzheimer’s Disease Neuroimaging (ADNI) cohorts. Metabolite
                     concentrations from 157 metabolites were obtained in clinical lab tests performed by participating
@@ -23,8 +23,10 @@
                     participants with clinical Alzheimer’s disease (AD). In this analysis, 26 out of the 157 metabolites had an adjusted P-value <= 0.05.
                 </div>
                 <div class="row last-content-row">
-                    This content has been provided by the Duke AMP-AD Team led by Rima Kaddurah-Daouk. Learn more about the
-                    <a class="link no-bold" href="https://agora.ampadportal.org/teams-contributing" target="_blank">team</a>.
+                    <p>
+                        This content has been provided by the Duke AMP-AD Team led by Rima Kaddurah-Daouk. Learn more about the
+                        <span class="link auto-width no-bold" (click)="openWindow('https://agora.ampadportal.org/teams-contributing')">team</span>.
+                    </p>
                 </div>
             </div>
         </div>

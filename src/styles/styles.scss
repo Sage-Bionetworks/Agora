@@ -192,6 +192,15 @@ p-dialog {
         max-height: 62%;
         overflow: auto;
         background: white;
+
+        p {
+            color: #000000;
+            margin: 0px;
+        }
+    }
+
+    .no-bold {
+        font-weight: normal;
     }
 
     .ui-dialog-titlebar {
@@ -244,8 +253,22 @@ p-dialog {
         height: 100% ;
         padding-bottom: 10%;
 
+        p {
+            text-align: left !important;
+        }
+
         .content-row {
             margin-bottom: $font-size-xx-regular;
+
+            a {
+                display: inline-block;
+                width: auto;
+            }
+
+            span {
+                display: contents;
+                width: auto;
+            }
 
             .content-vspacing {
                 margin-bottom: 40px;

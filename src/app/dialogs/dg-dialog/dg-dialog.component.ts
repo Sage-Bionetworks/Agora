@@ -26,4 +26,8 @@ export class DRUggabilityComponent {
     closeDialog() {
         this.dialogsService.closeDialog(this.name);
     }
+
+    openWindow(url: string) {
+        window.open(url, '_blank');
+    }
 }

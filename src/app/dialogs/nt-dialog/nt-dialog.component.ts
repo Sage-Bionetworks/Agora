@@ -34,4 +34,8 @@ export class NOMinatedTargetComponent {
     getNavService() {
         return this.navService;
     }
+
+    openWindow(url: string) {
+        window.open(url, '_blank');
+    }
 }

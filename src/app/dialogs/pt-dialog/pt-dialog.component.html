@@ -2,7 +2,7 @@
     <p-dialog header="About the Proteomics Analysis" [(visible)]="display" [modal]="true" [blockScroll]="false" [responsive]="true" [minY]="256"
       [baseZIndex]="10000" [styleClass]="'pt-dialog'" [ngStyle]="{'minWidth': 330}">
         <div class="row content-row first-bp-dia-row" dir="ltr">
-            <div class="col-md-12 col-sm-12 col-12 container-col">
+            <div class="col-md-12 col-sm-12 col-12">
                 <div class="row first-content-row">
                     Proteomic data used for these analyses was generated from post-mortem brains of more than 500 individuals. Samples were taken from
                     four human cohort studies, representing four different brain regions:
@@ -57,8 +57,12 @@
                     (PMI). Differential expression of AD versus controls was determined via ANOVA with an FDR of 0.05.
                 </div>
                 <div class="row last-content-row">
-                    The processed data is publicly available in&nbsp;<a class="link auto-width no-bold" href="https://www.synapse.org/" target="_blank">Synapse</a>&nbsp;through
-                    this link:&nbsp;<a class="link auto-width no-bold" href="https://www.synapse.org/#!Synapse:syn18689335" target="_blank">Proteomics for Agora</a>.
+                    <p>
+                        The processed data is publicly available in
+                        <span class="link auto-width no-bold" (click)="openWindow('https://www.synapse.org/')">Synapse</span>
+                        through this link:
+                        <span class="link auto-width no-bold" (click)="openWindow('https://www.synapse.org/#!Synapse:syn18689335')">Proteomics for Agora</span>.
+                    </p>
                 </div>
             </div>
         </div>
