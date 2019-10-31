@@ -30,7 +30,8 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="j === 0">
-                    <span>{{rowData[col.field]}}</span>
+                    <soe-property [prop]="rowData[col.field]"></soe-property>
+
                 </ng-container>
             </td>
         </tr>

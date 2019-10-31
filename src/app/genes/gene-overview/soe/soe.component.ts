@@ -34,64 +34,95 @@ export class SOEComponent implements OnInit {
         this.initData();
     }
 
+
     initData() {
         this.summary = [
             {
-                property: 'Genetic Association with LOAD',
+                property: {
+                    title: 'Genetic Association with LOAD',
+                    description: 'True indicates a significant genetic association with Late Onset AD (LOAD) based on the International Genomics of Alzheimer\'s Project (IGAP)',
+                    link: 'https://doi.org/10.1038/s41588-019-0358-2',
+                    anchorText: 'genome-wide association study'
+                },
                 state: (this.geneInfo.isIGAP === undefined) ? false : this.geneInfo.isIGAP,
                 hasLink: false,
                 extraText: ''
             },
             {
-                property: 'Brain eQTL',
+                property: {
+                    title: 'Brain eQTL',
+                    description: 'True indicates that this gene has a significant expression Quantitative Trait Locus (eQTL) based on an',
+                    link: 'https://doi.org/10.1101/638544',
+                    anchorText: 'AMP-AD consortium study'
+                },
                 state: (this.geneInfo.haseqtl === undefined) ? false : this.geneInfo.haseqtl,
                 hasLink: false,
                 extraText: ''
             },
             {
-                property: 'RNA Expression Change in AD Brain',
-                state: (this.geneInfo.isChangedInADBrain === undefined) ?
-                    false : this.geneInfo.isChangedInADBrain,
-                hasLink: false,
-                extraText: ''
+                property: {
+                    title: 'RNA Expression Change in AD Brain',
+                    description: 'True indicates that this gene show significant differential expression in at least one brain region based on AMP-AD consortium work detailed on Agora under RNA Evidence.'},
+                    state: (this.geneInfo.isChangedInADBrain === undefined) ?
+                        false : this.geneInfo.isChangedInADBrain,
+                    hasLink: false,
+                    extraText: ''
             },
             {
-                property: 'Nominated Target',
+                property: {
+                    title: 'Nominated Target',
+                    description: 'True indicates that this gene has been submitted as a nominated target to Agora.'
+                },
                 state: (this.geneInfo.nominations === undefined) ?
                     false : this.geneInfo.nominations,
                 hasLink: false,
                 extraText: ''
             },
             {
-                property: 'Gene Ontology',
+                property: {
+                    title: 'Gene Ontology',
+                    description: 'Provides a link out to gene ontology information in Ensembl.'
+                },
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Ensembl',
                 command: (event) => this.viewGeneOntology()
             },
             {
-                property: 'Reactome Pathways',
+                property: {
+                    title: 'Reactome Pathways',
+                    description:  "Provides a link out to reactome pathway information in Ensembl."
+                },
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Ensembl',
                 command: (event) => this.viewPathways()
             },
             {
-                property: 'Evidence for AD Association',
+                property: {
+                    title: 'Evidence for AD Association',
+                    description: 'Provides a link out to the Open Targets site, which collates various forms of evidence for a gene\'s association to AD.'
+                },
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Open Targets',
                 command: (event) => this.viewHallmarks()
             },
             {
-                property: 'Cell Type Specificity',
+                property: {
+                    title: 'Cell Type Specificity',
+                    description: 'Provides a link out to the Brain RNAseq site, which hosts single-cell RNAseq data.'
+                },
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Brain RNAseq',
                 command: (event) => this.viewBrainRNAseq()
             },
             {
-                property: 'Genetic Evidence',
+                property: {
+                    title: 'Genetic Evidence',
+                    descrition: 'Provides a link out to the National Institute on Aging Alzheimer\'s Genetics of Alzheimer\'s Disease Data Storage Site (NIAGADS) Genomics Database.'
+                },
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Alzheimer\'s Genomics Database',

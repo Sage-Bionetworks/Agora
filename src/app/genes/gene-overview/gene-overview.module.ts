@@ -8,7 +8,7 @@ import { DialogsModule } from 'app/dialogs';
 
 import { GeneOverviewComponent } from './gene-overview.component';
 import { NominationDetailsComponent } from './nom-details';
-import { SOEComponent } from './soe';
+import { SOEComponent, SOEPropertyComponent } from './soe';
 import { EvidenceMenuComponent } from './evidence-menu';
 import { RNAComponent } from './evidence-menu/rna';
 import { ProteomicsComponent } from './evidence-menu/proteomics';
@@ -22,6 +22,7 @@ import { GeneDruggabilityComponent } from './gene-druggability';
     declarations: [
         GeneOverviewComponent,
         SOEComponent,
+        SOEPropertyComponent,
         NominationDetailsComponent,
         EvidenceMenuComponent,
         RNAComponent,
