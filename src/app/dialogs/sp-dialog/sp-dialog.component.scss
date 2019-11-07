@@ -15,6 +15,11 @@
         padding-bottom: 132px !important;
         padding-left: 6% !important;
         padding-right: 6% !important;
+
+        a.link {
+            display: inline;
+            position: static;
+        }
     }
 
     .first-bp-dia-row {

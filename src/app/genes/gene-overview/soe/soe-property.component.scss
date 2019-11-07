@@ -1,0 +1,27 @@
+@import '../../../../assets/css/helpers/variables';
+@import '../../../../assets/css/helpers/mixins';
+
+.st-table {
+  .ui-table-tbody > tr > td:first-child {
+    div.name-block {
+      line-height: 12px;
+      padding: 18px 0;
+    }
+    span.title {
+      @include lato-font('bold');
+    }
+    div.description {
+      @include lato-font('normal');
+      font-size: 18px;
+      margin-top: 18px;
+      display: block;
+      font-style: italic;
+      line-height: 22px;
+      text-align:left;
+      > .link {
+        font-style: italic;
+        font-weight: normal;
+      }
+    }
+  }
+}

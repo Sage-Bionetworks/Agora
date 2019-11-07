@@ -141,21 +141,6 @@ describe('Component: SOE', () => {
         expect(aEl.length).toEqual(1);
     });
 
-    it('should have extra info component', () => {
-        const el = fixture.debugElement.query(By.css('more-info'));
-        expect(el).toBeDefined();
-
-        // When using ng-mocks, we need to pick the component instance,
-        // pass in the input value so we can assert it after
-        const ci = el.componentInstance as MoreInfoComponent;
-        ci.name = 'soe';
-        fixture.detectChanges();
-        expect(ci.name).toEqual('soe');
-
-        const aEl = fixture.debugElement.queryAll(By.css('more-info'));
-        expect(aEl.length).toEqual(1);
-    });
-
     it('should open a new window when needed', () => {
         const woSpy = spyOn(window, 'open').and.callThrough();
 
