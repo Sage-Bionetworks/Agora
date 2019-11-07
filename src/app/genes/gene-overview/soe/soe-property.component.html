@@ -1,5 +1,5 @@
-<div *ngIf="isItString()"><span>{{prop}}</span></div>
-<div *ngIf="!isItString()" class="name-block"><span>{{prop.title}}</span><br>
-    <span class="description">{{prop.description}} <span class="link no-bold" *ngIf="prop.link"
-        (click)="openWindow(prop.link)">{{prop.anchorText}}</span></span>
+<div *ngIf="isItString()"><span span class="title">{{prop}}</span></div>
+<div *ngIf="!isItString()" class="name-block"><span class="title">{{prop.title}}</span>
+    <div class="description">{{prop.description}} <span class="link no-bold" *ngIf="prop.link"
+        (click)="openWindow(prop.link)">{{prop.anchorText}}</span></div>
 </div>

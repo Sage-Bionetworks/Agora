@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core'
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
-type Property = {
-  title: string
-  description: string
-  link?: string
-  anchorText?: string
+interface IProperty  {
+  title: string;
+  description: string;
+  link?: string;
+  anchorText?: string;
 }
 
 @Component({
@@ -13,20 +13,17 @@ type Property = {
   styleUrls: ['./soe-property.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SOEPropertyComponent implements OnInit {
-  @Input() prop: Property | string
+export class SOEPropertyComponent {
+  @Input() prop: IProperty | string;
 
-  cols: any[]
-  summary: any[]
+  cols: any[];
+  summary: any[];
 
-  constructor() {}
   isItString(): boolean {
-    console.log(typeof this.prop === 'string')
-    return typeof this.prop === 'string'
+    return typeof this.prop === 'string';
   }
-  ngOnInit() {}
 
   openWindow(url: string) {
-    window.open(url, '_blank')
+    window.open(url, '_blank');
   }
 }
