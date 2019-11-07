@@ -62,12 +62,6 @@
             height: 40px;
         }
 
-        >tr>td:first-child {
-            span {
-                @include lato-font('bold');
-            }
-        }
-
         @include respond-to('ex-small') {
             >tr>td {
                 padding-left: 3.5%;
