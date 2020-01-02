@@ -139,7 +139,7 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.800.6",
+    "@angular-devkit/build-angular": "^0.803.21",
     "@angular-devkit/build-optimizer": "^0.800.6",
     "@angular/cdk": "^8.1.4",
     "@angular/cli": "^8.3.0",
@@ -185,7 +185,7 @@
     "find-root": "^1.1.0",
     "font-awesome": "^4.7.0",
     "gh-pages": "^2.1.1",
-    "helmet": "^3.20.0",
+    "helmet": "^3.21.2",
     "html-webpack-plugin": "^3.2.0",
     "inline-manifest-webpack-plugin": "^4.0.2",
     "istanbul-instrumenter-loader": "^3.0.1",
