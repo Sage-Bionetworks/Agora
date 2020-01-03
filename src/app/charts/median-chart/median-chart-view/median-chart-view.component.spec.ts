@@ -78,7 +78,7 @@ describe('Component: MedianChartView', () => {
         expect(icSpy).not.toHaveBeenCalled();
     });
 
-    it('should call init if the statistical model was already selected', () => {
+    xit('should call init if the statistical model was already selected', () => {
         const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
         const icSpy = spyOn(component, 'initChart').and.callThrough();
         component.geneinfo = mockInfo1;
@@ -131,7 +131,7 @@ describe('Component: MedianChartView', () => {
         expect(gsspgSpy).not.toHaveBeenCalled();
     });
 
-    it('should remove chart if there is a chart', () => {
+    xit('should remove chart if there is a chart', () => {
         const csrcSpy = spyOn(chartService, 'removeChart').and.callThrough();
         const csrcnSpy = spyOn(chartService, 'removeChartName').and.callThrough();
         const gsspgSpy = spyOn(geneService, 'setPreviousGene').and.callThrough();
