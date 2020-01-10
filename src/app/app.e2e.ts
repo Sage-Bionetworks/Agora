@@ -7,7 +7,7 @@ describe('App', () => {
     await browser.get('/');
   });
 
-  /*it('should have a title', async () => {
+  it('should have a title', async () => {
     await browser.getTitle().then((value) => {
       console.log(value);
       expect(value).toEqual('Agora');
@@ -25,5 +25,5 @@ describe('App', () => {
     await element(by.css('app')).isPresent().then((value) => {
       expect(value).toEqual(true);
     });
-  });*/
+  });
 });
