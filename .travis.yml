@@ -21,7 +21,7 @@ branches:
   - prod
 
 before_install:
-  - npm install npm@6 -g
+  - npm install npm@6.13.2 -g
   - npm cache verify
   - travis_retry npm prune
   - travis_retry npm update
