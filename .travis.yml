@@ -4,8 +4,7 @@ language: node_js
 cache:
   npm: false
 
-matrix:
-  fast_finish: true
+fast_finish: true
 
 addons:
   chrome: stable
