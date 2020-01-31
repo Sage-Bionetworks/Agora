@@ -21,6 +21,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 /***
@@ -143,6 +144,7 @@ module.exports = function (env) {
     },
 
     optimization: {
+      minimize: true,
       minimizer: [
         /**
          * Plugin: UglifyJsPlugin
@@ -153,11 +155,14 @@ module.exports = function (env) {
          *
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
-        new UglifyJsPlugin({
+
+
+          new TerserPlugin({
+        //new UglifyJsPlugin({
           sourceMap: true,
           parallel: true,
-          cache: helpers.root('webpack-cache/uglify-cache'),
-          uglifyOptions: getUglifyOptions(supportES2015, true)
+          cache: true, //helpers.root('webpack-cache/uglify-cache'),
+          //uglifyOptions: getUglifyOptions(supportES2015, true)
         })
       ],
       splitChunks: {
