@@ -27,7 +27,6 @@
       "hammerjs",
       "jasmine",
       "node",
-      "uglify-js",
       "webpack"
     ]
   },
