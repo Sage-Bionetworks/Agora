@@ -78,7 +78,7 @@ describe('Component: MedianChartView', () => {
         expect(icSpy).not.toHaveBeenCalled();
     });
 
-    xit('should call init if the statistical model was already selected', () => {
+    it('should call init if the statistical model was already selected', () => {
         const oiSpy = spyOn(component, 'ngOnInit').and.callThrough();
         const icSpy = spyOn(component, 'initChart').and.callThrough();
         component.geneinfo = mockInfo1;
