@@ -131,7 +131,7 @@ describe('Component: MedianChartView', () => {
         expect(gsspgSpy).not.toHaveBeenCalled();
     });
 
-    xit('should remove chart if there is a chart', () => {
+    it('should remove chart if there is a chart', () => {
         const csrcSpy = spyOn(chartService, 'removeChart').and.callThrough();
         const csrcnSpy = spyOn(chartService, 'removeChartName').and.callThrough();
         const gsspgSpy = spyOn(geneService, 'setPreviousGene').and.callThrough();
