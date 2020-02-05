@@ -1,17 +1,18 @@
 sudo: required
 dist: xenial
 language: node_js
-cache: npm
+cache:
+  npm: false
 
-matrix:
-  fast_finish: true
+fast_finish: true
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
+  #apt:
+  #  sources:
+  #    - google-chrome
+  #  packages:
+  #    - google-chrome-stable
 
 branches:
   only:
@@ -20,7 +21,7 @@ branches:
   - prod
 
 before_install:
-  - npm install npm@6 -g
+  - npm install npm@6.13.7
   - npm cache verify
   - travis_retry npm prune
   - travis_retry npm update
