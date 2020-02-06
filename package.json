@@ -228,7 +228,7 @@
     "stylelint": "^9.10.1",
     "stylelint-bare-webpack-plugin": "^1.1.4",
     "stylelint-no-unsupported-browser-features": "^3.0.2",
-    "terser-webpack-plugin": "^2.3.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "to-string-loader": "^1.1.6",
     "ts-node": "^7.0.1",
     "tslib": "^1.10.0",
