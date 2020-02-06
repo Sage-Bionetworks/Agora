@@ -4,8 +4,6 @@ language: node_js
 cache:
   npm: false
 
-fast_finish: true
-
 addons:
   chrome: stable
   #apt:
@@ -24,7 +22,7 @@ before_install:
   - npm install npm@6.13.7
   - npm cache verify
   - travis_retry npm prune
-  - travis_retry npm update
+  #- travis_retry npm update
 
 install:
   - npm install
@@ -37,6 +35,7 @@ stages:
   - name: eb-deploy
 
 jobs:
+  fast_finish: true
   include:
     - stage: test
       script: npm run ci:travis
