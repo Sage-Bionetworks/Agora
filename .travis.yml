@@ -39,10 +39,7 @@ jobs:
   include:
     - stage: test
       script: npm run ci:travis
-      node_js:
-        - 8
-        - 10
-        - node
+      node_js: 8
     - stage: eb-deploy
       script:
         - ./set-agora-version.sh || travis_terminate 1
