@@ -33,6 +33,7 @@ before_script:
 stages:
   - name: test
   - name: eb-deploy
+    if: (tag =~ ^v) OR (type = push)
 
 jobs:
   fast_finish: true
