@@ -171,7 +171,7 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      new MiniCssExtractPlugin({ filename: '[name]-[hash].css', chunkFilename: '[name]-[chunkhash].css' }),
+      new MiniCssExtractPlugin({ filename: '[name]-[contenthash].css', chunkFilename: '[name]-[chunkhash].css' }),
       new HashedModuleIdsPlugin(),
       new webpack.LoaderOptionsPlugin({
         options: {
