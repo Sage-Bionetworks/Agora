@@ -1,17 +1,16 @@
 sudo: required
 dist: xenial
 language: node_js
-cache: npm
-
-matrix:
-  fast_finish: true
+cache:
+  npm: false
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
+  #apt:
+  #  sources:
+  #    - google-chrome
+  #  packages:
+  #    - google-chrome-stable
 
 branches:
   only:
@@ -20,10 +19,10 @@ branches:
   - prod
 
 before_install:
-  - npm install npm@6 -g
+  - npm install npm@6.13.7
   - npm cache verify
   - travis_retry npm prune
-  - travis_retry npm update
+  #- travis_retry npm update
 
 install:
   - npm install
@@ -34,8 +33,10 @@ before_script:
 stages:
   - name: test
   - name: eb-deploy
+    if: (tag =~ ^v) OR (type = push)
 
 jobs:
+  fast_finish: true
   include:
     - stage: test
       script: npm run ci:travis
