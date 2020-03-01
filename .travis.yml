@@ -6,11 +6,6 @@ cache:
 
 addons:
   chrome: stable
-  #apt:
-  #  sources:
-  #    - google-chrome
-  #  packages:
-  #    - google-chrome-stable
 
 branches:
   only:
@@ -22,7 +17,6 @@ before_install:
   - npm install npm@6.13.7
   - npm cache verify
   - travis_retry npm prune
-  #- travis_retry npm update
 
 install:
   - npm install
