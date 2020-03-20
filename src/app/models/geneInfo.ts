@@ -18,7 +18,7 @@ export interface GeneInfo {
     summary?: string;
     hgnc_symbol: string;
     type_of_gene: string;
-    'go.MF': GoMF[];
+    go_MF: GoMF[];
     isIGAP: boolean;
     haseqtl: boolean;
     isChangedInADBrain: boolean;

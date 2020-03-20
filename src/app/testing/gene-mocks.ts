@@ -63,11 +63,11 @@ export const mockGeneStatistics: GeneStatistics = {
 };
 
 export const mockInfo1: GeneInfo = {
-    '_id': '5b33ce05cf26b9efe2025046',
-    'ensembl_gene_id': 'ENSG00000106211',
-    'alias': ['CMT2F', 'HEL-S-102', 'HMN2B', 'HS.76067', 'HSP27', 'HSP28', 'Hsp25', 'SRP27'],
-    'name': 'heat shock protein family B (small) member 1',
-    'summary': 'This gene encodes a member of the small heat shock protein (HSP20) family of ' +
+    _id: '5b33ce05cf26b9efe2025046',
+    ensembl_gene_id: 'ENSG00000106211',
+    alias: ['CMT2F', 'HEL-S-102', 'HMN2B', 'HS.76067', 'HSP27', 'HSP28', 'Hsp25', 'SRP27'],
+    name: 'heat shock protein family B (small) member 1',
+    summary: 'This gene encodes a member of the small heat shock protein (HSP20) family of ' +
         'proteins. In response to environmental stress, the encoded protein translocates from ' +
         'the cytoplasm to the nucleus and functions as a molecular chaperone that promotes the ' +
         'correct folding of other proteins. This protein plays an important role in the ' +
@@ -77,9 +77,9 @@ export const mockInfo1: GeneInfo = {
         'from apoptosis. Mutations in this gene have been identified in human patients with ' +
         'Charcot-Marie-Tooth disease and distal hereditary motor neuropathy. [provided  ' +
         'by RefSeq, Aug 2017].',
-    'hgnc_symbol': 'HSPB1',
-    'type_of_gene': 'protein-coding',
-    'go.MF': [
+    hgnc_symbol: 'HSPB1',
+    type_of_gene: 'protein-coding',
+    go_MF: [
         {
             category: 'MF',
             evidence: 'HDA',
@@ -107,10 +107,10 @@ export const mockInfo1: GeneInfo = {
             term: 'protein binding'
         }
     ],
-    'isChangedInADBrain': false,
-    'isIGAP': false,
-    'haseqtl': true,
-    'medianexpression': [
+    isChangedInADBrain: false,
+    isIGAP: false,
+    haseqtl: true,
+    medianexpression: [
         {
             medianlogcpm: 7.7848,
             tissue: 'DLPFC'
@@ -120,7 +120,7 @@ export const mockInfo1: GeneInfo = {
             tissue: 'TCX'
         }
     ],
-    'nominatedtarget': [
+    nominatedtarget: [
         {
             team: 'Emory',
             rank: 19,
@@ -143,7 +143,7 @@ export const mockInfo1: GeneInfo = {
             input_data: 'Protein'
         }
     ],
-    'druggability': [
+    druggability: [
         {
             sm_druggability_bucket: 1,
             safety_bucket: 3,
@@ -168,7 +168,7 @@ export const mockInfo1: GeneInfo = {
             'by user.'
         }
     ],
-    'nominations': 1
+    nominations: 1
 };
 
 export const mockDataLink1: GeneNetworkLinks = {

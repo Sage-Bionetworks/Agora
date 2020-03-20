@@ -62,13 +62,13 @@ export class GeneDruggabilityComponent implements OnInit {
             case 6:
                 return 'Probably small molecule druggable by homology';
             case 7:
-                return 'Potentially small molecule druggable by family (active ligand)';
-            case 8:
-                return 'Potentially small molecule druggable by family (low activity ligand)';
-            case 9:
                 return 'Potentially targetable by protein family structure';
-            case 10:
+            case 8:
                 return 'Endogenous ligand';
+            case 9:
+                return 'Potentially small molecule druggable by family (active ligand)';
+            case 10:
+                return 'Potentially small molecule druggable by family (low activity ligand)';
             case 11:
                 return 'Druggable protein class, no other information';
             case 12:
@@ -106,15 +106,15 @@ export class GeneDruggabilityComponent implements OnInit {
     getDruggabilitySFTitle(bucket: number): string {
         switch (bucket) {
             case 1:
-                return 'Lowest risk, most stringent requirements met';
+                return 'Lowest risk';
             case 2:
                 return 'Lower risk';
             case 3:
-                return 'Potential risks, proceed with caution';
+                return 'Potential risks';
             case 4:
-                return 'Probable safety risks requiring mitigation';
+                return 'Probable risks';
             case 5:
-                return 'Potentially not safe in humans';
+                return 'Potentially unsafe in humans';
             case 6:
                 return 'Unknown';
             default:
@@ -143,16 +143,15 @@ export class GeneDruggabilityComponent implements OnInit {
                 return '>=40% homologous to a protein with a small molecule ligand identified ' +
                 'from ChEMBL data, but the ligand does not meeting TCRD activity criteria';
             case 7:
-                return 'Is a member of a gene family which has a member with an small molecule ' +
-                'ligand identified from ChEMBL data, meeting TCRD activity criteria';
+                return 'Is a member of a gene family which has a protein member with a druggable pocket ' +
+                'in the protein structure.';
             case 8:
-                return 'Is a member of a gene family which has a protein member with a ligand ' +
-                'which does not meet TCRD activity criteria';
+                return 'Has an identified endogenous ligand according from IUPHAR.';
+
             case 9:
-                return 'is a member of a gene family which has a protein member with a druggable ' +
-                'pocket in the protein structure';
+                return 'Is a member of a gene family which has a member with an small molecule ligand identified from ChEMBL data, meeting TCRD activity criteria.';
             case 10:
-                return 'Has an identified endogenous ligand according from IUPHAR';
+                return 'Is a member of a gene family which has a protein member with a ligand which does not meet TCRD activity criteria.';
             case 11:
                 return 'Is a member of a PHAROS druggable class of protein (enzyme, receptor, ' +
                 'ion channel, nuclear hormone receptor, kinase) but does not meet any of the ' +
@@ -197,25 +196,27 @@ export class GeneDruggabilityComponent implements OnInit {
 
     getDruggabilitySFText(bucket: number): string {
         switch (bucket) {
+
             case 1:
-                return 'Target has a drug in phase IV in the appropriate modality, with good ' +
-                'safety profile';
+                return 'Clinical data, evidence of tolerable safety profile in desired modality; ' +
+                'target has a drug in phase IV in the appropriate modality, with good safety profile.';
             case 2:
                 return 'No major issues found from gene expression, genetic or pharmacological ' +
-                'profiling, but has not been extensively tested in humans';
+                'profiling, but has not been extensively tested in humans.';
             case 3:
                 return 'Two or fewer of: high off-target gene expression, cancer driver, ' +
                 'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
-                'associated gene, or black box warning on clinically used drug';
+                'associated gene, or black box warning on clinically used drug.';
+
             case 4:
                 return 'More than two of: high off target gene expression, cancer driver, ' +
                 'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
-                'associated gene, or black box warning on clinically used drug';
+                'associated gene, or black box warning on clinically used drug.';
             case 5:
-                return 'Evidence of on-target toxicity that may preclude clinical use in the ' +
-                'desired modality';
+                return 'Clinical data with evidence of intolerable safety profile/adverse drug reactions ' +
+                'in the desired modality and with target engagement. Drug for target withdrawn on those grounds.';
             case 6:
-                return 'Insufficient data available';
+                return 'Insufficient data available for safety assessment.';
             default:
                 return '';
         }
