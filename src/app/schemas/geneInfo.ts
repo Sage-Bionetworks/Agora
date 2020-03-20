@@ -80,51 +80,51 @@ export let NominatedTargetSchema: Schema = new Schema (
 
 export let GeneInfoSchema: Schema = new Schema(
     {
-        'ensembl_gene_id': {
+        ensembl_gene_id: {
             required: true,
             type: String
         },
-        'alias': {
+        alias: {
             required: false,
             type: [String]
         },
-        'name': {
+        name: {
             require: true,
             type: String
         },
-        'summary': {
+        summary: {
             required: false,
             type: String
         },
-        'hgnc_symbol': {
+        hgnc_symbol: {
             required: true,
             type: String
         },
-        'type_of_gene': {
+        type_of_gene: {
             required: true,
             type: String
         },
-        'go.MF': {
+        go_MF: {
             required: true,
             type: [GoMFSchema]
         },
-        'isIGAP': {
+        isIGAP: {
             required: true,
             type: Boolean
         },
-        'haseqtl': {
+        haseqtl: {
             required: true,
             type: Boolean
         },
-        'medianexpression': {
+        medianexpression: {
             required: true,
             type: [MedianExpressionSchema]
         },
-        'nominatedtarget': {
+        nominatedtarget: {
             required: true,
             type: [NominatedTargetSchema]
         },
-        'nominations': {
+        nominations: {
             required: true,
             type: Number
         }
