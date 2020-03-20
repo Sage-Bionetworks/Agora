@@ -103,18 +103,17 @@ describe('Component: GeneDruggability', () => {
 
         let title: string = '';
         title = component.getDruggabilitySFTitle(1);
-        expect(title).toEqual('Lowest risk, most stringent requirements met');
+        expect(title).toEqual('Lowest risk');
         title = component.getDruggabilitySFTitle(2);
         expect(title).toEqual('Lower risk');
         title = component.getDruggabilitySFTitle(3);
-        expect(title).toEqual('Potential risks, proceed with caution');
+        expect(title).toEqual('Potential risks');
         title = component.getDruggabilitySFTitle(4);
-        expect(title).toEqual('Probable safety risks requiring mitigation');
+        expect(title).toEqual('Probable risks');
         title = component.getDruggabilitySFTitle(5);
-        expect(title).toEqual('Potentially not safe in humans');
+        expect(title).toEqual('Potentially unsafe in humans');
         title = component.getDruggabilitySFTitle(6);
         expect(title).toEqual('Unknown');
-
         title = component.getDruggabilitySFTitle(-1);
         expect(title).toEqual('');
 
@@ -138,15 +137,15 @@ describe('Component: GeneDruggability', () => {
         title = component.getDruggabilitySMTitle(6);
         expect(title).toEqual('Probably small molecule druggable by homology');
         title = component.getDruggabilitySMTitle(7);
-        expect(title).toEqual('Potentially small molecule druggable by family (active ligand)');
+        expect(title).toEqual('Potentially targetable by protein family structure');
         title = component.getDruggabilitySMTitle(8);
+        expect(title).toEqual('Endogenous ligand');
+        title = component.getDruggabilitySMTitle(9);
+        expect(title).toEqual('Potentially small molecule druggable by family (active ligand)');
+        title = component.getDruggabilitySMTitle(10);
         expect(title).toEqual(
             'Potentially small molecule druggable by family (low activity ligand)'
         );
-        title = component.getDruggabilitySMTitle(9);
-        expect(title).toEqual('Potentially targetable by protein family structure');
-        title = component.getDruggabilitySMTitle(10);
-        expect(title).toEqual('Endogenous ligand');
         title = component.getDruggabilitySMTitle(11);
         expect(title).toEqual('Druggable protein class, no other information');
         title = component.getDruggabilitySMTitle(12);
@@ -198,22 +197,17 @@ describe('Component: GeneDruggability', () => {
         );
         title = component.getDruggabilitySMText(7);
         expect(title).toEqual(
-            'Is a member of a gene family which has a member with an small molecule ' +
-            'ligand identified from ChEMBL data, meeting TCRD activity criteria'
+            'Is a member of a gene family which has a protein member with a druggable pocket in the protein structure.'
         );
         title = component.getDruggabilitySMText(8);
-        expect(title).toEqual(
-            'Is a member of a gene family which has a protein member with a ligand ' +
-            'which does not meet TCRD activity criteria'
+        expect(title).toEqual('Has an identified endogenous ligand according from IUPHAR.'
         );
         title = component.getDruggabilitySMText(9);
-        expect(title).toEqual(
-            'is a member of a gene family which has a protein member with a druggable ' +
-            'pocket in the protein structure'
+        expect(title).toEqual('Is a member of a gene family which has a member with an small molecule ligand identified from ChEMBL data, meeting TCRD activity criteria.'
         );
         title = component.getDruggabilitySMText(10);
         expect(title).toEqual(
-            'Has an identified endogenous ligand according from IUPHAR'
+            'Is a member of a gene family which has a protein member with a ligand which does not meet TCRD activity criteria.'
         );
         title = component.getDruggabilitySMText(11);
         expect(title).toEqual(
@@ -287,33 +281,31 @@ describe('Component: GeneDruggability', () => {
         let title: string = '';
         title = component.getDruggabilitySFText(1);
         expect(title).toEqual(
-            'Target has a drug in phase IV in the appropriate modality, with good ' +
-            'safety profile'
+            'Clinical data, evidence of tolerable safety profile in desired modality; target has a drug in phase IV in the appropriate modality, with good safety profile.'
         );
         title = component.getDruggabilitySFText(2);
         expect(title).toEqual(
             'No major issues found from gene expression, genetic or pharmacological ' +
-            'profiling, but has not been extensively tested in humans'
+            'profiling, but has not been extensively tested in humans.'
         );
         title = component.getDruggabilitySFText(3);
         expect(title).toEqual(
             'Two or fewer of: high off-target gene expression, cancer driver, ' +
             'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
-            'associated gene, or black box warning on clinically used drug'
+            'associated gene, or black box warning on clinically used drug.'
         );
         title = component.getDruggabilitySFText(4);
         expect(title).toEqual(
             'More than two of: high off target gene expression, cancer driver, ' +
             'essential gene, associated deleterious genetic disorder, HPO phenotype ' +
-            'associated gene, or black box warning on clinically used drug'
+            'associated gene, or black box warning on clinically used drug.'
         );
         title = component.getDruggabilitySFText(5);
         expect(title).toEqual(
-            'Evidence of on-target toxicity that may preclude clinical use in the ' +
-            'desired modality'
+            'Clinical data with evidence of intolerable safety profile/adverse drug reactions in the desired modality and with target engagement. Drug for target withdrawn on those grounds.'
         );
         title = component.getDruggabilitySFText(6);
-        expect(title).toEqual('Insufficient data available');
+        expect(title).toEqual('Insufficient data available for safety assessment.');
 
         title = component.getDruggabilitySFText(-1);
         expect(title).toEqual('');
