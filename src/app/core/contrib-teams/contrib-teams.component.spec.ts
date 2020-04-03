@@ -75,6 +75,7 @@ describe('Component: ContribTeamsPage', () => {
 
         // Get the injected instances
         apiService = fixture.debugElement.injector.get(ApiService);
+        // @ts-ignore
         sanitizer = fixture.debugElement.injector.get(DomSanitizer);
 
         component = fixture.componentInstance;

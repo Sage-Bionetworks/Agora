@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { RollbarService } from '../../shared/shared.module';
 
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng/api';
 
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -18,6 +18,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
     constructor(
         private injector: Injector,
+        // @ts-ignore
         private messageService: MessageService
     ) {
         //
