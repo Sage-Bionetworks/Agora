@@ -10,9 +10,9 @@
     "webpack",
     "typescript",
     "gene",
-    "alzheimer"
+    "alzheimer's"
   ],
-  "author": "Renan Dembogurski <renan.augusto@toptal.com>",
+  "author": "Sage Bionetworks",
   "homepage": "https://github.com/Sage-Bionetworks/Agora",
   "license": "MIT",
   "scripts": {
