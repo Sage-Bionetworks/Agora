@@ -57,7 +57,7 @@
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",
     "ngsw-copy": "cp node_modules/@angular/service-worker/ngsw-worker.js dist/",
     "build-ngsw": "npm run ngsw-config && npm run ngsw-copy",
-    "postinstall": "ngcc && npm dedupe && npm run webdriver:update",
+    "postinstall": "npm dedupe && npm run webdriver:update",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
     "preversion": "npm test",
