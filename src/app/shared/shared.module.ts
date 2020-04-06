@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 // PrimeNG modules
-import { SharedModule } from 'primeng/shared';
+
 import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
@@ -71,7 +71,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         HttpClientModule,
         RouterModule,
         // PrimeNG modules
-        SharedModule,
+
         ButtonModule,
         SplitButtonModule,
         CheckboxModule,
@@ -96,7 +96,6 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         HttpClientModule,
         RouterModule,
         // PrimeNG modules
-        SharedModule,
         ButtonModule,
         SplitButtonModule,
         CheckboxModule,

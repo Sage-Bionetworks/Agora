@@ -53,19 +53,16 @@ describe('Component: Download', () => {
         const img = fixture.debugElement.nativeElement.querySelector('img');
         img.click();
         fixture.detectChanges();
-
-        expect(component.overlayPanel.visible).toEqual(true);
+        expect(component.overlayPanel.overlayVisible).toEqual(true);
     }));
 
     it('should hide the overlay menu', fakeAsync(() => {
         const img = fixture.debugElement.nativeElement.querySelector('img');
         img.click();
         fixture.detectChanges();
-
         component.overlayPanel.hide();
         fixture.detectChanges();
-
-        expect(component.overlayPanel.visible).toEqual(false);
+        expect(component.overlayPanel.overlayVisible).toEqual(false);
     }));
 
     it('should have a download img element', () => {
