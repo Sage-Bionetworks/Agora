@@ -1,11 +1,12 @@
-import { Gene, GeneInfo, Proteomics } from '../../app/models';
+import { Gene, GeneInfo, Proteomics, NeuropathCorr } from '../../app/models';
 import {
     Genes,
     GenesInfo,
     GenesLinks,
     TeamsInfo,
     GenesProteomics,
-    GenesMetabolomics
+    GenesMetabolomics,
+    NeuropathCorrs
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -73,6 +74,7 @@ connection.once('open', () => {
     const genesADDSF: Gene[] = [];
     const genesADDSM: Gene[] = [];
     let geneProteomics: Proteomics[] = [];
+    let genesNeuroCorr: NeuropathCorr[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -184,6 +186,16 @@ connection.once('open', () => {
             });
         }
     });
+
+    NeuropathCorrs.find()
+        .exec(async(err, genes: NeuropathCorr[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                genesNeuroCorr = genes.slice();
+            }
+        }
+    );
 
     /* GET genes listing. */
     router.get('/', (req, res) => {
@@ -633,6 +645,12 @@ connection.once('open', () => {
                 } else {
                     const item = gene;
 
+                    // Get genes/anatomy correlation data, can only retrieve through ensembl_gene_id
+                    let correlationData = [];
+                    if (fieldName === 'ensembl_gene_id') {
+                        correlationData = genesNeuroCorr.filter(obj => req.query.id === obj['ensembl_gene_id']);
+                    }
+
                     await GenesInfo.findOne({ [fieldName]: req.query.id }).exec(
                         async (errB, info) => {
                         if (errB) {
@@ -645,7 +663,8 @@ connection.once('open', () => {
                             res.setHeader('Expires', 0);
                             await res.json({
                                 info,
-                                item
+                                item,
+                                correlationData
                             });
                         }
                     });
