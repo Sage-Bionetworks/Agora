@@ -10,6 +10,20 @@ candlestick-chart {
     }
 }
 
+.candlestick-plot-tooltip {
+    font: normal 16px Lato;
+    position: absolute;
+    padding: 14px;
+    text-align: center;
+    line-height: normal;
+    border: 0;
+    background: #2F8E94;
+    box-shadow: 0px 0px 4px #C7C5C5;
+    border-radius: 8px;
+    color: #fff;
+    pointer-events: none;
+}
+
 @media (min-width: 576px) {
     candlestick-chart {
         .rc {
