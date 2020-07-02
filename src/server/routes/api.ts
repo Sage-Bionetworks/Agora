@@ -78,6 +78,7 @@ connection.once('open', () => {
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
+    const hgncToEnsembl: Map<string, string[]> = new Map<string, string[]>();
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
@@ -122,6 +123,17 @@ connection.once('open', () => {
             g.model = g.model;
             g.study = g.study;
             g.tissue = g.tissue;
+
+            // TODO: this map may not be needed
+            const ensembl_list = hgncToEnsembl.get(g.hgnc_symbol);
+            if (ensembl_list === undefined) {
+                hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id])
+            } else {
+                if (!ensembl_list.includes(g.ensembl_gene_id)) {
+                    ensembl_list.push(g.ensembl_gene_id)
+                    hgncToEnsembl.set(g.hgnc_symbol, ensembl_list)
+                }
+            }
 
             if (allTissues.indexOf(g.tissue) === -1) {
                 allTissues.push(g.tissue);
@@ -432,12 +444,12 @@ connection.once('open', () => {
                         }
                     });
 
+                    results["cpGroup"] = getGeneCorrelationData(id);
                     resolve(results);
                 });
                 rPromise.then((r: any) => {
                     if (r) {
                         indx = null;
-
                         res.send(r);
                     }
                 });
@@ -645,12 +657,6 @@ connection.once('open', () => {
                 } else {
                     const item = gene;
 
-                    // Get genes/anatomy correlation data, can only retrieve through ensembl_gene_id
-                    let correlationData = [];
-                    if (fieldName === 'ensembl_gene_id') {
-                        correlationData = genesNeuroCorr.filter(obj => req.query.id === obj['ensembl_gene_id']);
-                    }
-
                     await GenesInfo.findOne({ [fieldName]: req.query.id }).exec(
                         async (errB, info) => {
                         if (errB) {
@@ -663,8 +669,7 @@ connection.once('open', () => {
                             res.setHeader('Expires', 0);
                             await res.json({
                                 info,
-                                item,
-                                correlationData
+                                item
                             });
                         }
                     });
@@ -1140,6 +1145,18 @@ connection.once('open', () => {
             }
         };
     };
+
+    const getGeneCorrelationData = (hgncId: string) => {
+        const ensembl_ids = hgncToEnsembl.get(hgncId);
+        if (ensembl_ids !== undefined) {
+            if (ensembl_ids.length === 1) {  // ensembl id "should" map to only one hgnc id
+                return genesNeuroCorr.filter(obj => obj["ensembl_gene_id"] === ensembl_ids[0])
+            } else {
+                console.log("Correlation data length error with length: ", ensembl_ids.length)
+                return []
+            }
+        }
+    }
 });
 
 export default router;

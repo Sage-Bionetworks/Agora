@@ -1,0 +1,23 @@
+
+candlestick-chart {
+    display: block;
+    .rc .cc {
+        svg {
+            g.axis {
+                fill: none;
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    candlestick-chart {
+        .rc {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+}
+
+
+
