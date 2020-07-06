@@ -117,9 +117,10 @@
         <h1 class="inner-section-divider"></h1>
     </div>
 
+    <!-- Correlation Chart -->
     <div class="section-thin rna-seq-candlestick no-padding-bottom">
         <h3>
-            Correlation of [Selected Gene] with Hallmarks of AD
+            Correlation of {{gene.hgnc_symbol}} with Hallmarks of AD
             <span class="icon-spacing"></span>
             <!-- Hide for now -->
             <!--<download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>-->
@@ -128,7 +129,7 @@
             This plot depicts the association between expression levels of the selected gene in the DFPLC and four phenotypic measures of AD. An odds ratio > 1 indicates a positive correlation and an odds ratio < 1 indicates a negative correlation. Statistical significance and summary statistics for each phenotype can be viewed by hovering over the dots.
         </p>
         <div #stcs>
-            <candlestick-chart *ngIf="dataLoaded && !isEmptyGene"></candlestick-chart>
+            <candlestick-chart *ngIf="dataLoaded && !isEmptyGene" [hgicId]=gene.hgnc_symbol></candlestick-chart>
             <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
         </div>
         <div *ngIf="isEmptyGene" class="row rc-empty-plot-content">

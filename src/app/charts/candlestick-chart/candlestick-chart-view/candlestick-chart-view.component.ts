@@ -25,18 +25,12 @@ import * as d3 from 'd3';
 
 export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @Input() title: string;
-    @Input() chart: any;
-    @Input() info: any;
-    @Input() label: string = 'candlestick-plot';
-    @Input() rawData: any;
-    @Input() group: any;
-    @Input() paddingLR: number = 15;
-    @Input() paddingUD: number = 0;
-
     @ViewChild('chart', {static: false}) candleStickChart: ElementRef;
+    @Input() hgicId: string = "";
 
+    private rawData: any;
     private chartData: any[] = [];
+    private label: string = 'candlestick-plot';
     private maxValue: number = -Infinity;
     private minValue: number = Infinity;
     private chartHeight: number = 500;
@@ -54,7 +48,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     ngOnInit() {
         this.rawData = this.chartService.filteredData['cpGroup'];
-        console.log("raw data", this.rawData)
     }
 
     ngOnDestroy() {
@@ -102,7 +95,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     getChartPromise(): Promise<any> {
         this.formatData();
-
         return new Promise((resolve, reject) => {
             this.renderChart();
             resolve();
@@ -204,11 +196,11 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     showTooltip(d) {
         const is_isnot = d.value.mean > 1.0 ? 'is' : 'is not';
-        const tooltip = `${d.ensembl_gene_id} ${is_isnot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
+        const tooltip = `${this.hgicId} ${is_isnot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
         this.tooltip.transition()
             .duration(200)
             .text(tooltip)
-            .style('opacity', 0.9)
+            .style('opacity', 1)
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 28) + "px");
     }
