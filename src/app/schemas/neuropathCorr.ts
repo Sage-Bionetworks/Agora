@@ -8,23 +8,23 @@ export let NeuropathCorrSchema: Schema = new Schema(
             type: String
         },
         oddsratio: {
-            required:true,
+            required: true,
             type: Number
         },
         ci_lower: {
-            required:true,
+            required: true,
             type: Number
         },
         ci_upper: {
-            required:true,
+            required: true,
             type: Number
         },
         pval: {
-            required:true,
+            required: true,
             type: Number
         },
         pval_adj: {
-            required:true,
+            required: true,
             type: Number
         },
         neuropath_type: {
@@ -37,7 +37,7 @@ export let NeuropathCorrSchema: Schema = new Schema(
     }
 );
 
-NeuropathCorrSchema.set('autoIndex', false)
+NeuropathCorrSchema.set('autoIndex', false);
 NeuropathCorrSchema.index(
     {
         ensembl_gene_id: 'text',

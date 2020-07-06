@@ -125,13 +125,13 @@ connection.once('open', () => {
             g.tissue = g.tissue;
 
             // TODO: this map may not be needed
-            const ensembl_list = hgncToEnsembl.get(g.hgnc_symbol);
-            if (ensembl_list === undefined) {
-                hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id])
+            const ensemblList = hgncToEnsembl.get(g.hgnc_symbol);
+            if (ensemblList === undefined) {
+                hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id]);
             } else {
-                if (!ensembl_list.includes(g.ensembl_gene_id)) {
-                    ensembl_list.push(g.ensembl_gene_id)
-                    hgncToEnsembl.set(g.hgnc_symbol, ensembl_list)
+                if (!ensemblList.includes(g.ensembl_gene_id)) {
+                    ensemblList.push(g.ensembl_gene_id);
+                    hgncToEnsembl.set(g.hgnc_symbol, ensemblList);
                 }
             }
 
@@ -200,7 +200,7 @@ connection.once('open', () => {
     });
 
     NeuropathCorrs.find()
-        .exec(async(err, genes: NeuropathCorr[], next) => {
+        .exec(async (err, genes: NeuropathCorr[], next) => {
             if (err) {
                 next(err);
             } else {
@@ -444,7 +444,7 @@ connection.once('open', () => {
                         }
                     });
 
-                    results["cpGroup"] = getGeneCorrelationData(id);
+                    results['cpGroup'] = getGeneCorrelationData(id);
                     resolve(results);
                 });
                 rPromise.then((r: any) => {
@@ -1147,16 +1147,16 @@ connection.once('open', () => {
     };
 
     const getGeneCorrelationData = (hgncId: string) => {
-        const ensembl_ids = hgncToEnsembl.get(hgncId);
-        if (ensembl_ids !== undefined) {
-            if (ensembl_ids.length === 1) {  // ensembl id "should" map to only one hgnc id
-                return genesNeuroCorr.filter(obj => obj["ensembl_gene_id"] === ensembl_ids[0])
+        const ensembledIds = hgncToEnsembl.get(hgncId);
+        if (ensembledIds !== undefined) {
+            if (ensembledIds.length === 1) {  // ensembl id 'should' map to only one hgnc id
+                return genesNeuroCorr.filter(obj => obj['ensembl_gene_id'] === ensembledIds[0]);
             } else {
-                console.log("Correlation data length error with length: ", ensembl_ids.length)
-                return []
+                console.log('Correlation data length error with length: ', ensembledIds.length);
+                return [];
             }
         }
-    }
+    };
 });
 
 export default router;

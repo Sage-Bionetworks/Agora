@@ -26,7 +26,7 @@ import * as d3 from 'd3';
 export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('chart', {static: false}) candleStickChart: ElementRef;
-    @Input() hgicId: string = "";
+    @Input() hgicId: string = '';
 
     private rawData: any;
     private chartData: any[] = [];
@@ -82,7 +82,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
                     mean: item.oddsratio,
                     pval_adj: item.pval_adj
                 }
-            }
+            };
             if (this.maxValue < item.ci_upper) {
                 this.maxValue = item.ci_upper;
             }
@@ -90,7 +90,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
                 this.minValue = item.ci_lower;
             }
             this.chartData.push(data);
-        })
+        });
     }
 
     getChartPromise(): Promise<any> {
@@ -98,7 +98,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
         return new Promise((resolve, reject) => {
             this.renderChart();
             resolve();
-        })
+        });
     }
 
     renderChart() {
@@ -108,107 +108,107 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             d3.select(`.${this.label}-svg`).remove();
         }
 
-        const svg = this.component.append("svg");
+        const svg = this.component.append('svg');
         const container = { width: this.getContainerWidth(svg.node()), height: this.chartHeight };
         const margin = { top: 50, right: 0, bottom: 50, left: 200 };
         const width = container.width - margin.left - margin.right;
         const height = container.height - margin.top - margin.bottom;
-        const color = "#5171C0";
+        const color = '#5171C0';
 
-        svg.attr("width", container.width)
-            .attr("height", container.height)
-            .attr("class", `${this.label}-svg`)
+        svg.attr('width', container.width)
+            .attr('height', container.height)
+            .attr('class', `${this.label}-svg`);
 
-        const group = svg.append("g")
-            .attr("transform", `translate(${margin.left}, 0)`);
+        const group = svg.append('g')
+            .attr('transform', `translate(${margin.left}, 0)`);
 
         // Draw X axis
         const x = d3.scaleBand()
             .range([0, width])
             .domain(this.chartData.map(item => {
-                return item.key
+                return item.key;
             }))
             .paddingInner(1)
             .paddingOuter(.5);
 
-        group.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .attr("class", "axis x-axis")
+        group.append('g')
+            .attr('transform', 'translate(0,' + height + ')')
+            .attr('class', 'axis x-axis')
             .call(d3.axisBottom(x));
 
         // Draw X axis title
-        group.append("text")
-            .attr("transform",
-                "translate(" + (width/2) + " ," +
-                (height + margin.top) + ")")
-            .style("text-anchor", "middle")
-            .style("font-weight", "bold")
-            .text("PHENOTYPE");
+        group.append('text')
+            .attr('transform',
+                'translate(' + (width / 2) + ' ,' +
+                (height + margin.top) + ')')
+            .style('text-anchor', 'middle')
+            .style('font-weight', 'bold')
+            .text('PHENOTYPE');
 
         // Draw Y axis
         const y = d3.scaleLinear()
             .domain([this.minValue, this.maxValue])
             .range([height, 0]);
 
-        group.append("g")
-            .attr("class", "axis y-axis")
+        group.append('g')
+            .attr('class', 'axis y-axis')
             .call(d3.axisLeft(y));
 
         // Draw Y axis title
-        group.append("text")
-            .attr("transform", `rotate(-90) translate(${-height/2}, ${-margin.left/2})`)
-            .style("text-anchor", "middle")
-            .style("font-weight", "bold")
-            .text("ODDS RATIO")
+        group.append('text')
+            .attr('transform', `rotate(-90) translate(${-height / 2}, ${-margin.left / 2})`)
+            .style('text-anchor', 'middle')
+            .style('font-weight', 'bold')
+            .text('ODDS RATIO');
 
         // Draw vertical lines
-        group.selectAll("vertLines")
+        group.selectAll('vertLines')
             .data(this.chartData)
             .enter()
-            .append("line")
-            .attr("x1", d => x(d.key))
-            .attr("x2", d => x(d.key))
-            .attr("y1", d => y(d.value.min))
-            .attr("y2", d => y(d.value.max))
-            .attr("stroke", color)
-            .attr("stroke-width", 1.5)
+            .append('line')
+            .attr('x1', d => x(d.key))
+            .attr('x2', d => x(d.key))
+            .attr('y1', d => y(d.value.min))
+            .attr('y2', d => y(d.value.max))
+            .attr('stroke', color)
+            .attr('stroke-width', 1.5);
 
         // Draw mid circle (mean value)
-        group.selectAll("meanCircle")
+        group.selectAll('meanCircle')
             .data(this.chartData)
             .enter()
-            .append("circle")
-            .attr("cx", d => x(d.key))
-            .attr("cy", d => y(d.value.mean))
-            .attr("r", 9)
-            .attr("stroke", color)
-            .style("fill", color)
+            .append('circle')
+            .attr('cx', d => x(d.key))
+            .attr('cy', d => y(d.value.mean))
+            .attr('r', 9)
+            .attr('stroke', color)
+            .style('fill', color)
             .on('mouseover', d => this.showTooltip(d))
-            .on('mouseout', d => this.hideTooltip(d))
+            .on('mouseout', d => this.hideTooltip(d));
 
     }
 
     createTooltip() {
-        this.tooltip = d3.select("body").append("div")
-            .attr("class", `${this.label}-tooltip`)
-            .style("opacity", 0);
+        this.tooltip = d3.select('body').append('div')
+            .attr('class', `${this.label}-tooltip`)
+            .style('opacity', 0);
     }
 
     showTooltip(d) {
-        const is_isnot = d.value.mean > 1.0 ? 'is' : 'is not';
-        const tooltip = `${this.hgicId} ${is_isnot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
+        const isOrNot = d.value.mean > 1.0 ? 'is' : 'is not';
+        const tooltip = `${this.hgicId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
         this.tooltip.transition()
             .duration(200)
             .text(tooltip)
             .style('opacity', 1)
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 28) + 'px');
     }
 
     hideTooltip(d) {
         this.tooltip.transition()
             .duration(500)
-            .style("opacity", 0)
+            .style('opacity', 0);
     }
 
 }
