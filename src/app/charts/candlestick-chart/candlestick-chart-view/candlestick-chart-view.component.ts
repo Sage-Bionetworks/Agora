@@ -96,7 +96,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     getChartPromise(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.renderChart();
-            resolve();
+            resolve(true);
         });
     }
 
@@ -217,6 +217,10 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     getChartData() {
         return this.chartData;
+    }
+
+    getLabel() {
+        return this.label;
     }
 
 }

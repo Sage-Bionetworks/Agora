@@ -17,6 +17,7 @@ import {
 import { CandlestickChartViewComponent } from './candlestick-chart-view.component';
 import { GeneService, DataService } from '../../../core/services';
 import { ChartService } from '../../services';
+import { By } from "@angular/platform-browser";
 
 describe('Component: CandlestickChartViewComponent', () => {
 
@@ -98,7 +99,29 @@ describe('Component: CandlestickChartViewComponent', () => {
 
         const data = component.getChartData();
         expect(data[0]).toEqual(chartData[0]);
+    });
 
+    it('should create chart after chart init call', (done) => {
+        const spy = spyOn(component, 'renderChart').and.callThrough();
+        const elClass = `.${component.getLabel()}-svg`;
+
+        component.ngOnInit();
+        fixture.detectChanges();
+        component.formatData();
+        component.getChartPromise().then(() => {
+            fixture.detectChanges();
+            expect(spy).toHaveBeenCalled();
+            const el = fixture.debugElement.query(By.css(elClass));
+            expect(el).toBeDefined();
+            done();
+        });
+    });
+
+    it('should create tooltip container', () => {
+        const elClass = `.${component.getLabel()}-tooltip`;
+        component.createTooltip();
+        const el = fixture.debugElement.query(By.css(elClass));
+        expect(el).toBeDefined();
     });
 
 });
