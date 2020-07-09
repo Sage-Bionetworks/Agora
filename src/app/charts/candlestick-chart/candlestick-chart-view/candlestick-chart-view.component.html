@@ -1,9 +1,9 @@
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-12 rc-plot-heading">
-        <h4 class="center-text"></h4>
+<div *ngIf="dataEmpty" class="row rc-empty-plot-content">
+    <div class="no-median-data">
+        <h2 class="placeholder-text">No expression data is currently available.</h2>
     </div>
 </div>
-<div class="row rc-plot-content">
+<div *ngIf="!dataEmpty" class="row rc-plot-content">
     <div class="col-md-10 col-sm-8 col-8 rc">
         <div #chart class="cc"></div>
     </div>

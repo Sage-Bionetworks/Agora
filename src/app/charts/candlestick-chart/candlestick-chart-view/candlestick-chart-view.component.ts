@@ -36,6 +36,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     private chartHeight: number = 500;
     private component: any = null;
     private tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
+    private dataEmpty: boolean = true;
 
     constructor(
         private location: PlatformLocation,
@@ -48,15 +49,21 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     ngOnInit() {
         this.rawData = this.chartService.filteredData['cpGroup'];
+        if (this.rawData.length > 0) {
+            this.dataEmpty = false;
+        }
     }
 
     ngOnDestroy() {
         d3.select(window).on('resize.' + this.label, null);
+        this.dataEmpty = true;
     }
 
     ngAfterViewInit() {
-        this.formatData();
-        this.initChart();
+        if (!this.dataEmpty) {
+            this.formatData();
+            this.initChart();
+        }
     }
 
     getContainerWidth(chart) {

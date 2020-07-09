@@ -1147,12 +1147,17 @@ connection.once('open', () => {
     };
 
     const getGeneCorrelationData = (hgncId: string) => {
+        if (!genesNeuroCorr.length) {  // if DB has error
+            console.log('getGeneCorrelationData: Mongo DB return document length ', genesNeuroCorr.length);
+            return [];
+        }
+
         const ensembledIds = hgncToEnsembl.get(hgncId);
         if (ensembledIds !== undefined) {
             if (ensembledIds.length === 1) {  // ensembl id 'should' map to only one hgnc id
                 return genesNeuroCorr.filter(obj => obj['ensembl_gene_id'] === ensembledIds[0]);
             } else {
-                console.log('Correlation data length error with length: ', ensembledIds.length);
+                console.log('getGeneCorrelationData: Correlation data length error with length: ', ensembledIds.length);
                 return [];
             }
         }
