@@ -36,7 +36,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     private chartHeight: number = 500;
     private component: any = null;
     private tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
-    private dataEmpty: boolean = true;
+    dataEmpty: boolean = true;
 
     constructor(
         private location: PlatformLocation,
