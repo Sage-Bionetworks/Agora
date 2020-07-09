@@ -17,7 +17,7 @@ import {
 import { CandlestickChartViewComponent } from './candlestick-chart-view.component';
 import { GeneService, DataService } from '../../../core/services';
 import { ChartService } from '../../services';
-import { By } from "@angular/platform-browser";
+import { By } from '@angular/platform-browser';
 
 describe('Component: CandlestickChartViewComponent', () => {
 

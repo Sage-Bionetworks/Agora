@@ -118,8 +118,12 @@ describe('Component: GeneRNASeqDE', () => {
         fixture.detectChanges();
         expect(ci.name).toEqual('bp');
 
+        ci.name = 'cc';
+        fixture.detectChanges();
+        expect(ci.name).toEqual('cc');
+
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
-        expect(aEl.length).toEqual(1);
+        expect(aEl.length).toEqual(2);
     });
 
     it('should refresh the charts data', fakeAsync(() => {
