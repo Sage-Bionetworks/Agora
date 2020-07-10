@@ -1,11 +1,12 @@
-import { Gene, GeneInfo, Proteomics } from '../../app/models';
+import { Gene, GeneInfo, Proteomics, NeuropathCorr } from '../../app/models';
 import {
     Genes,
     GenesInfo,
     GenesLinks,
     TeamsInfo,
     GenesProteomics,
-    GenesMetabolomics
+    GenesMetabolomics,
+    NeuropathCorrs
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -73,9 +74,11 @@ connection.once('open', () => {
     const genesADDSF: Gene[] = [];
     const genesADDSM: Gene[] = [];
     let geneProteomics: Proteomics[] = [];
+    let genesNeuroCorr: NeuropathCorr[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
+    const hgncToEnsembl: Map<string, string[]> = new Map<string, string[]>();
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
@@ -120,6 +123,17 @@ connection.once('open', () => {
             g.model = g.model;
             g.study = g.study;
             g.tissue = g.tissue;
+
+            // TODO: this map may not be needed
+            const ensemblList = hgncToEnsembl.get(g.hgnc_symbol);
+            if (ensemblList === undefined) {
+                hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id]);
+            } else {
+                if (!ensemblList.includes(g.ensembl_gene_id)) {
+                    ensemblList.push(g.ensembl_gene_id);
+                    hgncToEnsembl.set(g.hgnc_symbol, ensemblList);
+                }
+            }
 
             if (allTissues.indexOf(g.tissue) === -1) {
                 allTissues.push(g.tissue);
@@ -184,6 +198,16 @@ connection.once('open', () => {
             });
         }
     });
+
+    NeuropathCorrs.find()
+        .exec(async (err, genes: NeuropathCorr[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                genesNeuroCorr = genes.slice();
+            }
+        }
+    );
 
     /* GET genes listing. */
     router.get('/', (req, res) => {
@@ -420,12 +444,12 @@ connection.once('open', () => {
                         }
                     });
 
+                    results['cpGroup'] = getGeneCorrelationData(id);
                     resolve(results);
                 });
                 rPromise.then((r: any) => {
                     if (r) {
                         indx = null;
-
                         res.send(r);
                     }
                 });
@@ -1120,6 +1144,26 @@ connection.once('open', () => {
                 });
             }
         };
+    };
+
+    const getGeneCorrelationData = (hgncId: string) => {
+        const noData = [];
+        if (!genesNeuroCorr.length) {  // if DB has error
+            console.log('getGeneCorrelationData: Mongo DB return document length ', genesNeuroCorr.length);
+            return noData;
+        }
+
+        const ensembledIds = hgncToEnsembl.get(hgncId);
+        if (ensembledIds !== undefined) {
+            if (ensembledIds.length === 1) {  // ensembl id 'should' map to only one hgnc id
+                return genesNeuroCorr.filter(obj => obj['ensembl_gene_id'] === ensembledIds[0]);
+            } else {
+                console.log('getGeneCorrelationData: Correlation data length error with length: ', ensembledIds.length);
+            }
+        } else {
+            console.log('getGeneCorrelationData: ensembledIds is undefined.');
+        }
+        return noData;
     };
 });
 

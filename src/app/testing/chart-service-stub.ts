@@ -56,7 +56,17 @@ export class ChartServiceStub {
         spGroup: {
             values: [],
             top: {}
-        }
+        },
+        cpGroup: [{
+            id: 'abc1',
+            ensembl_gene_id: 'abc',
+            oddsratio: 0.1,
+            ci_lower: 0.2,
+            ci_upper: 0.4,
+            pval: 0.001,
+            pval_adj: 0.02,
+            neuropath_type: 'AAA'
+        }]
     };
     tissueToFilter: string = '';
     modelToFilter: string = '';

@@ -51,7 +51,7 @@
     "github-deploy:dev": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubDev",
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
     "github-deploy": "npm run github-deploy:dev",
-    "lint": "npm run tslint \"src/**/*.ts\"",
+    "lint": "npm run tslint -f \"src/**/*.ts\"",
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",

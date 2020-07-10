@@ -16,6 +16,7 @@ import { BRAinRegionNetworkComponent } from './brn-dialog';
 import { SimilarGenesNetworkComponent } from './sgn-dialog';
 import { RNADialogComponent } from './rna-dialog';
 import { SIMilarPageDialogComponent } from './sp-dialog';
+import { CCDialogComponent } from './cc-dialog';
 
 import { DialogsService } from './services';
 
@@ -38,7 +39,8 @@ import { DialogsService } from './services';
         BRAinRegionNetworkComponent,
         SimilarGenesNetworkComponent,
         RNADialogComponent,
-        SIMilarPageDialogComponent
+        SIMilarPageDialogComponent,
+        CCDialogComponent
     ],
     exports: [
         MoreInfoComponent,
@@ -54,7 +56,8 @@ import { DialogsService } from './services';
         BRAinRegionNetworkComponent,
         SimilarGenesNetworkComponent,
         RNADialogComponent,
-        SIMilarPageDialogComponent
+        SIMilarPageDialogComponent,
+        CCDialogComponent
     ],
     providers: [
         DialogsService
