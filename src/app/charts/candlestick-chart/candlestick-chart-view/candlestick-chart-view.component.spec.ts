@@ -96,7 +96,7 @@ describe('Component: CandlestickChartViewComponent', () => {
         component.ngAfterViewInit();
         expect(fSpy).toHaveBeenCalled();
         expect(iSpy).toHaveBeenCalled();
-        
+
         const data = component.chartData;
         expect(data[0]).toEqual(chartData[0]);
     });
