@@ -1147,9 +1147,10 @@ connection.once('open', () => {
     };
 
     const getGeneCorrelationData = (hgncId: string) => {
+        const noData = [];
         if (!genesNeuroCorr.length) {  // if DB has error
             console.log('getGeneCorrelationData: Mongo DB return document length ', genesNeuroCorr.length);
-            return [];
+            return noData;
         }
 
         const ensembledIds = hgncToEnsembl.get(hgncId);
@@ -1158,9 +1159,11 @@ connection.once('open', () => {
                 return genesNeuroCorr.filter(obj => obj['ensembl_gene_id'] === ensembledIds[0]);
             } else {
                 console.log('getGeneCorrelationData: Correlation data length error with length: ', ensembledIds.length);
-                return [];
             }
+        } else {
+            console.log('getGeneCorrelationData: ensembledIds is undefined.');
         }
+        return noData;
     };
 });
 
