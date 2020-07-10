@@ -117,9 +117,16 @@ describe('Component: CandlestickChartViewComponent', () => {
         });
     });
 
-    it('should create tooltip container', () => {
+    it('should create mid circle tooltip container', () => {
         const elClass = `.${component.getLabel()}-tooltip`;
-        component.createTooltip();
+        const tooltip = component.createTooltip(elClass);
+        const el = fixture.debugElement.query(By.css(elClass));
+        expect(el).toBeDefined();
+    });
+
+    it('should create x-axis tooltip container', () => {
+        const elClass = `.${component.getLabel()}-axis-tooltip`;
+        const tooltip = component.createTooltip(elClass);
         const el = fixture.debugElement.query(By.css(elClass));
         expect(el).toBeDefined();
     });

@@ -28,6 +28,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('chart', {static: false}) candleStickChart: ElementRef;
     @Input() hgicId: string = '';
 
+    dataEmpty: boolean = true;
     private rawData: any;
     private chartData: any[] = [];
     private label: string = 'candlestick-plot';
@@ -36,7 +37,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     private chartHeight: number = 500;
     private component: any = null;
     private tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
-    dataEmpty: boolean = true;
+    private xAxisTooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
 
     constructor(
         private location: PlatformLocation,
@@ -72,7 +73,8 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
     initChart() {
         this.component = d3.select(this.candleStickChart.nativeElement);
-        this.createTooltip();
+        this.tooltip = this.createTooltip(`${this.label}-tooltip`);
+        this.xAxisTooltip = this.createTooltip(`${this.label}-xaxis-tooltip`);
         this.getChartPromise().then(() => {
             d3.select(window).on('resize.' + this.label, this.renderChart.bind(this));
         });
@@ -168,10 +170,11 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .text('ODDS RATIO');
 
         // Draw vertical lines
-        group.selectAll('vertLines')
+        group.selectAll('.vertLines')
             .data(this.chartData)
             .enter()
             .append('line')
+            .attr('class', 'vertLines')
             .attr('x1', d => x(d.key))
             .attr('x2', d => x(d.key))
             .attr('y1', d => y(d.value.min))
@@ -180,39 +183,53 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .attr('stroke-width', 1.5);
 
         // Draw mid circle (mean value)
-        group.selectAll('meanCircle')
+        group.selectAll('.meanCircle')
             .data(this.chartData)
             .enter()
             .append('circle')
+            .attr('class', 'meanCircle')
             .attr('cx', d => x(d.key))
             .attr('cy', d => y(d.value.mean))
             .attr('r', 9)
             .attr('stroke', color)
             .style('fill', color)
-            .on('mouseover', d => this.showTooltip(d))
-            .on('mouseout', d => this.hideTooltip(d));
+            .on('mouseover', d => {
+                const isOrNot = d.value.mean > 1.0 ? 'is' : 'is not';
+                const msg = `${this.hgicId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
+                this.showTooltip(this.tooltip, msg);
+            })
+            .on('mouseout', d => this.hideTooltip(this.tooltip));
+
+        // Draw X-axis tooltip
+        group.selectAll('.x-axis .tick text')
+            .data(this.chartData)
+            .on('mouseover', d => {
+                const msg = this.chartService.getTooltipText(d.key);
+                if (msg) {
+                    this.showTooltip(this.xAxisTooltip, msg);
+                }
+            })
+            .on('mouseout', d => this.hideTooltip(this.xAxisTooltip));
 
     }
 
-    createTooltip() {
-        this.tooltip = d3.select('body').append('div')
-            .attr('class', `${this.label}-tooltip`)
+    createTooltip(name) {
+        return d3.select('body').append('div')
+            .attr('class', `${name}`)
             .style('opacity', 0);
     }
 
-    showTooltip(d) {
-        const isOrNot = d.value.mean > 1.0 ? 'is' : 'is not';
-        const tooltip = `${this.hgicId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
-        this.tooltip.transition()
+    showTooltip(tooltip, msg) {
+        tooltip.transition()
             .duration(200)
-            .text(tooltip)
+            .text(msg)
             .style('opacity', 1)
             .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 28) + 'px');
+            .style('top', (d3.event.pageY + 30) + 'px');
     }
 
-    hideTooltip(d) {
-        this.tooltip.transition()
+    hideTooltip(tooltip) {
+        tooltip.transition()
             .duration(500)
             .style('opacity', 0);
     }
