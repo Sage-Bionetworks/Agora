@@ -29,9 +29,9 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     @Input() hgicId: string = '';
 
     dataEmpty: boolean = true;
-    private rawData: any;
-    private chartData: any[] = [];
-    private label: string = 'candlestick-plot';
+    rawData: any;
+    chartData: any[] = [];
+    label: string = 'candlestick-plot';
     private maxValue: number = -Infinity;
     private minValue: number = Infinity;
     private chartHeight: number = 500;

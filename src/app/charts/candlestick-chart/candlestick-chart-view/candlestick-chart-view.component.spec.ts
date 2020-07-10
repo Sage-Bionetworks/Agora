@@ -83,7 +83,7 @@ describe('Component: CandlestickChartViewComponent', () => {
         component.ngOnInit();
         expect(spy).toHaveBeenCalled();
 
-        const data = component.getRawData();
+        const data = component.rawData;
         expect(data).toEqual(rawData);
     });
 
@@ -96,8 +96,8 @@ describe('Component: CandlestickChartViewComponent', () => {
         component.ngAfterViewInit();
         expect(fSpy).toHaveBeenCalled();
         expect(iSpy).toHaveBeenCalled();
-
-        const data = component.getChartData();
+        
+        const data = component.chartData;
         expect(data[0]).toEqual(chartData[0]);
     });
 
@@ -118,14 +118,14 @@ describe('Component: CandlestickChartViewComponent', () => {
     });
 
     it('should create mid circle tooltip container', () => {
-        const elClass = `.${component.getLabel()}-tooltip`;
+        const elClass = `.${component.label}-tooltip`;
         const tooltip = component.createTooltip(elClass);
         const el = fixture.debugElement.query(By.css(elClass));
         expect(el).toBeDefined();
     });
 
     it('should create x-axis tooltip container', () => {
-        const elClass = `.${component.getLabel()}-axis-tooltip`;
+        const elClass = `.${component.label}-axis-tooltip`;
         const tooltip = component.createTooltip(elClass);
         const el = fixture.debugElement.query(By.css(elClass));
         expect(el).toBeDefined();
