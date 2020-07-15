@@ -234,17 +234,4 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .style('opacity', 0);
     }
 
-    // Helper functions for testing
-    getRawData() {
-        return this.rawData;
-    }
-
-    getChartData() {
-        return this.chartData;
-    }
-
-    getLabel() {
-        return this.label;
-    }
-
 }
