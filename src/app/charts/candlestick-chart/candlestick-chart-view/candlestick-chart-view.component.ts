@@ -32,8 +32,8 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     rawData: any;
     chartData: any[] = [];
     label: string = 'candlestick-plot';
-    private maxValue: number = -Infinity;
-    private minValue: number = Infinity;
+    private maxValue: number = 2.0;
+    private minValue: number = 0.0;
     private chartHeight: number = 500;
     private component: any = null;
     private tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
@@ -81,7 +81,8 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     }
 
     formatData() {
-        this.rawData.forEach(item => {
+        const filtered = this.rawData.filter(item => item.neuropath_type !== 'DCFDX');
+        this.chartData = filtered.map(item => {
             const data = {
                 key: item.neuropath_type,
                 ensembl_gene_id: item.ensembl_gene_id,
@@ -92,13 +93,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
                     pval_adj: item.pval_adj
                 }
             };
-            if (this.maxValue < item.ci_upper) {
-                this.maxValue = item.ci_upper;
-            }
-            if (this.minValue > item.ci_lower) {
-                this.minValue = item.ci_lower;
-            }
-            this.chartData.push(data);
+            return data;
         });
     }
 
@@ -118,7 +113,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
         const svg = this.component.append('svg');
         const container = { width: this.getContainerWidth(svg.node()), height: this.chartHeight };
-        const margin = { top: 50, right: 0, bottom: 50, left: 200 };
+        const margin = { top: 100, right: 0, bottom: 50, left: 100 };
         const width = container.width - margin.left - margin.right;
         const height = container.height - margin.top - margin.bottom;
         const color = '#5171C0';
@@ -128,7 +123,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .attr('class', `${this.label}-svg`);
 
         const group = svg.append('g')
-            .attr('transform', `translate(${margin.left}, 0)`);
+            .attr('transform', `translate(${margin.left}, 10)`);
 
         // Draw X axis
         const x = d3.scaleBand()
@@ -210,6 +205,15 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
                 }
             })
             .on('mouseout', d => this.hideTooltip(this.xAxisTooltip));
+
+        // Add red horizontal line
+        group.append('g')
+            .attr('transform', `translate(0,${y(1.0)})`)
+            .append('line')
+            .attr('class', 'yAxisGuide')
+            .attr('x2', width)
+            .style('stroke', 'red')
+            .style('stroke-width', '1px');
 
     }
 
