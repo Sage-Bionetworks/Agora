@@ -194,7 +194,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .attr('stroke', color)
             .style('fill', color)
             .on('mouseover', d => {
-                const isOrNot = d.value.mean > 1.0 ? 'is' : 'is not';
+                const isOrNot = d.value.pval_adj <= 0.05 ? 'is' : 'is not';
                 const msg = `${this.hgicId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
                 this.showTooltip(this.tooltip, msg);
             })
@@ -232,19 +232,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
         tooltip.transition()
             .duration(500)
             .style('opacity', 0);
-    }
-
-    // Helper functions for testing
-    getRawData() {
-        return this.rawData;
-    }
-
-    getChartData() {
-        return this.chartData;
-    }
-
-    getLabel() {
-        return this.label;
     }
 
 }

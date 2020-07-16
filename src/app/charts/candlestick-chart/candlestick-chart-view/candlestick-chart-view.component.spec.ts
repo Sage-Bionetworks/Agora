@@ -96,14 +96,14 @@ describe('Component: CandlestickChartViewComponent', () => {
         component.ngAfterViewInit();
         expect(fSpy).toHaveBeenCalled();
         expect(iSpy).toHaveBeenCalled();
-        
+
         const data = component.chartData;
         expect(data[0]).toEqual(chartData[0]);
     });
 
     it('should create chart after chart init call', (done) => {
         const spy = spyOn(component, 'renderChart').and.callThrough();
-        const elClass = `.${component.getLabel()}-svg`;
+        const elClass = `.${component.label}-svg`;
 
         component.ngOnInit();
         fixture.detectChanges();
