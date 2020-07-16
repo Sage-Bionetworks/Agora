@@ -81,7 +81,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     }
 
     formatData() {
-        const filtered = this.rawData.filter(item => item.neuropath_type !== "DCFDX");
+        const filtered = this.rawData.filter(item => item.neuropath_type !== 'DCFDX');
         this.chartData = filtered.map(item => {
             const data = {
                 key: item.neuropath_type,
@@ -208,7 +208,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
 
         // Add red horizontal line
         group.append('g')
-            .attr("transform", `translate(0,${y(1.0)})`)
+            .attr('transform', `translate(0,${y(1.0)})`)
             .append('line')
             .attr('class', 'yAxisGuide')
             .attr('x2', width)
