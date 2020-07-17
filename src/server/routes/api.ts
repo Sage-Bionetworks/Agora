@@ -124,7 +124,6 @@ connection.once('open', () => {
             g.study = g.study;
             g.tissue = g.tissue;
 
-            // TODO: this map may not be needed
             const ensemblList = hgncToEnsembl.get(g.hgnc_symbol);
             if (ensemblList === undefined) {
                 hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id]);

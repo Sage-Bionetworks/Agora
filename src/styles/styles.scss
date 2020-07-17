@@ -290,6 +290,10 @@ p-dialog {
         right: 1%;
         top: 10%;
     }
+
+    a.dialog-link {
+        position: static;
+    }
 }
 
 p-multiselectitem {
