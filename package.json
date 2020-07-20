@@ -2,7 +2,7 @@
   "name": "agora",
   "version": "2.1.1",
   "data-file": "syn13363290",
-  "data-version": "16",
+  "data-version": "17",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -51,7 +51,7 @@
     "github-deploy:dev": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubDev",
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
     "github-deploy": "npm run github-deploy:dev",
-    "lint": "npm run tslint \"src/**/*.ts\"",
+    "lint": "npm run tslint -f \"src/**/*.ts\"",
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",

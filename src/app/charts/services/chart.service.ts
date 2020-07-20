@@ -215,6 +215,14 @@ export class ChartService {
                 return 'Anterior Prefrontal Cortex';
             case 'MFG':
                 return 'Middle Frontal Gyrus';
+            case 'BRAAK':
+                return 'Neurofibrillary Tangles';
+            case 'CERAD':
+                return 'Neuritic Plaques';
+            case 'COGDX':
+                return 'Clinical Consensus Diagnosis';
+            case 'DCFDX':
+                return 'Clinical Cognitive Diagnosis';
             default:
                 return '';
         }
