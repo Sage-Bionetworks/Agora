@@ -4,8 +4,23 @@
   ],
   "rules": {
     "plugin/no-unsupported-browser-features": [true, {
-      "browsers": ["> 1%", "Last 2 versions"],
-      "ignore": ["rem", "border-radius", "css-boxshadow", "background-img-opts"],
+      "browsers": [
+          "> 1%",
+          "Last 2 versions",
+          "not ie > 0",
+          "not ie_mob > 0",
+          "not op_mini all",
+          "not op_mob > 0",
+          "not bb > 0"
+      ],
+      "ignore": [
+          "css-unset-value",
+          "css3-cursors",
+          "text-decoration",
+          "css-sticky",
+          "css-filters",
+          "css-appearance"
+      ],
       "severity": "warning"
     }]
   }

@@ -70,7 +70,7 @@ describe('Component: SOE', () => {
         const idSpy = spyOn(component, 'initData').and.callThrough();
         component.initData();
         expect(component.cols.length).toEqual(2);
-        expect(component.summary.length).toEqual(11);
+        expect(component.summary.length).toEqual(9);
         expect(idSpy.calls.any()).toEqual(true);
     });
 

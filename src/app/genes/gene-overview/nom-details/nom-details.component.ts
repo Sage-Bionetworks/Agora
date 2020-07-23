@@ -79,7 +79,7 @@ export class NominationDetailsComponent implements OnInit {
     }
 
     viewNomProcess(index: number) {
-        window.open('https://www.synapse.org/#!Synapse:' +
+        window.open('https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study=' +
             this.ntInfoArray[index].data_synapseid[0], '_blank');
     }
 

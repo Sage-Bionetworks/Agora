@@ -127,18 +127,6 @@ export class SOEComponent implements OnInit {
                 hasLink: true,
                 extraText: 'Visit Alzheimer\'s Genomics Database',
                 command: (event) => this.viewGenomicsDatabase()
-            },
-            {
-                property: 'Association with Hallmarks of AD',
-                state: false,
-                hasLink: false,
-                extraText: 'Coming Soon'
-            },
-            {
-                property: 'Protein Expression Change in AD Brain',
-                state: false,
-                hasLink: false,
-                extraText: 'Coming Soon'
             }
         ];
 
