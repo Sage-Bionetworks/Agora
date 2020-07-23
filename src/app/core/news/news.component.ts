@@ -23,6 +23,24 @@ export class NewsComponent implements OnInit {
     initNews() {
         this.news = [
             {
+                data: 'JULY 2020',
+                entry: [
+                    {
+                        header: 'RNA Evidence',
+                        body: 'A plot that depicts associations between gene expression levels and clinical and neuropathology phenotypes is now available.'
+                    }
+                ]
+            },
+            {
+                data: 'MARCH 2020',
+                entry: [
+                    {
+                        header: 'Druggability Information',
+                        body: 'A new version of druggability classifications has been incorporated.'
+                    }
+                ]
+            },
+            {
                 data: 'JULY 2019',
                 entry: [
                     {
