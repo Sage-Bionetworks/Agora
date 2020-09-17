@@ -70,7 +70,7 @@ describe('Component: SOE', () => {
         const idSpy = spyOn(component, 'initData').and.callThrough();
         component.initData();
         expect(component.cols.length).toEqual(2);
-        expect(component.summary.length).toEqual(9);
+        expect(component.summary.length).toEqual(10);
         expect(idSpy.calls.any()).toEqual(true);
     });
 
@@ -145,12 +145,8 @@ describe('Component: SOE', () => {
         const woSpy = spyOn(window, 'open').and.callThrough();
 
         component.gene = mockGene1;
-        component.viewGeneOntology();
-        component.viewPathways();
-        component.viewHallmarks();
-        component.viewBrainRNAseq();
+        component.openExternalLink('http://www.google.com/');
 
         expect(woSpy.calls.any()).toEqual(true);
-        expect(woSpy.calls.count()).toEqual(4);
     });
 });
