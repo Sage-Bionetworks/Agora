@@ -85,7 +85,9 @@ export class SOEComponent implements OnInit {
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Ensembl',
-                command: (event) => this.viewGeneOntology()
+                command: (event) => this.openExternalLink(
+                    `https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=${this.gene.ensembl_gene_id}`
+                )
             },
             {
                 property: {
@@ -95,7 +97,9 @@ export class SOEComponent implements OnInit {
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Ensembl',
-                command: (event) => this.viewPathways()
+                command: (event) => this.openExternalLink(
+                    `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene.ensembl_gene_id}`
+                )
             },
             {
                 property: {
@@ -105,7 +109,9 @@ export class SOEComponent implements OnInit {
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Open Targets',
-                command: (event) => this.viewHallmarks()
+                command: (event) => this.openExternalLink(
+                    `https://www.targetvalidation.org/evidence/${this.gene.ensembl_gene_id}/EFO_0000249`
+                )
             },
             {
                 property: {
@@ -116,7 +122,9 @@ export class SOEComponent implements OnInit {
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Brain RNAseq',
-                command: (event) => this.viewBrainRNAseq()
+                command: (event) => this.openExternalLink(
+                    `http://www.brainrnaseq.org/`
+                )
             },
             {
                 property: {
@@ -126,7 +134,21 @@ export class SOEComponent implements OnInit {
                 state: true,
                 hasLink: true,
                 extraText: 'Visit Alzheimer\'s Genomics Database',
-                command: (event) => this.viewGenomicsDatabase()
+                command: (event) => this.openExternalLink(
+                    `https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=${this.gene.ensembl_gene_id}`
+                )
+            },
+            {
+                property: {
+                    title: 'Explore the Alzheimer\'s Disease Atlas',
+                    description: 'Provides a link out to the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.'
+                },
+                state: true,
+                hasLink: true,
+                extraText: 'Visit the AD Atlas',
+                command: (event) => this.openExternalLink(
+                    `https://adatlas.org/?geneID=${this.gene.ensembl_gene_id}`
+                )
             }
         ];
 
@@ -167,29 +189,11 @@ export class SOEComponent implements OnInit {
         return colorClassObj;
     }
 
-    viewGeneOntology() {
-        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=' +
-            this.gene.ensembl_gene_id, '_blank');
+    openExternalLink(url) {
+        if (!url) {
+            return;
+        }
+        window.open(url, '_blank');
     }
 
-    viewPathways() {
-        window.open('https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=' +
-            this.gene.ensembl_gene_id, '_blank');
-    }
-
-    viewHallmarks() {
-        window.open('https://www.targetvalidation.org/evidence/' +
-            this.gene.ensembl_gene_id + '/EFO_0000249', '_blank'
-        );
-    }
-
-    viewBrainRNAseq() {
-        window.open('http://www.brainrnaseq.org/', '_blank');
-    }
-
-    viewGenomicsDatabase() {
-        window.open('https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.' +
-            'GeneRecordClass&source_id=' + this.gene.ensembl_gene_id, '_blank'
-        );
-    }
 }
