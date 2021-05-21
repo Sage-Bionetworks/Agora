@@ -44,6 +44,7 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol'},
             { field: 'nominations', header: 'Nominations' },
+            { field: 'initial_nomination', header: 'Year First Nominated' },
             { field: 'teams', header: 'Nominating Teams' },
             { field: 'study', header: 'Cohort Study' },
             { field: 'input_data', header: 'Input Data' },
@@ -52,7 +53,6 @@ export class GenesListComponent implements OnInit {
             { field: 'safety_bucket_definition', header: 'Safety Rating' },
             { field: 'abability_bucket_definition', header: 'Antibody Modality' },
             { field: 'validation_study_details', header: 'Experimental Validation' },
-            { field: 'initial_nomination', header: 'Year First Nominated' },
         ];
 
         // Add a position property so we can add/remove at the same position
@@ -60,7 +60,7 @@ export class GenesListComponent implements OnInit {
             col.position = i;
         });
 
-        this.selectedColumns = this.cols.slice(0, 4);
+        this.selectedColumns = this.cols.slice(0, 5);
 
         this.initData();
     }
