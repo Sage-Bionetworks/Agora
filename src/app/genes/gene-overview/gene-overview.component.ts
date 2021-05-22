@@ -69,6 +69,13 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     firstTimeCheck: boolean = true;
     resizeTimer;
     mobileOpen: boolean = true;
+    tabMenuLabels = {
+        NOMINATION_DETAILS: 'NOMINATION DETAILS',
+        SUMMARY: 'SUMMARY',
+        EVIDENCE: 'EVIDENCE',
+        DRUGGABILITY: 'DRUGGABILITY',
+        EXPERIMENTAL_VALIDATION: 'EXPERIMENTAL VALIDATION'
+    };
 
     constructor(
         private navService: NavigationService,
@@ -135,10 +142,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     populateTabMenu() {
         this.items = [
-            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
-            { label: 'SUMMARY', disabled: this.disableMenu },
+            { label: this.tabMenuLabels.NOMINATION_DETAILS, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.SUMMARY, disabled: this.disableMenu },
             {
-                label: 'EVIDENCE',
+                label: this.tabMenuLabels.EVIDENCE,
                 disabled: this.disableMenu,
                 items: [
                     {
@@ -158,7 +165,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     }
                 ]
             },
-            { label: 'DRUGGABILITY', disabled: this.disableMenu }
+            { label: this.tabMenuLabels.DRUGGABILITY, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.EXPERIMENTAL_VALIDATION, disabled: this.disableMenu }
         ];
     }
 
@@ -195,7 +203,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 event ? {label: event.target.textContent} : {label: this.getFirstMenuTabName()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
-                    case 'NOMINATION DETAILS':
+                    case this.tabMenuLabels.NOMINATION_DETAILS:
                         this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
                             outlets: {
@@ -205,7 +213,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'SUMMARY':
+                    case this.tabMenuLabels.SUMMARY:
                         this.navService.setOvMenuTabIndex(this.items.length - 3);
                         this.navService.goToRoute('/genes', {
                             outlets: {
@@ -215,7 +223,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'EVIDENCE':
+                    case this.tabMenuLabels.EVIDENCE:
                         this.navService.setOvMenuTabIndex(this.items.length - 2);
                         this.navService.goToRoute('/genes', {
                             outlets: {
@@ -225,7 +233,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'DRUGGABILITY':
+                    case this.tabMenuLabels.DRUGGABILITY:
                         if (this.geneInfo.druggability) {
                             this.navService.setOvMenuTabIndex(this.items.length - 1);
                         }

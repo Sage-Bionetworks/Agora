@@ -1,4 +1,4 @@
-import { Gene, GeneInfo, Proteomics, NeuropathCorr } from '../../app/models';
+import { Gene, GeneInfo, Proteomics, NeuropathCorr, TargetExpValidation } from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -6,7 +6,8 @@ import {
     TeamsInfo,
     GenesProteomics,
     GenesMetabolomics,
-    NeuropathCorrs
+    NeuropathCorrs,
+    TargetExpValidations
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -75,6 +76,7 @@ connection.once('open', () => {
     const genesADDSM: Gene[] = [];
     let geneProteomics: Proteomics[] = [];
     let genesNeuroCorr: NeuropathCorr[] = [];
+    let targetExpValidations: TargetExpValidation[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -207,6 +209,15 @@ connection.once('open', () => {
             }
         }
     );
+
+    TargetExpValidations.find()
+        .exec(async (err, genes: TargetExpValidation[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                targetExpValidations = genes.slice();
+            }
+        });
 
     /* GET genes listing. */
     router.get('/', (req, res) => {
