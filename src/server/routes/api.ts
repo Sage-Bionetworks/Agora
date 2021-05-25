@@ -672,23 +672,19 @@ connection.once('open', () => {
                         if (errB) {
                             next(errB);
                         } else {
-                            await GenesExperimentalValidation.findOne({ [fieldName]: req.query.id}).exec(
-                                async (errC, expValidation) => {
-                                    if (errC) {
-                                        next(errC);
-                                    } else {
-                                        res.setHeader(
-                                            'Cache-Control', 'no-cache, no-store, must-revalidate'
-                                        );
-                                        res.setHeader('Pragma', 'no-cache');
-                                        res.setHeader('Expires', 0);
-                                        await res.json({
-                                            info,
-                                            item,
-                                            expValidation
-                                        });
-                                    }
-                                })
+                            const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id)
+                            const expValidation = validation.length ? validation[0] : undefined
+
+                            res.setHeader(
+                                'Cache-Control', 'no-cache, no-store, must-revalidate'
+                            );
+                            res.setHeader('Pragma', 'no-cache');
+                            res.setHeader('Expires', 0);
+                            await res.json({
+                                info,
+                                item,
+                                expValidation
+                            });
                         }
                     })
                 }

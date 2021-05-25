@@ -217,7 +217,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     case this.tabMenuLabels.SUMMARY:
-                        this.navService.setOvMenuTabIndex(this.items.length - 3);
+                        this.navService.setOvMenuTabIndex(this.items.length - 4);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -227,7 +227,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     case this.tabMenuLabels.EVIDENCE:
-                        this.navService.setOvMenuTabIndex(this.items.length - 2);
+                        this.navService.setOvMenuTabIndex(this.items.length - 3);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -238,7 +238,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         break;
                     case this.tabMenuLabels.DRUGGABILITY:
                         if (this.geneInfo.druggability) {
-                            this.navService.setOvMenuTabIndex(this.items.length - 1);
+                            this.navService.setOvMenuTabIndex(this.items.length - 2);
                         }
                         this.navService.goToRoute('/genes', {
                             outlets: {

@@ -24,7 +24,7 @@ export interface GenesSameIdResponse {
 export interface GeneResponse {
     item: Gene;
     info: GeneInfo;
-    expValidation: GeneExpValidation;
+    expValidation: GeneExpValidation | undefined;
 }
 
 export interface GeneInfosResponse {
