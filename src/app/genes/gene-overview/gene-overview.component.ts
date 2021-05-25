@@ -11,6 +11,7 @@ import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import {
     Gene,
+    GeneExpValidation,
     GeneInfo,
     GeneNetwork,
     GeneResponse,
@@ -45,6 +46,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
+    @Input() geneExpValidation: GeneExpValidation;
     @Input() id: string;
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
@@ -123,6 +125,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
+        this.geneExpValidation = this.geneService.getCurrentExpValidation();
         this.id = this.navService.getId();
 
         // Get a gene if we don't have one and inits the tissues/models
@@ -245,6 +248,18 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
+                    case this.tabMenuLabels.EXPERIMENTAL_VALIDATION:
+                        if (this.geneExpValidation) {
+                            this.navService.setOvMenuTabIndex(this.items.length - 1);
+                        }
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['exp-validation'],
+                                'evidence-menu': null
+                            }
+                        }, this.extras);
+                        break;
                     default:
                         this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
@@ -295,6 +310,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
+                    this.geneExpValidation = data.expValidation;
                 }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
@@ -346,22 +362,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     console.error('Error loading the data!');
                     return throwError(error);  // Angular 6/RxJS 6
                 }, () => {
-                    if (!this.geneInfo.nominations) {
-                        this.items.splice(0, 1);
-                    }
-                    if (!this.geneInfo.druggability) {
-                        this.items.splice(this.items.length - 1, 1);
-                    }
+                    this.removeNoDataTabs();
                     this.setActiveItem();
                     this.dataLoaded = true;
                 });
             } else {
-                if (!this.geneInfo.nominations) {
-                    this.items.splice(0, 1);
-                }
-                if (!this.geneInfo.druggability) {
-                    this.items.splice(this.items.length - 1, 1);
-                }
+                this.removeNoDataTabs();
                 this.setActiveItem();
                 this.dataLoaded = true;
             }
@@ -370,6 +376,18 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             this.geneService.setGeneModels([]);
             this.initDetails();
         }
+    }
+
+    removeNoDataTabs() {
+        const itemsToCheck = [this.geneInfo.nominations, this.geneInfo.druggability, this.geneExpValidation];
+        const labels = [this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.EXPERIMENTAL_VALIDATION];
+
+        itemsToCheck.forEach((item, i) => {
+            if (!item) {
+                const tabIndex = this.items.findIndex(tab => tab.label === labels[i])
+                this.items.splice(tabIndex, 1)
+            }
+        });
     }
 
     initDetails() {

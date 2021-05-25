@@ -1,4 +1,4 @@
-import { Gene, GeneInfo, Proteomics, NeuropathCorr, TargetExpValidation } from '../../app/models';
+import { Gene, GeneInfo, Proteomics, NeuropathCorr, GeneExpValidation } from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -7,7 +7,7 @@ import {
     GenesProteomics,
     GenesMetabolomics,
     NeuropathCorrs,
-    TargetExpValidations
+    GenesExperimentalValidation,
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -76,7 +76,7 @@ connection.once('open', () => {
     const genesADDSM: Gene[] = [];
     let geneProteomics: Proteomics[] = [];
     let genesNeuroCorr: NeuropathCorr[] = [];
-    let targetExpValidations: TargetExpValidation[] = [];
+    let genesExpValidation: GeneExpValidation[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -210,12 +210,12 @@ connection.once('open', () => {
         }
     );
 
-    TargetExpValidations.find()
-        .exec(async (err, genes: TargetExpValidation[], next) => {
+    GenesExperimentalValidation.find()
+        .exec(async (err, genes: GeneExpValidation[], next) => {
             if (err) {
                 next(err);
             } else {
-                targetExpValidations = genes.slice();
+                genesExpValidation = genes.slice();
             }
         });
 
@@ -672,17 +672,25 @@ connection.once('open', () => {
                         if (errB) {
                             next(errB);
                         } else {
-                            res.setHeader(
-                                'Cache-Control', 'no-cache, no-store, must-revalidate'
-                            );
-                            res.setHeader('Pragma', 'no-cache');
-                            res.setHeader('Expires', 0);
-                            await res.json({
-                                info,
-                                item
-                            });
+                            await GenesExperimentalValidation.findOne({ [fieldName]: req.query.id}).exec(
+                                async (errC, expValidation) => {
+                                    if (errC) {
+                                        next(errC);
+                                    } else {
+                                        res.setHeader(
+                                            'Cache-Control', 'no-cache, no-store, must-revalidate'
+                                        );
+                                        res.setHeader('Pragma', 'no-cache');
+                                        res.setHeader('Expires', 0);
+                                        await res.json({
+                                            info,
+                                            item,
+                                            expValidation
+                                        });
+                                    }
+                                })
                         }
-                    });
+                    })
                 }
             });
         }

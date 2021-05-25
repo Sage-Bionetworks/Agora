@@ -1,7 +1,7 @@
 import { Schema, Model, model } from 'mongoose';
-import { TargetExpValidationDocument } from '../models';
+import { GeneExpValidationDocument } from '../models';
 
-export const TargetExpValidationSchema = new Schema(
+export const GeneExpValidationSchema = new Schema(
     {
         ensembl_gene_id: {
             required: true,
@@ -52,17 +52,17 @@ export const TargetExpValidationSchema = new Schema(
             type: String
         },
     }, {
-        collection: 'targetexpvalidation',
+        collection: 'geneexpvalidation',
         timestamps: true
     })
 
-TargetExpValidationSchema.set('autoIndex', false);
-TargetExpValidationSchema.index(
+GeneExpValidationSchema.set('autoIndex', false);
+GeneExpValidationSchema.index(
     {
         hgnc_symbol: 'text',
         ensembl_gene_id: 'text',
     }
 );
 
-export const TargetExpValidations: Model<TargetExpValidationDocument> =
-    model<TargetExpValidationDocument>('targetexpvalidation', TargetExpValidationSchema);
+export const GenesExperimentalValidation: Model<GeneExpValidationDocument> =
+    model<GeneExpValidationDocument>('geneexpvalidation', GeneExpValidationSchema);

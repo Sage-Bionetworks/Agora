@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface TargetExpValidation {
+export interface GeneExpValidation {
     _id: string;
     ensembl_gene_id: string;
     hgnc_symbol: string;
@@ -16,4 +16,4 @@ export interface TargetExpValidation {
     Date_report: string;
 }
 
-export type TargetExpValidationDocument = TargetExpValidation & Document;
+export type GeneExpValidationDocument = GeneExpValidation & Document;
