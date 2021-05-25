@@ -270,6 +270,6 @@ export const mockExpValidation: GeneExpValidation = {
     Outcome_measure: 'string',
     Outcome_measure_details: 'string',
     Contributors: 'John D',
-    Team: 'ABC',
+    Team: 'Duke',
     Date_report: '01/01/2021',
 };

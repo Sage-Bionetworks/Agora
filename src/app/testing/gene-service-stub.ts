@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo, GeneExpValidation } from '../models';
 import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels, mockExpValidation } from './gene-mocks';
+import { mockTeam1, mockTeam2 } from "./team-info-mocks";
 
 @Injectable()
 export class GeneServiceStub {
@@ -188,5 +189,9 @@ export class GeneServiceStub {
 
     getGeneProteomics(): Proteomics[] {
         return [];
+    }
+
+    getCurrentTeams(): TeamInfo[] {
+        return [mockTeam1, mockTeam2]
     }
 }

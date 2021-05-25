@@ -16,7 +16,6 @@ export class ExpValidationComponent implements OnInit {
     @Input() teamInfo: TeamInfo;
 
     constructor(
-        private route: ActivatedRoute,
         private geneService: GeneService
     ) {}
 
