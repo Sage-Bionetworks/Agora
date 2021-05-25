@@ -88,7 +88,7 @@ export class GeneService {
     }
 
     setCurrentExpValidation(geneExpValidation: GeneExpValidation) {
-        this.currentExpValidation = geneExpValidation
+        this.currentExpValidation = geneExpValidation;
     }
 
     getCurrentExpValidation(): GeneExpValidation {

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo } from '../models';
-import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels } from './gene-mocks';
+import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo, GeneExpValidation } from '../models';
+import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels, mockExpValidation } from './gene-mocks';
 
 @Injectable()
 export class GeneServiceStub {
     previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
+    currentExpValidation: GeneExpValidation;
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string;
@@ -38,6 +39,10 @@ export class GeneServiceStub {
         return mockInfo1;
     }
 
+    getCurrentExpValidation(): GeneExpValidation {
+        return mockExpValidation;
+    }
+
     setCurrentTeams(teams: TeamInfo[]) {
         //
     }
@@ -62,6 +67,10 @@ export class GeneServiceStub {
 
     setCurrentInfo(geneInfo: GeneInfo) {
         this.currentInfo = geneInfo;
+    }
+
+    setCurrentExpValidation(geneExpValidation: GeneExpValidation) {
+        this.currentExpValidation = geneExpValidation;
     }
 
     getDefaultTissue(): string {
@@ -139,6 +148,7 @@ export class GeneServiceStub {
     updateGeneData(data: any) {
         this.setCurrentGene(data['item']);
         this.setCurrentInfo(data['info']);
+        this.setCurrentExpValidation(data['expValidation']);
         this.setFC(data['minFC'], data['maxFC']);
         this.setLogFC(data['minFC'], data['maxFC']);
         this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);

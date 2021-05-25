@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { GeneExpValidation, TeamInfo } from "../../../models";
-import { ActivatedRoute } from "@angular/router";
-import { GeneService } from "../../../core/services";
+import { GeneExpValidation, TeamInfo } from '../../../models';
+import { ActivatedRoute } from '@angular/router';
+import { GeneService } from '../../../core/services';
 
 @Component({
     selector: 'exp-validation',
@@ -12,8 +12,8 @@ import { GeneService } from "../../../core/services";
 
 export class ExpValidationComponent implements OnInit {
 
-    @Input() data: GeneExpValidation
-    @Input() teamInfo: TeamInfo
+    @Input() data: GeneExpValidation;
+    @Input() teamInfo: TeamInfo;
 
     constructor(
         private route: ActivatedRoute,
@@ -22,15 +22,15 @@ export class ExpValidationComponent implements OnInit {
 
     ngOnInit() {
         if (!this.data) {
-            this.data = this.geneService.getCurrentExpValidation()
+            this.data = this.geneService.getCurrentExpValidation();
         }
-        this.LoadTeam()
+        this.LoadTeam();
     }
 
     LoadTeam() {
-        const teams = this.geneService.getCurrentTeams()
+        const teams = this.geneService.getCurrentTeams();
         if (teams.length) {
-            this.teamInfo = teams.filter(item => item.team === this.data.Team)[0]
+            this.teamInfo = teams.filter(item => item.team === this.data.Team)[0];
         }
     }
 

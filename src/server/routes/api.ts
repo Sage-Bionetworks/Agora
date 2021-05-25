@@ -672,8 +672,8 @@ connection.once('open', () => {
                         if (errB) {
                             next(errB);
                         } else {
-                            const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id)
-                            const expValidation = validation.length ? validation[0] : undefined
+                            const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id);
+                            const expValidation = validation.length ? validation[0] : undefined;
 
                             res.setHeader(
                                 'Cache-Control', 'no-cache, no-store, must-revalidate'
@@ -686,7 +686,7 @@ connection.once('open', () => {
                                 expValidation
                             });
                         }
-                    })
+                    });
                 }
             });
         }

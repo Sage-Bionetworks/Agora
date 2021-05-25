@@ -54,7 +54,7 @@ export const GeneExpValidationSchema = new Schema(
     }, {
         collection: 'geneexpvalidation',
         timestamps: true
-    })
+    });
 
 GeneExpValidationSchema.set('autoIndex', false);
 GeneExpValidationSchema.index(

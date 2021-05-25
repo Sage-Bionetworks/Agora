@@ -17,7 +17,7 @@ import { GeneRNASeqDEComponent } from './evidence-menu/rna/gene-rnaseq-de';
 import { BoxPlotsViewComponent } from './evidence-menu/rna/gene-rnaseq-de/box-plots-view';
 import { GeneNetworkComponent } from './evidence-menu/rna/gene-network';
 import { GeneDruggabilityComponent } from './gene-druggability';
-import { ExpValidationComponent } from "./exp-validation";
+import { ExpValidationComponent } from './exp-validation';
 
 @NgModule({
     declarations: [
