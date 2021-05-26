@@ -99,7 +99,9 @@ export class GenesListComponent implements OnInit {
                     validationStudyDetailsArray = de.nominatedtarget
                         .map((nt: NominatedTarget) => nt.validation_study_details)
                         .filter(item => item !== undefined);
-                    initialNominationArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.initial_nomination);
+                    initialNominationArray = de.nominatedtarget
+                        .map((nt: NominatedTarget) => nt.initial_nomination)
+                        .filter(item => item !== undefined);
                 }
 
                 // Check if there are any strings with commas inside,
