@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { GeneExpValidation, TeamInfo } from '../../../models';
-import { ActivatedRoute } from '@angular/router';
 import { GeneService } from '../../../core/services';
 
 @Component({
