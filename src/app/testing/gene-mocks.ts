@@ -140,7 +140,8 @@ export const mockInfo1: GeneInfo = {
                 'FrCx \nWPCNA of multiple and consensus cohorts\nANOVA',
             data_synapseid: ['syn3606086', 'syn5759376', 'syn7170616'],
             study: 'ACT, BLSA, Banner',
-            input_data: 'Protein'
+            input_data: 'Protein',
+            initial_nomination: 2018,
         }
     ],
     druggability: [

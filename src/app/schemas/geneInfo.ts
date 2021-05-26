@@ -72,6 +72,10 @@ export let NominatedTargetSchema: Schema = new Schema (
         data_synapseid: {
             required: true,
             type: [String]
+        },
+        initial_nomination: {
+            required: false,
+            type: Number
         }
     }, {
         timestamps: true
