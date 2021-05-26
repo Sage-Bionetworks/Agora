@@ -141,7 +141,8 @@ export const mockInfo1: GeneInfo = {
             data_synapseid: ['syn3606086', 'syn5759376', 'syn7170616'],
             study: 'ACT, BLSA, Banner',
             input_data: 'Protein',
-            initial_nomination: 2018,
+            validation_study_details: '',
+            initial_nomination: 2018
         }
     ],
     druggability: [

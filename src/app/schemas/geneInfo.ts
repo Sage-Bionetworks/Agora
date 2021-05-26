@@ -73,8 +73,12 @@ export let NominatedTargetSchema: Schema = new Schema (
             required: true,
             type: [String]
         },
-        initial_nomination: {
+        validation_study_details: {
             required: false,
+            type: String
+        },
+        initial_nomination: {
+            required: true,
             type: Number
         }
     }, {

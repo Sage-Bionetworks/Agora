@@ -30,6 +30,8 @@ export interface GeneInfo {
     teams?: string;
     study?: string;
     input_data?: string;
+    validation_study_details?: string;
+    initial_nomination?: number;
     sm_druggability_bucket?: string;
     safety_bucket?: string;
     feasibility_bucket?: string;
@@ -44,7 +46,6 @@ export interface GeneInfo {
     new_modality_bucket_definition?: string;
     brain_regions?: string;
     num_brain_regions?: string;
-    initial_nomination?: number;
 }
 
 export interface MedianExpression {
@@ -61,7 +62,8 @@ export interface NominatedTarget {
     data_synapseid: string[];
     study: string;
     input_data: string;
-    initial_nomination?: number;
+    validation_study_details: string;
+    initial_nomination: number;
 }
 
 export interface Druggability {
