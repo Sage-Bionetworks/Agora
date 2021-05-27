@@ -19,7 +19,7 @@ export const GeneExpValidationSchema = new Schema(
             required: true,
             type: String
         },
-        'Published?': {
+        Published: {
             required: true,
             type: String
         },
@@ -45,6 +45,10 @@ export const GeneExpValidationSchema = new Schema(
         },
         Team: {
             required: true,
+            type: String
+        },
+        Reference_doi: {
+            required: false,
             type: String
         },
         Date_report: {

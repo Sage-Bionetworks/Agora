@@ -30,7 +30,10 @@
         <h4>Contributors</h4>
         <p class="col-8 section-desc">{{data.Contributors}}</p>
         <h4>Published?</h4>
-        <p class="col-8 section-desc">{{data['Published?']}}</p>
+        <p class="col-8 section-desc">
+            {{data.Published}}<span *ngIf="data.Published && data.Reference_doi">; </span>
+            <span *ngIf="data.Reference_doi"><a class="link-heading" [href]="data.Reference_doi" target="_blank">{{data.Reference_doi}}</a></span>
+        </p>
         <h4>Date of Report</h4>
         <p class="col-8 section-desc">{{data.Date_report}}</p>
     </div>
