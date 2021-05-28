@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo, GeneExpValidation } from '../models';
 import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels, mockExpValidation } from './gene-mocks';
-import { mockTeam1, mockTeam2 } from "./team-info-mocks";
+import { mockTeam1, mockTeam2 } from './team-info-mocks';
 
 @Injectable()
 export class GeneServiceStub {
     previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
-    currentExpValidation: GeneExpValidation;
+    currentExpValidation: GeneExpValidation[] = [];
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string;
@@ -40,7 +40,7 @@ export class GeneServiceStub {
         return mockInfo1;
     }
 
-    getCurrentExpValidation(): GeneExpValidation {
+    getCurrentExpValidation(): GeneExpValidation[] {
         return mockExpValidation;
     }
 
@@ -70,7 +70,7 @@ export class GeneServiceStub {
         this.currentInfo = geneInfo;
     }
 
-    setCurrentExpValidation(geneExpValidation: GeneExpValidation) {
+    setCurrentExpValidation(geneExpValidation: GeneExpValidation[]) {
         this.currentExpValidation = geneExpValidation;
     }
 
@@ -192,6 +192,6 @@ export class GeneServiceStub {
     }
 
     getCurrentTeams(): TeamInfo[] {
-        return [mockTeam1, mockTeam2]
+        return [mockTeam1, mockTeam2];
     }
 }

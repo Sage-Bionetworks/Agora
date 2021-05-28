@@ -258,7 +258,7 @@ export const mockLinksListResponse: LinksListResponse = {
     items: [mockDataLink1, mockDataLink2]
 };
 
-export const mockExpValidation: GeneExpValidation = {
+export const mockExpValidation: GeneExpValidation[] = [{
     _id: '12345',
     ensembl_gene_id: 'string',
     hgnc_symbol: 'BBB',
@@ -273,4 +273,4 @@ export const mockExpValidation: GeneExpValidation = {
     Team: 'Duke',
     Reference_doi: 'https://doi.org/10.15252/abc.123',
     Date_report: '01/01/2021',
-};
+}];

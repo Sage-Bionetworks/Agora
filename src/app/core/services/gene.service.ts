@@ -22,7 +22,7 @@ export class GeneService {
     previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
-    currentExpValidation: GeneExpValidation;
+    currentExpValidation: GeneExpValidation[] = [];
     currentTeams: TeamInfo[];
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
@@ -87,11 +87,11 @@ export class GeneService {
         return this.currentInfo;
     }
 
-    setCurrentExpValidation(geneExpValidation: GeneExpValidation) {
+    setCurrentExpValidation(geneExpValidation: GeneExpValidation[]) {
         this.currentExpValidation = geneExpValidation;
     }
 
-    getCurrentExpValidation(): GeneExpValidation {
+    getCurrentExpValidation(): GeneExpValidation[] {
         return this.currentExpValidation;
     }
 

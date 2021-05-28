@@ -673,7 +673,7 @@ connection.once('open', () => {
                             next(errB);
                         } else {
                             const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id);
-                            const expValidation = validation.length ? validation[0] : undefined;
+                            const expValidation = validation.length ? validation : undefined;
 
                             res.setHeader(
                                 'Cache-Control', 'no-cache, no-store, must-revalidate'

@@ -46,7 +46,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
-    @Input() geneExpValidation: GeneExpValidation;
+    @Input() geneExpValidation: GeneExpValidation[] = [];
     @Input() id: string;
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
@@ -57,7 +57,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         relativeTo: this.navService.getRoute(),
         skipLocationChange: true
     };
-
     activeItem: MenuItem;
     currentGeneData = [];
     subscription: Subscription;
@@ -384,8 +383,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
         itemsToCheck.forEach((item, i) => {
             if (!item) {
-                const tabIndex = this.items.findIndex(tab => tab.label === labels[i])
-                this.items.splice(tabIndex, 1)
+                const tabIndex = this.items.findIndex(tab => tab.label === labels[i]);
+                this.items.splice(tabIndex, 1);
             }
         });
     }

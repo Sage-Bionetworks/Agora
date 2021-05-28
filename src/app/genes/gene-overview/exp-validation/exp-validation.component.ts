@@ -11,8 +11,8 @@ import { GeneService } from '../../../core/services';
 
 export class ExpValidationComponent implements OnInit {
 
-    @Input() data: GeneExpValidation;
-    @Input() teamInfo: TeamInfo;
+    @Input() data: GeneExpValidation[];
+    @Input() teamInfo: TeamInfo[];
 
     constructor(
         private geneService: GeneService
@@ -28,7 +28,9 @@ export class ExpValidationComponent implements OnInit {
     LoadTeam() {
         const teams = this.geneService.getCurrentTeams();
         if (teams.length) {
-            this.teamInfo = teams.filter(item => item.team === this.data.Team)[0];
+            this.teamInfo = this.data.map((item, i) => {
+               return teams.filter(j => j.team === item.Team)[0];
+            });
         }
     }
 

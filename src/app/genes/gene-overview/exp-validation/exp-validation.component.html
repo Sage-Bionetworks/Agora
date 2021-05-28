@@ -1,40 +1,43 @@
 <div *ngIf="data">
-    <div class="section-thin overview-header no-padding-bottom" tabindex="0">
-        <div class="row no-gutters">
-            <div>
-                <h2 *ngIf="data">Experimental Validation of {{data.hgnc_symbol}}</h2>
-                <p class="no-margin-bottom no-padding">
-                    Nominating teams provided details on experimental validation studies they performed to examine a role for the target in AD.
-                </p>
+    <div *ngFor="let d of data; let i = index">
+        <div *ngIf="i == 0" class="section-thin overview-header no-padding-bottom" tabindex="0">
+            <div class="row no-gutters">
+                <div>
+                    <h2 *ngIf="data">Experimental Validation of {{d.hgnc_symbol}}</h2>
+                    <p class="no-margin-bottom no-padding">
+                        Nominating teams provided details on experimental validation studies they performed to examine a role for the target in AD.
+                    </p>
+                </div>
             </div>
+            <h1 class="inner-section-divider"></h1>
         </div>
-        <h1 class="inner-section-divider"></h1>
-    </div>
-    <div class="section-thin no-padding-top overview-sections">
-        <h2>{{teamInfo.program}}: {{teamInfo.team_full}}</h2>
-        <p class="col-8 section-desc">{{teamInfo.description}}</p>
-        <h4>Hypothesis Being Tested</h4>
-        <p class="col-8 section-desc">{{data.Hypothesis_tested}}</p>
-        <h4>Species and Model System</h4>
-        <p class="col-8 section-desc">
-            {{data.Species}}<span *ngIf="data.Species && data.Model_system">; </span>
-            <span *ngIf="data.Model_system">{{data.Model_system}}</span>
-        </p>
-        <h4>Outcome Measure</h4>
-        <p class="col-8 section-desc">
-            {{data.Outcome_measure}}<span *ngIf="data.Outcome_measure && data.Outcome_measure_details">; </span>
-            <span *ngIf="data.Outcome_measure_details">{{data.Outcome_measure_details}}</span>
-        </p>
-        <h4>Summary of Findings</h4>
-        <p class="col-8 section-desc">{{data.Summary_findings}}</p>
-        <h4>Contributors</h4>
-        <p class="col-8 section-desc">{{data.Contributors}}</p>
-        <h4>Published?</h4>
-        <p class="col-8 section-desc">
-            {{data.Published}}<span *ngIf="data.Published && data.Reference_doi">; </span>
-            <span *ngIf="data.Reference_doi"><a class="link-heading" [href]="data.Reference_doi" target="_blank">{{data.Reference_doi}}</a></span>
-        </p>
-        <h4>Date of Report</h4>
-        <p class="col-8 section-desc">{{data.Date_report}}</p>
+        <div class="section-thin no-padding-top overview-sections">
+            <h2>{{teamInfo[i].program}}: {{teamInfo[i].team_full}}</h2>
+            <p class="col-8 section-desc">{{teamInfo[i].description}}</p>
+            <h4>Hypothesis Being Tested</h4>
+            <p class="col-8 section-desc">{{d.Hypothesis_tested}}</p>
+            <h4>Species and Model System</h4>
+            <p class="col-8 section-desc">
+                {{d.Species}}<span *ngIf="d.Species && d.Model_system">; </span>
+                <span *ngIf="d.Model_system">{{d.Model_system}}</span>
+            </p>
+            <h4>Outcome Measure</h4>
+            <p class="col-8 section-desc">
+                {{d.Outcome_measure}}<span *ngIf="d.Outcome_measure && d.Outcome_measure_details">; </span>
+                <span *ngIf="d.Outcome_measure_details">{{d.Outcome_measure_details}}</span>
+            </p>
+            <h4>Summary of Findings</h4>
+            <p class="col-8 section-desc">{{d.Summary_findings}}</p>
+            <h4>Contributors</h4>
+            <p class="col-8 section-desc">{{d.Contributors}}</p>
+            <h4>Published?</h4>
+            <p class="col-8 section-desc">
+                {{d.Published}}<span *ngIf="d.Published && d.Reference_doi">; </span>
+                <span *ngIf="d.Reference_doi"><a class="link-heading" [href]="d.Reference_doi" target="_blank">{{d.Reference_doi}}</a></span>
+            </p>
+            <h4>Date of Report</h4>
+            <p class="col-8 section-desc">{{d.Date_report}}</p>
+        </div>
+        <div *ngIf="i<data.length-1" class="section-thin no-padding-top"><h1 class="inner-section-divider"></h1></div>
     </div>
 </div>
