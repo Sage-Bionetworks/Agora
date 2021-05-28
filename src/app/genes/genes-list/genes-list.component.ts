@@ -44,13 +44,15 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol'},
             { field: 'nominations', header: 'Nominations' },
+            { field: 'initial_nomination', header: 'Year First Nominated' },
             { field: 'teams', header: 'Nominating Teams' },
             { field: 'study', header: 'Cohort Study' },
             { field: 'input_data', header: 'Input Data' },
             { field: 'pharos_class', header: 'Pharos Class' },
             { field: 'classification', header: 'Small Molecule Druggability' },
             { field: 'safety_bucket_definition', header: 'Safety Rating' },
-            { field: 'abability_bucket_definition', header: 'Antibody Modality' }
+            { field: 'abability_bucket_definition', header: 'Antibody Modality' },
+            { field: 'validation_study_details', header: 'Experimental Validation' },
         ];
 
         // Add a position property so we can add/remove at the same position
@@ -58,7 +60,7 @@ export class GenesListComponent implements OnInit {
             col.position = i;
         });
 
-        this.selectedColumns = this.cols.slice(0, 4);
+        this.selectedColumns = this.cols.slice(0, 5);
 
         this.initData();
     }
@@ -82,13 +84,25 @@ export class GenesListComponent implements OnInit {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.dataSource = (data.items) ? data.items : [];
             this.dataSource.forEach((de: GeneInfo) => {
+                let teamsArray = [],
+                    studyArray = [],
+                    inputDataArray = [],
+                    validationStudyDetailsArray = [],
+                    initialNominationArray = [];
+
                 // First map all entries nested in the data to a new array
-                let teamsArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
-                    (nt: NominatedTarget) => nt.team) : [];
-                let studyArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
-                    (nt: NominatedTarget) => nt.study) : [];
-                let inputDataArray = (de.nominatedtarget.length) ? de.nominatedtarget.map(
-                    (nt: NominatedTarget) => nt.input_data) : [];
+
+                if (de.nominatedtarget.length) {
+                    teamsArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.team);
+                    studyArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.study);
+                    inputDataArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.input_data);
+                    validationStudyDetailsArray = de.nominatedtarget
+                        .map((nt: NominatedTarget) => nt.validation_study_details)
+                        .filter(item => item !== undefined);
+                    initialNominationArray = de.nominatedtarget
+                        .map((nt: NominatedTarget) => nt.initial_nomination)
+                        .filter(item => item !== undefined);
+                }
 
                 // Check if there are any strings with commas inside,
                 // if there are separate those into new split strings
@@ -103,6 +117,9 @@ export class GenesListComponent implements OnInit {
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
                 de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+                de.validation_study_details = (validationStudyDetailsArray.length) ? [...new Set(validationStudyDetailsArray)]
+                    .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+                de.initial_nomination = (initialNominationArray.length) ? Math.min(...initialNominationArray) : undefined;
 
                 // Druggability columns
                 if (de.druggability && de.druggability.length) {

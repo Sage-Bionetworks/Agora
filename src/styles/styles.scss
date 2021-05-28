@@ -837,6 +837,10 @@ p-multiselectitem {
             color: color(text, secondary) !important;
             height: 40px;
             text-align: center;
+
+            &:first-letter {
+                text-transform: capitalize;
+            }
         }
     }
 
