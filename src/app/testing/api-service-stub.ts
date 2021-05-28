@@ -7,7 +7,8 @@ import {
     mockDataLink2,
     mockInfo1,
     mockTeam1,
-    mockMetabolomics
+    mockMetabolomics,
+    mockExpValidation
 } from '../testing';
 
 import {
@@ -32,7 +33,8 @@ export class ApiServiceStub {
     getGene(id?: string): Observable<object> {
         return of({
             item: mockGene1,
-            info: mockInfo1
+            info: mockInfo1,
+            expValidation: mockExpValidation
         } as GeneResponse);
     }
 

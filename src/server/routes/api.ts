@@ -1,4 +1,4 @@
-import { Gene, GeneInfo, Proteomics, NeuropathCorr } from '../../app/models';
+import { Gene, GeneInfo, Proteomics, NeuropathCorr, GeneExpValidation } from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -6,7 +6,8 @@ import {
     TeamsInfo,
     GenesProteomics,
     GenesMetabolomics,
-    NeuropathCorrs
+    NeuropathCorrs,
+    GenesExperimentalValidation,
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -75,6 +76,7 @@ connection.once('open', () => {
     const genesADDSM: Gene[] = [];
     let geneProteomics: Proteomics[] = [];
     let genesNeuroCorr: NeuropathCorr[] = [];
+    let genesExpValidation: GeneExpValidation[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -207,6 +209,15 @@ connection.once('open', () => {
             }
         }
     );
+
+    GenesExperimentalValidation.find()
+        .exec(async (err, genes: GeneExpValidation[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                genesExpValidation = genes.slice();
+            }
+        });
 
     /* GET genes listing. */
     router.get('/', (req, res) => {
@@ -661,6 +672,9 @@ connection.once('open', () => {
                         if (errB) {
                             next(errB);
                         } else {
+                            const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id);
+                            const expValidation = validation.length ? validation : undefined;
+
                             res.setHeader(
                                 'Cache-Control', 'no-cache, no-store, must-revalidate'
                             );
@@ -668,7 +682,8 @@ connection.once('open', () => {
                             res.setHeader('Expires', 0);
                             await res.json({
                                 info,
-                                item
+                                item,
+                                expValidation
                             });
                         }
                     });
