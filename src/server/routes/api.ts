@@ -1170,7 +1170,7 @@ connection.once('open', () => {
         const ensembledIds = hgncToEnsembl.get(hgncId);
         if (ensembledIds !== undefined) {
             if (ensembledIds.length === 1) {  // ensembl id 'should' map to only one hgnc id
-                return genesNeuroCorr.filter(obj => obj['ensembl_gene_id'] === ensembledIds[0]);
+                return genesNeuroCorr.filter(obj => obj['ensg'] === ensembledIds[0]);
             } else {
                 console.log('getGeneCorrelationData: Correlation data length error with length: ', ensembledIds.length);
             }
