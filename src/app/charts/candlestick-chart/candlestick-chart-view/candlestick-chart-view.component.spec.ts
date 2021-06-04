@@ -11,7 +11,7 @@ import {
     RouterStub,
     GeneServiceStub,
     DataServiceStub,
-    ChartServiceStub
+    ChartServiceStub2
 } from '../../../testing';
 
 import { CandlestickChartViewComponent } from './candlestick-chart-view.component';
@@ -26,11 +26,11 @@ describe('Component: CandlestickChartViewComponent', () => {
     let router: RouterStub;
     let geneService: GeneServiceStub;
     let dataService: DataServiceStub;
-    let chartService: ChartServiceStub;
+    let chartService: ChartServiceStub2;
     let location: SpyLocation;
     const rawData = [{
         id: 'abc1',
-        ensembl_gene_id: 'abc',
+        ensg: 'ENSG001',
         oddsratio: 0.1,
         ci_lower: 0.2,
         ci_upper: 0.4,
@@ -40,7 +40,7 @@ describe('Component: CandlestickChartViewComponent', () => {
     }];
     const chartData = [{
         key: 'AAA',
-        ensembl_gene_id: 'abc',
+        ensg: 'ENSG001',
         value: {
             min: 0.2,
             max: 0.4,
@@ -59,7 +59,7 @@ describe('Component: CandlestickChartViewComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
-                { provide: ChartService, useValue: new ChartServiceStub() },
+                { provide: ChartService, useValue: new ChartServiceStub2() },
                 { provide: SpyLocation, useValue: new SpyLocation() }
             ]
         }).compileComponents();

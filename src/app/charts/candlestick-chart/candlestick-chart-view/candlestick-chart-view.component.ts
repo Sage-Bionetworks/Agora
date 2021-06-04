@@ -10,10 +10,9 @@ import {
 } from '@angular/core';
 
 import { PlatformLocation } from '@angular/common';
-import { Router, NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
 import { ChartService } from '../../services';
 import { DataService, GeneService } from '../../../core/services';
-import { Subscription } from 'rxjs';
 import * as d3 from 'd3';
 
 @Component({
@@ -85,7 +84,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
         this.chartData = filtered.map(item => {
             const data = {
                 key: item.neuropath_type,
-                ensembl_gene_id: item.ensembl_gene_id,
+                ensg: item.ensg,
                 value: {
                     min: item.ci_lower,
                     max: item.ci_upper,
