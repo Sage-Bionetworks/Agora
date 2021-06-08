@@ -11,6 +11,7 @@ import { RouterEvent, NavigationEnd, NavigationExtras } from '@angular/router';
 
 import {
     Gene,
+    GeneExpValidation,
     GeneInfo,
     GeneNetwork,
     GeneResponse,
@@ -45,6 +46,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     @Input() style: any;
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
+    @Input() geneExpValidation: GeneExpValidation[] = [];
     @Input() id: string;
     @Input() models: string[] = [];
     @Input() tissues: string[] = [];
@@ -55,7 +57,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         relativeTo: this.navService.getRoute(),
         skipLocationChange: true
     };
-
     activeItem: MenuItem;
     currentGeneData = [];
     subscription: Subscription;
@@ -69,6 +70,13 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     firstTimeCheck: boolean = true;
     resizeTimer;
     mobileOpen: boolean = true;
+    tabMenuLabels = {
+        NOMINATION_DETAILS: 'NOMINATION DETAILS',
+        SUMMARY: 'SUMMARY',
+        EVIDENCE: 'EVIDENCE',
+        DRUGGABILITY: 'DRUGGABILITY',
+        EXPERIMENTAL_VALIDATION: 'EXPERIMENTAL VALIDATION'
+    };
 
     constructor(
         private navService: NavigationService,
@@ -116,6 +124,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             .subscribe((data: GeneNetwork) => this.currentGeneData = data.nodes);
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
+        this.geneExpValidation = this.geneService.getCurrentExpValidation();
         this.id = this.navService.getId();
 
         // Get a gene if we don't have one and inits the tissues/models
@@ -135,10 +144,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     populateTabMenu() {
         this.items = [
-            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
-            { label: 'SUMMARY', disabled: this.disableMenu },
+            { label: this.tabMenuLabels.NOMINATION_DETAILS, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.SUMMARY, disabled: this.disableMenu },
             {
-                label: 'EVIDENCE',
+                label: this.tabMenuLabels.EVIDENCE,
                 disabled: this.disableMenu,
                 items: [
                     {
@@ -158,7 +167,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     }
                 ]
             },
-            { label: 'DRUGGABILITY', disabled: this.disableMenu }
+            { label: this.tabMenuLabels.DRUGGABILITY, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.EXPERIMENTAL_VALIDATION, disabled: this.disableMenu }
         ];
     }
 
@@ -195,7 +205,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 event ? {label: event.target.textContent} : {label: this.getFirstMenuTabName()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
-                    case 'NOMINATION DETAILS':
+                    case this.tabMenuLabels.NOMINATION_DETAILS:
                         this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
                             outlets: {
@@ -205,8 +215,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'SUMMARY':
-                        this.navService.setOvMenuTabIndex(this.items.length - 3);
+                    case this.tabMenuLabels.SUMMARY:
+                        this.navService.setOvMenuTabIndex(this.items.length - 4);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -215,8 +225,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'EVIDENCE':
-                        this.navService.setOvMenuTabIndex(this.items.length - 2);
+                    case this.tabMenuLabels.EVIDENCE:
+                        this.navService.setOvMenuTabIndex(this.items.length - 3);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -225,14 +235,26 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case 'DRUGGABILITY':
+                    case this.tabMenuLabels.DRUGGABILITY:
                         if (this.geneInfo.druggability) {
-                            this.navService.setOvMenuTabIndex(this.items.length - 1);
+                            this.navService.setOvMenuTabIndex(this.items.length - 2);
                         }
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['druggability'],
+                                'evidence-menu': null
+                            }
+                        }, this.extras);
+                        break;
+                    case this.tabMenuLabels.EXPERIMENTAL_VALIDATION:
+                        if (this.geneExpValidation) {
+                            this.navService.setOvMenuTabIndex(this.items.length - 1);
+                        }
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['exp-validation'],
                                 'evidence-menu': null
                             }
                         }, this.extras);
@@ -287,6 +309,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
+                    this.geneExpValidation = data.expValidation;
                 }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
@@ -338,22 +361,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     console.error('Error loading the data!');
                     return throwError(error);  // Angular 6/RxJS 6
                 }, () => {
-                    if (!this.geneInfo.nominations) {
-                        this.items.splice(0, 1);
-                    }
-                    if (!this.geneInfo.druggability) {
-                        this.items.splice(this.items.length - 1, 1);
-                    }
+                    this.removeNoDataTabs();
                     this.setActiveItem();
                     this.dataLoaded = true;
                 });
             } else {
-                if (!this.geneInfo.nominations) {
-                    this.items.splice(0, 1);
-                }
-                if (!this.geneInfo.druggability) {
-                    this.items.splice(this.items.length - 1, 1);
-                }
+                this.removeNoDataTabs();
                 this.setActiveItem();
                 this.dataLoaded = true;
             }
@@ -362,6 +375,18 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
             this.geneService.setGeneModels([]);
             this.initDetails();
         }
+    }
+
+    removeNoDataTabs() {
+        const itemsToCheck = [this.geneInfo.nominations, this.geneInfo.druggability, this.geneExpValidation];
+        const labels = [this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.EXPERIMENTAL_VALIDATION];
+
+        itemsToCheck.forEach((item, i) => {
+            if (!item) {
+                const tabIndex = this.items.findIndex(tab => tab.label === labels[i]);
+                this.items.splice(tabIndex, 1);
+            }
+        });
     }
 
     initDetails() {

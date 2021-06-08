@@ -110,7 +110,7 @@ export class SOEComponent implements OnInit {
                 hasLink: true,
                 extraText: 'Visit Open Targets',
                 command: (event) => this.openExternalLink(
-                    `https://www.targetvalidation.org/evidence/${this.gene.ensembl_gene_id}/EFO_0000249`
+                    `https://platform.opentargets.org/evidence/${this.gene.ensembl_gene_id}/EFO_0000249`
                 )
             },
             {

@@ -14,31 +14,37 @@
         </div>
         <h1 class="inner-section-divider"></h1>
     </div>
-    <div class="section-thin teams-section">
+    <div class="section-thin teams-section overview-sections">
         <div *ngFor="let team of teams; let i = index">
             <h3 class="team-name">
                 {{getFullDisplayName(team.program, team.team_full)}}
             </h3>
-            <p class="black-paragraph custom-paragraph col-8 no-padding">
+            <p class="black-paragraph col-8 section-desc">
                 {{team.description}}
             </p>
             <h4>
                 Why was the target selected?
             </h4>
-            <p class="black-paragraph custom-paragraph col-8 no-padding">
+            <p class="black-paragraph col-8 section-desc">
                 {{ntInfoArray[i].target_choice_justification}}
             </p>
             <h4>
                 Predicted therapeutic direction
             </h4>
-            <p class="black-paragraph custom-paragraph col-8 no-padding">
+            <p class="black-paragraph col-8 section-desc">
                 {{ntInfoArray[i].predicted_therapeutic_direction}}
             </p>
             <h4>
                 The type of data used and analyses done to identify target
             </h4>
-            <p class="black-paragraph custom-paragraph col-8 no-padding">
+            <p class="black-paragraph col-8 section-desc">
                 {{ntInfoArray[i].data_used_to_support_target_selection}}
+            </p>
+            <h4>
+                Initial date of nomination
+            </h4>
+            <p class="black-paragraph custom-paragraph col-8 no-padding">
+                {{ntInfoArray[i].initial_nomination}}
             </p>
             <h4>
                 <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">

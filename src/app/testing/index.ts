@@ -1,6 +1,7 @@
 export * from './api-service-stub';
 export * from './activated-route-stub';
 export * from './chart-service-stub';
+export * from './chart-service-stub2';
 export * from './data-service-stub';
 export * from './dialogs-service-stub';
 export * from './element-ref-stub';

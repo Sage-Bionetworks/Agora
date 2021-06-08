@@ -3,7 +3,11 @@ import { NeuropathCorrDocument } from '../models';
 
 export let NeuropathCorrSchema: Schema = new Schema(
     {
-        ensembl_gene_id: {
+        ensg: {
+            required: true,
+            type: String
+        },
+        gname: {
             required: true,
             type: String
         },
@@ -40,7 +44,8 @@ export let NeuropathCorrSchema: Schema = new Schema(
 NeuropathCorrSchema.set('autoIndex', false);
 NeuropathCorrSchema.index(
     {
-        ensembl_gene_id: 'text',
+        ensg: 'text',
+        gname: 'text',
         neuropath_type: 'text'
     }
 );

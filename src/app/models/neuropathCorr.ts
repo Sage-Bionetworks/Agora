@@ -2,7 +2,8 @@ import { Document } from 'mongoose';
 
 export interface NeuropathCorr {
     _id: string;
-    ensembl_gene_id: string;
+    ensg: string;
+    gname: string;
     oddsratio: number;
     ci_lower: number;
     ci_upper: number;

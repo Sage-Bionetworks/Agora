@@ -6,7 +6,8 @@ import {
     GeneStatistics,
     GenesResponse,
     Metabolomics,
-    LinksListResponse
+    LinksListResponse,
+    GeneExpValidation
 } from '../models';
 
 export const mockGene1: Gene = {
@@ -140,7 +141,9 @@ export const mockInfo1: GeneInfo = {
                 'FrCx \nWPCNA of multiple and consensus cohorts\nANOVA',
             data_synapseid: ['syn3606086', 'syn5759376', 'syn7170616'],
             study: 'ACT, BLSA, Banner',
-            input_data: 'Protein'
+            input_data: 'Protein',
+            validation_study_details: '',
+            initial_nomination: 2018
         }
     ],
     druggability: [
@@ -256,3 +259,20 @@ export const mockGenesResponse: GenesResponse = {
 export const mockLinksListResponse: LinksListResponse = {
     items: [mockDataLink1, mockDataLink2]
 };
+
+export const mockExpValidation: GeneExpValidation[] = [{
+    _id: '12345',
+    ensembl_gene_id: 'string',
+    hgnc_symbol: 'BBB',
+    Hypothesis_tested: 'string',
+    Summary_findings: 'string',
+    Published: 'Yes',
+    Species: 'string',
+    Model_system: 'string',
+    Outcome_measure: 'string',
+    Outcome_measure_details: 'string',
+    Contributors: 'John D',
+    Team: 'Duke',
+    Reference_doi: 'https://doi.org/10.15252/abc.123',
+    Date_report: '01/01/2021',
+}];

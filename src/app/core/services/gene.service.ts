@@ -7,7 +7,8 @@ import {
     TissuesResponse,
     ModelsResponse,
     GeneResponse,
-    Proteomics
+    Proteomics,
+    GeneExpValidation
 } from '../../models';
 
 import { emptyGene } from 'app/testing';
@@ -21,6 +22,7 @@ export class GeneService {
     previousGene: Gene;
     currentGene: Gene;
     currentInfo: GeneInfo;
+    currentExpValidation: GeneExpValidation[] = [];
     currentTeams: TeamInfo[];
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
@@ -72,6 +74,7 @@ export class GeneService {
     updateGeneData(data: GeneResponse) {
         this.setCurrentGene(data.item);
         this.setCurrentInfo(data.info);
+        this.setCurrentExpValidation(data.expValidation);
         this.setCurrentModel(data.item.model);
         this.setCurrentTissue(data.item.tissue);
     }
@@ -82,6 +85,14 @@ export class GeneService {
 
     getCurrentInfo(): GeneInfo {
         return this.currentInfo;
+    }
+
+    setCurrentExpValidation(geneExpValidation: GeneExpValidation[]) {
+        this.currentExpValidation = geneExpValidation;
+    }
+
+    getCurrentExpValidation(): GeneExpValidation[] {
+        return this.currentExpValidation;
     }
 
     setCurrentTeams(teams: TeamInfo[]) {

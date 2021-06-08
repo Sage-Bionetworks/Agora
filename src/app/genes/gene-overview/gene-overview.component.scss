@@ -385,3 +385,11 @@
 .loading-full-height {
     height: calc(100vh - 187px);
 }
+
+.overview-sections {
+    .section-desc {
+        padding: 0;
+        margin-bottom: 36px;
+    }
+}
+
