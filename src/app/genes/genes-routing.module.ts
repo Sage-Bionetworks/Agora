@@ -14,6 +14,7 @@ import { RNAComponent } from './gene-overview/evidence-menu/rna';
 import { ProteomicsComponent } from './gene-overview/evidence-menu/proteomics';
 import { MetabolomicsComponent } from './gene-overview/evidence-menu/metabolomics';
 import { GeneDruggabilityComponent } from './gene-overview/gene-druggability';
+import { ExpValidationComponent } from './gene-overview/exp-validation';
 
 export const routes: Routes = [
     { path: 'genes', component: GenesViewComponent, children: [
@@ -34,7 +35,9 @@ export const routes: Routes = [
         { path: 'rna', component: RNAComponent, outlet: 'gene-overview' },
         { path: 'proteomics', component: ProteomicsComponent, outlet: 'gene-overview' },
         { path: 'metabolomics', component: MetabolomicsComponent, outlet: 'gene-overview' },
-        { path: 'druggability', component: GeneDruggabilityComponent, outlet: 'gene-overview'}
+        { path: 'druggability', component: GeneDruggabilityComponent, outlet: 'gene-overview'},
+        { path: 'exp-validation', component: ExpValidationComponent, outlet: 'gene-overview'}
+
     ] },
     { path: '', redirectTo: 'genes', pathMatch: 'full' }
 ];

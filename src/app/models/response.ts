@@ -1,4 +1,4 @@
-import { Gene, GeneNetworkLinks, GeneInfo } from '.';
+import { Gene, GeneNetworkLinks, GeneInfo, GeneExpValidation } from '.';
 
 export interface LinksListResponse {
     items: GeneNetworkLinks[];
@@ -24,6 +24,7 @@ export interface GenesSameIdResponse {
 export interface GeneResponse {
     item: Gene;
     info: GeneInfo;
+    expValidation: GeneExpValidation[] | undefined;
 }
 
 export interface GeneInfosResponse {

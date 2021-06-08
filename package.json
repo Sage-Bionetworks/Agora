@@ -2,7 +2,7 @@
   "name": "agora",
   "version": "2.1.1",
   "data-file": "syn13363290",
-  "data-version": "17",
+  "data-version": "22",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -215,7 +215,7 @@
     "optimize-js-plugin": "^0.0.4",
     "parse5": "^5.1.1",
     "popper.js": "^1.16.1",
-    "postcss": "^7.0.27",
+    "postcss": "^8.2.10",
     "postcss-loader": "^3.0.0",
     "puppeteer": "^1.20.0",
     "raw-loader": "^1.0.0",
