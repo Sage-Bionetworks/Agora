@@ -90,12 +90,12 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: ['.ts', '.js', '.json'],
+      extensions: ['.ts', '.tsx', '.js', '.json'],
 
       /**
        * An array of directory names to be resolved to the current directory
        */
-      modules: [helpers.root('src'), helpers.root('node_modules')],
+      modules: [helpers.root('src'), helpers.root('node_modules'), "node_modules"],
 
       /**
        * Add support for lettable operators.
@@ -144,7 +144,7 @@ module.exports = function (options) {
          *
          */
         {
-          test: /\.scss$/,
+          test: /\.(sass|css|scss)$/,
           use: ['to-string-loader', 'css-loader', {
             loader: 'postcss-loader',
             options: {
