@@ -36,10 +36,6 @@
       "timeEnd",
       "trace"
     ],
-    "max-line-length": [
-      true,
-      100
-    ],
     "no-string-literal": false,
     "no-use-before-declare": true,
     "object-literal-sort-keys": false,
@@ -59,6 +55,7 @@
     "rxjs-collapse-imports": true,
     "rxjs-pipeable-operators-only": true,
     "rxjs-no-static-observable-methods": true,
-    "rxjs-proper-imports": true
+    "rxjs-proper-imports": true,
+    "arrow-parens": ["as-needed"]
   }
 }
