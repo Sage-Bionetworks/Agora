@@ -177,7 +177,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "bootstrap": "^4.4.1",
     "browser-update": "^3.3.16",
-    "browserslist": "^4.11.1",
+    "browserslist": "^4.16.5",
     "codelyzer": "^5.2.2",
     "compression": "^1.7.4",
     "copy-webpack-plugin": "^4.6.0",
