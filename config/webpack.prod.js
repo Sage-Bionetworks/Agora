@@ -20,8 +20,8 @@ const commonConfig = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const TerserPlugin = require("terser-webpack-plugin");
 
 /***
  * Ref: https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
@@ -153,12 +153,12 @@ module.exports = function (env) {
          *
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
-        new UglifyJsPlugin({
-          sourceMap: true,
-          parallel: true,
-          cache: helpers.root('webpack-cache/uglify-cache'),
-          uglifyOptions: getUglifyOptions(supportES2015, true)
-        })
+          new TerserPlugin({
+              parallel: true,
+              terserOptions: {
+                  ecma: 6,
+              },
+          })
       ],
       splitChunks: {
         chunks: 'all'
