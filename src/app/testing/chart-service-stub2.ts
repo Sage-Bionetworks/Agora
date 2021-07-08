@@ -1,4 +1,4 @@
-// A copy of chart-service-stub to support data field name refactoring. 
+// A copy of chart-service-stub to support data field name refactoring.
 
 import { Injectable } from '@angular/core';
 

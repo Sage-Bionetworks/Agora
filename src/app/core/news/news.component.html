@@ -10,34 +10,5 @@
     <h2>
         What's New
     </h2>
-    <div class="row content-row" dir="ltr">
-        <div class="col-md-12 col-sm-12 col-12">
-            <div *ngFor="let newsObj of news" class="container no-margin news-container" tabindex="0">
-                <div class="row data-row">{{newsObj.data}}</div>
-                <div *ngFor="let newsEntry of newsObj.entry" class="row" tabindex="0">
-                    <div class="col-md-12 col-sm-12 col-12 no-padding-bottom">
-                        <h3 class="no-margin-bottom no-margin-top no-padding-bottom">{{newsEntry.header}}</h3>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-12 body-col">
-                        {{newsEntry.body}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <h1 class="inner-section-divider"></h1>
-    <h2>
-        Coming Soon
-    </h2>
-    <div class="row content-row" dir="ltr">
-        <div class="col-md-12 col-sm-12 col-12">
-            <div class="container no-margin news-container" tabindex="0">
-                <div class="row" tabindex="0">
-                    <div class="col-md-12 col-sm-12 col-12 body-col">
-                        RNAseq data from AD mouse models will be released.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="news-container" #wikiNews></div>
 </div>

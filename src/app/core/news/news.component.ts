@@ -1,6 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { News } from '../../models';
+import { Component, ViewEncapsulation, OnChanges, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import MarkdownSynapse, { MarkdownSynapseProps } from 'synapse-react-client/dist/containers/MarkdownSynapse';
+import { SynapseClient } from 'synapse-react-client';
+import { SynapseContextProvider } from 'synapse-react-client/dist/utils/SynapseContext';
 
 @Component({
     selector: 'news',
@@ -8,93 +11,39 @@ import { News } from '../../models';
     styleUrls: [ './news.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class NewsComponent implements OnInit {
-    news: News[] = [];
+export class NewsComponent implements OnChanges, AfterViewInit {
+    @ViewChild('wikiNews') containerRef: ElementRef;
 
-    ngOnInit() {
-        // Init the news array
-        this.initNews();
+    private hasViewLoaded = false;
+
+    public ngOnChanges() {
+        this.renderComponent();
     }
 
-    viewSynapseReg() {
-        window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
+    public ngAfterViewInit() {
+        this.hasViewLoaded = true;
+        this.renderComponent();
     }
 
-    initNews() {
-        this.news = [
-            {
-                data: 'JULY 2020',
-                entry: [
-                    {
-                        header: 'RNA Evidence',
-                        body: 'A plot that depicts associations between gene expression levels and clinical and neuropathology phenotypes is now available.'
-                    }
-                ]
-            },
-            {
-                data: 'MARCH 2020',
-                entry: [
-                    {
-                        header: 'Druggability Information',
-                        body: 'A new version of druggability classifications has been incorporated.'
-                    }
-                ]
-            },
-            {
-                data: 'JULY 2019',
-                entry: [
-                    {
-                        header: 'Druggability Information',
-                        body: 'Druggability buckets have been updated with two additional ' +
-                        'categories: antibody feasibility and safety.'
-                    },
-                    {
-                        header: 'Proteomic Data',
-                        body: 'Differential protein expression between AD cases and controls ' +
-                        'is now available.'
-                    },
-                    {
-                        header: 'Metabolomic Data',
-                        body: 'Differential abundance of metabolites between AD cases and ' +
-                        'controls is now available.'
-                    }
-                ]
-            },
-            {
-                data: 'JUNE 2019',
-                entry: [
-                    {
-                        header: 'Nominated Targets',
-                        body: 'Researchers outside the AMP-AD consortium have submitted ' +
-                        'nominated targets.'
-                    },
-                    {
-                        header: 'Druggability Information',
-                        body: 'Small Molecule Druggability is now available for all genes ' +
-                        'across the genome.'
-                    }
-                ]
-            },
-            {
-                data: 'MAY 2019',
-                entry: [
-                    {
-                        header: 'Nominated Targets',
-                        body: 'The total number of AMP-AD nominated targets has increased ' +
-                        'to 500 targets.'
-                    }
-                ]
-            },
-            {
-                data: 'MARCH 2019',
-                entry: [
-                    {
-                        header: 'Transcriptomic Data',
-                        body: 'Differential expression from RNAseq is now available for all ' +
-                        'genes with measurable expression across the genome.'
-                    }
-                ]
+    private renderComponent() {
+        if (!this.hasViewLoaded) {
+            return;
+        }
+        const newsProps: MarkdownSynapseProps = {
+            ownerId: 'syn25913473',
+            wikiId: '611426'
+        };
+        const newsContent = React.createElement(MarkdownSynapse, newsProps);
+        const props = {
+            synapseContext: {
+                accessToken: undefined,
+                isInExperimentalMode: false,
+                utcTime: SynapseClient.getUseUtcTimeFromCookie()
             }
-        ];
+        };
+        ReactDOM.render(
+            React.createElement(SynapseContextProvider, props, newsContent),
+            this.containerRef.nativeElement
+        );
     }
 }

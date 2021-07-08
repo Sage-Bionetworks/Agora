@@ -6,6 +6,5 @@ export * from './teamInfo';
 export * from './response';
 export * from './proteomics';
 export * from './metabolomics';
-export * from './misc';
 export * from './neuropathCorr';
 export * from './geneExpValidation';
