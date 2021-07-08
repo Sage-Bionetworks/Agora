@@ -168,6 +168,13 @@ module.exports = function (env) {
       clearImmediate: false,
       setImmediate: false,
       fs: 'empty'
-    }
+    },
+
+    /**
+     * Only output errors and warnings in log to prevent exceeding the maximum log length error
+     * https://webpack.js.org/configuration/stats/
+    */
+    stats: 'errors-warnings'
+
   });
 }
