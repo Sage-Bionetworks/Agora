@@ -20,36 +20,8 @@ const commonConfig = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-
-/***
- * Ref: https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
- * @param supportES2015
- * @param enableCompress disabling compress could improve the performance, see https://github.com/webpack/webpack/issues/4558#issuecomment-352255789
- * @returns {{ecma: number, warnings: boolean, ie8: boolean, mangle: boolean, compress: {pure_getters: boolean, passes: number}, output: {ascii_only: boolean, comments: boolean}}}
- */
-function getUglifyOptions(supportES2015, enableCompress) {
-  const uglifyCompressOptions = {
-    pure_getters: true /* buildOptimizer */,
-    // PURE comments work best with 3 passes.
-    // See https://github.com/webpack/webpack/issues/2899#issuecomment-317425926.
-    passes: 3 /* buildOptimizer */
-  };
-
-  return {
-    ecma: supportES2015 ? 6 : 5,
-    warnings: false, // TODO verbose based on option?
-    ie8: false,
-    mangle: true,
-    // compress: enableCompress ? uglifyCompressOptions : false,
-    compress: false,
-    output: {
-      ascii_only: true,
-      comments: false
-    }
-  };
-}
+const TerserPlugin = require("terser-webpack-plugin");  // replace uglifyjs-webpack-plugin because it doesn't support es6
 
 module.exports = function (env) {
   const ENV = (process.env.mode = process.env.NODE_ENV = process.env.ENV = 'production');
@@ -153,12 +125,12 @@ module.exports = function (env) {
          *
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
-        new UglifyJsPlugin({
-          sourceMap: true,
-          parallel: true,
-          cache: helpers.root('webpack-cache/uglify-cache'),
-          uglifyOptions: getUglifyOptions(supportES2015, true)
-        })
+          new TerserPlugin({
+              parallel: true,
+              terserOptions: {
+                  ecma: 6,
+              },
+          })
       ],
       splitChunks: {
         chunks: 'all'
@@ -191,11 +163,12 @@ module.exports = function (env) {
     node: {
       global: true,
       crypto: 'empty',
-      process: false,
+      process: true,
       module: false,
       clearImmediate: false,
       setImmediate: false,
       fs: 'empty'
     }
+
   });
 }
