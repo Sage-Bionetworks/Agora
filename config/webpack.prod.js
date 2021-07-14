@@ -1,32 +1,19 @@
 /**
  * @author: @AngularClass
  */
-const helpers = require('./helpers');
-const buildUtils = require('./build-utils');
-
-/**
- * Used to merge webpack configs
-*/
-const webpackMerge = require('webpack-merge');
-/**
- * The settings that are common to prod and dev
-*/
-const commonConfig = require('./webpack.common.js');
-
-/**
- * Webpack Plugins
- */
 
 const webpack = require('webpack');
+const helpers = require('./helpers');
+const buildUtils = require('./build-utils');
+const webpackMerge = require('webpack-merge'); // used to merge webpack configs
+const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin');
-const autoprefixer = require('autoprefixer');
 const TerserPlugin = require("terser-webpack-plugin");  // replace uglifyjs-webpack-plugin because it doesn't support es6
 
 module.exports = function (env) {
   const ENV = (process.env.mode = process.env.NODE_ENV = process.env.ENV = 'production');
-  const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
-  const sourceMapEnabled = process.env.SOURCE_MAP === '1';
   const Analyzer = process.env.Analyzer || false;
 
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
@@ -117,19 +104,17 @@ module.exports = function (env) {
     optimization: {
       minimizer: [
         /**
-         * Plugin: UglifyJsPlugin
-         * Description: Minimize all JavaScript output of chunks.
+         * Plugin: TerserPlugin
+         * Description: Replace UglifyJsPlugin to support es6.
+         * Minimize all JavaScript output of chunks.
          * Loaders are switched into minimizing mode.
-         *
-         * See: https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
-         *
-         * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
           new TerserPlugin({
               parallel: true,
               terserOptions: {
                   ecma: 6,
-              },
+                  compress: false // disable so it doesn't break 3rd party libraries while files still minimized.
+              }
           })
       ],
       splitChunks: {
