@@ -46,6 +46,8 @@ export interface GeneInfo {
     new_modality_bucket_definition?: string;
     brain_regions?: string;
     num_brain_regions?: string;
+    isAnyRNAChangedInADBrain?: boolean;
+    isAnyProteinChangedInADBrain?: boolean;
 }
 
 export interface MedianExpression {

@@ -61,11 +61,20 @@ export class SOEComponent implements OnInit {
             {
                 property: {
                     title: 'RNA Expression Change in AD Brain',
-                    description: 'Indicates whether or not this gene shows significant differential expression in at least one brain region based on AMP-AD consortium work.'},
-                    state: (this.geneInfo.isChangedInADBrain === undefined) ?
-                        false : this.geneInfo.isChangedInADBrain,
+                    description: 'Indicates whether or not this gene shows significant differential expression in at least one brain region based on AMP-AD consortium work. See \'EVIDENCE\' tab.'},
+                    state: (this.geneInfo.isAnyRNAChangedInADBrain === undefined) ?
+                        false : this.geneInfo.isAnyRNAChangedInADBrain,
                     hasLink: false,
                     extraText: ''
+            },
+            {
+                property: {
+                    title: 'Protein Expression Change in AD Brain',
+                    description: 'Indicates whether or not this gene shows significant differential protein expression in at least one brain region based on AMP-AD consortium work. See \'EVIDENCE\' tab.'},
+                state: (this.geneInfo.isAnyProteinChangedInADBrain === undefined) ?
+                    false : this.geneInfo.isAnyProteinChangedInADBrain,
+                hasLink: false,
+                extraText: ''
             },
             {
                 property: {
@@ -76,79 +85,6 @@ export class SOEComponent implements OnInit {
                     false : this.geneInfo.nominations,
                 hasLink: false,
                 extraText: ''
-            },
-            {
-                property: {
-                    title: 'Gene Ontology',
-                    description: 'Provides a link out to gene ontology information in Ensembl.'
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit Ensembl',
-                command: (event) => this.openExternalLink(
-                    `https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=${this.gene.ensembl_gene_id}`
-                )
-            },
-            {
-                property: {
-                    title: 'Reactome Pathways',
-                    description:  'Provides a link out to reactome pathway information in Ensembl.'
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit Ensembl',
-                command: (event) => this.openExternalLink(
-                    `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene.ensembl_gene_id}`
-                )
-            },
-            {
-                property: {
-                    title: 'Evidence for AD Association',
-                    description: 'Provides a link out to the Open Targets site, which collates various forms of evidence for a gene\'s association to AD.'
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit Open Targets',
-                command: (event) => this.openExternalLink(
-                    `https://platform.opentargets.org/evidence/${this.gene.ensembl_gene_id}/EFO_0000249`
-                )
-            },
-            {
-                property: {
-                    title: 'Cell Type Specificity',
-                    description: 'Provides a link out to the Brain RNAseq site, which hosts single-cell RNAseq data.'
-
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit Brain RNAseq',
-                command: (event) => this.openExternalLink(
-                    `http://www.brainrnaseq.org/`
-                )
-            },
-            {
-                property: {
-                    title: 'Explore Genetic Evidence on NIAGADS',
-                    description: 'Provides a link out to the National Institute on Aging Alzheimer\'s Genetics of Alzheimer\'s Disease Data Storage Site (NIAGADS) Genomics Database.'
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit Alzheimer\'s Genomics Database',
-                command: (event) => this.openExternalLink(
-                    `https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=${this.gene.ensembl_gene_id}`
-                )
-            },
-            {
-                property: {
-                    title: 'Explore the Alzheimer\'s Disease Atlas',
-                    description: 'Provides a link out to the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.'
-                },
-                state: true,
-                hasLink: true,
-                extraText: 'Visit the AD Atlas',
-                command: (event) => this.openExternalLink(
-                    `https://adatlas.org/?geneID=${this.gene.ensembl_gene_id}`
-                )
             }
         ];
 
