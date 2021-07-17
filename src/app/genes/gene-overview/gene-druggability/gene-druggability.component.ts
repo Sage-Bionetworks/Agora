@@ -7,6 +7,15 @@ import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
+
+// TODO: Update tab label and dialog link text?
+export type GeneResourceType = {
+    title: string,
+    description: string,
+    linkText: string,
+    link: string
+}
+
 @Component({
     selector: 'gene-druggability',
     templateUrl: './gene-druggability.component.html',
@@ -27,6 +36,7 @@ export class GeneDruggabilityComponent implements OnInit {
     currentBucketAB: number = 1;
     currentBucketSF: number = 1;
     classes: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
+    additionalResources: GeneResourceType[] = []
 
     constructor(
         private route: ActivatedRoute,
@@ -45,6 +55,7 @@ export class GeneDruggabilityComponent implements OnInit {
             this.currentBucketAB = this.geneInfo.druggability[0].abability_bucket;
             this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
         }
+        this.setAdditionalResources()
     }
 
     getDruggabilitySMTitle(bucket: number): string {
@@ -329,5 +340,52 @@ export class GeneDruggabilityComponent implements OnInit {
                 this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
             }
         }
+    }
+
+    setAdditionalResources() {
+        this.additionalResources = [
+            {
+                title: 'Open Targets',
+                description: 'View this gene on Open Targets, a resource that provides evidence on the validity of therapeutic targets based on genome-scale experiments and analysis.',
+                linkText: 'Visit Open Targets',
+                link: `https://platform.opentargets.org/target/${this.gene.ensembl_gene_id}`
+            },
+            {
+                title: 'Pharos',
+                description: `View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the Illuminating the Druggable Genome program.`,
+                linkText: 'Visit Pharos',
+                link: `https://pharos.nih.gov/search?q=%22${this.gene.hgnc_symbol}%22`
+            },
+            {
+                title: 'Brain RNAseq',
+                description: 'Search for this gene on the Brain RNAseq site, which hosts single-cell RNAseq data.',
+                linkText: 'Visit BrainRNAseq',
+                link: `http://www.brainrnaseq.org/`
+            },
+            {
+                title: 'Genomics DB',
+                description: 'View this gene on the National Institute on Aging Alzheimer\'s Genetics of Alzheimer\'s Disease Data Storage Site (NIAGADS) Genomics Database.',
+                linkText: 'Visit Genomics DB',
+                link: `https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=${this.gene.ensembl_gene_id}`
+            },
+            {
+                title: 'AD Atlas',
+                description: 'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.',
+                linkText: 'Visit AD Atlas',
+                link: `https://adatlas.org/?geneID=${this.gene.ensembl_gene_id}`
+            },
+            {
+                title: 'Gene Ontology',
+                description: 'View the gene ontology information for this gene on Ensembl.',
+                linkText: 'Visit Ensembl',
+                link: `https://www.ensembl.org/Homo_sapiens/Gene/Ontologies/molecular_function?g=${this.gene.ensembl_gene_id}`
+            },
+            {
+                title: 'Reactome Pathways',
+                description:  'View the reactome pathway information for this gene on Ensembl.',
+                linkText: 'Visit Ensembl',
+                link: `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene.ensembl_gene_id}`
+            }
+        ]
     }
 }
