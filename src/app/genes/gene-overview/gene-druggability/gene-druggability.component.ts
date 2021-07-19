@@ -8,7 +8,6 @@ import { GeneService } from '../../../core/services';
 import * as d3 from 'd3';
 
 
-// TODO: Update tab label and dialog link text?
 export type GeneResourceType = {
     title: string,
     description: string,

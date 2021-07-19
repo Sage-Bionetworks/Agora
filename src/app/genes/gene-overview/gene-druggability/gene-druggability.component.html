@@ -5,7 +5,7 @@
     <p class="druggability-description">
         AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.
     </p>
-    <more-info [name]="'dg'">
+    <more-info [name]="'dg'" [text]="'Learn more about the analysis'">
         <dg-dialog [name]="'dg'"></dg-dialog>
     </more-info>
 </div>
@@ -230,16 +230,21 @@
     </p-accordionTab>
 </p-accordion>
 
-<div *ngIf="geneInfo" class="section-thin" tabindex="0">
-    <h2>
-        Additional Resources
-    </h2>
-    <p>These external sites provide useful AD-specific or general information for exploring targets.</p>
-    <div *ngFor="let r of additionalResources; let i = index" class="row tab-row last-row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">{{r.title}}</div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="{{r.link}}" target="_blank">{{r.linkText}}</a>
+<div *ngIf="geneInfo" tabindex="0">
+    <div class="section-thin">
+        <h2>
+            Additional Resources
+        </h2>
+        <p>These external sites provide useful AD-specific or general information for exploring targets.</p>
+    </div>
+    <div class="section-thin">
+        <div *ngFor="let r of additionalResources; let i = index" class="row tab-row last-row">
+            <div class="col-md-3 col-sm-8 col-8 header-title">{{r.title}}</div>
+            <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+                <a class="link no-bold" href="{{r.link}}" target="_blank">{{r.linkText}}</a>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12 header-description">{{r.description}}</div>
         </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">{{r.description}}</div>
     </div>
 </div>
+
