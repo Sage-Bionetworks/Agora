@@ -74,7 +74,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         NOMINATION_DETAILS: 'NOMINATION DETAILS',
         SUMMARY: 'SUMMARY',
         EVIDENCE: 'EVIDENCE',
-        DRUGGABILITY: 'DRUGGABILITY',
+        RESOURCES: 'RESOURCES',
         EXPERIMENTAL_VALIDATION: 'EXPERIMENTAL VALIDATION'
     };
 
@@ -167,7 +167,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                     }
                 ]
             },
-            { label: this.tabMenuLabels.DRUGGABILITY, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.RESOURCES, disabled: this.disableMenu },
             { label: this.tabMenuLabels.EXPERIMENTAL_VALIDATION, disabled: this.disableMenu }
         ];
     }
@@ -235,7 +235,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                             }
                         }, this.extras);
                         break;
-                    case this.tabMenuLabels.DRUGGABILITY:
+                    case this.tabMenuLabels.RESOURCES:
                         if (this.geneInfo.druggability) {
                             this.navService.setOvMenuTabIndex(this.items.length - 2);
                         }
