@@ -12,6 +12,7 @@
     "importHelpers": true,
     "strictNullChecks": false,
     "downlevelIteration": true,
+    "skipLibCheck": true,
     "lib": [
       "dom",
       "es6"
