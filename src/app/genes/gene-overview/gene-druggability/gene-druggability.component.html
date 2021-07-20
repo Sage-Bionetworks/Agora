@@ -3,10 +3,9 @@
         Druggability of {{geneInfo.hgnc_symbol}}
     </h2>
     <p class="druggability-description">
-        AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources
-        and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.
+        AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.
     </p>
-    <more-info [name]="'dg'">
+    <more-info [name]="'dg'" [text]="'Learn more about the analysis'">
         <dg-dialog [name]="'dg'"></dg-dialog>
     </more-info>
 </div>
@@ -231,32 +230,21 @@
     </p-accordionTab>
 </p-accordion>
 
-<div *ngIf="geneInfo" class="section-thin" tabindex="0">
-    <h2>
-        Additional Resources
-    </h2>
-    <div class="row tab-row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">
-            Open Targets
-        </div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="https://platform.opentargets.org/target/{{gene.ensembl_gene_id}}" target="_blank">Visit Open Targets</a>
-        </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">
-            View this gene on Open Targets, a resource that provides evidence on the validity of therapeutic
-            targets based on genome-scale experiments and analysis.
-        </div>
+<div *ngIf="geneInfo" tabindex="0">
+    <div class="section-thin">
+        <h2>
+            Additional Resources
+        </h2>
+        <p>These external sites provide useful AD-specific or general information for exploring targets.</p>
     </div>
-    <div class="row tab-row last-row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">
-            Pharos
-        </div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="https://pharos.nih.gov/search?q=%22{{gene.hgnc_symbol}}%22" target="_blank">Visit Pharos</a>
-        </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">
-            View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the
-            Illuminating the Druggable Genome program.
+    <div class="section-thin">
+        <div *ngFor="let r of additionalResources; let i = index" class="row tab-row last-row">
+            <div class="col-md-3 col-sm-8 col-8 header-title">{{r.title}}</div>
+            <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+                <a class="link no-bold" href="{{r.link}}" target="_blank">{{r.linkText}}</a>
+            </div>
+            <div class="col-md-6 col-sm-12 col-12 header-description">{{r.description}}</div>
         </div>
     </div>
 </div>
+
