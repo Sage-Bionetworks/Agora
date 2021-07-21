@@ -218,9 +218,9 @@ describe('Component: GeneOverview', () => {
         expect(navService.getOvMenuTabIndex()).toEqual(2);
 
         component.menu.activeItem = null;
-        component.activateMenu({target: {textContent: 'DRUGGABILITY'}});
-        expect(component.activeItem).toEqual({label: 'DRUGGABILITY'});
-        expect(component.activeItem.label).toEqual('DRUGGABILITY');
+        component.activateMenu({target: {textContent: 'RESOURCES'}});
+        expect(component.activeItem).toEqual({label: 'RESOURCES'});
+        expect(component.activeItem.label).toEqual('RESOURCES');
         expect(navService.getOvMenuTabIndex()).toEqual(3);
 
         component.menu.activeItem = null;
