@@ -7,13 +7,12 @@ import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
-
 export type GeneResourceType = {
     title: string,
     description: string,
     linkText: string,
     link: string
-}
+};
 
 @Component({
     selector: 'gene-druggability',
@@ -35,7 +34,7 @@ export class GeneDruggabilityComponent implements OnInit {
     currentBucketAB: number = 1;
     currentBucketSF: number = 1;
     classes: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
-    additionalResources: GeneResourceType[] = []
+    additionalResources: GeneResourceType[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -54,7 +53,7 @@ export class GeneDruggabilityComponent implements OnInit {
             this.currentBucketAB = this.geneInfo.druggability[0].abability_bucket;
             this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
         }
-        this.setAdditionalResources()
+        this.setAdditionalResources();
     }
 
     getDruggabilitySMTitle(bucket: number): string {
@@ -385,6 +384,6 @@ export class GeneDruggabilityComponent implements OnInit {
                 linkText: 'Visit Ensembl',
                 link: `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene.ensembl_gene_id}`
             }
-        ]
+        ];
     }
 }
