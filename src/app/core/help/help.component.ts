@@ -1,4 +1,9 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnChanges, AfterViewInit, ViewChild, ElementRef  } from '@angular/core';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import MarkdownSynapse, { MarkdownSynapseProps } from 'synapse-react-client/dist/containers/MarkdownSynapse';
+import { SynapseClient } from 'synapse-react-client';
+import { SynapseContextProvider } from 'synapse-react-client/dist/utils/SynapseContext';
 
 @Component({
   selector: 'help',
@@ -6,12 +11,43 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: [ './help.component.scss' ],
   encapsulation: ViewEncapsulation.None
 })
-export class HelpComponent {
-    constructor() {
-        //
+export class HelpComponent implements OnChanges, AfterViewInit {
+    @ViewChild('wikiHelp') containerRef: ElementRef;
+
+    private hasViewLoaded = false;
+
+    public ngOnChanges() {
+        this.renderComponent();
     }
 
-    sendEmail(clientMail: string) {
+    public ngAfterViewInit() {
+        this.hasViewLoaded = true;
+        this.renderComponent();
+    }
+
+    private renderComponent() {
+        if (!this.hasViewLoaded) {
+            return;
+        }
+        const newsProps: MarkdownSynapseProps = {
+            ownerId: 'syn25913473',
+            wikiId: '612057'
+        };
+        const newsContent = React.createElement(MarkdownSynapse, newsProps);
+        const props = {
+            synapseContext: {
+                accessToken: undefined,
+                isInExperimentalMode: false,
+                utcTime: SynapseClient.getUseUtcTimeFromCookie()
+            }
+        };
+        ReactDOM.render(
+            React.createElement(SynapseContextProvider, props, newsContent),
+            this.containerRef.nativeElement
+        );
+    }
+
+    sendEmail(clientMail: string) {  // TODO: Keep image contact us button?
         window.open(clientMail);
     }
 }
