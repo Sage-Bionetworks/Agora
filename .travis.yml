@@ -23,7 +23,6 @@ install:
 
 before_script:
   - export NODE_OPTIONS=--max_old_space_size=4096
-  - chromedriver-update 92.0.4515
 
 stages:
   - name: test
