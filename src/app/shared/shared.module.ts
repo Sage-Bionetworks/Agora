@@ -29,6 +29,7 @@ import { DownloadComponent } from './components/download';
 import { LoadingComponent } from './components/loading';
 import { LoadingPageComponent } from './components/loading-page';
 import { HttpErrorInterceptor } from './http-error';
+import { WikiComponent } from './components/wiki/wiki.component';
 
 import {
     AlertComponent,
@@ -62,7 +63,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         FocusDirective,
         NumbersPipe,
         ArraySortPipe,
-        OrderBy
+        OrderBy,
+        WikiComponent
     ],
     imports: [
         // Angular modules
@@ -120,7 +122,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         FocusDirective,
         NumbersPipe,
         ArraySortPipe,
-        OrderBy
+        OrderBy,
+        WikiComponent
     ]
 })
 // Changed the name so it does not conflict with primeng module

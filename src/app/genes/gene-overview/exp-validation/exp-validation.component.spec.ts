@@ -5,7 +5,7 @@ import {
 } from '@angular/core/testing';
 
 import { ExpValidationComponent } from './exp-validation.component';
-import {GeneServiceStub, mockExpValidation, RouterStub} from '../../../testing';
+import { GeneServiceStub, mockExpValidation, RouterStub } from '../../../testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { GeneService } from '../../../core/services';
 import { Router } from '@angular/router';

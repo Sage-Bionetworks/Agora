@@ -1397,16 +1397,7 @@ p-multiselectitem {
 }
 
 .link {
-    @include lato-font('normal');
-    cursor: pointer;
-    width: 100%;
-    line-height: normal;
-    font-size: $font-size-x-regular;
-    text-decoration: underline;
-    color: #5BB0B5 !important;
-    position: relative;
-    top: inherit;
-    left: inherit;
+  @include link
 }
 
 .custom-toast {
