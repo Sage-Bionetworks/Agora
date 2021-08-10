@@ -143,7 +143,7 @@
     "reflect-metadata": "^0.1.13",
     "rollbar": "^2.15.0",
     "rxjs": "^6.5.5",
-    "synapse-react-client": "^2.0.4",
+    "synapse-react-client": "^2.0.26",
     "ts-loader": "^5.4.5",
     "typescript": "^3.8.3",
     "zone.js": "~0.10.3"
