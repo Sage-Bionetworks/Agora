@@ -1,7 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { NavigationService } from '../services';
-
 @Component({
     selector: 'about',
     templateUrl: './about.component.html',
@@ -10,17 +8,11 @@ import { NavigationService } from '../services';
 })
 export class AboutComponent {
 
-    constructor(
-        private navService: NavigationService
-    ) {
-        //
+    wikiId = '612058';
+    classNames = 'section-thin about-desc';
+
+    constructor() {
+        // empty
     }
 
-    viewSynapseReg() {
-        window.open('https://www.synapse.org/#!RegisterAccount:0', '_blank');
-    }
-
-    getNavService() {
-        return this.navService;
-    }
 }

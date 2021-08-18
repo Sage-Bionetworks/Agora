@@ -9,36 +9,3 @@
         margin-bottom: 40px;
     }
 }
-
-.about-anchor {
-    color: $secondary-background;
-}
-
-.contact-us {
-    @include lato-font('normal');
-
-    color: $secondary-background;
-    line-height: normal;
-    font-size: $font-size-x-regular;
-}
-.content-row {
-    @include lato-font('normal');
-    margin-bottom: 45px;
-    font-size: $font-size-x-regular;
-    color: color(text, secondary);
-}
-
-.italic-bold {
-    @include lato-font('bold', italic);
-    font-size: $font-size-x-regular;
-    color: color(text, secondary);
-
-    .italic-bold-link {
-        color: #5BB0B5 !important;
-        cursor: pointer;
-
-        :hover {
-            text-decoration: underline;
-        }
-    }
-}

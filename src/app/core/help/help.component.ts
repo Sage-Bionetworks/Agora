@@ -7,11 +7,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class HelpComponent {
-    constructor() {
-        //
-    }
 
-    sendEmail(clientMail: string) {
-        window.open(clientMail);
+    wikiId = '612057';
+    classNames = 'section-thin help-desc';
+
+    constructor() {
+        // empty
     }
 }

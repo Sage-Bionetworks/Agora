@@ -1,10 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { NavigationServiceStub } from '../../testing';
-
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { AboutComponent } from './';
-
-import { NavigationService } from '../../core/services';
 
 describe('Component: Footer', () => {
     let component: AboutComponent;
@@ -15,14 +11,11 @@ describe('Component: Footer', () => {
             declarations: [
                 AboutComponent
             ],
-            providers: [
-                { provide: NavigationService, useValue: new NavigationServiceStub() }
-            ]
+            schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
 
         fixture = TestBed.createComponent(AboutComponent);
-
         component = fixture.componentInstance;
     }));
 
