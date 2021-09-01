@@ -6,10 +6,12 @@ export let GeneSchema: Schema = new Schema(
         ensembl_gene_id: {
             required: true,
             type: String,
+            index: true
         },
         hgnc_symbol: {
             required: true,
             type: String,
+            index: true
         },
         logfc: {
             required: false,
