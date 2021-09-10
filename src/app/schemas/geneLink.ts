@@ -5,13 +5,11 @@ export let GeneLinkSchema: Schema = new Schema(
     {
         geneA_ensembl_gene_id: {
             required: true,
-            type: String,
-            index: true
+            type: String
         },
         geneB_ensembl_gene_id: {
             required: true,
-            type: String,
-            index: true
+            type: String
         },
         geneA_external_gene_name: {
             required: false,
