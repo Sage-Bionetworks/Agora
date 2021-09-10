@@ -392,6 +392,7 @@ by the CI system.
 
 ## Deployment for New Data
 * First, update data version in `data-manifest.json` in [Agoara Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
+* If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`
 * Verify new data is in database.
 * Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files))
 
