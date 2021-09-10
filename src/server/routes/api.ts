@@ -87,7 +87,7 @@ connection.once('open', () => {
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
     // Group by id and sort by hgnc_symbol
-    const geneAggregateCursor = Genes.aggregate(
+    Genes.aggregate(
         [
             {
                 $sort: {
@@ -112,14 +112,9 @@ connection.once('open', () => {
                 }
             }
         ]
-    ).cursor({
-        batchSize: 50000
-    }).allowDiskUse(true).exec();
-
-    geneAggregateCursor.eachAsync((data) => {
-        allGenes.push(data);
-    }, { parallel: 5000 }).then(async (genes) => {
-
+    ).allowDiskUse(true).exec().then(async (genes) => {
+        // All the genes, ordered by hgnc_symbol
+        allGenes = genes.slice();
 
         await allGenes.forEach((g) => {
             // Separate the columns we need
