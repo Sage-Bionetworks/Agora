@@ -390,6 +390,11 @@ by the CI system.
 ## Builds
 * https://travis-ci.org/Sage-Bionetworks/Agora
 
+## Deployment for New Data
+* First, update data version in `data-manifest.json` in [Agoara Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
+* Verify new data is in database.
+* Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files))
+
 ## Style Guide and Project Structure
 
 This project follows the directions provided by the official [angular style guide](https://angular.io/guide/styleguide). Things that the guide state to keep in mind:
