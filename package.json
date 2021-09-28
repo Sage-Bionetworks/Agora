@@ -75,7 +75,7 @@
     "server:prod:ci": "http-server dist -p 8080 -c-1 --cors",
     "server:staging": "cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
     "server:wds": "npm run webpack-dev-server -- --config config/webpack.server.js --open --progress --profile --watch --content-base src/",
-    "start": "npm run server",
+    "start": "node --max_old_space_size=2000  ./dist/server.js",
     "start:mongo": "sh start-mongo.sh '/var/lib/mongodb/'",
     "start:mongo:windows": "sh start-mongo.sh 'C:\\data\\db'",
     "start:prod": "npm run watch:server:prod",
