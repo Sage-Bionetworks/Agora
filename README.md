@@ -164,12 +164,12 @@ to manually configure and register all the endpoints and mocks within this devel
 With the application built and the database waiting for connections, we issue the next command for the server. Open a third terminal and run the following command:
 
 ```bash
-npm start
+npm run server
 ```
 
 This is going to build the server using the configuration from the `nodemon-webpack-plugin`. Nodemon already watches for changes so any change done to files inside the `src/server` folder is going to rebuild the server.
 
-As a side note, you don't need to stop the server when changing client-side files, because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+As a side note, you don't need to stop the server when changing client-side files, because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm run server`.
 
 The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so that MongoDB won't crash**. To sum it up:
 
@@ -197,7 +197,7 @@ npm run build:aot
 ### server
 ```bash
 # development
-npm start
+npm run server
 # production
 npm run start:prod
 ```
@@ -205,6 +205,14 @@ npm run start:prod
 go to [http://0.0.0.0:8080](http://0.0.0.0:8080) in your browser.
 
 ## Other commands
+
+### AWS Elastic Beanstalk server start command
+
+AWS Elastic Beanstalk Node.js platform version 12 or above uses the `start` command in `package.json` file to start the application. This replaces the legacy NodeCommand option in the `aws:elasticbeanstalk:container:nodejs` namespace. [See details here.](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-packagejson) ***DO NOT MODIFY the `start` command in `package.json`*** . 
+
+```bash
+node --max_old_space_size=2000  ./dist/server.js
+```
 
 ### hot module replacement
 ```bash
