@@ -1,4 +1,9 @@
-import { Gene, GeneNetworkLinks, GeneInfo, GeneExpValidation } from '.';
+import {
+    Gene,
+    GeneNetworkLinks,
+    GeneInfo,
+    GeneExpValidation
+} from '.';
 
 export interface LinksListResponse {
     items: GeneNetworkLinks[];

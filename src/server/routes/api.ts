@@ -1,4 +1,11 @@
-import { Gene, GeneInfo, Proteomics, NeuropathCorr, GeneExpValidation } from '../../app/models';
+import {
+    Gene,
+    GeneInfo,
+    Proteomics,
+    NeuropathCorr,
+    GeneExpValidation,
+    GeneScoreDistribution
+} from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -8,6 +15,7 @@ import {
     GenesMetabolomics,
     NeuropathCorrs,
     GenesExperimentalValidation,
+    GenesScoreDistribution
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -77,6 +85,7 @@ connection.once('open', () => {
     let geneProteomics: Proteomics[] = [];
     let genesNeuroCorr: NeuropathCorr[] = [];
     let genesExpValidation: GeneExpValidation[] = [];
+    let geneScoreDistribution: GeneScoreDistribution[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -216,6 +225,15 @@ connection.once('open', () => {
                 next(err);
             } else {
                 genesExpValidation = genes.slice();
+            }
+        });
+
+    GenesScoreDistribution.find()
+        .exec(async (err, genes: GeneScoreDistribution[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                geneScoreDistribution = genes.slice();
             }
         });
 
@@ -1179,6 +1197,15 @@ connection.once('open', () => {
         }
         return noData;
     };
+
+    const getGeneScoreDistribution = (hgncId: string) => {
+        const noData = [];
+        if (!geneScoreDistribution.length) {  // if DB has error
+            console.log('geneScoreDistribution: Mongo DB return document length ', geneScoreDistribution.length);
+            return noData;
+        }
+
+    }
 });
 
 export default router;
