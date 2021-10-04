@@ -2,7 +2,7 @@
   "name": "agora",
   "version": "2.1.4",
   "data-file": "syn13363290",
-  "data-version": "22",
+  "data-version": "23",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
