@@ -164,12 +164,12 @@ to manually configure and register all the endpoints and mocks within this devel
 With the application built and the database waiting for connections, we issue the next command for the server. Open a third terminal and run the following command:
 
 ```bash
-npm start
+npm run server
 ```
 
 This is going to build the server using the configuration from the `nodemon-webpack-plugin`. Nodemon already watches for changes so any change done to files inside the `src/server` folder is going to rebuild the server.
 
-As a side note, you don't need to stop the server when changing client-side files, because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm start`.
+As a side note, you don't need to stop the server when changing client-side files, because they use different packaging pipes. You just need to restart the server when changing a route name or a configuration file, for instance. In this case, just stop the server and do another `npm run server`.
 
 The Express server will route the app for us and will communicate to MongoDB through Mongoose, the requests will be sent back to the Angular front-end. **Since we are loading a huge database locally, it is recommended that you have a good amount of RAM so that MongoDB won't crash**. To sum it up:
 
@@ -197,7 +197,7 @@ npm run build:aot
 ### server
 ```bash
 # development
-npm start
+npm run server
 # production
 npm run start:prod
 ```
@@ -205,6 +205,14 @@ npm run start:prod
 go to [http://0.0.0.0:8080](http://0.0.0.0:8080) in your browser.
 
 ## Other commands
+
+### AWS Elastic Beanstalk server start command
+
+AWS Elastic Beanstalk Node.js platform version 12 or above uses the `start` command in `package.json` file to start the application. This replaces the legacy NodeCommand option in the `aws:elasticbeanstalk:container:nodejs` namespace. [See details here.](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-packagejson) ***DO NOT MODIFY the `start` command in `package.json`*** . 
+
+```bash
+node --max_old_space_size=2000  ./dist/server.js
+```
 
 ### hot module replacement
 ```bash
@@ -365,6 +373,46 @@ If you're importing a module that uses Node.js modules which are CommonJS you ne
 import * as _ from 'lodash';
 ```
 
+# Local Development and Testing (Updated 9/30/2021)
+
+## Application Code Testing
+
+In a command window, start server by running:
+
+```
+npm run server
+```
+
+In a separate command window, start client by running:
+
+```
+npm run watch
+```
+
+Review your changes by going to `http://localhost:8080/`
+
+## New Data Testing
+
+1. New or updated data is usually in `json` format. Make sure you have MongoDB installed locally as described in "**Running the app**" section. Then you can import your json file to your local MongoDB database by running:
+
+```
+mongoimport --db agora --collection [add collection name here] --jsonArray --drop --file [path to the json file name]
+```
+
+More examples can be found [here](https://github.com/Sage-Bionetworks/Agora/blob/develop/mongo-import.sh). 
+
+2. Verified the data is successfully imported to the database. You may do that by using a GUI for MongoDB. The connection address to MongoDB in your local machine is `localhost` and the port number is `27017`. 
+
+## Before Deployment
+Before pushing code to the dev branch, we should follow these steps to make sure no errors during the build process. 
+
+1. Run `npm run test` to make sure no failed unit test
+2. Run `npm clean:all`. This removes the `./dist` folder
+3. Delete `node_modules`
+4. Run `npm install` to re-install the `node_modules`
+5. Run `npm run build:aot` to build the client code. In a separate command window, run `npm run build:server:prod` to build the server code
+6. Verify the Agora app is running without error in a browser by running the server script: `node --max_old_space_size=2000  ./dist/server.js`
+
 # Deployment
 
 ## Continuous Deployment
@@ -388,13 +436,18 @@ The .ebextensions files are packaged up with Agora and deployed to beanstalk
 by the CI system.
 
 ## Builds
-* https://travis-ci.org/Sage-Bionetworks/Agora
+* https://app.travis-ci.com/github/Sage-Bionetworks/Agora
 
-## Deployment for New Data
-* First, update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
-* If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`
-* Verify new data is in database.
-* Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files))
+## Deployment for New Data (Updated 9/30/2021)
+1. First, make sure the data file is available in [Synapse](https://www.synapse.org/#!Synapse:syn12177492)
+2. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). 
+3. If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
+4. Deploy your changes in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to dev branch. 
+5. Verify new data is in the database for the dev branch. 
+6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deployment the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
+7. Check new data shows up on [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
+8. Once verified, repeat step 4 to 7 to finish deployment to staging and production branches. 
+
 
 ## Style Guide and Project Structure
 
