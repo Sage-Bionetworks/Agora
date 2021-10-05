@@ -11,7 +11,6 @@ export type DistributionData = {
 }
 
 export interface GeneScoreDistribution {
-    _id: string;
     logsdon: DistributionData,
     geneticsscore: DistributionData,
     omicsscore: DistributionData,

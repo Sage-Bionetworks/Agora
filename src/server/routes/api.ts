@@ -745,6 +745,17 @@ connection.once('open', () => {
         }
     });
 
+    // Get gene scores distribution
+    router.get('/genescores', (req, res, next) => {
+        const noData = [];
+        if (!geneScoreDistribution.length) {  // if DB has error
+            console.log('geneScoreDistribution: Mongo DB return document length ', geneScoreDistribution.length);
+            return res.json(noData);
+        } else {
+            return res.json(geneScoreDistribution[0]);
+        }
+    });
+
     // Get a team by team field
     router.get('/teams', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
@@ -1198,14 +1209,6 @@ connection.once('open', () => {
         return noData;
     };
 
-    const getGeneScoreDistribution = (hgncId: string) => {
-        const noData = [];
-        if (!geneScoreDistribution.length) {  // if DB has error
-            console.log('geneScoreDistribution: Mongo DB return document length ', geneScoreDistribution.length);
-            return noData;
-        }
-
-    }
 });
 
 export default router;

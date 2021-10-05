@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { Gene, GeneInfo } from '../../../models';
-
-import { GeneService } from '../../../core/services';
+import {
+    Gene,
+    GeneInfo,
+    GeneScoreDistribution,
+} from '../../../models';
+import { ApiService, GeneService } from '../../../core/services';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'soe',
@@ -15,20 +18,34 @@ export class SOEComponent implements OnInit {
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
+    @Input() geneScoresResponse: Observable<GeneScoreDistribution>;
 
     cols: any[];
     summary: any[];
+    geneScores: any;
+    scoresDataLoaded: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private apiService: ApiService,
     ) {}
 
     ngOnInit() {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
-
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+
+        // Add gene scores distribution
+        this.geneScoresResponse = this.apiService.getAllGeneScores();
+        this.geneScoresResponse.subscribe((data: GeneScoreDistribution) => {
+            this.geneScores = data;
+            delete this.geneScores._id;
+        }, (error) => {
+            console.log('Error loading gene scores distribution: ' + error.message);
+        }, () => {
+            this.scoresDataLoaded = true;
+        });
 
         // Adds the summary entries
         this.initData();
