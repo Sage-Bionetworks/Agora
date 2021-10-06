@@ -100,10 +100,18 @@
     }
 }
 
-.ranking-scores .no-data {
+.ranking-scores {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 280px;
-  background: rgba(245, 245, 245, 0.5);
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    background: rgba(245, 245, 245, 0.5);
+  }
 }
+
+

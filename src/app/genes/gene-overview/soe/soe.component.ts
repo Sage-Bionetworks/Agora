@@ -28,9 +28,40 @@ export class SOEComponent implements OnInit {
         "literaturescore",
         "logsdon",
         "omicsscore",
-        "flyneuropathscore" 
+        // "flyneuropathscore"  // TODO: this should be deleted from data file soon
     ];
-    geneScores: any;
+    chartData: any;
+    commonBarSettings: any = {
+        config: {
+            displayModeBar: false
+        },
+        layout: {
+            width: 350,
+            xaxis: {
+                title: "Gene Score".toUpperCase(),
+                titlefont: {
+                    size: 12,
+                }
+            },
+            yaxis: {
+                title: "Number of Genes".toUpperCase(),
+                titlefont: {
+                    size: 12
+                }
+            },
+            plot_bgcolor: 'rgba(236, 236, 236, 0.25)',
+        }
+    }
+
+    getBarChartAnnotation() {
+        return [{
+            x: 0.3,
+            y: 5149,
+            text: "2.5",
+            ax: 0,
+            ay: -10
+        }]
+    }
 
     constructor(
         private route: ActivatedRoute,
@@ -46,29 +77,16 @@ export class SOEComponent implements OnInit {
         // Add gene scores distribution
         this.geneScoresResponse = this.apiService.getAllGeneScores();
         this.geneScoresResponse.subscribe((data: GeneScoreDistribution) => {
-
             const rawData: GeneScoreDistribution = data
             delete rawData._id; // id is not needed for looping in the UI
-            // delete rawData.flyneuropathscore
-            this.geneScores = this.scoreCategories.map(category => {
-                if (rawData[category]) {
-                    return {
-                        name: category,
-                        data: rawData[category]
-                    }
-                } else {
-                    return {
-                        name: category,
-                        data: {}
-                    }
-                }
-            });
-            // console.log(this.geneScores)
+            delete rawData.flyneuropathscore
+            this.chartData = this.initChartData(rawData)
         }, (error) => {
             console.log('Error loading gene scores distribution: ' + error.message);
         }, () => {
             this.scoresDataLoaded = true;
         });
+        console.log(this.chartData);
 
         // Adds the summary entries
         this.initData();
@@ -132,6 +150,31 @@ export class SOEComponent implements OnInit {
             { field: 'property', header: 'Property' },
             { field: 'state', header: 'State' }
         ];
+    }
+
+    initChartData(rawData) {
+        return this.scoreCategories.map(category => {
+            if (rawData[category]) {
+                return {
+                    name: category,
+                    data: [{
+                        x: rawData[category].bins.map(num => num.toFixed(2)),
+                        y: rawData[category].distribution,
+                        type: "bar",
+                        marker: {
+                            color: "rgba(166, 132, 238, 0.25)"
+                        }
+                    }],
+                    layout: this.commonBarSettings.layout,
+                    config: this.commonBarSettings.config,
+                }
+            } else {
+                return {
+                    name: category,
+                    data: {}
+                }
+            }
+        });
     }
 
     getText(state?: boolean): string {

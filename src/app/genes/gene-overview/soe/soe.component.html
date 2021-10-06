@@ -39,16 +39,18 @@
     <p>
         The TREAT-AD Center at Emory-Sage-SGC has developed a target ranking score encompassing genomics, genetics, neuropathology, and literature evidence.
     </p>
-    <div class="ranking-scores" *ngIf="geneScores">
-        <div>
-            <div *ngFor="let item of geneScores">
-                <h2>{{item.name}}</h2>
-                <div *ngIf="!item.data.distribution" class="no-data">
-                    <p>Data Unavailable</p>
-                </div>
-                <div *ngIf="item.data.distribution">
-                    <p>has data</p>
-                </div>
+    <div class="ranking-scores" *ngIf="chartData">
+        <div *ngFor="let item of chartData">
+            <h2>{{item.name}}</h2>
+            <div *ngIf="!item.data" class="no-data">
+                <p>Data Unavailable</p>
+            </div>
+            <div *ngIf="item.data">
+                <plotlywrapper
+                        [data]="item.data"
+                        [layout]="item.layout"
+                        [config]="item.config"
+                ></plotlywrapper>
             </div>
         </div>
     </div>
