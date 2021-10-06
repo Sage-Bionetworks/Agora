@@ -22,8 +22,15 @@ export class SOEComponent implements OnInit {
 
     cols: any[];
     summary: any[];
-    geneScores: any;
     scoresDataLoaded: boolean = false;
+    scoreCategories: string[] = [
+        "geneticsscore",
+        "literaturescore",
+        "logsdon",
+        "omicsscore",
+        "flyneuropathscore" 
+    ];
+    geneScores: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -39,8 +46,24 @@ export class SOEComponent implements OnInit {
         // Add gene scores distribution
         this.geneScoresResponse = this.apiService.getAllGeneScores();
         this.geneScoresResponse.subscribe((data: GeneScoreDistribution) => {
-            this.geneScores = data;
-            delete this.geneScores._id;
+
+            const rawData: GeneScoreDistribution = data
+            delete rawData._id; // id is not needed for looping in the UI
+            // delete rawData.flyneuropathscore
+            this.geneScores = this.scoreCategories.map(category => {
+                if (rawData[category]) {
+                    return {
+                        name: category,
+                        data: rawData[category]
+                    }
+                } else {
+                    return {
+                        name: category,
+                        data: {}
+                    }
+                }
+            });
+            // console.log(this.geneScores)
         }, (error) => {
             console.log('Error loading gene scores distribution: ' + error.message);
         }, () => {
