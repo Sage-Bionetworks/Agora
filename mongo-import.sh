@@ -10,6 +10,8 @@ mongoimport --db agora --collection genesproteomics --jsonArray --drop --file ./
 mongoimport --db agora --collection genesmetabolomics --jsonArray --drop --file ./metabolomics.json
 mongoimport --db agora --collection genesneuropathcorr --jsonArray --drop --file ./neuropath_corr.json
 mongoimport --db agora --collection geneexpvalidation --jsonArray --drop --file ./target_exp_validation_harmonized.json
+mongoimport --db agora --collection genescoredistribution --jsonArray --drop --file ./distribution_data.json
+mongoimport --db agora --collection genesoverallscores --jsonArray --drop --file ./overall_scores.json
 
 cd ./team_images
 ls -1r *.jpg *.jpeg *.png | while read x; do mongofiles -d agora -v put $x --replace; echo $x; done
