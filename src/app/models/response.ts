@@ -2,7 +2,8 @@ import {
     Gene,
     GeneNetworkLinks,
     GeneInfo,
-    GeneExpValidation
+    GeneExpValidation,
+    GeneOverallScores
 } from '.';
 
 export interface LinksListResponse {
@@ -30,6 +31,7 @@ export interface GeneResponse {
     item: Gene;
     info: GeneInfo;
     expValidation: GeneExpValidation[] | undefined;
+    overallScores: GeneOverallScores | undefined
 }
 
 export interface GeneInfosResponse {
