@@ -202,8 +202,7 @@ export class SOEComponent implements OnInit {
         let scoreX = null;
         let scoreY = null;
         let binNumber = null;
-        // -2 because we have 11 bins and 10 distribution data
-        const lastBarIndex = binData.bins.length - 2;
+        const lastBarIndex = binData.bins.length - 1;
 
         // rawData[category].min and rawData[category].bin[0] don't have the same min values
         if (score <= binData.bins[0]) {
