@@ -104,13 +104,15 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
 
-  .no-data {
+  .no-data, .chart-nodata{
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 280px;
     background: rgba(245, 245, 245, 0.5);
+    padding: 10rem;
   }
 }
 

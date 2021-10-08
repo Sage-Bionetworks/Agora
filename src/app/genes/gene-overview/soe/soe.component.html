@@ -42,9 +42,6 @@
     <div class="ranking-scores" *ngIf="chartData">
         <div *ngFor="let item of chartData">
             <h2>{{item.name}}</h2>
-            <div *ngIf="!item.data" class="no-data">
-                <p>Data Unavailable</p>
-            </div>
             <div *ngIf="item.data">
                 <plotlywrapper
                         [data]="item.data"
