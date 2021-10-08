@@ -31,7 +31,7 @@ export interface GeneResponse {
     item: Gene;
     info: GeneInfo;
     expValidation: GeneExpValidation[] | undefined;
-    overallScores: GeneOverallScores | undefined
+    overallScores: GeneOverallScores | undefined;
 }
 
 export interface GeneInfosResponse {

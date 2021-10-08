@@ -24,11 +24,11 @@ export class SOEComponent implements OnInit {
     summary: any[];
     scoresDataLoaded: boolean = false;
     scoreCategories: string[] = [
-        "geneticsscore",
-        "literaturescore",
-        "logsdon",
-        "omicsscore",
-        // "flyneuropathscore"  // TODO: this should be deleted from data file soon
+        'geneticsscore',
+        'literaturescore',
+        'logsdon',
+        'omicsscore',
+        // 'flyneuropathscore'  // TODO: this should be deleted from data file soon
     ];
     chartData: any;
     commonBarSettings: any = {
@@ -38,30 +38,20 @@ export class SOEComponent implements OnInit {
         layout: {
             width: 350,
             xaxis: {
-                title: "Gene Score".toUpperCase(),
+                title: 'Gene Score'.toUpperCase(),
                 titlefont: {
                     size: 12,
                 }
             },
             yaxis: {
-                title: "Number of Genes".toUpperCase(),
+                title: 'Number of Genes'.toUpperCase(),
                 titlefont: {
                     size: 12
                 }
             },
             plot_bgcolor: 'rgba(236, 236, 236, 0.25)',
         }
-    }
-
-    getBarChartAnnotation() {
-        return [{
-            x: 0.3,
-            y: 5149,
-            text: "2.5",
-            ax: 0,
-            ay: -10
-        }]
-    }
+    };
 
     constructor(
         private route: ActivatedRoute,
@@ -77,10 +67,10 @@ export class SOEComponent implements OnInit {
         // Add gene scores distribution
         this.geneScoresResponse = this.apiService.getAllGeneScores();
         this.geneScoresResponse.subscribe((data: GeneScoreDistribution) => {
-            const rawData: GeneScoreDistribution = data
+            const rawData: GeneScoreDistribution = data;
             delete rawData._id; // id is not needed for looping in the UI
-            delete rawData.flyneuropathscore
-            this.chartData = this.initChartData(rawData)
+            delete rawData.flyneuropathscore;
+            this.chartData = this.initChartData(rawData);
         }, (error) => {
             console.log('Error loading gene scores distribution: ' + error.message);
         }, () => {
@@ -153,28 +143,97 @@ export class SOEComponent implements OnInit {
     }
 
     initChartData(rawData) {
+        const annotationTextColor = 'rgba(166, 132, 238, 1)';
+        const overallScores = this.geneService.getCurrentGeneOverallScores();
+
+        // Data files sometimes have lowercase keys or camel case keys. Change all to lowercase
+        Object.keys(overallScores).forEach(key => {
+            overallScores[key.toLowerCase()] = overallScores[key];
+            delete overallScores[key];
+        });
+
         return this.scoreCategories.map(category => {
+
             if (rawData[category]) {
+                const score = overallScores[category];
+                const barColors = rawData[category].distribution.map(item => 'rgba(166, 132, 238, 0.25)');
+                let annotations = [];
+                if (score) {
+                    const annotationObj = this.getBarChartAnnotation(score, rawData[category]);
+                    annotations = [{
+                        x: annotationObj.scoreX,
+                        y: annotationObj.scoreY,
+                        text: `${score.toFixed(2)}`,
+                        ax: 0,
+                        ay: -10,
+                        font: {
+                            color: annotationTextColor,
+                        }
+                    }];
+                    barColors[annotationObj.binNumber] = annotationTextColor;
+                }
+
                 return {
                     name: category,
                     data: [{
                         x: rawData[category].bins.map(num => num.toFixed(2)),
                         y: rawData[category].distribution,
-                        type: "bar",
+                        type: 'bar',
                         marker: {
-                            color: "rgba(166, 132, 238, 0.25)"
+                            color: barColors
                         }
                     }],
-                    layout: this.commonBarSettings.layout,
+                    layout: {
+                        ...this.commonBarSettings.layout,
+                        annotations: annotations
+                    },
                     config: this.commonBarSettings.config,
-                }
+                };
             } else {
                 return {
                     name: category,
                     data: {}
-                }
+                };
             }
         });
+    }
+
+    getBarChartAnnotation(score, binData) {
+        let scoreX = null;
+        let scoreY = null;
+        let binNumber = null;
+        // -2 because we have 11 bins and 10 distribution data
+        const lastBarIndex = binData.bins.length - 2;
+
+        // rawData[category].min and rawData[category].bin[0] don't have the same min values
+        if (score <= binData.bins[0]) {
+            scoreX = binData.bins[0];
+            scoreY = binData.distribution[0];
+            binNumber = 0;
+        }
+
+        if (score > binData.bins[lastBarIndex]) {
+            scoreX = binData.bins[lastBarIndex];
+            scoreY = binData.distribution[binData.distribution.length - 1];
+            binNumber = lastBarIndex;
+        }
+
+        if (!scoreX) {
+            binData.bins.every((bin, i) => {
+                if (score > bin) {
+                    return true;
+                }
+                scoreX = binData.bins[i];
+                scoreY = binData.distribution[i];
+                binNumber = i;
+                return false;
+            });
+        }
+        return {
+            scoreX,
+            scoreY,
+            binNumber,
+        };
     }
 
     getText(state?: boolean): string {

@@ -7,7 +7,8 @@ import {
     GenesResponse,
     Metabolomics,
     LinksListResponse,
-    GeneExpValidation
+    GeneExpValidation,
+    GeneScoreDistribution, DistributionData, GeneOverallScores
 } from '../models';
 
 export const mockGene1: Gene = {
@@ -276,3 +277,31 @@ export const mockExpValidation: GeneExpValidation[] = [{
     Reference_doi: 'https://doi.org/10.15252/abc.123',
     Date_report: '01/01/2021',
 }];
+
+export const mockDistributionData = {
+    distribution: [1],
+    bins: [1],
+    min: 1,
+    max: 1,
+    mean: 1,
+    first_quartile: 1,
+    third_quartile: 1,
+};
+
+export const mockGeneScoreDistribution: GeneScoreDistribution = {
+    _id: 'string',
+    logsdon: mockDistributionData,
+    geneticsscore: mockDistributionData,
+    omicsscore: mockDistributionData,
+    literaturescore: mockDistributionData,
+    flyneuropathscore: mockDistributionData
+};
+
+export const mockGeneOverallScores: GeneOverallScores = {
+    _id: 'string',
+    GeneName: 'string',
+    Logsdon: 1,
+    GeneticsScore: 2,
+    OmicsScore: 3,
+    LiteratureScore: 4,
+};

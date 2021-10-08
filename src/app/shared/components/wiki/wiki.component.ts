@@ -29,7 +29,7 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() classNames: string;
 
     private hasViewLoaded = false;
-    classNameList = 'wiki ';
+    private classNameList = 'wiki ';
 
     constructor() {
         // empty
@@ -57,7 +57,7 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
 
         const wikiProps: MarkdownSynapseProps = {
             ownerId: this.ownId || 'syn25913473',
-            wikiId: this.wikiId 
+            wikiId: this.wikiId
         };
         const wikiContent = React.createElement(MarkdownSynapse, wikiProps);
         const props = {

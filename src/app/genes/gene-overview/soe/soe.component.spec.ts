@@ -11,15 +11,16 @@ import {
     ActivatedRouteStub,
     RouterStub,
     GeneServiceStub,
+    ApiServiceStub,
     mockInfo1,
-    mockGene1
+    mockGene1,
 } from '../../../testing';
 
 import { SOEComponent } from './soe.component';
 
 import { MoreInfoComponent } from 'app/dialogs/more-info';
 
-import { GeneService } from '../../../core/services';
+import { ApiService, GeneService } from '../../../core/services';
 
 import { MockComponent } from 'ng-mocks';
 
@@ -29,6 +30,7 @@ describe('Component: SOE', () => {
     let component: SOEComponent;
     let fixture: ComponentFixture<SOEComponent>;
     let geneService: GeneServiceStub;
+    let apiService: ApiServiceStub;
     let activatedRoute: any;
 
     beforeEach(async(() => {
@@ -44,7 +46,8 @@ describe('Component: SOE', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-                { provide: GeneService, useValue: new GeneServiceStub() }
+                { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: ApiService, useValue: new ApiServiceStub() }
             ]
         })
         .compileComponents();
@@ -53,6 +56,7 @@ describe('Component: SOE', () => {
 
         // Get the injected instances
         geneService = fixture.debugElement.injector.get(GeneService);
+        apiService = fixture.debugElement.injector.get(ApiService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
 

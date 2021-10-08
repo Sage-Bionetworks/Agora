@@ -9,4 +9,4 @@ export interface GeneOverallScores {
     LiteratureScore: number;
 }
 
-export type GeneOverallScoresDocument = GeneOverallScores & Document
+export type GeneOverallScoresDocument = GeneOverallScores & Document;

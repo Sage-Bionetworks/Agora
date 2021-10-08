@@ -30,7 +30,7 @@ import { LoadingComponent } from './components/loading';
 import { LoadingPageComponent } from './components/loading-page';
 import { HttpErrorInterceptor } from './http-error';
 import { WikiComponent } from './components/wiki/wiki.component';
-import { PlotlyWrapperComponent } from './components/plotly-wrapper/plotly-wrapper.component'
+import { PlotlyWrapperComponent } from './components/plotly-wrapper/plotly-wrapper.component';
 
 import {
     AlertComponent,
