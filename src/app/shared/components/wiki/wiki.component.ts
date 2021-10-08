@@ -28,8 +28,8 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() wikiId: string;
     @Input() classNames: string;
 
+    classNameList = 'wiki ';
     private hasViewLoaded = false;
-    private classNameList = 'wiki ';
 
     constructor() {
         // empty

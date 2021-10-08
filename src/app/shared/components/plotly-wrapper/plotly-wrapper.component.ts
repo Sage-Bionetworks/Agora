@@ -30,8 +30,8 @@ export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit 
     @Input() containerWidth: number;
     @Input() classNames: string;
 
+    classNameList = 'plotlywrapper ';
     private hasViewLoaded = false;
-    private classNameList = 'plotlywrapper ';
 
     constructor() {
         // empty
