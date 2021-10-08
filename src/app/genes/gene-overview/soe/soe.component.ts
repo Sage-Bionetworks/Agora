@@ -76,7 +76,6 @@ export class SOEComponent implements OnInit {
         }, () => {
             this.scoresDataLoaded = true;
         });
-        console.log(this.chartData);
 
         // Adds the summary entries
         this.initData();
