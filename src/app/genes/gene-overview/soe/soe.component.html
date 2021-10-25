@@ -41,7 +41,14 @@
     </p>
     <div class="ranking-scores" *ngIf="chartData">
         <div *ngFor="let item of chartData">
-            <h2>{{item.name}}</h2>
+            <!-- TODO: Use name, wiki supplied in the object -->
+            <div class="chart-header-container">
+                <h2 class="chart-header">{{item.name.toUpperCase()}}</h2>
+                <infobuttonpopover
+                    [contentProps]="{ 'ownerId': 'syn25913473', 'wikiId': '613104' }"
+                    >
+                </infobuttonpopover>
+            </div>
             <div *ngIf="item.data">
                 <plotlywrapper
                         [data]="item.data"

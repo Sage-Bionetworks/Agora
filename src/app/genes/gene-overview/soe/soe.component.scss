@@ -106,6 +106,24 @@
   flex-wrap: wrap;
   justify-content: space-between;
 
+  .chart-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid color(text, title);
+
+    .chart-header {
+        color: color(text, title);
+        font-size: $font-size-regular;
+        font-weight: 900;
+        margin: 0px;
+    }
+
+    .infobutton {
+        cursor: pointer;
+        font-size: $font-size-xxx-regular;
+    }
+  }
   .no-data, .chart-nodata{
     display: flex;
     align-items: center;
