@@ -184,6 +184,12 @@ export class SOEComponent implements OnInit {
                     }],
                     layout: {
                         ...this.commonBarSettings.layout,
+                        xaxis: {
+                            ...this.commonBarSettings.layout.xaxis,
+                            // AG-240: Label only 0 and the max whole number on the x-axis
+                            tick0: 0,
+                            dtick: Math.floor(rawData[category].bins[rawData[category].bins.length  - 1])
+                        },
                         annotations: annotations
                     },
                     config: this.commonBarSettings.config,
