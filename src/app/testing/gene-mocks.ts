@@ -280,12 +280,15 @@ export const mockExpValidation: GeneExpValidation[] = [{
 
 export const mockDistributionData = {
     distribution: [1],
-    bins: [1],
+    bins: [["0", "1"],] as [string, string][],
     min: 1,
     max: 1,
     mean: 1,
     first_quartile: 1,
     third_quartile: 1,
+    syn_id: "syn25913473",
+    wiki_id: "613104",
+    name: "Distribution Name",
 };
 
 export const mockGeneScoreDistribution: GeneScoreDistribution = {

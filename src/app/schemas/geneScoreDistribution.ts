@@ -27,10 +27,6 @@ export let GeneScoreDistributionSchema: Schema = new Schema(
             required: true,
             type: Object
         },
-        flyneuropathscore: {
-            required: true,
-            type: Object
-        }
     }, {
         collection: 'genescoredistribution',
         timestamps: true

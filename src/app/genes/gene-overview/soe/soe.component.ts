@@ -1,12 +1,22 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
+    DistributionData,
     Gene,
     GeneInfo,
     GeneScoreDistribution,
 } from '../../../models';
 import { ApiService, GeneService } from '../../../core/services';
 import { Observable } from 'rxjs';
+
+type ChartData = {
+    name: string
+    data: Plotly.Data[]
+    layout?: Plotly.Layout
+    config?: Plotly.Config
+    ownerId?: string
+    wikiId?: string
+}
 
 @Component({
     selector: 'soe',
@@ -30,13 +40,21 @@ export class SOEComponent implements OnInit {
         'omicsscore',
         // 'flyneuropathscore'  // TODO: this should be deleted from data file soon
     ];
-    chartData: any;
+    chartData: ChartData[];
     commonBarSettings: any = {
         config: {
             displayModeBar: false
         },
         layout: {
             width: 350,
+            // The title is not rendered in the plot area, so we adjust the margin to remove the space for the title
+            margin: {
+                l: 50,
+                r: 50,
+                b: 50,
+                t: 50,
+                pad: 4
+            },
             xaxis: {
                 title: 'Gene Score'.toUpperCase(),
                 titlefont: {
@@ -50,6 +68,7 @@ export class SOEComponent implements OnInit {
                 }
             },
             plot_bgcolor: 'rgba(236, 236, 236, 0.25)',
+            hovermode: 'closest'
         }
     };
 
@@ -141,24 +160,31 @@ export class SOEComponent implements OnInit {
         ];
     }
 
-    initChartData(rawData) {
+    initChartData(rawData: GeneScoreDistribution): ChartData[] {
         const annotationTextColor = 'rgba(166, 132, 238, 1)';
         const overallScores = this.geneService.getCurrentGeneOverallScores();
 
         // Data files sometimes have lowercase keys or camel case keys. Change all to lowercase
         Object.keys(overallScores).forEach(key => {
-            overallScores[key.toLowerCase()] = overallScores[key];
+            const temp = overallScores[key];
             delete overallScores[key];
+            overallScores[key.toLowerCase()] = temp;
         });
 
-        return this.scoreCategories.map(category => {
+        Object.keys(rawData).forEach(key => {
+            const temp = rawData[key]
+            delete rawData[key];
+            rawData[key.toLowerCase()] = temp;
+        });
 
-            if (rawData[category]) {
-                const score = overallScores[category];
-                const barColors = rawData[category].distribution.map(item => 'rgba(166, 132, 238, 0.25)');
+        return this.scoreCategories.map((category) => {
+            const distributionData: DistributionData = rawData[category]
+            if (distributionData) {
+                const score: number = overallScores[category];
+                const barColors = distributionData.distribution.map(item => 'rgba(166, 132, 238, 0.25)');
                 let annotations = [];
                 if (score) {
-                    const annotationObj = this.getBarChartAnnotation(score, rawData[category]);
+                    const annotationObj = this.getBarChartAnnotation(score, distributionData);
                     annotations = [{
                         x: annotationObj.scoreX,
                         y: annotationObj.scoreY,
@@ -173,61 +199,66 @@ export class SOEComponent implements OnInit {
                 }
 
                 return {
-                    name: category,
+                    name: distributionData.name,
                     data: [{
-                        x: rawData[category].bins.map(num => num.toFixed(2)),
-                        y: rawData[category].distribution,
+                        x: distributionData.bins.map(num => parseFloat(num[0]).toFixed(2)),
+                        customdata: distributionData.bins.map(num => parseFloat(num[1]).toFixed(2)),
+                        y: distributionData.distribution,
+                        hovertemplate: "Score Range: [%{x:.2f}, %{customdata:.2f}]<br>Gene Count: %{y:.0f}",
                         type: 'bar',
                         marker: {
                             color: barColors
                         }
-                    }],
+                    }] as Plotly.Data[],
                     layout: {
                         ...this.commonBarSettings.layout,
                         xaxis: {
                             ...this.commonBarSettings.layout.xaxis,
                             // AG-240: Label only 0 and the max whole number on the x-axis
                             tick0: 0,
-                            dtick: Math.floor(rawData[category].bins[rawData[category].bins.length  - 1])
+                            dtick: Math.ceil(parseFloat(distributionData.bins[distributionData.bins.length  - 1][1])),
+                            range: [-0.1, Math.ceil(parseFloat(distributionData.bins[distributionData.bins.length  - 1][1]))]
                         },
                         annotations: annotations
-                    },
+                    } as Plotly.Layout,
                     config: this.commonBarSettings.config,
+                    ownerId: distributionData.syn_id,
+                    wikiId: distributionData.wiki_id
                 };
             } else {
                 return {
                     name: category,
-                    data: {}
+                    data: []
                 };
             }
         });
     }
 
-    getBarChartAnnotation(score, binData) {
+    getBarChartAnnotation(score: number, binData: DistributionData) {
         let scoreX = null;
         let scoreY = null;
         let binNumber = null;
         const lastBarIndex = binData.bins.length - 1;
 
         // rawData[category].min and rawData[category].bin[0] don't have the same min values
-        if (score <= binData.bins[0]) {
-            scoreX = binData.bins[0];
+        if (score <= parseFloat(binData.bins[0][0])) {
+            scoreX = parseFloat(binData.bins[0][0]);
             scoreY = binData.distribution[0];
             binNumber = 0;
         }
 
-        if (score > binData.bins[lastBarIndex]) {
-            scoreX = binData.bins[lastBarIndex];
+        if (score > parseFloat(binData.bins[lastBarIndex][0])) {
+            scoreX = binData.bins[lastBarIndex][0];
             scoreY = binData.distribution[binData.distribution.length - 1];
             binNumber = lastBarIndex;
         }
 
         if (!scoreX) {
             binData.bins.every((bin, i) => {
-                if (score > bin) {
+                if (score > parseFloat(bin[1])) {
                     return true;
                 }
-                scoreX = binData.bins[i];
+                scoreX = binData.bins[i][0];
                 scoreY = binData.distribution[i];
                 binNumber = i;
                 return false;

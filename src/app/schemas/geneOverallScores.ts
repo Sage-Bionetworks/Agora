@@ -3,8 +3,12 @@ import { GeneOverallScoresDocument } from '../models';
 
 export let GenesOverallScoresSchema: Schema = new Schema(
     {
-        GeneName: {
+        ENSG: {
             required: true,
+            type: String
+        },
+        GeneName: {
+            required: false,
             type: String
         },
         Logsdon: {
