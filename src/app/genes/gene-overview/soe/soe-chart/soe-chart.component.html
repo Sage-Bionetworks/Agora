@@ -1,0 +1,17 @@
+
+<div>
+    <div class="chart-header-container">
+        <h2 class="chart-header">{{title.toUpperCase()}}</h2>
+        <infobuttonpopover
+            [contentProps]="{ 'ownerId': wikiInfo.ownerId, 'wikiId': wikiInfo.wikiId }"
+            >
+        </infobuttonpopover>
+    </div>
+    <div *ngIf="chartData.data">
+        <plotlywrapper
+                [data]="chartData.data"
+                [layout]="chartData.layout"
+                [config]="chartData.config"
+        ></plotlywrapper>
+    </div>
+</div>

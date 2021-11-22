@@ -8,15 +8,7 @@ import {
 } from '../../../models';
 import { ApiService, GeneService } from '../../../core/services';
 import { Observable } from 'rxjs';
-
-type ChartData = {
-    name: string
-    data: Plotly.Data[]
-    layout?: Plotly.Layout
-    config?: Plotly.Config
-    ownerId?: string
-    wikiId?: string
-}
+import { SOEChartProps } from './soe-chart/soe-chart.component';
 
 @Component({
     selector: 'soe',
@@ -36,41 +28,11 @@ export class SOEComponent implements OnInit {
     scoreCategories: string[] = [
         'geneticsscore',
         'literaturescore',
-        'logsdon',
         'omicsscore',
-        // 'flyneuropathscore'  // TODO: this should be deleted from data file soon
+        'logsdon',
     ];
-    chartData: ChartData[];
-    commonBarSettings: any = {
-        config: {
-            displayModeBar: false
-        },
-        layout: {
-            width: 350,
-            // The title is not rendered in the plot area, so we adjust the margin to remove the space for the title
-            margin: {
-                l: 50,
-                r: 50,
-                b: 50,
-                t: 50,
-                pad: 4
-            },
-            xaxis: {
-                title: 'Gene Score'.toUpperCase(),
-                titlefont: {
-                    size: 12,
-                }
-            },
-            yaxis: {
-                title: 'Number of Genes'.toUpperCase(),
-                titlefont: {
-                    size: 12
-                }
-            },
-            plot_bgcolor: 'rgba(236, 236, 236, 0.25)',
-            hovermode: 'closest'
-        }
-    };
+
+    distributionDataAndScore: SOEChartProps[]
 
     constructor(
         private route: ActivatedRoute,
@@ -89,7 +51,7 @@ export class SOEComponent implements OnInit {
             const rawData: GeneScoreDistribution = data;
             delete rawData._id; // id is not needed for looping in the UI
             delete rawData.flyneuropathscore;
-            this.chartData = this.initChartData(rawData);
+            this.distributionDataAndScore = this.initChartData(rawData);
         }, (error) => {
             console.log('Error loading gene scores distribution: ' + error.message);
         }, () => {
@@ -160,8 +122,7 @@ export class SOEComponent implements OnInit {
         ];
     }
 
-    initChartData(rawData: GeneScoreDistribution): ChartData[] {
-        const annotationTextColor = 'rgba(166, 132, 238, 1)';
+    initChartData(rawData: GeneScoreDistribution): SOEChartProps[] {
         const overallScores = this.geneService.getCurrentGeneOverallScores();
 
         // Data files sometimes have lowercase keys or camel case keys. Change all to lowercase
@@ -178,98 +139,18 @@ export class SOEComponent implements OnInit {
         });
 
         return this.scoreCategories.map((category) => {
-            const distributionData: DistributionData = rawData[category]
-            if (distributionData) {
-                const score: number = overallScores[category];
-                const barColors = distributionData.distribution.map(item => 'rgba(166, 132, 238, 0.25)');
-                let annotations = [];
-                if (score) {
-                    const annotationObj = this.getBarChartAnnotation(score, distributionData);
-                    annotations = [{
-                        x: annotationObj.scoreX,
-                        y: annotationObj.scoreY,
-                        text: `${score.toFixed(2)}`,
-                        ax: 0,
-                        ay: -10,
-                        font: {
-                            color: annotationTextColor,
-                        }
-                    }];
-                    barColors[annotationObj.binNumber] = annotationTextColor;
-                }
-
-                return {
-                    name: distributionData.name,
-                    data: [{
-                        x: distributionData.bins.map(num => parseFloat(num[0]).toFixed(2)),
-                        customdata: distributionData.bins.map(num => parseFloat(num[1]).toFixed(2)),
-                        y: distributionData.distribution,
-                        hovertemplate: "Score Range: [%{x:.2f}, %{customdata:.2f}]<br>Gene Count: %{y:.0f}",
-                        type: 'bar',
-                        marker: {
-                            color: barColors
-                        }
-                    }] as Plotly.Data[],
-                    layout: {
-                        ...this.commonBarSettings.layout,
-                        xaxis: {
-                            ...this.commonBarSettings.layout.xaxis,
-                            // AG-240: Label only 0 and the max whole number on the x-axis
-                            tick0: 0,
-                            dtick: Math.ceil(parseFloat(distributionData.bins[distributionData.bins.length  - 1][1])),
-                            range: [-0.1, Math.ceil(parseFloat(distributionData.bins[distributionData.bins.length  - 1][1]))]
-                        },
-                        annotations: annotations
-                    } as Plotly.Layout,
-                    config: this.commonBarSettings.config,
-                    ownerId: distributionData.syn_id,
-                    wikiId: distributionData.wiki_id
-                };
-            } else {
-                return {
-                    name: category,
-                    data: []
-                };
+            return {
+                title: rawData[category].name ?? category,
+                wikiInfo: {
+                    ownerId: rawData[category].syn_id,
+                    wikiId: rawData[category].wiki_id
+                },
+                distributionData: rawData[category],
+                geneScore: overallScores[category]
             }
         });
     }
 
-    getBarChartAnnotation(score: number, binData: DistributionData) {
-        let scoreX = null;
-        let scoreY = null;
-        let binNumber = null;
-        const lastBarIndex = binData.bins.length - 1;
-
-        // rawData[category].min and rawData[category].bin[0] don't have the same min values
-        if (score <= parseFloat(binData.bins[0][0])) {
-            scoreX = parseFloat(binData.bins[0][0]);
-            scoreY = binData.distribution[0];
-            binNumber = 0;
-        }
-
-        if (score > parseFloat(binData.bins[lastBarIndex][0])) {
-            scoreX = binData.bins[lastBarIndex][0];
-            scoreY = binData.distribution[binData.distribution.length - 1];
-            binNumber = lastBarIndex;
-        }
-
-        if (!scoreX) {
-            binData.bins.every((bin, i) => {
-                if (score > parseFloat(bin[1])) {
-                    return true;
-                }
-                scoreX = binData.bins[i][0];
-                scoreY = binData.distribution[i];
-                binNumber = i;
-                return false;
-            });
-        }
-        return {
-            scoreX,
-            scoreY,
-            binNumber,
-        };
-    }
 
     getText(state?: boolean): string {
         let text = '';

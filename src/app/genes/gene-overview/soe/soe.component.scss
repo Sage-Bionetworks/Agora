@@ -119,11 +119,21 @@
         margin: 0px;
     }
   }
+
+  .hoverlayer {
+      .hovertext {
+          path {
+            fill-opacity: 0.75;
+          }
+      }
+  }
+
   .no-data, .chart-nodata{
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 280px;
+    height: 380px;
     background: rgba(245, 245, 245, 0.5);
     padding: 10rem 6rem;
   }

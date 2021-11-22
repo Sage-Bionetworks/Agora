@@ -8,7 +8,7 @@ import { DialogsModule } from 'app/dialogs';
 
 import { GeneOverviewComponent } from './gene-overview.component';
 import { NominationDetailsComponent } from './nom-details';
-import { SOEComponent, SOEPropertyComponent } from './soe';
+import { SOEComponent, SOEPropertyComponent, SOEChartComponent } from './soe';
 import { EvidenceMenuComponent } from './evidence-menu';
 import { RNAComponent } from './evidence-menu/rna';
 import { ProteomicsComponent } from './evidence-menu/proteomics';
@@ -34,6 +34,7 @@ import { ExpValidationComponent } from './exp-validation';
         GeneNetworkComponent,
         GeneDruggabilityComponent,
         ExpValidationComponent,
+        SOEChartComponent,
     ],
     imports: [
         ReactiveFormsModule,
