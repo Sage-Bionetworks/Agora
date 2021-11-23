@@ -8,7 +8,7 @@
   [resizable]="false"
   [blockScroll]="false"
   [baseZIndex]="10000"
-  [style]="{ maxHeight: '90vh', height: '90vh', maxWidth: '90vw', width: '90vw' }"
+  [style]="{ maxHeight: '90vh', height: '90vh', maxWidth: '90vw', width: '90vw', pointerEvents: 'unset' }"
 >
 <!-- We must wrap the component in ngIf so onDestroy gets called, which causes the React component to properly unmount -->
   <div *ngIf="display">
