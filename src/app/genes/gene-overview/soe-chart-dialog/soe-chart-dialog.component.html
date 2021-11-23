@@ -1,0 +1,23 @@
+<p-dialog
+  styleClass="soe-chart-modal"
+  (onHide)="closeDialog()"
+  [header]="header"
+  [(visible)]="display"
+  [draggable]="false"
+  [modal]="false"
+  [resizable]="false"
+  [blockScroll]="false"
+  [baseZIndex]="10000"
+  [style]="{ maxHeight: '90vh', height: '90vh', maxWidth: '90vw', width: '90vw' }"
+>
+<!-- We must wrap the component in ngIf so onDestroy gets called, which causes the React component to properly unmount -->
+  <div *ngIf="display">
+    <plotlywrapper
+      [data]="chartData.data"
+      [layout]="layout"
+      [config]="config"
+      [plotStyle]="{ width: '100%', height: '100%'}"
+      [useResizeHandler]="true"
+    ></plotlywrapper>
+  </div>
+</p-dialog>

@@ -11,7 +11,7 @@ export type SOEChartProps = {
     }
 }
 
-type ChartData = {
+export type ChartData = {
   data: Plotly.Data[];
   layout?: Plotly.Layout;
   config?: Plotly.Config;
@@ -31,7 +31,12 @@ export class SOEChartComponent implements OnInit {
   @Input() geneScore: number | undefined;
   @Input() wikiInfo: SOEChartProps['wikiInfo'];
 
+  showModal: boolean = false;
   private chartData: ChartData;
+
+  onHideModal = () => {
+      this.showModal = false;
+  }
 
   ngOnInit() {
     this.chartData = this.initChartData();
@@ -158,11 +163,17 @@ export class SOEChartComponent implements OnInit {
     };
   }
 
+  onExpand() {
+      console.log('expand clicked')
+    this.showModal = true;
+  }
+
   commonBarSettings: any = {
     config: {
       displayModeBar: false,
     },
     layout: {
+      autosize: true,
       height: 400,
       width: 350,
       // The title is not rendered in the plot area, so we adjust the margin to remove the space for the title

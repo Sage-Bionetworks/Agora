@@ -7,6 +7,7 @@ import {
     OnChanges,
     ViewChild,
     ViewEncapsulation,
+    OnDestroy,
 } from '@angular/core';
 import * as React from 'react';
 import { SynapseClient } from 'synapse-react-client';
@@ -21,7 +22,7 @@ import { MarkdownPopover, MarkdownPopoverProps } from 'synapse-react-client/dist
     encapsulation: ViewEncapsulation.None
 })
 
-export class InfoButtonPopoverComponent implements OnChanges, AfterViewInit {
+export class InfoButtonPopoverComponent implements OnChanges, AfterViewInit, OnDestroy {
 
     @ViewChild('infobuttonpopover') containerRef: ElementRef;
     @Input() contentProps: {};
@@ -41,6 +42,10 @@ export class InfoButtonPopoverComponent implements OnChanges, AfterViewInit {
     public ngAfterViewInit() {
         this.hasViewLoaded = true;
         this.renderComponent();
+    }
+
+    public ngOnDestroy() {
+        ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement)
     }
 
     private renderComponent() {

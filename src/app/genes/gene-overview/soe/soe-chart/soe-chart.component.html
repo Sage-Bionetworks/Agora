@@ -1,7 +1,10 @@
 
 <div>
+    <soechartdialog [display]="showModal" [onHide]="onHideModal" [chartData]="chartData" [header]="title.toUpperCase()"></soechartdialog>
     <div class="chart-header-container">
         <h2 class="chart-header">{{title.toUpperCase()}}</h2>
+        <div class="spacer"></div>
+        <i class="pi pi-window-maximize" *ngIf="geneScore" (click)="onExpand()"></i>
         <infobuttonpopover
             [contentProps]="{ 'ownerId': wikiInfo.ownerId, 'wikiId': wikiInfo.wikiId }"
             >

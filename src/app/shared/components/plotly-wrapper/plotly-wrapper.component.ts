@@ -7,6 +7,7 @@ import {
     ViewChild,
     ViewEncapsulation,
     OnInit,
+    OnDestroy,
 } from '@angular/core';
 import * as React from 'react';
 import { SynapseClient } from 'synapse-react-client';
@@ -21,13 +22,15 @@ import PlotlyWrapper, { PlotlyWrapperProps } from 'synapse-react-client/dist/con
     encapsulation: ViewEncapsulation.None
 })
 
-export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit {
+export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     @ViewChild('plotlywrapper') containerRef: ElementRef;
     @Input() data: [];
     @Input() layout: {};
     @Input() config: {};
     @Input() containerWidth: number;
+    @Input() useResizeHandler: boolean;
+    @Input() plotStyle: React.CSSProperties;
     @Input() classNames: string;
 
     classNameList = 'plotlywrapper ';
@@ -52,6 +55,10 @@ export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit 
         this.renderComponent();
     }
 
+    public ngOnDestroy() {
+        ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement)
+    }
+
     private renderComponent() {
         if (!this.hasViewLoaded) {
             return;
@@ -62,7 +69,9 @@ export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit 
             layout: this.layout,
             config: this.config,
             containerWidth: this.containerWidth,
-            className: this.classNameList
+            className: this.classNameList,
+            useResizeHandler: this.useResizeHandler,
+            plotStyle: this.plotStyle
         };
         const plotly = React.createElement(PlotlyWrapper, plotlyProps);
         const props = {

@@ -9,8 +9,8 @@
 
   .chart-header-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 5px;
     border-bottom: 1px solid color(text, title);
 
     .chart-header {
@@ -18,6 +18,15 @@
         font-size: $font-size-regular;
         font-weight: 900;
         margin: 0px;
+    }
+
+    .spacer {
+        margin: auto;
+    }
+
+    .pi {
+        color:#878e95;
+        cursor: pointer;
     }
   }
 

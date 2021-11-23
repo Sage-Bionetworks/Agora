@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "data-file": "syn13363290",
-  "data-version": "29",
+  "data-version": "33",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -143,7 +143,7 @@
     "reflect-metadata": "^0.1.13",
     "rollbar": "^2.15.0",
     "rxjs": "^6.5.5",
-    "synapse-react-client": "^2.0.49",
+    "synapse-react-client": "^2.0.57",
     "ts-loader": "^5.4.5",
     "typescript": "^3.8.3",
     "zone.js": "~0.10.3"
