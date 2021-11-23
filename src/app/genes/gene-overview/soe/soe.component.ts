@@ -27,8 +27,8 @@ export class SOEComponent implements OnInit {
     scoresDataLoaded: boolean = false;
     scoreCategories: string[] = [
         'geneticsscore',
-        'literaturescore',
         'omicsscore',
+        'literaturescore',
         'logsdon',
     ];
 
