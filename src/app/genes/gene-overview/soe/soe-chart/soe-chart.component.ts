@@ -32,7 +32,46 @@ export class SOEChartComponent implements OnInit {
   @Input() wikiInfo: SOEChartProps['wikiInfo'];
 
   showModal: boolean = false;
-  private chartData: ChartData;
+  chartData: ChartData;
+  commonBarSettings: any = {
+    config: {
+      displayModeBar: false,
+    },
+    layout: {
+      autosize: true,
+      height: 400,
+      width: 350,
+      // The title is not rendered in the plot area, so we adjust the margin to remove the space for the title
+      margin: {
+        l: 50,
+        r: 10,
+        b: 40,
+        t: 10,
+        pad: 4,
+      },
+      xaxis: {
+        title: "GENE SCORE",
+        titlefont: {
+          size: 12,
+        },
+      },
+      yaxis: {
+        title: "NUMBER OF GENES",
+        titlefont: {
+          size: 12,
+        },
+        tickformat: ".1s",
+      },
+      plot_bgcolor: "rgba(236, 236, 236, 0.25)",
+      hovermode: "closest",
+      hoverlabel: {
+        bgcolor: "#000", // opacity is set in CSS,
+        font: {
+          color: "white",
+        },
+      },
+    },
+  };
 
   onHideModal = () => {
       this.showModal = false;
@@ -167,43 +206,5 @@ export class SOEChartComponent implements OnInit {
     this.showModal = true;
   }
 
-  commonBarSettings: any = {
-    config: {
-      displayModeBar: false,
-    },
-    layout: {
-      autosize: true,
-      height: 400,
-      width: 350,
-      // The title is not rendered in the plot area, so we adjust the margin to remove the space for the title
-      margin: {
-        l: 50,
-        r: 10,
-        b: 40,
-        t: 10,
-        pad: 4,
-      },
-      xaxis: {
-        title: "GENE SCORE",
-        titlefont: {
-          size: 12,
-        },
-      },
-      yaxis: {
-        title: "NUMBER OF GENES",
-        titlefont: {
-          size: 12,
-        },
-        tickformat: ".1s",
-      },
-      plot_bgcolor: "rgba(236, 236, 236, 0.25)",
-      hovermode: "closest",
-      hoverlabel: {
-        bgcolor: "#000", // opacity is set in CSS,
-        font: {
-          color: "white",
-        },
-      },
-    },
-  };
+
 }
