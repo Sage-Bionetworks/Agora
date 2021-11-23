@@ -164,7 +164,6 @@ export class SOEChartComponent implements OnInit {
   }
 
   onExpand() {
-      console.log('expand clicked')
     this.showModal = true;
   }
 

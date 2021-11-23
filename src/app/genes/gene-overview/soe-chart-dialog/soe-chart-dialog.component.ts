@@ -46,7 +46,6 @@ export class SOEChartDialogue implements OnInit {
 
     // Waiting for the new PrimeNG version
     closeDialog() {
-        console.log('closeDialog called')
         this.dialogsService.closeDialog(this.name);
         this.onHide()
     }
