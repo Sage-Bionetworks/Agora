@@ -140,10 +140,10 @@ export class SOEComponent implements OnInit {
 
         return this.scoreCategories.map((category) => {
             return {
-                title: rawData[category].name ?? category,
+                title: rawData[category]?.name ?? category,
                 wikiInfo: {
-                    ownerId: rawData[category].syn_id,
-                    wikiId: rawData[category].wiki_id
+                    ownerId: rawData[category]?.syn_id,
+                    wikiId: rawData[category]?.wiki_id
                 },
                 distributionData: rawData[category],
                 geneScore: overallScores[category]
