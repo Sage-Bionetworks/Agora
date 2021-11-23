@@ -1,4 +1,10 @@
-import { Gene, GeneNetworkLinks, GeneInfo, GeneExpValidation } from '.';
+import {
+    Gene,
+    GeneNetworkLinks,
+    GeneInfo,
+    GeneExpValidation,
+    GeneOverallScores
+} from '.';
 
 export interface LinksListResponse {
     items: GeneNetworkLinks[];
@@ -25,6 +31,7 @@ export interface GeneResponse {
     item: Gene;
     info: GeneInfo;
     expValidation: GeneExpValidation[] | undefined;
+    overallScores: GeneOverallScores | undefined;
 }
 
 export interface GeneInfosResponse {

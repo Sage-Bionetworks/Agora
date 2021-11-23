@@ -1,7 +1,24 @@
 import { Injectable } from '@angular/core';
 
-import { Gene, GeneInfo, TissuesResponse, ModelsResponse, Proteomics, TeamInfo, GeneExpValidation } from '../models';
-import { mockGene1, mockGene2, mockInfo1, mockTissues, mockModels, mockExpValidation } from './gene-mocks';
+import {
+    Gene,
+    GeneInfo,
+    TissuesResponse,
+    ModelsResponse,
+    Proteomics,
+    TeamInfo,
+    GeneExpValidation,
+    GeneOverallScores
+} from '../models';
+import {
+    mockGene1,
+    mockGene2,
+    mockInfo1,
+    mockTissues,
+    mockModels,
+    mockExpValidation,
+    mockGeneOverallScores
+} from './gene-mocks';
 import { mockTeam1, mockTeam2 } from './team-info-mocks';
 
 @Injectable()
@@ -10,6 +27,7 @@ export class GeneServiceStub {
     currentGene: Gene;
     currentInfo: GeneInfo;
     currentExpValidation: GeneExpValidation[] = [];
+    currentGeneOverallScores: GeneOverallScores;
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string;
@@ -72,6 +90,14 @@ export class GeneServiceStub {
 
     setCurrentExpValidation(geneExpValidation: GeneExpValidation[]) {
         this.currentExpValidation = geneExpValidation;
+    }
+
+    setCurrentGeneOverallScores(geneOverallScores: GeneOverallScores) {
+        this.currentGeneOverallScores = geneOverallScores;
+    }
+
+    getCurrentGeneOverallScores() {
+        return mockGeneOverallScores;
     }
 
     getDefaultTissue(): string {
@@ -153,6 +179,7 @@ export class GeneServiceStub {
         this.setFC(data['minFC'], data['maxFC']);
         this.setLogFC(data['minFC'], data['maxFC']);
         this.setAdjPValue(data['minAdjPValue'], data['maxAdjPValue']);
+        this.setCurrentGeneOverallScores(data['overallScores']);
     }
 
     loadGeneTissues(data?: TissuesResponse) {

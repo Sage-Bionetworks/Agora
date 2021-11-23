@@ -8,7 +8,8 @@ import {
     LinksListResponse,
     TeamMember,
     TeamInfo,
-    GeneInfosResponse
+    GeneInfosResponse,
+    GeneScoreDistribution,
 } from '../../models';
 
 import { LazyLoadEvent, Message } from 'primeng/api';
@@ -146,6 +147,13 @@ export class ApiService {
         }
 
         return this.http.get('/api/gene/', { headers, params });
+    }
+
+    getAllGeneScores(): Observable<GeneScoreDistribution> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const params = new HttpParams();
+
+        return this.http.get('/api/genescores', { headers, params }) as Observable<GeneScoreDistribution>;
     }
 
     getTeams(info: GeneInfo): Observable<object> {

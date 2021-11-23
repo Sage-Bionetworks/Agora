@@ -7,28 +7,33 @@ import {
     ViewChild,
     ViewEncapsulation,
     OnInit,
+    OnDestroy,
 } from '@angular/core';
-import MarkdownSynapse, { MarkdownSynapseProps } from 'synapse-react-client/dist/containers/MarkdownSynapse';
 import * as React from 'react';
 import { SynapseClient } from 'synapse-react-client';
 import * as ReactDOM from 'react-dom';
 import { SynapseContextProvider } from 'synapse-react-client/dist/utils/SynapseContext';
+import PlotlyWrapper, { PlotlyWrapperProps } from 'synapse-react-client/dist/containers/PlotlyWrapper';
 
 @Component({
-    selector: 'wiki',
-    templateUrl: './wiki.component.html',
-    styleUrls: ['./wiki.component.scss'],
+    selector: 'plotlywrapper',
+    templateUrl: './plotly-wrapper.component.html',
+    styleUrls: ['./plotly-wrapper.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
+export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-    @ViewChild('wiki') containerRef: ElementRef;
-    @Input() ownId: string;
-    @Input() wikiId: string;
+    @ViewChild('plotlywrapper') containerRef: ElementRef;
+    @Input() data: [];
+    @Input() layout: {};
+    @Input() config: {};
+    @Input() containerWidth: number;
+    @Input() useResizeHandler: boolean;
+    @Input() plotStyle: React.CSSProperties;
     @Input() classNames: string;
 
-    classNameList = 'wiki ';
+    classNameList = 'plotlywrapper ';
     private hasViewLoaded = false;
 
     constructor() {
@@ -50,16 +55,25 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
         this.renderComponent();
     }
 
+    public ngOnDestroy() {
+        ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement)
+    }
+
     private renderComponent() {
-        if (!this.hasViewLoaded || !this.wikiId) {
+        if (!this.hasViewLoaded) {
             return;
         }
 
-        const wikiProps: MarkdownSynapseProps = {
-            ownerId: this.ownId || 'syn25913473',
-            wikiId: this.wikiId
+        const plotlyProps: PlotlyWrapperProps = {
+            data: this.data,
+            layout: this.layout,
+            config: this.config,
+            containerWidth: this.containerWidth,
+            className: this.classNameList,
+            useResizeHandler: this.useResizeHandler,
+            plotStyle: this.plotStyle
         };
-        const wikiContent = React.createElement(MarkdownSynapse, wikiProps);
+        const plotly = React.createElement(PlotlyWrapper, plotlyProps);
         const props = {
             synapseContext: {
                 accessToken: undefined,
@@ -68,7 +82,7 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
             }
         };
         ReactDOM.render(
-            React.createElement(SynapseContextProvider, props, wikiContent),
+            React.createElement(SynapseContextProvider, props, plotly),
             this.containerRef.nativeElement
         );
     }

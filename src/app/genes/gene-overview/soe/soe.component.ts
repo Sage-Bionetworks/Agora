@@ -1,9 +1,14 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { Gene, GeneInfo } from '../../../models';
-
-import { GeneService } from '../../../core/services';
+import {
+    DistributionData,
+    Gene,
+    GeneInfo,
+    GeneScoreDistribution,
+} from '../../../models';
+import { ApiService, GeneService } from '../../../core/services';
+import { Observable } from 'rxjs';
+import { SOEChartProps } from './soe-chart/soe-chart.component';
 
 @Component({
     selector: 'soe',
@@ -15,20 +20,43 @@ export class SOEComponent implements OnInit {
     @Input() gene: Gene;
     @Input() geneInfo: GeneInfo;
     @Input() id: string;
+    @Input() geneScoresResponse: Observable<GeneScoreDistribution>;
 
     cols: any[];
     summary: any[];
+    scoresDataLoaded: boolean = false;
+    scoreCategories: string[] = [
+        'geneticsscore',
+        'omicsscore',
+        'literaturescore',
+        'logsdon',
+    ];
+
+    distributionDataAndScore: SOEChartProps[]
 
     constructor(
         private route: ActivatedRoute,
-        private geneService: GeneService
+        private geneService: GeneService,
+        private apiService: ApiService,
     ) {}
 
     ngOnInit() {
         if (!this.gene) { this.gene = this.geneService.getCurrentGene(); }
         if (!this.geneInfo) { this.geneInfo = this.geneService.getCurrentInfo(); }
-
         if (!this.id) { this.id = this.route.snapshot.paramMap.get('id'); }
+
+        // Add gene scores distribution
+        this.geneScoresResponse = this.apiService.getAllGeneScores();
+        this.geneScoresResponse.subscribe((data: GeneScoreDistribution) => {
+            const rawData: GeneScoreDistribution = data;
+            delete rawData._id; // id is not needed for looping in the UI
+            delete rawData.flyneuropathscore;
+            this.distributionDataAndScore = this.initChartData(rawData);
+        }, (error) => {
+            console.log('Error loading gene scores distribution: ' + error.message);
+        }, () => {
+            this.scoresDataLoaded = true;
+        });
 
         // Adds the summary entries
         this.initData();
@@ -93,6 +121,36 @@ export class SOEComponent implements OnInit {
             { field: 'state', header: 'State' }
         ];
     }
+
+    initChartData(rawData: GeneScoreDistribution): SOEChartProps[] {
+        const overallScores = this.geneService.getCurrentGeneOverallScores();
+
+        // Data files sometimes have lowercase keys or camel case keys. Change all to lowercase
+        Object.keys(overallScores).forEach(key => {
+            const temp = overallScores[key];
+            delete overallScores[key];
+            overallScores[key.toLowerCase()] = temp;
+        });
+
+        Object.keys(rawData).forEach(key => {
+            const temp = rawData[key]
+            delete rawData[key];
+            rawData[key.toLowerCase()] = temp;
+        });
+
+        return this.scoreCategories.map((category) => {
+            return {
+                title: rawData[category]?.name ?? category,
+                wikiInfo: {
+                    ownerId: rawData[category]?.syn_id,
+                    wikiId: rawData[category]?.wiki_id
+                },
+                distributionData: rawData[category],
+                geneScore: overallScores[category]
+            }
+        });
+    }
+
 
     getText(state?: boolean): string {
         let text = '';
