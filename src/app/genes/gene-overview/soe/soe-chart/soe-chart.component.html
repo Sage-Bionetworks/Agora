@@ -5,10 +5,12 @@
         <h2 class="chart-header">{{title.toUpperCase()}}</h2>
         <div class="spacer"></div>
         <i class="pi pi-window-maximize" *ngIf="geneScore" (click)="onExpand()"></i>
-        <infobuttonpopover
-            [contentProps]="{ 'ownerId': wikiInfo.ownerId, 'wikiId': wikiInfo.wikiId }"
-            >
-        </infobuttonpopover>
+        <img src="/assets/icon/info-icon3.svg" class="info-icon pointer" (click)="op.show($event)"/>
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <wiki [ownerId]="wikiInfo.ownerId" [wikiId]="wikiInfo.wikiId"></wiki>
+            </ng-template>
+        </p-overlayPanel>
     </div>
     <div *ngIf="chartData.data">
         <plotlywrapper

@@ -6,6 +6,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+  gap: 20px;
 
   .chart-header-container {
     display: flex;
@@ -18,6 +19,15 @@
         font-size: $font-size-regular;
         font-weight: 900;
         margin: 0px;
+    }
+
+    .ui-overlaypanel-content {
+      background: white;
+      max-width: 350px;
+
+      .markdown {
+        padding: 0px 15px;
+      }
     }
 
     .spacer {

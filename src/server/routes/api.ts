@@ -683,8 +683,12 @@ connection.once('open', () => {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };
 
-            // TODO: currently scores in data file are available only by gene symbol and not gene id
-            const overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
+            let overallScores;
+            if (fieldName === "ensembl_gene_id") {
+                overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
+            } else {
+                overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
+            }
 
             if (req.query.tissue) {
                 queryObj['tissue'] = req.query.tissue;

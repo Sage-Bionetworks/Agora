@@ -302,6 +302,7 @@ export const mockGeneScoreDistribution: GeneScoreDistribution = {
 
 export const mockGeneOverallScores: GeneOverallScores = {
     _id: 'string',
+    ENSG: 'ENSG_string',
     GeneName: 'string',
     Logsdon: 1,
     GeneticsScore: 2,
