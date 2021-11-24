@@ -111,12 +111,13 @@ export class SOEChartComponent implements OnInit {
             x: this.distributionData.bins.map((num) =>
               parseFloat(num[0]).toFixed(2)
             ),
+            // We will set customdata to be the upper bound of the bins, so we can show it in the tooltip.
             customdata: this.distributionData.bins.map((num) =>
               parseFloat(num[1]).toFixed(2)
             ),
             y: this.distributionData.distribution,
             hovertemplate:
-              "<br>  Score Range: [%{x:.2f}, %{customdata:.2f}]  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>",
+              "<br>  Score Range: [%{x:.2f}, %{customdata:.2f})  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>",
             type: "bar",
             marker: {
               color: barColors,
