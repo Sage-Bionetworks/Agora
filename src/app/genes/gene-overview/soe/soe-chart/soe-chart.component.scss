@@ -20,6 +20,15 @@
         margin: 0px;
     }
 
+    .ui-overlaypanel-content {
+      background: white;
+      max-width: 350px;
+
+      .markdown {
+        padding: 0px 15px;
+      }
+    }
+
     .spacer {
         margin: auto;
     }
