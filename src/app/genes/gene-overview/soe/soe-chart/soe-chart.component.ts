@@ -64,7 +64,7 @@ export class SOEChartComponent implements OnInit {
         tickformat: ".1s",
       },
       plot_bgcolor: "rgba(236, 236, 236, 0.25)",
-      hovermode: "closest",
+      hovermode: "x", // note: axistext (tooltip that is applied on the axis) is hidden via CSS
       hoverlabel: {
         bgcolor: "#000", // opacity is set in CSS,
         font: {
