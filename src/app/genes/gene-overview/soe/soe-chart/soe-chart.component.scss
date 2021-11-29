@@ -1,5 +1,6 @@
 @import "../../../../../assets/css/helpers/variables";
 @import "../../../../../assets/css/helpers/mixins";
+@import '~ngx-popperjs/scss/theme-white';
 
 .ranking-scores {
   display: flex;
@@ -21,11 +22,11 @@
         margin: 0px;
     }
 
-    .ui-overlaypanel-content {
-      background: white;
-      max-width: 350px;
+    div[role="popper"] {
+      width: 425px;
+      max-width: 425px;
 
-      .markdown {
+      .wiki {
         padding: 0px 15px;
       }
     }

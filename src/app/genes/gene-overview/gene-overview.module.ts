@@ -19,6 +19,7 @@ import { GeneNetworkComponent } from './evidence-menu/rna/gene-network';
 import { GeneDruggabilityComponent } from './gene-druggability';
 import { ExpValidationComponent } from './exp-validation';
 import { SOEChartDialogue } from './soe-chart-dialog/soe-chart-dialog.component';
+import { NgxPopperjsModule } from 'ngx-popperjs';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { SOEChartDialogue } from './soe-chart-dialog/soe-chart-dialog.component'
         AppSharedModule,
         DialogsModule,
         ChartsModule,
-        GeneOverviewRoutingModule
+        GeneOverviewRoutingModule,
+        NgxPopperjsModule
     ],
     entryComponents: [
         BoxPlotsViewComponent

@@ -1,22 +1,34 @@
-
 <div>
-    <soechartdialog [display]="showModal" [onHide]="onHideModal" [chartData]="chartData" [header]="title.toUpperCase()"></soechartdialog>
-    <div class="chart-header-container">
-        <h2 class="chart-header">{{title.toUpperCase()}}</h2>
-        <div class="spacer"></div>
-        <i class="pi pi-window-maximize" *ngIf="geneScore" (click)="onExpand()"></i>
-        <img src="/assets/icon/info-icon3.svg" class="info-icon pointer" (click)="op.show($event)"/>
-        <p-overlayPanel #op>
-            <ng-template pTemplate>
-                <wiki [ownerId]="wikiInfo.ownerId" [wikiId]="wikiInfo.wikiId"></wiki>
-            </ng-template>
-        </p-overlayPanel>
-    </div>
-    <div *ngIf="chartData.data">
-        <plotlywrapper
-                [data]="chartData.data"
-                [layout]="chartData.layout"
-                [config]="chartData.config"
-        ></plotlywrapper>
-    </div>
+  <soechartdialog
+    [display]="showModal"
+    [onHide]="onHideModal"
+    [chartData]="chartData"
+    [header]="title.toUpperCase()"
+  ></soechartdialog>
+  <div class="chart-header-container">
+    <h2 class="chart-header">{{ title.toUpperCase() }}</h2>
+    <div class="spacer"></div>
+    <i class="pi pi-window-maximize" *ngIf="geneScore" (click)="onExpand()"></i>
+    <img
+      [popper]="popper1Content"
+      [popperTrigger]="'click'"
+      src="/assets/icon/info-icon3.svg"
+      class="info-icon pointer target-block"
+    />
+    <!-- (click)="op.show($event)" -->
+    <!-- <p-overlayPanel #op>
+            <ng-template pTemplate> -->
+    <popper-content #popper1Content>
+      <wiki [ownerId]="wikiInfo.ownerId" [wikiId]="wikiInfo.wikiId"></wiki>
+    </popper-content>
+    <!-- </ng-template>
+        </p-overlayPanel> -->
+  </div>
+  <div *ngIf="chartData.data">
+    <plotlywrapper
+      [data]="chartData.data"
+      [layout]="chartData.layout"
+      [config]="chartData.config"
+    ></plotlywrapper>
+  </div>
 </div>
