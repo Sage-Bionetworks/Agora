@@ -112,7 +112,7 @@ module.exports = function (env) {
           new TerserPlugin({
               parallel: true,
               terserOptions: {
-                  ecma: 6,
+                  ecma: 5,
                   compress: false // disable so it doesn't break 3rd party libraries while files still minimized.
               }
           })
