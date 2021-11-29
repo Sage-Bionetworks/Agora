@@ -15,14 +15,9 @@
       src="/assets/icon/info-icon3.svg"
       class="info-icon pointer target-block"
     />
-    <!-- (click)="op.show($event)" -->
-    <!-- <p-overlayPanel #op>
-            <ng-template pTemplate> -->
     <popper-content #popper1Content>
       <wiki [ownerId]="wikiInfo.ownerId" [wikiId]="wikiInfo.wikiId"></wiki>
     </popper-content>
-    <!-- </ng-template>
-        </p-overlayPanel> -->
   </div>
   <div *ngIf="chartData.data">
     <plotlywrapper
