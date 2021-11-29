@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { DistributionData } from "app/models";
+import { format } from 'd3-format'
 
 export type SOEChartProps = {
     title: string,
@@ -94,7 +95,8 @@ export class SOEChartComponent implements OnInit {
           {
             x: annotationObj.scoreX,
             y: annotationObj.scoreY,
-            text: `${this.geneScore.toFixed(2)}`,
+            // We truncate the gene score instead of rounding, because a rounded score may end up conflicting with the displayed bin ranges (see comments on AG-260)
+            text: truncateToFixed(this.geneScore, 2),
             ax: 0,
             ay: -10,
             font: {
@@ -111,13 +113,21 @@ export class SOEChartComponent implements OnInit {
             x: this.distributionData.bins.map((num) =>
               parseFloat(num[0]).toFixed(2)
             ),
-            // We will set customdata to be the upper bound of the bins, so we can show it in the tooltip.
-            customdata: this.distributionData.bins.map((num) =>
-              parseFloat(num[1]).toFixed(2)
-            ),
+            // We will set customdata to be the bin range, so we can show it in the tooltip.
+            customdata: this.distributionData.bins.map((range, index) =>{
+              const lowerBound = parseFloat(range[0])
+              const upperBound = parseFloat(range[1])
+
+              // We use d3-format since plotly also uses it
+              const formatter = format('.2f')
+
+              // The last bin's upper bound is inclusive ']', rather than exclusive ')'.
+              const isLastBin = index === this.distributionData.bins.length - 1
+              return `[${formatter(lowerBound)}, ${formatter(upperBound)}${isLastBin ? ']' : ')'}`
+            }),
             y: this.distributionData.distribution,
             hovertemplate:
-              "<br>  Score Range: [%{x:.2f}, %{customdata:.2f})  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>",
+              "<br>  Score Range: %{customdata}  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>",
             type: "bar",
             marker: {
               color: barColors,
@@ -208,4 +218,16 @@ export class SOEChartComponent implements OnInit {
   }
 
 
+}
+
+/**
+ * Truncates a number to a certain number of decimal places without rounding
+ */
+function truncateToFixed(num: number, fixed: number): string {
+  /*
+   * You might think that truncating a number to a certain number of decimal places in JavaScript would be simple, but then you would be wrong.
+   * See https://stackoverflow.com/a/11818658/9723359
+   */
+  const re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+  return num.toString().match(re)[0];
 }
