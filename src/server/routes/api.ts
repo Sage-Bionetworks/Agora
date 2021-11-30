@@ -1,4 +1,12 @@
-import { Gene, GeneInfo, Proteomics, NeuropathCorr, GeneExpValidation } from '../../app/models';
+import {
+    Gene,
+    GeneInfo,
+    Proteomics,
+    NeuropathCorr,
+    GeneExpValidation,
+    GeneScoreDistribution,
+    GeneOverallScores,
+} from '../../app/models';
 import {
     Genes,
     GenesInfo,
@@ -8,6 +16,8 @@ import {
     GenesMetabolomics,
     NeuropathCorrs,
     GenesExperimentalValidation,
+    GenesScoreDistribution,
+    GenesOverallScores,
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -77,6 +87,8 @@ connection.once('open', () => {
     let geneProteomics: Proteomics[] = [];
     let genesNeuroCorr: NeuropathCorr[] = [];
     let genesExpValidation: GeneExpValidation[] = [];
+    let geneScoreDistribution: GeneScoreDistribution[] = [];
+    let genesOverallScores: GeneOverallScores[] = [];
     let totalRecords = 0;
     const allTissues: string[] = [];
     const allModels: string[] = [];
@@ -216,6 +228,24 @@ connection.once('open', () => {
                 next(err);
             } else {
                 genesExpValidation = genes.slice();
+            }
+        });
+
+    GenesScoreDistribution.find()
+        .exec(async (err, genes: GeneScoreDistribution[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                geneScoreDistribution = genes.slice();
+            }
+        });
+
+    GenesOverallScores.find()
+        .exec(async (err, genes: GeneOverallScores[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                genesOverallScores = genes.slice();
             }
         });
 
@@ -653,13 +683,19 @@ connection.once('open', () => {
             const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
             const queryObj = { [fieldName]: req.query.id };
 
+            let overallScores;
+            if (fieldName === "ensembl_gene_id") {
+                overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
+            } else {
+                overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
+            }
+
             if (req.query.tissue) {
                 queryObj['tissue'] = req.query.tissue;
             }
             if (req.query.model) {
                 queryObj['model'] = req.query.model;
             }
-
             // Find all the Genes with the current id
             await Genes.findOne(queryObj).exec(async (err, gene) => {
                 if (err) {
@@ -683,7 +719,8 @@ connection.once('open', () => {
                             await res.json({
                                 info,
                                 item,
-                                expValidation
+                                expValidation,
+                                overallScores,
                             });
                         }
                     });
@@ -724,6 +761,17 @@ connection.once('open', () => {
                         });
                 });
             });
+        }
+    });
+
+    // Get gene scores distribution
+    router.get('/genescores', (req, res, next) => {
+        const noData = [];
+        if (!geneScoreDistribution.length) {  // if DB has error
+            console.log('geneScoreDistribution: Mongo DB return document length ', geneScoreDistribution.length);
+            return res.json(noData);
+        } else {
+            return res.json(geneScoreDistribution[0]);
         }
     });
 
@@ -1179,6 +1227,7 @@ connection.once('open', () => {
         }
         return noData;
     };
+
 });
 
 export default router;

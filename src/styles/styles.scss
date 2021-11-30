@@ -179,16 +179,7 @@ p-panel {
 
 p-dialog {
     .ui-dialog {
-        width: 65% !important;
-
-        @include respond-to('ex-small') {
-            left: 17.5% !important;
-        }
-        @include respond-to('small') {
-            left: 17.5% !important;
-        }
-
-        top: 109px;
+        width: 65%;
         max-height: 62%;
         overflow: auto;
         background: white;
@@ -242,9 +233,9 @@ p-dialog {
     .ui-dialog-content {
         @include lato-font('normal');
 
-        padding-bottom: 45px !important;
-        padding-left: 20% !important;
-        padding-right: 20% !important;
+        padding-bottom: 45px;
+        padding-left: 20%;
+        padding-right: 20%;
         line-height: normal;
         font-size: $font-size-x-regular;
         text-align: left;

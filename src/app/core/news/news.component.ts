@@ -7,7 +7,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
     encapsulation: ViewEncapsulation.None
 })
 export class NewsComponent {
-
+    ownerId = "syn25913473";
     wikiId = '611426';
     classNames = 'news-container';
 

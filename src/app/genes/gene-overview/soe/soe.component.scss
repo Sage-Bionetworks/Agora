@@ -99,3 +99,44 @@
         }
     }
 }
+
+.ranking-scores {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .chart-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid color(text, title);
+
+    .chart-header {
+        color: color(text, title);
+        font-size: $font-size-regular;
+        font-weight: 900;
+        margin: 0px;
+    }
+  }
+
+  .hoverlayer {
+      .hovertext {
+          path {
+            fill-opacity: 0.75;
+          }
+      }
+  }
+
+  .no-data, .chart-nodata{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    height: 380px;
+    background: rgba(245, 245, 245, 0.5);
+    padding: 10rem 6rem;
+  }
+}
+
+

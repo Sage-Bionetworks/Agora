@@ -8,3 +8,5 @@ export * from './proteomics';
 export * from './metabolomics';
 export * from './neuropathCorr';
 export * from './geneExpValidation';
+export * from './geneScoreDistribution';
+export * from './geneOverallScores';

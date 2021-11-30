@@ -1,0 +1,67 @@
+@import "../../../../../assets/css/helpers/variables";
+@import "../../../../../assets/css/helpers/mixins";
+@import '~ngx-popperjs/scss/theme-white';
+
+.ranking-scores {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+
+  .chart-header-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 1px solid color(text, title);
+
+    .chart-header {
+        color: color(text, title);
+        font-size: $font-size-regular;
+        font-weight: 900;
+        margin: 0px;
+    }
+
+    div[role="popper"] {
+      width: 425px;
+      max-width: 425px;
+
+      .wiki {
+        padding: 0px 15px;
+      }
+    }
+
+    .spacer {
+        margin: auto;
+    }
+
+    .pi {
+        color:#878e95;
+        cursor: pointer;
+    }
+  }
+
+  .hoverlayer {
+      .hovertext {
+          path {
+            fill-opacity: 0.75;
+          }
+      }
+      .axistext {
+        display: none;
+      }
+  }
+
+  .no-data, .chart-nodata{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    height: 380px;
+    width: 350px;
+    background: rgba(245, 245, 245, 0.5);
+    padding: 10rem 6rem;
+  }
+}
+
+
