@@ -1,28 +1,29 @@
-import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
-import { DistributionData } from "app/models";
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { DistributionData } from 'app/models';
+import { format } from 'd3-format';
 
-export type SOEChartProps = {
-    title: string,
-    distributionData: DistributionData
-    geneScore: number
-    wikiInfo: {
-        ownerId: string
-        wikiId: string
-    }
+export interface SOEChartProps {
+  title: string;
+  distributionData: DistributionData;
+  geneScore: number;
+  wikiInfo: {
+    ownerId: string;
+    wikiId: string;
+  };
 }
 
-export type ChartData = {
+export interface ChartData {
   data: Plotly.Data[];
   layout?: Plotly.Layout;
   config?: Plotly.Config;
   ownerId?: string;
   wikiId?: string;
-};
+}
 
 @Component({
-  selector: "soechart",
-  templateUrl: "./soe-chart.component.html",
-  styleUrls: ["./soe-chart.component.scss"],
+  selector: 'soechart',
+  templateUrl: './soe-chart.component.html',
+  styleUrls: ['./soe-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class SOEChartComponent implements OnInit {
@@ -50,31 +51,31 @@ export class SOEChartComponent implements OnInit {
         pad: 4,
       },
       xaxis: {
-        title: "GENE SCORE",
+        title: 'GENE SCORE',
         titlefont: {
           size: 12,
         },
       },
       yaxis: {
-        title: "NUMBER OF GENES",
+        title: 'NUMBER OF GENES',
         titlefont: {
           size: 12,
         },
-        tickformat: ".1s",
+        tickformat: '.1s',
       },
-      plot_bgcolor: "rgba(236, 236, 236, 0.25)",
-      hovermode: "closest",
+      plot_bgcolor: 'rgba(236, 236, 236, 0.25)',
+      hovermode: 'x', // note: axistext (tooltip that is applied on the axis) is hidden via CSS
       hoverlabel: {
-        bgcolor: "#000", // opacity is set in CSS,
+        bgcolor: '#000', // opacity is set in CSS,
         font: {
-          color: "white",
+          color: 'white',
         },
       },
     },
   };
 
   onHideModal = () => {
-      this.showModal = false;
+    this.showModal = false;
   }
 
   ngOnInit() {
@@ -82,10 +83,10 @@ export class SOEChartComponent implements OnInit {
   }
 
   initChartData(): ChartData {
-    const annotationTextColor = "rgba(166, 132, 238, 1)";
+    const annotationTextColor = 'rgba(166, 132, 238, 1)';
     if (this.distributionData && this.geneScore) {
       const barColors = this.distributionData.distribution.map(
-        (item) => "rgba(166, 132, 238, 0.25)"
+        (item) => 'rgba(166, 132, 238, 0.25)'
       );
       let annotations = [];
       if (this.geneScore) {
@@ -94,7 +95,9 @@ export class SOEChartComponent implements OnInit {
           {
             x: annotationObj.scoreX,
             y: annotationObj.scoreY,
-            text: `${this.geneScore.toFixed(2)}`,
+            // We truncate the gene score instead of rounding, because a rounded score may end up conflicting with the displayed bin ranges
+            // See comments on AG-260
+            text: truncateToFixed(this.geneScore, 2),
             ax: 0,
             ay: -10,
             font: {
@@ -108,17 +111,23 @@ export class SOEChartComponent implements OnInit {
       return {
         data: [
           {
-            x: this.distributionData.bins.map((num) =>
-              parseFloat(num[0]).toFixed(2)
-            ),
-            // We will set customdata to be the upper bound of the bins, so we can show it in the tooltip.
-            customdata: this.distributionData.bins.map((num) =>
-              parseFloat(num[1]).toFixed(2)
-            ),
+            x: this.distributionData.bins.map((num) => parseFloat(num[0]).toFixed(2)),
+            // We will set customdata to be the bin range, so we can show it in the tooltip.
+            customdata: this.distributionData.bins.map((range, index) => {
+              const lowerBound = parseFloat(range[0]);
+              const upperBound = parseFloat(range[1]);
+
+              // We use d3-format since plotly also uses it
+              const formatter = format('.2f');
+
+              // The last bin's upper bound is inclusive ']', rather than exclusive ')'.
+              const isLastBin = index === this.distributionData.bins.length - 1;
+              return `[${formatter(lowerBound)}, ${formatter(upperBound)}${isLastBin ? ']' : ')'}`;
+            }),
             y: this.distributionData.distribution,
             hovertemplate:
-              "<br>  Score Range: [%{x:.2f}, %{customdata:.2f})  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>",
-            type: "bar",
+              '<br>  Score Range: %{customdata}  <br>  Gene Count: %{y:.0f}<extra></extra>  <br>',
+            type: 'bar',
             marker: {
               color: barColors,
             },
@@ -131,20 +140,12 @@ export class SOEChartComponent implements OnInit {
             // AG-240: Label only 0 and the max whole number on the x-axis
             tick0: 0,
             dtick: Math.ceil(
-              parseFloat(
-                this.distributionData.bins[
-                  this.distributionData.bins.length - 1
-                ][1]
-              )
+              parseFloat(this.distributionData.bins[this.distributionData.bins.length - 1][1])
             ),
             range: [
               -0.1,
               Math.ceil(
-                parseFloat(
-                  this.distributionData.bins[
-                    this.distributionData.bins.length - 1
-                  ][1]
-                )
+                parseFloat(this.distributionData.bins[this.distributionData.bins.length - 1][1])
               ),
             ],
           },
@@ -174,14 +175,9 @@ export class SOEChartComponent implements OnInit {
       binNumber = 0;
     }
 
-    if (
-      this.geneScore > parseFloat(this.distributionData.bins[lastBarIndex][0])
-    ) {
+    if (this.geneScore > parseFloat(this.distributionData.bins[lastBarIndex][0])) {
       scoreX = this.distributionData.bins[lastBarIndex][0];
-      scoreY =
-        this.distributionData.distribution[
-          this.distributionData.distribution.length - 1
-        ];
+      scoreY = this.distributionData.distribution[this.distributionData.distribution.length - 1];
       binNumber = lastBarIndex;
     }
 
@@ -206,6 +202,16 @@ export class SOEChartComponent implements OnInit {
   onExpand() {
     this.showModal = true;
   }
+}
 
-
+/**
+ * Truncates a number to a certain number of decimal places without rounding
+ */
+function truncateToFixed(num: number, fixed: number): string {
+  /*
+   * You might think that truncating a number to a certain number of decimal places in JavaScript would be simple, but then you would be wrong.
+   * See https://stackoverflow.com/a/11818658/9723359
+   */
+  const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
+  return num.toString().match(re)[0];
 }

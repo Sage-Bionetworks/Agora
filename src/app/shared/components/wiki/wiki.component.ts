@@ -24,7 +24,7 @@ import { SynapseContextProvider } from 'synapse-react-client/dist/utils/SynapseC
 export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
 
     @ViewChild('wiki') containerRef: ElementRef;
-    @Input() ownId: string;
+    @Input() ownerId: string;
     @Input() wikiId: string;
     @Input() classNames: string;
 
@@ -56,7 +56,7 @@ export class WikiComponent implements OnInit, OnChanges, AfterViewInit {
         }
 
         const wikiProps: MarkdownSynapseProps = {
-            ownerId: this.ownId || 'syn25913473',
+            ownerId: this.ownerId,
             wikiId: this.wikiId
         };
         const wikiContent = React.createElement(MarkdownSynapse, wikiProps);
