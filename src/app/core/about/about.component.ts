@@ -7,7 +7,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
     encapsulation: ViewEncapsulation.None
 })
 export class AboutComponent {
-
+    ownerId = "syn25913473";
     wikiId = '612058';
     classNames = 'section-thin about-desc';
 

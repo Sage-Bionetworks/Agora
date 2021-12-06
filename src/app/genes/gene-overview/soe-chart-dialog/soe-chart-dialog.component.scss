@@ -1,0 +1,20 @@
+@import "../../../../assets/css/helpers/variables";
+@import "../../../../assets/css/helpers/mixins";
+
+.soe-chart-modal {
+    .ui-dialog-titlebar {
+        pointer-events: auto;
+    }
+    .ui-dialog-content {
+        padding: 20px;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+
+        div {
+            width: 100%;
+            height: 100%;
+        }
+
+    }
+}

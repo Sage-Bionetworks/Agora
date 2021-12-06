@@ -379,7 +379,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     removeNoDataTabs() {
         const itemsToCheck = [this.geneInfo.nominations, this.geneInfo.druggability, this.geneExpValidation];
-        const labels = [this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.NOMINATION_DETAILS, this.tabMenuLabels.EXPERIMENTAL_VALIDATION];
+        const labels = [
+            this.tabMenuLabels.NOMINATION_DETAILS,
+            this.tabMenuLabels.NOMINATION_DETAILS,
+            this.tabMenuLabels.EXPERIMENTAL_VALIDATION
+        ];
 
         itemsToCheck.forEach((item, i) => {
             if (!item) {
