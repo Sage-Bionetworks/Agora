@@ -11,19 +11,19 @@ export const GeneExpValidationSchema = new Schema(
             required: true,
             type: String
         },
-        Hypothesis_tested: {
+        hypothesis_tested: {
             required: true,
             type: String
         },
-        Summary_findings: {
+        summary_findings: {
             required: true,
             type: String
         },
-        Published: {
+        published: {
             required: true,
             type: String
         },
-        Species: {
+        species: {
             required: true,
             type: String
         },
@@ -31,27 +31,27 @@ export const GeneExpValidationSchema = new Schema(
             required: true,
             type: String
         },
-        Outcome_measure: {
+        outcome_measure: {
             required: true,
             type: String
         },
-        Outcome_measure_details: {
+        outcome_measure_details: {
             required: true,
             type: String
         },
-        Contributors: {
+        contributors: {
             required: true,
             type: String
         },
-        Team: {
+        team: {
             required: true,
             type: String
         },
-        Reference_doi: {
+        reference_doi: {
             required: false,
             type: String
         },
-        Date_report: {
+        date_report: {
             required: true,
             type: String
         },
