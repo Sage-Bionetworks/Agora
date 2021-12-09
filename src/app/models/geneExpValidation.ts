@@ -4,17 +4,17 @@ export interface GeneExpValidation {
     _id: string;
     ensembl_gene_id: string;
     hgnc_symbol: string;
-    Hypothesis_tested: string;
-    Summary_findings: string;
-    Published: string;
-    Species: string;
-    Model_system: string;
-    Outcome_measure: string;
-    Outcome_measure_details: string;
-    Contributors: string;
-    Team: string;
-    Reference_doi: string;
-    Date_report: string;
+    hypothesis_tested: string;
+    summary_findings: string;
+    published: string;
+    species: string;
+    model_system: string;
+    outcome_measure: string;
+    outcome_measure_details: string;
+    contributors: string;
+    team: string;
+    reference_doi: string;
+    date_report: string;
 }
 
 export type GeneExpValidationDocument = GeneExpValidation & Document;
