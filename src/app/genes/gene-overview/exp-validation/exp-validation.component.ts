@@ -29,7 +29,7 @@ export class ExpValidationComponent implements OnInit {
         const teams = this.geneService.getCurrentTeams();
         if (teams.length) {
             this.teamInfo = this.data.map((item, i) => {
-               return teams.filter(j => j.team === item.Team)[0];
+               return teams.filter(j => j.team === item.team)[0];
             });
         }
     }
