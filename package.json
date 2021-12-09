@@ -120,7 +120,7 @@
     "@types/react-jsonschema-form": "^1.7.5",
     "@types/react-router-dom": "^5.1.7",
     "aws-param-store": "^2.1.0",
-    "aws-sdk": "^2.653.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.19.0",
     "chart.js": "^2.9.3",
     "core-js": "^2.6.11",
