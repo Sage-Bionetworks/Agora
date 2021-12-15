@@ -81,14 +81,6 @@ export class ApiServiceStub {
         });
     }
 
-    getGeneTissues(): Observable<any> {
-        return of(mockTissues);
-    }
-
-    getGeneModels(): Observable<any> {
-        return of(mockModels);
-    }
-
     getGeneMetabolomics(id: string): Observable<object> {
         return of(mockMetabolomics);
     }

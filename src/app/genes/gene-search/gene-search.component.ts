@@ -76,7 +76,6 @@ export class GeneSearchComponent implements OnInit {
                         name: this.notFoundString,
                         hgnc_symbol: this.notFoundString,
                         type_of_gene: this.notFoundString,
-                        go_MF: [],
                         isIGAP: false,
                         haseqtl: false,
                         isChangedInADBrain: false,

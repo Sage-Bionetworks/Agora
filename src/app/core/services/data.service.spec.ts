@@ -50,17 +50,6 @@ describe('Service: Data: TestBed', () => {
         });
     });
 
-    it('should load the tissues and models from the server', () => {
-        const ltmSpy = spyOn(dataService, 'loadTissuesModels').and.callThrough();
-
-        const loadTMResponse = dataService.loadTissuesModels();
-        loadTMResponse.subscribe((response) => {
-            expect(ltmSpy).toHaveBeenCalled();
-            expect(response[0]).toEqual(mockTissues);
-            expect(response[1]).toEqual(mockModels);
-        });
-    });
-
     // Load nodes fails in every way to be tested with a Promise returned
     it('should load the nodes from the server', () => {
         const pnSpy = spyOn(forceService, 'processNodes').and.callThrough();

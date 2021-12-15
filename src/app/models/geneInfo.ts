@@ -1,14 +1,5 @@
 import { Document } from 'mongoose';
 
-export interface GoMF {
-    category: string;
-    MF?: string;
-    evidence: string;
-    id: string;
-    pubmed: number[] | any;
-    term: string;
-}
-
 export interface GeneInfo {
     _id: string;
     ensembl_gene_id: string;
@@ -18,7 +9,6 @@ export interface GeneInfo {
     summary?: string;
     hgnc_symbol: string;
     type_of_gene: string;
-    go_MF: GoMF[];
     isIGAP: boolean;
     haseqtl: boolean;
     isChangedInADBrain: boolean;
