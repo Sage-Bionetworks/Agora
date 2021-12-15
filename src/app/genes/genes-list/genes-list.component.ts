@@ -84,11 +84,11 @@ export class GenesListComponent implements OnInit {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.dataSource = (data.items) ? data.items : [];
             this.dataSource.forEach((de: GeneInfo) => {
-                let teamsArray = [],
-                    studyArray = [],
-                    inputDataArray = [],
-                    validationStudyDetailsArray = [],
-                    initialNominationArray = [];
+                let teamsArray = [];
+                let studyArray = [];
+                let inputDataArray = [];
+                let validationStudyDetailsArray = [];
+                let initialNominationArray = [];
 
                 // First map all entries nested in the data to a new array
 
