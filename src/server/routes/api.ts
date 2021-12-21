@@ -271,7 +271,9 @@ connection.once('open', () => {
                     {
                         uniprotid: { $ne: null }
                     }
-                ]}).exec((err, gene: Proteomics) => {
+                ]})
+                    .sort('uniprotid')
+                    .exec((err, gene: Proteomics) => {
                     if (err) {
                         res.send({error: 'Empty Proteomics array', items: []});
                     } else {
@@ -565,7 +567,7 @@ connection.once('open', () => {
                             maxAdjPValue,
                             geneModels,
                             geneTissues,
-                            geneProteomics
+                            geneProteomics: geneProteomics.filter (p => p.hgnc_symbol === geneEntries[0].hgnc_symbol )
                         });
                     }
                 }
@@ -684,7 +686,7 @@ connection.once('open', () => {
             const queryObj = { [fieldName]: req.query.id };
 
             let overallScores;
-            if (fieldName === "ensembl_gene_id") {
+            if (fieldName === 'ensembl_gene_id') {
                 overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
             } else {
                 overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
