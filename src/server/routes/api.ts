@@ -98,6 +98,27 @@ connection.once('open', () => {
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
+    // Select fields for data caches
+    const tableGenesByIdFields = [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'nominatedtarget.initial_nomination',
+        'nominatedtarget.team',
+        'nominatedtarget.study',
+        'nominatedtarget.input_data',
+        'nominatedtarget.validation_study_details',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition'
+    ].join(' ');
+
+    // initialize data caches
+
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
         [
@@ -174,19 +195,18 @@ connection.once('open', () => {
         });
         await allTissues.sort();
         await allModels.sort();
-
-        //////////////////////////////////////////////////////////////////////////////////////////
     });
 
-    GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+    GenesInfo.find({ nominations: { $gt: 0 } }).lean()
+        .select(tableGenesByIdFields)
+        .sort({ hgnc_symbol: 1 })
         .exec(async (err, genes: GeneInfo[], next) => {
         if (err) {
             next(err);
         } else {
             tableGenesById = genes.slice();
             // Table genes ordered by nominations
-            tableGenesByNom = await genes.slice().sort((a, b) => {
+            tableGenesByNom = genes.slice().sort((a, b) => {
                 return (a.nominations > b.nominations) ? 1 :
                     ((b.nominations > a.nominations) ? -1 : 0);
             });
@@ -614,7 +634,7 @@ connection.once('open', () => {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', 0);
-        res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
+        res.json({ items: tableGenesById, totalRecords });
     });
 
     // Get all gene infos that match an id, using the hgnc_symbol or ensembl id
