@@ -667,23 +667,28 @@ connection.once('open', () => {
         }
     });
 
-    // Get a gene list by id
+    // Get the list of genes related to the gene specified by id; used for the gene-network (hairball)
     router.get('/genelist/:id', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) {
             res.json({items: []});
         } else {
+
+            // identify all genes directly related to the gene of interest via network records
             GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).lean()
                 .exec(async (err, links) => {
                     const arrA = links.slice().map((slink) => {
                         return slink.geneB_ensembl_gene_id;
                     });
 
+                    // identify all genes related to the related genes identified above
                     GenesLinks.find({geneB_ensembl_gene_id: req.params.id}, async (errB, linkB) => {
                         const arrB = linkB.slice().map((slink) => {
                             return slink.toJSON()['geneA_ensembl_gene_id'];
                         });
                         const arr = [...arrA, ...arrB];
+
+                        // identify all genes related to the related genes identified above
                         await GenesLinks.find({geneA_ensembl_gene_id: {$in: arr}}).lean()
                             .where('geneB_ensembl_gene_id')
                             .in(arr)
