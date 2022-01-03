@@ -96,6 +96,27 @@ connection.once('open', () => {
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
+    // Select fields for data caches
+    const tableGenesByIdFields = [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'nominatedtarget.initial_nomination',
+        'nominatedtarget.team',
+        'nominatedtarget.study',
+        'nominatedtarget.input_data',
+        'nominatedtarget.validation_study_details',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition'
+    ].join(' ');
+
+    // initialize data caches
+
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
         [
@@ -159,12 +180,11 @@ connection.once('open', () => {
                     break;
             }
         });
-
-        //////////////////////////////////////////////////////////////////////////////////////////
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } }).lean()
-        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+        .select(tableGenesByIdFields)
+        .sort({ hgnc_symbol: 1 })
         .exec(async (err, genes: GeneInfo[], next) => {
         if (err) {
             next(err);
@@ -246,7 +266,8 @@ connection.once('open', () => {
                     {
                         uniprotid: { $ne: null }
                     }
-                ]}).lean().exec((err, gene: Proteomics) => {
+                ]}).lean().sort('uniprotid')
+                    .exec((err, gene: Proteomics) => {
                     if (err) {
                         res.send({error: 'Empty Proteomics array', items: []});
                     } else {
@@ -539,7 +560,7 @@ connection.once('open', () => {
                             maxAdjPValue,
                             geneModels,
                             geneTissues,
-                            geneProteomics
+                            geneProteomics: geneProteomics.filter (p => p.hgnc_symbol === geneEntries[0].hgnc_symbol )
                         });
                     }
                 }
@@ -552,7 +573,7 @@ connection.once('open', () => {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', 0);
-        res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
+        res.json({ items: tableGenesById, totalRecords });
     });
 
     // Get all gene infos that match an id, using the hgnc_symbol or ensembl id

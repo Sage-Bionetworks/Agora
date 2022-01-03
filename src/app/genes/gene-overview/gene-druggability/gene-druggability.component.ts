@@ -352,7 +352,7 @@ export class GeneDruggabilityComponent implements OnInit {
                 title: 'Pharos',
                 description: `View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the Illuminating the Druggable Genome program.`,
                 linkText: 'Visit Pharos',
-                link: `https://pharos.nih.gov/search?q=%22${this.gene.hgnc_symbol}%22`
+                link: `https://pharos.nih.gov/search?q=${this.gene.hgnc_symbol}`
             },
             {
                 title: 'Brain RNAseq',
