@@ -126,36 +126,23 @@ export class GenesListComponent implements OnInit {
                     de.sm_druggability_bucket =
                         de.druggability[0].sm_druggability_bucket.toString();
                     de.safety_bucket = de.druggability[0].safety_bucket.toString();
-                    de.feasibility_bucket = de.druggability[0].feasibility_bucket.toString();
                     de.abability_bucket = de.druggability[0].abability_bucket.toString();
-                    de.new_modality_bucket = de.druggability[0].new_modality_bucket.toString();
-                    de.tissue_engagement_bucket =
-                        de.druggability[0].tissue_engagement_bucket.toString();
                     de.pharos_class = de.druggability[0].pharos_class;
                     de.classification = de.druggability[0].sm_druggability_bucket + ': ' +
                         de.druggability[0].classification;
                     de.safety_bucket_definition = de.druggability[0].safety_bucket + ': ' +
                         de.druggability[0].safety_bucket_definition;
-                    de.feasibility_bucket_definition =
-                        de.druggability[0].feasibility_bucket_definition;
                     de.abability_bucket_definition = de.druggability[0].abability_bucket + ': ' +
                         de.druggability[0].abability_bucket_definition;
-                    de.new_modality_bucket_definition =
-                        de.druggability[0].new_modality_bucket_definition;
                 } else {
                     const noValue = 'No value';
                     de.sm_druggability_bucket = noValue;
                     de.safety_bucket = noValue;
-                    de.feasibility_bucket = noValue;
                     de.abability_bucket = noValue;
-                    de.new_modality_bucket = noValue;
-                    de.tissue_engagement_bucket = noValue;
                     de.pharos_class = noValue;
                     de.classification = noValue;
                     de.safety_bucket_definition = noValue;
-                    de.feasibility_bucket_definition = noValue;
                     de.abability_bucket_definition = noValue;
-                    de.new_modality_bucket_definition = noValue;
                 }
             });
             this.genesInfo = this.dataSource;
