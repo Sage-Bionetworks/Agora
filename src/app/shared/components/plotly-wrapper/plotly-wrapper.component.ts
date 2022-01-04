@@ -56,7 +56,7 @@ export class PlotlyWrapperComponent implements OnInit, OnChanges, AfterViewInit,
     }
 
     public ngOnDestroy() {
-        ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement)
+        ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement);
     }
 
     private renderComponent() {

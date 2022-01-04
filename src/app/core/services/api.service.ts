@@ -56,39 +56,6 @@ export class ApiService {
         return this.http.get<GenesResponse>('/api/genes', { headers, params });
     }
 
-    getGenesSameId(id: string): Observable<GenesResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        const params = new HttpParams().set(
-            'id', id
-        );
-
-        // Get all the genes to render the charts
-        return this.http.get<GenesResponse>('/api/genes/same', { headers, params });
-    }
-
-    getPageData(paramsObj?: LazyLoadEvent): Observable<object> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        let params = new HttpParams();
-
-        for (const key in paramsObj) {
-            if (paramsObj.hasOwnProperty(key)) {
-                params = params.append(key, paramsObj[key]);
-            }
-        }
-
-        return this.http.get('/api/genes/page', { headers, params });
-    }
-
     getTableData(): Observable<GeneInfosResponse> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -223,46 +190,6 @@ export class ApiService {
                 ) as Observable<object>;
             })
         ).pipe(share());
-    }
-
-    getTissues(): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get('/api/tissues', { headers });
-    }
-
-    getGeneTissues(): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get('/api/tissues/gene', { headers });
-    }
-
-    getModels(): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get('/api/models', { headers });
-    }
-
-    getGeneModels(): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get('/api/models/gene', { headers });
     }
 
     getGeneMetabolomics(id: string): Observable<object> {

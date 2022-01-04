@@ -37,13 +37,6 @@ export class DataServiceStub {
         ]);
     }
 
-    loadTissuesModels(gene: Gene): Observable<any[]> {
-        return forkJoin([
-            of(mockTissues),
-            of(mockModels)
-        ]);
-    }
-
     loadNodes(sgene?: Gene): Promise<any> {
         return new Promise((resolve, reject) => {
             resolve(mockNetwork1);

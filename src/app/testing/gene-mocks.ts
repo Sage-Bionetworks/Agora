@@ -84,33 +84,6 @@ export const mockInfo1: GeneInfo = {
     'by RefSeq, Aug 2017].',
   hgnc_symbol: 'HSPB1',
   type_of_gene: 'protein-coding',
-  go_MF: [
-    {
-      category: 'MF',
-      evidence: 'HDA',
-      id: 'GO:0003723',
-      pubmed: [22658674],
-      term: 'RNA binding',
-    },
-    {
-      category: 'MF',
-      evidence: 'ISS',
-      id: 'GO:0005080',
-      pubmed: {},
-      term: 'protein kinase C binding',
-    },
-    {
-      category: 'MF',
-      evidence: 'IPI',
-      id: 'GO:0005515',
-      pubmed: [
-        11003656, 11700327, 12601044, 14594798, 15161933, 15657067, 16169070, 17184779, 17342744,
-        17353931, 18330356, 20467437, 20618440, 21157431, 21575178, 22365833, 23188086, 23397142,
-        23948568, 24189400, 25036637, 25241761, 25277244, 25852190, 26496610,
-      ],
-      term: 'protein binding',
-    },
-  ],
   isChangedInADBrain: false,
   isIGAP: false,
   haseqtl: true,
