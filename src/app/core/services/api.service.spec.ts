@@ -2,7 +2,6 @@ import {
     TestBed
 } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpParams } from '@angular/common/http';
 
 import {
     mockGene1,
@@ -10,7 +9,9 @@ import {
     mockGenesResponse,
     mockLinksListResponse,
     mockTeam1,
-    mockTissues,
+    mockTeam2,
+    mockTeam3,
+    mockTeam4,
     mockModels
 } from '../../testing';
 
@@ -113,14 +114,25 @@ describe('Service: Api: TestBed', () => {
         req.flush(res);
     });
 
-    it('should get a team data from the server using a gene info', () => {
+    it ('should get team data from the server using a team name', () => {
         const res: any = [mockTeam1];
 
-        apiService.getTeams(mockInfo1).subscribe((response) => {
+        apiService.getTeams([mockTeam1.team]).subscribe((response) => {
             expect(response).toEqual(res);
         });
 
-        const req = httpMock.expectOne('/api/teams?teams=Emory');
+        const req = httpMock.expectOne('/api/teams?teams=Duke');
+        expect(req.request.method).toBe('GET');
+        req.flush(res);
+    });
+
+    it('should get deduplicated team data from the server using a list of team names', () => {
+        const res: any = [mockTeam1, mockTeam2, mockTeam4];
+        apiService.getTeams([mockTeam1.team, mockTeam2.team, mockTeam3.team, mockTeam4.team]).subscribe((response) => {
+            expect(response).toEqual(res);
+        });
+
+        const req = httpMock.expectOne('/api/teams?teams=Duke,Harvard-MIT,Columbia-Rush');
         expect(req.request.method).toBe('GET');
         req.flush(res);
     });
