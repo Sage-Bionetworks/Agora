@@ -1,16 +1,16 @@
 import {
-  Gene,
-  GeneInfo,
-  GeneNetworkLinks,
-  GeneNetwork,
-  GeneStatistics,
-  GenesResponse,
-  Metabolomics,
-  LinksListResponse,
-  GeneExpValidation,
-  GeneScoreDistribution,
-  DistributionData,
-  GeneOverallScores,
+    Gene,
+    GeneInfo,
+    GeneNetworkLinks,
+    GeneNetwork,
+    GeneStatistics,
+    GenesResponse,
+    Metabolomics,
+    LinksListResponse,
+    GeneExpValidation,
+    GeneScoreDistribution,
+    DistributionData,
+    GeneOverallScores, GeneResponse,
 } from '../models';
 
 export const mockGene1: Gene = {
@@ -274,4 +274,32 @@ export const mockGeneOverallScores: GeneOverallScores = {
   GeneticsScore: 2,
   OmicsScore: 3,
   LiteratureScore: 4,
+};
+
+export const mockGeneResponse1: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoGeneItem: GeneResponse = {
+    item: null,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoExpValidation: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: null,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoScores: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: null
 };
