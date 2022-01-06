@@ -75,8 +75,8 @@ export class GeneService {
         this.setCurrentGene(data.item);
         this.setCurrentInfo(data.info);
         this.setCurrentExpValidation(data.expValidation);
-        this.setCurrentModel(data.item.model);
-        this.setCurrentTissue(data.item.tissue);
+        this.setCurrentModel(data.item?.model);
+        this.setCurrentTissue(data.item?.tissue);
         this.setCurrentGeneOverallScores(data.overallScores);
     }
 

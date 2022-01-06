@@ -27,7 +27,7 @@ describe('Service: Chart: TestBed', () => {
             ]
         });
 
-        chartService = TestBed.get(ChartService);
+        chartService = TestBed.inject(ChartService);
     });
 
     it('should create an instance', () => {

@@ -28,8 +28,8 @@ describe('Service: Api: TestBed', () => {
             providers: [ ApiService ]
         });
 
-        apiService = TestBed.get(ApiService);
-        httpMock = TestBed.get(HttpTestingController);
+        apiService = TestBed.inject(ApiService);
+        httpMock = TestBed.inject(HttpTestingController);
     });
 
     afterEach(() => {

@@ -30,9 +30,9 @@ describe('Service: Data: TestBed', () => {
             ]
         });
 
-        dataService = TestBed.get(DataService);
-        apiService = TestBed.get(ApiService);
-        forceService = TestBed.get(ForceService);
+        dataService = TestBed.inject(DataService);
+        apiService = TestBed.inject(ApiService);
+        forceService = TestBed.inject(ForceService);
     });
 
     it('should create an instance', () => {

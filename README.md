@@ -407,11 +407,12 @@ More examples can be found [here](https://github.com/Sage-Bionetworks/Agora/blob
 Before pushing code to the dev branch, we should follow these steps to make sure no errors during the build process. 
 
 1. Run `npm run test` to make sure no failed unit test
-2. Run `npm clean:all`. This removes the `./dist` folder
+2. Run `npm run clean:all`. This removes the `./dist` folder
 3. Delete `node_modules`
 4. Run `npm install` to re-install the `node_modules`
 5. Run `npm run build:aot` to build the client code. In a separate command window, run `npm run build:server:prod` to build the server code
-6. Verify the Agora app is running without error in a browser by running the server script: `node --max_old_space_size=2000  ./dist/server.js`
+6. Run the server script: `node --max_old_space_size=2000  ./dist/server.js`
+7. Verify the Agora app is running without error in a browser at localhost:8080
 
 # Deployment
 

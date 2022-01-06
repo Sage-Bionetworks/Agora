@@ -22,8 +22,8 @@ describe('Service: Force: TestBed', () => {
             ]
         });
 
-        forceService = TestBed.get(ForceService);
-        geneService = TestBed.get(GeneService);
+        forceService = TestBed.inject(ForceService);
+        geneService = TestBed.inject(GeneService);
     });
 
     it('should create an instance', () => {
