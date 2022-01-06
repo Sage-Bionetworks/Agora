@@ -52,8 +52,8 @@ export class NominationDetailsComponent implements OnInit {
     }
 
     loadTeams() {
-        const info = this.geneService.getCurrentInfo();
-        this.apiService.getTeams(info).subscribe((data: TeamInfo[]) => {
+        const teamNames = this.geneService.getCurrentInfo().nominatedtarget.map(info  => info.team);
+        this.apiService.getTeams(teamNames).subscribe((data: TeamInfo[]) => {
             if (!data) { this.navService.getRouter().navigate(['/genes']); }
             // Data array has the correct teams order already
             this.teams = data;
@@ -69,8 +69,6 @@ export class NominationDetailsComponent implements OnInit {
                 newNtInfoArray.push(this.geneInfo.nominatedtarget[ntInfoArray.indexOf(team)]);
             });
             this.ntInfoArray = newNtInfoArray;
-
-            this.geneService.setCurrentTeams(this.teams);
         }, (error) => {
             console.log('Error loading gene: ' + error.message);
         }, () => {

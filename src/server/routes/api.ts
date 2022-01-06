@@ -5,7 +5,7 @@ import {
     NeuropathCorr,
     GeneExpValidation,
     GeneScoreDistribution,
-    GeneOverallScores,
+    GeneOverallScores, TeamInfo,
 } from '../../app/models';
 import {
     Genes,
@@ -80,6 +80,7 @@ connection.once('open', () => {
     // Get the genes collection size
     let tableGenesById: GeneInfo[] = [];
     let allGenes: Gene[] = [];
+    let allTeams: TeamInfo[] = [];
     const genesADDMF: Gene[] = [];
     const genesADDAODMF: Gene[] = [];
     const genesADDSF: Gene[] = [];
@@ -242,6 +243,23 @@ connection.once('open', () => {
             } else {
                 genesOverallScores = genes.slice();
             }
+        });
+
+    TeamsInfo.find().lean()
+        .exec(async (err, teams: TeamInfo[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                allTeams = teams.slice();
+            }
+            allTeams.sort((a, b) => {
+                const aProgram: string = (a.program) ? a.program.toLowerCase() : '';
+                const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
+                const bProgram: string = (b.program) ? b.program.toLowerCase() : '';
+                const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
+                return aProgram.toLowerCase() + aTeamFull.toLowerCase() <
+                bProgram.toLowerCase() + bTeamFull.toLowerCase() ? -1 : 1;
+            });
         });
 
     /* GET genes listing. */
@@ -543,8 +561,8 @@ connection.once('open', () => {
                                 geneModels.push(g['model']);
                             }
                         });
-                        await geneTissues.sort();
-                        await geneModels.sort();
+                        geneTissues.sort();
+                        geneModels.sort();
 
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
@@ -742,49 +760,34 @@ connection.once('open', () => {
         }
     });
 
-    // Get a team by team field
+    // Get teams by team (short name) field
     router.get('/teams', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); } else {
-            const arr = req.query.teams.split(', ');
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({items: []});
+        } else {
+            const arr = req.query.teams.split(',');
+            const teams = allTeams.filter(t => arr.includes(t.team));
 
-            TeamsInfo.find({ team: { $in: arr } }).lean().exec((err, teams) => {
-                if (err) {
-                    next(err);
-                } else {
-                    teams.sort((a, b) => {
-                        const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
-                        const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
-                        return aTeamFull.toLowerCase() < bTeamFull.toLowerCase() ? -1 : 1;
-                    });
-
-                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                    res.setHeader('Pragma', 'no-cache');
-                    res.setHeader('Expires', 0);
-                    res.json(teams);
-                }
-            });
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
+            res.json(teams);
         }
     });
 
     // Get all team infos
     router.get('/teams/all', (req, res, next) => {
-        TeamsInfo.find().lean().exec((err, teams) => {
-            if (err) {
-                next(err);
-            } else {
-                teams.sort((a, b) => {
-                    const aProgram: string = (a.program) ? a.program.toLowerCase() : '';
-                    const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
-                    const bProgram: string = (b.program) ? b.program.toLowerCase() : '';
-                    const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
-                    return aProgram.toLowerCase() + aTeamFull.toLowerCase() <
-                        bProgram.toLowerCase() + bTeamFull.toLowerCase() ? -1 : 1;
-                });
+        const noData = [];
+        if (!allTeams.length) {
+            console.log('getAllTeams: Teams cache is empty');
+            return noData;
+        }
 
-                res.json(teams);
-            }
-        });
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json(allTeams);
     });
 
     router.get('/team/image', async (req, res, next) => {

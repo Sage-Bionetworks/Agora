@@ -81,7 +81,7 @@ describe('Component: NominationDetails', () => {
         expect(woSpy.calls.count()).toEqual(1);
     });
 
-    it('should open a new window when needed', () => {
+    it('should get the title case', () => {
         const ttcSpy = spyOn(component, 'toTitleCase').and.callThrough();
 
         component.gene = mockGene1;
@@ -99,5 +99,13 @@ describe('Component: NominationDetails', () => {
 
         expect(gfdnSpy.calls.any()).toEqual(true);
         expect(displayName).toEqual('A: B');
+    });
+
+    it('should get the correct team', () => {
+        const ltSpy = spyOn(component, 'loadTeams').and.callThrough();
+
+        component.ngOnInit();
+        expect(ltSpy.calls.any()).toEqual(true);
+        expect(component.teams[0].team).toEqual('Columbia-Rush');
     });
 });

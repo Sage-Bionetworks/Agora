@@ -6,7 +6,6 @@ import {
     TissuesResponse,
     ModelsResponse,
     Proteomics,
-    TeamInfo,
     GeneExpValidation,
     GeneOverallScores
 } from '../models';
@@ -19,7 +18,6 @@ import {
     mockExpValidation,
     mockGeneOverallScores
 } from './gene-mocks';
-import { mockTeam1, mockTeam2 } from './team-info-mocks';
 
 @Injectable()
 export class GeneServiceStub {
@@ -60,10 +58,6 @@ export class GeneServiceStub {
 
     getCurrentExpValidation(): GeneExpValidation[] {
         return mockExpValidation;
-    }
-
-    setCurrentTeams(teams: TeamInfo[]) {
-        //
     }
 
     setLogFC(min: number, max: number) {
@@ -216,9 +210,5 @@ export class GeneServiceStub {
 
     getGeneProteomics(): Proteomics[] {
         return [];
-    }
-
-    getCurrentTeams(): TeamInfo[] {
-        return [mockTeam1, mockTeam2];
     }
 }

@@ -123,15 +123,16 @@ export class ApiService {
         return this.http.get('/api/genescores', { headers, params }) as Observable<GeneScoreDistribution>;
     }
 
-    getTeams(info: GeneInfo): Observable<object> {
+    getTeams(teamNames: string[]): Observable<object> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
             'Pragma': 'no-cache',
             'Expires': '0'
         });
+        const uniqTeams = Array.from(new Set(teamNames));
         const params = new HttpParams().set(
-            'teams', info.nominatedtarget.map((e) => e.team).join(', ')
+            'teams', uniqTeams.join(',')
         );
 
         return this.http.get('/api/teams', { headers, params });
