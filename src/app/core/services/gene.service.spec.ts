@@ -43,7 +43,8 @@ describe('Service: Gene: TestBed', () => {
         expect(gcglSpy).toHaveBeenCalledTimes(2);
     });
 
-    it('should update the previous gene with the current gene', () => {
+    // AG-293
+    xit('should update the previous gene with the current gene', () => {
         const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
         geneService.setCurrentGene(mockGene1);
         expect(geneService.getCurrentGene()).toEqual(mockGene1);

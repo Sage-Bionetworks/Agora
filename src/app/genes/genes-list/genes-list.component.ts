@@ -117,17 +117,20 @@ export class GenesListComponent implements OnInit {
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
                 de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.validation_study_details = (validationStudyDetailsArray.length) ? [...new Set(validationStudyDetailsArray)]
+                de.validation_study_details = (validationStudyDetailsArray.length) ?
+                    [...new Set(validationStudyDetailsArray)]
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.initial_nomination = (initialNominationArray.length) ? Math.min(...initialNominationArray) : undefined;
+                de.initial_nomination = (initialNominationArray.length) ?
+                    Math.min(...initialNominationArray) : undefined;
 
                 // Druggability columns
+                const noValue = 'No value';
                 if (de.druggability && de.druggability.length) {
                     de.sm_druggability_bucket =
                         de.druggability[0].sm_druggability_bucket.toString();
                     de.safety_bucket = de.druggability[0].safety_bucket.toString();
                     de.abability_bucket = de.druggability[0].abability_bucket.toString();
-                    de.pharos_class = de.druggability[0].pharos_class;
+                    de.pharos_class = de.druggability[0].pharos_class ? de.druggability[0].pharos_class : noValue;
                     de.classification = de.druggability[0].sm_druggability_bucket + ': ' +
                         de.druggability[0].classification;
                     de.safety_bucket_definition = de.druggability[0].safety_bucket + ': ' +
@@ -135,7 +138,6 @@ export class GenesListComponent implements OnInit {
                     de.abability_bucket_definition = de.druggability[0].abability_bucket + ': ' +
                         de.druggability[0].abability_bucket_definition;
                 } else {
-                    const noValue = 'No value';
                     de.sm_druggability_bucket = noValue;
                     de.safety_bucket = noValue;
                     de.abability_bucket = noValue;
