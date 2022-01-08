@@ -11,7 +11,6 @@ export interface GeneInfo {
     type_of_gene: string;
     isIGAP: boolean;
     haseqtl: boolean;
-    isChangedInADBrain: boolean;
     isAnyRNAChangedInADBrain?: boolean;
     isAnyProteinChangedInADBrain?: boolean;
     medianexpression: MedianExpression[];

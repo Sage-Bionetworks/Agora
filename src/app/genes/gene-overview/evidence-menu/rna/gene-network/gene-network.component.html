@@ -43,12 +43,20 @@
                         <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
                     </h4>
                     <h4 class="cg-col-span">
-                        Nominated target &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText((geneInfo.nominations === undefined) ? false : geneInfo.nominations)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
                         Brain eQTL &nbsp;&nbsp;&nbsp;
                         <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
+                    </h4>
+                    <h4 class="cg-col-span">
+                        RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                        <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, true)">{{getText(geneInfo.isAnyRNAChangedInADBrain)}}</span>
+                    </h4>
+                    <h4 class="cg-col-span">
+                        Protein Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                        <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, true)">{{getText(geneInfo.isAnyProteinChangedInADBrain)}}</span>
+                    </h4>
+                    <h4 class="cg-col-span">
+                        Nominated target &nbsp;&nbsp;&nbsp;
+                        <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText((geneInfo.nominations === undefined) ? false : geneInfo.nominations > 0)}}</span>
                     </h4>
                 </div>
             </div>

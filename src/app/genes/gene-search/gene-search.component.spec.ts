@@ -95,7 +95,7 @@ describe('Component: GeneSearch', () => {
         expect(aEl.length).toEqual(1);
     }));
 
-    it('should have a inpput element', () => {
+    it('should have a input element', () => {
         const el = fixture.debugElement.query(By.css('input'));
         expect(el).toBeDefined();
 
