@@ -296,11 +296,7 @@ export class GeneSimilarComponent implements OnInit {
             }
         } else {
             if (field === 'druggability') {
-                if (subfield === 'pharos_class') {
-                    return this.druggabilitypc(rowObj.druggability);
-                } else {
-                    return this.druggability(rowObj.druggability);
-                }
+                return this.druggability(rowObj.druggability, subfield);
             } else {
                 if (field === 'isIGAP' || field === 'isChangedInADBrain' ||
                     field === 'haseqtl') {
@@ -316,13 +312,23 @@ export class GeneSimilarComponent implements OnInit {
         return druggability[0].pharos_class;
     }
 
-    druggability(druggability: Druggability[]): string {
-        if (!druggability || !druggability.length || !druggability[0].sm_druggability_bucket ||
-            !druggability[0].classification
-        ) {
+    druggability(druggability: Druggability[], subfield: string): string {
+        if (!druggability || !druggability.length || !druggability[0][subfield]) {
             return '-';
+        } else {
+            switch (subfield) {
+                case 'sm_druggability_bucket':
+                    return `${druggability[0][subfield]}: ${druggability[0].classification}`;
+                case 'safety_bucket':
+                    return `${druggability[0][subfield]}: ${druggability[0].safety_bucket_definition}`;
+                case 'abability_bucket':
+                    return `${druggability[0][subfield]}: ${druggability[0].abability_bucket_definition}`;
+                case 'pharos_class':
+                    return `${druggability[0][subfield]}`;
+                default:
+                    return 'No value';
+            }
         }
-        return `${druggability[0].sm_druggability_bucket}: ${druggability[0].classification}`;
     }
 
     onRowSelect(event) {
