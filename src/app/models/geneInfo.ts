@@ -61,16 +61,12 @@ export interface NominatedTarget {
 export interface Druggability {
     sm_druggability_bucket: number;
     safety_bucket: number;
-    feasibility_bucket: number;
     abability_bucket: number;
-    new_modality_bucket: number;
-    tissue_engagement_bucket: number;
     pharos_class: string;
+    // classification should really be named sm_druggability_bucket_definition
     classification: string;
     safety_bucket_definition: string;
-    feasibility_bucket_definition: string;
     abability_bucket_definition: string;
-    new_modality_bucket_definition: string;
 }
 
 export type GeneInfoDocument = GeneInfo & Document;
