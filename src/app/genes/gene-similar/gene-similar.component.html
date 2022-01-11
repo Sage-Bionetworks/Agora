@@ -75,7 +75,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns">
-                    {{colFinalValue(rowData, col.field, col.subfield)}}
+                    {{colFinalValue(rowData, col.field)}}
                 </td>
             </tr>
         </ng-template>

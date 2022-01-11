@@ -466,7 +466,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     getAlias(): string {
-        if (this.geneInfo.alias.length > 0) {
+        if (this.geneInfo.alias && this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
         }
         return '';
