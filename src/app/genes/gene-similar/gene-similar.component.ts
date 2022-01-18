@@ -53,6 +53,7 @@ export class GeneSimilarComponent implements OnInit {
     totalRecords: any;
     loading: boolean;
     sortColumnIndex: number;
+    noValue = 'No value';
 
     constructor(
         private router: Router,
@@ -67,19 +68,16 @@ export class GeneSimilarComponent implements OnInit {
     ngOnInit() {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'brain_regions', header: 'Brain Regions' },
-            { field: 'num_brain_regions', header: 'Number of Brain Regions' },
-            { field: 'nominations', header: 'Nominated Target' },
+            { field: 'brain_regions_display_value', header: 'Brain Regions' },
+            { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
+            { field: 'nominated_target_display_value', header: 'Nominated Target' },
             { field: 'isIGAP', header: 'Genetic Association with LOAD'},
             { field: 'isChangedInADBrain', header: 'RNA Expression Change'},
             { field: 'haseqtl', header: 'Brain eQTL' },
-            { field: 'druggability', subfield: 'pharos_class', header: 'Pharos Class'},
-            { field: 'druggability', subfield: 'sm_druggability_bucket',
-                header: 'Small Molecule Druggability'},
-            { field: 'druggability', subfield: 'safety_bucket',
-                header: 'Safety Rating'},
-            { field: 'druggability', subfield: 'abability_bucket',
-                header: 'Antibody Modality'}
+            { field: 'pharos_class_display_value', header: 'Pharos Class' },
+            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+            { field: 'safety_rating_display_value', header: 'Safety Rating' },
+            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
         ];
 
         // Add a position property so we can add/remove at the same position
@@ -201,17 +199,34 @@ export class GeneSimilarComponent implements OnInit {
             this.apiService.getInfosMatchIds(nodesIds).subscribe((datas: GeneInfosResponse) => {
                 this.genesInfo = datas.items;
                 this.genesInfo.forEach((de: GeneInfo) => {
-                    // First map all entries nested in the data to a new array
-                    const meArray = (de.medianexpression.length) ? de.medianexpression.map(
-                        (me: MedianExpression) => me.tissue) : [];
 
-                    // Join the final strings into a new array removing duplicates
-                    de.brain_regions = (meArray.length) ? meArray.filter(this.getUnique)
+                    // Populate display fields
+                    de.isChangedInADBrain = (de.isChangedInADBrain) ? de.isChangedInADBrain : false;
+                    de.nominated_target_display_value = de.nominations > 0;
+
+                    // Populate MedianExpression display fields
+                    const meArray = (de.medianexpression.length) ?
+                        de.medianexpression.map((me: MedianExpression) => me.tissue) : [];
+                    de.brain_regions_display_value = (meArray.length) ? meArray.filter(this.getUnique)
                         .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
+                    de.num_brain_regions_display_value = meArray.length.toString();
 
-                    de.num_brain_regions = meArray.length.toString();
-                    de.isChangedInADBrain = (de.isChangedInADBrain) ? de.isChangedInADBrain :
-                        false;
+                    // Populate Druggability display fields
+                    if (de.druggability && de.druggability.length) {
+                        de.pharos_class_display_value = de.druggability[0].pharos_class ?
+                            de.druggability[0].pharos_class : this.noValue;
+                        de.sm_druggability_display_value = de.druggability[0].sm_druggability_bucket + ': ' +
+                            de.druggability[0].classification;
+                        de.safety_rating_display_value = de.druggability[0].safety_bucket + ': ' +
+                            de.druggability[0].safety_bucket_definition;
+                        de.ab_modality_display_value = de.druggability[0].abability_bucket + ': ' +
+                            de.druggability[0].abability_bucket_definition;
+                    } else {
+                        de.pharos_class_display_value = this.noValue;
+                        de.sm_druggability_display_value = this.noValue;
+                        de.safety_rating_display_value = this.noValue;
+                        de.ab_modality_display_value = this.noValue;
+                    }
                 });
 
                 this.totalRecords = (datas.items.length) ? datas.items.length : 0;
@@ -231,33 +246,24 @@ export class GeneSimilarComponent implements OnInit {
     downloadTable() {
         const downloadArray = [];
         // The headers row for the csv file
-        downloadArray[0] = this.cols.map((c) => (c.subfield) ? c.subfield : c.field).join();
+        downloadArray[0] = this.cols.map((c) => c.header).join();
+        // List of columns with values containing commas
+        const escapeFields = ['brain_regions_display_value', 'sm_druggability_display_value',
+            'safety_rating_display_value', 'ab_modality_display_value'];
+
         this.genesInfo.forEach((de: GeneInfo) => {
             downloadArray.push('');
             this.cols.forEach((c, index) => {
-                const curField = (c.subfield) ? c.subfield : c.field;
-                // If we don't have the field in the data file
-                if (de[c.field] === undefined) {
-                    downloadArray[downloadArray.length - 1] += '';
-                } else {
-                    if (c.field === 'druggability') {
-                        downloadArray[downloadArray.length - 1] += de[c.field][0][c.subfield];
-                    } else {
-                        downloadArray[downloadArray.length - 1] += (curField === 'brain_regions' ||
-                            curField === 'pharos_class') ? ('"' + de[curField] + '"') :
-                            de[curField];
-                    }
-                }
-
+                downloadArray[downloadArray.length - 1] +=
+                    // quote the values that contain commas
+                    (escapeFields.includes(c.field)) ?  ('"' + de[c.field] + '"') : de[c.field];
                 downloadArray[downloadArray.length - 1] += ((index) < (this.cols.length - 1)) ?
                     ',' : '';
             });
         });
 
         // Finally export to csv
-        this.dataService.exportToCsv(
-            'genes-similar-' + this.gene.ensembl_gene_id + '.csv', downloadArray
-        );
+        this.dataService.exportToCsv( 'genes-similar-' + this.gene.ensembl_gene_id + '.csv', downloadArray);
     }
 
     toggleFullscreen() {
@@ -286,49 +292,17 @@ export class GeneSimilarComponent implements OnInit {
         };
     }
 
-    colFinalValue(rowObj: any, field: any, subfield: any): string {
+    colFinalValue(rowObj: any, field: any): string {
 
         if (rowObj[field] === undefined) {
-            if (rowObj[subfield]) {
-                return rowObj[subfield];
-            } else {
-                return 'False';
-            }
+            return this.noValue;
         } else {
-            if (field === 'druggability') {
-                return this.druggability(rowObj.druggability, subfield);
-            } else {
                 if (field === 'isIGAP' || field === 'isChangedInADBrain' ||
-                    field === 'haseqtl') {
+                    field === 'haseqtl' || field === 'nominated_target_display_value') {
                     return this.titleCase.transform(rowObj[field].toString());
                 }
                 return rowObj[field];
             }
-        }
-    }
-
-    druggabilitypc(druggability: Druggability[]): string {
-        if (!druggability || !druggability.length || !druggability[0].pharos_class) { return '-'; }
-        return druggability[0].pharos_class;
-    }
-
-    druggability(druggability: Druggability[], subfield: string): string {
-        if (!druggability || !druggability.length || !druggability[0][subfield]) {
-            return '-';
-        } else {
-            switch (subfield) {
-                case 'sm_druggability_bucket':
-                    return `${druggability[0][subfield]}: ${druggability[0].classification}`;
-                case 'safety_bucket':
-                    return `${druggability[0][subfield]}: ${druggability[0].safety_bucket_definition}`;
-                case 'abability_bucket':
-                    return `${druggability[0][subfield]}: ${druggability[0].abability_bucket_definition}`;
-                case 'pharos_class':
-                    return `${druggability[0][subfield]}`;
-                default:
-                    return 'No value';
-            }
-        }
     }
 
     onRowSelect(event) {
@@ -392,13 +366,9 @@ export class GeneSimilarComponent implements OnInit {
 
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
-            const value1 = (!data1[event.field] && data1.druggability) ?
-                data1.druggability[0][event.field] :
-                data1[event.field];
-            const value2 = (!data2[event.field] && data2.druggability) ?
-                data2.druggability[0][event.field] :
-                data2[event.field];
             let result = null;
+            const value1 = data1[event.field];
+            const value2 = data2[event.field];
 
             if (value1 == null && value2 != null) {
                 result = -1;
@@ -407,20 +377,24 @@ export class GeneSimilarComponent implements OnInit {
             } else if (value1 == null && value2 == null) {
                 result = 0;
             } else if (typeof value1 === 'string' && typeof value2 === 'string') {
-                result = value1.localeCompare(value2);
+                // Natural sorting for this score type, which can be >= 10
+                if (event.field === 'sm_druggability_display_value') {
+                    const numericValue1 = parseInt(value1.split(':')[0], 10);
+                    const numericValue2 = parseInt(value2.split(':')[0], 10);
+                    if (!isNaN(numericValue1) && !isNaN(numericValue2)) {
+                        result = (numericValue1 < numericValue2) ? -1 : (numericValue1 > numericValue2) ? 1 : 0;
+                    } else {
+                        // sort noValue to the end
+                        result = isNaN(numericValue1) ? 1 : -1;
+                    }
+                } else {
+                    result = value1.localeCompare(value2);
+                }
             } else {
                 result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
             }
 
             return (event.order * result);
         });
-    }
-
-    getSortColumnField(index: number, col: any) {
-        if (index < 4) {
-            return col.field;
-        } else {
-            return col.subfield;
-        }
     }
 }

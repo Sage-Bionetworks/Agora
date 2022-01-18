@@ -97,7 +97,7 @@ connection.once('open', () => {
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
-    // Select fields for data caches
+    // Select fields for Nominated Targets table
     const tableGenesByIdFields = [
         'hgnc_symbol',
         'ensembl_gene_id',
@@ -107,6 +107,24 @@ connection.once('open', () => {
         'nominatedtarget.study',
         'nominatedtarget.input_data',
         'nominatedtarget.validation_study_details',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition'
+    ].join(' ');
+
+    // Select fields for Similalr Genes table
+    const tableSimilarGenesFields = [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'medianexpression',
+        'isIGAP',
+        'haseqtl',
+        'isChangedInADBrain',
         'druggability.pharos_class',
         'druggability.sm_druggability_bucket',
         'druggability.classification',
@@ -185,7 +203,7 @@ connection.once('open', () => {
 
     GenesInfo.find({ nominations: { $gt: 0 } }).lean()
         .select(tableGenesByIdFields)
-        .sort({ hgnc_symbol: 1 })
+        .sort({ nominations: -1, hgnc_symbol: 1 })
         .exec(async (err, genes: GeneInfo[], next) => {
         if (err) {
             next(err);
@@ -586,7 +604,7 @@ connection.once('open', () => {
         }
     });
 
-    // Use mongoose to get all nominated targets for the table
+    // Get the cached list of nominated targets to populate the table
     router.get('/genes/table', (req, res) => {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
@@ -629,7 +647,7 @@ connection.once('open', () => {
         }
     });
 
-    // Get all genes infos that match an array of ids, currently hgnc_symbol
+    // Query for all genesInfos that match an array of ENSG - used to populate the Similar Genes table
     router.get('/mgenes/infos', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
         if (!req.query || !req.query.ids) {
@@ -637,7 +655,8 @@ connection.once('open', () => {
         } else {
             const ids = req.query.ids.split(',');
 
-            GenesInfo.find({ ensembl_gene_id: { $in: ids } }).lean().exec(
+            GenesInfo.find({ ensembl_gene_id: { $in: ids } }).lean()
+                .sort({  hgnc_symbol: 1 }).select(tableSimilarGenesFields).exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);

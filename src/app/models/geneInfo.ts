@@ -12,32 +12,27 @@ export interface GeneInfo {
     isIGAP: boolean;
     haseqtl: boolean;
     isChangedInADBrain: boolean;
+    isAnyRNAChangedInADBrain?: boolean;
+    isAnyProteinChangedInADBrain?: boolean;
     medianexpression: MedianExpression[];
     nominatedtarget: NominatedTarget[];
     nominations: number;
-    // Extra field for the genes list table. This will be
-    // all the teams in a single string separated by commas
-    teams?: string;
-    study?: string;
-    input_data?: string;
-    validation_study_details?: string;
-    initial_nomination?: number;
-    sm_druggability_bucket?: string;
-    safety_bucket?: string;
-    feasibility_bucket?: string;
-    abability_bucket?: string;
-    new_modality_bucket?: string;
-    tissue_engagement_bucket?: string;
-    pharos_class?: string;
-    classification?: string;
-    safety_bucket_definition?: string;
-    feasibility_bucket_definition?: string;
-    abability_bucket_definition?: string;
-    new_modality_bucket_definition?: string;
-    brain_regions?: string;
-    num_brain_regions?: string;
-    isAnyRNAChangedInADBrain?: boolean;
-    isAnyProteinChangedInADBrain?: boolean;
+    // Extra fields for display values
+    // NominatedTargets
+    teams_display_value?: string;
+    study_display_value?: string;
+    input_data_display_value?: string;
+    validation_study_details_display_value?: string;
+    initial_nomination_display_value?: number;
+    nominated_target_display_value?: boolean;
+    // MedianExpression
+    brain_regions_display_value?: string;
+    num_brain_regions_display_value?: string;
+    // Druggability
+    pharos_class_display_value?: string;
+    sm_druggability_display_value?: string;
+    safety_rating_display_value?: string;
+    ab_modality_display_value?: string;
 }
 
 export interface MedianExpression {
