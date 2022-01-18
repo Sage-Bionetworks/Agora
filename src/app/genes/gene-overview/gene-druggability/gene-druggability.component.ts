@@ -373,6 +373,12 @@ export class GeneDruggabilityComponent implements OnInit {
                 link: `https://adatlas.org/?geneID=${this.gene.ensembl_gene_id}`
             },
             {
+                title: 'Pub AD',
+                description: 'View dementia-related publication information for this gene on PubAD.',
+                linkText: 'Visit PubAD',
+                link: `https://adexplorer.medicine.iu.edu/pubad/external/${this.gene.hgnc_symbol}`
+            },
+            {
                 title: 'Gene Ontology',
                 description: 'View the gene ontology information for this gene on Ensembl.',
                 linkText: 'Visit Ensembl',
