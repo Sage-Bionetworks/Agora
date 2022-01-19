@@ -84,9 +84,10 @@ export const mockInfo1: GeneInfo = {
     'by RefSeq, Aug 2017].',
   hgnc_symbol: 'HSPB1',
   type_of_gene: 'protein-coding',
-  isChangedInADBrain: false,
   isIGAP: false,
   haseqtl: true,
+  isAnyRNAChangedInADBrain: true,
+  isAnyProteinChangedInADBrain: true,
   medianexpression: [
     {
       medianlogcpm: 7.7848,

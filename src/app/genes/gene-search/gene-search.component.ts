@@ -78,7 +78,8 @@ export class GeneSearchComponent implements OnInit {
                         type_of_gene: this.notFoundString,
                         isIGAP: false,
                         haseqtl: false,
-                        isChangedInADBrain: false,
+                        isAnyRNAChangedInADBrain: false,
+                        isAnyProteinChangedInADBrain: false,
                         medianexpression: [],
                         nominatedtarget: [],
                         nominations: 0
@@ -187,7 +188,7 @@ export class GeneSearchComponent implements OnInit {
         });
     }
 
-    // The parameter is the gene hgnc_symbol from the server. To be calssified as an alias,
+    // The parameter is the gene hgnc_symbol from the server. To be classified as an alias,
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
         return !hgncSymbol.includes(this.currentQuery.toUpperCase()) &&

@@ -72,8 +72,9 @@ export class GeneSimilarComponent implements OnInit {
             { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
             { field: 'nominated_target_display_value', header: 'Nominated Target' },
             { field: 'isIGAP', header: 'Genetic Association with LOAD'},
-            { field: 'isChangedInADBrain', header: 'RNA Expression Change'},
             { field: 'haseqtl', header: 'Brain eQTL' },
+            { field: 'isAnyRNAChangedInADBrain', header: 'RNA Expression Change'},
+            { field: 'isAnyProteinChangedInADBrain', header: 'Protein Expression Change'},
             { field: 'pharos_class_display_value', header: 'Pharos Class' },
             { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
             { field: 'safety_rating_display_value', header: 'Safety Rating' },
@@ -200,8 +201,11 @@ export class GeneSimilarComponent implements OnInit {
                 this.genesInfo = datas.items;
                 this.genesInfo.forEach((de: GeneInfo) => {
 
-                    // Populate display fields
-                    de.isChangedInADBrain = (de.isChangedInADBrain) ? de.isChangedInADBrain : false;
+                    // Populate display fields & set default values
+                    de.isAnyRNAChangedInADBrain = (de.isAnyRNAChangedInADBrain) ?
+                        de.isAnyRNAChangedInADBrain : false;
+                    de.isAnyProteinChangedInADBrain = (de.isAnyProteinChangedInADBrain) ?
+                        de.isAnyProteinChangedInADBrain : false;
                     de.nominated_target_display_value = de.nominations > 0;
 
                     // Populate MedianExpression display fields
@@ -297,8 +301,8 @@ export class GeneSimilarComponent implements OnInit {
         if (rowObj[field] === undefined) {
             return this.noValue;
         } else {
-                if (field === 'isIGAP' || field === 'isChangedInADBrain' ||
-                    field === 'haseqtl' || field === 'nominated_target_display_value') {
+                if (field === 'isIGAP' || field === 'haseqtl' || field === 'nominated_target_display_value'
+                    || field === 'isAnyRNAChangedInADBrain' || field === 'isAnyProteinChangedInADBrain') {
                     return this.titleCase.transform(rowObj[field].toString());
                 }
                 return rowObj[field];
