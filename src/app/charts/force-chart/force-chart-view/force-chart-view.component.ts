@@ -85,8 +85,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
     ngAfterViewInit() {
         setTimeout(() => {
             this.width = this.forceChart.nativeElement.parentElement.offsetWidth - 30;
-            const geneColNode = d3.select('.current-gene-col').node() as HTMLBaseElement;
-            this.height = (geneColNode) ? geneColNode.getBoundingClientRect().height : 400;
+            this.height = 400 + (700 * (this.networkData.nodes.length / 100));
             this.loaded = true;
             this.simulation = d3.forceSimulation<GeneNode, GeneLink>()
                 .force('charge', (d) => {
