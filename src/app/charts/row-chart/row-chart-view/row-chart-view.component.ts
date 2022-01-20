@@ -355,8 +355,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     updateXTicks(chart: dc.RowChart) {
         const allTicks = chart.selectAll('g.axis g.tick');
         allTicks.each(function(t, i) {
-            // Handle UTF-8 characters
             let value = parseFloat(d3.select(this).select('text').text());
+            // Handle UTF-8 characters, if text is not a number, then replace all non-numeric values with the empty string
             value = isNaN(value) ? parseFloat('-' + d3.select(this).select('text').text().replace(/[^,.0-9]/g, '')) : value;
 
             if (i > 0 && i < allTicks.size() - 1) {
