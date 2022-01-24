@@ -19,7 +19,7 @@ npm install -g node-pre-gyp
 ## Dependencies
 What you need to run this app:
 * `node` and `npm` (`brew install node`)
-* Ensure you're running the latest versions Node `v6.x.x`+ (or `v7.x.x`) and NPM `3.x.x`+
+* Ensure you're running the latest versions Node `v14.18.2`+ and NPM `6.14.15`+
 
 > If you have `nvm` installed, which is highly recommended (`brew install nvm`) you can do a `nvm install --lts && nvm use` in `$` to run with the latest Node LTS. You can also have this `zsh` done for you [automatically](https://github.com/creationix/nvm#calling-nvm-use-automatically-in-a-directory-with-a-nvmrc-file)
 
@@ -208,7 +208,7 @@ go to [http://0.0.0.0:8080](http://0.0.0.0:8080) in your browser.
 
 ### AWS Elastic Beanstalk server start command
 
-AWS Elastic Beanstalk Node.js platform version 12 or above uses the `start` command in `package.json` file to start the application. This replaces the legacy NodeCommand option in the `aws:elasticbeanstalk:container:nodejs` namespace. [See details here.](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-packagejson) ***DO NOT MODIFY the `start` command in `package.json`*** . 
+AWS Elastic Beanstalk Node.js platform version 12 or above uses the `start` command in `package.json` file to start the application. This replaces the legacy NodeCommand option in the `aws:elasticbeanstalk:container:nodejs` namespace. [See details here.](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-packagejson) ***DO NOT MODIFY the `start` command in `package.json`*** .
 
 ```bash
 node --max_old_space_size=2000  ./dist/server.js
@@ -399,12 +399,12 @@ Review your changes by going to `http://localhost:8080/`
 mongoimport --db agora --collection [add collection name here] --jsonArray --drop --file [path to the json file name]
 ```
 
-More examples can be found [here](https://github.com/Sage-Bionetworks/Agora/blob/develop/mongo-import.sh). 
+More examples can be found [here](https://github.com/Sage-Bionetworks/Agora/blob/develop/mongo-import.sh).
 
-2. Verified the data is successfully imported to the database. You may do that by using a GUI for MongoDB. The connection address to MongoDB in your local machine is `localhost` and the port number is `27017`. 
+2. Verified the data is successfully imported to the database. You may do that by using a GUI for MongoDB. The connection address to MongoDB in your local machine is `localhost` and the port number is `27017`.
 
 ## Before Deployment
-Before pushing code to the dev branch, we should follow these steps to make sure no errors during the build process. 
+Before pushing code to the dev branch, we should follow these steps to make sure no errors during the build process.
 
 1. Run `npm run test` to make sure no failed unit test
 2. Run `npm run clean:all`. This removes the `./dist` folder
@@ -441,13 +441,13 @@ by the CI system.
 
 ## Deployment for New Data (Updated 9/30/2021)
 1. First, make sure the data file is available in [Synapse](https://www.synapse.org/#!Synapse:syn12177492)
-2. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). 
+2. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290).
 3. If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
-4. Deploy your changes in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to dev branch. 
-5. Verify new data is in the database for the dev branch. 
-6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deployment the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
-7. Check new data shows up on [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
-8. Once verified, repeat step 4 to 7 to finish deployment to staging and production branches. 
+4. Deploy your changes in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to dev branch.
+5. Verify new data is in the database for the dev branch.
+6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deployment the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes).
+7. Check new data shows up on [Agora's dev branch](https://agora-develop.ampadportal.org/genes).
+8. Once verified, repeat step 4 to 7 to finish deployment to staging and production branches.
 
 
 ## Style Guide and Project Structure
