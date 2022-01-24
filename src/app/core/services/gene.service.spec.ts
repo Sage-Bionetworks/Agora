@@ -1,13 +1,22 @@
 import {
     TestBed
 } from '@angular/core/testing';
-
-import {
-    ApiServiceStub, mockGene1, mockGeneResponse1, mockGeneResponseNoGeneItem, mockGeneResponseNoExpValidation, mockGeneResponseNoScores
-} from '../../testing';
-
 import { ApiService, GeneService } from './';
-import { Gene, GeneExpValidation, GeneInfo, GeneOverallScores, GeneResponse } from 'app/models';
+import {
+    ApiServiceStub,
+    mockGene1,
+    mockGeneResponse1,
+    mockGeneResponseNoGeneItem,
+    mockGeneResponseNoExpValidation,
+    mockGeneResponseNoScores
+} from '../../testing';
+import {
+    Gene,
+    GeneExpValidation,
+    GeneInfo,
+    GeneOverallScores,
+    GeneResponse
+} from 'app/models';
 
 describe('Service: Gene: TestBed', () => {
     let geneService: GeneService;

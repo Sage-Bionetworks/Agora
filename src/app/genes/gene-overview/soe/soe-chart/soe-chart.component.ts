@@ -95,7 +95,8 @@ export class SOEChartComponent implements OnInit {
           {
             x: annotationObj.scoreX,
             y: annotationObj.scoreY,
-            // We truncate the gene score instead of rounding, because a rounded score may end up conflicting with the displayed bin ranges
+            // We truncate the gene score instead of rounding, because a rounded score may end up conflicting with the
+            // displayed bin ranges
             // See comments on AG-260
             text: truncateToFixed(this.geneScore, 2),
             ax: 0,
@@ -149,7 +150,7 @@ export class SOEChartComponent implements OnInit {
               ),
             ],
           },
-          annotations: annotations,
+          annotations,
         } as Plotly.Layout,
         config: this.commonBarSettings.config,
         ownerId: this.distributionData.syn_id,
@@ -209,7 +210,8 @@ export class SOEChartComponent implements OnInit {
  */
 function truncateToFixed(num: number, fixed: number): string {
   /*
-   * You might think that truncating a number to a certain number of decimal places in JavaScript would be simple, but then you would be wrong.
+   * You might think that truncating a number to a certain number of decimal places in JavaScript would be simple, but
+   * then you would be wrong.
    * See https://stackoverflow.com/a/11818658/9723359
    */
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
