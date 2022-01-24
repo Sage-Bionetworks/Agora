@@ -45,7 +45,6 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() rcRadius: number = 12.5;
     @Input() boxRadius: number = 9;
 
-    firstRender: boolean = true;
     max: number = -Infinity;
     oldMax: number = -Infinity;
     counter: number = 0;
@@ -245,11 +244,8 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                     });
 
-                    if (self.firstRender) {
-                        self.firstRender = false;
-                        // Adds tooltip below the x axis labels
-                        self.addXAxisTooltips(chart);
-                    }
+                    // Adds tooltip below the x axis labels
+                    self.addXAxisTooltips(chart);
                 });
 
             resolve(chartInst);
@@ -270,44 +266,22 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     addXAxisTooltips(chart: dc.BoxPlot) {
         const self = this;
-        chart.selectAll('g.axis.x g.tick text').each(function(d, i) {
-            const n = d3.select(this).node();
-            d3.select(this)
-                .on('mouseover', function() {
-                    // The space between the beginning of the page and the column
-                    const left = self.bpCol.nativeElement.getBoundingClientRect().left;
-                    // Total column width, including padding
-                    const colWidth = self.bpCol.nativeElement.offsetWidth;
-                    // Shows the tooltip
-                    self.sDiv.transition()
-                        .duration(200)
-                        .style('opacity', 1);
-                    // Get the text based on the brain tissue
-                    self.sDiv.html(self.chartService.getTooltipText(d3.select(this).text()));
+        chart.selectAll('g.axis.x g.tick').each(function(d, i) {
+            const text = d3.select(this).select('text');
+            const line = d3.select(this).select('line').node() as HTMLElement;
+            const tooltip = document.getElementsByClassName('pbp-axis-tooltip')[0] as HTMLElement;
 
-                    // The tooltip element, we need half of the width
-                    const tooltip =
-                        document.getElementsByClassName('pbp-axis-tooltip')[0] as HTMLElement;
-                    // Represents the width of each x axis tick section
-                    // We get the total column width, minus both side paddings,
-                    // and we divide by all tissues plus 1. Five sections total
-                    const tickSectionWidth = (
-                        (colWidth - (self.paddingLR * 2)) /
-                        (self.geneService.getNumOfPTissues() + 1)
-                    );
-                    // The start position for the current section tick will be
-                    // the width of a section * current index + one
-                    const xTickPos = tickSectionWidth * (i + 1);
+            text
+                .on('mouseover', function() {
+                    // Get the text based on the brain tissue
+                    self.sDiv.html(self.chartService.getTooltipText(text.text()));
+
+                    // Position the tooltip
                     self.sDiv
                         .style('left',
                             (
-                                // The most important calculation. We need the space
-                                // between the beginning of the page and the column,
-                                // plus the left padding, plus half the width of a
-                                // vertical bar, plus the current tick position and we
-                                // subtract half the width of the tooltip
-                                left + self.paddingLR + 30 + xTickPos -
-                                (tooltip.offsetWidth / 2.0)
+                                // Left position of the tick line minus half the tooltip width to center.
+                                line.getBoundingClientRect().left - (tooltip.offsetWidth / 2)
                             ) + 'px'
                         )
                         .style('top',
@@ -316,6 +290,11 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                                 + chart.height()
                             ) + 'px'
                         );
+
+                    // Shows the tooltip
+                    self.sDiv.transition()
+                        .duration(200)
+                        .style('opacity', 1);
                 })
                 .on('mouseout', function() {
                     self.sDiv.transition()
