@@ -14,7 +14,7 @@ branches:
   - prod
 
 before_install:
-  - npm install npm@6.13.7
+  - npm install npm@6.14.15
   - npm cache verify
   - travis_retry npm prune
 
@@ -34,7 +34,7 @@ jobs:
   include:
     - stage: test
       script: npm run ci:travis
-      node_js: 12
+      node_js: 14
     - stage: eb-deploy
       script:
         - ./set-agora-version.sh || travis_terminate 1
