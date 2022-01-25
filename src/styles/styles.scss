@@ -1460,14 +1460,17 @@ p-multiselectitem {
 
     .dc-chart {
         width: 100%;
-        rect.bar{
-            cursor: default;
-        }
-        rect.bar:hover {
-          fill-opacity: 1;
-        }
+
         svg {
             height: 100%;
+
+            rect.bar, text {
+                cursor: default;
+            }
+
+            rect.bar:hover {
+                fill-opacity: 1;
+              }
         }
     }
 }
@@ -1548,6 +1551,13 @@ p-multiselectitem {
 
     .dc-chart {
         width: 100%;
+
+        svg {
+
+            rect, text {
+                cursor: default;
+            }
+        }
     }
 }
 
