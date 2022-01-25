@@ -135,6 +135,7 @@ export class GeneSimilarComponent implements OnInit {
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
                     this.geneInfo = data.info;
+                    console.log(this.gene);
                 }
             }, (error) => {
                 console.log('Error loading gene overview! ' + error.message);
@@ -401,4 +402,20 @@ export class GeneSimilarComponent implements OnInit {
             return (event.order * result);
         });
     }
+
+    navigateBackToGene() {
+
+        this.navService.goToRoute(
+            '/genes',
+            {
+                outlets: {
+                    'genes-router': [
+                        'gene-details',
+                        this.geneService.getCurrentGene().ensembl_gene_id
+                    ]
+                }
+            }
+        );
+    }
+
 }
