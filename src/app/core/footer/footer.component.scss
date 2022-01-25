@@ -130,7 +130,13 @@
     font-size: $font-size-regular;
     color: $show-more-color;
     cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
+
 
 .last-footer-span {
     margin-right: 0px;
@@ -157,8 +163,6 @@
     color: color(text, span-grey);
 }
 
-.footer-span:hover {
-    text-decoration: underline;
-}
+
 
 
