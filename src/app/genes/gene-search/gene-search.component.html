@@ -9,11 +9,16 @@
                         <p-progressSpinner *ngIf="isSearching" strokeWidth="4" fill="#FFFFFF" animationDuration=".5s"></p-progressSpinner>
                     </div>
                     <div class="col-md-11 col-sm-11 col-9 input-search-col">
-                        <input type="text" [formControl]="queryField" id="keyword" rows="1" cols="22"
+                        <input
+                            #searchedGenes
+                            [formControl]="queryField"
+                            id="keyword"
                             [class.input-text]="searchedGenes.value"
-                            (blur)="closeSearchList($event.target)"
                             placeholder="Search Gene Symbol or Ensembl ID"
-                            #searchedGenes>
+                            autocomplete="off"
+                            type="text"
+                            (blur)="closeSearchList($event.target)"
+                        >
                     </div>
                 </div>
             </div>
