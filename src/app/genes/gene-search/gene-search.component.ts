@@ -69,9 +69,14 @@ export class GeneSearchComponent implements OnInit {
                 } else {
                     this.isNotFound = false;
                     if (data.isEnsembl) {
-                        // It is safe to get the first index here because there will be only
-                        // one match when using the ensembl id
-                        this.viewGene(data.items[0]);
+                        // Multiple matching genes: This should never happen…but if it does, log an error
+                        if (data.items.length > 1) {
+                            console.log('Unexpected duplicate gene_info objects for ensembl ID "' + this.currentQuery + '" found.');
+                            this.setErrorMessage(this.ensemblIdNotFoundString);
+                        }
+                        else {
+                            this.viewGene(data.items[0]);
+                        }
                     } else {
                         this.results = data.items;
                     }
