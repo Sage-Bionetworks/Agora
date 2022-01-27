@@ -131,7 +131,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
 })
 // Changed the name so it does not conflict with primeng module
 export class AppSharedModule {
-    static forRoot(): ModuleWithProviders {
+    static forRoot(): ModuleWithProviders<any> {
         return {
             ngModule: AppSharedModule,
             providers: [
