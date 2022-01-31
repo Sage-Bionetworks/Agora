@@ -124,17 +124,12 @@
 
 .footer-span {
     @include lato-font('normal');
-
+    @include hover-underline();
     margin-right: 5%;
     line-height: normal;
     font-size: $font-size-regular;
     color: $show-more-color;
     cursor: pointer;
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
 
 
@@ -162,7 +157,3 @@
     text-align: right;
     color: color(text, span-grey);
 }
-
-
-
-
