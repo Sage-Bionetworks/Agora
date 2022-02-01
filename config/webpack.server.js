@@ -13,6 +13,7 @@
  const DefinePlugin = require('webpack/lib/DefinePlugin');
  const nodeExternals = require('webpack-node-externals');
  const NodemonPlugin = require( 'nodemon-webpack-plugin' );
+ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
  const ENV = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
  const HOST = process.env.HOST || 'localhost';
@@ -31,6 +32,7 @@
  });
 
  module.exports = {
+     devtool: "inline-source-map",
      entry: {
          server: './src/server/server.ts'
      },
@@ -59,25 +61,29 @@
          }),
 
          /**
-        * Plugin: DefinePlugin
-        * Description: Define free variables.
-        * Useful for having development builds with debug logging or adding global constants.
-        *
-        * Environment helpers
-        *
-        * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-        */
-       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-       new DefinePlugin({
-         'ENV': JSON.stringify(METADATA.ENV),
-         'process.env.ENV': JSON.stringify(METADATA.ENV),
-         'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
-         'process.env.HOST': JSON.stringify(METADATA.host),
-         'process.env.PORT': JSON.stringify(METADATA.port),
-         'process.env.MONGODB_HOST': JSON.stringify(METADATA.MONGODB_HOST),
-         'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT),
-         'process.env.APP_ENV': JSON.stringify(METADATA.APP_ENV)
-       })
+          * Plugin: DefinePlugin
+          * Description: Define free variables.
+          * Useful for having development builds with debug logging or adding global constants.
+          *
+          * Environment helpers
+          *
+          * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+          */
+         // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
+         new DefinePlugin({
+            'ENV': JSON.stringify(METADATA.ENV),
+            'process.env.ENV': JSON.stringify(METADATA.ENV),
+            'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+            'process.env.HOST': JSON.stringify(METADATA.host),
+            'process.env.PORT': JSON.stringify(METADATA.port),
+            'process.env.MONGODB_HOST': JSON.stringify(METADATA.MONGODB_HOST),
+            'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT),
+            'process.env.APP_ENV': JSON.stringify(METADATA.APP_ENV)
+         }),
+
+         new TsconfigPathsPlugin({
+             configFile: helpers.root('tsconfig.server.json')
+        })
      ],
      target: 'node',
      externals: [nodeExternals()],
@@ -107,13 +113,16 @@
              /**
               * Typescript loader support for .ts and Angular 2 async routes via .async.ts
               *
-              * See: https://github.com/s-panferov/awesome-typescript-loader
+              * See: https://github.com/TypeStrong/ts-loader
               */
              {
-                 test: /\.ts$/,
-                 loader: 'ts-loader',
-                 exclude: [/\.(e2e|spec)\.ts$/]
-             },
+                test: /\.tsx?$/,
+                use: [
+                    'ts-loader',
+                    'angular2-template-loader'
+                ],
+                exclude: [/\.(e2e|spec)\.ts$/]
+             }
          ]
      }
  }
