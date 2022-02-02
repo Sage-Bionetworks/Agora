@@ -100,15 +100,16 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     }
 
     getMobileClass(): string {
-        return 'mobile-menu ' + ((this.mobileMenu && this.mobileMenu.overlayVisible) ?
+        console.log(this.mobileMenu);
+        return 'mobile-menu ' + ((this.mobileMenu /*&& this.mobileMenu.overlayVisible*/) ?
             'mobile-menu-open-btn' : 'mobile-menu-closed-btn');
     }
 
     showMenu(event: Event) {
         // Mimics the splitbutton dropdown button click
         this.mobileMenu.onDropdownClick.emit(event);
-        this.mobileMenu.dropdownClick = true;
-        this.mobileMenu.show();
+        //this.mobileMenu.dropdownClick = true;
+        //this.mobileMenu.show();
     }
 
     showVideo() {

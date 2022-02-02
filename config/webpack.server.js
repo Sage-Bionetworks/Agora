@@ -32,22 +32,27 @@
  });
 
  module.exports = {
-     devtool: "inline-source-map",
-     entry: {
-         server: './src/server/server.ts'
-     },
-     output: {
-         path: helpers.root('dist'),
-         filename: '[name].js',
-         libraryTarget: 'commonjs2'
-     },
-     resolve: {
-         // Add `.ts` and `.tsx` as a resolvable extension.
-         extensions: ['.ts', '.tsx', '.js'],
-         modules: [
-             helpers.root('node_modules')
-         ]
-     },
+    devtool: "inline-source-map",
+    entry: {
+        server: './src/server/server.ts'
+    },
+    output: {
+        path: helpers.root('dist'),
+        filename: '[name].js',
+        libraryTarget: 'commonjs2'
+    },
+    resolve: {
+        // Add `.ts` and `.tsx` as a resolvable extension.
+        extensions: ['.ts', '.tsx', '.js'],
+        modules: [
+            helpers.root('node_modules')
+        ],
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: helpers.root('tsconfig.server.json')
+            })
+        ]
+    },
      plugins: [
          new NodemonPlugin({
              // What to watch.
@@ -80,10 +85,6 @@
             'process.env.MONGODB_PORT': JSON.stringify(METADATA.MONGODB_PORT),
             'process.env.APP_ENV': JSON.stringify(METADATA.APP_ENV)
          }),
-
-         new TsconfigPathsPlugin({
-             configFile: helpers.root('tsconfig.server.json')
-        })
      ],
      target: 'node',
      externals: [nodeExternals()],

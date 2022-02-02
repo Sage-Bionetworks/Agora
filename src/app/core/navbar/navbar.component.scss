@@ -12,7 +12,7 @@
     background: $background;
     z-index: 1000;
 
-    .ui-state-active {
+    .p-highlight {
         a > span {
             @include lato-font('bold');
 
@@ -31,7 +31,7 @@
         }
     }
 
-    .ui-menu.ui-menu-dynamic {
+    .p-menu.p-menu-overlay {
         padding: 12px;
     }
 
@@ -70,7 +70,7 @@
 }
 
 .mobile-menu-open-btn {
-    .ui-button-icon-left:before {
+    .p-button-icon-left:before {
         content: '';
         background: url('/assets/icon/close-modal-icon.svg') center center no-repeat;
         vertical-align: middle;
@@ -81,7 +81,7 @@
 }
 
 .mobile-menu-closed-btn {
-    .ui-button-icon-left:before {
+    .p-button-icon-left:before {
         content: url('/assets/icon/bars-icon.svg');
     }
 }
@@ -95,7 +95,7 @@
         display: none;
     }
 
-    .ui-tabmenu {
+    .p-tabmenu {
         position: absolute;
         top: 0px;
         height: 100%;
@@ -120,7 +120,7 @@
         }*/
     }
 
-    .ui-tabmenu-nav {
+    .p-tabmenu-nav {
         float: right;
         padding: 0px;
         height: $navbar-height;
@@ -144,7 +144,7 @@
         }
     }
 
-    .ui-tabmenuitem {
+    .p-tabmenuitem {
         background-color: $background !important;
         border: none;
         height: 80px;
@@ -162,7 +162,7 @@
     }
 }
 
-p-button {
+.p-button {
     float: right;
     position: absolute;
     right: 0px;
@@ -174,7 +174,7 @@ p-button {
     height: $navbar-height;
     outline: none;
 
-    .ui-button-text {
+    .p-button-text {
         width: 200px;
         padding: 0px !important;
     }
@@ -218,16 +218,16 @@ p-button {
         border-color: transparent;
         background: $background;
 
-        .ui-button-text {
+        .p-button-text {
             padding-left: 0px !important;
         }
     }
 
-    .ui-button-icon-only, .ui-button-text-only {
+    .p-button-icon-only, .p-button-text-only {
         outline: none;
     }
 
-    .ui-panelmenu-header {
+    .p-panelmenu-header {
         float: right;
         position: -webkit-sticky; /* Safari */
         position: sticky;

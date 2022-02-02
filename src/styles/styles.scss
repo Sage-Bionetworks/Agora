@@ -41,7 +41,7 @@
 }
 
 .fullscreen-table {
-    .ui-table {
+    .p-datatable {
         width: 100%;
         height: 100%;
         padding-left: 0px !important;
@@ -128,25 +128,25 @@ textarea::-ms-clear {
     display: none;
 }
 
-p-checkbox {
-    .ui-state-focus.ui-state-active {
+.p-checkbox {
+    .p-state-focus.p-state-active {
         background: #2F8E94 !important;
         border: 2px solid #73C8CC !important;
     }
 }
 
-p-progressSpinner {
+.p-progressSpinner {
     z-index: 2;
     color: color(text, title);
 
-    .ui-progress-spinner {
+    .p-progress-spinner {
         width: 10px;
         height: 10px;
         position: static;
     }
 }
 
-@keyframes ui-progress-spinner-color {
+@keyframes p-progress-spinner-color {
     100%,
     0% {
         stroke: color(text, title);
@@ -163,7 +163,7 @@ p-progressSpinner {
     }
 }
 
-p-panel {
+.p-panel {
     .pi-minus:before {
         content: url("/assets/icon/minus_icon.png") !important;
     }
@@ -172,29 +172,28 @@ p-panel {
         content: url("/assets/icon/plus_icon.png") !important;
     }
 
-    .ui-panel-titlebar {
+    .p-panel-titlebar {
         line-height: 45px !important;
     }
 }
 
-p-dialog {
-    .ui-dialog {
-        width: 65%;
-        max-height: 62%;
-        overflow: auto;
-        background: white;
+.p-dialog {
+    position: relative;
+    width: 65%;
+    max-height: 62%;
+    overflow: auto;
+    background: white;
 
-        p {
-            color: #000000;
-            margin: 0px;
-        }
+    p {
+        color: #000000;
+        margin: 0px;
     }
 
     .no-bold {
         font-weight: normal;
     }
 
-    .ui-dialog-titlebar {
+    .p-dialog-header {
         padding-bottom: 39px !important;
         @include lato-font('bold');
 
@@ -207,21 +206,28 @@ p-dialog {
         text-align: center;
         padding-top: 10% ;
 
+        .p-dialog-header-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
         .pi-times:before {
             color: #5BB0B5;
             content: url("/assets/icon/close-modal-icon.svg");
         }
     }
 
-    .ui-dialog-title {
+    .p-dialog-title {
         @include lato-font('semi-bold');
+        width: 100%;
         font-weight: 500;
         font-size: 28px !important;
         line-height: 34px;
         color: color(text, title);
     }
 
-    .ui-dialog-titlebar-icon {
+    .p-dialog-header-icon {
         padding: .525em !important;
 
         > span {
@@ -230,7 +236,7 @@ p-dialog {
         }
     }
 
-    .ui-dialog-content {
+    .p-dialog-content {
         @include lato-font('normal');
 
         padding-bottom: 45px;
@@ -276,18 +282,12 @@ p-dialog {
         color: #5BB0B5;
     }
 
-    a {
-        position: absolute;
-        right: 1%;
-        top: 10%;
-    }
-
     a.dialog-link {
         position: static;
     }
 }
 
-p-multiselectitem {
+.p-multiselectitem {
     span, .multiselect-option {
         @include lato-font('normal');
 
@@ -297,11 +297,19 @@ p-multiselectitem {
     }
 }
 
-.ui-menu {
+.p-menu {
     background-color: $background;
+
+    .p-menuitem {
+        margin: .125em 0;
+    }
+
+    .p-menuitem-link {
+        padding: .25em;
+    }
 }
 
-.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
     top: 0px;
 }
 
@@ -345,7 +353,7 @@ p-multiselectitem {
             background: $tertiary-background;
         }
 
-        .ui-table {
+        .p-datatable {
             background: white;
             padding-left: 10%;
             padding-right: 10%;
@@ -362,7 +370,7 @@ p-multiselectitem {
             padding-top: 44px;
         }
 
-        .ui-table-thead {
+        .p-datatable-thead {
             >tr>th {
                 background: $table-rol-filter !important;
                 color: color(text, secondary) !important;
@@ -380,8 +388,8 @@ p-multiselectitem {
             height: 58px;
             line-height: 58px;
             background: $menu-dark;
-            margin-right: -8px;
-            margin-left: -8px;
+            margin-right: 0;
+            margin-left: 0;
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.85);
 
             .title-col {
@@ -417,16 +425,16 @@ p-multiselectitem {
                         content: url("/assets/icon/columns.svg");
                     }
 
-                    .ui-multiselect-items-wrapper {
+                    .p-multiselect-items-wrapper {
                         padding: 0px;
                         background: white;
                     }
 
-                    .ui-multiselect-items {
+                    .p-multiselect-items {
                         background: white;
                     }
 
-                    .ui-multiselect-panel {
+                    .p-multiselect-panel {
                         padding: 0px;
                         background: transparent;
                         min-width: 234px !important;
@@ -439,27 +447,27 @@ p-multiselectitem {
                         }
                     }
 
-                    .ui-multiselect-trigger {
+                    .p-multiselect-trigger {
                         height: 0px;
                     }
 
-                    .ui-multiselect-trigger-icon {
+                    .p-multiselect-trigger-icon {
                         font-size: 1.5em;
                         color: white;
                     }
 
-                    .ui-multiselect-item {
+                    .p-multiselect-item {
                         line-height: 30px;
                         text-align: left;
                         padding-left: 15px;
                         padding-right: 15px;
                         display: flex !important;
 
-                        .ui-chkbox {
+                        .p-chkbox {
                             margin-right: 6.8px;
                         }
 
-                        .ui-chkbox-box {
+                        .p-chkbox-box {
                             line-height: 23px;
                         }
                     }
@@ -485,16 +493,16 @@ p-multiselectitem {
         color: $background;
     }
 
-    .ui-table-scrollable-wrapper {
+    .p-datatable-scrollable-wrapper {
         padding-bottom: 60px;
     }
 
-    .ui-table-scrollable-view {
+    .p-datatable-scrollable-view {
         background-color: $background;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    .ui-table-scrollable-body {
+    .p-datatable-scrollable-body {
         min-height: 300px;
     }
 
@@ -560,14 +568,14 @@ p-multiselectitem {
         }
     }
 
-    .ui-table-tbody {
+    .p-datatable-tbody {
         width: 100%;
         height: 100%;
         position: relative;
         overflow: unset !important;
     }
 
-    .ui-table-scrollable-header-box {
+    .p-datatable-scrollable-header-box {
         margin-right: 0px !important;
 
         @include respond-to('ex-small') {
@@ -575,7 +583,7 @@ p-multiselectitem {
         }
     }
 
-    .ui-table-caption {
+    .p-datatable-caption {
         background-color: transparent;
         background: none;
         border: none;
@@ -719,12 +727,12 @@ p-multiselectitem {
         }
     }
 
-    .ui-table-thead {
-        .ui-state-highlight {
+    .p-datatable-thead {
+        .p-state-highlight {
             color: $menu-dark;
         }
 
-        .ui-sortable-column {
+        .p-sortable-column {
             outline: 0;
         }
 
@@ -799,20 +807,20 @@ p-multiselectitem {
             text-align: center;
         }
 
-        .ui-sortable-column {
+        .p-sortable-column {
             font-size: $font-size-x-regular;
         }
     }
 
-    .ui-table-tbody {
+    .p-datatable-tbody {
         height: 100%;
 
-        .ui-selectable-row {
+        .p-selectable-row {
             outline: 0;
             cursor: pointer;
         }
 
-        >tr.ui-state-highlight,
+        >tr.p-state-highlight,
         >tr:focus {
             background-color: color(tr-focus, bg-color) !important;
         }
@@ -835,7 +843,7 @@ p-multiselectitem {
         }
     }
 
-    .ui-sortable-column-icon {
+    .p-sortable-column-icon {
         color: $menu-dark !important;
     }
 
@@ -1402,7 +1410,7 @@ p-multiselectitem {
         width: 50%;
     }
 
-    .ui-toast-message {
+    .p-toast-message {
         @include lato-font('normal');
 
         color: color(text, secondary);
@@ -1410,7 +1418,7 @@ p-multiselectitem {
         font-size: $font-size-x-regular;
     }
 
-    .ui-toast-summary {
+    .p-toast-summary {
         @include lato-font('bold');
 
         color: color(text, secondary);
@@ -1418,18 +1426,18 @@ p-multiselectitem {
         font-size: $font-size-xx-regular;
     }
 
-    .ui-toast-close-icon {
+    .p-toast-close-icon {
         color: color(text, secondary);
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
     }
 
-    .ui-toast-message-error {
+    .p-toast-message-error {
         background: #f33847;
     }
 
-    .ui-toast-message-warn {
+    .p-toast-message-warn {
         background: #ffe399;
     }
 }
