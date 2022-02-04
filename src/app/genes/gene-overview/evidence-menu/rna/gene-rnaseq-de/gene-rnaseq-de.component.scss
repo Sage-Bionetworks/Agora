@@ -78,7 +78,7 @@
             background-color: $faded-secondary-background;
         }
 
-        .p-chkbox-box:not(.p-state-disabled):not(.p-state-active):hover {
+        .p-chkbox-box:not(.p-state-disabled):not(.p-highlight):hover {
             background-color: $faded-secondary-background;
         }
 
@@ -181,7 +181,7 @@
                 background-color: $background;
             }
 
-            .p-state-active {
+            .p-highlight {
                 background: color(li, background-active);
                 border: 2px solid color(li, border-color-active);
                 box-sizing: border-box;

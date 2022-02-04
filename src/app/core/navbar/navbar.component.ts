@@ -11,8 +11,8 @@ import { NavigationService } from '../services';
 
 import { LocalStorageService } from 'ngx-webstorage';
 
+import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { SplitButton } from 'primeng/splitbutton';
 import { TabMenu } from 'primeng/tabmenu';
 
 @Component({
@@ -23,7 +23,7 @@ import { TabMenu } from 'primeng/tabmenu';
 })
 export class NavbarComponent implements OnInit, AfterContentChecked {
     @ViewChild('navMenu', {static: false}) menu: TabMenu;
-    @ViewChild('mobileMenu', {static: false}) mobileMenu: SplitButton;
+    @ViewChild('mobileMenu', {static: false}) mobileMenu: MenuModule;
     items: MenuItem[];
     mobileItems: MenuItem[];
     activeItem: MenuItem;
@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     showMobileMenu: boolean = false;
     showDesktopMenu: boolean = false;
     firstTimeCheck: boolean = true;
+    mobileMenuOpen: boolean = false;
 
     private resizeTimer;
 
@@ -97,19 +98,6 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     goToRoute(path: string, outlets?: any) {
         this.navService.goToRoute(path, outlets);
-    }
-
-    getMobileClass(): string {
-        console.log(this.mobileMenu);
-        return 'mobile-menu ' + ((this.mobileMenu /*&& this.mobileMenu.overlayVisible*/) ?
-            'mobile-menu-open-btn' : 'mobile-menu-closed-btn');
-    }
-
-    showMenu(event: Event) {
-        // Mimics the splitbutton dropdown button click
-        this.mobileMenu.onDropdownClick.emit(event);
-        //this.mobileMenu.dropdownClick = true;
-        //this.mobileMenu.show();
     }
 
     showVideo() {

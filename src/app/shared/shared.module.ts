@@ -22,6 +22,7 @@ import { ToastModule } from 'primeng/toast';
 import { AccordionModule } from 'primeng/accordion';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { MenuModule } from 'primeng/menu';
 
 import { MessageService } from 'primeng/api';
 
@@ -91,7 +92,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         MultiSelectModule,
         ProgressSpinnerModule,
         AccordionModule,
-        ContextMenuModule
+        ContextMenuModule,
+        MenuModule
     ],
     exports: [
         // Angular modules
@@ -116,6 +118,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         ProgressSpinnerModule,
         AccordionModule,
         ContextMenuModule,
+        MenuModule,
+
         // Other declarations
         AlertComponent,
         DownloadComponent,
