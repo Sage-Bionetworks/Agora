@@ -401,4 +401,20 @@ export class GeneSimilarComponent implements OnInit {
             return (event.order * result);
         });
     }
+
+    navigateBackToGene() {
+
+        this.navService.goToRoute(
+            '/genes',
+            {
+                outlets: {
+                    'genes-router': [
+                        'gene-details',
+                        this.geneService.getCurrentGene().ensembl_gene_id
+                    ]
+                }
+            }
+        );
+    }
+
 }
