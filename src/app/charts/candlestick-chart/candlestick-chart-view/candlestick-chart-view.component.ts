@@ -31,12 +31,19 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     rawData: any;
     chartData: any[] = [];
     label: string = 'candlestick-plot';
+
+    // Define the div for the tooltip
+    xAxisTooltip: any = d3.select('body').append('div')
+        .attr('class', 'cc-axis-tooltip')
+        .style('width', 50)
+        .style('height', 160)
+        .style('opacity', 0);
+
     private maxValue: number = 2.0;
     private minValue: number = 0.0;
     private chartHeight: number = 500;
     private component: any = null;
     private tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
-    private xAxisTooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = null;
 
     constructor(
         private location: PlatformLocation,
@@ -73,7 +80,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     initChart() {
         this.component = d3.select(this.candleStickChart.nativeElement);
         this.tooltip = this.createTooltip(`${this.label}-tooltip`);
-        this.xAxisTooltip = this.createTooltip(`${this.label}-xaxis-tooltip`);
         this.getChartPromise().then(() => {
             d3.select(window).on('resize.' + this.label, this.renderChart.bind(this));
         });
@@ -194,17 +200,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             })
             .on('mouseout', d => this.hideTooltip(this.tooltip));
 
-        // Draw X-axis tooltip
-        group.selectAll('.x-axis .tick text')
-            .data(this.chartData)
-            .on('mouseover', d => {
-                const msg = this.chartService.getTooltipText(d.key);
-                if (msg) {
-                    this.showTooltip(this.xAxisTooltip, msg);
-                }
-            })
-            .on('mouseout', d => this.hideTooltip(this.xAxisTooltip));
-
         // Add red horizontal line
         group.append('g')
             .attr('transform', `translate(0,${y(1.0)})`)
@@ -214,6 +209,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .style('stroke', 'red')
             .style('stroke-width', '1px');
 
+        this.addXAxisTooltips(this.component);
     }
 
     createTooltip(name) {
@@ -237,4 +233,45 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .style('opacity', 0);
     }
 
+    addXAxisTooltips(chart) {
+        const self = this;
+        chart.selectAll('g.x-axis g.tick').each(function() {
+            const text = d3.select(this).select('text');
+            const textElement = text.node() as HTMLElement;
+            const line = d3.select(this).select('line').node() as HTMLElement;
+
+            text
+                .on('mouseover', function() {
+                    const textElementRec = textElement.getBoundingClientRect();
+
+                    // Get the text based on the brain tissue
+                    self.xAxisTooltip.html(self.chartService.getTooltipText(text.text()));
+
+                    // Position the tooltip
+                    self.xAxisTooltip
+                        .style('left',
+                            (
+                                // Left position of the tick line minus half the tooltip width to center.
+                                line.getBoundingClientRect().left - (self.xAxisTooltip.node().offsetWidth / 2)
+                            ) + 'px'
+                        )
+                        .style('top',
+                            (
+                                // Position at the bottom on the label + 15px
+                                window.pageYOffset + textElementRec.top + textElementRec.height + 15
+                            ) + 'px'
+                        );
+
+                    // Shows the tooltip
+                    self.xAxisTooltip.transition()
+                        .duration(200)
+                        .style('opacity', 1);
+                })
+                .on('mouseout', function() {
+                    self.xAxisTooltip.transition()
+                        .duration(500)
+                        .style('opacity', 0);
+                });
+        });
+    }
 }
