@@ -89,7 +89,6 @@ export class GeneNetworkComponent implements OnInit {
                 this.loadGenes();
             } else {
                 const dn = this.forceService.getGeneOriginalList();
-                console.log(dn);
                 this.filterlvl = dn.filterLvl;
                 this.selectedGeneData.nodes = dn.nodes.slice(1);
                 this.selectedGeneData.links = dn.links.slice().reverse();
