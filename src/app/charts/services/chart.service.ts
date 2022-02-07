@@ -223,6 +223,10 @@ export class ChartService {
                 return 'Clinical Consensus Diagnosis';
             case 'DCFDX':
                 return 'Clinical Cognitive Diagnosis';
+            case 'ACC':
+                return 'Anterior Cingulate Cortex';
+            case 'PCC':
+                return 'Posterior Cingulate Cortex';
             default:
                 return '';
         }

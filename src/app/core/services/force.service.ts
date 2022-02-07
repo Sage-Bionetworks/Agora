@@ -59,6 +59,7 @@ export class ForceService {
     }
 
     getGeneOriginalList(): GeneNetwork {
+        console.log(this.genes);
         if (this.genes.links.length && this.genes.nodes.length) {
             return this.genes;
         }

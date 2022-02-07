@@ -268,6 +268,10 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                 return 'Superior Temporal Gyrus';
             case 'TCX':
                 return 'Temporal Cortex';
+            case 'ACC':
+                return 'Anterior Cingulate Cortex';
+            case 'PCC':
+                return 'Posterior Cingulate Cortex';
         }
     }
 
