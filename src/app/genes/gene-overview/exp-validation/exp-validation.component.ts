@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { GeneExpValidation, TeamInfo } from '../../../models';
-import { GeneService } from '../../../core/services';
+import { ApiService, GeneService } from '../../../core/services';
 
 @Component({
     selector: 'exp-validation',
@@ -15,23 +15,21 @@ export class ExpValidationComponent implements OnInit {
     @Input() teamInfo: TeamInfo[];
 
     constructor(
-        private geneService: GeneService
+        private geneService: GeneService,
+        private apiService: ApiService
     ) {}
 
     ngOnInit() {
         if (!this.data) {
             this.data = this.geneService.getCurrentExpValidation();
         }
-        this.LoadTeam();
+        this.loadTeams();
     }
 
-    LoadTeam() {
-        const teams = this.geneService.getCurrentTeams();
-        if (teams.length) {
-            this.teamInfo = this.data.map((item, i) => {
-               return teams.filter(j => j.team === item.Team)[0];
-            });
-        }
+    loadTeams() {
+        const teamNames = this.geneService.getCurrentExpValidation().map(expVal => expVal.team);
+        this.apiService.getTeams(teamNames).subscribe((teams: TeamInfo[]) => {
+            this.teamInfo = teams;
+        });
     }
-
 }

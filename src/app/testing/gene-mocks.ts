@@ -1,16 +1,16 @@
 import {
-  Gene,
-  GeneInfo,
-  GeneNetworkLinks,
-  GeneNetwork,
-  GeneStatistics,
-  GenesResponse,
-  Metabolomics,
-  LinksListResponse,
-  GeneExpValidation,
-  GeneScoreDistribution,
-  DistributionData,
-  GeneOverallScores,
+    Gene,
+    GeneInfo,
+    GeneNetworkLinks,
+    GeneNetwork,
+    GeneStatistics,
+    GenesResponse,
+    Metabolomics,
+    LinksListResponse,
+    GeneExpValidation,
+    GeneScoreDistribution,
+    DistributionData,
+    GeneOverallScores, GeneResponse,
 } from '../models';
 
 export const mockGene1: Gene = {
@@ -84,36 +84,10 @@ export const mockInfo1: GeneInfo = {
     'by RefSeq, Aug 2017].',
   hgnc_symbol: 'HSPB1',
   type_of_gene: 'protein-coding',
-  go_MF: [
-    {
-      category: 'MF',
-      evidence: 'HDA',
-      id: 'GO:0003723',
-      pubmed: [22658674],
-      term: 'RNA binding',
-    },
-    {
-      category: 'MF',
-      evidence: 'ISS',
-      id: 'GO:0005080',
-      pubmed: {},
-      term: 'protein kinase C binding',
-    },
-    {
-      category: 'MF',
-      evidence: 'IPI',
-      id: 'GO:0005515',
-      pubmed: [
-        11003656, 11700327, 12601044, 14594798, 15161933, 15657067, 16169070, 17184779, 17342744,
-        17353931, 18330356, 20467437, 20618440, 21157431, 21575178, 22365833, 23188086, 23397142,
-        23948568, 24189400, 25036637, 25241761, 25277244, 25852190, 26496610,
-      ],
-      term: 'protein binding',
-    },
-  ],
-  isChangedInADBrain: false,
   isIGAP: false,
   haseqtl: true,
+  isAnyRNAChangedInADBrain: true,
+  isAnyProteinChangedInADBrain: true,
   medianexpression: [
     {
       medianlogcpm: 7.7848,
@@ -156,10 +130,7 @@ export const mockInfo1: GeneInfo = {
     {
       sm_druggability_bucket: 1,
       safety_bucket: 3,
-      feasibility_bucket: 3,
       abability_bucket: 1,
-      new_modality_bucket: 4,
-      tissue_engagement_bucket: 3,
       pharos_class: 'Tchem',
       classification:
         'Small molecule druggable: Protein with a small molecule ligand ' +
@@ -169,15 +140,8 @@ export const mockInfo1: GeneInfo = {
         'high off-target gene expression, cander driver, essential gene, associated ' +
         'deleterious genetic disorder, HPO phenotype associated gene, or black box ' +
         'warning on clinically used drug.',
-      feasibility_bucket_definition:
-        'High target qualification but low feasibility – ' +
-        'Tier C  for drug development. Attempt to address gaps and re-evaluate if additional ' +
-        'feasibility tools found. Either move to category 1 or 2 if successful, or park in ' +
-        'category 5 if not.',
       abability_bucket_definition:
         'Secreted protein. Highly accessible to antibody-based ' + 'therapies.',
-      new_modality_bucket_definition:
-        'Not specified suitable for degradation/inhibition ' + 'by user.',
     },
   ],
   nominations: 1,
@@ -252,26 +216,26 @@ export const mockLinksListResponse: LinksListResponse = {
   items: [mockDataLink1, mockDataLink2],
 };
 
-export const mockExpValidation: Array<GeneExpValidation> = [
+export const mockExpValidation: GeneExpValidation[] = [
   {
     _id: '12345',
     ensembl_gene_id: 'string',
     hgnc_symbol: 'BBB',
-    Hypothesis_tested: 'string',
-    Summary_findings: 'string',
-    Published: 'Yes',
-    Species: 'string',
-    Model_system: 'string',
-    Outcome_measure: 'string',
-    Outcome_measure_details: 'string',
-    Contributors: 'John D',
-    Team: 'Duke',
-    Reference_doi: 'https://doi.org/10.15252/abc.123',
-    Date_report: '01/01/2021',
+    hypothesis_tested: 'string',
+    summary_findings: 'string',
+    published: 'Yes',
+    species: 'string',
+    model_system: 'string',
+    outcome_measure: 'string',
+    outcome_measure_details: 'string',
+    contributors: 'John D',
+    team: 'Duke',
+    reference_doi: 'https://doi.org/10.15252/abc.123',
+    date_report: '01/01/2021',
   },
 ];
 
-export const mockDistributionData = {
+export const mockDistributionData: DistributionData = {
   distribution: [1],
   bins: [['0', '1']] as Array<[string, string]>,
   min: 1,
@@ -301,4 +265,32 @@ export const mockGeneOverallScores: GeneOverallScores = {
   GeneticsScore: 2,
   OmicsScore: 3,
   LiteratureScore: 4,
+};
+
+export const mockGeneResponse1: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoGeneItem: GeneResponse = {
+    item: null,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoExpValidation: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: null,
+    overallScores: mockGeneOverallScores
+};
+
+export const mockGeneResponseNoScores: GeneResponse = {
+    item: mockGene1,
+    info: mockInfo1,
+    expValidation: mockExpValidation,
+    overallScores: null
 };

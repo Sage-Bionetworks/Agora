@@ -61,7 +61,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             { label: 'Teams', routerLink: ['teams-contributing'] },
             { label: 'About', routerLink: ['about'] },
             { label: 'Help', routerLink: ['help'] },
-            { label: 'Terms & Privacy', routerLink: ['terms'] }
+            { label: 'Terms of Service', url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5', target: '_blank' }
         ];
 
         this.navService.getRouter().events.subscribe((re: RouterEvent) => {

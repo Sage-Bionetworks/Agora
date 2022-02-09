@@ -10,7 +10,7 @@ import {
     ApiServiceStub,
     mockTeam1,
     mockTeam2,
-    mockTeam3
+    mockTeam3, mockTeam4
 } from '../../testing';
 import { TeamInfo } from '../../models';
 
@@ -143,7 +143,7 @@ describe('Component: ContribTeamsPage', () => {
 
     it('should load the teams', () => {
         const gatSpy = spyOn(apiService, 'getAllTeams').and.returnValue(of(
-            [mockTeam1, mockTeam2]
+            [mockTeam1, mockTeam4]
         ));
         const ltSpy = spyOn(component, 'loadTeams').and.callThrough();
 
@@ -152,6 +152,8 @@ describe('Component: ContribTeamsPage', () => {
         component.obsTeams.subscribe((data) => {
             // Both mock teamInfos we set above
             expect(data.length).toEqual(2);
+            expect(data).toContain(mockTeam1);
+            expect(data).toContain(mockTeam4);
         });
 
         expect(gatSpy).toHaveBeenCalled();

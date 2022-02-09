@@ -1,14 +1,5 @@
 import { Document } from 'mongoose';
 
-export interface GoMF {
-    category: string;
-    MF?: string;
-    evidence: string;
-    id: string;
-    pubmed: number[] | any;
-    term: string;
-}
-
 export interface GeneInfo {
     _id: string;
     ensembl_gene_id: string;
@@ -18,36 +9,29 @@ export interface GeneInfo {
     summary?: string;
     hgnc_symbol: string;
     type_of_gene: string;
-    go_MF: GoMF[];
     isIGAP: boolean;
     haseqtl: boolean;
-    isChangedInADBrain: boolean;
+    isAnyRNAChangedInADBrain?: boolean;
+    isAnyProteinChangedInADBrain?: boolean;
     medianexpression: MedianExpression[];
     nominatedtarget: NominatedTarget[];
     nominations: number;
-    // Extra field for the genes list table. This will be
-    // all the teams in a single string separated by commas
-    teams?: string;
-    study?: string;
-    input_data?: string;
-    validation_study_details?: string;
-    initial_nomination?: number;
-    sm_druggability_bucket?: string;
-    safety_bucket?: string;
-    feasibility_bucket?: string;
-    abability_bucket?: string;
-    new_modality_bucket?: string;
-    tissue_engagement_bucket?: string;
-    pharos_class?: string;
-    classification?: string;
-    safety_bucket_definition?: string;
-    feasibility_bucket_definition?: string;
-    abability_bucket_definition?: string;
-    new_modality_bucket_definition?: string;
-    brain_regions?: string;
-    num_brain_regions?: string;
-    isAnyRNAChangedInADBrain?: boolean;
-    isAnyProteinChangedInADBrain?: boolean;
+    // Extra fields for display values
+    // NominatedTargets
+    teams_display_value?: string;
+    study_display_value?: string;
+    input_data_display_value?: string;
+    validation_study_details_display_value?: string;
+    initial_nomination_display_value?: number;
+    nominated_target_display_value?: boolean;
+    // MedianExpression
+    brain_regions_display_value?: string;
+    num_brain_regions_display_value?: string;
+    // Druggability
+    pharos_class_display_value?: string;
+    sm_druggability_display_value?: string;
+    safety_rating_display_value?: string;
+    ab_modality_display_value?: string;
 }
 
 export interface MedianExpression {
@@ -71,16 +55,12 @@ export interface NominatedTarget {
 export interface Druggability {
     sm_druggability_bucket: number;
     safety_bucket: number;
-    feasibility_bucket: number;
     abability_bucket: number;
-    new_modality_bucket: number;
-    tissue_engagement_bucket: number;
     pharos_class: string;
+    // classification should really be named sm_druggability_bucket_definition
     classification: string;
     safety_bucket_definition: string;
-    feasibility_bucket_definition: string;
     abability_bucket_definition: string;
-    new_modality_bucket_definition: string;
 }
 
 export type GeneInfoDocument = GeneInfo & Document;

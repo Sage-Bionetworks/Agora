@@ -18,7 +18,7 @@ describe('Service: Dialogs: TestBed', () => {
             ]
         });
 
-        geneService = TestBed.get(DialogsService);
+        geneService = TestBed.inject(DialogsService);
     });
 
     it('should create an instance', () => {

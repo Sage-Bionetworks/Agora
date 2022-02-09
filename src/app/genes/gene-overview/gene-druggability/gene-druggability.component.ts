@@ -49,11 +49,36 @@ export class GeneDruggabilityComponent implements OnInit {
 
         // Update the initial buckets
         if (this.geneInfo) {
+            if (!this.geneInfo.druggability) {
+                this.geneInfo.druggability = [
+                    {
+                        sm_druggability_bucket: this.getDefaultBucketNumber(),
+                        safety_bucket: this.getDefaultBucketNumber(),
+                        abability_bucket: this.getDefaultBucketNumber(),
+                        pharos_class: null,
+                        classification: this.getDefaultText(),
+                        safety_bucket_definition: this.getDefaultText(),
+                        abability_bucket_definition: this.getDefaultText()
+                    }
+                ];
+            }
             this.currentBucketSM = this.geneInfo.druggability[0].sm_druggability_bucket;
             this.currentBucketAB = this.geneInfo.druggability[0].abability_bucket;
             this.currentBucketSF = this.geneInfo.druggability[0].safety_bucket;
         }
         this.setAdditionalResources();
+    }
+
+    getDefaultBucketNumber(): number {
+        return 100;
+    }
+
+    getDefaultTitle(): string {
+        return 'Not analyzed';
+    }
+
+    getDefaultText(): string {
+        return 'No score is currently available for this gene.';
     }
 
     getDruggabilitySMTitle(bucket: number): string {
@@ -87,7 +112,7 @@ export class GeneDruggabilityComponent implements OnInit {
             case 14:
                 return 'Non-protein target';
             default:
-                return '';
+                return this.getDefaultTitle();
         }
     }
 
@@ -108,7 +133,7 @@ export class GeneDruggabilityComponent implements OnInit {
             case 7:
                 return 'Unknown';
             default:
-                return '';
+                return this.getDefaultTitle();
         }
     }
 
@@ -127,7 +152,7 @@ export class GeneDruggabilityComponent implements OnInit {
             case 6:
                 return 'Unknown';
             default:
-                return '';
+                return this.getDefaultTitle();
         }
     }
 
@@ -156,7 +181,6 @@ export class GeneDruggabilityComponent implements OnInit {
                 'in the protein structure.';
             case 8:
                 return 'Has an identified endogenous ligand according from IUPHAR.';
-
             case 9:
                 return 'Is a member of a gene family which has a member with an small molecule ligand identified from ChEMBL data, meeting TCRD activity criteria.';
             case 10:
@@ -173,7 +197,7 @@ export class GeneDruggabilityComponent implements OnInit {
             case 14:
                 return 'New modality indicated';
             default:
-                return '';
+                return this.getDefaultText();
         }
     }
 
@@ -199,7 +223,7 @@ export class GeneDruggabilityComponent implements OnInit {
                 return 'Dark target. Paucity of biological knowledge means progress will be ' +
                 'difficult';
             default:
-                return '';
+                return this.getDefaultText();
         }
     }
 
@@ -227,8 +251,12 @@ export class GeneDruggabilityComponent implements OnInit {
             case 6:
                 return 'Insufficient data available for safety assessment.';
             default:
-                return '';
+                return this.getDefaultText();
         }
+    }
+
+    getBucketNumberText(bucket: number, section: string): string {
+        return bucket !== 100 ? bucket.toString(10) : '–';
     }
 
     getBucketTextColor(bucket: number, section: string): string {
@@ -259,6 +287,10 @@ export class GeneDruggabilityComponent implements OnInit {
             range = 6;
         } else if (section === 'sf') {
             range = 5;
+        }
+
+        if (bucket === 100) {
+            return '#C3C7D1';
         }
 
         if (bucket <= range && bucket > 0) {
@@ -310,7 +342,7 @@ export class GeneDruggabilityComponent implements OnInit {
             case 14:
                 return 'Class F';
             default:
-                return 'Class A';
+                return 'Not analyzed';
         }
     }
 
@@ -352,7 +384,7 @@ export class GeneDruggabilityComponent implements OnInit {
                 title: 'Pharos',
                 description: `View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the Illuminating the Druggable Genome program.`,
                 linkText: 'Visit Pharos',
-                link: `https://pharos.nih.gov/search?q=%22${this.gene.hgnc_symbol}%22`
+                link: `https://pharos.nih.gov/targets?q=${this.gene.hgnc_symbol}`
             },
             {
                 title: 'Brain RNAseq',
@@ -371,6 +403,12 @@ export class GeneDruggabilityComponent implements OnInit {
                 description: 'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.',
                 linkText: 'Visit AD Atlas',
                 link: `https://adatlas.org/?geneID=${this.gene.ensembl_gene_id}`
+            },
+            {
+                title: 'Pub AD',
+                description: 'View dementia-related publication information for this gene on PubAD.',
+                linkText: 'Visit PubAD',
+                link: `https://adexplorer.medicine.iu.edu/pubad/external/${this.gene.hgnc_symbol}`
             },
             {
                 title: 'Gene Ontology',

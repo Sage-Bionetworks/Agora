@@ -7,6 +7,7 @@ import {
     mockDataLink2,
     mockInfo1,
     mockTeam1,
+    mockTeam4,
     mockMetabolomics,
     mockExpValidation,
     mockGeneScoreDistribution
@@ -60,12 +61,12 @@ export class ApiServiceStub {
         return of([mockGeneScoreDistribution]);
     }
 
-    getTeams(info?: GeneInfo): Observable<object> {
-        return of([mockTeam1]);
+    getTeams(teamNames?: string[]): Observable<object> {
+        return of([mockTeam4]);
     }
 
     getAllTeams(): Observable<object> {
-        return of([mockTeam1]);
+        return of([mockTeam1, mockTeam4]);
     }
 
     getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
@@ -79,14 +80,6 @@ export class ApiServiceStub {
                 top: {}
             }
         });
-    }
-
-    getGeneTissues(): Observable<any> {
-        return of(mockTissues);
-    }
-
-    getGeneModels(): Observable<any> {
-        return of(mockModels);
     }
 
     getGeneMetabolomics(id: string): Observable<object> {

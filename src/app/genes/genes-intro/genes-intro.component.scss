@@ -1,5 +1,7 @@
+@use "sass:math";
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
+
 
 .intro-desc {
     // Navbar minus footer minus body bottom margin for footer
@@ -26,7 +28,7 @@
     }
 
     .video-half-vspace {
-        height: $video-height / 2;
+        height: math.div($video-height, 2);
     }
 }
 

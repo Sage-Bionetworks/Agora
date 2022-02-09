@@ -1460,14 +1460,17 @@ p-multiselectitem {
 
     .dc-chart {
         width: 100%;
-        rect.bar{
-            cursor: default;
-        }
-        rect.bar:hover {
-          fill-opacity: 1;
-        }
+
         svg {
             height: 100%;
+
+            rect.bar, text {
+                cursor: default;
+            }
+
+            rect.bar:hover {
+                fill-opacity: 1;
+              }
         }
     }
 }
@@ -1548,6 +1551,13 @@ p-multiselectitem {
 
     .dc-chart {
         width: 100%;
+
+        svg {
+
+            rect, text {
+                cursor: default;
+            }
+        }
     }
 }
 
@@ -1788,9 +1798,8 @@ g.textGroup text {
 
 // Box-plot chart
 
-.bp-axis-tooltip, .pbp-axis-tooltip {
+.bp-axis-tooltip, .pbp-axis-tooltip, .cc-axis-tooltip {
     @include lato-font('regular');
-
     position: absolute;
     padding: 14px;
     text-align: center;
@@ -1800,6 +1809,7 @@ g.textGroup text {
     box-shadow: 0px 0px 4px color(box-shadow);
     border-radius: 2px;
     color: color(text, fill);
+    pointer-events: none;
 }
 
 .bplot-content {

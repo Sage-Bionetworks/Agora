@@ -2,7 +2,6 @@ import {
     TestBed
 } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpParams } from '@angular/common/http';
 
 import {
     mockGene1,
@@ -10,7 +9,9 @@ import {
     mockGenesResponse,
     mockLinksListResponse,
     mockTeam1,
-    mockTissues,
+    mockTeam2,
+    mockTeam3,
+    mockTeam4,
     mockModels
 } from '../../testing';
 
@@ -27,8 +28,8 @@ describe('Service: Api: TestBed', () => {
             providers: [ ApiService ]
         });
 
-        apiService = TestBed.get(ApiService);
-        httpMock = TestBed.get(HttpTestingController);
+        apiService = TestBed.inject(ApiService);
+        httpMock = TestBed.inject(HttpTestingController);
     });
 
     afterEach(() => {
@@ -59,30 +60,6 @@ describe('Service: Api: TestBed', () => {
         });
 
         const req = httpMock.expectOne('/api/genes?id=VGF');
-        expect(req.request.method).toBe('GET');
-        req.flush(dummyGenes);
-    });
-
-    it('should get the genes with the same id data from the server', () => {
-        const dummyGenes = mockGenesResponse;
-
-        apiService.getGenesSameId('VGF').subscribe((response) => {
-            expect(response).toEqual(mockGenesResponse);
-        });
-
-        const req = httpMock.expectOne('/api/genes/same?id=VGF');
-        expect(req.request.method).toBe('GET');
-        req.flush(dummyGenes);
-    });
-
-    it('should get the genes page data from the server', () => {
-        const dummyGenes = mockGenesResponse;
-
-        apiService.getPageData().subscribe((response) => {
-            expect(response).toEqual(mockGenesResponse);
-        });
-
-        const req = httpMock.expectOne('/api/genes/page');
         expect(req.request.method).toBe('GET');
         req.flush(dummyGenes);
     });
@@ -137,14 +114,25 @@ describe('Service: Api: TestBed', () => {
         req.flush(res);
     });
 
-    it('should get a team data from the server using a gene info', () => {
+    it ('should get team data from the server using a team name', () => {
         const res: any = [mockTeam1];
 
-        apiService.getTeams(mockInfo1).subscribe((response) => {
+        apiService.getTeams([mockTeam1.team]).subscribe((response) => {
             expect(response).toEqual(res);
         });
 
-        const req = httpMock.expectOne('/api/teams?teams=Emory');
+        const req = httpMock.expectOne('/api/teams?teams=Duke');
+        expect(req.request.method).toBe('GET');
+        req.flush(res);
+    });
+
+    it('should get deduplicated team data from the server using a list of team names', () => {
+        const res: any = [mockTeam1, mockTeam2, mockTeam4];
+        apiService.getTeams([mockTeam1.team, mockTeam2.team, mockTeam3.team, mockTeam4.team]).subscribe((response) => {
+            expect(response).toEqual(res);
+        });
+
+        const req = httpMock.expectOne('/api/teams?teams=Duke,Harvard-MIT,Columbia-Rush');
         expect(req.request.method).toBe('GET');
         req.flush(res);
     });
@@ -183,54 +171,6 @@ describe('Service: Api: TestBed', () => {
         const req = httpMock.expectOne('/api/team/image?name=Rima%20Kaddurah-Daouk');
         httpMock.expectOne('/api/team/image?name=Colette%20Blach');
         httpMock.expectOne('/api/team/image?name=Andrew%20Saykin');
-        expect(req.request.method).toBe('GET');
-        req.flush(res);
-    });
-
-    it('should get all the tissues', () => {
-        const res: string[] = mockTissues;
-
-        apiService.getTissues().subscribe((response) => {
-            expect(response).toEqual(res);
-        });
-
-        const req = httpMock.expectOne('/api/tissues');
-        expect(req.request.method).toBe('GET');
-        req.flush(res);
-    });
-
-    it('should get the gene tissues', () => {
-        const res: string[] = mockTissues;
-
-        apiService.getGeneTissues().subscribe((response) => {
-            expect(response).toEqual(res);
-        });
-
-        const req = httpMock.expectOne('/api/tissues/gene');
-        expect(req.request.method).toBe('GET');
-        req.flush(res);
-    });
-
-    it('should get all the models', () => {
-        const res: string[] = mockModels;
-
-        apiService.getModels().subscribe((response) => {
-            expect(response).toEqual(res);
-        });
-
-        const req = httpMock.expectOne('/api/models');
-        expect(req.request.method).toBe('GET');
-        req.flush(res);
-    });
-
-    it('should get the gene models', () => {
-        const res: string[] = mockModels;
-
-        apiService.getGeneModels().subscribe((response) => {
-            expect(response).toEqual(res);
-        });
-
-        const req = httpMock.expectOne('/api/models/gene');
         expect(req.request.method).toBe('GET');
         req.flush(res);
     });

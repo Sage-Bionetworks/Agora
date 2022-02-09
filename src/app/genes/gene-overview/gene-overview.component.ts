@@ -236,9 +236,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     case this.tabMenuLabels.RESOURCES:
-                        if (this.geneInfo.druggability) {
-                            this.navService.setOvMenuTabIndex(this.items.length - 2);
-                        }
+                        this.navService.setOvMenuTabIndex(this.items.length - 2);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -378,9 +376,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     removeNoDataTabs() {
-        const itemsToCheck = [this.geneInfo.nominations, this.geneInfo.druggability, this.geneExpValidation];
+        const itemsToCheck = [this.geneInfo.nominations, this.geneExpValidation];
         const labels = [
-            this.tabMenuLabels.NOMINATION_DETAILS,
             this.tabMenuLabels.NOMINATION_DETAILS,
             this.tabMenuLabels.EXPERIMENTAL_VALIDATION
         ];
@@ -466,7 +463,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     getAlias(): string {
-        if (this.geneInfo.alias.length > 0) {
+        if (this.geneInfo.alias && this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
         }
         return '';

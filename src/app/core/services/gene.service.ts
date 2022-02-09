@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import {
     Gene,
     GeneInfo,
-    TeamInfo,
     TissuesResponse,
     ModelsResponse,
     GeneResponse,
@@ -25,7 +24,6 @@ export class GeneService {
     currentInfo: GeneInfo;
     currentExpValidation: GeneExpValidation[] = [];
     currentGeneOverallScores: GeneOverallScores;
-    currentTeams: TeamInfo[];
     defaultTissue: string = 'CBE';
     defaultModel: string = 'AD Diagnosis (males and females)';
     currentTissue: string = this.defaultTissue;
@@ -77,8 +75,8 @@ export class GeneService {
         this.setCurrentGene(data.item);
         this.setCurrentInfo(data.info);
         this.setCurrentExpValidation(data.expValidation);
-        this.setCurrentModel(data.item.model);
-        this.setCurrentTissue(data.item.tissue);
+        this.setCurrentModel(data.item?.model);
+        this.setCurrentTissue(data.item?.tissue);
         this.setCurrentGeneOverallScores(data.overallScores);
     }
 
@@ -104,14 +102,6 @@ export class GeneService {
 
     getCurrentGeneOverallScores(): GeneOverallScores {
         return this.currentGeneOverallScores;
-    }
-
-    setCurrentTeams(teams: TeamInfo[]) {
-        this.currentTeams = teams;
-    }
-
-    getCurrentTeams(): TeamInfo[] {
-        return this.currentTeams;
     }
 
     setCurrentTissue(tissue: string) {
