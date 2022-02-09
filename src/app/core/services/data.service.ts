@@ -21,6 +21,7 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
+    rnaDistributionData: any;
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
     // at least, but not more than, 2 digits after decimal point
@@ -113,5 +114,19 @@ export class DataService {
                 document.body.removeChild(link);
             }
         }
+    }
+
+    setRnaDistributionData(data) {
+        this.rnaDistributionData = data;
+    }
+
+    loadRnaDistributionData(data) {
+        if (data) {
+            this.setRnaDistributionData(data);
+        }
+    }
+
+    getRnaDistributionData(): Object[] {
+        return this.rnaDistributionData;
     }
 }

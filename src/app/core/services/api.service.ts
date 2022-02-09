@@ -224,4 +224,19 @@ export class ApiService {
 
         return this.http.get(baseUrl, { headers, params });
     }
+
+
+    getRnaDistributionData(id: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+        const params = new HttpParams().set(
+            'id', id
+        );
+        // Get all the genes to render the charts
+        return this.http.get<any>('/api/rnadistribution', { headers, params });
+    }
 }
