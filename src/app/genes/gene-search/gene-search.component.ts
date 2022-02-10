@@ -25,13 +25,17 @@ export class GeneSearchComponent implements OnInit {
     @Input() style: any;
     @Input() infos: Gene[];
     queryField: FormControl = new FormControl();
+    currentQuery: string = '';
+    isSearching: boolean = false;
+    isEnsemblIdSearch: boolean = false;
+    isNotFound: boolean = false;
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
-    isSearching: boolean = false;
     gene: Gene;
-    notFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
-    isNotFound: boolean = false;
-    currentQuery: string = '';
+    hgncSymbolNotFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
+    ensemblIdNotFoundString: string = 'Unable to find a matching gene. Try searching by gene symbol.';
+    notValidSearchString: string = 'Please enter a least two characters.';
+    notValidEnsemblIdString: string = 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
 
     constructor(
         private navService: NavigationService,
@@ -46,20 +50,11 @@ export class GeneSearchComponent implements OnInit {
     initQueryField() {
         this.queryField.valueChanges
             .pipe(
-                debounceTime(300),
+                debounceTime(500),
                 distinctUntilChanged(),
                 switchMap((query) => {
                     this.results = [];
-
-                    if (query) {
-                        this.currentQuery = query;
-                        this.isSearching = true;
-                        return this.search(query);
-                    } else {
-                        this.currentQuery = '';
-                        this.isSearching = false;
-                        return empty();
-                    }
+                    return this.search(query);
                 }),
                 catchError((err) => throwError(err))
             )
@@ -70,26 +65,18 @@ export class GeneSearchComponent implements OnInit {
                 // If we got an empty array as response, or no genes found
                 if (!data.items.length) {
                     this.isNotFound = true;
-                    this.results = [{
-                        _id: this.notFoundString,
-                        ensembl_gene_id: this.notFoundString,
-                        name: this.notFoundString,
-                        hgnc_symbol: this.notFoundString,
-                        type_of_gene: this.notFoundString,
-                        go_MF: [],
-                        isIGAP: false,
-                        haseqtl: false,
-                        isChangedInADBrain: false,
-                        medianexpression: [],
-                        nominatedtarget: [],
-                        nominations: 0
-                    } as GeneInfo];
+                    this.setErrorMessage(this.isEnsemblIdSearch ? this.ensemblIdNotFoundString : this.hgncSymbolNotFoundString);
                 } else {
                     this.isNotFound = false;
                     if (data.isEnsembl) {
-                        // It is safe to get the first index here because there will be only
-                        // one match when using the ensembl id
-                        this.viewGene(data.items[0]);
+                        // Multiple matching genes: This should never happen…but if it does, log an error
+                        if (data.items.length > 1) {
+                            console.log('Unexpected duplicate gene_info objects for ensembl ID "' + this.currentQuery + '" found.');
+                            this.setErrorMessage(this.ensemblIdNotFoundString);
+                        }
+                        else {
+                            this.viewGene(data.items[0]);
+                        }
                     } else {
                         this.results = data.items;
                     }
@@ -102,13 +89,31 @@ export class GeneSearchComponent implements OnInit {
             });
     }
 
-    search(queryString: string): Observable<any> {
-        if (queryString) {
-            return this.apiService.getInfosMatchId(queryString);
-        } else {
-            this.isSearching = false;
-            return empty();
+    search(query: string): Observable<any> {
+        this.isEnsemblIdSearch = false;
+
+        if (query.length < 2) {
+            query = '';
+            this.setErrorMessage(this.notValidSearchString);
         }
+        else if (query.length > 3) {
+            const prefix = query.toLowerCase().substring(0, 4);
+
+            if ('ensg' === prefix) {
+                const digits = query.toLowerCase().substring(4, query.length);
+                this.isEnsemblIdSearch = true;
+
+                // Check if 11 digits numeric string
+                if (digits.length !== 11 || !/^\d+$/.test(digits)) {
+                    query = '';
+                    this.setErrorMessage(this.notValidEnsemblIdString);
+                }
+            }
+        }
+
+        this.currentQuery = query;
+        this.isSearching = query ? true : false;
+        return query ? this.apiService.getInfosMatchId(query) : empty();
     }
 
     focusSearchList(state: boolean) {
@@ -124,7 +129,7 @@ export class GeneSearchComponent implements OnInit {
     }
 
     viewGene(info: GeneInfo) {
-        if (info.name !== this.notFoundString) {
+        if (info.name !== this.hgncSymbolNotFoundString && info.name !== this.ensemblIdNotFoundString) {
             this.navService.setOvMenuTabIndex(0);
             // We don't have a gene
             if (!this.geneService.getCurrentGene()) {
@@ -188,10 +193,27 @@ export class GeneSearchComponent implements OnInit {
         });
     }
 
-    // The parameter is the gene hgnc_symbol from the server. To be calssified as an alias,
+    // The parameter is the gene hgnc_symbol from the server. To be classified as an alias,
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
         return !hgncSymbol.includes(this.currentQuery.toUpperCase()) &&
-            hgncSymbol !== this.notFoundString;
+            hgncSymbol !== this.hgncSymbolNotFoundString && hgncSymbol !== this.ensemblIdNotFoundString;
+    }
+
+    setErrorMessage(message: string) {
+        this.results = [{
+            _id: message,
+            ensembl_gene_id: message,
+            name: message,
+            hgnc_symbol: message,
+            type_of_gene: message,
+            isIGAP: false,
+            haseqtl: false,
+            isAnyRNAChangedInADBrain: false,
+            isAnyProteinChangedInADBrain: false,
+            medianexpression: [],
+            nominatedtarget: [],
+            nominations: 0
+        } as GeneInfo];
     }
 }

@@ -91,9 +91,10 @@ describe('Component: GeneDruggability', () => {
         expect(title).toEqual('Inaccessible');
         title = component.getDruggabilityABTitle(7);
         expect(title).toEqual('Unknown');
-
+        title = component.getDruggabilityABTitle(100);
+        expect(title).toEqual(component.getDefaultTitle());
         title = component.getDruggabilityABTitle(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultTitle());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -114,8 +115,10 @@ describe('Component: GeneDruggability', () => {
         expect(title).toEqual('Potentially unsafe in humans');
         title = component.getDruggabilitySFTitle(6);
         expect(title).toEqual('Unknown');
+        title = component.getDruggabilitySFTitle(100);
+        expect(title).toEqual(component.getDefaultTitle());
         title = component.getDruggabilitySFTitle(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultTitle());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -154,9 +157,10 @@ describe('Component: GeneDruggability', () => {
         expect(title).toEqual('Unknown');
         title = component.getDruggabilitySMTitle(14);
         expect(title).toEqual('Non-protein target');
-
+        title = component.getDruggabilitySMTitle(100);
+        expect(title).toEqual(component.getDefaultTitle());
         title = component.getDruggabilitySMTitle(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultTitle());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -227,8 +231,11 @@ describe('Component: GeneDruggability', () => {
         title = component.getDruggabilitySMText(14);
         expect(title).toEqual('New modality indicated');
 
+        title = component.getDruggabilitySMText(100);
+        expect(title).toEqual(component.getDefaultText());
+
         title = component.getDruggabilitySMText(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultText());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -269,8 +276,11 @@ describe('Component: GeneDruggability', () => {
             'difficult'
         );
 
+        title = component.getDruggabilityABText(100);
+        expect(title).toEqual(component.getDefaultText());
+
         title = component.getDruggabilityABText(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultText());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -307,8 +317,11 @@ describe('Component: GeneDruggability', () => {
         title = component.getDruggabilitySFText(6);
         expect(title).toEqual('Insufficient data available for safety assessment.');
 
+        title = component.getDruggabilitySFText(100);
+        expect(title).toEqual(component.getDefaultText());
+
         title = component.getDruggabilitySFText(-1);
-        expect(title).toEqual('');
+        expect(title).toEqual(component.getDefaultText());
 
         expect(gdtSpy).toHaveBeenCalled();
     });
@@ -332,6 +345,9 @@ describe('Component: GeneDruggability', () => {
 
         title = component.getBucketBGColor(14, 'sm');
         expect(title).toEqual('#AFDDDF');
+
+        title = component.getBucketBGColor(100, 'sm');
+        expect(title).toEqual('#C3C7D1');
 
         title = component.getBucketBGColor(-1, 'sm');
         expect(title).toEqual('#FFFFFF');

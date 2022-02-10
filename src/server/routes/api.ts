@@ -5,7 +5,7 @@ import {
     NeuropathCorr,
     GeneExpValidation,
     GeneScoreDistribution,
-    GeneOverallScores,
+    GeneOverallScores, TeamInfo,
 } from '../../app/models';
 import {
     Genes,
@@ -25,6 +25,7 @@ import * as mongoose from 'mongoose';
 import * as Grid from 'gridfs';
 import * as awsParamStore from 'aws-param-store';
 import * as crossfilter from 'crossfilter2';
+// required when verbose debugging is enabled
 import * as util from 'util';
 
 const router = express.Router();
@@ -40,7 +41,7 @@ const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'dev
         '\nmethod => ' + method,
         '\ndata => ' + util.inspect(query),
         '\n',
-        doc && ('doc => ' + util.inspect(doc)), '\n')
+        doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
 // Set the database url
@@ -78,8 +79,8 @@ connection.once('open', () => {
 
     // Get the genes collection size
     let tableGenesById: GeneInfo[] = [];
-    let tableGenesByNom: GeneInfo[] = [];
     let allGenes: Gene[] = [];
+    let allTeams: TeamInfo[] = [];
     const genesADDMF: Gene[] = [];
     const genesADDAODMF: Gene[] = [];
     const genesADDSF: Gene[] = [];
@@ -90,13 +91,51 @@ connection.once('open', () => {
     let geneScoreDistribution: GeneScoreDistribution[] = [];
     let genesOverallScores: GeneOverallScores[] = [];
     let totalRecords = 0;
-    const allTissues: string[] = [];
-    const allModels: string[] = [];
     const hgncToEnsembl: Map<string, string[]> = new Map<string, string[]>();
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
+
+    // Select fields for Nominated Targets table
+    const tableGenesByIdFields = [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'nominatedtarget.initial_nomination',
+        'nominatedtarget.team',
+        'nominatedtarget.study',
+        'nominatedtarget.input_data',
+        'nominatedtarget.validation_study_details',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition'
+    ].join(' ');
+
+    // Select fields for Similalr Genes table
+    const tableSimilarGenesFields = [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'medianexpression',
+        'isIGAP',
+        'haseqtl',
+        'isAnyRNAChangedInADBrain',
+        'isAnyProteinChangedInADBrain',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition'
+    ].join(' ');
+
+    // initialize data caches
 
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
@@ -133,10 +172,6 @@ connection.once('open', () => {
             g.logfc = getSignificantFigures(+g.logfc);
             g.fc = getSignificantFigures(+g.fc);
             g.adj_p_val = getSignificantFigures(+g.adj_p_val);
-            g.hgnc_symbol = g.hgnc_symbol;
-            g.model = g.model;
-            g.study = g.study;
-            g.tissue = g.tissue;
 
             const ensemblList = hgncToEnsembl.get(g.hgnc_symbol);
             if (ensemblList === undefined) {
@@ -146,13 +181,6 @@ connection.once('open', () => {
                     ensemblList.push(g.ensembl_gene_id);
                     hgncToEnsembl.set(g.hgnc_symbol, ensemblList);
                 }
-            }
-
-            if (allTissues.indexOf(g.tissue) === -1) {
-                allTissues.push(g.tissue);
-            }
-            if (allModels.indexOf(g.model) === -1) {
-                allModels.push(g.model);
             }
 
             switch (g.model) {
@@ -172,47 +200,34 @@ connection.once('open', () => {
                     break;
             }
         });
-        await allTissues.sort();
-        await allModels.sort();
-
-        //////////////////////////////////////////////////////////////////////////////////////////
     });
 
-    GenesInfo.find({ nominations: { $gt: 0 } })
-        .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+    GenesInfo.find({ nominations: { $gt: 0 } }).lean()
+        .select(tableGenesByIdFields)
+        .sort({ nominations: -1, hgnc_symbol: 1 })
         .exec(async (err, genes: GeneInfo[], next) => {
         if (err) {
             next(err);
         } else {
             tableGenesById = genes.slice();
-            // Table genes ordered by nominations
-            tableGenesByNom = await genes.slice().sort((a, b) => {
-                return (a.nominations > b.nominations) ? 1 :
-                    ((b.nominations > a.nominations) ? -1 : 0);
-            });
-
             totalRecords = tableGenesById.length;
         }
     });
 
-    GenesProteomics.find({}).exec(async (err, genes: Proteomics[], next) => {
+    GenesProteomics.find({}).lean().exec(async (err, genes: Proteomics[], next) => {
         if (err) {
             next(err);
         } else {
             geneProteomics = genes.slice();
             await geneProteomics.forEach((g: Proteomics) => {
-                g.uniqid = g.uniqid;
-                g.uniprotid = g.uniprotid;
                 g.log2_fc = (g.log2_fc) ? +g.log2_fc : 0;
-                g.hgnc_symbol = g.hgnc_symbol;
                 g.pval = (g.pval) ? +g.pval : 0;
                 g.cor_pval = (g.cor_pval) ? +g.cor_pval : 0;
-                g.tissue = g.tissue;
             });
         }
     });
 
-    NeuropathCorrs.find()
+    NeuropathCorrs.find().lean()
         .exec(async (err, genes: NeuropathCorr[], next) => {
             if (err) {
                 next(err);
@@ -222,7 +237,7 @@ connection.once('open', () => {
         }
     );
 
-    GenesExperimentalValidation.find()
+    GenesExperimentalValidation.find().lean()
         .exec(async (err, genes: GeneExpValidation[], next) => {
             if (err) {
                 next(err);
@@ -231,7 +246,7 @@ connection.once('open', () => {
             }
         });
 
-    GenesScoreDistribution.find()
+    GenesScoreDistribution.find().lean()
         .exec(async (err, genes: GeneScoreDistribution[], next) => {
             if (err) {
                 next(err);
@@ -240,13 +255,30 @@ connection.once('open', () => {
             }
         });
 
-    GenesOverallScores.find()
+    GenesOverallScores.find().lean()
         .exec(async (err, genes: GeneOverallScores[], next) => {
             if (err) {
                 next(err);
             } else {
                 genesOverallScores = genes.slice();
             }
+        });
+
+    TeamsInfo.find().lean()
+        .exec(async (err, teams: TeamInfo[], next) => {
+            if (err) {
+                next(err);
+            } else {
+                allTeams = teams.slice();
+            }
+            allTeams.sort((a, b) => {
+                const aProgram: string = (a.program) ? a.program.toLowerCase() : '';
+                const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
+                const bProgram: string = (b.program) ? b.program.toLowerCase() : '';
+                const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
+                return aProgram.toLowerCase() + aTeamFull.toLowerCase() <
+                bProgram.toLowerCase() + bTeamFull.toLowerCase() ? -1 : 1;
+            });
         });
 
     /* GET genes listing. */
@@ -271,7 +303,8 @@ connection.once('open', () => {
                     {
                         uniprotid: { $ne: null }
                     }
-                ]}).exec((err, gene: Proteomics) => {
+                ]}).lean().sort('uniprotid')
+                    .exec((err, gene: Proteomics) => {
                     if (err) {
                         res.send({error: 'Empty Proteomics array', items: []});
                     } else {
@@ -313,11 +346,10 @@ connection.once('open', () => {
                     idGenesProteomics.forEach((p: Proteomics) => {
                         genePTissues.push(p.tissue);
                     });
-                    const distinctTissues = genePTissues.filter((value, index, self) => {
+                    // Only unique tissues
+                    genePTissues = genePTissues.filter((value, index, self) => {
                         return self.indexOf(value) === index;
                     });
-                    // Only unique tissues
-                    genePTissues = distinctTissues;
 
                     // Only genes with the unique tissues
                     indx = await crossfilter(geneProteomics.slice().filter((p: Proteomics) => {
@@ -507,7 +539,7 @@ connection.once('open', () => {
             const queryObj = { [fieldName]: req.query.id };
 
             // Find all the Genes with the current id
-            await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+            await Genes.find(queryObj).lean().sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
                 .exec(async (err, genes) => {
                 if (err) {
                     next(err);
@@ -544,12 +576,12 @@ connection.once('open', () => {
                             if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
                                 geneTissues.push(g.tissue);
                             }
-                            if (g.model && geneModels.indexOf(g.model) === -1) {
-                                geneModels.push(g.model);
+                            if (g['model'] && geneModels.indexOf(g['model']) === -1) {
+                                geneModels.push(g['model']);
                             }
                         });
-                        await geneTissues.sort();
-                        await geneModels.sort();
+                        geneTissues.sort();
+                        geneModels.sort();
 
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
@@ -565,7 +597,7 @@ connection.once('open', () => {
                             maxAdjPValue,
                             geneModels,
                             geneTissues,
-                            geneProteomics
+                            geneProteomics: geneProteomics.filter (p => p.hgnc_symbol === geneEntries[0].hgnc_symbol )
                         });
                     }
                 }
@@ -573,54 +605,18 @@ connection.once('open', () => {
         }
     });
 
-    // Use mongoose to get one page of genes
-    router.get('/genes/page', (req, res) => {
-        // Convert the strings
-        const skip = (+req.query.first) ? +req.query.first : 0;
-        const limit = (+req.query.rows) ? +req.query.rows : 10;
-
-        // Get one array or the other depending on the list column we want to sort by
-        let genes: GeneInfo[] = [];
-
-        if (req.query.globalFilter !== 'null' && req.query.globalFilter) {
-            ((req.query.sortField === 'nominations') ? tableGenesByNom : tableGenesById).forEach(
-                (g) => {
-                // If we typed into the search above the list
-                if (g.hgnc_symbol.includes(req.query.globalFilter.trim().toUpperCase()))  {
-                    // Do not use a shallow copy here
-                    genes.push(JSON.parse(JSON.stringify(g)));
-                }
-            });
-        } else {
-            genes = ((req.query.sortField === 'nominations') ? tableGenesByNom :
-                tableGenesById).slice();
-        }
-        // Updates the global length based on the filter
-        totalRecords = genes.length;
-
-        // If we want sort in the reverse order, this is done in-place
-        const sortOrder = (+req.query.sortOrder) ? +req.query.sortOrder : 1;
-        if (sortOrder === -1) { genes.reverse(); }
-
-        // Send the final genes page
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', 0);
-        res.json({ items: genes.slice(skip, skip + limit), totalRecords });
-    });
-
-    // Use mongoose to get all pages for the table
+    // Get the cached list of nominated targets to populate the table
     router.get('/genes/table', (req, res) => {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', 0);
-        res.json({ items: tableGenesById, totalRecords: tableGenesById.length });
+        res.json({ items: tableGenesById, totalRecords });
     });
 
     // Get all gene infos that match an id, using the hgnc_symbol or ensembl id
     router.get('/gene/infos/:id', (req, res, next) => {
         const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-        const isEnsembl = (req.params.id.startsWith('ENSG')) ? true : false;
+        const isEnsembl = req.params.id.startsWith('ENSG');
         const queryObj = { $or: [
             {
                 [fieldName]: { $regex: req.params.id.trim(), $options: 'i' }
@@ -634,7 +630,7 @@ connection.once('open', () => {
         if (!req.params || !req.params.id) {
             res.status(404).send('Not found');
         } else {
-            GenesInfo.find(queryObj).exec(
+            GenesInfo.find(queryObj).lean().exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);
@@ -652,7 +648,7 @@ connection.once('open', () => {
         }
     });
 
-    // Get all genes infos that match an array of ids, currently hgnc_symbol
+    // Query for all genesInfos that match an array of ENSG - used to populate the Similar Genes table
     router.get('/mgenes/infos', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
         if (!req.query || !req.query.ids) {
@@ -660,7 +656,8 @@ connection.once('open', () => {
         } else {
             const ids = req.query.ids.split(',');
 
-            GenesInfo.find({ ensembl_gene_id: { $in: ids } }).exec(
+            GenesInfo.find({ ensembl_gene_id: { $in: ids } }).lean()
+                .sort({  hgnc_symbol: 1 }).select(tableSimilarGenesFields).exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);
@@ -684,7 +681,7 @@ connection.once('open', () => {
             const queryObj = { [fieldName]: req.query.id };
 
             let overallScores;
-            if (fieldName === "ensembl_gene_id") {
+            if (fieldName === 'ensembl_gene_id') {
                 overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
             } else {
                 overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
@@ -729,38 +726,46 @@ connection.once('open', () => {
         }
     });
 
-    // Get a gene list by id
+    // Get the list of genes related to the gene specified by id; used for the gene-network (hairball)
     router.get('/genelist/:id', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !req.params.id) { res.json({ items: [] }); } else {
-            GenesLinks.find({ geneA_ensembl_gene_id: req.params.id }).exec(async (err, links) => {
-                const arrA = await links.slice().map((slink) => {
-                    return slink.toJSON()['geneB_ensembl_gene_id'];
-                });
+        if (!req.params || !req.params.id) {
+            res.json({items: []});
+        } else {
 
-                GenesLinks.find({ geneB_ensembl_gene_id: req.params.id }, async (errB, linkB) => {
-                    const arrB = await linkB.slice().map((slink) => {
-                        return slink.toJSON()['geneA_ensembl_gene_id'];
+            // identify all genes directly related to the gene of interest via network records
+            GenesLinks.find({geneA_ensembl_gene_id: req.params.id}).lean()
+                .exec(async (err, links) => {
+                    const arrA = links.slice().map((slink) => {
+                        return slink.geneB_ensembl_gene_id;
                     });
-                    const arr = [...arrA, ...arrB];
-                    GenesLinks.find({ geneA_ensembl_gene_id: { $in: arr } })
-                        .where('geneB_ensembl_gene_id')
-                        .in(arr)
-                        .exec((errC, linksC) => {
-                            if (errC) {
-                                next(errC);
-                            } else {
-                                const flinks = [...links, ...linkB, ...linksC];
-                                res.setHeader(
-                                    'Cache-Control', 'no-cache, no-store, must-revalidate'
-                                );
-                                res.setHeader('Pragma', 'no-cache');
-                                res.setHeader('Expires', 0);
-                                res.json({ items: flinks });
-                            }
+
+                    // identify all genes related to the related genes identified above
+                    GenesLinks.find({geneB_ensembl_gene_id: req.params.id}, async (errB, linkB) => {
+                        const arrB = linkB.slice().map((slink) => {
+                            return slink.toJSON()['geneA_ensembl_gene_id'];
                         });
+                        const arr = [...arrA, ...arrB];
+
+                        // identify all genes related to the related genes identified above
+                        await GenesLinks.find({geneA_ensembl_gene_id: {$in: arr}}).lean()
+                            .where('geneB_ensembl_gene_id')
+                            .in(arr)
+                            .exec((errC, linksC) => {
+                                if (errC) {
+                                    next(errC);
+                                } else {
+                                    const flinks = [...links, ...linkB, ...linksC];
+                                    res.setHeader(
+                                        'Cache-Control', 'no-cache, no-store, must-revalidate'
+                                    );
+                                    res.setHeader('Pragma', 'no-cache');
+                                    res.setHeader('Expires', 0);
+                                    res.json({items: flinks});
+                                }
+                            });
+                    });
                 });
-            });
         }
     });
 
@@ -775,49 +780,34 @@ connection.once('open', () => {
         }
     });
 
-    // Get a team by team field
+    // Get teams by team (short name) field
     router.get('/teams', (req, res, next) => {
         // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) { res.json({ items: [] }); } else {
-            const arr = req.query.teams.split(', ');
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({items: []});
+        } else {
+            const arr = req.query.teams.split(',');
+            const teams = allTeams.filter(t => arr.includes(t.team));
 
-            TeamsInfo.find({ team: { $in: arr } }).exec((err, teams) => {
-                if (err) {
-                    next(err);
-                } else {
-                    teams.sort((a, b) => {
-                        const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
-                        const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
-                        return aTeamFull.toLowerCase() < bTeamFull.toLowerCase() ? -1 : 1;
-                    });
-
-                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                    res.setHeader('Pragma', 'no-cache');
-                    res.setHeader('Expires', 0);
-                    res.json(teams);
-                }
-            });
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', 0);
+            res.json(teams);
         }
     });
 
     // Get all team infos
     router.get('/teams/all', (req, res, next) => {
-        TeamsInfo.find().exec((err, teams) => {
-            if (err) {
-                next(err);
-            } else {
-                teams.sort((a, b) => {
-                    const aProgram: string = (a.program) ? a.program.toLowerCase() : '';
-                    const aTeamFull: string = (a.team_full) ? a.team_full.toLowerCase() : '';
-                    const bProgram: string = (b.program) ? b.program.toLowerCase() : '';
-                    const bTeamFull: string = (b.team_full) ? b.team_full.toLowerCase() : '';
-                    return aProgram.toLowerCase() + aTeamFull.toLowerCase() <
-                        bProgram.toLowerCase() + bTeamFull.toLowerCase() ? -1 : 1;
-                });
+        const noData = [];
+        if (!allTeams.length) {
+            console.log('getAllTeams: Teams cache is empty');
+            return noData;
+        }
 
-                res.json(teams);
-            }
-        });
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json(allTeams);
     });
 
     router.get('/team/image', async (req, res, next) => {
@@ -854,124 +844,6 @@ connection.once('open', () => {
         }
     });
 
-    // Get all the tissues
-    router.get('/tissues', (req, res, next) => {
-        // Return an empty array in case we don't have tissues
-        if (!allTissues.length) { res.json({ items: [] }); } else {
-            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', 0);
-            res.json({ items: allTissues });
-        }
-    });
-
-    // Get all the gene tissues
-    router.get('/tissues/gene', async (req, res, next) => {
-        // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) {
-            res.json({ item: null });
-        } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-            const queryObj = { [fieldName]: req.query.id };
-
-            // Find all the Genes with the current id
-            await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
-                .exec(async (err, genes) => {
-                if (err) {
-                    next(err);
-                } else {
-                    if (!genes.length) {
-                        res.status(404).send('No genes found!');
-                    } else {
-                        const geneTissues = await genes.slice().map((gene) => {
-                            return gene.tissue;
-                        });
-                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                        res.setHeader('Pragma', 'no-cache');
-                        res.setHeader('Expires', 0);
-                        res.json({ items: geneTissues });
-                    }
-                }
-            });
-        }
-    });
-
-    // Get all the models
-    router.get('/models', (req, res, next) => {
-        // Return an empty array in case we don't have models
-        if (!allModels.length) { res.json({ items: [] }); } else {
-            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            res.setHeader('Pragma', 'no-cache');
-            res.setHeader('Expires', 0);
-            res.json({ items: allModels });
-        }
-    });
-
-    // Get all the models
-    router.get('/models/gene', async (req, res, next) => {
-        // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) {
-            res.json({ item: null });
-        } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-            const queryObj = { [fieldName]: req.query.id };
-
-            // Find all the Genes with the current id
-            await Genes.find(queryObj).sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
-                .exec(async (err, genes) => {
-                if (err) {
-                    next(err);
-                } else {
-                    if (!genes.length) {
-                        res.status(404).send('No genes found!');
-                    } else {
-                        const geneModels = await genes.slice().map((gene) => {
-                            return gene.model;
-                        });
-                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                        res.setHeader('Pragma', 'no-cache');
-                        res.setHeader('Expires', 0);
-                        res.json({ items: geneModels });
-                    }
-                }
-            });
-        }
-    });
-
-    // Get all genes using an id
-    router.get('/genes/same', async (req, res, next) => {
-        // Return an empty array in case no id was passed or no params
-        if (!req.params || !Object.keys(req.query).length) {
-            res.json({ item: null });
-        } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-            const queryObj = { [fieldName]: req.query.id };
-
-            if (req.query.tissue) {
-                queryObj['tissue'] = req.query.tissue;
-            }
-            if (req.query.model) {
-                queryObj['model'] = req.query.model;
-            }
-
-            // Find all the Genes with the current id
-            await Genes.find(queryObj).exec(async (err, genes) => {
-                if (err) {
-                    next(err);
-                } else {
-                    res.setHeader(
-                        'Cache-Control', 'no-cache, no-store, must-revalidate'
-                    );
-                    res.setHeader('Pragma', 'no-cache');
-                    res.setHeader('Expires', 0);
-                    await res.json({
-                        geneEntries: genes
-                    });
-                }
-            });
-        }
-    });
-
     router.get('/metabolomics', async (req, res, next) => {
         // Return an empty array in case no id was passed or no params
         if (!req.params || !Object.keys(req.query).length) {
@@ -982,7 +854,7 @@ connection.once('open', () => {
             const queryObj = { [fieldName]: req.query.id };
 
             // Find all the Genes with the current id
-            await GenesMetabolomics.findOne(queryObj).exec(async (err, gene) => {
+            await GenesMetabolomics.findOne(queryObj).lean().exec(async (err, gene) => {
                 if (err) {
                     next(err);
                 } else {
@@ -1022,7 +894,7 @@ connection.once('open', () => {
         }
 
         if (chartInfos) {
-            if (label && !localChartInfos.has(label)) { localChartInfos.set(label, chartObj); }
+            if (label && localChartInfos && !localChartInfos.has(label)) { localChartInfos.set(label, chartObj); }
         }
     }
 
@@ -1086,7 +958,7 @@ connection.once('open', () => {
     function getDimension(info: any, ndx: any): crossfilter.Dimension<any, any> {
         const dimValue = info.dimension;
 
-        const dim = ndx.dimension((d) => {
+        info.dim = ndx.dimension((d) => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned
@@ -1108,7 +980,6 @@ connection.once('open', () => {
             }
         });
 
-        info.dim = dim;
         return info.dim;
     }
 

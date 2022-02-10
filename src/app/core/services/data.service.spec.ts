@@ -30,9 +30,9 @@ describe('Service: Data: TestBed', () => {
             ]
         });
 
-        dataService = TestBed.get(DataService);
-        apiService = TestBed.get(ApiService);
-        forceService = TestBed.get(ForceService);
+        dataService = TestBed.inject(DataService);
+        apiService = TestBed.inject(ApiService);
+        forceService = TestBed.inject(ForceService);
     });
 
     it('should create an instance', () => {
@@ -47,17 +47,6 @@ describe('Service: Data: TestBed', () => {
             expect(gnSpy).toHaveBeenCalled();
             expect(response[0]).toEqual(mockGenesResponse);
             expect(response[1]).toEqual(mockLinksListResponse);
-        });
-    });
-
-    it('should load the tissues and models from the server', () => {
-        const ltmSpy = spyOn(dataService, 'loadTissuesModels').and.callThrough();
-
-        const loadTMResponse = dataService.loadTissuesModels();
-        loadTMResponse.subscribe((response) => {
-            expect(ltmSpy).toHaveBeenCalled();
-            expect(response[0]).toEqual(mockTissues);
-            expect(response[1]).toEqual(mockModels);
         });
     });
 

@@ -116,7 +116,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData" tabindex="0">
+            <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns">
                     {{rowData[col.field]}}
                 </td>

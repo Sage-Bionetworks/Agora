@@ -32,6 +32,7 @@ export class GenesListComponent implements OnInit {
     cols: any[];
     selectedColumns: any[];
     loading: boolean = true;
+    noValue = 'No value';
 
     constructor(
         private navService: NavigationService,
@@ -44,15 +45,15 @@ export class GenesListComponent implements OnInit {
         this.cols = [
             { field: 'hgnc_symbol', header: 'Gene Symbol'},
             { field: 'nominations', header: 'Nominations' },
-            { field: 'initial_nomination', header: 'Year First Nominated' },
-            { field: 'teams', header: 'Nominating Teams' },
-            { field: 'study', header: 'Cohort Study' },
-            { field: 'input_data', header: 'Input Data' },
-            { field: 'pharos_class', header: 'Pharos Class' },
-            { field: 'classification', header: 'Small Molecule Druggability' },
-            { field: 'safety_bucket_definition', header: 'Safety Rating' },
-            { field: 'abability_bucket_definition', header: 'Antibody Modality' },
-            { field: 'validation_study_details', header: 'Experimental Validation' },
+            { field: 'initial_nomination_display_value', header: 'Year First Nominated' },
+            { field: 'teams_display_value', header: 'Nominating Teams' },
+            { field: 'study_display_value', header: 'Cohort Study' },
+            { field: 'input_data_display_value', header: 'Input Data' },
+            { field: 'pharos_class_display_value', header: 'Pharos Class' },
+            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+            { field: 'safety_rating_display_value', header: 'Safety Rating' },
+            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+            { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
         ];
 
         // Add a position property so we can add/remove at the same position
@@ -84,14 +85,14 @@ export class GenesListComponent implements OnInit {
         this.apiService.getTableData().subscribe((data: GeneInfosResponse) => {
             this.dataSource = (data.items) ? data.items : [];
             this.dataSource.forEach((de: GeneInfo) => {
-                let teamsArray = [],
-                    studyArray = [],
-                    inputDataArray = [],
-                    validationStudyDetailsArray = [],
-                    initialNominationArray = [];
+                let teamsArray = [];
+                let studyArray = [];
+                let inputDataArray = [];
+                let validationStudyDetailsArray = [];
+                let initialNominationArray = [];
 
+                // Handle NominatedTargets fields
                 // First map all entries nested in the data to a new array
-
                 if (de.nominatedtarget.length) {
                     teamsArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.team);
                     studyArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.study);
@@ -110,65 +111,38 @@ export class GenesListComponent implements OnInit {
                 studyArray = this.commaFlattenArray(studyArray);
                 inputDataArray = this.commaFlattenArray(inputDataArray);
 
-                // Join the final strings into a new array removing duplicates
-                de.teams = (teamsArray.length) ? teamsArray.filter(this.getUnique)
+                // Populate NominatedTargets display fields
+                de.teams_display_value = (teamsArray.length) ? teamsArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.study = (studyArray.length) ? studyArray.filter(this.getUnique)
+                de.study_display_value = (studyArray.length) ? studyArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.input_data = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
+                de.input_data_display_value = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.validation_study_details = (validationStudyDetailsArray.length) ? [...new Set(validationStudyDetailsArray)]
+                de.validation_study_details_display_value = (validationStudyDetailsArray.length) ?
+                    [...new Set(validationStudyDetailsArray)]
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                de.initial_nomination = (initialNominationArray.length) ? Math.min(...initialNominationArray) : undefined;
+                de.initial_nomination_display_value = (initialNominationArray.length) ?
+                    Math.min(...initialNominationArray) : undefined;
 
-                // Druggability columns
+                // Populate Druggability display fields
                 if (de.druggability && de.druggability.length) {
-                    de.sm_druggability_bucket =
-                        de.druggability[0].sm_druggability_bucket.toString();
-                    de.safety_bucket = de.druggability[0].safety_bucket.toString();
-                    de.feasibility_bucket = de.druggability[0].feasibility_bucket.toString();
-                    de.abability_bucket = de.druggability[0].abability_bucket.toString();
-                    de.new_modality_bucket = de.druggability[0].new_modality_bucket.toString();
-                    de.tissue_engagement_bucket =
-                        de.druggability[0].tissue_engagement_bucket.toString();
-                    de.pharos_class = de.druggability[0].pharos_class;
-                    de.classification = de.druggability[0].sm_druggability_bucket + ': ' +
+                    de.pharos_class_display_value = de.druggability[0].pharos_class ?
+                        de.druggability[0].pharos_class : this.noValue;
+                    de.sm_druggability_display_value = de.druggability[0].sm_druggability_bucket + ': ' +
                         de.druggability[0].classification;
-                    de.safety_bucket_definition = de.druggability[0].safety_bucket + ': ' +
+                    de.safety_rating_display_value = de.druggability[0].safety_bucket + ': ' +
                         de.druggability[0].safety_bucket_definition;
-                    de.feasibility_bucket_definition =
-                        de.druggability[0].feasibility_bucket_definition;
-                    de.abability_bucket_definition = de.druggability[0].abability_bucket + ': ' +
+                    de.ab_modality_display_value = de.druggability[0].abability_bucket + ': ' +
                         de.druggability[0].abability_bucket_definition;
-                    de.new_modality_bucket_definition =
-                        de.druggability[0].new_modality_bucket_definition;
                 } else {
-                    const noValue = 'No value';
-                    de.sm_druggability_bucket = noValue;
-                    de.safety_bucket = noValue;
-                    de.feasibility_bucket = noValue;
-                    de.abability_bucket = noValue;
-                    de.new_modality_bucket = noValue;
-                    de.tissue_engagement_bucket = noValue;
-                    de.pharos_class = noValue;
-                    de.classification = noValue;
-                    de.safety_bucket_definition = noValue;
-                    de.feasibility_bucket_definition = noValue;
-                    de.abability_bucket_definition = noValue;
-                    de.new_modality_bucket_definition = noValue;
+                    de.pharos_class_display_value = this.noValue;
+                    de.sm_druggability_display_value = this.noValue;
+                    de.safety_rating_display_value = this.noValue;
+                    de.ab_modality_display_value = this.noValue;
                 }
             });
             this.genesInfo = this.dataSource;
             this.totalRecords = (data.totalRecords) ? data.totalRecords : 0;
-
-            // Starts table with the nominations columns sorted in descending order
-            this.customSort({
-                data: this.dataSource,
-                field: 'nominations',
-                mode: 'single',
-                order: -1
-            } as SortEvent);
-
             this.loading = false;
         });
     }
@@ -206,13 +180,18 @@ export class GenesListComponent implements OnInit {
     downloadTable() {
         const downloadArray = [];
         // The headers row for the csv file
-        downloadArray[0] = this.cols.map((c) => c.field).join();
+        downloadArray[0] = this.cols.map((c) => c.header).join();
+        // Columns with values containing commas
+        const escapeFields = ['teams_display_value',  'study_display_value', 'input_data_display_value',
+            'sm_druggability_display_value', 'safety_rating_display_value',
+            'ab_modality_display_value', 'validation_study_details_display_value'];
+
         this.dataSource.forEach((de: GeneInfo) => {
             downloadArray.push('');
             this.cols.forEach((c, index) => {
-                downloadArray[downloadArray.length - 1] += (c.field === 'hgnc_symbol' || c.field ===
-                'nominations' || c.field === 'pharos_class') ? de[c.field] :
-                    ('"' + de[c.field] + '"');
+                downloadArray[downloadArray.length - 1] +=
+                    // quote the values that contain commas
+                    (escapeFields.includes(c.field)) ?  ('"' + de[c.field] + '"') : de[c.field];
                 downloadArray[downloadArray.length - 1] += ((index) < (this.cols.length - 1)) ?
                     ',' : '';
             });
@@ -319,13 +298,9 @@ export class GenesListComponent implements OnInit {
 
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
-            const value1 = (Array.isArray(data1[event.field])) ?
-                data1[event.field].map((nt) => nt.team).join(', ') :
-                data1[event.field];
-            const value2 = (Array.isArray(data2[event.field])) ?
-                data2[event.field].map((nt) => nt.team).join(', ') :
-                data2[event.field];
             let result = null;
+            const value1 = data1[event.field];
+            const value2 = data2[event.field];
 
             if (value1 == null && value2 != null) {
                 result = -1;
@@ -334,7 +309,16 @@ export class GenesListComponent implements OnInit {
             } else if (value1 == null && value2 == null) {
                 result = 0;
             } else if (typeof value1 === 'string' && typeof value2 === 'string') {
-                result = value1.localeCompare(value2);
+                // Natural sorting for this score type, which can be >= 10
+                if (event.field === 'sm_druggability_display_value') {
+                    const numericValue1 = parseInt(value1.split(':')[0], 10);
+                    const numericValue2 = parseInt(value2.split(':')[0], 10);
+                    if (!isNaN(numericValue1) && !isNaN(numericValue2)) {
+                        result = (numericValue1 < numericValue2) ? -1 : (numericValue1 > numericValue2) ? 1 : 0;
+                    }
+                } else {
+                    result = value1.localeCompare(value2);
+                }
             } else {
                 result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
             }

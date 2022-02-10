@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div [ngStyle]="getBucketIconStyle(false)" [style.background-color]="getBucketBGColor(geneInfo.druggability[0].sm_druggability_bucket, 'sm')" [style.color]="getBucketTextColor(geneInfo.druggability[0].sm_druggability_bucket, 'sm')">
-                            <div class="icon-description">{{geneInfo.druggability[0].sm_druggability_bucket}}</div>
+                            <div class="icon-description">{{getBucketNumberText(geneInfo.druggability[0].sm_druggability_bucket)}}</div>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12 header-description">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div [ngStyle]="getBucketIconStyle(false)" [style.background-color]="getBucketBGColor(geneInfo.druggability[0].abability_bucket, 'ab')" [style.color]="getBucketTextColor(geneInfo.druggability[0].abability_bucket, 'ab')">
-                            <div class="icon-description">{{geneInfo.druggability[0].abability_bucket}}</div>
+                            <div class="icon-description">{{getBucketNumberText(geneInfo.druggability[0].abability_bucket)}}</div>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12 header-description">
@@ -165,7 +165,7 @@
                     </div>
                     <div class="col-md-3 col-sm-4 col-4 text-center header-score">
                         <div [ngStyle]="getBucketIconStyle(false)" [style.background-color]="getBucketBGColor(geneInfo.druggability[0].safety_bucket, 'sf')" [style.color]="getBucketTextColor(geneInfo.druggability[0].safety_bucket, 'sf')">
-                            <div class="icon-description">{{geneInfo.druggability[0].safety_bucket}}</div>
+                            <div class="icon-description">{{getBucketNumberText(geneInfo.druggability[0].safety_bucket)}}</div>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12 header-description">

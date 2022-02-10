@@ -70,3 +70,49 @@ export const mockTeam3: TeamInfo = {
         }
     ]
 };
+
+export const mockTeam4: TeamInfo = {
+    team: 'Columbia-Rush',
+    team_full: 'Columbia University - Rush University',
+    program: 'AMP-AD',
+    description: 'The Columbia-Rush AMP-AD team, led by Philip De Jager and David Bennett, focuses on taking a ' +
+        'systems biology approach to mine a unique set of deep clinical, paraclinical, pathologic, genomic, ' +
+        'epigenomic, transcriptomic, proteomic, metabolic and single cell brain and blood data from more than 1000 ' +
+        'subjects from two prospective cohort studies of aging and dementia. They use these data to identify genes, ' +
+        'proteins, and pathways with critical roles in a range of traits that influence the function of the aging ' +
+        'brain, including susceptibility Alzheimer\'s disease, the accumulation of aging-related neuropathologies, ' +
+        'cognitive decline in older age, as well as resilience to the brain pathologies. Finally, the team then ' +
+        'interrogates those genes in ex vivo and in vitro systems to determine their therapeutic potential.',
+    members: [
+        {
+            name: 'Chris Gaiteri',
+            isprimaryinvestigator: false
+        },
+        {
+            name: 'David Bennett',
+            isprimaryinvestigator: true,
+            url: 'https://www.rushu.rush.edu/faculty/david-bennett-md'
+        },
+        {
+            name: 'Jishu Xu',
+            isprimaryinvestigator: false
+        },
+        {
+            name: 'Lei Yu',
+            isprimaryinvestigator: false
+        },
+        {
+            name: 'Philip De Jager',
+            isprimaryinvestigator: true,
+            url: 'http://www.cumc.columbia.edu/dept/taub/faculty-dejager.html'
+        },
+        {
+            name: 'Shinya Tasaki',
+            isprimaryinvestigator: false
+        },
+        {
+            name: 'Tracy Young Pearce',
+            isprimaryinvestigator: false
+        }
+    ]
+};

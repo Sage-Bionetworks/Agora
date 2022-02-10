@@ -198,51 +198,39 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         this.chart.render();
     }
 
-    addXAxisTooltips(chart: dc.BarChart) {
+    addXAxisTooltips(chart: dc.BoxPlot) {
         const self = this;
-        chart.selectAll('g.axis.x g.tick text').each(function(d, i) {
-            d3.select(this)
+        chart.selectAll('g.axis.x g.tick').each(function() {
+            const text = d3.select(this).select('text');
+            const textElement = text.node() as HTMLElement;
+            const line = d3.select(this).select('line').node() as HTMLElement;
+
+            text
                 .on('mouseover', function() {
-                    // The space between the beginning of the page and the column
-                    const left = self.bcCol.nativeElement.getBoundingClientRect().left;
-                    // Total column width, including padding
-                    const colWidth = self.bcCol.nativeElement.offsetWidth;
-                    // Shows the tooltip
-                    self.div.transition()
-                        .duration(200)
-                        .style('opacity', 1);
+                    const textElementRec = textElement.getBoundingClientRect();
+
                     // Get the text based on the brain tissue
-                    self.div.html(self.getTooltipText(d3.select(this).text()));
-                    // The tooltip element, we need half of the width
-                    const tooltip =
-                        document.getElementsByClassName('mc-tooltip')[0] as HTMLElement;
-                    // Represents the width of each x axis tick section
-                    // We get the total column width, minus both side paddings,
-                    // and we divide by all tissues plus 1. Eight sections total
-                    const tickSectionWidth = (
-                        (colWidth - (self.paddingLR * 2)) /
-                        (self.geneService.getNumOfTissues() + 1)
-                    );
-                    // The start position for the current section tick will be
-                    // the width of a section * current index + one
-                    const xTickPos = tickSectionWidth * (i + 1);
+                    self.div.html(self.chartService.getTooltipText(text.text()));
+
+                    // Position the tooltip
                     self.div
                         .style('left',
                             (
-                                // The most important calculation. We need the space
-                                // between the beginning of the page and the column,
-                                // plus the left padding, plus half the width of a
-                                // vertical bar, plus the current tick position and we
-                                // subtract half the width of the tooltip
-                                left + self.paddingLR + 35 + xTickPos -
-                                (tooltip.offsetWidth / 2.0)
+                                // Left position of the tick line minus half the tooltip width to center.
+                                line.getBoundingClientRect().left - (self.div.node().offsetWidth / 2)
                             ) + 'px'
                         )
                         .style('top',
                             (
-                                self.bcCol.nativeElement.offsetTop + chart.height()
+                                // Position at the bottom on the label + 15px
+                                window.pageYOffset + textElementRec.top + textElementRec.height + 15
                             ) + 'px'
                         );
+
+                    // Shows the tooltip
+                    self.div.transition()
+                        .duration(200)
+                        .style('opacity', 1);
                 })
                 .on('mouseout', function() {
                     self.div.transition()

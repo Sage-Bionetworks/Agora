@@ -55,11 +55,10 @@ export class ProteomicsComponent implements OnInit {
 
     initData() {
         this.registerCharts().then((status) => {
-            // First load of dimension and groups, set a default model so we don't
-            // load all the data
+            // First load of dimension and groups
             this.chartService.pQueryFilter.spGroup = '';
             this.apiService.refreshChartsData(
-                this.chartService.queryFilter.spGroup,
+                this.chartService.pQueryFilter.spGroup,
                 this.gene.hgnc_symbol,
                 'Proteomics'
             ).subscribe((d) => {
@@ -97,8 +96,7 @@ export class ProteomicsComponent implements OnInit {
                     }
                 ],
                 'LOG 2 FOLD CHANGE',
-                'log2_fc',
-                'Proteomics'
+                'log2_fc'
             );
 
             resolve(true);
@@ -106,7 +104,7 @@ export class ProteomicsComponent implements OnInit {
     }
 
     registerBoxPlot(
-        label: string, constraints: any[], yAxisLabel: string, attr: string, type: string = 'RNA'
+        label: string, constraints: any[], yAxisLabel: string, attr: string, type: string = 'Proteomics'
     ) {
         this.chartService.addChartInfo(
             label,
