@@ -212,6 +212,11 @@ export const mockGenesResponse: GenesResponse = {
   geneModels: mockModels,
 };
 
+export const mockEvidenceDataResponse: any = {
+  rnaDifferentialExpression: [mockGene1, mockGene2],
+  rnaCorrelation: [],
+};
+
 export const mockLinksListResponse: LinksListResponse = {
   items: [mockDataLink1, mockDataLink2],
 };

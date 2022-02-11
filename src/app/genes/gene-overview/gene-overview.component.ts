@@ -322,6 +322,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     initTissuesModels() {
         // Check if we have a database id at this point
         if (this.gene) {
+            console.log('initTissuesModels', this.gene);
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
                     // Genes response
@@ -329,12 +330,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         this.dataLoaded = true;
                         return;
                     } else {
-                        if (responseList[0].geneModels) {
-                            this.geneService.setGeneModels(responseList[0].geneModels);
-                        }
-                        if (responseList[0].geneTissues) {
-                            this.geneService.setGeneTissues(responseList[0].geneTissues);
-                        }
+                        // if (responseList[0].geneModels) {
+                        //     this.geneService.setGeneModels(responseList[0].geneModels);
+                        // }
+                        // if (responseList[0].geneTissues) {
+                        //     this.geneService.setGeneTissues(responseList[0].geneTissues);
+                        // }
                         if (responseList[0].geneProteomics) {
                             this.geneService.setGeneProteomics(responseList[0].geneProteomics
                                 .sort((a: Proteomics, b: Proteomics) => {
@@ -352,8 +353,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                                 })
                             );
                         }
+
                         this.dataService.loadGenes(responseList[0]);
                         this.forceService.processSelectedNode(responseList[1], this.gene);
+                        this.dataService.setEvidenceData(responseList[2]);
                     }
                 }, (error) => {
                     console.error('Error loading the data!');

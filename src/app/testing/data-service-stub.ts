@@ -10,7 +10,8 @@ import {
     mockModels,
     mockGeneStatistics,
     mockGenesResponse,
-    mockLinksListResponse
+    mockLinksListResponse,
+    mockEvidenceDataResponse
 } from './gene-mocks';
 
 import {
@@ -33,7 +34,8 @@ export class DataServiceStub {
     loadData(gene: Gene): Observable<any[]> {
         return forkJoin([
             of(mockGenesResponse),
-            of(mockLinksListResponse)
+            of(mockLinksListResponse),
+            of(mockEvidenceDataResponse)
         ]);
     }
 
@@ -58,5 +60,13 @@ export class DataServiceStub {
     // Assuming the rows are already properly formatted
     exportToCsv(filename: string, rows: string[]) {
         //
+    }
+
+    setEvidenceData(data: any) {
+        //
+    }
+
+    getEvidenceData(): Gene[] {
+        return mockEvidenceDataResponse;
     }
 }

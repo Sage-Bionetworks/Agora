@@ -153,7 +153,16 @@ export class GeneService {
     }
 
     getGeneTissues(): string[] {
-        return this.geneTissues;
+        return [
+            'CBE',
+            'DLPFC',
+            'FP',
+            'IFG',
+            'PHG',
+            'STG',
+            'TCX'
+        ];
+        // return this.geneTissues;
     }
 
     setGeneTissues(tissues: string[]) {
@@ -169,7 +178,13 @@ export class GeneService {
     }
 
     getGeneModels(): string[] {
-        return this.geneModels;
+        return [
+            'AD Diagnosis (males and females)',
+            'AD Diagnosis x AOD (males and females)',
+            'AD Diagnosis x Sex (females only)',
+            'AD Diagnosis x Sex (males only)'
+        ];
+        // return this.geneModels;
     }
 
     setGeneModels(models: string[]) {

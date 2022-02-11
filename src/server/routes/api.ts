@@ -588,15 +588,15 @@ connection.once('open', () => {
                         res.setHeader('Expires', 0);
                         await res.json({
                             geneEntries,
-                            minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                            maxFC,
-                            minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC : minLogFC,
-                            maxLogFC,
-                            minAdjPValue,
-                            maxAdjPValue,
-                            geneModels,
-                            geneTissues,
+                            // minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
+                            // maxFC,
+                            // minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
+                            //     -maxLogFC : minLogFC,
+                            // maxLogFC,
+                            // minAdjPValue,
+                            // maxAdjPValue,
+                            // geneModels,
+                            // geneTissues,
                             geneProteomics: geneProteomics.filter (p => p.hgnc_symbol === geneEntries[0].hgnc_symbol )
                         });
                     }
@@ -1098,6 +1098,20 @@ connection.once('open', () => {
         }
         return noData;
     };
+
+    router.get('/evidence', (req, res, next) => {
+
+        // Mock data
+        const response = {
+            rnaDifferentialExpression: [], // set in setEvidenceData
+            rnaCorrelation: getGeneCorrelationData(req.query.id)
+        };
+
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json(response);
+    });
 
 });
 

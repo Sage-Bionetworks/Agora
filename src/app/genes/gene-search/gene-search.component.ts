@@ -65,7 +65,11 @@ export class GeneSearchComponent implements OnInit {
                 // If we got an empty array as response, or no genes found
                 if (!data.items.length) {
                     this.isNotFound = true;
-                    this.setErrorMessage(this.isEnsemblIdSearch ? this.ensemblIdNotFoundString : this.hgncSymbolNotFoundString);
+                    this.setErrorMessage(
+                        this.isEnsemblIdSearch ?
+                            this.ensemblIdNotFoundString
+                            : this.hgncSymbolNotFoundString
+                    );
                 } else {
                     this.isNotFound = false;
                     if (data.isEnsembl) {
@@ -73,8 +77,7 @@ export class GeneSearchComponent implements OnInit {
                         if (data.items.length > 1) {
                             console.log('Unexpected duplicate gene_info objects for ensembl ID "' + this.currentQuery + '" found.');
                             this.setErrorMessage(this.ensemblIdNotFoundString);
-                        }
-                        else {
+                        } else {
                             this.viewGene(data.items[0]);
                         }
                     } else {
@@ -95,8 +98,7 @@ export class GeneSearchComponent implements OnInit {
         if (query.length < 2) {
             query = '';
             this.setErrorMessage(this.notValidSearchString);
-        }
-        else if (query.length > 3) {
+        } else if (query.length > 3) {
             const prefix = query.toLowerCase().substring(0, 4);
 
             if ('ensg' === prefix) {

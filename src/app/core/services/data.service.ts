@@ -21,6 +21,7 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
+    evidenceData: any;
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
     // at least, but not more than, 2 digits after decimal point
@@ -40,10 +41,12 @@ export class DataService {
     loadData(gene: Gene): Observable<any[]> {
         const genesResponse = this.apiService.getGenes(gene.hgnc_symbol);
         const nodesResponse = this.apiService.getLinksList(gene);
+        const evidenceResponse = this.apiService.getEvidencenData(gene.hgnc_symbol);
 
         return forkJoin([
             genesResponse,
-            nodesResponse
+            nodesResponse,
+            evidenceResponse
         ]);
     }
 
@@ -114,4 +117,14 @@ export class DataService {
             }
         }
     }
+
+    setEvidenceData(data: any) {
+        this.evidenceData = data;
+        this.evidenceData.rnaDifferentialExpression = this.getGeneEntries();
+    }
+
+    getEvidenceData(): Gene[] {
+        return this.evidenceData;
+    }
+
 }

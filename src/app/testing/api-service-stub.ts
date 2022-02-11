@@ -25,7 +25,7 @@ import {
 } from '../models';
 
 import { Observable, of } from 'rxjs';
-import { mockGenesResponse, mockTissues, mockModels } from './gene-mocks';
+import { mockGenesResponse, mockTissues, mockModels, mockEvidenceDataResponse } from './gene-mocks';
 
 @Injectable()
 export class ApiServiceStub {
@@ -84,5 +84,9 @@ export class ApiServiceStub {
 
     getGeneMetabolomics(id: string): Observable<object> {
         return of(mockMetabolomics);
+    }
+
+    getEvidencenData(id: string): Observable<object> {
+        return of(mockEvidenceDataResponse);
     }
 }
