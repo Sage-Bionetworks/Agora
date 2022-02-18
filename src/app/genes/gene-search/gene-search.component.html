@@ -28,10 +28,13 @@
                 <div class="gene-name row">
                     <div class="col-md-12 col-sm-12 col-12">
                         <span class="gene-symbol">
-                            {{result.hgnc_symbol}}
+                            {{errorMessage ? errorMessage : result.hgnc_symbol}}
                         </span>
-                        <span *ngIf="hasAlias(result.hgnc_symbol)">
+                        <span *ngIf="!errorMessage && hasAlias(result.hgnc_symbol)">
                             &nbsp;(Also known as&nbsp;{{currentQuery.toUpperCase()}})
+                        </span>
+                        <span *ngIf="!errorMessage && !hasAlias(result.hgnc_symbol)">
+                            &nbsp;({{result.ensembl_gene_id}})
                         </span>
                     </div>
                 </div>

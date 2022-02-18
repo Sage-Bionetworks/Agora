@@ -29,6 +29,7 @@ export class GeneSearchComponent implements OnInit {
     isSearching: boolean = false;
     isEnsemblIdSearch: boolean = false;
     isNotFound: boolean = false;
+    errorMessage: string = null;
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
     gene: Gene;
@@ -91,6 +92,7 @@ export class GeneSearchComponent implements OnInit {
 
     search(query: string): Observable<any> {
         this.isEnsemblIdSearch = false;
+        this.errorMessage = '';
 
         if (query.length < 2) {
             query = '';
@@ -201,12 +203,13 @@ export class GeneSearchComponent implements OnInit {
     }
 
     setErrorMessage(message: string) {
+        this.errorMessage = message;
         this.results = [{
-            _id: message,
-            ensembl_gene_id: message,
-            name: message,
-            hgnc_symbol: message,
-            type_of_gene: message,
+            _id: null,
+            ensembl_gene_id: null,
+            name: null,
+            hgnc_symbol: null,
+            type_of_gene: null,
             isIGAP: false,
             haseqtl: false,
             isAnyRNAChangedInADBrain: false,
