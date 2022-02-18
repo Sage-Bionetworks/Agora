@@ -43,6 +43,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
     tissuecoresGroup: any;
     routerSubscription: Subscription;
     chartSubscription: Subscription;
+    hasNegativeValues: boolean;
 
     // Define the div for the tooltip
     div: any = d3.select('body').append('div')
@@ -76,7 +77,17 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.geneinfo) {
             return;
         }
-        this.ndx = crossfilter(this.geneinfo.medianexpression);
+
+        this.hasNegativeValues = false;
+        const medianExpression = this.geneinfo.medianexpression.map((median) => {
+            if (median.medianlogcpm < 0) {
+                this.hasNegativeValues = true;
+                median.medianlogcpm = Math.abs(median.medianlogcpm);
+            }
+            return median;
+        });
+
+        this.ndx = crossfilter(medianExpression);
         this.group = this.ndx.groupAll();
         this.dimension = this.ndx.dimension( (d) =>  d.tissue );
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
@@ -151,6 +162,14 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .renderTitle(false)
             .on('renderlet', (chart) => {
                 if (chart) {
+                    if (this.hasNegativeValues) {
+                        chart.selectAll('g.axis.y g.tick text, text.barLabel').each(function(el, i, tree) {
+                            if ('-' !== tree[i].innerHTML[0]) {
+                                tree[i].innerHTML = '-' + tree[i].innerHTML;
+                            }
+                        });
+                    }
+
                     const yDomainLength = Math.abs(chart.y().domain()[1]
                         - chart.y().domain()[0]);
                     chart.selectAll('rect').each((el, i, tree) => {
