@@ -4,8 +4,8 @@
         <div class="section-thin overview-header " tabindex="0">
             <div class="row no-gutters">
                 <div *ngIf="geneInfo" class="col-md-12 col-sm-12 col-12 go-info-header">
-                    <h1 class="no-margin">{{gene.hgnc_symbol}}</h1>
-                    <p class="no-margin">
+                    <h1 class="no-margin">{{gene.hgnc_symbol ? gene.hgnc_symbol : gene.ensembl_gene_id}}</h1>
+                    <p *ngIf="geneInfo.name" class="no-margin">
                         {{geneInfo.name}}
                     </p>
                     <div *ngIf="isNominatedTarget() == 'Yes'"><img src="/assets/icon/nominated.svg" alt=""> <span>Nominated Target</span></div>
