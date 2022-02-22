@@ -615,36 +615,92 @@ connection.once('open', () => {
 
     // Get all gene infos that match an id, using the hgnc_symbol or ensembl id
     router.get('/gene/infos/:id', (req, res, next) => {
-        const fieldName = (req.params.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-        const isEnsembl = req.params.id.startsWith('ENSG');
-        const queryObj = { $or: [
-            {
-                [fieldName]: { $regex: req.params.id.trim(), $options: 'i' }
-            },
-            {
-                alias: new RegExp('^' + req.params.id.trim() + '$', 'i')
-            }
-        ]};
-
         // Return an empty array in case no id was passed or no params
         if (!req.params || !req.params.id) {
             res.status(404).send('Not found');
         } else {
-            GenesInfo.find(queryObj).lean().exec(
-                (err, geneInfos) => {
-                    if (err) {
-                        next(err);
-                    } else {
-                        if (geneInfos.length === 0) {
-                            res.json({ items: [], isEnsembl });
+            const isEnsembl = req.params.id.startsWith('ENSG');
+            const id = req.params.id.trim();
+            let items = [];
+
+            if (isEnsembl && id.length === 15) {
+                GenesInfo.find({ ensembl_gene_id: id }).lean().exec(
+                    (err, geneInfos) => {
+                        if (err) {
+                            next(err);
                         } else {
                             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                             res.setHeader('Pragma', 'no-cache');
                             res.setHeader('Expires', 0);
-                            res.json({ items: geneInfos, isEnsembl });
+                            res.json({ items: geneInfos, isEnsembl: isEnsembl });
                         }
-                    }
-                });
+                    });
+            } else {
+                GenesInfo.find({
+                    $or: [
+                        { hgnc_symbol: { $regex: id, $options: 'i' } },
+                        { alias: { $regex: id, $options: 'i' } }
+                    ]
+                }).lean().exec(
+                    (err, geneInfos) => {
+                        if (err) {
+                            next(err);
+                        } else {
+                            if (geneInfos.length > 0) {
+
+                                /**
+                                 * Give a relevance score for sorting
+                                 * 400 = Exact match
+                                 * 300 = Exact Alias match
+                                 * 200 (minus position) = Partial match order by string position / alphabetical
+                                 * 100 (minus position) = Patial alias match order by string position
+                                 */
+
+                                items = geneInfos.map((item) => {
+                                    const pos = item.hgnc_symbol.indexOf(id);
+                                    item.search_score = item.hgnc_symbol === id ? 400 : 200;
+
+                                    if (pos < 0) {
+                                        item.search_score = 100;
+
+                                        if (item.alias && item.alias.length > 0) {
+                                            for (const alias of item.alias) {
+                                                const aliasPos = alias.indexOf(id);
+                                                if (alias === id) {
+                                                    item.search_score = 300;
+                                                    break;
+                                                }
+                                                else if (aliasPos > -1) {
+                                                    item.search_score -= aliasPos;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        item.search_score -= pos;
+                                    }
+
+                                    return item;
+                                });
+
+                                items.sort((a, b) => {
+                                    if (a.search_score > b.search_score) { return -1;}
+                                    else if (a.search_score < b.search_score) { return 1; }
+
+                                    if (a.hgnc_symbol < b.hgnc_symbol) { return -1; }
+                                    else if (a.hgnc_symbol > b.hgnc_symbol) { return 1; }
+
+                                    return 0;
+                                });
+                            }
+
+                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                            res.setHeader('Pragma', 'no-cache');
+                            res.setHeader('Expires', 0);
+                            res.json({ items: items, isEnsembl: isEnsembl });
+                        }
+                    });
+            }
         }
     });
 
