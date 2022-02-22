@@ -7,12 +7,12 @@ import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
 
-export type GeneResourceType = {
-    title: string,
-    description: string,
-    linkText: string,
-    link: string
-};
+export interface GeneResourceType {
+    title: string;
+    description: string;
+    linkText: string;
+    link: string;
+}
 
 @Component({
     selector: 'gene-druggability',

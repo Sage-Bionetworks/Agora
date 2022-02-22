@@ -33,14 +33,14 @@ export class ForceServiceStub {
         links: [
             {
                 brainregions: ['DLPFC'],
-                hgnc_symbolA: 'VGF',
-                hgnc_symbolB: 'COL22A1',
+                geneIdA: 'VGF',
+                geneIdB: 'COL22A1',
                 source: {
                     brainregions: ['CBE', 'DLPFC', 'FP', 'IFG', 'PHG', 'STG', 'TCX'],
                     ensembl_gene_id: 'ENSG00000128564',
                     group: 38,
                     hgnc_symbol: 'VGF',
-                    id: 'ENSG00000128564',
+                    id: 'VGF',
                     index: 0,
                     vx: 0.6383193392459895,
                     vy: -4.464810585759529,
@@ -52,7 +52,7 @@ export class ForceServiceStub {
                     ensembl_gene_id: 'ENSG00000169436',
                     group: 2,
                     hgnc_symbol: 'COL22A1',
-                    id: 'ENSG00000128564',
+                    id: 'COL22A1',
                     index: 1,
                     vx: 0.6383193392459895,
                     vy: -4.464810585759529,
@@ -63,8 +63,8 @@ export class ForceServiceStub {
             } as GeneLink
         ],
         nodes: [{
-            id: 'VGF',
-            ensembl_gene_id: 'VGF',
+            id: 'ENSG00000078043',
+            ensembl_gene_id: 'ENSG00000078043',
             group: 1,
             hgnc_symbol: 'PIAS2',
             brainregions: []

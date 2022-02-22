@@ -59,7 +59,7 @@ export class ProteomicsComponent implements OnInit {
             this.chartService.pQueryFilter.spGroup = '';
             this.apiService.refreshChartsData(
                 this.chartService.pQueryFilter.spGroup,
-                this.gene.hgnc_symbol,
+                this.gene.ensembl_gene_id,
                 'Proteomics'
             ).subscribe((d) => {
                 this.chartService.filteredData = d;

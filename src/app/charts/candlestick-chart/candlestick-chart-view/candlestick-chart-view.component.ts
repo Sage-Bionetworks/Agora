@@ -25,7 +25,7 @@ import * as d3 from 'd3';
 export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('chart', {static: false}) candleStickChart: ElementRef;
-    @Input() hgicId: string = '';
+    @Input() geneId: string = '';
 
     dataEmpty: boolean = true;
     rawData: any;
@@ -195,7 +195,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             .style('fill', color)
             .on('mouseover', d => {
                 const isOrNot = d.value.pval_adj <= 0.05 ? 'is' : 'is not';
-                const msg = `${this.hgicId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
+                const msg = `${this.geneId} ${isOrNot} significantly correlated with ${d.key}, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${d.value.pval_adj}.`;
                 this.showTooltip(this.tooltip, msg);
             })
             .on('mouseout', d => this.hideTooltip(this.tooltip));

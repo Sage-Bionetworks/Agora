@@ -231,20 +231,20 @@ export class GenesListComponent implements OnInit {
         this.msgs = [{
             severity: 'info',
             summary: 'Gene Selected',
-            detail: 'Gene: ' + event.data.hgnc_symbol
+            detail: 'Gene: ' + (event.data.hgnc_symbol || event.data.ensembl_gene_id)
         }];
 
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
 
         // We don't have a gene
         if (!this.geneService.getCurrentGene()) {
-            this.getGene(this.selectedInfo.hgnc_symbol);
+            this.getGene(this.selectedInfo.ensembl_gene_id);
         } else {
             this.geneService.updatePreviousGene();
             // We have a gene, but it's a new one
-            if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+            if (this.geneService.getCurrentGene().ensembl_gene_id !== this.selectedInfo.ensembl_gene_id) {
                 this.navService.setOvMenuTabIndex(0);
-                this.getGene(this.selectedInfo.hgnc_symbol);
+                this.getGene(this.selectedInfo.ensembl_gene_id);
             } else {
                 this.navService.goToRoute(
                     '/genes',
@@ -265,8 +265,8 @@ export class GenesListComponent implements OnInit {
         return this.navService;
     }
 
-    getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+    getGene(ensemblGeneId: string) {
+        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);

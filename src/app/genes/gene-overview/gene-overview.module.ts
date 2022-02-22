@@ -18,7 +18,7 @@ import { BoxPlotsViewComponent } from './evidence-menu/rna/gene-rnaseq-de/box-pl
 import { GeneNetworkComponent } from './evidence-menu/rna/gene-network';
 import { GeneDruggabilityComponent } from './gene-druggability';
 import { ExpValidationComponent } from './exp-validation';
-import { SOEChartDialogue } from './soe-chart-dialog/soe-chart-dialog.component';
+import { SOEChartDialogueComponent } from './soe-chart-dialog/soe-chart-dialog.component';
 import { NgxPopperjsModule } from 'ngx-popperjs';
 
 @NgModule({
@@ -37,7 +37,7 @@ import { NgxPopperjsModule } from 'ngx-popperjs';
         GeneDruggabilityComponent,
         ExpValidationComponent,
         SOEChartComponent,
-        SOEChartDialogue,
+        SOEChartDialogueComponent,
     ],
     imports: [
         ReactiveFormsModule,
