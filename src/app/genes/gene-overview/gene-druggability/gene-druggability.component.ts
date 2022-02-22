@@ -384,7 +384,7 @@ export class GeneDruggabilityComponent implements OnInit {
                 title: 'Pharos',
                 description: `View this gene on Pharos, a resource that provides access to the integrated knowledge-base from the Illuminating the Druggable Genome program.`,
                 linkText: 'Visit Pharos',
-                link: `https://pharos.nih.gov/targets?q=${this.gene.hgnc_symbol}`
+                link: `https://pharos.nih.gov/targets?q=${this.gene.hgnc_symbol || this.gene.ensembl_gene_id}`
             },
             {
                 title: 'Brain RNAseq',
@@ -408,7 +408,7 @@ export class GeneDruggabilityComponent implements OnInit {
                 title: 'Pub AD',
                 description: 'View dementia-related publication information for this gene on PubAD.',
                 linkText: 'Visit PubAD',
-                link: `https://adexplorer.medicine.iu.edu/pubad/external/${this.gene.hgnc_symbol}`
+                link: `https://adexplorer.medicine.iu.edu/pubad/external/${this.gene.hgnc_symbol || this.gene.ensembl_gene_id}`
             },
             {
                 title: 'Gene Ontology',
