@@ -32,6 +32,7 @@ export interface GeneInfo {
     sm_druggability_display_value?: string;
     safety_rating_display_value?: string;
     ab_modality_display_value?: string;
+    search_score?: number;
 }
 
 export interface MedianExpression {

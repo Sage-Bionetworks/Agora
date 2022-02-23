@@ -30,6 +30,7 @@ export class GeneSearchComponent implements OnInit {
     isEnsemblIdSearch: boolean = false;
     isNotFound: boolean = false;
     results: GeneInfo[] = [];
+    errorMessage: string = '';
     hasFocus: boolean = false;
     gene: Gene;
     hgncSymbolNotFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
@@ -90,24 +91,21 @@ export class GeneSearchComponent implements OnInit {
     }
 
     search(query: string): Observable<any> {
+        this.errorMessage = '';
         this.isEnsemblIdSearch = false;
 
         if (query.length < 2) {
             query = '';
             this.setErrorMessage(this.notValidSearchString);
         }
-        else if (query.length > 3) {
-            const prefix = query.toLowerCase().substring(0, 4);
+        else if (query.length > 3 && query.toLowerCase().startsWith('ensg')) {
+            const digits = query.toLowerCase().substring(4, query.length);
+            this.isEnsemblIdSearch = true;
 
-            if ('ensg' === prefix) {
-                const digits = query.toLowerCase().substring(4, query.length);
-                this.isEnsemblIdSearch = true;
-
-                // Check if 11 digits numeric string
-                if (digits.length !== 11 || !/^\d+$/.test(digits)) {
-                    query = '';
-                    this.setErrorMessage(this.notValidEnsemblIdString);
-                }
+            // Check if 11 digits numeric string
+            if (digits.length !== 11 || !/^\d+$/.test(digits)) {
+                query = '';
+                this.setErrorMessage(this.notValidEnsemblIdString);
             }
         }
 
@@ -193,6 +191,12 @@ export class GeneSearchComponent implements OnInit {
         });
     }
 
+    highlightCurrentQuery(str: string) {
+        if (this.currentQuery) {
+            return str.replace(new RegExp(this.currentQuery, "gi"), match => '<b>' + match + '</b>')
+        }
+    }
+
     // The parameter is the gene hgnc_symbol from the server. To be classified as an alias,
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
@@ -200,7 +204,37 @@ export class GeneSearchComponent implements OnInit {
             hgncSymbol !== this.hgncSymbolNotFoundString && hgncSymbol !== this.ensemblIdNotFoundString;
     }
 
+    getResultString(item): string {
+        if (this.errorMessage) {
+            return this.errorMessage;
+        } else if (!item.hgnc_symbol) {
+            return item.ensembl_gene_id;
+        } else {
+
+            let string = item.hgnc_symbol;
+
+            if (!string) {
+                string = item.ensembl_gene_id;
+            } else {
+                string = this.highlightCurrentQuery(string);
+
+                if (!item.hgnc_symbol.includes(this.currentQuery.toUpperCase())) {
+                    string += ' (AKA ' + this.highlightCurrentQuery(
+                        item.alias.filter((alias) => alias.toLowerCase().indexOf(this.currentQuery.toLowerCase()) > -1).join(', ')
+                    ) + ')';
+                }
+
+                if (item.ensembl_gene_id) {
+                    string += ' <span class="gene-ensembl-id">(' + item.ensembl_gene_id + ')</span>'
+                }
+            }
+
+            return string;
+        }
+    }
+
     setErrorMessage(message: string) {
+        this.errorMessage = message;
         this.results = [{
             _id: message,
             ensembl_gene_id: message,

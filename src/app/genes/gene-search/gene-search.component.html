@@ -26,14 +26,7 @@
         <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
             <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)" [class.italic-result]="isNotFound">
                 <div class="gene-name row">
-                    <div class="col-md-12 col-sm-12 col-12">
-                        <span class="gene-symbol">
-                            {{result.hgnc_symbol}}
-                        </span>
-                        <span *ngIf="hasAlias(result.hgnc_symbol)">
-                            &nbsp;(Also known as&nbsp;{{currentQuery.toUpperCase()}})
-                        </span>
-                    </div>
+                    <div class="col-md-12 col-sm-12 col-12" [innerHTML]="getResultString(result)"></div>
                 </div>
             </li>
         </ul>
