@@ -23,18 +23,27 @@
                 </div>
             </div>
         </div>
-        <ul class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
-            <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)" [class.italic-result]="isNotFound">
+        <ul *ngIf="errorMessage"  class="filter-select">
+            <li class="filter-select-list" [class.italic-result]="isNotFound">
                 <div class="gene-name row">
                     <div class="col-md-12 col-sm-12 col-12">
-                        <span class="gene-symbol">
-                            {{errorMessage ? errorMessage : result.hgnc_symbol}}
+                        {{errorMessage}}
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul *ngIf="!errorMessage" class="filter-select" (mouseover)="focusSearchList(true)" (mouseleave)="focusSearchList(false)">
+            <li *ngFor="let result of results" class="filter-select-list" (click)="viewGene(result)">
+                <div class="gene-name row">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <span class="gene-id">
+                            {{result.hgnc_symbol || result.ensembl_gene_id}}
                         </span>
-                        <span *ngIf="!errorMessage && hasAlias(result.hgnc_symbol)">
+                        <span *ngIf="result.hgnc_symbol && hgncSymbolCounts[result.hgnc_symbol] > 1" class="gene-ensembl-id">
+                            &nbsp;{{result.ensembl_gene_id}}
+                        </span>
+                        <span *ngIf="hasAlias(result.hgnc_symbol)" class="gene-aliases">
                             &nbsp;(Also known as&nbsp;{{currentQuery.toUpperCase()}})
-                        </span>
-                        <span *ngIf="!errorMessage && !hasAlias(result.hgnc_symbol)">
-                            &nbsp;({{result.ensembl_gene_id}})
                         </span>
                     </div>
                 </div>

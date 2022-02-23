@@ -129,7 +129,7 @@
 
     span {
         width: 90%;
-        @include lato-font('bold');
+        @include lato-font('normal');
         color: color(text, secondary);
         margin-top: 0.75em;
     }
@@ -151,14 +151,21 @@
     line-height: 50px;
     font-size: $font-size-xx-regular;
 
-    .gene-symbol {
-        font-weight: normal;
+    .gene-id {
+
+    }
+
+    .gene-ensembl-id {
+        color: color(text, span-grey);
+    }
+
+    .gene-aliases {
+        font-weight: bold;
     }
 }
 
 .filter-select-list:hover {
     background: $faded-secondary-background;
-    color: $background;
 }
 
 .list-highlight,
