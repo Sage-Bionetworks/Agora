@@ -32,4 +32,9 @@ export class ExpValidationComponent implements OnInit {
             this.teamInfo = teams;
         });
     }
+
+    getTeamInfoField(teamName: string, field: string) {
+        const team = this.teamInfo.find(t => t.team === teamName);
+        return team[field];
+    }
 }
