@@ -29,6 +29,7 @@ export class GeneSearchComponent implements OnInit {
     isSearching: boolean = false;
     isEnsemblIdSearch: boolean = false;
     isNotFound: boolean = false;
+    errorMessage: string = null;
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
     gene: Gene;
@@ -36,6 +37,7 @@ export class GeneSearchComponent implements OnInit {
     ensemblIdNotFoundString: string = 'Unable to find a matching gene. Try searching by gene symbol.';
     notValidSearchString: string = 'Please enter a least two characters.';
     notValidEnsemblIdString: string = 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
+    hgncSymbolCounts: {};
 
     constructor(
         private navService: NavigationService,
@@ -73,11 +75,22 @@ export class GeneSearchComponent implements OnInit {
                         if (data.items.length > 1) {
                             console.log('Unexpected duplicate gene_info objects for ensembl ID "' + this.currentQuery + '" found.');
                             this.setErrorMessage(this.ensemblIdNotFoundString);
-                        }
-                        else {
+                        } else {
                             this.viewGene(data.items[0]);
                         }
                     } else {
+                        this.hgncSymbolCounts = {};
+
+                        for (const item of data.items) {
+                            if (item.hgnc_symbol) {
+                                if (!this.hgncSymbolCounts.hasOwnProperty(item.hgnc_symbol)) {
+                                    this.hgncSymbolCounts[item.hgnc_symbol] = 1;
+                                } else {
+                                    this.hgncSymbolCounts[item.hgnc_symbol]++;
+                                }
+                            }
+                        }
+
                         this.results = data.items;
                     }
                 }
@@ -91,12 +104,12 @@ export class GeneSearchComponent implements OnInit {
 
     search(query: string): Observable<any> {
         this.isEnsemblIdSearch = false;
+        this.errorMessage = '';
 
         if (query.length < 2) {
             query = '';
             this.setErrorMessage(this.notValidSearchString);
-        }
-        else if (query.length > 3) {
+        } else if (query.length > 3) {
             const prefix = query.toLowerCase().substring(0, 4);
 
             if ('ensg' === prefix) {
@@ -201,12 +214,13 @@ export class GeneSearchComponent implements OnInit {
     }
 
     setErrorMessage(message: string) {
+        this.errorMessage = message;
         this.results = [{
-            _id: message,
-            ensembl_gene_id: message,
-            name: message,
-            hgnc_symbol: message,
-            type_of_gene: message,
+            _id: null,
+            ensembl_gene_id: null,
+            name: null,
+            hgnc_symbol: null,
+            type_of_gene: null,
             isIGAP: false,
             haseqtl: false,
             isAnyRNAChangedInADBrain: false,
