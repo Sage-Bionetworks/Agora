@@ -301,7 +301,9 @@ export class GeneSimilarComponent implements OnInit {
         if (rowObj[field] === undefined) {
             return this.noValue;
         } else {
-                if (field === 'isIGAP' || field === 'haseqtl' || field === 'nominated_target_display_value'
+                if (field === 'hgnc_symbol') {
+                    return rowObj.hgnc_symbol || rowObj.ensembl_gene_id;
+                } else if (field === 'isIGAP' || field === 'haseqtl' || field === 'nominated_target_display_value'
                     || field === 'isAnyRNAChangedInADBrain' || field === 'isAnyProteinChangedInADBrain') {
                     return this.titleCase.transform(rowObj[field].toString());
                 }
