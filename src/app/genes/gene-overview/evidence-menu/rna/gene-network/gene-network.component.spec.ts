@@ -90,6 +90,7 @@ describe('Component: GeneNetwork', () => {
         const falseText = 'False';
         const noDataText = 'No data';
 
+        // with default modifier
         text = component.getText(true);
         fixture.detectChanges();
 
@@ -107,6 +108,44 @@ describe('Component: GeneNetwork', () => {
 
         expect(gtSpy).toHaveBeenCalledWith(undefined);
         expect(text).toEqual(noDataText);
+
+        // with explicit true modifier
+        text = component.getText(true, true);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(true, true);
+        expect(text).toEqual(trueText);
+
+        text = component.getText(false, true);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(false, true);
+        expect(text).toEqual(falseText);
+
+        text = component.getText(undefined, true);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(undefined, true);
+        expect(text).toEqual(noDataText);
+
+        // with false modifier
+        text = component.getText(true, false);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(true, false);
+        expect(text).toEqual(noDataText);
+
+        text = component.getText(false, false);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(false, false);
+        expect(text).toEqual(noDataText);
+
+        text = component.getText(undefined, false);
+        fixture.detectChanges();
+
+        expect(gtSpy).toHaveBeenCalledWith(undefined, false);
+        expect(text).toEqual(noDataText);
     });
 
     it('should get correct text color class', () => {
@@ -116,7 +155,10 @@ describe('Component: GeneNetwork', () => {
         const italicGreen = { 'green-text': true, 'italic-heading': true };
         const normalRed = { 'red-text': true, 'normal-heading': true };
         const italicRed = { 'red-text': true, 'italic-heading': true };
+        const normalBlack = { 'normal-heading': true };
+        const italicBlack = { 'italic-heading': true };
 
+        // with default modifier
         textColorClass = component.getTextColorClass(true, true);
         fixture.detectChanges();
 
@@ -140,6 +182,56 @@ describe('Component: GeneNetwork', () => {
 
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
+
+        // with explicit true modifier
+        textColorClass = component.getTextColorClass(true, true, true);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(textColorClass).toEqual(normalGreen);
+
+        textColorClass = component.getTextColorClass(true, false, true);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(textColorClass).toEqual(italicGreen);
+
+        textColorClass = component.getTextColorClass(false, true, true);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(textColorClass).toEqual(normalRed);
+
+        textColorClass = component.getTextColorClass(false, false, true);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(textColorClass).toEqual(italicRed);
+
+        // with false modifier
+        textColorClass = component.getTextColorClass(true, true, false);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(textColorClass).toEqual(normalBlack);
+
+        textColorClass = component.getTextColorClass(true, false, false);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(textColorClass).toEqual(italicBlack);
+
+        textColorClass = component.getTextColorClass(false, true, false);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(textColorClass).toEqual(normalBlack);
+
+        textColorClass = component.getTextColorClass(false, false, false);
+        fixture.detectChanges();
+
+        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(textColorClass).toEqual(italicBlack);
     });
 
     /*it('should have extra info components', () => {

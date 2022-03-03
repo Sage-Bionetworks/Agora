@@ -114,25 +114,41 @@ export class GeneNetworkComponent implements OnInit {
         this.forceService.genesFiltered = genes;
     }
 
-    getText(state?: boolean): string {
+    // If the 'state' boolean value is modified by another boolean value, pass the modifying value as 'tristateModifier'
+    // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is undefined, so calling:
+    // getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
+    // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
+    getText(state?: boolean, tristateModifier: boolean = true): string {
         let text = '';
-        if (state) {
-            text = 'True';
+
+        if (!tristateModifier) {
+            text = 'No data';
         } else {
-            if (state === undefined) {
-                text = 'No data';
+            if (state) {
+                text = 'True';
             } else {
-                text = 'False';
+                if (state === undefined) {
+                    text = 'No data';
+                } else {
+                    text = 'False';
+                }
             }
         }
         return text;
     }
 
-    getTextColorClass(state: boolean, normal?: boolean): any {
+    getNominationText(nominations: number): string {
+        return this.getText(nominations === undefined ? false : nominations > 0);
+    }
+
+    // Use black text if 'tristateModifier' is false ('No data')
+    // Otherwise, use green text when 'state' is true, use red text when 'state' is false
+    // If 'normal' is false, use italic
+    getTextColorClass(state: boolean, normal?: boolean, tristateModifier: boolean = true): any {
         const colorClassObj = {} as any;
-        if (state) {
+        if (state && tristateModifier) {
             colorClassObj['green-text'] = true;
-        } else {
+        } else if (!state && tristateModifier) {
             colorClassObj['red-text'] = true;
         }
 

@@ -23,7 +23,7 @@
                         <span *ngIf="!summary[i].hasLink" [ngClass]="'italic-heading'">Coming soon</span>
                     </ng-container>
                     <ng-container *ngIf="!summary[i].extraText">
-                        <span [ngClass]="getTextColorClass(summary[i].state, true)">{{getText(summary[i].state)}}</span>
+                        <span [ngClass]="getTextColorClass(summary[i].state, true, summary[i].tristateModifier)">{{getText(summary[i].state, summary[i].tristateModifier)}}</span>
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="j === 0">

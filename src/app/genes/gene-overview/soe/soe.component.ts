@@ -89,6 +89,7 @@ export class SOEComponent implements OnInit {
                     this.geneInfo.isIGAP === undefined
                         ? false
                         : this.geneInfo.isIGAP,
+                tristateModifier: true,
                 hasLink: false,
                 extraText: '',
             },
@@ -104,6 +105,7 @@ export class SOEComponent implements OnInit {
                     this.geneInfo.haseqtl === undefined
                         ? false
                         : this.geneInfo.haseqtl,
+                tristateModifier: true,
                 hasLink: false,
                 extraText: '',
             },
@@ -117,6 +119,7 @@ export class SOEComponent implements OnInit {
                     this.geneInfo.isAnyRNAChangedInADBrain === undefined
                         ? false
                         : this.geneInfo.isAnyRNAChangedInADBrain,
+                tristateModifier: this.geneInfo.rna_brain_change_studied,
                 hasLink: false,
                 extraText: '',
             },
@@ -130,6 +133,7 @@ export class SOEComponent implements OnInit {
                     this.geneInfo.isAnyProteinChangedInADBrain === undefined
                         ? false
                         : this.geneInfo.isAnyProteinChangedInADBrain,
+                tristateModifier: this.geneInfo.protein_brain_change_studied,
                 hasLink: false,
                 extraText: '',
             },
@@ -143,6 +147,7 @@ export class SOEComponent implements OnInit {
                     this.geneInfo.nominations === undefined
                         ? false
                         : this.geneInfo.nominations,
+                tristateModifier: true,
                 hasLink: false,
                 extraText: '',
             },
@@ -183,26 +188,37 @@ export class SOEComponent implements OnInit {
         });
     }
 
-    getText(state?: boolean): string {
+    // If the 'state' boolean value is modified by another boolean value, pass the modifying value as 'tristateModifier'
+    // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is undefined, so calling:
+    // getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
+    // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
+    getText(state?: boolean, tristateModifier: boolean = true): string {
         let text = '';
-        if (state) {
-            text = 'True';
+
+        if (!tristateModifier) {
+            text = 'No data';
         } else {
-            if (state === undefined) {
-                text = 'No data';
+            if (state) {
+                text = 'True';
             } else {
-                text = 'False';
+                if (state === undefined) {
+                    text = 'No data';
+                } else {
+                    text = 'False';
+                }
             }
         }
         return text;
     }
 
-    getTextColorClass(state: boolean, normal?: boolean): any {
+    // Use black text if 'tristateModifier' is false ('No data')
+    // Otherwise, use green text when 'state' is true, use red text when 'state' is false
+    // If 'normal' is false, use italic
+    getTextColorClass(state: boolean, normal?: boolean, tristateModifier: boolean = true): any {
         const colorClassObj = {} as any;
-        // The empty string is also a truthy value
-        if (state) {
+        if (state && tristateModifier) {
             colorClassObj['green-text'] = true;
-        } else {
+        } else if (!state && tristateModifier) {
             colorClassObj['red-text'] = true;
         }
 
