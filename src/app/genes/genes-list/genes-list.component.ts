@@ -119,7 +119,7 @@ export class GenesListComponent implements OnInit {
                 de.input_data_display_value = (inputDataArray.length) ? inputDataArray.filter(this.getUnique)
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
                 de.validation_study_details_display_value = (validationStudyDetailsArray.length) ?
-                    [...new Set(validationStudyDetailsArray)]
+                    [...new Set(validationStudyDetailsArray.filter(e => e !== ''))]
                     .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
                 de.initial_nomination_display_value = (initialNominationArray.length) ?
                     Math.min(...initialNominationArray) : undefined;
