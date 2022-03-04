@@ -201,7 +201,7 @@ describe('Component: GeneSearch', () => {
         );
 
         spyOn(component, 'search').and.callThrough();
-        component.search(mockInfo1.hgnc_symbol).subscribe((data) => {
+        component.search(mockInfo1.ensembl_gene_id).subscribe((data) => {
             expect(dsSpy.calls.any()).toEqual(true);
             expect(data).toEqual({ items: [mockInfo1]});
         }); // search a gene id

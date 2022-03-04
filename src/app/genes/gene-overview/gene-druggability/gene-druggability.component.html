@@ -1,6 +1,6 @@
 <div *ngIf="geneInfo" class="section-thin" tabindex="0">
     <h2>
-        Druggability of {{geneInfo.hgnc_symbol}}
+        Druggability of {{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}
     </h2>
     <p class="druggability-description">
         AMP-AD pharmaceutical partners scored the tractability of targets using publicly-available resources and have generated ratings of small-molecule druggability, therapeutic antibody feasibility, and safety.

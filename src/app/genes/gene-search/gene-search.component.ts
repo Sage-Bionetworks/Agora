@@ -67,13 +67,18 @@ export class GeneSearchComponent implements OnInit {
                 // If we got an empty array as response, or no genes found
                 if (!data.items.length) {
                     this.isNotFound = true;
-                    this.setErrorMessage(this.isEnsemblIdSearch ? this.ensemblIdNotFoundString : this.hgncSymbolNotFoundString);
+                    this.setErrorMessage(
+                        this.isEnsemblIdSearch ?
+                        this.ensemblIdNotFoundString :
+                        this.hgncSymbolNotFoundString
+                    );
                 } else {
                     this.isNotFound = false;
                     if (data.isEnsembl) {
                         // Multiple matching genes: This should never happen…but if it does, log an error
                         if (data.items.length > 1) {
-                            console.log('Unexpected duplicate gene_info objects for ensembl ID "' + this.currentQuery + '" found.');
+                            console.log('Unexpected duplicate gene_info objects for ensembl ID "' +
+                            this.currentQuery + '" found.');
                             this.setErrorMessage(this.ensemblIdNotFoundString);
                         } else {
                             this.viewGene(data.items[0]);
@@ -138,7 +143,7 @@ export class GeneSearchComponent implements OnInit {
     }
 
     getGeneId(): string {
-        return this.gene.hgnc_symbol;
+        return this.gene.ensembl_gene_id;
     }
 
     viewGene(info: GeneInfo) {
@@ -146,12 +151,12 @@ export class GeneSearchComponent implements OnInit {
             this.navService.setOvMenuTabIndex(0);
             // We don't have a gene
             if (!this.geneService.getCurrentGene()) {
-                this.getGene(info.hgnc_symbol);
+                this.getGene(info.ensembl_gene_id);
             } else {
                 this.geneService.updatePreviousGene();
                 // We have a gene, but it's a new one
-                if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
-                    this.getGene(info.hgnc_symbol);
+                if (this.geneService.getCurrentGene().ensembl_gene_id !== info.ensembl_gene_id) {
+                    this.getGene(info.ensembl_gene_id);
                 } else {
                     this.navService.goToRoute(
                         '/genes',
@@ -169,8 +174,8 @@ export class GeneSearchComponent implements OnInit {
         }
     }
 
-    getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+    getGene(ensemblGeneId: string) {
+        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
             if (!data.info) {
                 this.navService.goToRoute('./genes');
             } else {

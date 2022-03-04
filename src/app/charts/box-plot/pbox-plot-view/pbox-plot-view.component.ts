@@ -328,7 +328,8 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             logVals.push(p.log2_fc);
             significanceTexts.push((p.cor_pval <= 0.05) ?
             ' ' : 'not ');
-            phrases.push(p.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
+            phrases.push((p.hgnc_symbol || p.ensembl_gene_id) +
+                ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
                 p.tissue +
                 ' with a log fold change value of ' + p.log2_fc + ' and an adjusted p-value of ' +
