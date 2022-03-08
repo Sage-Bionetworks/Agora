@@ -114,14 +114,15 @@ export class GeneNetworkComponent implements OnInit {
         this.forceService.genesFiltered = genes;
     }
 
-    // If the 'state' boolean value is modified by another boolean value, pass the modifying value as 'tristateModifier'
-    // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is undefined, so calling:
-    // getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
+    // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
+    // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is
+    // undefined, so calling:
+    //     getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
     // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
-    getText(state?: boolean, tristateModifier: boolean = true): string {
+    getText(state?: boolean, isStateApplicable: boolean = true): string {
         let text = '';
 
-        if (!tristateModifier) {
+        if (!isStateApplicable) {
             text = 'No data';
         } else {
             if (state) {
@@ -141,14 +142,14 @@ export class GeneNetworkComponent implements OnInit {
         return this.getText(nominations === undefined ? false : nominations > 0);
     }
 
-    // Use black text if 'tristateModifier' is false ('No data')
+    // Use black text if 'isStateApplicable' is false ('No data')
     // Otherwise, use green text when 'state' is true, use red text when 'state' is false
     // If 'normal' is false, use italic
-    getTextColorClass(state: boolean, normal?: boolean, tristateModifier: boolean = true): any {
+    getTextColorClass(state: boolean, normal?: boolean, isStateApplicable: boolean = true): any {
         const colorClassObj = {} as any;
-        if (state && tristateModifier) {
+        if (state && isStateApplicable) {
             colorClassObj['green-text'] = true;
-        } else if (!state && tristateModifier) {
+        } else if (!state && isStateApplicable) {
             colorClassObj['red-text'] = true;
         }
 
