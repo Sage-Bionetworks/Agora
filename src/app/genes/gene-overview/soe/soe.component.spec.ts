@@ -85,60 +85,63 @@ describe('Component: SOE', () => {
         const falseText = 'False';
         const noDataText = 'No data';
 
-        // with default modifier
-        text = component.getText(true);
+        let state = true;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(true);
         expect(text).toEqual(trueText);
 
-        text = component.getText(false);
+        state = false;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(false);
         expect(text).toEqual(falseText);
 
-        text = component.getText(undefined);
+        state = undefined;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(undefined);
         expect(text).toEqual(noDataText);
 
-        // with explicit true modifier
-        text = component.getText(true, true);
+        state = true;
+        let isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(true, true);
         expect(text).toEqual(trueText);
 
-        text = component.getText(false, true);
+        state = false;
+        isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(false, true);
         expect(text).toEqual(falseText);
 
-        text = component.getText(undefined, true);
+        state = undefined;
+        isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(undefined, true);
         expect(text).toEqual(noDataText);
 
-        // with false modifier
-        text = component.getText(true, false);
+        state = true;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(true, false);
         expect(text).toEqual(noDataText);
 
-        text = component.getText(false, false);
+        state = false;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(false, false);
         expect(text).toEqual(noDataText);
 
-        text = component.getText(undefined, false);
+        state = undefined;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(undefined, false);
         expect(text).toEqual(noDataText);
     });
@@ -153,76 +156,96 @@ describe('Component: SOE', () => {
         const normalBlack = { 'normal-heading': true };
         const italicBlack = { 'italic-heading': true };
 
-        textColorClass = component.getTextColorClass(true, true);
+        let state = true;
+        let normal = true;
+        textColorClass = component.getTextColorClass(state, normal);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(true, true);
         expect(textColorClass).toEqual(normalGreen);
 
-        textColorClass = component.getTextColorClass(true, false);
+        state = true;
+        normal = false;
+        textColorClass = component.getTextColorClass(state, normal);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(true, false);
         expect(textColorClass).toEqual(italicGreen);
 
-        textColorClass = component.getTextColorClass(false, true);
+        state = false;
+        normal = true;
+        textColorClass = component.getTextColorClass(state, normal);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(false, true);
         expect(textColorClass).toEqual(normalRed);
 
-        textColorClass = component.getTextColorClass(false, false);
+        state = false;
+        normal = false;
+        textColorClass = component.getTextColorClass(state, normal);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
         expect(textColorClass).toEqual(italicRed);
 
-        textColorClass = component.getTextColorClass(true, true, true);
+        state = true;
+        normal = true;
+        let isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
         expect(textColorClass).toEqual(normalGreen);
 
-        textColorClass = component.getTextColorClass(true, false, true);
+        state = true;
+        normal = false;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(true, false, true);
         expect(textColorClass).toEqual(italicGreen);
 
-        textColorClass = component.getTextColorClass(false, true, true);
+        state = false;
+        normal = true;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
         expect(textColorClass).toEqual(normalRed);
 
-        textColorClass = component.getTextColorClass(false, false, true);
+        state = false;
+        normal = false;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(false, false, true);
         expect(textColorClass).toEqual(italicRed);
 
-        textColorClass = component.getTextColorClass(true, true, false);
+        state = true;
+        normal = true;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(true, true, false);
         expect(textColorClass).toEqual(normalBlack);
 
-        textColorClass = component.getTextColorClass(true, false, false);
+        state = true;
+        normal = false;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(true, false, false);
         expect(textColorClass).toEqual(italicBlack);
 
-        textColorClass = component.getTextColorClass(false, true, false);
+        state = false;
+        normal = true;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(false, true, false);
         expect(textColorClass).toEqual(normalBlack);
 
-        textColorClass = component.getTextColorClass(false, false, false);
+        state = false;
+        normal = false;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
+        expect(gtcSpy).toHaveBeenCalledWith(false, false, false);
         expect(textColorClass).toEqual(italicBlack);
     });
 
