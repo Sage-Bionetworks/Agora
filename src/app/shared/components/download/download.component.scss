@@ -11,7 +11,7 @@
         vertical-align: top;
     }
 
-    .ui-overlaypanel-content {
+    .p-overlaypanel-content {
         padding: 0px;
 
         @include respond-to('ex-small') {
@@ -66,11 +66,11 @@
 
     }
 
-    .ui-chkbox {
+    .p-chkbox {
         margin-right: 17px;
     }
 
-    .ui-chkbox-box {
+    .p-chkbox-box {
         background: $quinary-background;
         border: 2px solid $green-border-color;
         box-sizing: border-box;
@@ -80,7 +80,7 @@
         margin-bottom: 5px;
     }
 
-    .ui-chkbox-icon {
+    .p-chkbox-icon {
         color: $background;
         margin-top: 4px;
 
@@ -100,7 +100,7 @@
 }
 
 .progress-dialog {
-    .ui-dialog-titlebar {
+    .p-dialog-header {
         display: none !important;
     }
 

@@ -83,38 +83,42 @@
         overflow: hidden;
         position: relative;
         background-color: $menu-dark;
-        .ui-tabmenu-nav {
+        .p-tabmenu-nav {
             padding: 0;
             li{
                 width: 100%;
-                &.ui-state-default {
+                &:not(.p-highlight) {
                     background-color: $menu-inactive;
                     margin: 0;
                 }
-                &.ui-state-active {
+                &.p-highlight {
                     background-color: initial;
-                }
-                &.ui-state-active {
                     a::before {
+                        position: absolute;
                         content: url('/assets/icon/minus_icon.png');
                         transform: scale(.55);
-                        float: right;
-                        margin-right: -16px;
+                        margin-right: -14px;
+                        right: 15px;
                     }
                 }
                 a {
                     width: 100%;
+                    float: left;
+                    padding: 10px 15px;
+                    text-decoration: none;
+                    cursor: pointer;
+
                     span{
                         color: $background;
                     }
                 }
-                .ui-panelmenu-icon {
+                .p-panelmenu-icon {
                     float: right;
                 }
             }
-            .ui-panelmenu-content {
+            .p-panelmenu-content {
                 padding: 0;
-                .ui-submenu-list {
+                .p-submenu-list {
                     li {
                         a {
                             span {
@@ -130,21 +134,19 @@
     &.close {
         .overview-tab-menu-mobile {
             height: 38px;
-            .ui-tabmenu-nav {
+            .p-tabmenu-nav {
                 padding: 0;
                 li{
                     width: 100%;
-                    &.ui-state-default {
+                    &:not(.p-highlight) {
                         background-color: $menu-inactive;
                         margin: 0;
                         display: none;
                     }
-                    &.ui-state-active {
+                    &.p-highlight {
                         display: inline;
                         background-color: initial;
-                    }
-                    &.ui-state-active {
-                        a{
+                        a {
                             width: 100%;
                         }
                         a::before {
@@ -153,7 +155,7 @@
                             float: right;
                             margin-right: -16px;
                             padding-top: 0px;
-                            margin-top: -12px;
+                            margin-top: 4px;
                         }
                     }
                 }
@@ -163,27 +165,33 @@
 }
 
 .overview-tab-menu {
-    padding: 0px !important;
-     @include respond-to('ex-small') {
-        overflow-x: scroll;
-     }
+    position: relative;
+    padding: 0px 5.5%;
+    background: $background;
+    background-color: $background !important;
+    box-shadow: 0px 4px 6px color(black-box-shadow, a50);
 
-    .ui-tabmenu-nav {
-        padding: 0px !important;
-        background: $background;
-        background-color: $background !important;
-        box-shadow: 0px 4px 6px color(black-box-shadow, a50);
+    @include respond-to('small') {
+        padding: 0px 7.5%;
+    }
+
+    @include respond-to('ex-small') {
+        overflow-x: scroll;
+    }
+
+    .p-tabmenu-nav {
+        display: flex;
         position: relative;
 
         > li {
-            max-width: 25%;
+            flex-grow: 1;
         }
 
         @include respond-to('ex-small') {
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
-                padding-left: 3.5% !important;
+                //padding-left: 3.5% !important;
             }
             >li:last-child {
                 /* text-align: right;
@@ -197,7 +205,7 @@
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
-                padding-left: 4.0% !important;
+                //padding-left: 4.0% !important;
             }
             >li:last-child {
                 /* text-align: right;
@@ -211,7 +219,7 @@
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
-                padding-left: 4.5% !important;
+                //padding-left: 4.5% !important;
             }
             >li:last-child {
                 /* text-align: right;
@@ -225,7 +233,7 @@
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
-                padding-left: 5.5% !important;
+                //padding-left: 5.5% !important;
             }
             >li:last-child {
                 /* text-align: right;
@@ -239,7 +247,7 @@
             >li:first-child {
                 text-align: left;
                 text-align-last: left;
-                padding-left: 7.5% !important;
+                //padding-left: 7.5% !important;
             }
             >li:last-child {
                 /* text-align: right;
@@ -253,7 +261,6 @@
 
     ul {
         display: flex !important;
-        width: 100%;
         box-sizing: border-box;
     }
 
@@ -263,25 +270,40 @@
         height: 70px;
         line-height: 70px;
         margin: 0px !important;
-        width: 100%;
         border: none;
         color: $span-color;
+        max-width: 25%;
 
         a {
-            padding: 0px !important;
+            display: block;
             width: 100%;
-            text-align: center;
+            text-align: left;
+            padding: 0 30px !important;
             @include respond-to('ex-small') {
-              padding-right: 25px !important;
+                padding-right: 25px !important;
             }
             span {
                 color: $span-color;
                 opacity: 0.5;
             }
         }
+
+        &:first-child {
+
+            a {
+                padding-left: 0 !important;
+            }
+        }
+
+        &:last-child {
+
+            a {
+                padding-right: 0 !important;
+            }
+        }
     }
 
-    .ui-state-disabled {
+    .p-state-disabled {
         a {
             padding: 0px !important;
             width: 100%;
@@ -292,7 +314,7 @@
         }
     }
 
-    .ui-state-active {
+    .p-highlight {
         a > span {
             @include lato-font('bold');
             font-size: $font-size-xx-regular;

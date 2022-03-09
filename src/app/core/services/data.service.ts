@@ -9,6 +9,12 @@ import { Observable, forkJoin } from 'rxjs';
 
 import * as crossfilter from 'crossfilter2';
 
+declare global {
+    interface Navigator {
+        msSaveBlob?: (blob: any, defaultName?: string) => boolean
+    }
+}
+
 @Injectable()
 export class DataService {
     // Add the new #[field] from TypeScript when it's out

@@ -32,11 +32,11 @@
                 </div>
                 <div class="gct-controls-right">
                     <div class="cat-filter-container">
-                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="onQueryChange($event)" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="onQueryChange()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                     <div>
                         <div class="gct-filter-label">Models</div>
-                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="onQueryChange($event)" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="onQueryChange()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -122,7 +122,7 @@
                     [showCurrentPageReport]="true"
                     currentPageReportTemplate="{first}-{last} of {totalRecords}"
                     responsiveLayout="scroll"
-                    (sortFunction)="sort($event)"
+                    (sortFunction)="sort()"
                     [customSort]="true"
                     [globalFilterFields]="['hgnc_symbol']"
                 >

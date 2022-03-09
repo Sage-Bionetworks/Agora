@@ -2,23 +2,23 @@
 @import "../../../../assets/css/helpers/mixins";
 
 .st-table {
-    .ui-table {
+    .p-datatable {
         padding-bottom: 70px;
     }
 
-    .ui-table .ui-table-tbody > tr {
+    .p-datatable .p-datatable-tbody > tr {
         background-color: $table-row-even;
     }
 
-    .ui-table .ui-table-tbody > tr:nth-child(even) {
+    .p-datatable .p-datatable-tbody > tr:nth-child(even) {
         background-color: $table-row-odd;
     }
 
-    .ui-table-thead {
+    .p-datatable-thead {
         display: none;
     }
 
-    .ui-table-tbody {
+    .p-datatable-tbody {
         height: 100%;
 
         >tr {
