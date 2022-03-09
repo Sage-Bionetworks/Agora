@@ -144,19 +144,12 @@ export class GeneNetworkComponent implements OnInit {
 
     // Use black text if 'isStateApplicable' is false ('No data')
     // Otherwise, use green text when 'state' is true, use red text when 'state' is false
-    // If 'normal' is false, use italic
-    getTextColorClass(state: boolean, normal?: boolean, isStateApplicable: boolean = true): any {
+    getTextColorClass(state: boolean, isStateApplicable: boolean = true): any {
         const colorClassObj = {} as any;
         if (state && isStateApplicable) {
             colorClassObj['green-text'] = true;
         } else if (!state && isStateApplicable) {
             colorClassObj['red-text'] = true;
-        }
-
-        if (normal) {
-            colorClassObj['normal-heading'] = true;
-        } else {
-            colorClassObj['italic-heading'] = true;
         }
         return colorClassObj;
     }

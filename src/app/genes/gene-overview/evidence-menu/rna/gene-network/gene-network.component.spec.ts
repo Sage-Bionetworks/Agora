@@ -89,8 +89,10 @@ describe('Component: GeneNetwork', () => {
         const trueText = 'True';
         const falseText = 'False';
         const noDataText = 'No data';
+        let state;
+        let isStateApplicable;
 
-        let state = true;
+        state = true;
         text = component.getText(state);
         fixture.detectChanges();
         expect(gtSpy).toHaveBeenCalledWith(true);
@@ -109,7 +111,7 @@ describe('Component: GeneNetwork', () => {
         expect(text).toEqual(noDataText);
 
         state = true;
-        let isStateApplicable = true;
+        isStateApplicable = true;
         text = component.getText(state, isStateApplicable);
         fixture.detectChanges();
         expect(gtSpy).toHaveBeenCalledWith(true, true);
@@ -154,104 +156,51 @@ describe('Component: GeneNetwork', () => {
     it('should get correct text color class', () => {
         const gtcSpy = spyOn(component, 'getTextColorClass').and.callThrough();
         let textColorClass;
-        const normalGreen = { 'green-text': true, 'normal-heading': true };
-        const italicGreen = { 'green-text': true, 'italic-heading': true };
-        const normalRed = { 'red-text': true, 'normal-heading': true };
-        const italicRed = { 'red-text': true, 'italic-heading': true };
-        const normalBlack = { 'normal-heading': true };
-        const italicBlack = { 'italic-heading': true };
+        const greenText = { 'green-text': true };
+        const redText = { 'red-text': true };
+        const blackText = { };
+        let state;
+        let isStateApplicable;
 
-        let state = true;
-        let normal = true;
-        textColorClass = component.getTextColorClass(state, normal);
+        state = true;
+        textColorClass = component.getTextColorClass(state);
+        fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(true);
+        expect(textColorClass).toEqual(greenText);
+
+        state = false;
+        textColorClass = component.getTextColorClass(state);
+        fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(false);
+        expect(textColorClass).toEqual(redText);
+
+        state = true;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
         fixture.detectChanges();
         expect(gtcSpy).toHaveBeenCalledWith(true, true);
-        expect(textColorClass).toEqual(normalGreen);
-
-        state = true;
-        normal = false;
-        textColorClass = component.getTextColorClass(state, normal);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(true, false);
-        expect(textColorClass).toEqual(italicGreen);
+        expect(textColorClass).toEqual(greenText);
 
         state = false;
-        normal = true;
-        textColorClass = component.getTextColorClass(state, normal);
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
         fixture.detectChanges();
         expect(gtcSpy).toHaveBeenCalledWith(false, true);
-        expect(textColorClass).toEqual(normalRed);
+        expect(textColorClass).toEqual(redText);
+
+        state = true;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(true, false);
+        expect(textColorClass).toEqual(blackText);
 
         state = false;
-        normal = false;
-        textColorClass = component.getTextColorClass(state, normal);
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
         fixture.detectChanges();
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
-        expect(textColorClass).toEqual(italicRed);
-
-        state = true;
-        normal = true;
-        let isStateApplicable = true;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(true, true, true);
-        expect(textColorClass).toEqual(normalGreen);
-
-        state = true;
-        normal = false;
-        isStateApplicable = true;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(true, false, true);
-        expect(textColorClass).toEqual(italicGreen);
-
-        state = false;
-        normal = true;
-        isStateApplicable = true;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(false, true, true);
-        expect(textColorClass).toEqual(normalRed);
-
-        state = false;
-        normal = false;
-        isStateApplicable = true;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(false, false, true);
-        expect(textColorClass).toEqual(italicRed);
-
-        state = true;
-        normal = true;
-        isStateApplicable = false;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(true, true, false);
-        expect(textColorClass).toEqual(normalBlack);
-
-        state = true;
-        normal = false;
-        isStateApplicable = false;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(true, false, false);
-        expect(textColorClass).toEqual(italicBlack);
-
-        state = false;
-        normal = true;
-        isStateApplicable = false;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(false, true, false);
-        expect(textColorClass).toEqual(normalBlack);
-
-        state = false;
-        normal = false;
-        isStateApplicable = false;
-        textColorClass = component.getTextColorClass(state, normal, isStateApplicable);
-        fixture.detectChanges();
-        expect(gtcSpy).toHaveBeenCalledWith(false, false, false);
-        expect(textColorClass).toEqual(italicBlack);
+        expect(textColorClass).toEqual(blackText);
     });
 
     /*it('should have extra info components', () => {
