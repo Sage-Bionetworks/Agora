@@ -78,7 +78,7 @@ describe('Component: ForceChartView', () => {
             ensembl_gene_id: 'ENSG00000169436',
             group: 2,
             hgnc_symbol: 'COL22A1',
-            id: 'ENSG00000128564',
+            id: 'ENSG00000169436',
             index: 1,
             vx: 0.6383193392459895,
             vy: -4.464810585759529,
@@ -93,8 +93,8 @@ describe('Component: ForceChartView', () => {
             links: [
                 {
                     brainregions: ['DLPFC'],
-                    hgnc_symbolA: 'VGF',
-                    hgnc_symbolB: 'COL22A1',
+                    geneIdA: 'VGF',
+                    geneIdB: 'COL22A1',
                     source: mockNode1,
                     target: mockNode2,
                     value: 1

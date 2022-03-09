@@ -36,7 +36,7 @@
         <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData; else noDataSecImage">
             <div class="row cg-row">
                 <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
-                    <h3>{{geneInfo.hgnc_symbol}}</h3>
+                    <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
                     <p class="cg-col-p">{{geneInfo.summary}}</p>
                     <h4 class="cg-col-span">
                         Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
@@ -73,7 +73,7 @@
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-7">
                                     <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
-                                        <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol}}</div>
+                                        <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol || node.ensembl_gene_id}}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12 col-5">

@@ -8,7 +8,7 @@ import { ChartData } from '../soe';
   styleUrls: ['./soe-chart-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SOEChartDialogue implements OnInit {
+export class SOEChartDialogueComponent implements OnInit {
   @Input() display: boolean = false;
   @Input() description: boolean = false;
   @Input() header: string = '';

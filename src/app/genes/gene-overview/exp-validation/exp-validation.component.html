@@ -3,7 +3,7 @@
         <div *ngIf="i == 0" class="section-thin overview-header no-padding-bottom" tabindex="0">
             <div class="row no-gutters">
                 <div>
-                    <h2 *ngIf="data">Experimental Validation of {{d.hgnc_symbol}}</h2>
+                    <h2 *ngIf="data">Experimental Validation of {{d.hgnc_symbol || d.ensembl_gene_id}}</h2>
                     <p class="no-margin-bottom no-padding">
                         Nominating teams provided details on experimental validation studies they performed to examine a role for the target in AD.
                     </p>

@@ -156,7 +156,7 @@ export class GeneNetworkComponent implements OnInit {
 
     updategene(event: Gene) {
         const self = this;
-        if (event.hgnc_symbol !== this.geneService.getCurrentGene().hgnc_symbol) {
+        if (event.ensembl_gene_id !== this.geneService.getCurrentGene().ensembl_gene_id) {
             this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
                 const lsnPromise = new Promise((resolve, reject) => {
                     this.forceService.processSelectedNode(linksList, event);
@@ -167,11 +167,12 @@ export class GeneNetworkComponent implements OnInit {
                     self.selectedGeneData.links = dataNetwork.links;
                     self.selectedGeneData.nodes = dataNetwork.nodes;
                     self.selectedGeneData.origin = dataNetwork.origin;
-                    self.apiService.getGene(event.hgnc_symbol).subscribe((data: GeneResponse) => {
+                    self.apiService.getGene(event.ensembl_gene_id).subscribe((data: GeneResponse) => {
                         if (data.info) {
                             self.geneInfo = data.info;
                         } else {
                             self.geneInfo = {
+                                ensembl_gene_id: self.selectedGeneData.origin.ensembl_gene_id,
                                 hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
                             };
                         }

@@ -38,7 +38,7 @@ export class DataService {
     ) {}
 
     loadData(gene: Gene): Observable<any[]> {
-        const genesResponse = this.apiService.getGenes(gene.hgnc_symbol);
+        const genesResponse = this.apiService.getGenes(gene.ensembl_gene_id);
         const nodesResponse = this.apiService.getLinksList(gene);
 
         return forkJoin([

@@ -116,9 +116,9 @@ export class GeneSimilarComponent implements OnInit {
     initData() {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
-            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
-            this.geneService.getCurrentGene().hgnc_symbol
+        if (!this.gene || !this.gene.ensembl_gene_id || !this.geneInfo ||
+            this.id !== this.gene.ensembl_gene_id ||
+            this.gene.ensembl_gene_id !== this.geneService.getCurrentGene().ensembl_gene_id
         ) {
             this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
                 if (!data.info) {
@@ -313,18 +313,18 @@ export class GeneSimilarComponent implements OnInit {
         this.msgs = [{
             severity: 'info',
             summary: 'Gene Selected',
-            detail: 'Gene: ' + event.data.hgnc_symbol
+            detail: 'Gene: ' + (event.data.hgnc_symbol || event.data.ensembl_gene_id)
         }];
         if (!this.selectedInfo) { this.selectedInfo = event.data; }
         this.router.navigated = false;
 
         if (!this.geneService.getCurrentGene()) {
-            this.getGene(this.selectedInfo.hgnc_symbol);
+            this.getGene(this.selectedInfo.ensembl_gene_id);
         } else {
             this.geneService.updatePreviousGene();
-            if (this.geneService.getCurrentGene().hgnc_symbol !== this.selectedInfo.hgnc_symbol) {
+            if (this.geneService.getCurrentGene().ensembl_gene_id !== this.selectedInfo.ensembl_gene_id) {
                 this.navService.setOvMenuTabIndex(0);
-                this.getGene(this.selectedInfo.hgnc_symbol);
+                this.getGene(this.selectedInfo.ensembl_gene_id);
             } else {
                 this.navService.goToRoute(
                     '/genes',
@@ -350,8 +350,8 @@ export class GeneSimilarComponent implements OnInit {
         this.geneService.setCurrentGene(null);
     }
 
-    getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+    getGene(ensemblGeneId: string) {
+        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
             if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
             this.geneService.updatePreviousGene();
             this.geneService.updateGeneData(data);
