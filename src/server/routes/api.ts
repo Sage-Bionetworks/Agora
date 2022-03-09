@@ -529,6 +529,45 @@ connection.once('open', () => {
         });
     });
 
+    // Get the cached list of all genes
+    router.get('/genes/comparison', async (req, res, next) => {
+
+        let genes = allGenes.slice();
+        let _genes = {};
+
+        if (req.query.model) {
+            console.log('Model: ' + req.query.model);
+            genes = genes.filter(gene => gene.model === req.query.model);
+        }
+
+        for (let i = 0; i < genes.length; i++) {
+            const gene = genes[i];
+
+            if (!_genes.hasOwnProperty(gene.ensembl_gene_id)) {
+                _genes[gene.ensembl_gene_id] = {
+                    ensembl_gene_id : gene.ensembl_gene_id,
+                    hgnc_symbol     : gene.hgnc_symbol,
+                    tissues         : []
+                }
+            }
+
+            _genes[gene.ensembl_gene_id].tissues.push({
+                name        : gene.tissue,
+                logfc       : gene.logfc,
+                adj_p_val   : gene.adj_p_val,
+                ci_l        : gene.ci_l,
+                ci_r        : gene.ci_r,
+            });
+        }
+
+        console.log('Results count:', Object.values(_genes).length);
+
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json({ items: Object.values(_genes) });
+    });
+
     // Routes to get genes information
     router.get('/genes', async (req, res, next) => {
         // Return an empty array in case no id was passed or no params
@@ -646,6 +685,23 @@ connection.once('open', () => {
                     }
                 });
         }
+    });
+
+    router.get('/gene/infos', (req, res, next) => {
+        GenesInfo.find().lean().exec((err, geneInfos) => {
+            if (err) {
+                next(err);
+            } else {
+                if (geneInfos.length === 0) {
+                    res.json({ items: [] });
+                } else {
+                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    res.json({ items: geneInfos });
+                }
+            }
+        });
     });
 
     // Query for all genesInfos that match an array of ENSG - used to populate the Similar Genes table

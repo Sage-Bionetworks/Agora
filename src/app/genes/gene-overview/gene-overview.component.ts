@@ -320,10 +320,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     initTissuesModels() {
+        console.log('initTissuesModels')
         // Check if we have a database id at this point
         if (this.gene) {
             if (!this.geneService.getPreviousGene() || this.geneService.hasGeneChanged()) {
                 this.dataService.loadData(this.gene).subscribe((responseList) => {
+                    console.log('responseList', responseList);
                     // Genes response
                     if (!responseList.length) {
                         this.dataLoaded = true;

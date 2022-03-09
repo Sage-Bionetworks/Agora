@@ -1,0 +1,184 @@
+<div [ngClass]="{'loading': loading}" class="gct">
+    <div class="gct-inner">
+
+        <div class="gct-header">
+            <div class="gct-header-inner">
+                <div class="gct-header-left">
+                    <button (click)="filterPanel.toggle()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M1 2.25C1 1.55964 1.55964 1 2.25 1H22.25C22.9404 1 23.5 1.55964 23.5 2.25V6.05952C23.5 6.40162 23.3598 6.72877 23.1121 6.9647L15.5 14.2143V21.2976C15.5 21.8764 15.1026 22.3796 14.5395 22.5136L10.5395 23.466C10.1675 23.5546 9.77534 23.468 9.47521 23.2309C9.17509 22.9939 9 22.6325 9 22.25V14.2143L1.38793 6.9647C1.14021 6.72877 1 6.40162 1 6.05952V2.25ZM3.5 3.5V5.52381L11.1121 12.7734C11.3598 13.0093 11.5 13.3365 11.5 13.6786V20.6674L13 20.3103V13.6786C13 13.3365 13.1402 13.0093 13.3879 12.7734L21 5.52381V3.5H3.5Z" fill="#3F5EAB"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="gct-header-middle">
+                    <h3 class="gct-heading">Gene Comparison Tool</h3>
+                </div>
+                <div class="gct-header-right">
+                    <button (click)="copyUrl()">Copy URL</button>
+                </div>
+            </div>
+        </div>
+
+        <gene-comparison-tool-filter-list #filterList [filters]="filters" (onChange)="setFilters($event)"></gene-comparison-tool-filter-list>
+
+        <div class="gct-controls">
+            <div class="gct-controls-inner">
+                <div class="gct-controls-left">
+                    <div class="gene-label">DISPLAYED GENES</div>
+                    <div>{{ (availableGeneTable?._totalRecords || 0) + pinnedGenes.length }}</div>
+                    <div>
+                        <input type="text" pInputText (input)="setSearchTerm($event.target.value)" placeholder="Search">
+                    </div>
+                </div>
+                <div class="gct-controls-right">
+                    <div class="cat-filter-container">
+                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="loadGenes()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                    </div>
+                    <div>
+                        <div class="gct-filter-label">Models</div>
+                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="loadGenes()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gct-body">
+            <div class="gct-body-inner">
+
+                <p-table
+                    #tableHeader
+                    id="table-header"
+                    (sortFunction)="updateSortOptions($event)"
+                    [customSort]="true"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th *ngFor="let tissue of tissues" [pSortableColumn]="tissue.name">{{ tissue.name }} <p-sortIcon [field]="tissue.name"></p-sortIcon></th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <div *ngIf="pinnedGenes.length > 0" class="table-divider table-divider-1">
+                    <div class="table-divider-inner">
+                        <div>
+                            Pinned Genes
+                        </div>
+                        <div>
+                            <button (click)="clearPinned()">Clear all</button>
+                        </div>
+                    </div>
+                </div>
+                <p-table
+                    #pinnedGeneTable
+                    [value]="pinnedGenes"
+                    responsiveLayout="scroll"
+                >
+                    <ng-template pTemplate="body" let-gene>
+                        <tr class="pinned">
+                            <td>
+                                <div class="gene-controls">
+                                    <div>
+                                        <button (click)="unpinGene(gene)">
+                                            <svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.65 1.7V5.95C7.65 6.902 7.9645 7.786 8.5 8.5H3.4C3.9525 7.769 4.25 6.885 4.25 5.95V1.7H7.65ZM10.2 0H1.7C1.2325 0 0.85 0.3825 0.85 0.85C0.85 1.3175 1.2325 1.7 1.7 1.7H2.55V5.95C2.55 7.361 1.411 8.5 0 8.5V10.2H5.0745V16.15L5.9245 17L6.7745 16.15V10.2H11.9V8.5C10.489 8.5 9.35 7.361 9.35 5.95V1.7H10.2C10.6675 1.7 11.05 1.3175 11.05 0.85C11.05 0.3825 10.6675 0 10.2 0Z" fill="white"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button (click)="navigateToGene(gene)">
+                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M13.3333 13.3333H1.66667V1.66667H7.5V0H1.66667C0.741667 0 0 0.75 0 1.66667V13.3333C0 14.25 0.741667 15 1.66667 15H13.3333C14.25 15 15 14.25 15 13.3333V7.5H13.3333V13.3333ZM9.16667 0V1.66667H12.1583L3.96667 9.85833L5.14167 11.0333L13.3333 2.84167V5.83333H15V0H9.16667Z" fill="white"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td *ngFor="let tissue of tissues">
+                                <button
+                                    class="gene-indicator"
+                                    [style]="getCircleStyle(tissue.name, gene)"
+                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue.name, gene))"
+                                ></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <div *ngIf="pinnedGenes.length > 0" class="table-divider">
+                    <div class="table-divider-inner">
+                        <div *ngIf="hasSelectedFilters()">Filtered Genes</div>
+                        <div *ngIf="!hasSelectedFilters()">All Genes</div>
+                    </div>
+                </div>
+                <p-table
+                    #availableGeneTable
+                    [value]="availableGenes"
+                    [paginator]="true"
+                    [rows]="10"
+                    [showCurrentPageReport]="true"
+                    currentPageReportTemplate="{first}-{last} of {totalRecords}"
+                    responsiveLayout="scroll"
+                    (sortFunction)="sort($event)"
+                    [customSort]="true"
+                    [globalFilterFields]="['hgnc_symbol']"
+                >
+
+                <ng-template pTemplate="emptymessage" let-gene>
+                    <div class="no-results">No results founds....</div>
+                </ng-template>
+
+                    <ng-template pTemplate="body" let-gene>
+                        <tr>
+                            <td>
+                                <div class="gene-controls">
+                                    <div>
+                                        <button (click)="pinGene(gene)">
+                                            <svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.65 1.7V5.95C7.65 6.902 7.9645 7.786 8.5 8.5H3.4C3.9525 7.769 4.25 6.885 4.25 5.95V1.7H7.65ZM10.2 0H1.7C1.2325 0 0.85 0.3825 0.85 0.85C0.85 1.3175 1.2325 1.7 1.7 1.7H2.55V5.95C2.55 7.361 1.411 8.5 0 8.5V10.2H5.0745V16.15L5.9245 17L6.7745 16.15V10.2H11.9V8.5C10.489 8.5 9.35 7.361 9.35 5.95V1.7H10.2C10.6675 1.7 11.05 1.3175 11.05 0.85C11.05 0.3825 10.6675 0 10.2 0Z" fill="white"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button (click)="navigateToGene(gene)">
+                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M13.3333 13.3333H1.66667V1.66667H7.5V0H1.66667C0.741667 0 0 0.75 0 1.66667V13.3333C0 14.25 0.741667 15 1.66667 15H13.3333C14.25 15 15 14.25 15 13.3333V7.5H13.3333V13.3333ZM9.16667 0V1.66667H12.1583L3.96667 9.85833L5.14167 11.0333L13.3333 2.84167V5.83333H15V0H9.16667Z" fill="white"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                                    </div>
+                                </div>
+
+
+
+                            </td>
+                            <td *ngFor="let tissue of tissues">
+                                <button
+                                    class="gene-indicator"
+                                    [style]="getCircleStyle(tissue.name, gene)"
+                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue.name, gene))"
+                                ></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+                <gene-comparison-tool-filter-panel #filterPanel [filters]="filters" (onChange)="setFilters($event)"></gene-comparison-tool-filter-panel>
+
+            </div>
+        </div>
+
+        <gene-comparison-tool-details-panel #detailsPanel></gene-comparison-tool-details-panel>
+
+    </div>
+</div>
+
+<div *ngIf="loading" class="container-fluid small-padding-top">
+    <loading-page></loading-page>
+</div>

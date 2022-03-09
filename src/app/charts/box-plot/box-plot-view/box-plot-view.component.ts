@@ -166,6 +166,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const currentGenes = self.dataService.getGeneEntries().slice().filter((g) => {
                     return g.model === self.geneService.getCurrentModel();
                 });
+
+                console.log(currentGenes);
+
                 if (currentGenes.length !==
                     self.chartService.filteredData['bpGroup'].values.length &&
                     currentGenes.length <

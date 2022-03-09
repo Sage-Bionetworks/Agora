@@ -1,0 +1,39 @@
+<ng-template #panelTemplate let-data>
+    <div class="gct-details-panel-gene">{{ data.hgnc_symbol ? data.hgnc_symbol + ' - ' : '' }}{{ data.ensembl_gene_id }}</div>
+    <div class="gct-details-panel-category">{{ data.category }} ({{data.tissue }})</div>
+    <div class="gct-details-panel-model">{{ data.model }}</div>
+    <div class="gct-details-panel-data">
+        <div>
+            <div>Log 2 Fold Change</div>
+            <div>P-value</div>
+        </div>
+        <div>
+            <div>{{ data.logfc }}</div>
+            <div>{{ data.adj_p_val }}</div>
+        </div>
+    </div>
+    <div class="gct-details-panel-range">
+        <div>
+            <div>
+                <div></div>
+            </div>
+        </div>
+        <div>
+            <div>{{ data.ci_l }}</div>
+            <div>{{ data.ci_r }}</div>
+        </div>
+    </div>
+    <div class="gct-details-panel-footer">
+        Significance is considered to be an adjusted p-value < 0.05
+    </div>
+</ng-template>
+<p-overlayPanel class="gct-details-panel">
+    <ng-template pTemplate>
+        <ng-container *ngTemplateOutlet="panelTemplate; context: {$implicit: data[0]}"></ng-container>
+    </ng-template>
+</p-overlayPanel>
+<p-overlayPanel class="gct-details-panel">
+    <ng-template pTemplate>
+        <ng-container *ngTemplateOutlet="panelTemplate; context: {$implicit: data[1]}"></ng-container>
+    </ng-template>
+</p-overlayPanel>
