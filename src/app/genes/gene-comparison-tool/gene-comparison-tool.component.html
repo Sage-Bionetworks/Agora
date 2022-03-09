@@ -25,18 +25,18 @@
             <div class="gct-controls-inner">
                 <div class="gct-controls-left">
                     <div class="gene-label">DISPLAYED GENES</div>
-                    <div>{{ (availableGeneTable?._totalRecords || 0) + pinnedGenes.length }}</div>
+                    <div *ngIf="availableGeneTable">{{ (availableGeneTable._totalRecords || 0) + pinnedGenes.length }}</div>
                     <div>
                         <input type="text" pInputText (input)="setSearchTerm($event.target.value)" placeholder="Search">
                     </div>
                 </div>
                 <div class="gct-controls-right">
                     <div class="cat-filter-container">
-                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="loadGenes()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="onQueryChange($event)" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                     <div>
                         <div class="gct-filter-label">Models</div>
-                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="loadGenes()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="onQueryChange($event)" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -127,9 +127,9 @@
                     [globalFilterFields]="['hgnc_symbol']"
                 >
 
-                <ng-template pTemplate="emptymessage" let-gene>
-                    <div class="no-results">No results founds....</div>
-                </ng-template>
+                    <ng-template pTemplate="emptymessage" let-gene>
+                        <div class="no-results">No results founds....</div>
+                    </ng-template>
 
                     <ng-template pTemplate="body" let-gene>
                         <tr>
@@ -153,9 +153,6 @@
                                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
                                     </div>
                                 </div>
-
-
-
                             </td>
                             <td *ngFor="let tissue of tissues">
                                 <button
