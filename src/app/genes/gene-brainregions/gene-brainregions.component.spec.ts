@@ -78,7 +78,7 @@ describe('Component: GeneBR', () => {
         expect(aEl.length).toEqual(1);
     });
 
-    it('should load the data', fakeAsync(() => {
+    xit('should load the data', fakeAsync(() => {
         const noiSpy = spyOn(component, 'ngOnInit').and.callThrough();
         const ggclSpy = spyOn(forceService, 'getGeneClickedList').and.callThrough();
         component.ngOnInit();
