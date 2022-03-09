@@ -11,12 +11,14 @@ export interface GeneInfo {
     type_of_gene: string;
     isIGAP: boolean;
     haseqtl: boolean;
-    isAnyRNAChangedInADBrain?: boolean;
-    isAnyProteinChangedInADBrain?: boolean;
+    isAnyRNAChangedInADBrain: boolean;
+    isAnyProteinChangedInADBrain: boolean;
+    rna_brain_change_studied: boolean;
+    protein_brain_change_studied: boolean;
     medianexpression: MedianExpression[];
     nominatedtarget: NominatedTarget[];
     nominations: number;
-    // Extra fields for display values
+    // Extra fields for table display values
     // NominatedTargets
     teams_display_value?: string;
     study_display_value?: string;
@@ -32,6 +34,9 @@ export interface GeneInfo {
     sm_druggability_display_value?: string;
     safety_rating_display_value?: string;
     ab_modality_display_value?: string;
+    // Tristate booleans
+    is_any_rna_changed_in_ad_brain_display_value?: string;
+    is_any_protein_changed_in_ad_brain_display_value?: string;
 }
 
 export interface MedianExpression {

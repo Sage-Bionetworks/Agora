@@ -97,7 +97,7 @@ connection.once('open', () => {
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
-    // Select fields for Nominated Targets table
+    // Select fields for Nominated Targets table db queries
     const tableGenesByIdFields = [
         'hgnc_symbol',
         'ensembl_gene_id',
@@ -116,7 +116,7 @@ connection.once('open', () => {
         'druggability.abability_bucket_definition'
     ].join(' ');
 
-    // Select fields for Similalr Genes table
+    // Select fields for Similar Genes table db queries
     const tableSimilarGenesFields = [
         'hgnc_symbol',
         'ensembl_gene_id',
@@ -126,6 +126,8 @@ connection.once('open', () => {
         'haseqtl',
         'isAnyRNAChangedInADBrain',
         'isAnyProteinChangedInADBrain',
+        'rna_brain_change_studied',
+        'protein_brain_change_studied',
         'druggability.pharos_class',
         'druggability.sm_druggability_bucket',
         'druggability.classification',

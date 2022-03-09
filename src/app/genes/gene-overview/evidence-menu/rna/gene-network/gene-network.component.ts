@@ -114,32 +114,42 @@ export class GeneNetworkComponent implements OnInit {
         this.forceService.genesFiltered = genes;
     }
 
-    getText(state?: boolean): string {
+    // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
+    // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is
+    // undefined, so calling:
+    //     getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
+    // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
+    getText(state?: boolean, isStateApplicable: boolean = true): string {
         let text = '';
-        if (state) {
-            text = 'True';
+
+        if (!isStateApplicable) {
+            text = 'No data';
         } else {
-            if (state === undefined) {
-                text = 'No data';
+            if (state) {
+                text = 'True';
             } else {
-                text = 'False';
+                if (state === undefined) {
+                    text = 'No data';
+                } else {
+                    text = 'False';
+                }
             }
         }
         return text;
     }
 
-    getTextColorClass(state: boolean, normal?: boolean): any {
-        const colorClassObj = {} as any;
-        if (state) {
-            colorClassObj['green-text'] = true;
-        } else {
-            colorClassObj['red-text'] = true;
-        }
+    getNominationText(nominations: number): string {
+        return this.getText(nominations === undefined ? false : nominations > 0);
+    }
 
-        if (normal) {
-            colorClassObj['normal-heading'] = true;
-        } else {
-            colorClassObj['italic-heading'] = true;
+    // Use black text if 'isStateApplicable' is false ('No data')
+    // Otherwise, use green text when 'state' is true, use red text when 'state' is false
+    getTextColorClass(state: boolean, isStateApplicable: boolean = true): any {
+        const colorClassObj = {} as any;
+        if (state && isStateApplicable) {
+            colorClassObj['green-text'] = true;
+        } else if (!state && isStateApplicable) {
+            colorClassObj['red-text'] = true;
         }
         return colorClassObj;
     }

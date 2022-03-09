@@ -84,57 +84,118 @@ describe('Component: SOE', () => {
         const trueText = 'True';
         const falseText = 'False';
         const noDataText = 'No data';
+        let state;
+        let isStateApplicable;
 
-        text = component.getText(true);
+        state = true;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(true);
         expect(text).toEqual(trueText);
 
-        text = component.getText(false);
+        state = false;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(false);
         expect(text).toEqual(falseText);
 
-        text = component.getText(undefined);
+        state = undefined;
+        text = component.getText(state);
         fixture.detectChanges();
-
         expect(gtSpy).toHaveBeenCalledWith(undefined);
+        expect(text).toEqual(noDataText);
+
+        state = true;
+        isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(true, true);
+        expect(text).toEqual(trueText);
+
+        state = false;
+        isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(false, true);
+        expect(text).toEqual(falseText);
+
+        state = undefined;
+        isStateApplicable = true;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(undefined, true);
+        expect(text).toEqual(noDataText);
+
+        state = true;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(true, false);
+        expect(text).toEqual(noDataText);
+
+        state = false;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(false, false);
+        expect(text).toEqual(noDataText);
+
+        state = undefined;
+        isStateApplicable = false;
+        text = component.getText(state, isStateApplicable);
+        fixture.detectChanges();
+        expect(gtSpy).toHaveBeenCalledWith(undefined, false);
         expect(text).toEqual(noDataText);
     });
 
     it('should get correct text color class', () => {
         const gtcSpy = spyOn(component, 'getTextColorClass').and.callThrough();
         let textColorClass;
-        const normalGreen = { 'green-text': true, 'normal-heading': true };
-        const italicGreen = { 'green-text': true, 'italic-heading': true };
-        const normalRed = { 'red-text': true, 'normal-heading': true };
-        const italicRed = { 'red-text': true, 'italic-heading': true };
+        const greenText = { 'green-text': true };
+        const redText = { 'red-text': true };
+        const blackText = { };
+        let state;
+        let isStateApplicable;
 
-        textColorClass = component.getTextColorClass(true, true);
+        state = true;
+        textColorClass = component.getTextColorClass(state);
         fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(true);
+        expect(textColorClass).toEqual(greenText);
 
+        state = false;
+        textColorClass = component.getTextColorClass(state);
+        fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(false);
+        expect(textColorClass).toEqual(redText);
+
+        state = true;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
+        fixture.detectChanges();
         expect(gtcSpy).toHaveBeenCalledWith(true, true);
-        expect(textColorClass).toEqual(normalGreen);
+        expect(textColorClass).toEqual(greenText);
 
-        textColorClass = component.getTextColorClass(true, false);
+        state = false;
+        isStateApplicable = true;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
         fixture.detectChanges();
-
-        expect(gtcSpy).toHaveBeenCalledWith(true, false);
-        expect(textColorClass).toEqual(italicGreen);
-
-        textColorClass = component.getTextColorClass(false, true);
-        fixture.detectChanges();
-
         expect(gtcSpy).toHaveBeenCalledWith(false, true);
-        expect(textColorClass).toEqual(normalRed);
+        expect(textColorClass).toEqual(redText);
 
-        textColorClass = component.getTextColorClass(false, false);
+        state = true;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
         fixture.detectChanges();
+        expect(gtcSpy).toHaveBeenCalledWith(true, false);
+        expect(textColorClass).toEqual(blackText);
 
+        state = false;
+        isStateApplicable = false;
+        textColorClass = component.getTextColorClass(state, isStateApplicable);
+        fixture.detectChanges();
         expect(gtcSpy).toHaveBeenCalledWith(false, false);
-        expect(textColorClass).toEqual(italicRed);
+        expect(textColorClass).toEqual(blackText);
     });
 
     it('should have a table', () => {
