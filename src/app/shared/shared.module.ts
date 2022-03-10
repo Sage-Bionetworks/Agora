@@ -25,6 +25,8 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
+
 
 import { MessageService } from 'primeng/api';
 
@@ -97,7 +99,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         ContextMenuModule,
         InputTextModule,
         DropdownModule,
-        MenuModule
+        MenuModule,
+        TooltipModule
     ],
     exports: [
         // Angular modules
@@ -125,6 +128,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         InputTextModule,
         DropdownModule,
         MenuModule,
+        TooltipModule,
 
         // Other declarations
         AlertComponent,

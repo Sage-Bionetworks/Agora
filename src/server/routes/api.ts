@@ -533,16 +533,14 @@ connection.once('open', () => {
     router.get('/genes/comparison', async (req, res, next) => {
 
         let genes = allGenes.slice();
-        let _genes = {};
+        const _genes = {};
 
         if (req.query.model) {
             console.log('Model: ' + req.query.model);
             genes = genes.filter(gene => gene.model === req.query.model);
         }
 
-        for (let i = 0; i < genes.length; i++) {
-            const gene = genes[i];
-
+        for (const gene of genes) {
             if (!_genes.hasOwnProperty(gene.ensembl_gene_id)) {
                 _genes[gene.ensembl_gene_id] = {
                     ensembl_gene_id : gene.ensembl_gene_id,
@@ -559,8 +557,6 @@ connection.once('open', () => {
                 ci_r        : gene.ci_r,
             });
         }
-
-        console.log('Results count:', Object.values(_genes).length);
 
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');

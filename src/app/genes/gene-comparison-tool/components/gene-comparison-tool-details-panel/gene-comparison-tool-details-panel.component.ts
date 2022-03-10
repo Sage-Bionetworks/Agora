@@ -22,8 +22,6 @@ export class GeneComparisonToolDetailsPanelComponent {
 
    @ViewChildren(OverlayPanel) panels!: OverlayPanel;
 
-   constructor() { }
-
    setData(data: Data) {
       if (data && JSON.stringify(data) !== JSON.stringify(this.data[this.dataIndex])) {
          this.dataIndex = 0 === this.dataIndex ? 1 : 0;

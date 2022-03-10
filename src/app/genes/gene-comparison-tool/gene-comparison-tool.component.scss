@@ -1,6 +1,36 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
+.p-tooltip {
+    background-color: #63676C;
+    padding: 10px 15px !important;
+
+    .p-tooltip-text {
+        @include lato-font('normal');
+        font-size: 14px;
+        color: #ffffff;
+    }
+
+    .p-tooltip-arrow {
+        bottom: -10px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #63676C;
+        margin-left: -10px;
+    }
+}
+
+.gct-tooltip {
+    max-width: none;
+    transform: translateY(-18px);
+
+    .p-tooltip-text {
+        white-space: nowrap;
+    }
+}
+
 .gct {
     @include lato-font('normal');
     color: color(primary);
@@ -82,8 +112,14 @@
             transition: .3s;
             cursor: pointer;
 
+            svg path {
+                transition: .3s;
+            }
+
             &:hover {
-                opacity: 0.7;
+                svg path {
+                    fill: #000000;
+                }
             }
         }
     }
@@ -292,7 +328,7 @@
         td {
             position: relative;
             vertical-align: middle;
-            height: 40px;
+            height: 44px;
             padding-top: 4px !important;
             padding-bottom: 4px !important;
 
@@ -314,7 +350,6 @@
                     top: 0;
                     left: 50%;
                     bottom: 0;
-                    margin-left: -1px;
                     border-left: 1px solid #EEEEEE;
                 }
             }
@@ -322,11 +357,11 @@
 
         tr {
 
-            &:first-child {
+            &:first-child td {
                 padding-top: 8px !important;
             }
 
-            &:last-child {
+            &:last-child td {
                 padding-bottom: 8px !important;
             }
         }
@@ -405,12 +440,12 @@
         opacity: 0.75;
         border: 1px solid #069C81;
         z-index: 100;
-        transform: translateY(1px);
-        transition: .2s;
+        //transform: translateY(1px);
+        transition: .3s;
         cursor: pointer;
 
         &:hover {
-            // transform: scale(1.05);
+            border-color: #000000 !important;
         }
     }
 
@@ -423,7 +458,7 @@
             }
 
             &:hover > div:first-child button svg path {
-                fill: #283B6B;
+                fill: #000000;
             }
         }
     }

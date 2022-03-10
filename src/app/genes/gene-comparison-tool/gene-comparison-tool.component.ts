@@ -27,8 +27,6 @@ export class GeneComparisonToolComponent implements OnInit  {
    loading: boolean = true;
    urlParams: any = null;
 
-
-
    sortOrder: number = 1;
    sortField: string = 'hgnc_symbol';
 
@@ -139,8 +137,8 @@ export class GeneComparisonToolComponent implements OnInit  {
                 return false;
             };
 
-            for (let i = 0; i < filter.length; i++) {
-               if (value.indexOf(filter[i]) !== -1) {
+            for (const _filter of filter) {
+               if (value.indexOf(_filter) !== -1) {
                   return true;
                }
             }
@@ -180,7 +178,7 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    initGenes() {
-      for (let gene of this.availableGenes) {
+      for (const gene of this.availableGenes) {
          const info: any = this.geneInfos.get(gene.ensembl_gene_id);
          if (info) {
 
@@ -197,7 +195,7 @@ export class GeneComparisonToolComponent implements OnInit  {
             gene.year_first_nominated = null;
 
             if (info.nominatedtarget && info.nominatedtarget.length > 0) {
-               for (let nominated of info.nominatedtarget) {
+               for (const nominated of info.nominatedtarget) {
 
                   if (nominated.team) {
                      gene.teams.push(nominated.team);
@@ -212,9 +210,9 @@ export class GeneComparisonToolComponent implements OnInit  {
                   }
 
                   if (nominated.input_data) {
-                     nominated.input_data.split(', ').forEach(input_data => {
-                        gene.input_datas.push(input_data);
-                        this.setFilterOption('input_datas', input_data);
+                     nominated.input_data.split(', ').forEach(inputData => {
+                        gene.input_datas.push(inputData);
+                        this.setFilterOption('input_datas', inputData);
                      });
                   }
 
@@ -241,18 +239,17 @@ export class GeneComparisonToolComponent implements OnInit  {
          }
       }
 
-      this.getUrlParam('pinned').forEach(pinned => {
+      this.getUrlParam('pinned', true).forEach(pinned => {
          this.pinGene(this.availableGenes.find(gene => gene.ensembl_gene_id === pinned), false);
       });
 
-      const sort = this.getUrlParam('sort');
-      if (sort) {
-         this.tableHeader.sortMode = 'single';
-         this.tableHeader.defaultSortOrder = parseInt(sort[1]);
-         this.tableHeader.sort({ field: sort[0] });
+      const sortField = this.getUrlParam('sortField');
+      const sortOrder = this.getUrlParam('sortOrder');
+      if (sortField || sortOrder) {
+         this.tableHeader.defaultSortOrder = parseInt(sortOrder || 1, 2);
+         this.tableHeader.sort({ field: sortField || 'hgnc_symbol' });
       }
 
-      this.sort();
       this.filter();
    }
 
@@ -261,18 +258,17 @@ export class GeneComparisonToolComponent implements OnInit  {
    /* ----------------------------------------------------------------------- */
 
    setFilters(filters) {
-      console.log('setFilters', filters);
       this.filters = filters;
       this.updateUrl();
       this.filter();
    }
 
    getFilterValues() {
-      let values = {};
+      const values = {};
 
-      for (let filter of this.filters) {
-         let value = [];
-         for (let option of filter.options.filter(o => o.selected)) {
+      for (const filter of this.filters) {
+         const value = [];
+         for (const option of filter.options.filter(o => o.selected)) {
             value.push(option.value);
          }
          if (value.length) {
@@ -284,13 +280,13 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    setFilterOption(name, value) {
-      let filter = value ? this.filters.find(filter => filter.name === name) : null;
+      const filter = value ? this.filters.find(f => f.name === name) : null;
       if (filter && !filter.options.find(option => value === option.value)) {
-         const urlParams = this.getUrlParam(filter.name);
+         const urlParams = this.getUrlParam(filter.name, true);
          filter.options.push({
-            label: value,
-            value: value,
-            selected: urlParams && urlParams.indexOf(value) != -1 ? true : false
+            'label': value,
+            'value': value,
+            'selected': urlParams && urlParams.indexOf(typeof value === 'string' ? value : String(value)) !== -1 ? true : false
          });
          filter.options.sort((a, b) => {
             if (a.label < b.label) {
@@ -307,7 +303,7 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    hasSelectedFilters() {
-      for (let filter of this.filters) {
+      for (const filter of this.filters) {
          if (filter.options.filter(option => option.selected).length > 0) {
             return true;
          }
@@ -338,22 +334,22 @@ export class GeneComparisonToolComponent implements OnInit  {
    /* Sort
    /* ----------------------------------------------------------------------- */
 
-   sortGenes(genes) {
-      genes.sort((a, b) => {
+   sortCallback(event: any) {
+      event.data.sort((a, b) => {
          let result = null;
-         if ('hgnc_symbol' === this.sortField) {
+         if ('hgnc_symbol' === event.field) {
             const stringA = a.hgnc_symbol || a.ensembl_gene_id;
             const stringB = b.hgnc_symbol || b.ensembl_gene_id;
             result = stringA.localeCompare(stringB);
          } else {
-            const tissueA = a.tissues.find(tissue => tissue.name === this.sortField)
-            const tissueB = b.tissues.find(tissue => tissue.name === this.sortField)
+            const tissueA = a.tissues.find(tissue => tissue.name === event.field)
+            const tissueB = b.tissues.find(tissue => tissue.name === event.field)
 
             if (tissueA && tissueB) {
                if (tissueA.logfc == null && tissueB.logfc != null)
                   result = -1;
                else if (tissueA.logfc != null && tissueB.logfc == null)
-                  result = 1 === this.sortOrder ? -1 : 1;
+                  result = 1 === event.order ? -1 : 1;
                else if (tissueA.logfc == null && tissueB.logfc == null)
                   result = 0;
                else
@@ -362,19 +358,29 @@ export class GeneComparisonToolComponent implements OnInit  {
                if (!tissueA && tissueB)
                   result = -1;
                else if (tissueA && !tissueB)
-                  result = 1 === this.sortOrder ? -1 : 1;
+                  result = 1 === event.order ? -1 : 1;
                else
                   result = 0;
             }
          }
 
-         return (this.sortOrder * result);
+         return (event.order * result);
       });
    }
 
    sort() {
-      this.sortGenes(this.pinnedGenes);
-      this.sortGenes(this.availableGenes);
+      this.pinnedGeneTable.sort({
+         data: this.pinnedGenes,
+         field: this.sortField,
+         order: this.sortOrder,
+         mode: 'single'
+      });
+      this.availableGeneTable.sort({
+         data: this.availableGenes,
+         field: this.sortField,
+         order: this.sortOrder,
+         mode: 'single'
+      });
    }
 
    updateSortOptions(event) {
@@ -435,11 +441,11 @@ export class GeneComparisonToolComponent implements OnInit  {
    /*
    /* ----------------------------------------------------------------------- */
 
-   getUrlParam(name) {
+   getUrlParam(name, returnArray = false) {
       if (this.urlParams && this.urlParams.hasOwnProperty(name)) {
-         return typeof this.urlParams[name] === 'string' ? this.urlParams[name].split(',') : this.urlParams[name];
+         return returnArray && typeof this.urlParams[name] === 'string' ? this.urlParams[name].split(',') : this.urlParams[name];
       }
-      return [];
+      return returnArray ? [] : null;
    }
 
    updateUrl() {
@@ -457,22 +463,26 @@ export class GeneComparisonToolComponent implements OnInit  {
       );
 
       const pinned = this.pinnedGenes.map(gene => gene.ensembl_gene_id);
-      let params: any = this.getFilterValues();
+      const params: any = this.getFilterValues();
 
       if (pinned.length > 0) {
          params['pinned'] = pinned;
       }
 
       if (this.selectedCategory.name !== this.defaultCategory.name) {
-         params['category'] = this.selectedCategory.name
+         params['category'] = this.selectedCategory.name;
       }
 
       if (this.selectedModel.name !== this.defaultModel.name) {
-         params['model'] = this.selectedModel.name
+         params['model'] = this.selectedModel.name;
       }
 
       if (this.sortField && this.sortField !== 'hgnc_symbol') {
-         params['sort'] = [this.sortField, this.sortOrder]
+         params['sortField'] = this.sortField;
+      }
+
+      if (this.sortOrder && this.sortOrder !== 1) {
+         params['sortOrder'] = this.sortOrder;
       }
 
       if (Object.keys(params).length > 0) {
@@ -487,7 +497,7 @@ export class GeneComparisonToolComponent implements OnInit  {
    /* ----------------------------------------------------------------------- */
 
    getDetailsPanelData(tissueName, gene) {
-      const tissue = gene.tissues.find(tissue => tissue.name === tissueName);
+      const tissue = gene.tissues.find(t => t.name === tissueName);
       return {
          category: this.selectedCategory.name,
          model: this.selectedModel.name,
@@ -505,45 +515,54 @@ export class GeneComparisonToolComponent implements OnInit  {
    /*
    /* ----------------------------------------------------------------------- */
 
-   nthroot(x, n) {
+   nRoot(x, n) {
       try {
-        var negate = n % 2 == 1 && x < 0;
-        if(negate)
-          x = -x;
-        var possible = Math.pow(x, 1 / n);
-        n = Math.pow(possible, n);
-        if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
-          return negate ? -possible : possible;
-      } catch(e){}
-    }
+         const negate = n % 2 === 1 && x < 0;
+         if (negate)
+            x = -x;
+         const possible = Math.pow(x, 1 / n);
+         n = Math.pow(possible, n);
+         if (Math.abs(x - n) < 1 && (x > 0 === n > 0))
+            return negate ? -possible : possible;
+      } catch(e){
+         return;
+      }
+   }
 
    getCircleStyle(tissueName, gene) {
       let size = 0;
-      let opacity = 0;
-      let bgColor = 'rgba(139, 233, 210, 0.65)';
-      let borderColor = '#069C81';
+      let bgRGB = [236, 236, 236];
+      let bgAlpha = 0.4;
+      let borderColor = '#C2C2C2';
 
-      const tissue = gene.tissues.find(tissue => tissue.name === tissueName);
+      const tissue = gene.tissues.find(t => t.name === tissueName);
 
       if (tissue) {
-         size = (100 * (1 - this.nthroot(tissue.adj_p_val, 3))) * 0.44;
-         opacity = (((tissue.logfc - this.minLogfc) * 100) / (this.maxLogfc - tissue.logfc)) / 100;
 
-         if (tissue.logfc < 0) {
-            bgColor = 'rgba(201, 175, 255, 0.4)';
-            borderColor = '#A684EE';
+         if (tissue.adj_p_val) {
+            const pValue = 1 - this.nRoot(tissue.adj_p_val, 3);
+            size = Math.round((100 * pValue) * 0.44);
+            size = size < 6 ? 6 : size;
          }
 
-         opacity = opacity < 0.1 ? 0.1 : opacity;
-         size = size < 6 ? 6 : size;
+         if (tissue.logfc && this.maxLogfc) {
+            if (tissue.logfc >= 0) {
+               bgRGB = [139, 233, 210];
+               borderColor = '#069C81';
+               bgAlpha = 0.4 + (0.4 * (tissue.logfc / this.maxLogfc));
+            } else {
+               bgRGB = [201, 175, 255];
+               borderColor = '#A684EE';
+               bgAlpha = 0.4 + (0.4 * (Math.abs(tissue.logfc) / Math.abs(this.maxLogfc)));
+            }
+         }
       }
 
       return {
-         width: Math.round(size) + 'px',
-         height: Math.round(size) + 'px',
-         opacity: opacity,
-         backgroundColor: bgColor,
-         borderColor: borderColor
+         width: size + 'px',
+         height: size + 'px',
+         backgroundColor: 'rgba(' + bgRGB[0] + ',' + bgRGB[1] + ',' + bgRGB[2] + ',' + bgAlpha + ')',
+         borderColor: size ? borderColor : 'transparent'
       };
    }
 
@@ -570,7 +589,6 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    copyUrl() {
-      console.log('copyUrl', window.location.href);
       navigator.clipboard.writeText(window.location.href);
    }
 

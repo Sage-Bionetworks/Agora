@@ -12,10 +12,8 @@ export class GeneComparisonToolFilterListComponent {
    @Input() filters: GeneComparisonToolFilter[];
    @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 
-   constructor() { }
-
    hasSelectedFilters() {
-      for (let filter of this.filters) {
+      for (const filter of this.filters) {
          if (filter.options.filter(option => option.selected).length > 0) {
             return true;
          }
@@ -27,9 +25,9 @@ export class GeneComparisonToolFilterListComponent {
       if (option) {
          option.selected = false;
       } else {
-         for (let filter of this.filters) {
-            for (let option of filter.options) {
-               option.selected = false;
+         for (const filter of this.filters) {
+            for (const o of filter.options) {
+               o.selected = false;
             }
          }
       }

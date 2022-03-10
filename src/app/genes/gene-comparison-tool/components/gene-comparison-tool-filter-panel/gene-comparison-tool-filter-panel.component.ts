@@ -1,4 +1,4 @@
-import { Component, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
+import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
 
 import { GeneComparisonToolFilter } from '../..';
 
@@ -15,8 +15,6 @@ export class GeneComparisonToolFilterPanelComponent {
    activePane: number = -1;
 
    @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
-
-   constructor() { }
 
    toggleOption(option) {
       option.selected = option.selected ? false : true;
