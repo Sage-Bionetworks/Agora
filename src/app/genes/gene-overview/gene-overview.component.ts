@@ -301,7 +301,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         data.item = this.geneService.getEmptyGene(
                             data.info.ensembl_gene_id, data.info.hgnc_symbol
                         );
-
                         this.geneService.setInfoDataState(true);
                     }
                     // Remove hgnc_symbol if missing from info
