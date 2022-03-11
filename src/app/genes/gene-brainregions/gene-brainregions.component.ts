@@ -43,8 +43,7 @@ export class GeneBRComponent implements OnInit {
             this.dataLoaded = true;
         } else {
             this.gene = this.geneService.getCurrentGene();
-            this.selectedGeneData.links = this.forceService.getGeneClickedList().
-                links.slice().reverse();
+            this.selectedGeneData.links = this.forceService.getGeneClickedList().links.slice().reverse();
             this.dataLoaded = true;
         }
     }
