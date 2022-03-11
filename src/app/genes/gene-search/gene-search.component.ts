@@ -185,6 +185,12 @@ export class GeneSearchComponent implements OnInit {
                         data.info.ensembl_gene_id, data.info.hgnc_symbol
                     );
                 }
+
+                // Remove hgnc_symbol if missing from info
+                if (!data.info.hgnc_symbol) {
+                    data.item.hgnc_symbol = '';
+                }
+
                 const updatePromise = new Promise((resolve, reject) => {
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
