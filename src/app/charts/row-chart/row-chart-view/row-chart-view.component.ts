@@ -300,22 +300,18 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const squareSize = 18;
         const lineWidth = 60;
 
-        // Test if we should display the chart. Using this variable so we don't see
-        // the rows rectangles change into small squares abruptly
-        if (/*!self.display*/ 0 === 0) {
-            // Insert a line for each row of the chart
-            self.insertLinesInRows(chart);
+        // Insert a line for each row of the chart
+        self.insertLinesInRows(chart);
 
-            // Insert the texts for each row of the chart. At first we need to add
-            // empty texts so that the rowChart redraw does not move out confidence
-            // texts around
-            self.insertTextsInRows(chart);
-            self.insertTextsInRows(chart, 'confidence-text-left');
-            self.insertTextsInRows(chart, 'confidence-text-right');
+        // Insert the texts for each row of the chart. At first we need to add
+        // empty texts so that the rowChart redraw does not move out confidence
+        // texts around
+        self.insertTextsInRows(chart);
+        self.insertTextsInRows(chart, 'confidence-text-left');
+        self.insertTextsInRows(chart, 'confidence-text-right');
 
-            // Add a label to the x axis
-            self.addXLabel(this.chart, 'LOG 2 FOLD CHANGE', svg, width, height);
-        }
+        // Add a label to the x axis
+        self.addXLabel(this.chart, 'LOG 2 FOLD CHANGE', svg, width, height);
 
         // Finally redraw the lines in each row
         self.drawLines(chart, rectHeight / 2, lineWidth);
