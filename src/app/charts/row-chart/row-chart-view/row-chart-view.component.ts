@@ -235,12 +235,10 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     }
                 })
                 .on('renderlet', function(chart) {
-                    if (self.firstRender) {
-                        self.firstRender = false;
-                        // Copy all vertical texts to another div, so they don't get hidden by
-                        // the row chart svg after being translated
-                        self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
-                    }
+                    self.firstRender = false;
+                    // Copy all vertical texts to another div, so they don't get hidden by
+                    // the row chart svg after being translated
+                    self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
                     dc.events.trigger(function() {
                         const width = self.rowChart.nativeElement.offsetWidth || 450;
                         const height = self.rowChart.nativeElement.offsetHeight || 450;
@@ -304,7 +302,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
         // Test if we should display the chart. Using this variable so we don't see
         // the rows rectangles change into small squares abruptly
-        if (!self.display) {
+        if (/*!self.display*/ 0 === 0) {
             // Insert a line for each row of the chart
             self.insertLinesInRows(chart);
 
@@ -342,6 +340,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
+
         currentGenes.forEach((g) => {
             if (Math.abs(+g.ci_l) > this.max) {
                 this.max = Math.abs(+g.ci_l);
@@ -400,28 +399,29 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
         const self = this;
-        const newSvg = d3.select(el).append('svg');
-        const textGroup = newSvg.append('g').attr('class', 'textGroup');
+        const container = d3.select(el).html('');
+        const svg = container.append('svg');
+        const group = svg.append('g').attr('class', 'textGroup');
+        const texts: any = chart.selectAll('g.row > text');
 
-        // Remove the old texts and append to the new group
-        const allText = chart.selectAll('g.row text');
-        const removed = allText.remove();
-        removed['nodes']().forEach((n) => {
-            textGroup.append(function() {
-                return n;
-            });
+        texts.each(function() {
+            this.style.display = 'none';
+            group
+                .append('text')
+                .html(this.innerHTML)
+                .attr('x', this.getAttribute('x'))
+                .attr('y', this.getAttribute('y'))
+                .attr('dy', this.getAttribute('dy'));
         });
 
         // Move the text to the correct position in the new svg
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
         // Need this condition when reloading in Edge
         if (svgEl) {
-            const step = svgEl.getBBox().height /
-                ((removed['nodes']().length) ? (removed['nodes']().length) : 7);
-
-            d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+            const step = svgEl.getBBox().height / texts.nodes().length;
+            svg.selectAll('text').each(function(d, i) {
                 const currentStep = step * i;
-                const transfX = parseFloat(newSvg.style('width')) -
+                const transfX = parseFloat(svg.style('width')) -
                     parseFloat(d3.select(el).style('padding-right'));
                 const ftransfx = (isNaN(transfX)) ? 0 : transfX;
                 d3.select(this)
@@ -447,17 +447,25 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     insertLinesInRows(chart: dc.RowChart) {
-        chart.selectAll('g.row')
-            .insert('g')
-            .attr('class', 'hline')
-            .insert('line');
+        chart.selectAll('g.row').each(function() {
+            const row = d3.select(this);
+            row.select('.hline').remove();
+            row
+                .insert('g')
+                .attr('class', 'hline')
+                .insert('line');
+        });
     }
 
     insertTextsInRows(chart: dc.RowChart, textClass?: string) {
-        chart.selectAll('g.row')
-            .insert('g')
-            .attr('class', (textClass) ? textClass : 'confidence-text')
-            .insert('text');
+        chart.selectAll('g.row').each(function() {
+            const row = d3.select(this);
+            row.select('.' + textClass).remove();
+            row
+                .insert('g')
+                .attr('class', (textClass) ? textClass : 'confidence-text')
+                .insert('text');
+        });
     }
 
     // Draw the lines through the chart rows and a vertical line at
@@ -480,6 +488,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
+
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
@@ -528,17 +537,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
         const posQueryString = (isNeg) ? '-left' : '-right';
         const queryString = 'g.row g.confidence-text' + posQueryString + ' text';
-        chart.group({
-            all() {
-                return self.chartService.filteredData['fpGroup'].values;
-            },
-            order() {
-                //
-            },
-            top() {
-                //
-            }
-        });
+        chart.group(self.group);
         chart.selectAll(queryString)
             // ES6 method shorthand for object literals
             .attr('x', (d) => {
@@ -601,6 +600,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             .attr('transform', function(d) {
                 const val = (isNaN((chart.x()(+d.value.logfc) - (squareSize / 2)))) ?
                     0.0 : (chart.x()(+d.value.logfc) - (squareSize / 2));
+
                 return 'translate(' +
                     // X translate
                     val + ',' +
