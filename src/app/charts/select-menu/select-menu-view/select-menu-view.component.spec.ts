@@ -64,7 +64,7 @@ describe('Component: SelectMenuView', () => {
         geneService = fixture.debugElement.injector.get(GeneService);
         chartService = fixture.debugElement.injector.get(ChartService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+        activatedRoute.setParamMap({ id: mockInfo1.ensembl_gene_id });
         location = fixture.debugElement.injector.get(SpyLocation);
 
         component = fixture.componentInstance; // Component test instance
