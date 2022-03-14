@@ -86,8 +86,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             d.medianlogcpm
         );
 
-        console.log(this.tissuecoresGroup.all());
-
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
             if (state) {
                 this.initChart();
