@@ -32,14 +32,14 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    searchTerm: string = '';
 
-   categories: any[] = [
+   analyses: any[] = [
       {name: 'RNA - Differential Expression'},
-      {name: 'RNA - Overall Expression', disabled: true},
+      {name: 'RNA - Overall Expression'},
       {name: 'Proteomics', disabled: true},
       {name: 'Metabolomics', disabled: true}
    ];
-   defaultCategory: any = {name: 'RNA - Differential Expression'};
-   selectedCategory: any = {name: 'RNA - Differential Expression'};
+   defaultAnalysis: any = {name: 'RNA - Differential Expression'};
+   selectedAnalysis: any = {name: 'RNA - Differential Expression'};
 
    models: any[] = [
       {name: 'AD Diagnosis (males and females)'},
@@ -98,8 +98,11 @@ export class GeneComparisonToolComponent implements OnInit  {
       }
    ];
 
-   minLogfc: number = 0;
-   maxLogfc: number = 0;
+   minLogfc: number = null;
+   maxLogfc: number = null;
+
+   minMedianLogcpm: number = null;
+   maxMedianLogcpm: number = null;
 
    @ViewChild('tableHeader', { static: false }) tableHeader: Table;
    @ViewChild('pinnedGeneTable', { static: false }) pinnedGeneTable: Table;
@@ -121,8 +124,8 @@ export class GeneComparisonToolComponent implements OnInit  {
          this.loadGenes();
          this.loadGeneInfos();
 
-         if (this.urlParams.hasOwnProperty('category') && this.urlParams['category']) {
-            this.selectedCategory = { name: this.urlParams['category'] }
+         if (this.urlParams.hasOwnProperty('analysis') && this.urlParams['analysis']) {
+            this.selectedAnalysis = { name: this.urlParams['analysis'] }
          }
 
          if (this.urlParams.hasOwnProperty('model') && this.urlParams['model']) {
@@ -154,7 +157,7 @@ export class GeneComparisonToolComponent implements OnInit  {
    loadGenes() {
       this.loading = true;
       this.apiService.getComparisonData({
-         category: this.selectedCategory.name,
+         analysis: this.selectedAnalysis.name,
          model: this.selectedModel.name
       }).subscribe((data: GenesResponse) => {
          this.availableGenes = data.items;
@@ -178,10 +181,15 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    initGenes() {
+      this.minLogfc = null;
+      this.maxLogfc = null;
+      this.minMedianLogcpm = null;
+      this.maxMedianLogcpm = null;
+
       for (const gene of this.availableGenes) {
          const info: any = this.geneInfos.get(gene.ensembl_gene_id);
-         if (info) {
 
+         if (info) {
             if (info.hgnc_symbol) {
                gene.hgnc_symbol = info.hgnc_symbol;
             }
@@ -225,18 +233,26 @@ export class GeneComparisonToolComponent implements OnInit  {
                }
             }
 
-            gene.tissues.forEach(tissue => {
-               if (tissue.logfc < 0) {
-                  if (tissue.logfc < this.minLogfc) {
-                     this.minLogfc = tissue.logfc;
-                  }
-               } else {
-                  if (tissue.logfc > this.maxLogfc) {
-                     this.maxLogfc = tissue.logfc;
+            if (info.medianexpression) {
+               const medianLogcpms = info.medianexpression.map(exp => exp.medianlogcpm);
+               gene.minMedianLogcpm = Math.min.apply(Math, medianLogcpms);
+               gene.maxMedianLogcpm = Math.max.apply(Math, medianLogcpms);
+               this.minMedianLogcpm = (null === this.minMedianLogcpm || gene.minMedianLogcpm < this.minMedianLogcpm) ? gene.minMedianLogcpm : this.minMedianLogcpm;
+               this.maxMedianLogcpm = (null === this.maxMedianLogcpm || gene.minMedianLogcpm > this.maxMedianLogcpm) ? gene.minMedianLogcpm : this.maxMedianLogcpm;
+
+               for (const medianExpression of info.medianexpression) {
+                  const tissue = gene.tissues.find(t => t.name === medianExpression.tissue);
+                  if (tissue) {
+                     tissue.medianlogcpm = medianExpression.medianlogcpm;
                   }
                }
-            });
+            }
          }
+
+         gene.tissues.forEach(tissue => {
+            this.minLogfc = (null === this.minLogfc || tissue.logfc < this.minLogfc) ? tissue.logfc : this.minLogfc;
+            this.maxLogfc = (null === this.maxLogfc || tissue.logfc > this.maxLogfc) ? tissue.logfc : this.maxLogfc;
+         });
       }
 
       this.getUrlParam('pinned', true).forEach(pinned => {
@@ -244,10 +260,10 @@ export class GeneComparisonToolComponent implements OnInit  {
       });
 
       const sortField = this.getUrlParam('sortField');
-      const sortOrder = this.getUrlParam('sortOrder');
-      if (sortField || sortOrder) {
-         this.tableHeader.defaultSortOrder = parseInt(sortOrder || 1, 2);
-         this.tableHeader.sort({ field: sortField || 'hgnc_symbol' });
+      if (sortField) {
+         const sortOrder = this.getUrlParam('sortOrder');
+         this.tableHeader.defaultSortOrder = sortOrder ? parseInt(sortOrder) : ('hgnc_symbol' === sortField ? 1 : -1);
+         this.tableHeader.sort({ field: sortField });
       }
 
       this.filter();
@@ -322,6 +338,10 @@ export class GeneComparisonToolComponent implements OnInit  {
 
       this.availableGeneTable.filterGlobal(this.searchTerm, 'contains');
 
+      if ('RNA - Overall Expression' === this.selectedAnalysis.name) {
+         this.availableGeneTable.filter(null, 'minMedianLogcpm', 'notEquals');
+      }
+
       this.filters.forEach(filter => {
          const values = filter.options.filter(option => option.selected).map(selected => selected.value);
          this.availableGeneTable.filter(values, filter.name, filter.matchMode || 'equals');
@@ -369,17 +389,20 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    sort() {
+      this.pinnedGeneTable.sortField = null;
+      this.pinnedGeneTable.defaultSortOrder = this.sortOrder;
       this.pinnedGeneTable.sort({
          data: this.pinnedGenes,
          field: this.sortField,
-         order: this.sortOrder,
-         mode: 'single'
+         order: this.sortOrder
       });
+
+      this.availableGeneTable.sortField = null;
+      this.availableGeneTable.defaultSortOrder = this.sortOrder;
       this.availableGeneTable.sort({
          data: this.availableGenes,
          field: this.sortField,
-         order: this.sortOrder,
-         mode: 'single'
+         order: this.sortOrder
       });
    }
 
@@ -469,8 +492,8 @@ export class GeneComparisonToolComponent implements OnInit  {
          params['pinned'] = pinned;
       }
 
-      if (this.selectedCategory.name !== this.defaultCategory.name) {
-         params['category'] = this.selectedCategory.name;
+      if (this.selectedAnalysis.name !== this.defaultAnalysis.name) {
+         params['analysis'] = this.selectedAnalysis.name;
       }
 
       if (this.selectedModel.name !== this.defaultModel.name) {
@@ -479,9 +502,6 @@ export class GeneComparisonToolComponent implements OnInit  {
 
       if (this.sortField && this.sortField !== 'hgnc_symbol') {
          params['sortField'] = this.sortField;
-      }
-
-      if (this.sortOrder && this.sortOrder !== 1) {
          params['sortOrder'] = this.sortOrder;
       }
 
@@ -498,16 +518,30 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    getDetailsPanelData(tissueName, gene) {
       const tissue = gene.tissues.find(t => t.name === tissueName);
-      return {
-         category: this.selectedCategory.name,
-         model: this.selectedModel.name,
-         hgnc_symbol: gene.hgnc_symbol,
-         ensembl_gene_id: gene.ensembl_gene_id,
-         tissue: tissue.name,
-         logfc: tissue.logfc,
-         adj_p_val: tissue.adj_p_val,
-         ci_l: tissue.ci_l,
-         ci_r: tissue.ci_r
+      if (tissue) {
+         if ('RNA - Overall Expression' === this.selectedAnalysis.name) {
+            return {
+               label: (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id,
+               heading: 'Overall RNA Expression (' + tissue.name + ')',
+               valueLabel: 'Log CPM',
+               value: parseFloat(tissue.medianlogcpm?.toPrecision(3)),
+               min: parseFloat(gene.minMedianLogcpm?.toPrecision(3)),
+               max: parseFloat(gene.maxMedianLogcpm?.toPrecision(3)),
+               footer: 'Meaningful Expression is considered to be a Log CPM value > 0.7'
+            }
+         } else {
+            return {
+               label: (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id,
+               heading: 'Differential RNA Expression (' + tissue.name + ')',
+               subHeading: this.selectedModel.name,
+               valueLabel: 'Log 2 Fold Change',
+               value: tissue.logfc,
+               pValue: tissue.adj_p_val,
+               min: parseFloat(tissue.ci_l.toPrecision(2)),
+               max: parseFloat(tissue.ci_r.toPrecision(2)),
+               footer: 'Significance is considered to be an adjusted p-value < 0.05'
+            }
+         }
       }
    }
 
@@ -538,14 +572,13 @@ export class GeneComparisonToolComponent implements OnInit  {
       const tissue = gene.tissues.find(t => t.name === tissueName);
 
       if (tissue) {
-
          if (tissue.adj_p_val) {
             const pValue = 1 - this.nRoot(tissue.adj_p_val, 3);
             size = Math.round((100 * pValue) * 0.44);
             size = size < 6 ? 6 : size;
          }
 
-         if (tissue.logfc && this.maxLogfc) {
+         if (tissue.logfc) {
             if (tissue.logfc >= 0) {
                bgRGB = [139, 233, 210];
                borderColor = '#069C81';
@@ -559,10 +592,11 @@ export class GeneComparisonToolComponent implements OnInit  {
       }
 
       return {
+         display: size ? 'block' : 'none',
          width: size + 'px',
          height: size + 'px',
          backgroundColor: 'rgba(' + bgRGB[0] + ',' + bgRGB[1] + ',' + bgRGB[2] + ',' + bgAlpha + ')',
-         borderColor: size ? borderColor : 'transparent'
+         borderColor: borderColor
       };
    }
 

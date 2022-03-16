@@ -14,20 +14,20 @@
 
     }
 
-    .gct-details-panel-gene {
+    .gct-details-panel-label {
         font-size: 12px;
         color: #8E91A2;
         margin-bottom: 6px;
         font-weight: 900;
     }
 
-    .gct-details-panel-category {
+    .gct-details-panel-heading {
         font-size: 21px;
         color: $span-color;
         font-weight: 900;
     }
 
-    .gct-details-panel-model {
+    .gct-details-panel-sub-heading {
         font-size: 14px;
         color: $span-color;
         font-weight: 900;
@@ -46,7 +46,7 @@
                 > div {
                     flex-grow: 1;
 
-                    &:last-child {
+                    &:last-child:not(:first-child) {
                         text-align: right;
                     }
                 }
@@ -60,7 +60,7 @@
                 > div {
                     flex-grow: 1;
 
-                    &:last-child {
+                    &:last-child:not(:first-child) {
                         text-align: right;
                         color: #C4C4C4;
                     }
@@ -89,6 +89,7 @@
                         height: 20px;
                         background-color: #44B5A0;
                         border-radius: 50%;
+                        z-index: 100;
                     }
 
                     &:before,

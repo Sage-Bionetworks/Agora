@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 <div class="gct-controls-right">
-                    <div class="cat-filter-container">
-                        <p-dropdown class="cat-filter" [options]="categories" [(ngModel)]="selectedCategory" (onChange)="onQueryChange()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                    <div class="analysis-filter-container">
+                        <p-dropdown class="analysis-filter" [options]="analyses" [(ngModel)]="selectedAnalysis" (onChange)="filter();updateUrl();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                     <div>
                         <div class="gct-filter-label">Models</div>

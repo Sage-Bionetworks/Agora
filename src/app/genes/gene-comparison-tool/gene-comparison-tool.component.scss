@@ -247,7 +247,7 @@
             }
         }
     }
-    .cat-filter {
+    .analysis-filter {
 
         .p-dropdown-label {
             text-transform: uppercase;
@@ -269,7 +269,7 @@
         }
     }
 
-    .cat-filter-container {
+    .analysis-filter-container {
         border-bottom: 1px solid color(primary);
         margin-bottom: 8px;
     }
@@ -328,7 +328,7 @@
         td {
             position: relative;
             vertical-align: middle;
-            height: 44px;
+            height: 54px;
             padding-top: 4px !important;
             padding-bottom: 4px !important;
 

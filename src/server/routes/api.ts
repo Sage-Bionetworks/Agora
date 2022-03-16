@@ -536,7 +536,6 @@ connection.once('open', () => {
         const _genes = {};
 
         if (req.query.model) {
-            console.log('Model: ' + req.query.model);
             genes = genes.filter(gene => gene.model === req.query.model);
         }
 

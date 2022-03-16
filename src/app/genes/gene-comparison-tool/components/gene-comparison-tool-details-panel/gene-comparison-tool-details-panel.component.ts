@@ -1,11 +1,14 @@
-import { Component, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
 interface Data {
-   gene: object,
-   tissue: string,
-   category: string,
-   model: string
+   label?: string,
+   heading?: string,
+   subHeading?: string,
+   value?: number,
+   min?: number,
+   max?: number,
+   footer?: string
 }
 
 @Component({
@@ -16,22 +19,27 @@ interface Data {
 })
 export class GeneComparisonToolDetailsPanelComponent {
    event: Event = null;
-   data: Data[] = [];
    dataIndex: number = 1;
+   _data: Data[] = [];
+   get data() { return this._data[this.dataIndex] }
+   @Input() set data(data: Data) {
+      if (data && JSON.stringify(data) !== JSON.stringify(this._data[this.dataIndex])) {
+         this.dataIndex = 0 === this.dataIndex ? 1 : 0;
+         this._data[this.dataIndex] = data;
+      }
+   }
    isShown: boolean = false;
 
    @ViewChildren(OverlayPanel) panels!: OverlayPanel;
 
-   setData(data: Data) {
-      if (data && JSON.stringify(data) !== JSON.stringify(this.data[this.dataIndex])) {
-         this.dataIndex = 0 === this.dataIndex ? 1 : 0;
-         this.data[this.dataIndex] = data;
-      }
+   getMarkerStyle(data) {
+      const percentage = Math.round((data.value - data.min) / (data.max - data.min) * 100);
+      return { left: percentage + '%' }
    }
 
    show(event: Event, data?: Data) {
       this.event = event;
-      this.setData(data);
+      this.data = data;
       this.panels[0 === this.dataIndex ? 'last' : 'first'].hide();
       this.panels[0 === this.dataIndex ? 'first' : 'last'].show(event);
       this.isShown = true;
