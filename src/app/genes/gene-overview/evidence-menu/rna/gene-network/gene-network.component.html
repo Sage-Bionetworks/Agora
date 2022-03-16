@@ -38,26 +38,46 @@
                 <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
                     <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
                     <p class="cg-col-p">{{geneInfo.summary}}</p>
-                    <h4 class="cg-col-span">
-                        Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isIGAP)">{{getText(geneInfo.isIGAP)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Brain eQTL &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.haseqtl)">{{getText(geneInfo.haseqtl)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)">{{getText(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Protein Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)">{{getText(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Nominated target &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.nominations)">{{getNominationText(geneInfo.nominations)}}</span>
-                    </h4>
+                    <div class="gene-info-list-item">
+                        <div>
+                            <h4 class="gene-info-list-item-heading">Genetic Association with LOAD</h4>
+                        </div>
+                        <div [ngClass]="getTextColorClass(geneInfo.isIGAP)">
+                            {{getText(geneInfo.isIGAP)}}
+                        </div>
+                    </div>
+                    <div class="gene-info-list-item">
+                        <div>
+                            <h4 class="gene-info-list-item-heading">Brain eQTL</h4>
+                        </div>
+                        <div [ngClass]="getTextColorClass(geneInfo.haseqtl)">
+                            {{getText(geneInfo.haseqtl)}}
+                        </div>
+                    </div>
+                    <div class="gene-info-list-item">
+                        <div>
+                            <h4 class="gene-info-list-item-heading">RNA Expression Change in AD Brain</h4>
+                        </div>
+                        <div [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)">
+                            {{getText(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)}}
+                        </div>
+                    </div>
+                    <div class="gene-info-list-item">
+                        <div>
+                            <h4 class="gene-info-list-item-heading">Protein Expression Change in AD Brain</h4>
+                        </div>
+                        <div [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)">
+                            {{getText(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)}}
+                        </div>
+                    </div>
+                    <div class="gene-info-list-item">
+                        <div>
+                            <h4 class="gene-info-list-item-heading">Nominated target</h4>
+                        </div>
+                        <div [ngClass]="getTextColorClass(geneInfo.nominations)">
+                            {{getNominationText(geneInfo.nominations)}}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row cg-row">
