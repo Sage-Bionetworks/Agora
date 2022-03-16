@@ -87,7 +87,9 @@ export const mockInfo1: GeneInfo = {
   isIGAP: false,
   haseqtl: true,
   isAnyRNAChangedInADBrain: true,
+  rna_brain_change_studied: true,
   isAnyProteinChangedInADBrain: true,
+  protein_brain_change_studied: false,
   medianexpression: [
     {
       medianlogcpm: 7.7848,

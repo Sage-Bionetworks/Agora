@@ -250,7 +250,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             .selectAll('text')
             .data(this.networkData.nodes, (d) =>  d.id)
             .enter().append('text')
-            .text((node: any) => node.hgnc_symbol)
+            .text((node: any) => (node.hgnc_symbol || node.ensembl_gene_id))
             .attr('font-size', 12)
             .attr('dx', 13)
             .attr('dy', 4);
@@ -271,7 +271,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                     // A font size of 12 has 16 pixels per letter, so we pick
                     // half the word and make a negative dx. The anchor is in
                     // the middle so we half the result again
-                    return (((-node.hgnc_symbol.length * 16) / 2) / 2);
+                    return (((-(node.hgnc_symbol.length || node.ensembl_gene_id.length) * 16) / 2) / 2);
                 })
                 .attr('dy', (node: any) => {
                     return 35;
@@ -367,7 +367,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
             .data(this.networkData.nodes, (d) =>  d.id);
         this.textElements.exit().remove();
         this.textElements = this.textElements.enter().append('text')
-            .text((node: any) => node.hgnc_symbol)
+            .text((node: any) => (node.hgnc_symbol || node.ensembl_gene_id))
             .attr('font-size', 12)
             .attr('dx', 23)
             .attr('dy', 4)

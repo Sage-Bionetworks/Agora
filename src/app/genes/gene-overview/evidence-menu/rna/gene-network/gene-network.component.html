@@ -37,27 +37,27 @@
         <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData; else noDataSecImage">
             <div class="row cg-row">
                 <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
-                    <h3>{{geneInfo.hgnc_symbol}}</h3>
+                    <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
                     <p class="cg-col-p">{{geneInfo.summary}}</p>
                     <h4 class="cg-col-span">
                         Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isIGAP, true)">{{getText(geneInfo.isIGAP)}}</span>
+                        <span [ngClass]="getTextColorClass(geneInfo.isIGAP)">{{getText(geneInfo.isIGAP)}}</span>
                     </h4>
                     <h4 class="cg-col-span">
                         Brain eQTL &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.haseqtl, true)">{{getText(geneInfo.haseqtl)}}</span>
+                        <span [ngClass]="getTextColorClass(geneInfo.haseqtl)">{{getText(geneInfo.haseqtl)}}</span>
                     </h4>
                     <h4 class="cg-col-span">
                         RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, true)">{{getText(geneInfo.isAnyRNAChangedInADBrain)}}</span>
+                        <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)">{{getText(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)}}</span>
                     </h4>
                     <h4 class="cg-col-span">
                         Protein Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, true)">{{getText(geneInfo.isAnyProteinChangedInADBrain)}}</span>
+                        <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)">{{getText(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)}}</span>
                     </h4>
                     <h4 class="cg-col-span">
                         Nominated target &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.nominations, true)">{{getText((geneInfo.nominations === undefined) ? false : geneInfo.nominations > 0)}}</span>
+                        <span [ngClass]="getTextColorClass(geneInfo.nominations)">{{getNominationText(geneInfo.nominations)}}</span>
                     </h4>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                             <div class="row">
                                 <div class="col-md-7 col-sm-12 col-7">
                                     <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
-                                        <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol}}</div>
+                                        <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol || node.ensembl_gene_id}}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-sm-12 col-5">

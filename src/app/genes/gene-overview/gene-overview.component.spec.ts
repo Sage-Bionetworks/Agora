@@ -78,7 +78,7 @@ describe('Component: GeneOverview', () => {
         forceService = fixture.debugElement.injector.get(ForceService);
         navService = fixture.debugElement.injector.get(NavigationService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+        activatedRoute.setParamMap({ id: mockInfo1.ensembl_gene_id });
 
         component = fixture.componentInstance; // Component test instance
 

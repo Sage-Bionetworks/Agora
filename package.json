@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "2.2.0",
-  "data-file": "syn13363290",
-  "data-version": "34",
+  "version": "2.4.0",
+  "data-file": "syn18387112",
+  "data-version": "14",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -206,7 +206,7 @@
     "inline-manifest-webpack-plugin": "^4.0.2",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine-core": "^3.5.0",
-    "karma": "^6.3.2",
+    "karma": "^6.3.16",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
     "karma-coverage-istanbul-reporter": "^2.1.1",
@@ -269,8 +269,8 @@
     "url": "https://github.com/Sage-Bionetworks/Agora/issues"
   },
   "engines": {
-    "node": ">= 10.13.0",
-    "npm": ">= 5"
+    "node": "12.22.3",
+    "npm": "6.14.13"
   },
   "browserslist": [
     "iOS >= 7",

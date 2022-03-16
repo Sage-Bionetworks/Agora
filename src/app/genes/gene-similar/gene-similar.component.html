@@ -2,7 +2,7 @@
     <div class="section top-section section-hero">
         <h1>Similar Genes</h1>
         <p *ngIf="gene">
-            Genes that are similar to {{gene.hgnc_symbol}} based on network coexpression.
+            Genes that are similar to <span class="link" (click)="navigateBackToGene()">{{gene.hgnc_symbol || gene.ensembl_gene_id}}</span> based on network coexpression.
         </p>
         <p *ngIf="!gene">
             Genes that are similar based on network coexpression.
