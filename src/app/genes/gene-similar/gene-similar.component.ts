@@ -241,6 +241,11 @@ export class GeneSimilarComponent implements OnInit {
     }
 
     reorderValues(event) {
+        const defaultCol = this.selectedColumns.find(d => d.field === 'hgnc_symbol');
+        if (!defaultCol) {
+            this.selectedColumns.unshift(this.cols[0]);
+        }
+
         this.selectedColumns.sort((a: any, b: any) => {
             return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0);
         });
@@ -371,8 +376,16 @@ export class GeneSimilarComponent implements OnInit {
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
             let result = null;
-            const value1 = data1[event.field];
-            const value2 = data2[event.field];
+            let value1 = null;
+            let value2 = null;
+
+            if ('hgnc_symbol' === event.field) {
+                value1 = data1.hgnc_symbol || data1.ensembl_gene_id;
+                value2 = data2.hgnc_symbol || data2.ensembl_gene_id;
+            } else {
+                value1 = data1[event.field];
+                value2 = data2[event.field];
+            }
 
             if (value1 == null && value2 != null) {
                 result = -1;

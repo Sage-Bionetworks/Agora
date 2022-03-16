@@ -26,6 +26,7 @@
         (onRowSelect)="onRowSelect($event)"
         (onRowUnselect)="onRowUnselect($event)"
         [customSort]="true"
+        sortField="hgnc_symbol"
         [ngClass]="getFullscreenClass()">
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
