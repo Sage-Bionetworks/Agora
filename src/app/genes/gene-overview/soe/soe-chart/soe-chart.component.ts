@@ -150,7 +150,7 @@ export class SOEChartComponent implements OnInit {
               ),
             ],
           },
-          annotations: annotations,
+          annotations,
         } as Plotly.Layout,
         config: this.commonBarSettings.config,
         ownerId: this.distributionData.syn_id,
