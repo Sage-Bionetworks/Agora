@@ -1,99 +1,94 @@
 <div *ngIf="dataLoaded" class="network-content">
-        <div class="col-md-8 col-sm-8 col-12 network-container" *ngIf="!noData; else noDataImage">
-            <div class="row filter" *ngIf="filterlvl">
-                <div class="col-md-7 col-sm-12 col-12">
-                    <span class="filter-title">Filter by Number of Edges</span>
-                </div>
-                <div class="col-md-5 col-sm-12 col-12">
-                    <ul class="steps">
-                        <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
-                            <a (click)="filterNodes(i)" class="steps-marker"></a>
-                            <span class="tooltip">&gt;{{i}}</span>
-                        </li>
-                    </ul>
-                    <div class="filter-reference">
-                        <span class="left">&gt;0</span>
-                        <span class="right">&gt;{{filterlvl-1}}</span>
-                    </div>
-                </div>
+    <div class="col-md-8 col-sm-8 col-12 network-container" *ngIf="!noData; else noDataImage">
+        <div class="row filter" *ngIf="filterlvl">
+            <div class="col-md-7 col-sm-12 col-12">
+                <span class="filter-title">Filter by Number of Edges</span>
             </div>
-            <div class="row force-chart-container">
-                <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
-            </div>
-            <div class="row network-legend">
-                <div class="hexagon current"></div><div class="legend-text">Current gene</div>
-                <div class="dot selected"></div><div class="legend-text">Selected gene</div>
-                <div class="dot first"></div><div class="legend-text">2-3 Edges</div>
-                <div class="dot second"></div><div class="legend-text">4-5 Edges</div>
-                <div class="dot third"></div><div class="legend-text">6-7 Edges</div>
+            <div class="col-md-5 col-sm-12 col-12">
+                <ul class="steps">
+                    <li *ngFor="let item of filterLevel(filterlvl); let i = index" class="steps-segment" [ngClass]="{'is-active': filterlvlN === i}">
+                        <a (click)="filterNodes(i)" class="steps-marker"></a>
+                        <span class="tooltip">&gt;{{i}}</span>
+                    </li>
+                </ul>
+                <div class="filter-reference">
+                    <span class="left">&gt;0</span>
+                    <span class="right">&gt;{{filterlvl-1}}</span>
+                </div>
             </div>
         </div>
-        <ng-template #noDataImage>
-            <div class="col-md-8 col-sm-8 col-12 network-container no-data-vertical">
-                <h2 class="placeholder-text">No expression data is currently available.</h2>
+        <div class="row force-chart-container">
+            <force-chart (updategene)="updategene($event)" [networkData]="networkData"></force-chart>
+        </div>
+        <div class="row network-legend">
+            <div class="hexagon current"></div><div class="legend-text">Current gene</div>
+            <div class="dot selected"></div><div class="legend-text">Selected gene</div>
+            <div class="dot first"></div><div class="legend-text">2-3 Edges</div>
+            <div class="dot second"></div><div class="legend-text">4-5 Edges</div>
+            <div class="dot third"></div><div class="legend-text">6-7 Edges</div>
+        </div>
+    </div>
+    <ng-template #noDataImage>
+        <div class="col-12 network-container no-data-vertical">
+            <h2 class="placeholder-text">No expression data is currently available.</h2>
+        </div>
+    </ng-template>
+    <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData">
+        <div class="row cg-row">
+            <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
+                <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
+                <p class="cg-col-p">{{geneInfo.summary}}</p>
+                <h4 class="cg-col-span">
+                    Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.isIGAP)">{{getText(geneInfo.isIGAP)}}</span>
+                </h4>
+                <h4 class="cg-col-span">
+                    Brain eQTL &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.haseqtl)">{{getText(geneInfo.haseqtl)}}</span>
+                </h4>
+                <h4 class="cg-col-span">
+                    RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)">{{getText(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)}}</span>
+                </h4>
+                <h4 class="cg-col-span">
+                    Protein Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)">{{getText(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)}}</span>
+                </h4>
+                <h4 class="cg-col-span">
+                    Nominated target &nbsp;&nbsp;&nbsp;
+                    <span [ngClass]="getTextColorClass(geneInfo.nominations)">{{getNominationText(geneInfo.nominations)}}</span>
+                </h4>
             </div>
-        </ng-template>
-        <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData; else noDataSecImage">
-            <div class="row cg-row">
-                <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
-                    <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
-                    <p class="cg-col-p">{{geneInfo.summary}}</p>
-                    <h4 class="cg-col-span">
-                        Genetic Association with LOAD &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isIGAP)">{{getText(geneInfo.isIGAP)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Brain eQTL &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.haseqtl)">{{getText(geneInfo.haseqtl)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        RNA Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)">{{getText(geneInfo.isAnyRNAChangedInADBrain, geneInfo.rna_brain_change_studied)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Protein Expression Change in AD Brain &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)">{{getText(geneInfo.isAnyProteinChangedInADBrain, geneInfo.protein_brain_change_studied)}}</span>
-                    </h4>
-                    <h4 class="cg-col-span">
-                        Nominated target &nbsp;&nbsp;&nbsp;
-                        <span [ngClass]="getTextColorClass(geneInfo.nominations)">{{getNominationText(geneInfo.nominations)}}</span>
-                    </h4>
-                </div>
-            </div>
-            <div class="row cg-row">
-                <div class="col-md-12 col-sm-12 col-12 cg-col bottom-cg-col">
-                    <!--<h3 class="smaller-h3">
-                        Similar Genes
-                        <more-info [name]="'sgn'">
-                            <sgn-dialog [name]="'sgn'"></sgn-dialog>
-                        </more-info>
-                    </h3>-->
-                    <div class="row pathboxes-row">
-                        <div class="col-md-11 col-sm-11 col-11 nopadding-left">
-                            <div class="row">
-                                <div class="col-md-7 col-sm-12 col-7">
-                                    <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
-                                        <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol || node.ensembl_gene_id}}</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-sm-12 col-5">
-                                    View all genes that show similar expression to the selected gene, and learn how these  genes are associated with AD.
+        </div>
+        <div class="row cg-row">
+            <div class="col-md-12 col-sm-12 col-12 cg-col bottom-cg-col">
+                <!--<h3 class="smaller-h3">
+                    Similar Genes
+                    <more-info [name]="'sgn'">
+                        <sgn-dialog [name]="'sgn'"></sgn-dialog>
+                    </more-info>
+                </h3>-->
+                <div class="row pathboxes-row">
+                    <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+                        <div class="row">
+                            <div class="col-md-7 col-sm-12 col-7">
+                                <div *ngFor="let node of selectedGeneData.nodes | slice:0:6 | agrSort: 'brainregions' : true;" class="pathbox">
+                                    <div (click)="onNavigate('genes/(genes-router:gene-details/'+node.id+')')" class="genelink">{{node.hgnc_symbol || node.ensembl_gene_id}}</div>
                                 </div>
                             </div>
+                            <div class="col-md-5 col-sm-12 col-5">
+                                View all genes that show similar expression to the selected gene, and learn how these  genes are associated with AD.
+                            </div>
                         </div>
-                        <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
-                            <span class="btn brainregion-button"
-                                (click)="navService.goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', geneService.getCurrentGene().ensembl_gene_id ], 'gene-overview': null, 'evidence-menu': null} })">
-                                <i class="fa fa-angle-right fa-lg"></i>
-                            </span>
-                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+                        <span class="btn brainregion-button"
+                            (click)="navService.goToRoute('/genes', { outlets: {'genes-router': [ 'gene-similar', geneService.getCurrentGene().ensembl_gene_id ], 'gene-overview': null, 'evidence-menu': null} })">
+                            <i class="fa fa-angle-right fa-lg"></i>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-        <ng-template #noDataSecImage>
-            <div class="col-md-4 col-sm-4 col-12 currentGene">
-                <h2 class="placeholder-text">No expression data is currently available.</h2>
-            </div>
-        </ng-template>
+    </div>
 </div>
