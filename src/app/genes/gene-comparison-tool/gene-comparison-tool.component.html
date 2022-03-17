@@ -26,8 +26,16 @@
                 <div class="gct-controls-left">
                     <div class="gene-label">DISPLAYED GENES</div>
                     <div *ngIf="availableGeneTable">{{ (availableGeneTable._totalRecords || 0) + pinnedGenes.length }}</div>
-                    <div>
-                        <input type="text" pInputText (input)="setSearchTerm($event.target.value)" placeholder="Search">
+                    <div class="gct-search">
+                        <svg class="gct-search-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.29102 8.1761H8.70383L8.49571 7.97541C9.22413 7.12807 9.66266 6.02802 9.66266 4.83133C9.66266 2.16295 7.49971 0 4.83133 0C2.16295 0 0 2.16295 0 4.83133C0 7.49971 2.16295 9.66266 4.83133 9.66266C6.02802 9.66266 7.12807 9.22413 7.97541 8.49571L8.1761 8.70383V9.29102L11.8925 13L13 11.8925L9.29102 8.1761ZM4.83133 8.1761C2.98056 8.1761 1.48656 6.6821 1.48656 4.83133C1.48656 2.98056 2.98056 1.48656 4.83133 1.48656C6.6821 1.48656 8.1761 2.98056 8.1761 4.83133C8.1761 6.6821 6.6821 8.1761 4.83133 8.1761Z" fill="#C4C4C4"/>
+                        </svg>
+                        <input type="text" pInputText (input)="setSearchTerm($event.target.value)" [value]="searchTerm" placeholder="Search">
+                        <button *ngIf="searchTerm" (click)="clearSearch()">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 9L9 1M1 1L9 9" stroke="#EEEEEE" stroke-width="2"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div class="gct-controls-right">
@@ -126,7 +134,6 @@
                     responsiveLayout="scroll"
                     (sortFunction)="sortCallback($event)"
                     [customSort]="true"
-                    [globalFilterFields]="['hgnc_symbol']"
                 >
 
                     <ng-template pTemplate="emptymessage" let-gene>

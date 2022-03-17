@@ -280,12 +280,50 @@
         margin-bottom: 5px;
     }
 
-    input {
-        border: 1px solid color(border);
-        padding: 8px;
+    .gct-search {
+        position: relative;
         margin-top: 42px;
-        width: 100%;
+
+        .gct-search-icon {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            margin-top: -6px;
+        }
+
+        input {
+            border: 1px solid color(border);
+            padding: 12px 40px 12px 34px;
+            width: 100%;
+            transition: .3s;
+
+            &:focus {
+                border-color: color(primary);
+            }
+        }
+
+        button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 100%;
+            cursor: pointer;
+
+            svg path {
+                transition: .3s;
+            }
+
+            &:hover {
+
+                svg path {
+                    stroke: color(primary);
+                }
+            }
+        }
     }
+
+
 }
 
 

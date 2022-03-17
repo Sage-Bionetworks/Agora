@@ -27,16 +27,14 @@ export class GeneComparisonToolComponent implements OnInit  {
    loading: boolean = true;
    urlParams: any = null;
 
-   sortOrder: number = 1;
-   sortField: string = 'hgnc_symbol';
+   sortOrder: number = -1;
+   sortField: string = 'CBE';
 
    searchTerm: string = '';
 
    analyses: any[] = [
       {name: 'RNA - Differential Expression'},
-      {name: 'RNA - Overall Expression'},
-      {name: 'Proteomics', disabled: true},
-      {name: 'Metabolomics', disabled: true}
+      {name: 'RNA - Overall Expression'}
    ];
    defaultAnalysis: any = {name: 'RNA - Differential Expression'};
    selectedAnalysis: any = {name: 'RNA - Differential Expression'};
@@ -194,6 +192,8 @@ export class GeneComparisonToolComponent implements OnInit  {
                gene.hgnc_symbol = info.hgnc_symbol;
             }
 
+            gene.search_string = gene.hgnc_symbol + ' ' + gene.ensembl_gene_id;
+
             gene.nominations = info.nominations || 0;
             this.setFilterOption('nominations', gene.nominations);
 
@@ -237,6 +237,7 @@ export class GeneComparisonToolComponent implements OnInit  {
                const medianLogcpms = info.medianexpression.map(exp => exp.medianlogcpm);
                gene.minMedianLogcpm = Math.min.apply(Math, medianLogcpms);
                gene.maxMedianLogcpm = Math.max.apply(Math, medianLogcpms);
+               gene.hasMedianLogcpm = true;
                this.minMedianLogcpm = (null === this.minMedianLogcpm || gene.minMedianLogcpm < this.minMedianLogcpm) ? gene.minMedianLogcpm : this.minMedianLogcpm;
                this.maxMedianLogcpm = (null === this.maxMedianLogcpm || gene.minMedianLogcpm > this.maxMedianLogcpm) ? gene.minMedianLogcpm : this.maxMedianLogcpm;
 
@@ -259,12 +260,9 @@ export class GeneComparisonToolComponent implements OnInit  {
          this.pinGene(this.availableGenes.find(gene => gene.ensembl_gene_id === pinned), false);
       });
 
-      const sortField = this.getUrlParam('sortField');
-      if (sortField) {
-         const sortOrder = this.getUrlParam('sortOrder');
-         this.tableHeader.defaultSortOrder = sortOrder ? parseInt(sortOrder) : ('hgnc_symbol' === sortField ? 1 : -1);
-         this.tableHeader.sort({ field: sortField });
-      }
+      this.sortField = this.getUrlParam('sortField') || 'CBE';
+      this.sortOrder = this.getUrlParam('sortOrder') ? parseInt(this.getUrlParam('sortOrder')) : -1;
+      this.sortTable(this.tableHeader);
 
       this.filter();
    }
@@ -332,14 +330,19 @@ export class GeneComparisonToolComponent implements OnInit  {
       this.filter();
    }
 
+   clearSearch() {
+      this.searchTerm = '';
+      this.filter();
+   }
+
    filter() {
       const delay = this.availableGeneTable.filterDelay;
       this.availableGeneTable.filterDelay = 0;
 
-      this.availableGeneTable.filterGlobal(this.searchTerm, 'contains');
+      this.availableGeneTable.filter(this.searchTerm, 'search_string', 'contains');
 
       if ('RNA - Overall Expression' === this.selectedAnalysis.name) {
-         this.availableGeneTable.filter(null, 'minMedianLogcpm', 'notEquals');
+         this.availableGeneTable.filter(true, 'hasMedianLogcpm', 'equals');
       }
 
       this.filters.forEach(filter => {
@@ -388,22 +391,31 @@ export class GeneComparisonToolComponent implements OnInit  {
       });
    }
 
-   sort() {
-      this.pinnedGeneTable.sortField = null;
-      this.pinnedGeneTable.defaultSortOrder = this.sortOrder;
-      this.pinnedGeneTable.sort({
-         data: this.pinnedGenes,
-         field: this.sortField,
-         order: this.sortOrder
-      });
+   sortTable(table) {
+      table.sortField = null;
+      table.defaultSortOrder = this.sortOrder;
+      table.sort({ field: this.sortField });
+   }
 
-      this.availableGeneTable.sortField = null;
-      this.availableGeneTable.defaultSortOrder = this.sortOrder;
-      this.availableGeneTable.sort({
-         data: this.availableGenes,
-         field: this.sortField,
-         order: this.sortOrder
-      });
+   sort() {
+      this.sortTable(this.pinnedGeneTable);
+      this.sortTable(this.availableGeneTable);
+
+      // this.pinnedGeneTable.sortField = null;
+      // this.pinnedGeneTable.defaultSortOrder = this.sortOrder;
+      // this.pinnedGeneTable.sort({
+      //    data: this.pinnedGenes,
+      //    field: this.sortField,
+      //    order: this.sortOrder
+      // });
+
+      // this.availableGeneTable.sortField = null;
+      // this.availableGeneTable.defaultSortOrder = this.sortOrder;
+      // this.availableGeneTable.sort({
+      //    data: this.availableGenes,
+      //    field: this.sortField,
+      //    order: this.sortOrder
+      // });
    }
 
    updateSortOptions(event) {
