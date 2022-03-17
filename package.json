@@ -52,6 +52,7 @@
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
     "github-deploy": "npm run github-deploy:dev",
     "lint": "npm run tslint -f \"src/**/*.ts\"",
+    "pre-commit-lint": "npm run tslint \"src/**/*.ts\"",
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",
@@ -102,6 +103,10 @@
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
   },
+  "pre-commit": [
+    "pre-commit-lint",
+    "test"
+  ],
   "dependencies": {
     "@angular/animations": "^9.1.13",
     "@angular/common": "^9.1.13",
@@ -137,6 +142,7 @@
     "ngx-popperjs": "^12.2.1",
     "npm": "^6.14.4",
     "opencollective": "^1.0.3",
+    "pre-commit": "^1.2.2",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0",
     "protractor": "^5.4.3",
