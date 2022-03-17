@@ -156,30 +156,28 @@ export class GeneNetworkComponent implements OnInit {
 
     updategene(event: Gene) {
         const self = this;
-        if (event.ensembl_gene_id !== this.geneService.getCurrentGene().ensembl_gene_id) {
-            this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
-                const lsnPromise = new Promise((resolve, reject) => {
-                    this.forceService.processSelectedNode(linksList, event);
-                    resolve(true);
-                });
-                lsnPromise.then(() => {
-                    const dataNetwork = self.forceService.getGeneClickedList();
-                    self.selectedGeneData.links = dataNetwork.links;
-                    self.selectedGeneData.nodes = dataNetwork.nodes;
-                    self.selectedGeneData.origin = dataNetwork.origin;
-                    self.apiService.getGene(event.ensembl_gene_id).subscribe((data: GeneResponse) => {
-                        if (data.info) {
-                            self.geneInfo = data.info;
-                        } else {
-                            self.geneInfo = {
-                                ensembl_gene_id: self.selectedGeneData.origin.ensembl_gene_id,
-                                hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
-                            };
-                        }
-                    });
+        this.apiService.getLinksList(event).subscribe((linksList: LinksListResponse) => {
+            const lsnPromise = new Promise((resolve, reject) => {
+                this.forceService.processSelectedNode(linksList, event);
+                resolve(true);
+            });
+            lsnPromise.then(() => {
+                const dataNetwork = self.forceService.getGeneClickedList();
+                self.selectedGeneData.links = dataNetwork.links;
+                self.selectedGeneData.nodes = dataNetwork.nodes;
+                self.selectedGeneData.origin = dataNetwork.origin;
+                self.apiService.getGene(event.ensembl_gene_id).subscribe((data: GeneResponse) => {
+                    if (data.info) {
+                        self.geneInfo = data.info;
+                    } else {
+                        self.geneInfo = {
+                            ensembl_gene_id: self.selectedGeneData.origin.ensembl_gene_id,
+                            hgnc_symbol: self.selectedGeneData.origin.hgnc_symbol
+                        };
+                    }
                 });
             });
-        }
+        });
     }
 
     filterNodes(lvl: number) {
