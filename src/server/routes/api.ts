@@ -529,7 +529,7 @@ connection.once('open', () => {
         });
     });
 
-    // Get the cached list of all genes
+    // Get the cached list of genes for comparison tool
     router.get('/genes/comparison', async (req, res, next) => {
 
         let genes = allGenes.slice();

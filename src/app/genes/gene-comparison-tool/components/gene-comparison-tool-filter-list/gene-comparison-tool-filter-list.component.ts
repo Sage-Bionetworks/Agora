@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 
-import { GeneComparisonToolFilter, GeneComparisonToolFilterOption } from '../..';
+import { GCTFilter, GCTFilterOption } from '../..';
 
 @Component({
    selector: 'gene-comparison-tool-filter-list',
@@ -9,7 +9,7 @@ import { GeneComparisonToolFilter, GeneComparisonToolFilterOption } from '../..'
    encapsulation: ViewEncapsulation.None
 })
 export class GeneComparisonToolFilterListComponent {
-   @Input() filters: GeneComparisonToolFilter[];
+   @Input() filters: GCTFilter[];
    @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 
    hasSelectedFilters() {
@@ -21,7 +21,7 @@ export class GeneComparisonToolFilterListComponent {
       return false;
    }
 
-   clear(option?: GeneComparisonToolFilterOption) {
+   clear(option?: GCTFilterOption) {
       if (option) {
          option.selected = false;
       } else {

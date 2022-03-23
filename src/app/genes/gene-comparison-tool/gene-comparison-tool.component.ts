@@ -1,13 +1,14 @@
-import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { Table } from 'primeng/table';
-import { FilterService } from 'primeng/api';
+import { SortEvent, FilterService } from 'primeng/api';
 
 import { ApiService } from '../../core/services';
-import { GeneInfosResponse, GenesResponse } from '../../models';
+import { Gene, GeneInfosResponse, GenesResponse } from '../../models';
 
-import { GeneComparisonToolFilter } from '.';
+import { GCTSelectOption, GCTFilter, GCTGene } from '.';
 
 import {
    GeneComparisonToolFilterPanelComponent,
@@ -20,10 +21,16 @@ import {
    styleUrls: [ './gene-comparison-tool.component.scss' ],
    encapsulation: ViewEncapsulation.None
 })
-export class GeneComparisonToolComponent implements OnInit  {
+export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    pinnedGenes: any[] = [];
    availableGenes: any[] = [];
    geneInfos: Map<string, object> = null;
+
+   minLogfc: number = null;
+   maxLogfc: number = null;
+   minMedianLogcpm: number = null;
+   maxMedianLogcpm: number = null;
+
    loading: boolean = true;
    urlParams: any = null;
 
@@ -32,23 +39,21 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    searchTerm: string = '';
 
-   analyses: any[] = [
+   analyses: GCTSelectOption[] = [
       {name: 'RNA - Differential Expression'},
       {name: 'RNA - Overall Expression'}
    ];
-   defaultAnalysis: any = {name: 'RNA - Differential Expression'};
-   selectedAnalysis: any = {name: 'RNA - Differential Expression'};
+   selectedAnalysis = {name: 'RNA - Differential Expression'};
 
-   models: any[] = [
+   models: GCTSelectOption[] = [
       {name: 'AD Diagnosis (males and females)'},
       {name: 'AD Diagnosis x AOD (males and females)'},
       {name: 'AD Diagnosis x Sex (females only)'},
       {name: 'AD Diagnosis x Sex (males only)'}
    ];
-   defaultModel: any = {name: 'AD Diagnosis (males and females)'};
-   selectedModel: any = {name: 'AD Diagnosis (males and females)'};
+   selectedModel = {name: 'AD Diagnosis (males and females)'};
 
-   tissues: any[] = [
+   tissues: GCTSelectOption[] = [
       {name: 'CBE'},
       {name: 'DLPFC'},
       {name: 'FP'},
@@ -58,7 +63,7 @@ export class GeneComparisonToolComponent implements OnInit  {
       {name: 'TCX'}
    ];
 
-   filters: GeneComparisonToolFilter[] = [
+   filters: GCTFilter[] = [
       {
          name: 'nominations',
          label: 'Number of Nominations',
@@ -70,7 +75,7 @@ export class GeneComparisonToolComponent implements OnInit  {
          name: 'teams',
          label: 'Nominating Teams',
          short: 'Team',
-         matchMode: 'customIn',
+         matchMode: 'intersect',
          options: [],
       },
       {
@@ -84,23 +89,19 @@ export class GeneComparisonToolComponent implements OnInit  {
          name: 'studies',
          label: 'Cohort Study',
          short: 'Study',
-         matchMode: 'customIn',
+         matchMode: 'intersect',
          options: [],
       },
       {
          name: 'input_datas',
          label: 'Input Data',
          short: 'Data',
-         matchMode: 'customIn',
+         matchMode: 'intersect',
          options: [],
       }
    ];
 
-   minLogfc: number = null;
-   maxLogfc: number = null;
-
-   minMedianLogcpm: number = null;
-   maxMedianLogcpm: number = null;
+   urlParamsSubscription: Subscription;
 
    @ViewChild('tableHeader', { static: false }) tableHeader: Table;
    @ViewChild('pinnedGeneTable', { static: false }) pinnedGeneTable: Table;
@@ -116,36 +117,41 @@ export class GeneComparisonToolComponent implements OnInit  {
       private filterService: FilterService
    ) { }
 
-   ngOnInit() {
-      this.route.queryParams.subscribe(params => {
+   ngAfterViewInit() {
+      this.urlParamsSubscription = this.route.queryParams.subscribe(params => {
          this.urlParams = params;
-         this.loadGenes();
-         this.loadGeneInfos();
 
          if (this.urlParams.hasOwnProperty('analysis') && this.urlParams['analysis']) {
-            this.selectedAnalysis = { name: this.urlParams['analysis'] }
+            this.selectedAnalysis = this.analyses.find(analysis => analysis.name === this.urlParams['analysis'])
          }
 
          if (this.urlParams.hasOwnProperty('model') && this.urlParams['model']) {
-            this.selectedModel = { name: this.urlParams['model'] }
+            this.selectedModel = this.models.find(model => model.name === this.urlParams['model'])
          }
+
+         this.loadGenes();
+         this.loadGeneInfos();
       });
 
-      this.filterService.register('customIn', (value, filter): boolean => {
-            if (filter === undefined || filter === null || filter.length < 1) {
-                return true;
-            } else if (value === undefined || value === null || filter.length < 1) {;
-                return false;
-            };
+      this.filterService.register('intersect', (value, filters): boolean => {
+         if (filters === undefined || filters === null || filters.length < 1) {
+               return true;
+         } else if (value === undefined || value === null || filters.length < 1) {;
+               return false;
+         };
 
-            for (const _filter of filter) {
-               if (value.indexOf(_filter) !== -1) {
-                  return true;
-               }
+         for (const filter of filters) {
+            if (value.indexOf(filter) !== -1) {
+               return true;
             }
+         }
 
-            return false;
+         return false;
       });
+   }
+
+   ngOnDestroy() {
+      this.urlParamsSubscription?.unsubscribe();
    }
 
    /* ----------------------------------------------------------------------- */
@@ -154,16 +160,14 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    loadGenes() {
       this.loading = true;
-      this.apiService.getComparisonData({
-         analysis: this.selectedAnalysis.name,
-         model: this.selectedModel.name
-      }).subscribe((data: GenesResponse) => {
-         this.availableGenes = data.items;
-         if (this.geneInfos) {
-            this.initGenes();
-            this.loading = false;
-         }
-      });
+      this.availableGenes = [];
+      this.apiService.getComparisonData({model: this.selectedModel?.name})
+         .subscribe((data: GenesResponse) => {
+            this.availableGenes = data.items;
+            if (this.geneInfos) {
+               this.initGenes();
+            }
+         });
    }
 
    loadGeneInfos() {
@@ -173,7 +177,6 @@ export class GeneComparisonToolComponent implements OnInit  {
          this.geneInfos = new Map(data.items.map(info => [info.ensembl_gene_id, info]));
          if (this.availableGenes.length > 0) {
             this.initGenes();
-            this.loading = false;
          }
       });
    }
@@ -227,8 +230,8 @@ export class GeneComparisonToolComponent implements OnInit  {
                   if (nominated.initial_nomination) {
                      if (!gene.year_first_nominated || nominated.initial_nomination < gene.year_first_nominated) {
                         gene.year_first_nominated = nominated.initial_nomination;
+                        this.setFilterOption('year_first_nominated', gene.year_first_nominated);
                      }
-                     this.setFilterOption('year_first_nominated', gene.year_first_nominated);
                   }
                }
             }
@@ -250,10 +253,12 @@ export class GeneComparisonToolComponent implements OnInit  {
             }
          }
 
-         gene.tissues.forEach(tissue => {
-            this.minLogfc = (null === this.minLogfc || tissue.logfc < this.minLogfc) ? tissue.logfc : this.minLogfc;
-            this.maxLogfc = (null === this.maxLogfc || tissue.logfc > this.maxLogfc) ? tissue.logfc : this.maxLogfc;
-         });
+         if (gene.tissues) {
+            gene.tissues.forEach(tissue => {
+               this.minLogfc = (null === this.minLogfc || tissue.logfc < this.minLogfc) ? tissue.logfc : this.minLogfc;
+               this.maxLogfc = (null === this.maxLogfc || tissue.logfc > this.maxLogfc) ? tissue.logfc : this.maxLogfc;
+            });
+         }
       }
 
       this.getUrlParam('pinned', true).forEach(pinned => {
@@ -261,20 +266,22 @@ export class GeneComparisonToolComponent implements OnInit  {
       });
 
       this.sortField = this.getUrlParam('sortField') || 'CBE';
-      this.sortOrder = this.getUrlParam('sortOrder') ? parseInt(this.getUrlParam('sortOrder')) : -1;
+      const sortOrder = parseInt(this.getUrlParam('sortOrder'), 2);
+      this.sortOrder = sortOrder && !isNaN(sortOrder) ? sortOrder : -1;
       this.sortTable(this.tableHeader);
 
       this.filter();
+      this.loading = false;
    }
 
    /* ----------------------------------------------------------------------- */
    /* Filters
    /* ----------------------------------------------------------------------- */
 
-   setFilters(filters) {
+   setFilters(filters: GCTFilter[]) {
       this.filters = filters;
-      this.updateUrl();
       this.filter();
+      this.updateUrl();
    }
 
    getFilterValues() {
@@ -293,14 +300,24 @@ export class GeneComparisonToolComponent implements OnInit  {
       return values;
    }
 
-   setFilterOption(name, value) {
+   filterOptionValueToLabel(value: any) {
+      const label = typeof value === 'string' ? value : value.toString(10);
+      switch (label) {
+         case 'and Late Onset Alzheimer\'s Disease Family Study':
+            return 'Late Onset Alzheimer\'s Disease Family Study';
+         default:
+            return label;
+      }
+   }
+
+   setFilterOption(name: string, value: any) {
       const filter = value ? this.filters.find(f => f.name === name) : null;
       if (filter && !filter.options.find(option => value === option.value)) {
          const urlParams = this.getUrlParam(filter.name, true);
          filter.options.push({
-            'label': value,
-            'value': value,
-            'selected': urlParams && urlParams.indexOf(typeof value === 'string' ? value : String(value)) !== -1 ? true : false
+            label: this.filterOptionValueToLabel(value),
+            value,
+            selected: urlParams && urlParams.indexOf(typeof value === 'string' ? value : String(value)) !== -1 ? true : false
          });
          filter.options.sort((a, b) => {
             if (a.label < b.label) {
@@ -318,14 +335,14 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    hasSelectedFilters() {
       for (const filter of this.filters) {
-         if (filter.options.filter(option => option.selected).length > 0) {
+         if (filter.options.find(option => option.selected)) {
             return true;
          }
       }
       return false;
    }
 
-   setSearchTerm(term) {
+   setSearchTerm(term: string) {
       this.searchTerm = term;
       this.filter();
    }
@@ -336,12 +353,14 @@ export class GeneComparisonToolComponent implements OnInit  {
    }
 
    filter() {
+      if (!this.availableGeneTable) {return;}
+
       const delay = this.availableGeneTable.filterDelay;
       this.availableGeneTable.filterDelay = 0;
 
       this.availableGeneTable.filter(this.searchTerm, 'search_string', 'contains');
 
-      if ('RNA - Overall Expression' === this.selectedAnalysis.name) {
+      if ('RNA - Overall Expression' === this.selectedAnalysis?.name) {
          this.availableGeneTable.filter(true, 'hasMedianLogcpm', 'equals');
       }
 
@@ -357,7 +376,14 @@ export class GeneComparisonToolComponent implements OnInit  {
    /* Sort
    /* ----------------------------------------------------------------------- */
 
-   sortCallback(event: any) {
+   setSort(event: SortEvent) {
+      this.sortField = event.field;
+      this.sortOrder = event.order;
+      this.sort();
+      this.updateUrl();
+   }
+
+   sortCallback(event: SortEvent) {
       event.data.sort((a, b) => {
          let result = null;
          if ('hgnc_symbol' === event.field) {
@@ -391,45 +417,24 @@ export class GeneComparisonToolComponent implements OnInit  {
       });
    }
 
-   sortTable(table) {
-      table.sortField = null;
-      table.defaultSortOrder = this.sortOrder;
-      table.sort({ field: this.sortField });
+   sortTable(table: Table) {
+      if (table) {
+         table.sortField = null;
+         table.defaultSortOrder = this.sortOrder;
+         table.sort({ field: this.sortField });
+      }
    }
 
    sort() {
-      this.sortTable(this.pinnedGeneTable);
-      this.sortTable(this.availableGeneTable);
-
-      // this.pinnedGeneTable.sortField = null;
-      // this.pinnedGeneTable.defaultSortOrder = this.sortOrder;
-      // this.pinnedGeneTable.sort({
-      //    data: this.pinnedGenes,
-      //    field: this.sortField,
-      //    order: this.sortOrder
-      // });
-
-      // this.availableGeneTable.sortField = null;
-      // this.availableGeneTable.defaultSortOrder = this.sortOrder;
-      // this.availableGeneTable.sort({
-      //    data: this.availableGenes,
-      //    field: this.sortField,
-      //    order: this.sortOrder
-      // });
-   }
-
-   updateSortOptions(event) {
-      this.sortField = event.field;
-      this.sortOrder = event.order;
-      this.sort();
-      this.updateUrl();
+      this.sortTable(this.pinnedGeneTable || null);
+      this.sortTable(this.availableGeneTable || null);
    }
 
    /* ----------------------------------------------------------------------- */
    /* Pin/Unpin
    /* ----------------------------------------------------------------------- */
 
-   pinGene(gene, refresh: boolean = true) {
+   pinGene(gene: GCTGene, refresh: boolean = true) {
       if (this.pinnedGenes.findIndex(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
          const availableGeneIndex = this.availableGenes.findIndex(availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id);
          this.pinnedGenes.push(gene);
@@ -437,14 +442,12 @@ export class GeneComparisonToolComponent implements OnInit  {
             this.availableGenes.splice(availableGeneIndex, 1);
          }
          if (refresh) {
-            this.sort();
-            this.filter();
-            this.updateUrl();
+            this.refresh();
          }
       }
    }
 
-   unpinGene(gene, refresh: boolean = true) {
+   unpinGene(gene: GCTGene, refresh: boolean = true) {
       const pinnedGeneIndex = this.pinnedGenes.findIndex(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id);
       if (pinnedGeneIndex !== -1) {
          if (this.availableGenes.findIndex(availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
@@ -452,9 +455,7 @@ export class GeneComparisonToolComponent implements OnInit  {
          }
          this.pinnedGenes.splice(pinnedGeneIndex, 1);
          if (refresh) {
-            this.sort();
-            this.filter();
-            this.updateUrl();
+            this.refresh();
          }
       }
    }
@@ -465,18 +466,15 @@ export class GeneComparisonToolComponent implements OnInit  {
             this.availableGenes.push(gene);
          }
       });
-
       this.pinnedGenes = [];
-      this.sort();
-      this.filter();
-      this.updateUrl();
+      this.refresh();
    }
 
    /* ----------------------------------------------------------------------- */
    /*
    /* ----------------------------------------------------------------------- */
 
-   getUrlParam(name, returnArray = false) {
+   getUrlParam(name: string, returnArray: boolean = false) {
       if (this.urlParams && this.urlParams.hasOwnProperty(name)) {
          return returnArray && typeof this.urlParams[name] === 'string' ? this.urlParams[name].split(',') : this.urlParams[name];
       }
@@ -500,21 +498,21 @@ export class GeneComparisonToolComponent implements OnInit  {
       const pinned = this.pinnedGenes.map(gene => gene.ensembl_gene_id);
       const params: any = this.getFilterValues();
 
-      if (pinned.length > 0) {
-         params['pinned'] = pinned;
-      }
-
-      if (this.selectedAnalysis.name !== this.defaultAnalysis.name) {
+      if (this.selectedAnalysis?.name !== this.analyses[0].name) {
          params['analysis'] = this.selectedAnalysis.name;
       }
 
-      if (this.selectedModel.name !== this.defaultModel.name) {
+      if (this.selectedModel?.name !== this.models[0].name) {
          params['model'] = this.selectedModel.name;
       }
 
       if (this.sortField && this.sortField !== 'hgnc_symbol') {
          params['sortField'] = this.sortField;
          params['sortOrder'] = this.sortOrder;
+      }
+
+      if (pinned.length > 0) {
+         params['pinned'] = pinned;
       }
 
       if (Object.keys(params).length > 0) {
@@ -528,10 +526,10 @@ export class GeneComparisonToolComponent implements OnInit  {
    /*
    /* ----------------------------------------------------------------------- */
 
-   getDetailsPanelData(tissueName, gene) {
+   getDetailsPanelData(tissueName: string, gene: GCTGene) {
       const tissue = gene.tissues.find(t => t.name === tissueName);
       if (tissue) {
-         if ('RNA - Overall Expression' === this.selectedAnalysis.name) {
+         if ('RNA - Overall Expression' === this.selectedAnalysis?.name) {
             return {
                label: (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id,
                heading: 'Overall RNA Expression (' + tissue.name + ')',
@@ -545,7 +543,7 @@ export class GeneComparisonToolComponent implements OnInit  {
             return {
                label: (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id,
                heading: 'Differential RNA Expression (' + tissue.name + ')',
-               subHeading: this.selectedModel.name,
+               subHeading: this.selectedModel?.name,
                valueLabel: 'Log 2 Fold Change',
                value: tissue.logfc,
                pValue: tissue.adj_p_val,
@@ -575,7 +573,7 @@ export class GeneComparisonToolComponent implements OnInit  {
       }
    }
 
-   getCircleStyle(tissueName, gene) {
+   getCircleStyle(tissueName: string, gene: GCTGene) {
       let size = 0;
       let bgRGB = [236, 236, 236];
       let bgAlpha = 0.4;
@@ -608,7 +606,7 @@ export class GeneComparisonToolComponent implements OnInit  {
          width: size + 'px',
          height: size + 'px',
          backgroundColor: 'rgba(' + bgRGB[0] + ',' + bgRGB[1] + ',' + bgRGB[2] + ',' + bgAlpha + ')',
-         borderColor: borderColor
+         borderColor
       };
    }
 
@@ -616,7 +614,13 @@ export class GeneComparisonToolComponent implements OnInit  {
    /*
    /* ----------------------------------------------------------------------- */
 
-   navigateToGene(gene) {
+   refresh() {
+      this.sort();
+      this.filter();
+      this.updateUrl();
+   }
+
+   navigateToGene(gene: GCTGene) {
       const url = this.router.serializeUrl(
          this.router.createUrlTree([
             '/genes',
@@ -636,10 +640,5 @@ export class GeneComparisonToolComponent implements OnInit  {
 
    copyUrl() {
       navigator.clipboard.writeText(window.location.href);
-   }
-
-   onQueryChange() {
-      this.updateUrl();
-      this.loadGenes();
    }
 }

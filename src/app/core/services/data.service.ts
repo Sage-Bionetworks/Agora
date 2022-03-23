@@ -47,13 +47,6 @@ export class DataService {
         const genesResponse = this.apiService.getGenes(gene.hgnc_symbol);
         const nodesResponse = this.apiService.getLinksList(gene);
 
-        console.log('loadData');
-        console.log(genesResponse, nodesResponse);
-        console.log(forkJoin([
-            genesResponse,
-            nodesResponse
-        ]));
-
         return forkJoin([
             genesResponse,
             nodesResponse

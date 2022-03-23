@@ -33,18 +33,18 @@
                         <input type="text" pInputText (input)="setSearchTerm($event.target.value)" [value]="searchTerm" placeholder="Search">
                         <button *ngIf="searchTerm" (click)="clearSearch()">
                             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 9L9 1M1 1L9 9" stroke="#EEEEEE" stroke-width="2"/>
+                                <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2"/>
                             </svg>
                         </button>
                     </div>
                 </div>
                 <div class="gct-controls-right">
                     <div class="analysis-filter-container">
-                        <p-dropdown class="analysis-filter" [options]="analyses" [(ngModel)]="selectedAnalysis" (onChange)="filter();updateUrl();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="analysis-filter" [options]="analyses" [(ngModel)]="selectedAnalysis" (onChange)="updateUrl();filter();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                     <div>
                         <div class="gct-filter-label">Models</div>
-                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="onQueryChange()" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="updateUrl();loadGenes();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 <p-table
                     #tableHeader
                     id="table-header"
-                    (sortFunction)="updateSortOptions($event)"
+                    (sortFunction)="setSort($event)"
                     [customSort]="true"
                 >
                     <ng-template pTemplate="header">

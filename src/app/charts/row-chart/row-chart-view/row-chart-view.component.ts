@@ -148,7 +148,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         };
         this.group = {
             all() {
-                console.log(self.chartService.filteredData['fpGroup'].values);
                 return self.chartService.filteredData['fpGroup'].values;
             },
             order() {

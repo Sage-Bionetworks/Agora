@@ -44,7 +44,7 @@
                         <li *ngFor="let option of filter.options; index as j" >
                             <label>
                                 <div>
-                                    <p-checkbox [(ngModel)]="option.selected" [binary]="true" (change)="handleChange()"></p-checkbox>
+                                    <p-checkbox [(ngModel)]="option.selected" [binary]="true" (ngModelChange)="handleChange()"></p-checkbox>
                                 </div>
                                 <div>
                                     {{ option.label }}

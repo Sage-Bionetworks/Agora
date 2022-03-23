@@ -1,10 +1,9 @@
 import {
     async,
     ComponentFixture,
-    TestBed,
-    fakeAsync,
-    tick
+    TestBed
 } from '@angular/core/testing';
+import { Observable } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,57 +11,79 @@ import { FilterService } from 'primeng/api';
 
 import {
     RouterStub,
-    ActivatedRouteStub,
-    ApiServiceStub,
-    mockInfo1
+    ApiServiceStub
 } from '../../testing';
 
-import { GeneComparisonToolComponent } from '.';
+import {
+    GeneComparisonToolComponent,
+    GeneComparisonToolDetailsPanelComponent,
+    GeneComparisonToolFilterListComponent,
+    GeneComparisonToolFilterPanelComponent
+} from '.';
 
 import { ApiService } from '../../core/services';
 
-describe('Component: GeneComparisonToolComponent', () => {
-   let component: GeneComparisonToolComponent;
-   let fixture: ComponentFixture<GeneComparisonToolComponent>;
-   let apiService: ApiServiceStub;
-   let activatedRoute: any;
+class ActivatedRouteStub {
+    queryParams = new Observable(observer => {
+        const urlParams = {}
+        observer.next(urlParams);
+        observer.complete();
+    });
+}
 
-   beforeEach(async(() => {
-       TestBed.configureTestingModule({
-           declarations: [
-               GeneComparisonToolComponent
-           ],
-           // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
-           // elements and attributes
-           schemas: [ NO_ERRORS_SCHEMA ],
-           providers: [
+fdescribe('Component: GeneComparisonToolComponent', () => {
+    let component: GeneComparisonToolComponent;
+    let fixture: ComponentFixture<GeneComparisonToolComponent>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                GeneComparisonToolComponent,
+                GeneComparisonToolDetailsPanelComponent,
+                GeneComparisonToolFilterListComponent,
+                GeneComparisonToolFilterPanelComponent
+            ],
+            // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
+            // elements and attributes
+            schemas: [ NO_ERRORS_SCHEMA ],
+            providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: FilterService, useValue: new FilterService() },
-           ]
-       })
-       .compileComponents();
+            ]
+        })
+        .compileComponents();
 
-       fixture = TestBed.createComponent(GeneComparisonToolComponent);
+        fixture = TestBed.createComponent(GeneComparisonToolComponent);
+        component = fixture.componentInstance; // Component test instance
+    }));
 
-       // Get the injected instances
-       apiService = fixture.debugElement.injector.get(ApiService);
-       activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-       activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+    it('should create component', () => {
+        expect(component).toBeTruthy();
+    });
 
-       component = fixture.componentInstance; // Component test instance
-   }));
+    it('should have 3 tables', () => {
+        const el = fixture.debugElement.queryAll(By.css('p-table'));
+        expect(el).toBeDefined();
+        expect(el.length).toEqual(3);
+    });
 
-   it('should create', () => {
-       expect(component).toBeTruthy();
-   });
+    it('should have 1 filter list', () => {
+        const el = fixture.debugElement.queryAll(By.css('.gct-filter-list'));
+        expect(el).toBeDefined();
+        expect(el.length).toEqual(1);
+    });
 
-   it('should have 3 tables', () => {
-       const el = fixture.debugElement.query(By.css('p-table'));
-       expect(el).toBeDefined();
+    it('should have 1 filter panel', () => {
+        const el = fixture.debugElement.queryAll(By.css('.gct-details-panel'));
+        expect(el).toBeDefined();
+        expect(el.length).toEqual(2);
+    });
 
-       const aEl = fixture.debugElement.queryAll(By.css('p-table'));
-       expect(aEl.length).toEqual(3);
-   });
+    it('should have 1 details panel', () => {
+        const el = fixture.debugElement.queryAll(By.css('.gct-filter-panel'));
+        expect(el).toBeDefined();
+        expect(el.length).toEqual(1);
+    });
 });

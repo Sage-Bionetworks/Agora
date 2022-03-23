@@ -142,7 +142,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
             .x(d3.scaleBand())
             .y(d3.scaleLinear().domain([0, this.tissuecoresGroup.top(1)[0].value]))
             .valueAccessor((d) => {
-                console.log('TEST', d);
                 return self.dataService.getSignificantFigures(+d.value);
             })
             .brushOn(false)

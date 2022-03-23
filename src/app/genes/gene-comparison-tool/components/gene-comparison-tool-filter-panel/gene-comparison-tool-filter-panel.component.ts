@@ -1,6 +1,6 @@
 import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
 
-import { GeneComparisonToolFilter } from '../..';
+import { GCTFilter } from '../..';
 
 @Component({
    selector: 'gene-comparison-tool-filter-panel',
@@ -9,16 +9,12 @@ import { GeneComparisonToolFilter } from '../..';
    encapsulation: ViewEncapsulation.None
 })
 export class GeneComparisonToolFilterPanelComponent {
-   @Input() filters: GeneComparisonToolFilter[];
+   @Input() filters: GCTFilter[];
 
    isOpen: boolean = false;
    activePane: number = -1;
 
    @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
-
-   toggleOption(option) {
-      option.selected = option.selected ? false : true;
-   }
 
    handleChange() {
       this.onChange.emit(this.filters);

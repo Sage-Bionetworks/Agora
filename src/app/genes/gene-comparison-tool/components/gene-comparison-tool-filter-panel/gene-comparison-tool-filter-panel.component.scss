@@ -34,10 +34,15 @@
 
     .gct-filter-panel-close {
         cursor: pointer;
-        transition: .3s;
+
+        svg path {
+            transition: .3s;
+        }
 
         &:hover {
-            opacity: 0.7;
+            svg path {
+                stroke: color(primary);
+            }
         }
     }
 }
@@ -191,7 +196,7 @@
         margin: 0;
 
         li {
-            padding: 10px 0;
+            padding: 9px 0;
 
             label {
                 display: flex;

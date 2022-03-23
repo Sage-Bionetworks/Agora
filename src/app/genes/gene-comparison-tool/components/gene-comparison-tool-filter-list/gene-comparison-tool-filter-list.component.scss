@@ -2,12 +2,12 @@
 @import "../../../../../assets/css/helpers/mixins";
 
 .gct-filter-list {
-    border-bottom: 1px solid color(border);
     white-space: nowrap;
 
     .gct-filter-list-inner {
         display: flex;
         padding: 28px 44px 20px 44px;
+        border-bottom: 1px solid color(border);
     }
 
     .gct-filter-list-clear-all {
@@ -68,12 +68,12 @@
 
         svg path {
             transition: .3s;
-            stroke: color(text, demphasized);
         }
 
         &:hover {
+
             svg path {
-                stroke: darken(color(text, demphasized), 10%);
+                stroke: color(primary);
             }
         }
     }
