@@ -50,7 +50,7 @@ export interface NominatedTarget {
     target_choice_justification: string;
     predicted_therapeutic_direction: string;
     data_used_to_support_target_selection: string;
-    data_synapseid: string[];
+    data_synapseid: string;
     study: string;
     input_data: string;
     validation_study_details: string;

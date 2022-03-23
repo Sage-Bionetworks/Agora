@@ -75,7 +75,8 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td *ngFor="let col of columns">
-                    {{colFinalValue(rowData, col.field)}}
+                    <ng-template [ngIf]="col.field !== 'hgnc_symbol'">{{colFinalValue(rowData, col.field)}}</ng-template>
+                    <ng-template [ngIf]="col.field === 'hgnc_symbol'">{{rowData.hgnc_symbol || rowData.ensembl_gene_id}}</ng-template>
                 </td>
             </tr>
         </ng-template>
