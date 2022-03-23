@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 import {
     RouterStub,
     GeneServiceStub,
-    DataServiceStub,
     ChartServiceStub,
+    DataServiceStub,
     mockModels,
     mockTissues
 } from '../../../testing';
@@ -28,7 +28,6 @@ describe('Component: RowChartView', () => {
     let router: RouterStub;
     let geneService: GeneServiceStub;
     let chartService: ChartServiceStub;
-    let dataService: DataServiceStub;
     let location: SpyLocation;
 
     beforeEach(async(() => {
@@ -54,7 +53,6 @@ describe('Component: RowChartView', () => {
         // Get the injected instances
         router = fixture.debugElement.injector.get(Router);
         geneService = fixture.debugElement.injector.get(GeneService);
-        dataService = fixture.debugElement.injector.get(DataService);
         chartService = fixture.debugElement.injector.get(ChartService);
         location = fixture.debugElement.injector.get(SpyLocation);
 

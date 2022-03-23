@@ -169,8 +169,8 @@ export class ForceService {
                 source: obj.geneA_ensembl_gene_id,
                 target: obj.geneB_ensembl_gene_id,
                 brainregions: [obj.brainRegion],
-                hgnc_symbolA: obj.geneA_external_gene_name,
-                hgnc_symbolB: obj.geneB_external_gene_name
+                geneIdA: obj.geneA_external_gene_name || obj.geneA_ensembl_gene_id,
+                geneIdB: obj.geneB_external_gene_name || obj.geneB_ensembl_gene_id
             };
             dicL[obj.geneA_ensembl_gene_id + obj.geneB_ensembl_gene_id] = link;
             genes.links = [...genes.links,

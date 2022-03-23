@@ -151,6 +151,7 @@ export class SOEChartComponent implements OnInit {
               ),
             ],
           },
+          annotations,
         } as Plotly.Layout,
         config: this.commonBarSettings.config,
         ownerId: this.distributionData.syn_id,
@@ -210,8 +211,8 @@ export class SOEChartComponent implements OnInit {
  */
 function truncateToFixed(num: number, fixed: number): string {
   /*
-   * You might think that truncating a number to a certain number
-   * of decimal places in JavaScript would be simple, but then you would be wrong.
+   * You might think that truncating a number to a certain number of decimal
+   * places in JavaScript would be simple, but then you would be wrong.
    * See https://stackoverflow.com/a/11818658/9723359
    */
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');

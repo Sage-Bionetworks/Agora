@@ -27,6 +27,7 @@ import * as awsParamStore from 'aws-param-store';
 import * as crossfilter from 'crossfilter2';
 // required when verbose debugging is enabled
 import * as util from 'util';
+import { Console } from 'console';
 
 const router = express.Router();
 const database = { url: '' };
@@ -91,13 +92,12 @@ connection.once('open', () => {
     let geneScoreDistribution: GeneScoreDistribution[] = [];
     let genesOverallScores: GeneOverallScores[] = [];
     let totalRecords = 0;
-    const hgncToEnsembl: Map<string, string[]> = new Map<string, string[]>();
 
     // Crossfilter instance
     const chartInfos: Map<string, any> = new Map<string, any>();
     const pChartInfos: Map<string, any> = new Map<string, any>();
 
-    // Select fields for Nominated Targets table
+    // Select fields for Nominated Targets table db queries
     const tableGenesByIdFields = [
         'hgnc_symbol',
         'ensembl_gene_id',
@@ -116,7 +116,7 @@ connection.once('open', () => {
         'druggability.abability_bucket_definition'
     ].join(' ');
 
-    // Select fields for Similalr Genes table
+    // Select fields for Similar Genes table db queries
     const tableSimilarGenesFields = [
         'hgnc_symbol',
         'ensembl_gene_id',
@@ -126,6 +126,8 @@ connection.once('open', () => {
         'haseqtl',
         'isAnyRNAChangedInADBrain',
         'isAnyProteinChangedInADBrain',
+        'rna_brain_change_studied',
+        'protein_brain_change_studied',
         'druggability.pharos_class',
         'druggability.sm_druggability_bucket',
         'druggability.classification',
@@ -172,16 +174,6 @@ connection.once('open', () => {
             g.logfc = getSignificantFigures(+g.logfc);
             g.fc = getSignificantFigures(+g.fc);
             g.adj_p_val = getSignificantFigures(+g.adj_p_val);
-
-            const ensemblList = hgncToEnsembl.get(g.hgnc_symbol);
-            if (ensemblList === undefined) {
-                hgncToEnsembl.set(g.hgnc_symbol, [g.ensembl_gene_id]);
-            } else {
-                if (!ensemblList.includes(g.ensembl_gene_id)) {
-                    ensemblList.push(g.ensembl_gene_id);
-                    hgncToEnsembl.set(g.hgnc_symbol, ensemblList);
-                }
-            }
 
             switch (g.model) {
                 case 'AD Diagnosis (males and females)':
@@ -508,9 +500,11 @@ connection.once('open', () => {
                                     groups[groupName].top(1)[0]?.value
                             };
                         } else {
-                            const newGroup = rmEmptyBinsFP(groups.fpGroup, (filter) ?
-                                filter :
-                                'AD Diagnosis (males and females)', id);
+                            const newGroup = rmEmptyBinsFP(
+                                groups.fpGroup,
+                                (filter) ? filter : 'AD Diagnosis (males and females)',
+                                id
+                            );
                             results[groupName] = {
                                 values: newGroup.all()
                             };
@@ -536,11 +530,10 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) {
             res.json({ item: null });
         } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-            const queryObj = { [fieldName]: req.query.id };
-
             // Find all the Genes with the current id
-            await Genes.find(queryObj).lean().sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+            await Genes
+                .find({ ensembl_gene_id: req.query.id }).lean()
+                .sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
                 .exec(async (err, genes) => {
                 if (err) {
                     next(err);
@@ -548,57 +541,14 @@ connection.once('open', () => {
                     if (!genes.length) {
                         res.json({items: genes});
                     } else {
-                        const geneEntries = genes.slice();
-                        const geneTissues = [];
-                        const geneModels = [];
-
-                        let minFC: number = +Infinity;
-                        let maxFC: number = -Infinity;
-                        let minLogFC: number = +Infinity;
-                        let maxLogFC: number = -Infinity;
-                        let maxAdjPValue: number = -Infinity;
-                        let minAdjPValue: number = Infinity;
-                        geneTissues.length = 0;
-                        geneModels.length = 0;
-                        await genes.forEach((g) => {
-                            if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                            if (+g.fc < minFC) { minFC = (+g.fc); }
-                            if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                            if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                            const adjPVal: number = +g.adj_p_val;
-                            if (+g.adj_p_val) {
-                                if (adjPVal > maxAdjPValue) {
-                                    maxAdjPValue = adjPVal;
-                                }
-                                if (adjPVal < minAdjPValue) {
-                                    minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
-                                }
-                            }
-                            if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
-                                geneTissues.push(g.tissue);
-                            }
-                            if (g['model'] && geneModels.indexOf(g['model']) === -1) {
-                                geneModels.push(g['model']);
-                            }
-                        });
-                        geneTissues.sort();
-                        geneModels.sort();
-
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
                         await res.json({
-                            geneEntries,
-                            // minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                            // maxFC,
-                            // minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                            //     -maxLogFC : minLogFC,
-                            // maxLogFC,
-                            // minAdjPValue,
-                            // maxAdjPValue,
-                            // geneModels,
-                            // geneTissues,
-                            geneProteomics: geneProteomics.filter (p => p.hgnc_symbol === geneEntries[0].hgnc_symbol )
+                            genes,
+                            geneProteomics: geneProteomics.filter(p =>
+                                p.ensembl_gene_id === geneEntries[0].ensembl_gene_id
+                            )
                         });
                     }
                 }
@@ -658,7 +608,7 @@ connection.once('open', () => {
             const ids = req.query.ids.split(',');
 
             GenesInfo.find({ ensembl_gene_id: { $in: ids } }).lean()
-                .sort({  hgnc_symbol: 1 }).select(tableSimilarGenesFields).exec(
+                .sort({ hgnc_symbol: 1 }).select(tableSimilarGenesFields).exec(
                 (err, geneInfos) => {
                     if (err) {
                         next(err);
@@ -678,15 +628,8 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) {
             res.status(404).send('Not found');
         } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' : 'hgnc_symbol';
-            const queryObj = { [fieldName]: req.query.id };
-
-            let overallScores;
-            if (fieldName === 'ensembl_gene_id') {
-                overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
-            } else {
-                overallScores = genesOverallScores.filter(g => g.GeneName === req.query.id)[0] || [];
-            }
+            const queryObj = { ensembl_gene_id: req.query.id };
+            const overallScores = genesOverallScores.filter(g => g.ENSG === req.query.id)[0] || [];
 
             if (req.query.tissue) {
                 queryObj['tissue'] = req.query.tissue;
@@ -701,12 +644,12 @@ connection.once('open', () => {
                 } else {
                     const item = gene;
 
-                    await GenesInfo.findOne({ [fieldName]: req.query.id }).exec(
+                    await GenesInfo.findOne({ ensembl_gene_id: req.query.id }).exec(
                         async (errB, info) => {
                         if (errB) {
                             next(errB);
                         } else {
-                            const validation = genesExpValidation.filter(g => g[fieldName] === req.query.id);
+                            const validation = genesExpValidation.filter(g => g.ensembl_gene_id === req.query.id);
                             const expValidation = validation.length ? validation : undefined;
 
                             res.setHeader(
@@ -850,12 +793,8 @@ connection.once('open', () => {
         if (!req.params || !Object.keys(req.query).length) {
             res.json({ item: null });
         } else {
-            const fieldName = (req.query.id.startsWith('ENSG')) ? 'ensembl_gene_id' :
-                'associated_gene_name';
-            const queryObj = { [fieldName]: req.query.id };
-
             // Find all the Genes with the current id
-            await GenesMetabolomics.findOne(queryObj).lean().exec(async (err, gene) => {
+            await GenesMetabolomics.findOne({ ensembl_gene_id: req.query.id }).lean().exec(async (err, gene) => {
                 if (err) {
                     next(err);
                 } else {
@@ -905,19 +844,6 @@ connection.once('open', () => {
 
     function registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
-            addChartInfo(
-                'volcano-plot',
-                {
-                    dimension: ['logfc', 'adj_p_val', 'hgnc_symbol'],
-                    group: 'self',
-                    type: 'scatter-plot',
-                    title: 'Volcano Plot',
-                    xAxisLabel: 'Log Fold Change',
-                    yAxisLabel: '-log10(Adjusted p-value)',
-                    x: ['logfc'],
-                    y: ['adj_p_val']
-                }
-            );
             addChartInfo(
                 'forest-plot',
                 {
@@ -1009,6 +935,7 @@ connection.once('open', () => {
             group = rmEmptyBinsDefault(group);
         }
         info.g = group;
+
         return info.g;
     }
 
@@ -1087,10 +1014,10 @@ connection.once('open', () => {
             return noData;
         }
 
-        if (ensemblGeneId !== undefined) {
+        if (ensemblGeneId) {
             return genesNeuroCorr.filter(obj => obj['ensg'] === ensemblGeneId);
         } else {
-            console.log('getGeneCorrelationData: ensembledIds is undefined.');
+            console.log('getGeneCorrelationData: missing ensemblGeneId.');
         }
         return noData;
     };

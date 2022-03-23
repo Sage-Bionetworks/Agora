@@ -48,7 +48,7 @@
         Differential Expression of Selected Gene
     </h3>
     <h3 *ngIf="!isEmptyGene">
-        Differential Expression of {{gene.hgnc_symbol}} and Selected Protein
+        Differential Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} and Selected Protein
         <span class="icon-spacing"></span>
         <!-- Hide for now -->
         <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->

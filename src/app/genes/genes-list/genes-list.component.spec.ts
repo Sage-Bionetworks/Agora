@@ -69,7 +69,7 @@ describe('Component: GenesList', () => {
         dataService = fixture.debugElement.injector.get(DataService);
         navService = fixture.debugElement.injector.get(NavigationService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-        activatedRoute.setParamMap({ id: mockInfo1.hgnc_symbol });
+        activatedRoute.setParamMap({ id: mockInfo1.ensembl_gene_id });
 
         component = fixture.componentInstance; // Component test instance
     }));
@@ -140,10 +140,10 @@ describe('Component: GenesList', () => {
         spyOn(navService.testRouter, 'navigate').and.callThrough();
 
         component.selectedInfo = mockInfo1;
-        apiService.getGene('VGF').subscribe((data: GeneResponse) => {
+        apiService.getGene('ENSG00000128564').subscribe((data: GeneResponse) => {
             expect(data.item).toEqual(null);
         }); // search an empty gene id
-        component.getGene('VGF');
+        component.getGene('ENSG00000128564');
         tick();
         fixture.detectChanges();
         fixture.whenStable().then(() => {

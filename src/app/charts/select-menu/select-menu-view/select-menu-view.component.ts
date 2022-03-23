@@ -450,7 +450,8 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(
-                            self.chartService.queryFilter.smGroup, gene
+                            self.chartService.queryFilter.smGroup,
+                            self.geneService.getCurrentGene().ensembl_gene_id
                         )
                             .subscribe((results) => {
                             self.chartService.filteredData = results;
@@ -463,7 +464,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(
-                            self.chartService.pQueryFilter.spGroup, gene, self.type)
+                            self.chartService.pQueryFilter.spGroup,
+                            self.geneService.getCurrentGene().ensembl_gene_id,
+                            self.type
+                        )
                             .subscribe((results) => {
                             self.chartService.filteredData = results;
                             self.isActive = true;

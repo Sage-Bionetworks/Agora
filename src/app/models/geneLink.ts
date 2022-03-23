@@ -15,8 +15,8 @@ export interface GeneLink extends SimulationLinkDatum<SimulationNodeDatum> {
     source: GeneNode;
     target: GeneNode;
     brainregions: string[];
-    hgnc_symbolA: string;
-    hgnc_symbolB: string;
+    geneIdA: string;
+    geneIdB: string;
 }
 
 export interface GeneLinkP {
@@ -24,8 +24,8 @@ export interface GeneLinkP {
     source: GeneLinkDetail;
     target: GeneLinkDetail;
     brainregions: string[];
-    hgnc_symbolA: string;
-    hgnc_symbolB: string;
+    geneIdA: string;
+    geneIdB: string;
 }
 
 export interface GeneLinkDetail {

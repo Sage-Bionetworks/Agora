@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "data-file": "syn13363290",
-  "data-version": "34",
+  "data-version": "35",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -52,6 +52,7 @@
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
     "github-deploy": "npm run github-deploy:dev",
     "lint": "npm run tslint -f \"src/**/*.ts\"",
+    "pre-commit-lint": "npm run tslint \"src/**/*.ts\"",
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",
@@ -102,6 +103,10 @@
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
   },
+  "pre-commit": [
+    "pre-commit-lint",
+    "test"
+  ],
   "dependencies": {
     "@angular/animations": "^9.1.13",
     "@angular/common": "^9.1.13",
@@ -137,6 +142,7 @@
     "ngx-popperjs": "^12.2.1",
     "npm": "^6.14.4",
     "opencollective": "^1.0.3",
+    "pre-commit": "^1.2.2",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0",
     "protractor": "^5.4.3",
@@ -206,7 +212,7 @@
     "inline-manifest-webpack-plugin": "^4.0.2",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine-core": "^3.5.0",
-    "karma": "^6.3.2",
+    "karma": "^6.3.16",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
     "karma-coverage-istanbul-reporter": "^2.1.1",
@@ -269,8 +275,8 @@
     "url": "https://github.com/Sage-Bionetworks/Agora/issues"
   },
   "engines": {
-    "node": ">= 10.13.0",
-    "npm": ">= 5"
+    "node": "12.22.3",
+    "npm": "6.14.13"
   },
   "browserslist": [
     "iOS >= 7",
