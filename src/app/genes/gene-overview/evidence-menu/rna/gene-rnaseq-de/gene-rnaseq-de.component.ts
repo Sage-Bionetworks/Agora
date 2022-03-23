@@ -124,19 +124,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.chartService.addChartInfo(
-                'volcano-plot',
-                {
-                    dimension: ['logfc', 'adj_p_val', 'hgnc_symbol'],
-                    group: 'self',
-                    type: 'scatter-plot',
-                    title: 'Volcano Plot',
-                    xAxisLabel: 'Log Fold Change',
-                    yAxisLabel: '-log10(Adjusted p-value)',
-                    x: ['logfc'],
-                    y: ['adj_p_val']
-                }
-            );
-            this.chartService.addChartInfo(
                 'forest-plot',
                 {
                     dimension: ['tissue'],
@@ -184,7 +171,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
         this.apiService.refreshChartsData(
             this.chartService.queryFilter.smGroup,
-            this.gene.hgnc_symbol
+            this.gene.ensembl_gene_id
         ).subscribe((d) => {
             this.chartService.filteredData = d;
             this.dataLoaded = true;
@@ -192,7 +179,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     }
 
     getDownloadFileName(suffix: string): string {
-        return this.gene.hgnc_symbol + ' ' + suffix + '_' + this.geneService.getCurrentModel();
+        return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
+        ' ' + suffix + '_' + this.geneService.getCurrentModel();
     }
 
     registerBoxPlot(

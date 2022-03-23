@@ -55,11 +55,11 @@ describe('Service: Api: TestBed', () => {
     it('should get the genes data from the server', () => {
         const dummyGenes = mockGenesResponse;
 
-        apiService.getGenes('VGF').subscribe((response) => {
+        apiService.getGenes('ENSG00000128564').subscribe((response) => {
             expect(response).toEqual(mockGenesResponse);
         });
 
-        const req = httpMock.expectOne('/api/genes?id=VGF');
+        const req = httpMock.expectOne('/api/genes?id=ENSG00000128564');
         expect(req.request.method).toBe('GET');
         req.flush(dummyGenes);
     });
@@ -102,7 +102,7 @@ describe('Service: Api: TestBed', () => {
 
     it('should get the gene data from the server', () => {
         const res = { mockInfo1, mockGene1 };
-        apiService.getGene('VGF', 'DLPFC', 'AD+Diagnosis+%28males+and+females%29')
+        apiService.getGene('ENSG00000128564', 'DLPFC', 'AD+Diagnosis+%28males+and+females%29')
             .subscribe((response) => {
             expect(response).toEqual(res);
         });
@@ -178,13 +178,13 @@ describe('Service: Api: TestBed', () => {
     it('should trigger a refresh for the charts on the server', () => {
         const res: string[] = mockModels;
 
-        apiService.refreshChartsData('AD Diagnosis (males and females)', 'VGF').subscribe(
+        apiService.refreshChartsData('AD Diagnosis (males and females)', 'ENSG00000128564').subscribe(
             (response) => {
             expect(response).toEqual(res);
         });
 
         const req = httpMock.expectOne(
-            '/api/refresh?filter=' + JSON.stringify('AD Diagnosis (males and females)') + '&id=VGF'
+            '/api/refresh?filter=' + JSON.stringify('AD Diagnosis (males and females)') + '&id=ENSG00000128564'
         );
         expect(req.request.method).toBe('GET');
         req.flush(res);

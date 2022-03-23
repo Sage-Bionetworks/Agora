@@ -2,7 +2,7 @@
     <div class="section-thin overview-header nom-details-oh" tabindex="0">
         <div class="row no-gutters">
             <div class="">
-                <h2 *ngIf="dataLoaded">Evidence Supporting the Nomination of {{ gene.hgnc_symbol }}</h2>
+                <h2 *ngIf="dataLoaded">Evidence Supporting the Nomination of {{ gene.hgnc_symbol || gene.ensembl_gene_id }}</h2>
                 <p class="no-margin-bottom col-8 no-padding">
                     This gene has been nominated as a potential target for AD. Nominated targets are
                     obtained from several sources, including the National Institute on Aging's Accelerating

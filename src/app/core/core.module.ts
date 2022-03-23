@@ -18,7 +18,6 @@ import {
 import { AboutComponent } from './about';
 import { NewsComponent } from './news';
 import { HelpComponent } from './help';
-import { TermsComponent } from './terms';
 import { SynapseAccountComponent } from './synapse-account';
 import { NavbarComponent } from './navbar';
 import { MenubarComponent } from './menubar';
@@ -43,7 +42,6 @@ import '../../styles/headings.scss';
         AboutComponent,
         NewsComponent,
         HelpComponent,
-        TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent
     ],
@@ -55,7 +53,6 @@ import '../../styles/headings.scss';
         NoContentComponent,
         AboutComponent,
         HelpComponent,
-        TermsComponent,
         ContribTeamsPageComponent,
         SynapseAccountComponent
     ],

@@ -3,7 +3,7 @@
         <div *ngIf="i == 0" class="section-thin overview-header no-padding-bottom" tabindex="0">
             <div class="row no-gutters">
                 <div>
-                    <h2 *ngIf="data">Experimental Validation of {{d.hgnc_symbol}}</h2>
+                    <h2 *ngIf="data">Experimental Validation of {{d.hgnc_symbol || d.ensembl_gene_id}}</h2>
                     <p class="no-margin-bottom no-padding">
                         Nominating teams provided details on experimental validation studies they performed to examine a role for the target in AD.
                     </p>
@@ -12,8 +12,12 @@
             <h1 class="inner-section-divider"></h1>
         </div>
         <div class="section-thin no-padding-top overview-sections">
-            <h2>{{teamInfo[i].program}}: {{teamInfo[i].team_full}}</h2>
-            <p class="col-8 section-desc">{{teamInfo[i].description}}</p>
+            <div *ngFor="let t of teamInfo;">
+                <div *ngIf="t.team === d.team ">
+                    <h2>{{t.program}} : {{t.team_full}}</h2>
+                    <p class="col-8 section-desc">{{t.description}}</p>
+                </div>
+            </div>
             <h4>Hypothesis Being Tested</h4>
             <p class="col-8 section-desc">{{d.hypothesis_tested}}</p>
             <h4>Species and Model System</h4>

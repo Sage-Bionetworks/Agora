@@ -339,7 +339,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             logVals.push(self.dataService.getSignificantFigures(g.logfc));
             significanceTexts.push((g.adj_p_val <= 0.05) ?
             ' ' : 'not ');
-            phrases.push(g.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
+            phrases.push((g.hgnc_symbol || g.ensembl_gene_id) +
+                ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
                 g.tissue +
                 ' with a log fold change value of ' + g.logfc + ' and an adjusted p-value of ' +

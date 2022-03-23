@@ -87,7 +87,9 @@ export const mockInfo1: GeneInfo = {
   isIGAP: false,
   haseqtl: true,
   isAnyRNAChangedInADBrain: true,
+  rna_brain_change_studied: true,
   isAnyProteinChangedInADBrain: true,
+  protein_brain_change_studied: false,
   medianexpression: [
     {
       medianlogcpm: 7.7848,
@@ -119,7 +121,7 @@ export const mockInfo1: GeneInfo = {
       data_used_to_support_target_selection:
         'Discovery quantitative proteomics of ' +
         'FrCx \nWPCNA of multiple and consensus cohorts\nANOVA',
-      data_synapseid: ['syn3606086', 'syn5759376', 'syn7170616'],
+      data_synapseid: 'syn3606086',
       study: 'ACT, BLSA, Banner',
       input_data: 'Protein',
       validation_study_details: '',

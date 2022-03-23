@@ -288,9 +288,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     initData() {
         // If we don't have a Gene or any Models/Tissues here, or in case we are
         // reloading the page, try to get it from the server and move on
-        if (!this.gene || !this.geneInfo || this.id !== this.gene.ensembl_gene_id
-            || !this.gene.ensembl_gene_id || this.gene.hgnc_symbol !==
-            this.geneService.getCurrentGene().hgnc_symbol
+        if (!this.gene || !this.gene.ensembl_gene_id || !this.geneInfo ||
+            this.id !== this.gene.ensembl_gene_id ||
+            this.gene.ensembl_gene_id !== this.geneService.getCurrentGene().ensembl_gene_id
         ) {
             this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
                 if (!data.info) {
@@ -303,6 +303,11 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         );
                         this.geneService.setInfoDataState(true);
                     }
+                    // Remove hgnc_symbol if missing from info
+                    if (!data.info.hgnc_symbol) {
+                        data.item.hgnc_symbol = '';
+                    }
+
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
                     this.gene = data.item;
@@ -392,7 +397,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     initDetails() {
         if (this.geneService.hasGeneChanged()) {
-            this.apiService.getGenes(this.gene.hgnc_symbol).subscribe((data: GenesResponse) => {
+            this.apiService.getGenes(this.gene.ensembl_gene_id).subscribe((data: GenesResponse) => {
                 this.dataService.loadGenes(data);
             }, (error) => {
                 console.log('Error loading genes!');
