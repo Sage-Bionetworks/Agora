@@ -298,7 +298,7 @@ connection.once('open', () => {
             } else {
                 await GenesProteomics.findOne({ $and: [
                     {
-                        hgnc_symbol: id
+                        ensembl_gene_id: id
                     },
                     {
                         uniprotid: { $ne: null }
@@ -338,7 +338,7 @@ connection.once('open', () => {
                 // Load all dimensions and groups
                 let genePTissues: string[] = [];
                 const idGenesProteomics = localGeneProteomics.filter((p: Proteomics) => {
-                    return p.hgnc_symbol === id && p.log2_fc && p.uniprotid === filter;
+                    return p.ensembl_gene_id === id && p.log2_fc && p.uniprotid === filter;
                 });
 
                 if (idGenesProteomics.length) {
@@ -361,7 +361,7 @@ connection.once('open', () => {
                     }
 
                     dimensions.spDim = await indx.dimension((d) => {
-                        return (d.hgnc_symbol === id) ? d.uniprotid : null;
+                        return (d.ensembl_gene_id === id) ? d.uniprotid : null;
                     });
 
                     // Filter is the uniprotid
@@ -493,6 +493,7 @@ connection.once('open', () => {
                     return [];
                 }
             );
+
             groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
 
             if (Object.keys(groups).length > 0) {
@@ -504,7 +505,7 @@ connection.once('open', () => {
                                 values: groups[groupName].all(),
                                 top: (groupName === 'fpGroup') ?
                                     null :
-                                    groups[groupName].top(1)[0].value
+                                    groups[groupName].top(1)[0]?.value
                             };
                         } else {
                             const newGroup = rmEmptyBinsFP(groups.fpGroup, (filter) ?
@@ -962,7 +963,7 @@ connection.once('open', () => {
             switch (info.type) {
                 case 'forest-plot':
                     // The key returned
-                    return [d[dimValue[0]], d.hgnc_symbol, d.model];
+                    return [d[dimValue[0]], d.ensembl_gene_id, d.model];
                 case 'scatter-plot':
                     const x = Number.isNaN(+d[dimValue[0]]) ? 0 : +d[dimValue[0]];
                     const y = Number.isNaN(+d[dimValue[1]]) ? 0 : +d[dimValue[1]];
@@ -1079,38 +1080,46 @@ connection.once('open', () => {
         };
     };
 
-    const getGeneCorrelationData = (hgncId: string) => {
+    const getGeneCorrelationData = (ensemblGeneId: string) => {
         const noData = [];
         if (!genesNeuroCorr.length) {  // if DB has error
             console.log('getGeneCorrelationData: Mongo DB return document length ', genesNeuroCorr.length);
             return noData;
         }
 
-        const ensembledIds = hgncToEnsembl.get(hgncId);
-        if (ensembledIds !== undefined) {
-            if (ensembledIds.length === 1) {  // ensembl id 'should' map to only one hgnc id
-                return genesNeuroCorr.filter(obj => obj['ensg'] === ensembledIds[0]);
-            } else {
-                console.log('getGeneCorrelationData: Correlation data length error with length: ', ensembledIds.length);
-            }
+        if (ensemblGeneId !== undefined) {
+            return genesNeuroCorr.filter(obj => obj['ensg'] === ensemblGeneId);
         } else {
             console.log('getGeneCorrelationData: ensembledIds is undefined.');
         }
         return noData;
     };
 
-    router.get('/evidence', (req, res, next) => {
+    router.get('/evidence', async (req, res, next) => {
 
-        // Mock data
-        const response = {
-            rnaDifferentialExpression: [], // set in setEvidenceData
-            rnaCorrelation: getGeneCorrelationData(req.query.id)
-        };
-
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', 0);
-        res.json(response);
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({ item: null });
+        } else {
+            // Find all the Genes with the current id
+            await Genes.find({ensembl_gene_id: req.query.id}).lean().sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+                .exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    if (!genes.length) {
+                        res.json({items: []});
+                    } else {
+                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                        res.setHeader('Pragma', 'no-cache');
+                        res.setHeader('Expires', 0);
+                        res.json({
+                            rnaDifferentialExpression: genes,
+                            rnaCorrelation: getGeneCorrelationData(req.query.id)
+                        });
+                    }
+                }
+            });
+        }
     });
 
 });

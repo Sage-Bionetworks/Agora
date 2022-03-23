@@ -101,7 +101,6 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
             };
             return data;
         });
-        console.log(this.chartData);
     }
 
     getChartPromise(): Promise<any> {

@@ -41,7 +41,7 @@ export class DataService {
     loadData(gene: Gene): Observable<any[]> {
         const genesResponse = this.apiService.getGenes(gene.hgnc_symbol);
         const nodesResponse = this.apiService.getLinksList(gene);
-        const evidenceResponse = this.apiService.getEvidencenData(gene.hgnc_symbol);
+        const evidenceResponse = this.apiService.getEvidencenData(gene.ensembl_gene_id);
 
         return forkJoin([
             genesResponse,
@@ -120,7 +120,7 @@ export class DataService {
 
     setEvidenceData(data: any) {
         this.evidenceData = data;
-        this.evidenceData.rnaDifferentialExpression = this.getGeneEntries();
+        //this.evidenceData.rnaDifferentialExpression = this.getGeneEntries();
     }
 
     getEvidenceData(): Gene[] {

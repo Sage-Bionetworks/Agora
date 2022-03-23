@@ -183,7 +183,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
         this.apiService.refreshChartsData(
             this.chartService.queryFilter.smGroup,
-            this.gene.hgnc_symbol
+            this.gene.ensembl_gene_id
         ).subscribe((d) => {
             this.chartService.filteredData = d;
             this.dataLoaded = true;
