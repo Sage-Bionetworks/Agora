@@ -55,10 +55,8 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     max: number = -Infinity;
     currentModel: string;
     currentTissue: string;
-    display: boolean = false;
     canDisplay: boolean = false;
     canResize: boolean = false;
-    firstRender: boolean = true;
     colors: string[] = ['#5171C0'];
     routerSubscription: Subscription;
     chartSubscription: Subscription;
@@ -125,8 +123,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             this.chartSubscription.unsubscribe();
         }
         this.geneService.setEmptyGeneState(true);
-        this.firstRender = true;
-        this.display = false;
     }
 
     getModel(): string {
@@ -235,7 +231,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     }
                 })
                 .on('renderlet', function(chart) {
-                    self.firstRender = false;
                     // Copy all vertical texts to another div, so they don't get hidden by
                     // the row chart svg after being translated
                     self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
@@ -326,9 +321,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         // Redraw confidence text next to the lines in each row
         self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth, true);
         self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth);
-
-        // Finally show the chart
-        self.display = true;
     }
 
     updateXDomain() {
@@ -611,7 +603,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     displayChart(): any {
-        // return { opacity: (this.display) ? 1 : 0 };
         return { opacity: 1 };
     }
 
