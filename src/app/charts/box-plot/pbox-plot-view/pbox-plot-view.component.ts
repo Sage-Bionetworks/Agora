@@ -254,7 +254,8 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     updateYDomain() {
         // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+        const evidenceData = this.dataService.getEvidenceData();
+        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
         currentGenes.forEach((g) => {

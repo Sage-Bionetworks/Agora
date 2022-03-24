@@ -120,7 +120,6 @@ export class DataService {
 
     setEvidenceData(data: any) {
         this.evidenceData = data;
-        //this.evidenceData.rnaDifferentialExpression = this.getGeneEntries();
     }
 
     getEvidenceData(): Gene[] {

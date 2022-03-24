@@ -163,7 +163,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const bpGroup = {
             all() {
-                const currentGenes = self.dataService.getGeneEntries().slice().filter((g) => {
+                const evidenceData = self.dataService.getEvidenceData();
+                const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
                     return g.model === self.geneService.getCurrentModel();
                 });
                 if (currentGenes.length !==
@@ -267,9 +268,11 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     updateYDomain() {
         // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
+        const evidenceData = this.dataService.getEvidenceData();
+        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
+
         currentGenes.forEach((g) => {
             if (Math.abs(+g.logfc) > this.max) {
                 this.max = Math.abs(+g.logfc);
