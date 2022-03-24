@@ -51,8 +51,12 @@
         display: none;
     }
 
-    p-multiselect {
+    .p-multiselect {
         width: 100%;
+
+        .p-multiselect-label-empty {
+            display: none;
+        }
 
         .p-multiselect,
         .p-multiselect-panel
@@ -78,7 +82,7 @@
             background-color: $faded-secondary-background;
         }
 
-        .p-chkbox-box:not(.p-state-disabled):not(.p-highlight):hover {
+        .p-checkbox-box:not(.p-state-disabled):not(.p-highlight):hover {
             background-color: $faded-secondary-background;
         }
 
@@ -115,19 +119,19 @@
             }
         }
 
-        .p-chkbox {
+        .p-checkbox {
             margin-right: 1.125em;
             height: 32px;
             width: 32px;
         }
 
-        .p-chkbox-box {
+        .p-checkbox-box {
             height: 32px;
             width: 32px;
             vertical-align: middle;
             border-radius: 6px;
 
-            .p-chkbox-icon {
+            .p-checkbox-icon {
                 color: $background;
             }
 

@@ -287,11 +287,18 @@ textarea::-ms-clear {
     }
 }
 
-.p-multiselectitem {
-    span, .multiselect-option {
-        @include lato-font('normal');
+.p-multiselect-item {
 
+    .p-checkbox {
+        min-width: 18px;
+    }
+
+    &, .p-checkbox-icon {
         font-size: $font-size-x-small;
+    }
+
+    span:not(.p-checkbox-icon), .multiselect-option {
+        @include lato-font('normal');
         line-height: 29px;
         margin-top: 4px;
     }
@@ -404,21 +411,22 @@ textarea::-ms-clear {
             }
 
             .icon-col {
+                display: flex;
                 height: 100%;
+                justify-content: flex-end;
+                padding-top: 3px;
 
-                p-multiselect {
+                > div {
+                    padding-left: 3px;
+                    padding-right: 3px;
+                }
+
+                .p-multiselect {
                     width: 100%;
                     color: $background;
 
-                    p-multiselectitem {
-                        li:hover {
-                            background: $menu-dark !important;
-                            color: $background;
-
-                            .pi-check::before {
-                                color: $background !important;
-                            }
-                        }
+                    .p-multiselect-label-empty {
+                        display: none;
                     }
 
                     .custom-bars {
@@ -447,13 +455,10 @@ textarea::-ms-clear {
                         }
                     }
 
-                    .p-multiselect-trigger {
-                        height: 0px;
-                    }
-
                     .p-multiselect-trigger-icon {
                         font-size: 1.5em;
                         color: white;
+                        transform: translateY(3px);
                     }
 
                     .p-multiselect-item {
@@ -463,26 +468,23 @@ textarea::-ms-clear {
                         padding-right: 15px;
                         display: flex !important;
 
-                        .p-chkbox {
+                        .p-checkbox {
                             margin-right: 6.8px;
                         }
 
-                        .p-chkbox-box {
+                        .p-checkbox-box {
                             line-height: 23px;
                         }
+
+                        &:hover {
+                            background: $menu-dark !important;
+                            color: $background;
+
+                            .pi-check::before {
+                                color: $background !important;
+                            }
+                        }
                     }
-                }
-
-                .absolute-icon {
-                    position: absolute;
-                    top: 16px;
-                    right: 65%;
-                }
-
-                .absolute-icon-left {
-                    position: absolute;
-                    top: 16px;
-                    right: 100%;
                 }
             }
         }

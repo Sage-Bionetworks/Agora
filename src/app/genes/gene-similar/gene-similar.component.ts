@@ -103,8 +103,8 @@ export class GeneSimilarComponent implements OnInit {
 
     getWindowClass(): string {
         return (screenfull && !screenfull.isFullscreen) ?
-            ' pi pi-window-maximize table-icon absolute-icon-left' :
-            ' pi pi-window-minimize table-icon absolute-icon-left';
+            ' pi pi-window-maximize table-icon' :
+            ' pi pi-window-minimize table-icon';
     }
 
     updateVariables() {
@@ -240,10 +240,10 @@ export class GeneSimilarComponent implements OnInit {
         }
     }
 
-    reorderValues(event) {
-        const defaultCol = this.selectedColumns.find(d => d.field === 'hgnc_symbol');
-        if (!defaultCol) {
-            this.selectedColumns.unshift(this.cols[0]);
+    onColumnSelectionChange(event) {
+        // Force 'hgnc_symbol' (name) column to be selected
+        if (!this.selectedColumns.find(d => d.field === 'hgnc_symbol')) {
+            this.selectedColumns.unshift(this.cols.find(d => d.field === 'hgnc_symbol'));
         }
 
         this.selectedColumns.sort((a: any, b: any) => {
@@ -380,8 +380,8 @@ export class GeneSimilarComponent implements OnInit {
             let value2 = null;
 
             if ('hgnc_symbol' === event.field) {
-                value1 = data1.hgnc_symbol || data1.ensembl_gene_id;
-                value2 = data2.hgnc_symbol || data2.ensembl_gene_id;
+                value1 = data1.hgnc_symbol ?? data1.ensembl_gene_id;
+                value2 = data2.hgnc_symbol ?? data2.ensembl_gene_id;
             } else {
                 value1 = data1[event.field];
                 value2 = data2[event.field];

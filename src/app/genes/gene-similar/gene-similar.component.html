@@ -35,29 +35,36 @@
         </ng-template>
         <ng-template pTemplate="caption">
             <div class="row icon-row">
-                <div class="col-md-11 col-sm-11 col-9 title-col">
+                <div class="col-md-10 col-sm-10 col-9 title-col">
                     Similar Genes
                 </div>
-                <div class="col-md-1 col-sm-1 col-3 icon-col">
-                    <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
-                    <i class="pi pi-download table-icon absolute-icon" (click)="downloadTable()"></i>
-                    <p-multiSelect
-                        [options]="cols"
-                        [(ngModel)]="selectedColumns"
-                        optionLabel="header"
-                        selectedItemsLabel=""
-                        maxSelectedLabels="0"
-                        displaySelectedLabel="false"
-                        defaultLabel=""
-                        dropdownIcon="pi pi-bars custom-bars"
-                        [showHeader]="false"
-                        [panelStyle]="{minWidth:'15em'}"
-                        [appendTo]="body"
-                        (onChange)="reorderValues($event)">
-                        <ng-template let-col pTemplate="item">
-                            <div class="multiselect-option">{{col.label}}</div>
-                        </ng-template>
-                    </p-multiSelect>
+                <div class="col-md-2 col-sm-2 col-3 icon-col">
+                    <div>
+                        <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
+                    </div>
+                    <div>
+                        <i class="pi pi-download table-icon" (click)="downloadTable()"></i>
+                    </div>
+                    <div>
+                        <p-multiSelect
+                            [options]="cols"
+                            [(ngModel)]="selectedColumns"
+                            (onChange)="onColumnSelectionChange($event)"
+                            [appendTo]="body"
+                            [showHeader]="false"
+                            [panelStyle]="{minWidth:'15em'}"
+                            optionLabel="header"
+                            defaultLabel=""
+                            selectedItemsLabel=""
+                            displaySelectedLabel="false"
+                            maxSelectedLabels="0"
+                            dropdownIcon="pi pi-bars custom-bars"
+                        >
+                            <ng-template let-col pTemplate="item">
+                                <div class="multiselect-option">{{col.header}}</div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </div>
                 </div>
             </div>
         </ng-template>

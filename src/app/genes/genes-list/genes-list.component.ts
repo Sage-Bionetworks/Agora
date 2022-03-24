@@ -170,10 +170,10 @@ export class GenesListComponent implements OnInit {
         return array;
     }
 
-    reorderValues(event) {
-        const defaultCol = this.selectedColumns.find(d => d.field === 'hgnc_symbol');
-        if (!defaultCol) {
-            this.selectedColumns.unshift(this.cols[0]);
+    onColumnSelectionChange(event) {
+        // Force 'hgnc_symbol' (name) column to be selected
+        if (!this.selectedColumns.find(d => d.field === 'hgnc_symbol')) {
+            this.selectedColumns.unshift(this.cols.find(d => d.field === 'hgnc_symbol'));
         }
 
         this.selectedColumns.sort((a: any, b: any) => {
