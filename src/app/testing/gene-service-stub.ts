@@ -159,7 +159,7 @@ export class GeneServiceStub {
     }
 
     updatePreviousGene() {
-        if (this.getCurrentGene() && this.getCurrentGene().hgnc_symbol) {
+        if (this.getCurrentGene() && this.getCurrentGene().ensembl_gene_id) {
             // Only update the previous gene if we already have a current one
             this.setPreviousGene(this.getCurrentGene());
         }
@@ -196,7 +196,7 @@ export class GeneServiceStub {
 
     hasGeneChanged(): boolean {
         return (this.getPreviousGene() && this.getCurrentGene()) ?
-            this.getPreviousGene().hgnc_symbol !== this.getCurrentGene().hgnc_symbol :
+            this.getPreviousGene().ensembl_gene_id !== this.getCurrentGene().ensembl_gene_id :
             false;
     }
 

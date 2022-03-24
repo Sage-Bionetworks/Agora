@@ -266,13 +266,15 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     addXAxisTooltips(chart: dc.BoxPlot) {
         const self = this;
-        chart.selectAll('g.axis.x g.tick').each(function(d, i) {
+        chart.selectAll('g.axis.x g.tick').each(function() {
             const text = d3.select(this).select('text');
+            const textElement = text.node() as HTMLElement;
             const line = d3.select(this).select('line').node() as HTMLElement;
-            const tooltip = document.getElementsByClassName('pbp-axis-tooltip')[0] as HTMLElement;
 
             text
                 .on('mouseover', function() {
+                    const textElementRec = textElement.getBoundingClientRect();
+
                     // Get the text based on the brain tissue
                     self.sDiv.html(self.chartService.getTooltipText(text.text()));
 
@@ -281,13 +283,13 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         .style('left',
                             (
                                 // Left position of the tick line minus half the tooltip width to center.
-                                line.getBoundingClientRect().left - (tooltip.offsetWidth / 2)
+                                line.getBoundingClientRect().left - (self.sDiv.node().offsetWidth / 2)
                             ) + 'px'
                         )
                         .style('top',
                             (
-                                self.bpCol.nativeElement.offsetTop
-                                + chart.height()
+                                // Position at the bottom on the label + 15px
+                                window.pageYOffset + textElementRec.top + textElementRec.height + 15
                             ) + 'px'
                         );
 
@@ -326,7 +328,8 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             logVals.push(p.log2_fc);
             significanceTexts.push((p.cor_pval <= 0.05) ?
             ' ' : 'not ');
-            phrases.push(p.hgnc_symbol + ' is ' + significanceTexts[significanceTexts.length - 1] +
+            phrases.push((p.hgnc_symbol || p.ensembl_gene_id) +
+                ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
                 p.tissue +
                 ' with a log fold change value of ' + p.log2_fc + ' and an adjusted p-value of ' +

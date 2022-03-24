@@ -25,13 +25,19 @@ export class GeneSearchComponent implements OnInit {
     @Input() style: any;
     @Input() infos: Gene[];
     queryField: FormControl = new FormControl();
+    currentQuery: string = '';
+    isSearching: boolean = false;
+    isEnsemblIdSearch: boolean = false;
+    isNotFound: boolean = false;
+    errorMessage: string = null;
     results: GeneInfo[] = [];
     hasFocus: boolean = false;
-    isSearching: boolean = false;
     gene: Gene;
-    notFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
-    isNotFound: boolean = false;
-    currentQuery: string = '';
+    hgncSymbolNotFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
+    ensemblIdNotFoundString: string = 'Unable to find a matching gene. Try searching by gene symbol.';
+    notValidSearchString: string = 'Please enter a least two characters.';
+    notValidEnsemblIdString: string = 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
+    hgncSymbolCounts: {};
 
     constructor(
         private navService: NavigationService,
@@ -46,20 +52,11 @@ export class GeneSearchComponent implements OnInit {
     initQueryField() {
         this.queryField.valueChanges
             .pipe(
-                debounceTime(300),
+                debounceTime(500),
                 distinctUntilChanged(),
                 switchMap((query) => {
                     this.results = [];
-
-                    if (query) {
-                        this.currentQuery = query;
-                        this.isSearching = true;
-                        return this.search(query);
-                    } else {
-                        this.currentQuery = '';
-                        this.isSearching = false;
-                        return empty();
-                    }
+                    return this.search(query);
                 }),
                 catchError((err) => throwError(err))
             )
@@ -70,27 +67,35 @@ export class GeneSearchComponent implements OnInit {
                 // If we got an empty array as response, or no genes found
                 if (!data.items.length) {
                     this.isNotFound = true;
-                    this.results = [{
-                        _id: this.notFoundString,
-                        ensembl_gene_id: this.notFoundString,
-                        name: this.notFoundString,
-                        hgnc_symbol: this.notFoundString,
-                        type_of_gene: this.notFoundString,
-                        isIGAP: false,
-                        haseqtl: false,
-                        isAnyRNAChangedInADBrain: false,
-                        isAnyProteinChangedInADBrain: false,
-                        medianexpression: [],
-                        nominatedtarget: [],
-                        nominations: 0
-                    } as GeneInfo];
+                    this.setErrorMessage(
+                        this.isEnsemblIdSearch ?
+                        this.ensemblIdNotFoundString :
+                        this.hgncSymbolNotFoundString
+                    );
                 } else {
                     this.isNotFound = false;
                     if (data.isEnsembl) {
-                        // It is safe to get the first index here because there will be only
-                        // one match when using the ensembl id
-                        this.viewGene(data.items[0]);
+                        // Multiple matching genes: This should never happen…but if it does, log an error
+                        if (data.items.length > 1) {
+                            console.log('Unexpected duplicate gene_info objects for ensembl ID "' +
+                            this.currentQuery + '" found.');
+                            this.setErrorMessage(this.ensemblIdNotFoundString);
+                        } else {
+                            this.viewGene(data.items[0]);
+                        }
                     } else {
+                        this.hgncSymbolCounts = {};
+
+                        for (const item of data.items) {
+                            if (item.hgnc_symbol) {
+                                if (!this.hgncSymbolCounts.hasOwnProperty(item.hgnc_symbol)) {
+                                    this.hgncSymbolCounts[item.hgnc_symbol] = 1;
+                                } else {
+                                    this.hgncSymbolCounts[item.hgnc_symbol]++;
+                                }
+                            }
+                        }
+
                         this.results = data.items;
                     }
                 }
@@ -102,13 +107,31 @@ export class GeneSearchComponent implements OnInit {
             });
     }
 
-    search(queryString: string): Observable<any> {
-        if (queryString) {
-            return this.apiService.getInfosMatchId(queryString);
-        } else {
-            this.isSearching = false;
-            return empty();
+    search(query: string): Observable<any> {
+        this.isEnsemblIdSearch = false;
+        this.errorMessage = '';
+
+        if (query.length < 2) {
+            query = '';
+            this.setErrorMessage(this.notValidSearchString);
+        } else if (query.length > 3) {
+            const prefix = query.toLowerCase().substring(0, 4);
+
+            if ('ensg' === prefix) {
+                const digits = query.toLowerCase().substring(4, query.length);
+                this.isEnsemblIdSearch = true;
+
+                // Check if 11 digits numeric string
+                if (digits.length !== 11 || !/^\d+$/.test(digits)) {
+                    query = '';
+                    this.setErrorMessage(this.notValidEnsemblIdString);
+                }
+            }
         }
+
+        this.currentQuery = query;
+        this.isSearching = query ? true : false;
+        return query ? this.apiService.getInfosMatchId(query) : empty();
     }
 
     focusSearchList(state: boolean) {
@@ -120,20 +143,20 @@ export class GeneSearchComponent implements OnInit {
     }
 
     getGeneId(): string {
-        return this.gene.hgnc_symbol;
+        return this.gene.ensembl_gene_id;
     }
 
     viewGene(info: GeneInfo) {
-        if (info.name !== this.notFoundString) {
+        if (info.name !== this.hgncSymbolNotFoundString && info.name !== this.ensemblIdNotFoundString) {
             this.navService.setOvMenuTabIndex(0);
             // We don't have a gene
             if (!this.geneService.getCurrentGene()) {
-                this.getGene(info.hgnc_symbol);
+                this.getGene(info.ensembl_gene_id);
             } else {
                 this.geneService.updatePreviousGene();
                 // We have a gene, but it's a new one
-                if (this.geneService.getCurrentGene().hgnc_symbol !== info.hgnc_symbol) {
-                    this.getGene(info.hgnc_symbol);
+                if (this.geneService.getCurrentGene().ensembl_gene_id !== info.ensembl_gene_id) {
+                    this.getGene(info.ensembl_gene_id);
                 } else {
                     this.navService.goToRoute(
                         '/genes',
@@ -151,8 +174,8 @@ export class GeneSearchComponent implements OnInit {
         }
     }
 
-    getGene(geneSymbol: string) {
-        this.apiService.getGene(geneSymbol).subscribe((data: GeneResponse) => {
+    getGene(ensemblGeneId: string) {
+        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
             if (!data.info) {
                 this.navService.goToRoute('./genes');
             } else {
@@ -162,6 +185,12 @@ export class GeneSearchComponent implements OnInit {
                         data.info.ensembl_gene_id, data.info.hgnc_symbol
                     );
                 }
+
+                // Remove hgnc_symbol if missing from info
+                if (!data.info.hgnc_symbol) {
+                    data.item.hgnc_symbol = '';
+                }
+
                 const updatePromise = new Promise((resolve, reject) => {
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
@@ -192,6 +221,24 @@ export class GeneSearchComponent implements OnInit {
     // the resulting hgnc_symbol can't have the search query
     hasAlias(hgncSymbol: string): boolean {
         return !hgncSymbol.includes(this.currentQuery.toUpperCase()) &&
-            hgncSymbol !== this.notFoundString;
+            hgncSymbol !== this.hgncSymbolNotFoundString && hgncSymbol !== this.ensemblIdNotFoundString;
+    }
+
+    setErrorMessage(message: string) {
+        this.errorMessage = message;
+        this.results = [{
+            _id: null,
+            ensembl_gene_id: null,
+            name: null,
+            hgnc_symbol: null,
+            type_of_gene: null,
+            isIGAP: false,
+            haseqtl: false,
+            isAnyRNAChangedInADBrain: false,
+            isAnyProteinChangedInADBrain: false,
+            medianexpression: [],
+            nominatedtarget: [],
+            nominations: 0
+        } as GeneInfo];
     }
 }

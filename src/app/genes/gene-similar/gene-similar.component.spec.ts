@@ -200,7 +200,7 @@ describe('Component: GeneSimilar', () => {
         component.gene = mockGene1;
         component.geneInfo = mockInfo1;
         component.id = null;
-        component.gene.hgnc_symbol = null;
+        component.gene.ensembl_gene_id = null;
         component.initData();
         tick();
         fixture.detectChanges();
@@ -211,8 +211,8 @@ describe('Component: GeneSimilar', () => {
         // Fifth check
         component.gene = mockGene1;
         component.geneInfo = mockInfo1;
-        component.id = mockGene1.hgnc_symbol;
-        component.gene.hgnc_symbol = null;
+        component.id = mockGene1.ensembl_gene_id;
+        component.gene.ensembl_gene_id = null;
         component.initData();
         tick();
         fixture.detectChanges();
@@ -221,8 +221,8 @@ describe('Component: GeneSimilar', () => {
         expect(component.gene).not.toEqual(null);
         expect(component.geneInfo).not.toEqual(null);
         expect(component.id).not.toEqual(null);
-        expect(component.id).not.toEqual(component.gene.hgnc_symbol);
-        expect(component.id).not.toEqual(geneService.getCurrentGene().hgnc_symbol);
+        expect(component.id).not.toEqual(component.gene.ensembl_gene_id);
+        expect(component.id).not.toEqual(geneService.getCurrentGene().ensembl_gene_id);
 
         expect(ggSpy.calls.any()).toEqual(true);
         expect(gcgSpy.calls.any()).toEqual(true);
@@ -276,10 +276,10 @@ describe('Component: GeneSimilar', () => {
         spyOn(navService.testRouter, 'navigate').and.callThrough();
 
         component.selectedInfo = mockInfo1;
-        apiService.getGene('VGF').subscribe((data: GeneResponse) => {
+        apiService.getGene('ENSG00000128564').subscribe((data: GeneResponse) => {
             expect(data.item).toEqual(null);
         }); // search an empty gene id
-        component.getGene('VGF');
+        component.getGene('ENSG00000128564');
         tick();
         fixture.detectChanges();
         fixture.whenStable().then(() => {

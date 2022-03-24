@@ -3,7 +3,12 @@ import {
 } from '@angular/core/testing';
 
 import {
-    ApiServiceStub, mockGene1, mockGeneResponse1, mockGeneResponseNoGeneItem, mockGeneResponseNoExpValidation, mockGeneResponseNoScores
+    ApiServiceStub,
+    mockGene1,
+    mockGeneResponse1,
+    mockGeneResponseNoGeneItem,
+    mockGeneResponseNoExpValidation,
+    mockGeneResponseNoScores
 } from '../../testing';
 
 import { ApiService, GeneService } from './';

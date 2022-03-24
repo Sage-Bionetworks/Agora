@@ -446,11 +446,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 const cPromise = new Promise(async (resolve, reject) => {
                     if (self.type === 'RNA') {
                         self.chartService.queryFilter.smGroup = c.innerHTML;
-                        const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(
-                            self.chartService.queryFilter.smGroup, gene
+                            self.chartService.queryFilter.smGroup,
+                            self.geneService.getCurrentGene().ensembl_gene_id
                         )
                             .subscribe((results) => {
                             self.chartService.filteredData = results;
@@ -459,11 +459,13 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         });
                     } else if (self.type === 'Proteomics') {
                         self.chartService.pQueryFilter.spGroup = c.innerHTML;
-                        const gene = self.geneService.getCurrentGene().hgnc_symbol;
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(
-                            self.chartService.pQueryFilter.spGroup, gene, self.type)
+                            self.chartService.pQueryFilter.spGroup,
+                            self.geneService.getCurrentGene().ensembl_gene_id,
+                            self.type
+                        )
                             .subscribe((results) => {
                             self.chartService.filteredData = results;
                             self.isActive = true;
