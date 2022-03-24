@@ -385,6 +385,9 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
         if (this.networkData && this.networkData.origin.ensembl_gene_id === node.ensembl_gene_id) {
             return '#F47E6C';
         }
+        if (node.brainregions.length >= 8) {
+            return '#1C3A35';
+        }
         if (node.brainregions.length >= 6) {
             return '#0C656B';
         }

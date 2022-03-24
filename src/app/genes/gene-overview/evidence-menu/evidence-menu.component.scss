@@ -4,7 +4,7 @@
 .evidence-tab-menu {
     padding: 0px !important;
 
-    .ui-tabmenu-nav {
+    .p-tabmenu-nav {
         padding: 0px !important;
         background: $menu-dark;
         background-color: $menu-dark !important;
@@ -87,6 +87,7 @@
         color: $background;
 
         a {
+            display: block;
             padding: 0px !important;
             width: 100%;
             text-align: center;
@@ -98,7 +99,7 @@
         }
     }
 
-    .ui-state-active {
+    .p-highlight {
         a > span {
             @include lato-font('bold');
             font-size: $font-size-xx-regular;

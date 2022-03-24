@@ -20,7 +20,7 @@
 }
 
 .gd-accordion {
-    .ui-accordion-header {
+    .p-accordion-header {
         min-height: 99px;
         padding: 15px;
         border: 2px solid #DDDDDF;
@@ -43,7 +43,7 @@
     }
 
     .grey-background {
-        .ui-accordion-header {
+        .p-accordion-header {
             background: $table-row-even;
         }
 
@@ -240,8 +240,8 @@
         font-size: $font-size-x-regular;
     }
 
-    .ui-accordion {
-        .content-row, .ui-accordion-header {
+    .p-accordion {
+        .content-row, .p-accordion-header {
             @include respond-to('ex-small') {
                 margin-left: 3.5%;
                 margin-right: 3.5%;
@@ -264,7 +264,7 @@
             }
         }
 
-        .ui-accordion-toggle-icon {
+        .p-accordion-toggle-icon {
             position: absolute;
             right: 60px;
             top: calc(50% - 14px);
@@ -276,7 +276,7 @@
             padding-right: 144px;
         }
 
-        .ui-accordion-content {
+        .p-accordion-content {
             padding: 0px;
         }
 

@@ -2,11 +2,11 @@
 @import "../../../assets/css/helpers/mixins";
 
 .dg-dialog {
-    .ui-dialog {
+    .p-dialog {
         max-height: 90% !important;
     }
 
-    .ui-dialog-content {
+    .p-dialog-content {
         padding-top: 0% !important;
         padding-bottom: 132px !important;
         padding-left: 6% !important;
@@ -21,7 +21,7 @@
         padding-bottom: 215px;
     }
 
-    .ui-dialog-titlebar-icon {
+    .p-dialog-header-icon {
 
         cursor: pointer;
 

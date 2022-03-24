@@ -21,6 +21,8 @@ import { AppComponent } from './app.component';
 // State related imports
 import { AppState, InternalStateType } from './app.service';
 
+import { CookieService } from 'ngx-cookie-service';
+
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
@@ -52,7 +54,8 @@ interface StoreType {
     providers: [
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
-        HammerGestureConfig
+        HammerGestureConfig,
+        CookieService
     ]
 })
 export class AppModule {}
