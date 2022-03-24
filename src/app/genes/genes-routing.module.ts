@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
+import { GeneComparisonToolComponent } from './gene-comparison-tool';
 import { GeneBRComponent } from './gene-brainregions';
 import { GeneSimilarComponent } from './gene-similar';
 import { NominatedFormComponent } from './nominated-form';
@@ -21,6 +22,7 @@ export const routes: Routes = [
         { path: '', component: GenesIntroComponent, outlet: 'genes-router' },
         { path: 'genes-intro', component: GenesIntroComponent, outlet: 'genes-router' },
         { path: 'genes-list', component: GenesListComponent, outlet: 'genes-router' },
+        { path: 'gene-comparison-tool', component: GeneComparisonToolComponent, outlet: 'genes-router' },
         { path: 'gene-similar/:id', component: GeneSimilarComponent, outlet: 'genes-router' },
         { path: 'gene-brainregions/:id', component: GeneBRComponent, outlet: 'genes-router' },
         { path: 'nominated-form', component: NominatedFormComponent, outlet: 'genes-router'},
