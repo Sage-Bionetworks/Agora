@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 
 import { ApiService, ForceService } from '.';
 
-import { Gene, GenesResponse } from '../../models';
+import { Gene, GenesResponse, RnaDistribution } from '../../models';
 
 import { Observable, forkJoin } from 'rxjs';
 
@@ -126,7 +126,7 @@ export class DataService {
         }
     }
 
-    getRnaDistributionData(): Object[] {
+    getRnaDistributionData(): RnaDistribution[] {
         return this.rnaDistributionData;
     }
 }

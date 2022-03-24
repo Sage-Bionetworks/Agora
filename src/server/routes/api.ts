@@ -18,6 +18,7 @@ import {
     GenesExperimentalValidation,
     GenesScoreDistribution,
     GenesOverallScores,
+    RnaDistribution
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -403,12 +404,12 @@ connection.once('open', () => {
                                                         indexOf(obj['key']) === pos;
                                                 }
                                             ),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 } else {
                                     results[groupName] = {
                                         values: groups[groupName].all(),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 }
                             });
@@ -504,7 +505,7 @@ connection.once('open', () => {
                                 values: groups[groupName].all(),
                                 top: (groupName === 'fpGroup') ?
                                     null :
-                                    groups[groupName].top(1)[0].value
+                                    groups[groupName].top(1)[0]?.value
                             };
                         } else {
                             const newGroup = rmEmptyBinsFP(groups.fpGroup, (filter) ?
@@ -1099,93 +1100,21 @@ connection.once('open', () => {
         return noData;
     };
 
-    router.get('/rnadistribution', (req, res, next) => {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', 0);
-        res.json([
-            {
-                min: 1.50,
-                max: 2.50,
-                mean: 1.964,
-                first_quartile: 1.75,
-                third_quartile: 2.25,
-                tissue: "CBE",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: 0.5000,
-                max: 2.50,
-                mean: 1.43926,
-                first_quartile: 1.25,
-                third_quartile: 1.75,
-                tissue: "DLPFC",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: -2.00,
-                max: 2.00,
-                mean: -0.138,
-                first_quartile: -1.37,
-                third_quartile: 1.19,
-                tissue: "FP",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: -1.00,
-                max: -2.00,
-                mean: -1.50,
-                first_quartile: -1.25,
-                third_quartile: -1.75,
-                tissue: "IFG",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: -1.00,
-                max: 2.00,
-                mean: 0.974,
-                first_quartile: -0.25,
-                third_quartile: 1.65,
-                tissue: "PHG",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: 1.00,
-                max: 2.00,
-                mean: 1.50,
-                first_quartile: 1.25,
-                third_quartile: 1.75,
-                tissue: "STG",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: 1.00,
-                max: 2.00,
-                mean: 1.50,
-                first_quartile: 1.25,
-                third_quartile: 1.75,
-                tissue: "TCX",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: 1.00,
-                max: 2.00,
-                mean: 1.50,
-                first_quartile: 1.25,
-                third_quartile: 1.75,
-                tissue: "PCC",
-                model: "AD Diagnosis x Sex (females only)"
-            },
-            {
-                min: 0.00,
-                max: 2.00,
-                mean: 1.16,
-                first_quartile: 0.43,
-                third_quartile: 1.49,
-                tissue: "ACC",
-                model: "AD Diagnosis x Sex (females only)"
+    router.get('/rnadistribution', async (req, res, next) => {
+        await RnaDistribution.find({}).lean().exec(async (err, data) => {
+            if (err) {
+                next(err);
+            } else {
+                if (!data.length) {
+                    res.json(data);
+                } else {
+                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    await res.json(data);
+                }
             }
-        ]);
+        });
     });
 
 });

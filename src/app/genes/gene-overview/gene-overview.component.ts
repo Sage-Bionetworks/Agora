@@ -369,7 +369,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 this.dataLoaded = true;
             }
 
-            this.apiService.getRnaDistributionData('').subscribe((data) => {
+            this.apiService.getRnaDistributionData().subscribe((data) => {
                 this.dataService.loadRnaDistributionData(data);
             }, (error) => {
                 console.log('Error loading RNA distribution data!');
