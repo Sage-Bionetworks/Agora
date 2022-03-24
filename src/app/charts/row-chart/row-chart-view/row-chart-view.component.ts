@@ -259,13 +259,21 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
         const textSelection = (svg || chart.svg());
         if (textSelection !== null) {
-            textSelection
-                .append('text')
-                .attr('class', 'x-axis-label')
-                .attr('text-anchor', 'middle')
-                .attr('x', width / 2)
-                .attr('y', height - 10)
-                .text(text);
+            const label = textSelection.select('.x-axis-label');
+
+            if (!label.node()) {
+                textSelection
+                    .append('text')
+                    .attr('class', 'x-axis-label')
+                    .attr('text-anchor', 'middle')
+                    .attr('x', width / 2)
+                    .attr('y', height - 10)
+                    .text(text);
+            } else {
+                label
+                    .attr('x', width / 2)
+                    .attr('y', height - 10)
+            }
 
             this.adjustXLabel(chart, textSelection, width, height);
         }
