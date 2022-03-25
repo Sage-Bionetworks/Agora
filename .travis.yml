@@ -9,7 +9,7 @@ addons:
 
 branches:
   only:
-  - develop
+  - troubleshooting
   - staging
   - prod
 
@@ -48,7 +48,7 @@ jobs:
           local_dir: dist
           app: agora-ampad
           env:
-            develop: agora-develop
+            troubleshooting: agora-develop
             staging: agora-staging
             prod: agora-prod
             DISABLE_OPENCOLLECTIVE: true
