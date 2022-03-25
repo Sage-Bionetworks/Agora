@@ -1399,6 +1399,7 @@ textarea::-ms-clear {
   @include link
 }
 
+
 .custom-toast {
     @include respond-to('ex-small') {
         width: 80%;
@@ -1416,6 +1417,18 @@ textarea::-ms-clear {
         color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-x-regular;
+    }
+
+    .p-toast-message-content {
+        padding: 10px;
+    }
+
+    .p-toast-message-text {
+        padding-left: 8px;
+    }
+
+    .p-toast-message-icon {
+        transform: translateY(2px);
     }
 
     .p-toast-summary {
