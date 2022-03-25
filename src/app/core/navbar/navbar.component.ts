@@ -108,8 +108,8 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     showMenu(event: Event) {
         // Mimics the splitbutton dropdown button click
         this.mobileMenu.onDropdownClick.emit(event);
-        //this.mobileMenu.dropdownClick = true;
-        //this.mobileMenu.show();
+        // this.mobileMenu.dropdownClick = true;
+        // this.mobileMenu.show();
     }
 
     showVideo() {

@@ -237,7 +237,7 @@ export const mockExpValidation: GeneExpValidation[] = [
 
 export const mockDistributionData: DistributionData = {
   distribution: [1],
-  bins: [['0', '1']] as Array<[string, string]>,
+  bins: [['0', '1']] as [string, string][],
   min: 1,
   max: 1,
   mean: 1,
