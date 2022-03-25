@@ -49,12 +49,27 @@ describe('Service: Gene: TestBed', () => {
     });
 
     // AG-293
-    xit('should update the previous gene with the current gene', () => {
+    it('should update the previous gene with the current gene', () => {
         const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
         geneService.setCurrentGene(mockGene1);
         expect(geneService.getCurrentGene()).toEqual(mockGene1);
         expect(geneService.getPreviousGene()).toEqual(undefined);
 
+        geneService.updatePreviousGene();
+        expect(upgSpy).toHaveBeenCalled();
+        expect(geneService.getPreviousGene()).toEqual(mockGene1);
+    });
+
+    it('should update the previous gene with the current gene 1', () => {
+        const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
+        geneService.setCurrentGene(mockGene1);
+        expect(geneService.getCurrentGene()).toEqual(mockGene1);
+        expect(geneService.getPreviousGene()).toEqual(undefined);
+    });
+
+    it('should update the previous gene with the current gene 2', () => {
+        const upgSpy = spyOn(geneService, 'updatePreviousGene').and.callThrough();
+        geneService.currentGene = mockGene1
         geneService.updatePreviousGene();
         expect(upgSpy).toHaveBeenCalled();
         expect(geneService.getPreviousGene()).toEqual(mockGene1);

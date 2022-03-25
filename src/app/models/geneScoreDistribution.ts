@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 export interface DistributionData {
     distribution: number[];
     /* Array of [binStart, binEnd] */
-    bins: Array<[string, string]>;
+    bins: [string, string][];
     min: number;
     max: number;
     mean: number;
