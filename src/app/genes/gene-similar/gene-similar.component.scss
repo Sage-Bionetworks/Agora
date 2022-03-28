@@ -10,7 +10,7 @@
 }
 
 .similar-table {
-    a.p-paginator-page.p-highlight {
+    a.ui-paginator-page.ui-state-active {
         background: $menu-dark;
         color: $background;
     }
@@ -24,8 +24,8 @@
     width: 15%;
 }
 
-.p-paginator-bottom {
-    .p-paginator-element {
+.ui-paginator-bottom {
+    .ui-paginator-element {
         color: color(text, secondary);
     }
 }

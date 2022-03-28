@@ -2,16 +2,16 @@
 @import "../../../assets/css/helpers/mixins";
 
 .soe-dialog {
-    .p-dialog-header {
+    .ui-dialog-titlebar {
         @include respond-to('ex-small') {
             padding-top: 20% !important;
         }
     }
 
-    .p-button-text-only .p-button-text{
+    .ui-button-text-only .ui-button-text{
         display: none !important;
     }
-    .p-dialog-content{
+    .ui-dialog-content{
         padding-top: 0% !important;
         padding-bottom: 132px !important;
         padding-left: 6% !important;

@@ -41,7 +41,7 @@
 }
 
 .fullscreen-table {
-    .p-datatable {
+    .ui-table {
         width: 100%;
         height: 100%;
         padding-left: 0px !important;
@@ -128,25 +128,25 @@ textarea::-ms-clear {
     display: none;
 }
 
-.p-checkbox {
-    .p-state-focus.p-highlight {
+p-checkbox {
+    .ui-state-focus.ui-state-active {
         background: #2F8E94 !important;
         border: 2px solid #73C8CC !important;
     }
 }
 
-.p-progressSpinner {
+p-progressSpinner {
     z-index: 2;
     color: color(text, title);
 
-    .p-progress-spinner {
+    .ui-progress-spinner {
         width: 10px;
         height: 10px;
         position: static;
     }
 }
 
-@keyframes p-progress-spinner-color {
+@keyframes ui-progress-spinner-color {
     100%,
     0% {
         stroke: color(text, title);
@@ -163,7 +163,7 @@ textarea::-ms-clear {
     }
 }
 
-.p-panel {
+p-panel {
     .pi-minus:before {
         content: url("/assets/icon/minus_icon.png") !important;
     }
@@ -172,28 +172,29 @@ textarea::-ms-clear {
         content: url("/assets/icon/plus_icon.png") !important;
     }
 
-    .p-panel-titlebar {
+    .ui-panel-titlebar {
         line-height: 45px !important;
     }
 }
 
-.p-dialog {
-    position: relative;
-    width: 65%;
-    max-height: 62%;
-    overflow: auto;
-    background: white;
+p-dialog {
+    .ui-dialog {
+        width: 65%;
+        max-height: 62%;
+        overflow: auto;
+        background: white;
 
-    p {
-        color: #000000;
-        margin: 0px;
+        p {
+            color: #000000;
+            margin: 0px;
+        }
     }
 
     .no-bold {
         font-weight: normal;
     }
 
-    .p-dialog-header {
+    .ui-dialog-titlebar {
         padding-bottom: 39px !important;
         @include lato-font('bold');
 
@@ -206,28 +207,21 @@ textarea::-ms-clear {
         text-align: center;
         padding-top: 10% ;
 
-        .p-dialog-header-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
         .pi-times:before {
             color: #5BB0B5;
             content: url("/assets/icon/close-modal-icon.svg");
         }
     }
 
-    .p-dialog-title {
+    .ui-dialog-title {
         @include lato-font('semi-bold');
-        width: 100%;
         font-weight: 500;
         font-size: 28px !important;
         line-height: 34px;
         color: color(text, title);
     }
 
-    .p-dialog-header-icon {
+    .ui-dialog-titlebar-icon {
         padding: .525em !important;
 
         > span {
@@ -236,7 +230,7 @@ textarea::-ms-clear {
         }
     }
 
-    .p-dialog-content {
+    .ui-dialog-content {
         @include lato-font('normal');
 
         padding-bottom: 45px;
@@ -282,12 +276,18 @@ textarea::-ms-clear {
         color: #5BB0B5;
     }
 
+    a {
+        position: absolute;
+        right: 1%;
+        top: 10%;
+    }
+
     a.dialog-link {
         position: static;
     }
 }
 
-.p-multiselectitem {
+p-multiselectitem {
     span, .multiselect-option {
         @include lato-font('normal');
 
@@ -297,19 +297,11 @@ textarea::-ms-clear {
     }
 }
 
-.p-menu {
+.ui-menu {
     background-color: $background;
-
-    .p-menuitem {
-        margin: .125em 0;
-    }
-
-    .p-menuitem-link {
-        padding: .25em;
-    }
 }
 
-.p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
     top: 0px;
 }
 
@@ -353,7 +345,7 @@ textarea::-ms-clear {
             background: $tertiary-background;
         }
 
-        .p-datatable {
+        .ui-table {
             background: white;
             padding-left: 10%;
             padding-right: 10%;
@@ -370,7 +362,7 @@ textarea::-ms-clear {
             padding-top: 44px;
         }
 
-        .p-datatable-thead {
+        .ui-table-thead {
             >tr>th {
                 background: $table-rol-filter !important;
                 color: color(text, secondary) !important;
@@ -388,8 +380,8 @@ textarea::-ms-clear {
             height: 58px;
             line-height: 58px;
             background: $menu-dark;
-            margin-right: 0;
-            margin-left: 0;
+            margin-right: -8px;
+            margin-left: -8px;
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.85);
 
             .title-col {
@@ -425,16 +417,16 @@ textarea::-ms-clear {
                         content: url("/assets/icon/columns.svg");
                     }
 
-                    .p-multiselect-items-wrapper {
+                    .ui-multiselect-items-wrapper {
                         padding: 0px;
                         background: white;
                     }
 
-                    .p-multiselect-items {
+                    .ui-multiselect-items {
                         background: white;
                     }
 
-                    .p-multiselect-panel {
+                    .ui-multiselect-panel {
                         padding: 0px;
                         background: transparent;
                         min-width: 234px !important;
@@ -447,27 +439,27 @@ textarea::-ms-clear {
                         }
                     }
 
-                    .p-multiselect-trigger {
+                    .ui-multiselect-trigger {
                         height: 0px;
                     }
 
-                    .p-multiselect-trigger-icon {
+                    .ui-multiselect-trigger-icon {
                         font-size: 1.5em;
                         color: white;
                     }
 
-                    .p-multiselect-item {
+                    .ui-multiselect-item {
                         line-height: 30px;
                         text-align: left;
                         padding-left: 15px;
                         padding-right: 15px;
                         display: flex !important;
 
-                        .p-chkbox {
+                        .ui-chkbox {
                             margin-right: 6.8px;
                         }
 
-                        .p-chkbox-box {
+                        .ui-chkbox-box {
                             line-height: 23px;
                         }
                     }
@@ -493,16 +485,16 @@ textarea::-ms-clear {
         color: $background;
     }
 
-    .p-datatable-scrollable-wrapper {
+    .ui-table-scrollable-wrapper {
         padding-bottom: 60px;
     }
 
-    .p-datatable-scrollable-view {
+    .ui-table-scrollable-view {
         background-color: $background;
         box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
     }
 
-    .p-datatable-scrollable-body {
+    .ui-table-scrollable-body {
         min-height: 300px;
     }
 
@@ -568,14 +560,14 @@ textarea::-ms-clear {
         }
     }
 
-    .p-datatable-tbody {
+    .ui-table-tbody {
         width: 100%;
         height: 100%;
         position: relative;
         overflow: unset !important;
     }
 
-    .p-datatable-scrollable-header-box {
+    .ui-table-scrollable-header-box {
         margin-right: 0px !important;
 
         @include respond-to('ex-small') {
@@ -583,7 +575,7 @@ textarea::-ms-clear {
         }
     }
 
-    .p-datatable-caption {
+    .ui-table-caption {
         background-color: transparent;
         background: none;
         border: none;
@@ -727,12 +719,12 @@ textarea::-ms-clear {
         }
     }
 
-    .p-datatable-thead {
-        .p-state-highlight {
+    .ui-table-thead {
+        .ui-state-highlight {
             color: $menu-dark;
         }
 
-        .p-sortable-column {
+        .ui-sortable-column {
             outline: 0;
         }
 
@@ -807,20 +799,20 @@ textarea::-ms-clear {
             text-align: center;
         }
 
-        .p-sortable-column {
+        .ui-sortable-column {
             font-size: $font-size-x-regular;
         }
     }
 
-    .p-datatable-tbody {
+    .ui-table-tbody {
         height: 100%;
 
-        .p-selectable-row {
+        .ui-selectable-row {
             outline: 0;
             cursor: pointer;
         }
 
-        >tr.p-state-highlight,
+        >tr.ui-state-highlight,
         >tr:focus {
             background-color: color(tr-focus, bg-color) !important;
         }
@@ -843,7 +835,7 @@ textarea::-ms-clear {
         }
     }
 
-    .p-sortable-column-icon {
+    .ui-sortable-column-icon {
         color: $menu-dark !important;
     }
 
@@ -1410,7 +1402,7 @@ textarea::-ms-clear {
         width: 50%;
     }
 
-    .p-toast-message {
+    .ui-toast-message {
         @include lato-font('normal');
 
         color: color(text, secondary);
@@ -1418,7 +1410,7 @@ textarea::-ms-clear {
         font-size: $font-size-x-regular;
     }
 
-    .p-toast-summary {
+    .ui-toast-summary {
         @include lato-font('bold');
 
         color: color(text, secondary);
@@ -1426,18 +1418,18 @@ textarea::-ms-clear {
         font-size: $font-size-xx-regular;
     }
 
-    .p-toast-close-icon {
+    .ui-toast-close-icon {
         color: color(text, secondary);
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
     }
 
-    .p-toast-message-error {
+    .ui-toast-message-error {
         background: #f33847;
     }
 
-    .p-toast-message-warn {
+    .ui-toast-message-warn {
         background: #ffe399;
     }
 }
