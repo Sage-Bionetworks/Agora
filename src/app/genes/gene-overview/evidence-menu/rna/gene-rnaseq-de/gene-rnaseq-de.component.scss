@@ -54,14 +54,14 @@
     p-multiselect {
         width: 100%;
 
-        .p-multiselect,
-        .p-multiselect-panel
+        .ui-multiselect,
+        .ui-multiselect-panel
         {
             width: 100%;
             color: color(text, fill);
         }
 
-        .p-multiselect-items {
+        .ui-multiselect-items {
             vertical-align: middle;
 
             >:hover {
@@ -70,19 +70,19 @@
             }
         }
 
-        .p-multiselect:not(.p-state-disabled):hover {
+        .ui-multiselect:not(.ui-state-disabled):hover {
             background: $background;
         }
 
-        .p-multiselect-item:not(.p-state-highlight):hover {
+        .ui-multiselect-item:not(.ui-state-highlight):hover {
             background-color: $faded-secondary-background;
         }
 
-        .p-chkbox-box:not(.p-state-disabled):not(.p-highlight):hover {
+        .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
             background-color: $faded-secondary-background;
         }
 
-        .p-multiselect-label-container {
+        .ui-multiselect-label-container {
             padding-left: 10px;
             @include lato-font('normal');
             font-size: $font-size-x-regular;
@@ -109,25 +109,25 @@
             background: $background;
             box-shadow: 0px 0px 4px color(box-shadow);
 
-            .p-multiselect-label {
+            .ui-multiselect-label {
                 margin: auto;
                 line-height: 52px;
             }
         }
 
-        .p-chkbox {
+        .ui-chkbox {
             margin-right: 1.125em;
             height: 32px;
             width: 32px;
         }
 
-        .p-chkbox-box {
+        .ui-chkbox-box {
             height: 32px;
             width: 32px;
             vertical-align: middle;
             border-radius: 6px;
 
-            .p-chkbox-icon {
+            .ui-chkbox-icon {
                 color: $background;
             }
 
@@ -171,7 +171,7 @@
             height: 51px;
             vertical-align: middle;
 
-            .p-state-default {
+            .ui-state-default {
                 background: $background;
                 border: 2px solid color(box-shadow);
                 box-sizing: border-box;
@@ -181,7 +181,7 @@
                 background-color: $background;
             }
 
-            .p-highlight {
+            .ui-state-active {
                 background: color(li, background-active);
                 border: 2px solid color(li, border-color-active);
                 box-sizing: border-box;
@@ -196,7 +196,7 @@
             }
         }
 
-        .p-state-highlight {
+        .ui-state-highlight {
             background: $background !important;
             background-color: $background !important;
             color: color(text, secondary);
@@ -211,13 +211,13 @@
             transform: scale(1.2,1);
         }
 
-        .p-multiselect-trigger {
+        .ui-multiselect-trigger {
             color: $secondary-background !important;
             width: 32px;
             border: none;
             padding-right: 5%;
 
-            .p-multiselect-trigger-icon {
+            .ui-multiselect-trigger-icon {
                 color: $secondary-background !important;
                 top: 0%;
                 width: 12px;
@@ -227,7 +227,7 @@
                 transform: scale(2.4, 2.4);
             }
 
-            .p-clickable {
+            .ui-clickable {
                 margin-top: 1.2em;
             }
         }

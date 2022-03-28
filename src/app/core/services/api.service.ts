@@ -68,26 +68,6 @@ export class ApiService {
         return this.http.get<GeneInfosResponse>('/api/genes/table', { headers, params });
     }
 
-    getComparisonData(options?: {}): Observable<GenesResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get<GenesResponse>('/api/genes/comparison', { headers, params: options });
-    }
-
-    getInfos() {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
-        return this.http.get<GeneInfosResponse>('/api/gene/infos', { headers });
-    }
-
     getInfosMatchId(id: string): Observable<GeneInfosResponse> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',

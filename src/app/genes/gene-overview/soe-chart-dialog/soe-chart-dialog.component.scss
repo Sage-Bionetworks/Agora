@@ -2,10 +2,10 @@
 @import "../../../../assets/css/helpers/mixins";
 
 .soe-chart-modal {
-    .p-dialog-header {
+    .ui-dialog-titlebar {
         pointer-events: auto;
     }
-    .p-dialog-content {
+    .ui-dialog-content {
         padding: 20px;
         margin: auto;
         width: 100%;

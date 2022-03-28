@@ -8,12 +8,6 @@ import { DialogsModule } from 'app/dialogs';
 import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
-import {
-    GeneComparisonToolComponent,
-    GeneComparisonToolFilterPanelComponent,
-    GeneComparisonToolFilterListComponent,
-    GeneComparisonToolDetailsPanelComponent
-} from './gene-comparison-tool';
 import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewModule } from './gene-overview';
@@ -25,10 +19,6 @@ import { GeneSimilarComponent } from './gene-similar';
         GenesViewComponent,
         GenesIntroComponent,
         GenesListComponent,
-        GeneComparisonToolComponent,
-        GeneComparisonToolFilterPanelComponent,
-        GeneComparisonToolFilterListComponent,
-        GeneComparisonToolDetailsPanelComponent,
         NominatedFormComponent,
         GeneSearchComponent,
         GeneBRComponent,

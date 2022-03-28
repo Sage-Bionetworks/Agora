@@ -22,11 +22,6 @@ import { ToastModule } from 'primeng/toast';
 import { AccordionModule } from 'primeng/accordion';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContextMenuModule } from 'primeng/contextmenu';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { MenuModule } from 'primeng/menu';
-import { TooltipModule } from 'primeng/tooltip';
-
 
 import { MessageService } from 'primeng/api';
 
@@ -96,11 +91,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         MultiSelectModule,
         ProgressSpinnerModule,
         AccordionModule,
-        ContextMenuModule,
-        InputTextModule,
-        DropdownModule,
-        MenuModule,
-        TooltipModule
+        ContextMenuModule
     ],
     exports: [
         // Angular modules
@@ -125,11 +116,6 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         ProgressSpinnerModule,
         AccordionModule,
         ContextMenuModule,
-        InputTextModule,
-        DropdownModule,
-        MenuModule,
-        TooltipModule,
-
         // Other declarations
         AlertComponent,
         DownloadComponent,
@@ -145,7 +131,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
 })
 // Changed the name so it does not conflict with primeng module
 export class AppSharedModule {
-    static forRoot(): ModuleWithProviders<any> {
+    static forRoot(): ModuleWithProviders {
         return {
             ngModule: AppSharedModule,
             providers: [

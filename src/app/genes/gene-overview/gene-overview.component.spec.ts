@@ -95,10 +95,10 @@ describe('Component: GeneOverview', () => {
         );
 
         component.items = [
-            { label: 'NOMINATION DETAILS', disabled: component.disableMenu },
-            { label: 'SUMMARY', disabled: component.disableMenu },
+            { label: 'NOMINATION DETAILS', disabled: this.disableMenu },
+            { label: 'SUMMARY', disabled: this.disableMenu },
             { label: 'EVIDENCE',
-                disabled: component.disableMenu,
+                disabled: this.disableMenu,
                 items: [
                     {
                         label: 'RNA'
@@ -117,7 +117,7 @@ describe('Component: GeneOverview', () => {
                     }
             ]
             },
-            { label: 'DRUGGABILITY', disabled: component.disableMenu }
+            { label: 'DRUGGABILITY', disabled: this.disableMenu }
         ];
 
         spyOn(component, 'initDetails').and.callThrough();
