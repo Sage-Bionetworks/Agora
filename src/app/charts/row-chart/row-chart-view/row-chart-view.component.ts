@@ -279,7 +279,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             } else {
                 label
                     .attr('x', width / 2)
-                    .attr('y', height - 10)
+                    .attr('y', height - 10);
             }
 
             this.adjustXLabel(chart, textSelection, width, height);

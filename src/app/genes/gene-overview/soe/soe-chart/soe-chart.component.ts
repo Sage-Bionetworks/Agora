@@ -136,7 +136,7 @@ export class SOEChartComponent implements OnInit {
         ] as Plotly.Data[],
         layout: {
           ...this.commonBarSettings.layout,
-          ...{annotations: annotations},
+          ...{annotations},
           xaxis: {
             ...this.commonBarSettings.layout.xaxis,
             // AG-240: Label only 0 and the max whole number on the x-axis
