@@ -43,6 +43,10 @@ $font-size-xxxx-large-odd: 65px;
 $font-size-huge-odd: 97px;
 
 $colors: (
+    primary: #3F5EAB,
+    secondary: #3C4A63,
+    actionPrimary: #5BB0B5,
+    actionSecondary: #FCCB6F,
     black-box-shadow: (
         a10: rgba(0, 0, 0, 0.1),
         a35: rgba(0, 0, 0, 0.35),
@@ -72,7 +76,6 @@ $colors: (
         box-shadow: #C7C5C5,
         border-color: rgba(197, 199, 196, 0.5)
     ),
-
     rect: (
         stroke: #BCC0CA
     ),
@@ -82,11 +85,13 @@ $colors: (
         fill: #000000,
         title: #3F5EAB,
         span-title: #3F5EAB,
-        span-grey: #A6A6A6
+        span-grey: #A6A6A6,
+        demphasized: #9EA4B1
     ),
     tr-focus: (
         bg-color: rgba(63, 94, 171, 0.25)
-    )
+    ),
+    border: #EEEEEE,
 );
 
 $chart-grey: #6D7078;

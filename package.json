@@ -139,6 +139,7 @@
     "ie-shim": "^0.1.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
+    "ngx-cookie-service": "^11.0.2",
     "ngx-popperjs": "^12.2.1",
     "npm": "^6.14.4",
     "opencollective": "^1.0.3",

@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import {
     Gene,
-    GeneInfo,
     GenesResponse,
     LinksListResponse,
     TeamMember,
@@ -11,8 +10,6 @@ import {
     GeneInfosResponse,
     GeneScoreDistribution,
 } from '../../models';
-
-import { LazyLoadEvent, Message } from 'primeng/api';
 
 import { Observable, empty, throwError, forkJoin } from 'rxjs';
 import { catchError, share } from 'rxjs/operators';
@@ -66,6 +63,26 @@ export class ApiService {
         const params = new HttpParams();
 
         return this.http.get<GeneInfosResponse>('/api/genes/table', { headers, params });
+    }
+
+    getComparisonData(options?: {}): Observable<GenesResponse> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+        return this.http.get<GenesResponse>('/api/genes/comparison', { headers, params: options });
+    }
+
+    getInfos() {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+        return this.http.get<GeneInfosResponse>('/api/gene/infos', { headers });
     }
 
     getInfosMatchId(id: string): Observable<GeneInfosResponse> {
