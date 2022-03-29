@@ -85,4 +85,12 @@ export class ApiServiceStub {
     getGeneMetabolomics(id: string): Observable<object> {
         return of(mockMetabolomics);
     }
+
+    getComparisonData(): Observable<object> {
+        return of({ items: [mockGene1] });
+    }
+
+    getInfos(): Observable<object> {
+        return of({ items: [mockInfo1] });
+    }
 }
