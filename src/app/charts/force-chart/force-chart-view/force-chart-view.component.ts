@@ -211,6 +211,15 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                     .attr('fill', this.getNodeColor(this.pnode.node,
                             this.pnode.index,
                             []));
+                } else {
+                    for (let i = 0; i < nodes.length; i++) {
+                        const el = d3.select(nodes[i]);
+                        const data: any = el.data();
+                        if (data && this.networkData.origin.ensembl_gene_id === data[0].ensembl_gene_id) {
+                            el.attr('fill', this.getNodeColor(data[0], i, []));
+                            break;
+                        }
+                    }
                 }
                 this.pnode = {index: i, node: d};
                 d3.select(nodes[i]).attr('fill', '#FCCB6F');
@@ -380,7 +389,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
 
     getNodeColor(node: GeneNode , index, arr): string {
         if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
-            return '#F47E6C';
+            return '#FCCB6F';
         }
         if (this.networkData && this.networkData.origin.ensembl_gene_id === node.ensembl_gene_id) {
             return '#F47E6C';
