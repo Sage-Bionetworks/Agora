@@ -26,7 +26,7 @@ export class ContribTeamsPageComponent implements OnInit {
     @Input() placeholderUrl: string = '/assets/img/placeholder_member.png';
 
     teamsImageURLs: SafeStyle[][] = [];
-    teamsImages: Observable<object[]>[] = [];
+    teamsImages: Array<Observable<object[]>> = [];
     dataLoaded: boolean = false;
 
     constructor(

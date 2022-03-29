@@ -12,7 +12,7 @@ import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../.
 import {
     Message,
     SortEvent
-} from 'primeng/api';
+} from 'primeng/primeng';
 
 import * as screenfull from 'screenfull';
 
@@ -29,7 +29,19 @@ export class GenesListComponent implements OnInit {
     msgs: Message[] = [];
     selectedInfo: GeneInfo;
     totalRecords: number;
-    cols: any[];
+    cols: any[] = [
+        { field: 'hgnc_symbol', header: 'Gene Symbol'},
+        { field: 'nominations', header: 'Nominations' },
+        { field: 'initial_nomination_display_value', header: 'Year First Nominated' },
+        { field: 'teams_display_value', header: 'Nominating Teams' },
+        { field: 'study_display_value', header: 'Cohort Study' },
+        { field: 'input_data_display_value', header: 'Input Data' },
+        { field: 'pharos_class_display_value', header: 'Pharos Class' },
+        { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+        { field: 'safety_rating_display_value', header: 'Safety Rating' },
+        { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+        { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
+    ];
     selectedColumns: any[];
     loading: boolean = true;
     noValue = 'No value';
@@ -42,20 +54,6 @@ export class GenesListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene Symbol'},
-            { field: 'nominations', header: 'Nominations' },
-            { field: 'initial_nomination_display_value', header: 'Year First Nominated' },
-            { field: 'teams_display_value', header: 'Nominating Teams' },
-            { field: 'study_display_value', header: 'Cohort Study' },
-            { field: 'input_data_display_value', header: 'Input Data' },
-            { field: 'pharos_class_display_value', header: 'Pharos Class' },
-            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
-            { field: 'safety_rating_display_value', header: 'Safety Rating' },
-            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
-            { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
-        ];
-
         // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;

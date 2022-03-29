@@ -4,12 +4,12 @@
 .gct-details-panel {
     @include lato-font('normal');
 
-    .p-overlaypanel {
+    .ui-overlaypanel {
         background: #ffffff;
         box-shadow: 0 0px 10px 0 rgba(0,0,0,0.15);
     }
 
-    .p-overlaypanel-content {
+    .ui-overlaypanel-content {
         padding: 30px;
 
     }

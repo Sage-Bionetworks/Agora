@@ -45,7 +45,20 @@ export class GeneSimilarComponent implements OnInit {
     gene: Gene;
     geneInfo: GeneInfo;
     msgs: Message[] = [];
-    cols: any[];
+    cols: any[] = [
+        { field: 'hgnc_symbol', header: 'Gene name' },
+        { field: 'brain_regions_display_value', header: 'Brain Regions' },
+        { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
+        { field: 'nominated_target_display_value', header: 'Nominated Target' },
+        { field: 'isIGAP', header: 'Genetic Association with LOAD'},
+        { field: 'haseqtl', header: 'Brain eQTL' },
+        { field: 'is_any_rna_changed_in_ad_brain_display_value', header: 'RNA Expression Change'},
+        { field: 'is_any_protein_changed_in_ad_brain_display_value', header: 'Protein Expression Change'},
+        { field: 'pharos_class_display_value', header: 'Pharos Class' },
+        { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+        { field: 'safety_rating_display_value', header: 'Safety Rating' },
+        { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+    ];
     selectedColumns: any[];
     selectedInfo: GeneInfo;
     datasource: GeneInfosResponse;
@@ -66,21 +79,6 @@ export class GeneSimilarComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'brain_regions_display_value', header: 'Brain Regions' },
-            { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
-            { field: 'nominated_target_display_value', header: 'Nominated Target' },
-            { field: 'isIGAP', header: 'Genetic Association with LOAD'},
-            { field: 'haseqtl', header: 'Brain eQTL' },
-            { field: 'is_any_rna_changed_in_ad_brain_display_value', header: 'RNA Expression Change'},
-            { field: 'is_any_protein_changed_in_ad_brain_display_value', header: 'Protein Expression Change'},
-            { field: 'pharos_class_display_value', header: 'Pharos Class' },
-            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
-            { field: 'safety_rating_display_value', header: 'Safety Rating' },
-            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
-        ];
-
         // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;

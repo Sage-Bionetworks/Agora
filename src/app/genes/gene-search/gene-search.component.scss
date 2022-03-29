@@ -33,12 +33,6 @@
         font-size: $font-size-xx-regular;
         color: color(text, primary);
     }
-
-    .p-progress-spinner {
-        margin-top: 4px;
-        width: 26px;
-        height: 26px;
-    }
 }
 
 @keyframes ui-progress-spinner-color {

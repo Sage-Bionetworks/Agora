@@ -2,7 +2,7 @@
 @import "../../../assets/css/helpers/mixins";
 
 .sp-dialog {
-    .p-dialog {
+    .ui-dialog {
         max-height: 90% !important;
     }
 
@@ -10,7 +10,7 @@
         padding-bottom: 20px;
     }
 
-    .p-dialog-content {
+    .ui-dialog-content {
         padding-top: 0% !important;
         padding-bottom: 132px !important;
         padding-left: 6% !important;
@@ -30,7 +30,7 @@
         padding-bottom: 215px;
     }
 
-    .p-dialog-header-icon {
+    .ui-dialog-titlebar-icon {
 
         cursor: pointer;
 

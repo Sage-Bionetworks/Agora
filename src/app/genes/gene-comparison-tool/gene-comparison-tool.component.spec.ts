@@ -1,17 +1,17 @@
 import {
-    async,
+    fakeAsync,
     ComponentFixture,
-    TestBed
+    TestBed,
+    tick
 } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FilterService } from 'primeng/api';
 
 import {
     RouterStub,
-    ApiServiceStub
+    ApiServiceStub,
 } from '../../testing';
 
 import {
@@ -25,17 +25,17 @@ import { ApiService } from '../../core/services';
 
 class ActivatedRouteStub {
     queryParams = new Observable(observer => {
-        const urlParams = {}
+        const urlParams = {};
         observer.next(urlParams);
         observer.complete();
     });
 }
 
-fdescribe('Component: GeneComparisonToolComponent', () => {
+describe('Component: GeneComparisonToolComponent', () => {
     let component: GeneComparisonToolComponent;
     let fixture: ComponentFixture<GeneComparisonToolComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(fakeAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneComparisonToolComponent,
@@ -50,7 +50,7 @@ fdescribe('Component: GeneComparisonToolComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                { provide: FilterService, useValue: new FilterService() },
+                // { provide: FilterService, useValue: new FilterService() },
             ]
         })
         .compileComponents();
@@ -58,10 +58,6 @@ fdescribe('Component: GeneComparisonToolComponent', () => {
         fixture = TestBed.createComponent(GeneComparisonToolComponent);
         component = fixture.componentInstance; // Component test instance
     }));
-
-    it('should create component', () => {
-        expect(component).toBeTruthy();
-    });
 
     it('should have 3 tables', () => {
         const el = fixture.debugElement.queryAll(By.css('p-table'));

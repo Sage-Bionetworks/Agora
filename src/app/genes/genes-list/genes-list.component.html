@@ -102,8 +102,8 @@
                             maxSelectedLabels="0"
                             dropdownIcon="pi pi-bars custom-bars"
                         >
-                            <ng-template let-col pTemplate="item">
-                                <div class="multiselect-option">{{col.header}}</div>
+                            <ng-template let-item pTemplate="item">
+                                <div class="multiselect-option">{{item.label}}</div>
                             </ng-template>
                         </p-multiSelect>
                     </div>

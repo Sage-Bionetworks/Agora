@@ -12,7 +12,7 @@
     background: $background;
     z-index: 1000;
 
-    .p-highlight {
+    .ui-state-active {
         a > span {
             @include lato-font('bold');
 
@@ -31,7 +31,7 @@
         }
     }
 
-    .p-menu.p-menu-overlay {
+    .ui-menu.ui-menu-dynamic {
         padding: 12px;
     }
 
@@ -69,7 +69,22 @@
     }
 }
 
+.mobile-menu-open-btn {
+    .ui-button-icon-left:before {
+        content: '';
+        background: url('/assets/icon/close-modal-icon.svg') center center no-repeat;
+        vertical-align: middle;
+        background-size: 16px auto;
+        padding-left: 20px;
+        padding-top: 5px;
+    }
+}
 
+.mobile-menu-closed-btn {
+    .ui-button-icon-left:before {
+        content: url('/assets/icon/bars-icon.svg');
+    }
+}
 
 .desktop-menu {
     .footer-span {
@@ -80,7 +95,7 @@
         display: none;
     }
 
-    .p-tabmenu {
+    .ui-tabmenu {
         position: absolute;
         top: 0px;
         height: 100%;
@@ -105,7 +120,7 @@
         }*/
     }
 
-    .p-tabmenu-nav {
+    .ui-tabmenu-nav {
         float: right;
         padding: 0px;
         height: $navbar-height;
@@ -129,7 +144,7 @@
         }
     }
 
-    .p-tabmenuitem {
+    .ui-tabmenuitem {
         background-color: $background !important;
         border: none;
         height: 80px;
@@ -147,50 +162,74 @@
     }
 }
 
-.mobile-menu {
-    display: flex;
+p-button {
     float: right;
+    position: absolute;
+    right: 0px;
+    top: 0px;
     height: 100%;
-    align-items: center;
+    padding-right: calc(5.5vw);
+    background-color: $background !important;
+    border: none;
+    height: $navbar-height;
+    outline: none;
 
-    .p-button {
-        @include reset-button();
+    .ui-button-text {
+        width: 200px;
+        padding: 0px !important;
     }
 
-    .p-button-icon {
-        margin-right: 6px;
-    }
+    button {
+        outline: none;
+        height: $navbar-height  !important;
+        line-height: $navbar-height !important;
+        background-color: $background !important;
+        border: none;
 
-    &.mobile-menu-open-btn {
-        .p-button-icon-left:before {
-            content: '';
-            background: url('/assets/icon/close-modal-icon.svg') center center no-repeat;
-            vertical-align: middle;
-            background-size: 16px auto;
-            padding-left: 20px;
-            padding-top: 5px;
+        span {
+            height: $navbar-height  !important;
+            line-height: $navbar-height  !important;
         }
     }
 
-    &.mobile-menu-closed-btn {
-        .p-button-icon-left:before {
-            content: url('/assets/icon/bars-icon.svg');
+    button:focus {
+        outline:0;
+    }
+
+    span {
+        display: block !important;
+        height: $navbar-height  !important;
+        line-height: $navbar-height  !important;
+    }
+
+    @include respond-to('small') {
+        padding-right: calc(0.2vw);
+    }
+    @include respond-to('medium') {
+        padding-right: calc(5.5vw);
+    }
+}
+
+.mobile-menu {
+    float: right;
+
+    button {
+        margin: 0px;
+        border-color: transparent;
+        background: $background;
+
+        .ui-button-text {
+            padding-left: 0px !important;
         }
     }
 
-    .p-menu {
-        right: 15px;
-        left: auto !important;
-        margin-top: 6px;
+    .ui-button-icon-only, .ui-button-text-only {
+        outline: none;
+    }
 
-        &.p-menu-overlay {
-            -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
-            -moz-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
-        }
-
-        .p-menuitem {
-            margin: 6px 0;
-        }
+    .ui-panelmenu-header {
+        float: right;
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
     }
 }

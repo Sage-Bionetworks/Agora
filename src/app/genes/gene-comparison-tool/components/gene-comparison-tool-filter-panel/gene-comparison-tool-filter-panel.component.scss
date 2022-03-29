@@ -12,13 +12,13 @@
     transition: .6s;
     z-index: 500;
 
-    .p-overlaypanel {
+    .ui-overlaypanel {
         background-color: #ffffff;
         border-radius: 0px;
         box-shadow: 0 0px 10px 3px rgba(0,0,0,0.15);
     }
 
-    .p-overlaypanel-content {
+    .ui-overlaypanel-content {
         padding: 30px;
     }
 
@@ -141,7 +141,7 @@
     transition: .6s;
     overflow: auto;
 
-    .p-checkbox-box {
+    .ui-chkbox-box {
         width: 15px;
         height: 15px;
         font-size: 12px;
@@ -150,21 +150,32 @@
         transform: translateY(-1px);
         transition: .3s;
 
-        .p-checkbox-icon {
+        .ui-chkbox-icon {
             transition: .3s;
 
             &:before {
+                display: block;
                 font-size: 12px;
-                line-height: 25px;
+                line-height: 12px;
             }
         }
 
-        &.p-highlight {
-            background-color: color(primary);
-            border-color: color(primary);
+        &.ui-state-focus {
+            background-color: transparent !important;
+            border-color: color(primary) !important;
+        }
 
-            .p-checkbox-icon {
+        &.ui-state-active {
+            background-color: color(primary) !important;
+            border-color: color(primary) !important;
+
+            .ui-chkbox-icon {
                 color: #ffffff;
+
+                &, &:before {
+                    margin: 0;
+                    transform: translate(0, 0);
+                }
             }
         }
     }
@@ -216,7 +227,7 @@
                 &:hover {
                     color: #000000;
 
-                    .p-checkbox-box {
+                    .ui-chkbox-box {
                         border-color: #000000;
                     }
                 }

@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import {
     Gene,
-    GeneInfo,
     GenesResponse,
     LinksListResponse,
     TeamMember,
@@ -11,8 +10,6 @@ import {
     GeneInfosResponse,
     GeneScoreDistribution,
 } from '../../models';
-
-import { LazyLoadEvent, Message } from 'primeng/api';
 
 import { Observable, empty, throwError, forkJoin } from 'rxjs';
 import { catchError, share } from 'rxjs/operators';

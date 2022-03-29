@@ -9,10 +9,10 @@ import { GenesViewComponent } from './genes-view';
 import { GenesIntroComponent } from './genes-intro';
 import { GenesListComponent } from './genes-list';
 import {
-    GeneComparisonToolComponent,
     GeneComparisonToolFilterPanelComponent,
     GeneComparisonToolFilterListComponent,
-    GeneComparisonToolDetailsPanelComponent
+    GeneComparisonToolDetailsPanelComponent,
+    GeneComparisonToolComponent
 } from './gene-comparison-tool';
 import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
@@ -25,10 +25,10 @@ import { GeneSimilarComponent } from './gene-similar';
         GenesViewComponent,
         GenesIntroComponent,
         GenesListComponent,
-        GeneComparisonToolComponent,
         GeneComparisonToolFilterPanelComponent,
         GeneComparisonToolFilterListComponent,
         GeneComparisonToolDetailsPanelComponent,
+        GeneComparisonToolComponent,
         NominatedFormComponent,
         GeneSearchComponent,
         GeneBRComponent,
