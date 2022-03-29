@@ -53,12 +53,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     @ViewChild('studies', {static: false}) stdCol: ElementRef;
 
     max: number = -Infinity;
+    evidenceData: any;
     currentGenes: any;
     currentModel: string;
-    display: boolean = false;
     canDisplay: boolean = false;
     canResize: boolean = false;
-    firstRender: boolean = true;
     colors: string[] = ['#5171C0'];
     routerSubscription: Subscription;
     chartSubscription: Subscription;
@@ -82,11 +81,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     ngOnInit() {
         this.currentModel = this.geneService.getDefaultModel();
-
-        const evidenceData = this.dataService.getEvidenceData();
-        this.currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
+        this.evidenceData = this.dataService.getEvidenceData();
 
         // If we move away from the overview page, remove
         // the charts
@@ -129,8 +124,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             this.chartSubscription.unsubscribe();
         }
         this.geneService.setEmptyGeneState(true);
-        this.firstRender = true;
-        this.display = false;
     }
 
     getModel(): string {
@@ -213,6 +206,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     return d.key[0];
                 })
                 .on('preRender', function(chart) {
+                    self.currentGenes = self.evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                        return g.model === self.geneService.getCurrentModel();
+                    });
                     self.max = -Infinity;
                     self.updateXDomain();
                     if (self.max !== -Infinity) {
@@ -226,6 +222,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     }
                 })
                 .on('preRedraw', function(chart) {
+                    self.currentGenes = self.evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                        return g.model === self.geneService.getCurrentModel();
+                    });
                     self.max = -Infinity;
                     self.updateXDomain();
                     if (self.max !== -Infinity) {
@@ -239,12 +238,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     }
                 })
                 .on('renderlet', function(chart) {
-                    if (self.firstRender) {
-                        self.firstRender = false;
-                        // Copy all vertical texts to another div, so they don't get hidden by
-                        // the row chart svg after being translated
-                        self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
-                    }
+                    // Copy all vertical texts to another div, so they don't get hidden by
+                    // the row chart svg after being translated
+                    self.moveTextToElement(chart, self.stdCol.nativeElement, 9);
                     dc.events.trigger(function() {
                         const width = self.rowChart.nativeElement.offsetWidth || 450;
                         const height = self.rowChart.nativeElement.offsetHeight || 450;
@@ -270,13 +266,21 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     addXLabel(chart: dc.RowChart, text: string, svg?: any, width?: number, height?: number) {
         const textSelection = (svg || chart.svg());
         if (textSelection !== null) {
-            textSelection
-                .append('text')
-                .attr('class', 'x-axis-label')
-                .attr('text-anchor', 'middle')
-                .attr('x', width / 2)
-                .attr('y', height - 10)
-                .text(text);
+            const label = textSelection.select('.x-axis-label');
+
+            if (!label.node()) {
+                textSelection
+                    .append('text')
+                    .attr('class', 'x-axis-label')
+                    .attr('text-anchor', 'middle')
+                    .attr('x', width / 2)
+                    .attr('y', height - 10)
+                    .text(text);
+            } else {
+                label
+                    .attr('x', width / 2)
+                    .attr('y', height - 10)
+            }
 
             this.adjustXLabel(chart, textSelection, width, height);
         }
@@ -306,22 +310,18 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const squareSize = 18;
         const lineWidth = 60;
 
-        // Test if we should display the chart. Using this variable so we don't see
-        // the rows rectangles change into small squares abruptly
-        if (!self.display) {
-            // Insert a line for each row of the chart
-            self.insertLinesInRows(chart);
+        // Insert a line for each row of the chart
+        self.insertLinesInRows(chart);
 
-            // Insert the texts for each row of the chart. At first we need to add
-            // empty texts so that the rowChart redraw does not move out confidence
-            // texts around
-            self.insertTextsInRows(chart);
-            self.insertTextsInRows(chart, 'confidence-text-left');
-            self.insertTextsInRows(chart, 'confidence-text-right');
+        // Insert the texts for each row of the chart. At first we need to add
+        // empty texts so that the rowChart redraw does not move out confidence
+        // texts around
+        self.insertTextsInRows(chart);
+        self.insertTextsInRows(chart, 'confidence-text-left');
+        self.insertTextsInRows(chart, 'confidence-text-right');
 
-            // Add a label to the x axis
-            self.addXLabel(this.chart, 'LOG 2 FOLD CHANGE', svg, width, height);
-        }
+        // Add a label to the x axis
+        self.addXLabel(this.chart, 'LOG 2 FOLD CHANGE', svg, width, height);
 
         // Finally redraw the lines in each row
         self.drawLines(chart, rectHeight / 2, lineWidth);
@@ -336,9 +336,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         // Redraw confidence text next to the lines in each row
         self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth, true);
         self.renderConfidenceTexts(chart, rectHeight / 2, lineWidth);
-
-        // Finally show the chart
-        self.display = true;
     }
 
     updateXDomain() {
@@ -401,28 +398,29 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     // Moves all text in textGroups to a new HTML element
     moveTextToElement(chart: dc.RowChart, el: HTMLElement, vSpacing: number = 0) {
         const self = this;
-        const newSvg = d3.select(el).append('svg');
-        const textGroup = newSvg.append('g').attr('class', 'textGroup');
+        const container = d3.select(el).html('');
+        const svg = container.append('svg');
+        const group = svg.append('g').attr('class', 'textGroup');
+        const texts: any = chart.selectAll('g.row > text');
 
-        // Remove the old texts and append to the new group
-        const allText = chart.selectAll('g.row text');
-        const removed = allText.remove();
-        removed['nodes']().forEach((n) => {
-            textGroup.append(function() {
-                return n;
-            });
+        texts.each(function() {
+            this.style.display = 'none';
+            group
+                .append('text')
+                .html(this.innerHTML)
+                .attr('x', this.getAttribute('x'))
+                .attr('y', this.getAttribute('y'))
+                .attr('dy', this.getAttribute('dy'));
         });
 
         // Move the text to the correct position in the new svg
         const svgEl = (chart.select('g.axis g.tick line.grid-line').node() as SVGGraphicsElement);
         // Need this condition when reloading in Edge
         if (svgEl) {
-            const step = svgEl.getBBox().height /
-                ((removed['nodes']().length) ? (removed['nodes']().length) : 7);
-
-            d3.select(el).selectAll('g.textGroup text').each(function(d, i) {
+            const step = svgEl.getBBox().height / texts.nodes().length;
+            svg.selectAll('text').each(function(d, i) {
                 const currentStep = step * i;
-                const transfX = parseFloat(newSvg.style('width')) -
+                const transfX = parseFloat(svg.style('width')) -
                     parseFloat(d3.select(el).style('padding-right'));
                 const ftransfx = (isNaN(transfX)) ? 0 : transfX;
                 d3.select(this)
@@ -448,17 +446,25 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     insertLinesInRows(chart: dc.RowChart) {
-        chart.selectAll('g.row')
-            .insert('g')
-            .attr('class', 'hline')
-            .insert('line');
+        chart.selectAll('g.row').each(function() {
+            const row = d3.select(this);
+            row.select('.hline').remove();
+            row
+                .insert('g')
+                .attr('class', 'hline')
+                .insert('line');
+        });
     }
 
     insertTextsInRows(chart: dc.RowChart, textClass?: string) {
-        chart.selectAll('g.row')
-            .insert('g')
-            .attr('class', (textClass) ? textClass : 'confidence-text')
-            .insert('text');
+        chart.selectAll('g.row').each(function() {
+            const row = d3.select(this);
+            row.select('.' + textClass).remove();
+            row
+                .insert('g')
+                .attr('class', (textClass) ? textClass : 'confidence-text')
+                .insert('text');
+        });
     }
 
     // Draw the lines through the chart rows and a vertical line at
@@ -485,7 +491,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
-                const gene = this.currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -500,7 +506,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 return yPos;
             })
             .attr('x2', (d) => {
-                const gene = this.currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -523,21 +529,11 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         // Draw the confidence texts
         const posQueryString = (isNeg) ? '-left' : '-right';
         const queryString = 'g.row g.confidence-text' + posQueryString + ' text';
-        chart.group({
-            all() {
-                return self.chartService.filteredData['fpGroup'].values;
-            },
-            order() {
-                //
-            },
-            top() {
-                //
-            }
-        });
+        chart.group(self.group);
         chart.selectAll(queryString)
             // ES6 method shorthand for object literals
             .attr('x', (d) => {
-                const gene = this.currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -571,7 +567,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             })
             .attr('text-anchor', 'middle')
             .text((d) => {
-                const gene = this.currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -596,6 +592,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             .attr('transform', function(d) {
                 const val = (isNaN((chart.x()(+d.value.logfc) - (squareSize / 2)))) ?
                     0.0 : (chart.x()(+d.value.logfc) - (squareSize / 2));
+
                 return 'translate(' +
                     // X translate
                     val + ',' +
@@ -610,7 +607,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     }
 
     displayChart(): any {
-        // return { opacity: (this.display) ? 1 : 0 };
         return { opacity: 1 };
     }
 

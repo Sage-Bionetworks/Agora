@@ -89,4 +89,12 @@ export class ApiServiceStub {
     getEvidencenData(id: string): Observable<object> {
         return of(mockEvidenceDataResponse);
     }
+
+    getComparisonData(): Observable<object> {
+        return of({ items: [mockGene1] });
+    }
+
+    getInfos(): Observable<object> {
+        return of({ items: [mockInfo1] });
+    }
 }

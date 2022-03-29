@@ -182,6 +182,9 @@
     &.third {
         background-color: color(dot, background-color-third);
     }
+    &.fourth {
+        background-color: color(dot, background-color-fourth);
+    }
 }
 
 .hexagon {
@@ -374,5 +377,26 @@ ul {
 .steps-segment:hover {
     .tooltip {
         display: block;
+    }
+}
+
+.gene-info-list-item {
+    display: flex;
+    margin-bottom: 26px;
+
+    > div {
+
+        &:first-child {
+            flex-grow: 1;
+        }
+
+        &:last-child {
+            width: 60px;
+            text-align: right;
+        }
+    }
+
+    .gene-info-list-item-heading {
+        margin: 0;
     }
 }
