@@ -3,11 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Table } from 'primeng/table';
-import { SortEvent/*, FilterService*/ } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
 import { FilterUtils } from 'primeng/utils';
 
 import { ApiService } from '../../core/services';
-import { Gene, GeneInfosResponse, GenesResponse } from '../../models';
+import { GeneInfosResponse, GenesResponse } from '../../models';
 
 import { GCTSelectOption, GCTFilter, GCTGene } from '.';
 
@@ -114,8 +114,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    constructor(
       private router: Router,
       private route: ActivatedRoute,
-      private apiService: ApiService,
-      // private filterService: FilterService
+      private apiService: ApiService
    ) { }
 
    ngAfterViewInit() {
@@ -142,7 +141,6 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          this.loadGeneInfos();
       });
 
-      // this.filterService.register('intersect', (value, filters): boolean => {
       FilterUtils['intersect'] = (value, filters): boolean => {
          if (filters === undefined || filters === null || filters.length < 1) {
                return true;
@@ -201,10 +199,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          const info: any = this.geneInfos.get(gene.ensembl_gene_id);
 
          if (info) {
-            if (info.hgnc_symbol) {
-               gene.hgnc_symbol = info.hgnc_symbol;
-            }
-
+            gene.hgnc_symbol = info.hgnc_symbol;
             gene.search_string = gene.hgnc_symbol + ' ' + gene.ensembl_gene_id;
 
             gene.nominations = info.nominations || 0;
