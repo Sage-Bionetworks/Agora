@@ -8,3 +8,4 @@ export * from './neuropathCorr';
 export * from './geneExpValidation';
 export * from './geneScoreDistribution';
 export * from './geneOverallScores';
+export * from './rnaDistribution';

@@ -206,7 +206,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         chart.filterHandler(async (dimension, filters) => {
             if (filters.length === 0) {
                 // The empty case (no filtering)
-                dimension.filter(null);
+                if (dimension) {
+                    dimension.filter(null);
+                }
             } else if (filters.length === 1 && !filters[0].isFiltered) {
                 // Single value and not a function-based filter
                 // Before filters are applied, update the gene
