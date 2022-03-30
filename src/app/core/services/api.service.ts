@@ -9,10 +9,18 @@ import {
     TeamInfo,
     GeneInfosResponse,
     GeneScoreDistribution,
+    RnaDistribution
 } from '../../models';
 
 import { Observable, empty, throwError, forkJoin } from 'rxjs';
 import { catchError, share } from 'rxjs/operators';
+
+const defaultHeaders = {
+    'Content-Type': 'application/json',
+    'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+};
 
 @Injectable()
 export class ApiService {
@@ -26,12 +34,7 @@ export class ApiService {
 
     // Get a list of links related to a gene
     getLinksList(sgene: Gene): Observable<LinksListResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
 
         return this.http.get<LinksListResponse>(`/api/genelist/${sgene.ensembl_gene_id}`,
             { headers });
@@ -39,12 +42,7 @@ export class ApiService {
 
     // Get all the genes
     getGenes(id: string): Observable<GenesResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         const params = new HttpParams().set(
             'id', id
         );
@@ -54,55 +52,30 @@ export class ApiService {
     }
 
     getTableData(): Observable<GeneInfosResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         const params = new HttpParams();
 
         return this.http.get<GeneInfosResponse>('/api/genes/table', { headers, params });
     }
 
     getComparisonData(options?: {}): Observable<GenesResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         return this.http.get<GenesResponse>('/api/genes/comparison', { headers, params: options });
     }
 
     getInfos() {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         return this.http.get<GeneInfosResponse>('/api/gene/infos', { headers });
     }
 
     getInfosMatchId(id: string): Observable<GeneInfosResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
 
         return this.http.get<GeneInfosResponse>('/api/gene/infos/' + id, { headers });
     }
 
     getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         const params = new HttpParams().set(
             'ids', ids.map((e) => e).join(',')
         );
@@ -110,12 +83,7 @@ export class ApiService {
     }
 
     getGene(id: string, tissue?: string, model?: string): Observable<object> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         let params = new HttpParams().set(
             'id', id
         );
@@ -141,12 +109,7 @@ export class ApiService {
     }
 
     getTeams(teamNames: string[]): Observable<object> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         const uniqTeams = Array.from(new Set(teamNames));
         const params = new HttpParams().set(
             'teams', uniqTeams.join(',')
@@ -211,12 +174,7 @@ export class ApiService {
     }
 
     getGeneMetabolomics(id: string): Observable<object> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
         const params = new HttpParams().set(
             'id', id
         );
@@ -225,12 +183,7 @@ export class ApiService {
     }
 
     refreshChartsData(filter: any, id: string, type: string = 'RNA'): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control':  'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        });
+        const headers = new HttpHeaders(defaultHeaders);
 
         const params = new HttpParams().set(
             'id', id
@@ -240,5 +193,11 @@ export class ApiService {
         baseUrl += ((filter) ? '?filter=' + JSON.stringify(filter) : '');
 
         return this.http.get(baseUrl, { headers, params });
+    }
+
+    getRnaDistributionData(): Observable<RnaDistribution[]> {
+        const headers = new HttpHeaders(defaultHeaders);
+        // Get all the genes to render the charts
+        return this.http.get<any>('/api/rnadistribution', { headers });
     }
 }

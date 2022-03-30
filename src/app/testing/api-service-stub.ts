@@ -93,4 +93,8 @@ export class ApiServiceStub {
     getInfos(): Observable<object> {
         return of({ items: [mockInfo1] });
     }
+
+    getRnaDistributionData(): Observable<object> {
+        return of({ items: [mockInfo1] });
+    }
 }
