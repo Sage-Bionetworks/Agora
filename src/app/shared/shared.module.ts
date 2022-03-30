@@ -41,7 +41,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { AlertService } from './services';
+import { AlertService, PlotHelperService } from './services';
 
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 
@@ -151,6 +151,7 @@ export class AppSharedModule {
             providers: [
                 AlertService,
                 MessageService,
+                PlotHelperService,
                 {
                     provide: RollbarService,
                     useFactory: rollbarFactory

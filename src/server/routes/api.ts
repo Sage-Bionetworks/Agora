@@ -18,6 +18,7 @@ import {
     GenesExperimentalValidation,
     GenesScoreDistribution,
     GenesOverallScores,
+    RnaDistribution
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -395,12 +396,12 @@ connection.once('open', () => {
                                                         indexOf(obj['key']) === pos;
                                                 }
                                             ),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 } else {
                                     results[groupName] = {
                                         values: groups[groupName].all(),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 }
                             });
@@ -496,7 +497,7 @@ connection.once('open', () => {
                                 values: groups[groupName].all(),
                                 top: (groupName === 'fpGroup') ?
                                     null :
-                                    groups[groupName].top(1)[0].value
+                                    groups[groupName].top(1)[0]?.value
                             };
                         } else {
                             const newGroup = rmEmptyBinsFP(
@@ -1116,6 +1117,23 @@ connection.once('open', () => {
         }
         return noData;
     };
+
+    router.get('/rnadistribution', async (req, res, next) => {
+        await RnaDistribution.find({}).lean().exec(async (err, data) => {
+            if (err) {
+                next(err);
+            } else {
+                if (!data.length) {
+                    res.json(data);
+                } else {
+                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    await res.json(data);
+                }
+            }
+        });
+    });
 
 });
 

@@ -213,7 +213,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                             []));
                 } else {
                     for (let j = 0; j < nodes.length; j++) {
-                        const el = d3.select(nodes[i]);
+                        const el = d3.select(nodes[j]);
                         const data: any = el.data();
                         if (data && this.networkData.origin.ensembl_gene_id === data[0].ensembl_gene_id) {
                             el.attr('fill', this.getNodeColor(data[0], j, []));

@@ -14,12 +14,14 @@ import { PlatformLocation } from '@angular/common';
 import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
-import { DataService, GeneService } from '../../../core/services';
+import { PlotHelperService } from '../../../shared/services';
 
 import { Subscription } from 'rxjs';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
+
+import { DataService, GeneService } from '../../../core/services';
 
 @Component({
     selector: 'box-plot',
@@ -41,7 +43,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() rcBigRadius: number = 12.5;
     @Input() rcSmallRadius: number = 9;
     @Input() rcRadius: number = 12.5;
-    @Input() boxRadius: number = 9;
+    @Input() boxRadius: number = 8;
 
     firstRender: boolean = true;
     max: number = -Infinity;
@@ -70,10 +72,12 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private dataService: DataService,
         private geneService: GeneService,
-        private chartService: ChartService
+        private chartService: ChartService,
+        private plotHelperService: PlotHelperService
     ) { }
 
     ngOnInit() {
+
         // If we move away from the overview page, remove
         // the charts
         this.routerSubscription = this.router.events.subscribe((event) => {
@@ -163,30 +167,15 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const bpGroup = {
             all() {
-                const currentGenes = self.dataService.getGeneEntries().slice().filter((g) => {
-                    return g.model === self.geneService.getCurrentModel();
+                const distributionData = self.dataService.getRnaDistributionData().filter((data) => {
+                    return data.model === self.geneService.getCurrentModel();
                 });
-                if (currentGenes.length !==
-                    self.chartService.filteredData['bpGroup'].values.length &&
-                    currentGenes.length <
-                    self.chartService.filteredData['bpGroup'].values.length) {
-                    const indices: number[] = [];
-                    self.chartService.filteredData['bpGroup'].values.
-                        forEach((v: any, i: number) => {
-                        // We got an extra group entry, currentGenes is correct, but the
-                        // group coming from the server isn't
-                        if (!currentGenes.some((g) => g.tissue === v.key)) {
-                            indices.push(i);
-                        }
-                    });
-                    if (indices.length > 0) {
-                        for (let i = indices.length - 1; i >= 0; i--) {
-                            self.chartService.filteredData['bpGroup'].values.splice(indices[i], 1);
-                        }
-                    }
-                }
 
-                return self.chartService.filteredData['bpGroup'].values;
+                return distributionData.map((data) => {
+                    data['key'] = data['tissue'];
+                    data['value'] = [data['min'], data['median'], data['max']];
+                    return data;
+                });
             },
             order() {
                 //
@@ -222,7 +211,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     getChartPromise(): Promise<dc.BoxPlot> {
         const self = this;
         return new Promise((resolve, reject) => {
-            const chartInst = dc.boxPlot(this.boxPlot.nativeElement)
+            const chartInst = this.plotHelperService.boxPlot(this.boxPlot.nativeElement)
                 .dimension(this.dim)
                 .yAxisLabel('LOG 2 FOLD CHANGE', 20)
                 .group(this.group)
@@ -265,19 +254,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    updateYDomain() {
-        // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
-        currentGenes.forEach((g) => {
-            if (Math.abs(+g.logfc) > this.max) {
-                this.max = Math.abs(+g.logfc);
-            }
-        });
-    }
-
-    addXAxisTooltips(chart: dc.BoxPlot) {
+    addXAxisTooltips(chart: any) {
         const self = this;
         chart.selectAll('g.axis.x g.tick').each(function() {
             const text = d3.select(this).select('text');
@@ -319,11 +296,11 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    removeRedCircle(chart: dc.BoxPlot) {
+    removeRedCircle(chart: any) {
         chart.selectAll('g.box circle').remove();
     }
 
-    renderRedCircles(chart: dc.BoxPlot, translate?: boolean) {
+    renderRedCircles(chart: any, translate?: boolean) {
         const self = this;
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
@@ -350,13 +327,14 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             chart.selectAll('g.box').each(function(el, i) {
                 const cy = Math.abs(chart.y().domain()[1] - logVals[i]) * mult;
                 const fcy = (isNaN(cy) ? 0.0 : cy);
+
                 d3.select(this)
                     .insert('circle', ':last-child')
                     .attr('cx', lineCenter.attr('x1'))
                     .attr('cy', fcy)
                     .attr('fill', '#F47E6C')
                     .style('stroke', '#F47E6C')
-                    .style('stroke-width', 3)
+                    .style('stroke-width', 0)
                     .attr('r', self.rcRadius)
                     .attr('opacity', 1)
                     .on('mouseover', function() {
