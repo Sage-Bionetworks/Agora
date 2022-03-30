@@ -51,7 +51,7 @@
         display: none;
     }
 
-    p-multiselect {
+    .ui-multiselect {
         width: 100%;
 
         .ui-multiselect,
@@ -59,6 +59,10 @@
         {
             width: 100%;
             color: color(text, fill);
+        }
+
+        .ui-multiselect-label-empty {
+            display: none;
         }
 
         .ui-multiselect-items {
