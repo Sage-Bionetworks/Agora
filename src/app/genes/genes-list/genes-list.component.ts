@@ -12,7 +12,7 @@ import { GeneInfo, NominatedTarget, GeneResponse, GeneInfosResponse } from '../.
 import {
     Message,
     SortEvent
-} from 'primeng/api';
+} from 'primeng/primeng';
 
 import * as screenfull from 'screenfull';
 

@@ -9,30 +9,15 @@
             <!-- Uncomment to show video on navbar -->
             <!--<p-button label="Watch the Video" (onClick)="showVideo()"></p-button>-->
         </div>
-        <div
-            *ngIf="showMobileMenu"
-            [ngClass]="['mobile-menu', mobileMenuOpen ? 'mobile-menu-open-btn' : 'mobile-menu-closed-btn']"
-        >
-            <p-menu
-                #mobileMenu
-                [popup]="true"
-                [model]="mobileItems"
-            ></p-menu>
-            <button
-                type="button"
-                pButton
-                icon="pi pi-bars"
-                label="MENU"
-                (click)="mobileMenuOpen = !mobileMenuOpen; mobileMenu.toggle($event)"
-            ></button>
-        </div>
-        <!-- <p-splitButton #mobileMenu
-            *ngIf="showMobileMenu"
+        <p-splitButton #mobileMenu
             label="MENU"
+            icon=""
+            *ngIf="showMobileMenu"
             [model]="mobileItems"
-            [ngClass]="['mobile-menu', mobileMenuOpen ? 'mobile-menu-open-btn' : 'mobile-menu-closed-btn']"
+            [ngClass]="getMobileClass()"
             [appendTo]="menuCol"
             dir="rtl"
-        ></p-splitButton> -->
+            (onClick)="showMenu($event)">
+        </p-splitButton>
     </div>
 </div>

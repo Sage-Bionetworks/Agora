@@ -19,6 +19,7 @@ import {
     GenesResponse,
     GeneNetwork,
     GeneResponse,
+    RnaDistribution
 } from '../models';
 
 import { forkJoin, of, Observable } from 'rxjs';
@@ -29,6 +30,7 @@ import * as crossfilter from 'crossfilter2';
 export class DataServiceStub {
     data: any;
     ndx: any;
+    rnaDistributionData: any;
 
     loadData(gene: Gene): Observable<any[]> {
         return forkJoin([
@@ -58,5 +60,19 @@ export class DataServiceStub {
     // Assuming the rows are already properly formatted
     exportToCsv(filename: string, rows: string[]) {
         //
+    }
+
+    setRnaDistributionData(data) {
+        this.rnaDistributionData = data;
+    }
+
+    loadRnaDistributionData(data) {
+        if (data) {
+            this.setRnaDistributionData(data);
+        }
+    }
+
+    getRnaDistributionData(): RnaDistribution[] {
+        return this.rnaDistributionData;
     }
 }

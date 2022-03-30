@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-import { DataService, GeneService, ApiService } from '../../../core/services';
+import { DataService, GeneService } from '../../../core/services';
 
 @Component({
     selector: 'box-plot',
@@ -71,7 +71,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         private location: PlatformLocation,
         private router: Router,
         private dataService: DataService,
-        private apiService: ApiService,
         private geneService: GeneService,
         private chartService: ChartService,
         private plotHelperService: PlotHelperService
@@ -209,7 +208,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    getChartPromise(): Promise<any> {
+    getChartPromise(): Promise<dc.BoxPlot> {
         const self = this;
         return new Promise((resolve, reject) => {
             const chartInst = this.plotHelperService.boxPlot(this.boxPlot.nativeElement)

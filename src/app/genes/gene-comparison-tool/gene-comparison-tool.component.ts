@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Table } from 'primeng/table';
-import { SortEvent, FilterService } from 'primeng/api';
+import { SortEvent/*, FilterService*/ } from 'primeng/api';
+import { FilterUtils } from 'primeng/utils';
 
 import { ApiService } from '../../core/services';
 import { Gene, GeneInfosResponse, GenesResponse } from '../../models';
@@ -114,31 +115,40 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
       private router: Router,
       private route: ActivatedRoute,
       private apiService: ApiService,
-      private filterService: FilterService
+      // private filterService: FilterService
    ) { }
 
    ngAfterViewInit() {
       this.urlParamsSubscription = this.route.queryParams.subscribe(params => {
-         this.urlParams = params;
+         this.urlParams = params || {};
 
-         if (this.urlParams.hasOwnProperty('analysis') && this.urlParams['analysis']) {
-            this.selectedAnalysis = this.analyses.find(analysis => analysis.name === this.urlParams['analysis'])
+         if (this.urlParams.analysis) {
+            this.selectedAnalysis = this.analyses.find(analysis => analysis.name === this.urlParams['analysis']);
          }
 
-         if (this.urlParams.hasOwnProperty('model') && this.urlParams['model']) {
-            this.selectedModel = this.models.find(model => model.name === this.urlParams['model'])
+         if (this.urlParams.model) {
+            this.selectedModel = this.models.find(model => model.name === this.urlParams['model']);
+         }
+
+         if (this.urlParams.sortField) {
+            this.sortField = this.getUrlParam('sortField');
+         }
+
+         if (this.urlParams.sortOrder) {
+            this.sortOrder = parseInt(this.getUrlParam('sortOrder'), 2);
          }
 
          this.loadGenes();
          this.loadGeneInfos();
       });
 
-      this.filterService.register('intersect', (value, filters): boolean => {
+      // this.filterService.register('intersect', (value, filters): boolean => {
+      FilterUtils['intersect'] = (value, filters): boolean => {
          if (filters === undefined || filters === null || filters.length < 1) {
                return true;
-         } else if (value === undefined || value === null || filters.length < 1) {;
+         } else if (value === undefined || value === null || filters.length < 1) {
                return false;
-         };
+         }
 
          for (const filter of filters) {
             if (value.indexOf(filter) !== -1) {
@@ -147,7 +157,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          }
 
          return false;
-      });
+      };
    }
 
    ngOnDestroy() {
@@ -171,7 +181,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    }
 
    loadGeneInfos() {
-      if (this.geneInfos) return;
+      if (this.geneInfos) { return; }
       this.loading = true;
       this.apiService.getInfos().subscribe((data: GeneInfosResponse) => {
          this.geneInfos = new Map(data.items.map(info => [info.ensembl_gene_id, info]));
@@ -241,8 +251,15 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
                gene.minMedianLogcpm = Math.min.apply(Math, medianLogcpms);
                gene.maxMedianLogcpm = Math.max.apply(Math, medianLogcpms);
                gene.hasMedianLogcpm = true;
-               this.minMedianLogcpm = (null === this.minMedianLogcpm || gene.minMedianLogcpm < this.minMedianLogcpm) ? gene.minMedianLogcpm : this.minMedianLogcpm;
-               this.maxMedianLogcpm = (null === this.maxMedianLogcpm || gene.minMedianLogcpm > this.maxMedianLogcpm) ? gene.minMedianLogcpm : this.maxMedianLogcpm;
+               this.minMedianLogcpm = (
+                  null === this.minMedianLogcpm ||
+                  gene.minMedianLogcpm < this.minMedianLogcpm) ?
+                  gene.minMedianLogcpm : this.minMedianLogcpm;
+               this.maxMedianLogcpm = (
+                  null === this.maxMedianLogcpm
+                  || gene.minMedianLogcpm > this.maxMedianLogcpm)
+                  ? gene.minMedianLogcpm
+                  : this.maxMedianLogcpm;
 
                for (const medianExpression of info.medianexpression) {
                   const tissue = gene.tissues.find(t => t.name === medianExpression.tissue);
@@ -265,9 +282,8 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          this.pinGene(this.availableGenes.find(gene => gene.ensembl_gene_id === pinned), false);
       });
 
-      this.sortField = this.getUrlParam('sortField') || 'CBE';
-      const sortOrder = parseInt(this.getUrlParam('sortOrder'), 2);
-      this.sortOrder = sortOrder && !isNaN(sortOrder) ? sortOrder : -1;
+      this.sortField = this.sortField ? this.sortField : 'CBE';
+      this.sortOrder = Math.abs(this.sortOrder) === 1 ? this.sortOrder : -1;
       this.sortTable(this.tableHeader);
 
       this.filter();
@@ -317,7 +333,11 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          filter.options.push({
             label: this.filterOptionValueToLabel(value),
             value,
-            selected: urlParams && urlParams.indexOf(typeof value === 'string' ? value : String(value)) !== -1 ? true : false
+            selected:
+               urlParams
+               && urlParams.indexOf(typeof value === 'string'
+               ? value
+               : String(value)) !== -1 ? true : false
          });
          filter.options.sort((a, b) => {
             if (a.label < b.label) {
@@ -353,7 +373,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    }
 
    filter() {
-      if (!this.availableGeneTable) {return;}
+      if (!this.availableGeneTable) { return; }
 
       const delay = this.availableGeneTable.filterDelay;
       this.availableGeneTable.filterDelay = 0;
@@ -391,25 +411,27 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
             const stringB = b.hgnc_symbol || b.ensembl_gene_id;
             result = stringA.localeCompare(stringB);
          } else {
-            const tissueA = a.tissues.find(tissue => tissue.name === event.field)
-            const tissueB = b.tissues.find(tissue => tissue.name === event.field)
+            const tissueA = a.tissues.find(tissue => tissue.name === event.field);
+            const tissueB = b.tissues.find(tissue => tissue.name === event.field);
 
             if (tissueA && tissueB) {
-               if (tissueA.logfc == null && tissueB.logfc != null)
+               if (tissueA.logfc == null && tissueB.logfc != null) {
                   result = -1;
-               else if (tissueA.logfc != null && tissueB.logfc == null)
+               } else if (tissueA.logfc != null && tissueB.logfc == null) {
                   result = 1 === event.order ? -1 : 1;
-               else if (tissueA.logfc == null && tissueB.logfc == null)
+               } else if (tissueA.logfc == null && tissueB.logfc == null) {
                   result = 0;
-               else
+               } else {
                   result = (tissueA.logfc < tissueB.logfc) ? -1 : (tissueA.logfc > tissueB.logfc) ? 1 : 0;
+               }
             } else {
-               if (!tissueA && tissueB)
+               if (!tissueA && tissueB) {
                   result = -1;
-               else if (tissueA && !tissueB)
+               } else if (tissueA && !tissueB) {
                   result = 1 === event.order ? -1 : 1;
-               else
+               } else {
                   result = 0;
+               }
             }
          }
 
@@ -436,11 +458,14 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
 
    pinGene(gene: GCTGene, refresh: boolean = true) {
       if (this.pinnedGenes.findIndex(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
-         const availableGeneIndex = this.availableGenes.findIndex(availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id);
+         const availableGeneIndex = this.availableGenes.findIndex(
+            availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id
+         );
          this.pinnedGenes.push(gene);
          if (availableGeneIndex !== -1) {
             this.availableGenes.splice(availableGeneIndex, 1);
          }
+         this.updateUrl();
          if (refresh) {
             this.refresh();
          }
@@ -448,12 +473,20 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    }
 
    unpinGene(gene: GCTGene, refresh: boolean = true) {
-      const pinnedGeneIndex = this.pinnedGenes.findIndex(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id);
+      const pinnedGeneIndex = this.pinnedGenes.findIndex(
+         pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id
+      );
       if (pinnedGeneIndex !== -1) {
-         if (this.availableGenes.findIndex(availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
+         if (
+            this.availableGenes.findIndex(
+               availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id
+            )
+            === -1
+         ) {
             this.availableGenes.push(gene);
          }
          this.pinnedGenes.splice(pinnedGeneIndex, 1);
+         this.updateUrl();
          if (refresh) {
             this.refresh();
          }
@@ -462,11 +495,17 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
 
    clearPinned() {
       this.pinnedGenes.forEach(gene => {
-         if (this.availableGenes.findIndex(availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
+         if (
+            this.availableGenes.findIndex(
+               availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id
+            )
+            === -1
+         ) {
             this.availableGenes.push(gene);
          }
       });
       this.pinnedGenes = [];
+      this.updateUrl();
       this.refresh();
    }
 
@@ -476,7 +515,10 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
 
    getUrlParam(name: string, returnArray: boolean = false) {
       if (this.urlParams && this.urlParams.hasOwnProperty(name)) {
-         return returnArray && typeof this.urlParams[name] === 'string' ? this.urlParams[name].split(',') : this.urlParams[name];
+         return returnArray
+         && typeof this.urlParams[name] === 'string'
+         ? this.urlParams[name].split(',')
+         : this.urlParams[name];
       }
       return returnArray ? [] : null;
    }
@@ -495,7 +537,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
          ])
       );
 
-      const pinned = this.pinnedGenes.map(gene => gene.ensembl_gene_id);
+      const pinned = this.pinnedGenes.map(gene => gene.ensembl_gene_id) || [];
       const params: any = this.getFilterValues();
 
       if (this.selectedAnalysis?.name !== this.analyses[0].name) {
@@ -538,7 +580,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
                min: parseFloat(gene.minMedianLogcpm?.toPrecision(3)),
                max: parseFloat(gene.maxMedianLogcpm?.toPrecision(3)),
                footer: 'Meaningful Expression is considered to be a Log CPM value > 0.7'
-            }
+            };
          } else {
             return {
                label: (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id,
@@ -550,7 +592,7 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
                min: parseFloat(tissue.ci_l.toPrecision(2)),
                max: parseFloat(tissue.ci_r.toPrecision(2)),
                footer: 'Significance is considered to be an adjusted p-value < 0.05'
-            }
+            };
          }
       }
    }
@@ -562,13 +604,15 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    nRoot(x, n) {
       try {
          const negate = n % 2 === 1 && x < 0;
-         if (negate)
+         if (negate) {
             x = -x;
+         }
          const possible = Math.pow(x, 1 / n);
          n = Math.pow(possible, n);
-         if (Math.abs(x - n) < 1 && (x > 0 === n > 0))
+         if (Math.abs(x - n) < 1 && (x > 0 === n > 0)) {
             return negate ? -possible : possible;
-      } catch(e){
+         }
+      } catch (e) {
          return;
       }
    }
@@ -617,7 +661,6 @@ export class GeneComparisonToolComponent implements AfterViewInit, OnDestroy  {
    refresh() {
       this.sort();
       this.filter();
-      this.updateUrl();
    }
 
    navigateToGene(gene: GCTGene) {

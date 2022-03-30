@@ -10,12 +10,11 @@ import { RouterEvent, NavigationEnd } from '@angular/router';
 import { NavigationService } from '../services';
 
 import { LocalStorageService } from 'ngx-webstorage';
-
-import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { TabMenu } from 'primeng/tabmenu';
-
 import { CookieService } from 'ngx-cookie-service';
+
+import { MenuItem } from 'primeng/api';
+import { SplitButton } from 'primeng/splitbutton';
+import { TabMenu } from 'primeng/tabmenu';
 
 @Component({
   selector: 'navbar',
@@ -25,7 +24,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class NavbarComponent implements OnInit, AfterContentChecked {
     @ViewChild('navMenu', {static: false}) menu: TabMenu;
-    @ViewChild('mobileMenu', {static: false}) mobileMenu: MenuModule;
+    @ViewChild('mobileMenu', {static: false}) mobileMenu: SplitButton;
     items: MenuItem[];
     mobileItems: MenuItem[];
     activeItem: MenuItem;
@@ -33,7 +32,6 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
     showMobileMenu: boolean = false;
     showDesktopMenu: boolean = false;
     firstTimeCheck: boolean = true;
-    mobileMenuOpen: boolean = false;
 
     private resizeTimer;
 
@@ -47,6 +45,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
         // Main Menu
         this.items = [
             { label: 'Gene Search' },
+            // TODO: Uncomment and remove cookie code after testing
             // { label: 'Gene Comparison' },
             { label: 'Nominated Targets' },
             { label: 'Teams' }
@@ -55,6 +54,19 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
         // Secondary Menu
         this.mobileItems = [
             { label: 'Gene Search', routerLink: ['genes'] },
+            // TODO: Uncomment and remove cookie code after testing
+            // {
+            //     label: 'Gene Comparison',
+            //     command: () => {
+            //         this.navService.goToRoute('/genes', {
+            //             outlets: {
+            //                 'genes-router': [ 'gene-comparison-tool' ],
+            //                 'gene-overview': null,
+            //                 'evidence-menu': null
+            //             }
+            //         });
+            //     }
+            // },
             { label: 'Nominated Targets', command: () => {
                 this.navService.goToRoute('/genes', {
                     outlets: {
@@ -69,13 +81,12 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             { label: 'Terms of Service', url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5', target: '_blank' }
         ];
 
-        // Temporary for user testing
+        // TODO: remove this code after testing
         const queryString = window.location.search.slice(1);
         const urlParams = new URLSearchParams(queryString);
         if (urlParams.get('GCT')) {
             this.cookieService.set('GCT', '1');
         }
-
         if (this.cookieService.get('GCT')) {
             this.items.splice(1, 0, { label: 'Gene Comparison' });
             this.mobileItems.splice(1, 0, {
@@ -92,7 +103,6 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
             });
         }
 
-
         this.navService.getRouter().events.subscribe((re: RouterEvent) => {
             if (re instanceof NavigationEnd) {
                 if (re.url === '/genes' || re.url === '/') {
@@ -100,7 +110,7 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
                 } else if (re.url.indexOf('/genes/(genes-router:gene-comparison-tool)') !== -1) {
                     this.activeItem = this.items[1];
                 } else if (re.url === '/genes/(genes-router:genes-list)') {
-                    this.activeItem = this.items[1];
+                    this.activeItem = this.items[2];
                 } else if (re.url === '/teams-contributing') {
                     this.activeItem = this.items[3];
                 } else {
@@ -128,6 +138,18 @@ export class NavbarComponent implements OnInit, AfterContentChecked {
 
     goToRoute(path: string, outlets?: any) {
         this.navService.goToRoute(path, outlets);
+    }
+
+    getMobileClass(): string {
+        return 'mobile-menu ' + ((this.mobileMenu && this.mobileMenu.overlayVisible) ?
+            'mobile-menu-open-btn' : 'mobile-menu-closed-btn');
+    }
+
+    showMenu(event: Event) {
+        // Mimics the splitbutton dropdown button click
+        this.mobileMenu.onDropdownClick.emit(event);
+        this.mobileMenu.dropdownClick = true;
+        this.mobileMenu.show();
     }
 
     showVideo() {

@@ -10,6 +10,7 @@ import { CoreModule } from './core';
 
 // Third-party modules
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { CookieService } from 'ngx-cookie-service';
 
 // Platform and Environment providers
 import { environment } from 'environments/environment';
@@ -20,8 +21,6 @@ import { AppComponent } from './app.component';
 
 // State related imports
 import { AppState, InternalStateType } from './app.service';
-
-import { CookieService } from 'ngx-cookie-service';
 
 // Application wide providers
 const APP_PROVIDERS = [

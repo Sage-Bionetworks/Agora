@@ -33,3 +33,15 @@ export interface GCTFilter {
    matchMode?: string;
    options: GCTFilterOption[];
 }
+
+export interface GCDetailsPanelData {
+   label?: string;
+   heading?: string;
+   subHeading?: string;
+   value?: number;
+   valueLabel?: string;
+   pValue?: number;
+   min?: number;
+   max?: number;
+   footer?: string;
+}

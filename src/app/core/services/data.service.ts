@@ -9,12 +9,6 @@ import { Observable, forkJoin } from 'rxjs';
 
 import * as crossfilter from 'crossfilter2';
 
-declare global {
-    interface Navigator {
-        msSaveBlob?: (blob: any, defaultName?: string) => boolean
-    }
-}
-
 @Injectable()
 export class DataService {
     // Add the new #[field] from TypeScript when it's out
@@ -27,7 +21,7 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
-    rnaDistributionData: any;
+    rnaDistributionData: RnaDistribution[];
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
     // at least, but not more than, 2 digits after decimal point

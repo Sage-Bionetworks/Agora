@@ -11,9 +11,9 @@
     text-align-last: left;
 }
 
+.ui-dialog-mask {
+    background-color: rgba($info-circle-color, 0.5);
 
-.p-dialog-mask {
-    background-color: rgba($info-circle-color, 0.5) !important;
     top: 0;
     right: 0;
     bottom: 0;

@@ -2,16 +2,16 @@
 @import "../../../assets/css/helpers/mixins";
 
 .br-dialog {
-    .p-dialog {
+    .ui-dialog {
         max-height: 90% !important;
     }
 
-    .p-dialog-content {
+    .ui-dialog-content {
         padding-top: 0% !important;
         padding-bottom: 4.5% !important;
     }
 
-    .p-dialog-header-icon {
+    .ui-dialog-titlebar-icon {
 
         cursor: pointer;
 

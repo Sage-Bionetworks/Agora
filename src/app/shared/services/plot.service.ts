@@ -11,46 +11,45 @@ export class PlotHelperService {
     }
 
     box() {
-        var width = 1,
-            height = 1,
-            duration = 0,
-            domain = null,
-            value = Number,
-            whiskers = this.boxWhiskers,
-            tickFormat = null;
+        let width = 1;
+        let height = 1;
+        let duration = 0;
+        let domain = null;
+        let value = Number;
+        let whiskers = this.boxWhiskers;
+        let tickFormat = null;
 
         // For each small multiple…
         function box(g) {
             g.each(function(d, i) {
-                let g = d3.select(this),
-                    //n = d.length,
-                    min = d['min'],
-                    max = d['max'],
-                    quartiles;
+                const el = d3.select(this);
+                // const  n = d.length;
+                const min = d['min'];
+                const max = d['max'];
+                let quartiles;
 
                 if (d['first_quartile'] > d['third_quartile']) {
                     quartiles = [d['third_quartile'], d['median'], d['first_quartile']];
-                }
-                else {
+                } else {
                     quartiles = [d['first_quartile'], d['median'], d['third_quartile'] ];
                 }
 
                 // Compute whiskers. Must return exactly 2 elements, or null.
-                var whiskerData = [min, max];
+                const whiskerData = [min, max];
 
-                // Compute outliers. If no whiskers are specified, all data are "outliers".
+                // Compute outliers. If no whiskers are specified, all data are 'outliers'.
                 // We compute the outliers as indices, so that we can join across transitions!
-                // var outlierIndices = whiskerIndices
+                // let outlierIndices = whiskerIndices
                 //     ? d3.range(0, whiskerIndices[0]).concat(d3.range(whiskerIndices[1] + 1, n))
                 //     : d3.range(n);
 
                 // Compute the new x-scale.
-                var x1 = d3.scaleLinear()
+                const x1 = d3.scaleLinear()
                     .domain(domain && domain.call(this, d, i) || [min, max])
                     .range([height, 0]);
 
                 // Retrieve the old x-scale, if this is an update.
-                var x0 = this.__chart__ || d3.scaleLinear()
+                const x0 = this.__chart__ || d3.scaleLinear()
                     .domain([0, Infinity])
                     .range(x1.range());
 
@@ -63,185 +62,185 @@ export class PlotHelperService {
                 // elements also fade in and out.
 
                 // Update center line: the vertical line spanning the whiskers.
-                var center = g.selectAll("line.center")
+                const center = el.selectAll('line.center')
                     .data(whiskerData ? [whiskerData] : []);
 
-                center.enter().insert("line", "rect")
-                    .attr("class", "center")
-                    .attr("x1", width / 2)
-                    .attr("y1", function(d) { return x0(d[0]); })
-                    .attr("x2", width / 2)
-                    .attr("y2", function(d) { return x0(d[1]); })
-                    .style("opacity", 1e-6)
+                center.enter().insert('line', 'rect')
+                    .attr('class', 'center')
+                    .attr('x1', width / 2)
+                    .attr('y1', function(v) { return x0(v[0]); })
+                    .attr('x2', width / 2)
+                    .attr('y2', function(v) { return x0(v[1]); })
+                    .style('opacity', 1e-6)
                     .transition()
                     .duration(duration)
-                    .style("opacity", 1)
-                    .attr("y1", function(d) { return x1(d[0]); })
-                    .attr("y2", function(d) { return x1(d[1]); });
+                    .style('opacity', 1)
+                    .attr('y1', function(v) { return x1(v[0]); })
+                    .attr('y2', function(v) { return x1(v[1]); });
 
                 center.transition()
                     .duration(duration)
-                    .style("opacity", 1)
-                    .attr("y1", function(d) { return x1(d[0]); })
-                    .attr("y2", function(d) { return x1(d[1]); });
+                    .style('opacity', 1)
+                    .attr('y1', function(v) { return x1(v[0]); })
+                    .attr('y2', function(v) { return x1(v[1]); });
 
                 center.exit().transition()
                     .duration(duration)
-                    .style("opacity", 1e-6)
-                    .attr("y1", function(d) { return x1(d[0]); })
-                    .attr("y2", function(d) { return x1(d[1]); })
+                    .style('opacity', 1e-6)
+                    .attr('y1', function(v) { return x1(v[0]); })
+                    .attr('y2', function(v) { return x1(v[1]); })
                     .remove();
 
                 // Update innerquartile box.
-                var box = g.selectAll("rect.box")
+                const _box = g.selectAll('rect.box')
                     .data([quartiles]);
 
-                box.enter().append("rect")
-                    .attr("class", "box")
-                    .attr("x", 0)
-                    .attr("y", function(d) { return x0(d[2]); })
-                    .attr("width", width)
-                    .attr("fill", '#FFFFFF')
-                    .attr("height", function(d) { return x0(d[0]) - x0(d[2]); })
+                _box.enter().append('rect')
+                    .attr('class', 'box')
+                    .attr('x', 0)
+                    .attr('y', function(v) { return x0(v[2]); })
+                    .attr('width', width)
+                    .attr('fill', '#FFFFFF')
+                    .attr('height', function(v) { return x0(v[0]) - x0(v[2]); })
                     .transition()
                     .duration(duration)
-                    .attr("y", function(d) { return x1(d[2]); })
-                    .attr("height", function(d) { return x1(d[0]) - x1(d[2]); });
+                    .attr('y', function(v) { return x1(v[2]); })
+                    .attr('height', function(v) { return x1(v[0]) - x1(v[2]); });
 
-                box.transition()
+                _box.transition()
                     .duration(duration)
-                    .attr("y", function(d) { return x1(d[2]); })
-                    .attr("height", function(d) { return x1(d[0]) - x1(d[2]); });
+                    .attr('y', function(v) { return x1(v[2]); })
+                    .attr('height', function(v) { return x1(v[0]) - x1(v[2]); });
 
                 // Update median line.
-                var medianLine = g.selectAll("line.median")
+                const medianLine = el.selectAll('line.median')
                     .data([quartiles[1]]);
 
-                medianLine.enter().append("line")
-                    .attr("class", "median")
-                    .attr("x1", 0)
-                    .attr("y1", x0)
-                    .attr("x2", width)
-                    .attr("y2", x0)
+                medianLine.enter().append('line')
+                    .attr('class', 'median')
+                    .attr('x1', 0)
+                    .attr('y1', x0)
+                    .attr('x2', width)
+                    .attr('y2', x0)
                     .transition()
                     .duration(duration)
-                    .attr("y1", x1)
-                    .attr("y2", x1);
+                    .attr('y1', x1)
+                    .attr('y2', x1);
 
                 medianLine.transition()
                     .duration(duration)
-                    .attr("y1", x1)
-                    .attr("y2", x1);
+                    .attr('y1', x1)
+                    .attr('y2', x1);
 
                 // Update whiskers.
-                var whisker = g.selectAll("line.whisker")
+                const whisker = el.selectAll('line.whisker')
                     .data(whiskerData || []);
 
-                whisker.enter().insert("line", "circle, text")
-                    .attr("class", "whisker")
-                    .attr("x1", 0)
-                    .attr("y1", x0)
-                    .attr("x2", width)
-                    .attr("y2", x0)
-                    .style("opacity", 1e-6)
+                whisker.enter().insert('line', 'circle, text')
+                    .attr('class', 'whisker')
+                    .attr('x1', 0)
+                    .attr('y1', x0)
+                    .attr('x2', width)
+                    .attr('y2', x0)
+                    .style('opacity', 1e-6)
                     .transition()
                     .duration(duration)
-                    .attr("y1", x1)
-                    .attr("y2", x1)
-                    .style("opacity", 1);
+                    .attr('y1', x1)
+                    .attr('y2', x1)
+                    .style('opacity', 1);
 
                 whisker.transition()
                     .duration(duration)
-                    .attr("y1", x1)
-                    .attr("y2", x1)
-                    .style("opacity", 1);
+                    .attr('y1', x1)
+                    .attr('y2', x1)
+                    .style('opacity', 1);
 
                 whisker.exit().transition()
                     .duration(duration)
-                    .attr("y1", x1)
-                    .attr("y2", x1)
-                    .style("opacity", 1e-6)
+                    .attr('y1', x1)
+                    .attr('y2', x1)
+                    .style('opacity', 1e-6)
                     .remove();
 
-                //Update outliers.
-                // var outlier = g.selectAll("circle.outlier")
+                // Update outliers.
+                // let outlier = el.selectAll('circle.outlier')
                 //     .data(outlierIndices);
 
-                // outlier.enter().insert("circle", "text")
-                //     .attr("class", "outlier")
-                //     .attr("r", 5)
-                //     .attr("cx", width / 2)
-                //     .attr("cy", function(i) { return x0(d[i]); })
-                //     .style("opacity", 1e-6)
+                // outlier.enter().insert('circle', 'text')
+                //     .attr('class', 'outlier')
+                //     .attr('r', 5)
+                //     .attr('cx', width / 2)
+                //     .attr('cy', function(i) { return x0(d[i]); })
+                //     .style('opacity', 1e-6)
                 //     .transition()
                 //     .duration(duration)
-                //     .attr("cy", function(i) { return x1(d[i]); })
-                //     .style("opacity", 1);
+                //     .attr('cy', function(i) { return x1(d[i]); })
+                //     .style('opacity', 1);
 
                 // outlier.transition()
                 //     .duration(duration)
-                //     .attr("cy", function(i) { return x1(d[i]); })
-                //     .style("opacity", 1);
+                //     .attr('cy', function(i) { return x1(d[i]); })
+                //     .style('opacity', 1);
 
                 // outlier.exit().transition()
                 //     .duration(duration)
-                //     .attr("cy", function(i) { return x1(d[i]); })
-                //     .style("opacity", 1e-6)
+                //     .attr('cy', function(i) { return x1(d[i]); })
+                //     .style('opacity', 1e-6)
                 //     .remove();
 
                 // Compute the tick format.
-                var format = tickFormat || x1.tickFormat(8);
+                const format = tickFormat || x1.tickFormat(8);
 
                 // Update box ticks.
-                var boxTick = g.selectAll("text.box")
+                const boxTick = el.selectAll('text.box')
                     .data(quartiles);
 
-                boxTick.enter().append("text")
-                    .attr("class", "box")
-                    .attr("dy", ".3em")
-                    .attr("dx", function(d, i) { return i & 1 ? 6 : -6 })
-                    .attr("x", function(d, i) { return i & 1 ? width : 0 })
-                    .attr("y", x0)
-                    .attr("text-anchor", function(d, i) { return i & 1 ? "start" : "end"; })
+                boxTick.enter().append('text')
+                    .attr('class', 'box')
+                    .attr('dy', '.3em')
+                    .attr('dx', function(v, index) { return index && 1 ? 6 : -6; })
+                    .attr('x', function(v, index) { return index && 1 ? width : 0; })
+                    .attr('y', x0)
+                    .attr('text-anchor', function(v, index) { return index && 1 ? 'start' : 'end'; })
                     .text(format)
                     .transition()
                     .duration(duration)
-                    .attr("y", x1);
+                    .attr('y', x1);
 
                 boxTick.transition()
                     .duration(duration)
                     .text(format)
-                    .attr("y", x1);
+                    .attr('y', x1);
 
                 // Update whisker ticks. These are handled separately from the box
                 // ticks because they may or may not exist, and we want don't want
                 // to join box ticks pre-transition with whisker ticks post-.
-                var whiskerTick = g.selectAll("text.whisker")
+                const whiskerTick = el.selectAll('text.whisker')
                     .data(whiskerData || []);
 
-                whiskerTick.enter().append("text")
-                    .attr("class", "whisker")
-                    .attr("dy", ".3em")
-                    .attr("dx", 6)
-                    .attr("x", width)
-                    .attr("y", x0)
+                whiskerTick.enter().append('text')
+                    .attr('class', 'whisker')
+                    .attr('dy', '.3em')
+                    .attr('dx', 6)
+                    .attr('x', width)
+                    .attr('y', x0)
                     .text(format)
-                    .style("opacity", 1e-6)
+                    .style('opacity', 1e-6)
                     .transition()
                     .duration(duration)
-                    .attr("y", x1)
-                    .style("opacity", 1);
+                    .attr('y', x1)
+                    .style('opacity', 1);
 
                 whiskerTick.transition()
                     .duration(duration)
                     .text(format)
-                    .attr("y", x1)
-                    .style("opacity", 1);
+                    .attr('y', x1)
+                    .style('opacity', 1);
 
                 whiskerTick.exit().transition()
                     .duration(duration)
-                    .attr("y", x1)
-                    .style("opacity", 1e-6)
+                    .attr('y', x1)
+                    .style('opacity', 1e-6)
                     .remove();
             });
 
@@ -249,43 +248,43 @@ export class PlotHelperService {
         }
 
         box.width = function(x) {
-            if (!arguments.length) return width;
+            if (!arguments.length) { return width; }
             width = x;
             return box;
         };
 
         box.height = function(x) {
-            if (!arguments.length) return height;
+            if (!arguments.length) { return height; }
             height = x;
             return box;
         };
 
         box.tickFormat = function(x) {
-            if (!arguments.length) return tickFormat;
+            if (!arguments.length) { return tickFormat; }
             tickFormat = x;
             return box;
         };
 
         box.duration = function(x) {
-            if (!arguments.length) return duration;
+            if (!arguments.length) { return duration; }
             duration = x;
             return box;
         };
 
         box.domain = function(x) {
-            if (!arguments.length) return domain;
-            domain = x == null ? x : (typeof x === "function" ? x : function() { return x; })
+            if (!arguments.length) { return domain; }
+            domain = x == null ? x : (typeof x === 'function' ? x : function() { return x; });
             return box;
         };
 
         box.value = function(x) {
-            if (!arguments.length) return value;
+            if (!arguments.length) { return value; }
             value = x;
             return box;
         };
 
         box.whiskers = function(x) {
-            if (!arguments.length) return whiskers;
+            if (!arguments.length) { return whiskers; }
             whiskers = x;
             return box;
         };
@@ -293,40 +292,40 @@ export class PlotHelperService {
         return box;
     }
 
-    boxPlot(parent) {
-        var _chart = dc['coordinateGridMixin']({});
+    boxPlot(parent): dc.BoxPlot {
+        const _chart = dc['coordinateGridMixin']({});
 
         // Returns a function to compute the interquartile range.
-        function DEFAULT_WHISKERS_IQR (k) {
-            return function (d) {
-                var q1 = d.first_quartile,
-                    q3 = d.third_quartile,
-                    iqr = (q3 - q1) * k,
-                    i = -1,
-                    j = d.length;
+        function DEFAULT_WHISKERS_IQR(k) {
+            return function(d) {
+                const q1 = d.first_quartile;
+                const q3 = d.third_quartile;
+                const iqr = (q3 - q1) * k;
+                let i = -1;
+                let j = d.length;
                 do { ++i; } while (d[i] < q1 - iqr);
                 do { --j; } while (d[j] > q3 + iqr);
                 return [i, j];
             };
         }
 
-        var _whiskerIqrFactor = 1.5;
-        var _whiskersIqr = DEFAULT_WHISKERS_IQR;
-        var _whiskers = _whiskersIqr(_whiskerIqrFactor);
+        const _whiskerIqrFactor = 1.5;
+        const _whiskersIqr = DEFAULT_WHISKERS_IQR;
+        const _whiskers = _whiskersIqr(_whiskerIqrFactor);
 
-        var _box = this.box();
-        var _tickFormat = null;
-        var _renderDataPoints = false;
-        var _dataOpacity = 0.3;
-        var _dataWidthPortion = 0.8;
-        var _showOutliers = true;
-        var _boldOutlier = false;
+        const _box = this.box();
+        let _tickFormat = null;
+        let _renderDataPoints = false;
+        let _dataOpacity = 0.3;
+        let _dataWidthPortion = 0.8;
+        let _showOutliers = true;
+        let _boldOutlier = false;
 
         // Used in yAxisMin and yAxisMax to add padding in pixel coordinates
         // so the min and max data points/whiskers are within the chart
-        var _yRangePadding = 8;
+        let _yRangePadding = 8;
 
-        var _boxWidth = function (innerChartWidth, xUnits) {
+        let _boxWidth = function(innerChartWidth, xUnits) {
             if (_chart.isOrdinal()) {
                 return _chart.x().bandwidth();
             } else {
@@ -341,12 +340,12 @@ export class PlotHelperService {
         // valueAccessor should return an array of values that can be coerced into numbers
         // or if data is overloaded for a static array of arrays, it should be `Number`.
         // Empty arrays are not included.
-        _chart.data(function (group) {
-            return group.all().map(function (d) {
-                d.map = function (accessor) { return accessor.call(d, d); };
+        _chart.data(function(group) {
+            return group.all().map(function(d) {
+                d.map = function(accessor) { return accessor.call(d, d); };
                 return d;
-            }).filter(function (d) {
-                var values = _chart.valueAccessor()(d);
+            }).filter(function(d) {
+                const values = _chart.valueAccessor()(d);
                 return values.length !== 0;
             });
         });
@@ -393,7 +392,7 @@ export class PlotHelperService {
          * @param {Number|Function} [boxWidth=0.5]
          * @returns {Number|Function|dc.boxPlot}
          */
-        _chart.boxWidth = function (boxWidth) {
+        _chart.boxWidth = function(boxWidth) {
             if (!arguments.length) {
                 return _boxWidth;
             }
@@ -401,88 +400,87 @@ export class PlotHelperService {
             return _chart;
         };
 
-        var boxTransform = function (d, i) {
-            var xOffset = _chart.x()(_chart.keyAccessor()(d, i));
+        const boxTransform = function(d, i) {
+            const xOffset = _chart.x()(_chart.keyAccessor()(d, i));
             return 'translate(' + xOffset + ', 0)';
         };
 
-        _chart._preprocessData = function () {
+        _chart._preprocessData = function() {
             if (_chart.elasticX()) {
                 _chart.x().domain([]);
             }
         };
 
-        _chart.plotData = function () {
-            var _calculatedBoxWidth = _boxWidth(_chart.effectiveWidth(), _chart.xUnitCount());
+        _chart.plotData = function() {
+            const _calculatedBoxWidth = _boxWidth(_chart.effectiveWidth(), _chart.xUnitCount());
 
             _box.whiskers(_whiskers)
                 ['width'](_calculatedBoxWidth)
                 .height(_chart.effectiveHeight())
-                //.value(_chart.valueAccessor())
+                // .value(_chart.valueAccessor())
                 .domain(_chart.y().domain())
                 .duration(_chart.transitionDuration())
-                .tickFormat(_tickFormat)
-                //.renderDataPoints(_renderDataPoints)
-                //.dataOpacity(_dataOpacity)
-                //.dataWidthPortion(_dataWidthPortion)
-                //.renderTitle(_chart.renderTitle())
-                //.showOutliers(_showOutliers)
-                //.boldOutlier(_boldOutlier);
+                .tickFormat(_tickFormat);
+                // .renderDataPoints(_renderDataPoints)
+                // .dataOpacity(_dataOpacity)
+                // .dataWidthPortion(_dataWidthPortion)
+                // .renderTitle(_chart.renderTitle())
+                // .showOutliers(_showOutliers)
+                // .boldOutlier(_boldOutlier);
 
-            var boxesG = _chart.chartBodyG().selectAll('g.box').data(_chart.data(), _chart.keyAccessor());
-            var boxesGEnterUpdate = renderBoxes(boxesG);
+            const boxesG = _chart.chartBodyG().selectAll('g.box').data(_chart.data(), _chart.keyAccessor());
+            const boxesGEnterUpdate = renderBoxes(boxesG);
             updateBoxes(boxesGEnterUpdate);
             removeBoxes(boxesG);
 
             _chart.fadeDeselectedArea(_chart.filter());
         };
 
-        function renderBoxes (boxesG) {
-            var boxesGEnter = boxesG.enter().append('g');
+        function renderBoxes(boxesG) {
+            const boxesGEnter = boxesG.enter().append('g');
 
             boxesGEnter
                 .attr('class', 'box')
                 .attr('transform', boxTransform)
                 .call(_box)
-                .on('click', function (d) {
+                .on('click', function(d) {
                     _chart.filter(_chart.keyAccessor()(d));
                     _chart.redrawGroup();
                 });
             return boxesGEnter.merge(boxesG);
         }
 
-        function updateBoxes (boxesG) {
+        function updateBoxes(boxesG) {
             dc.transition(boxesG, _chart.transitionDuration(), _chart.transitionDelay())
                 ['attr']('transform', boxTransform)
                 .call(_box)
-                .each(function (d) {
-                    var color = _chart.getColor(d, 0);
+                .each(function(d) {
+                    const color = _chart.getColor(d, 0);
                     d3.select(this).select('rect.box').attr('fill', color);
                     d3.select(this).selectAll('circle.data').attr('fill', color);
                 });
         }
 
-        function removeBoxes (boxesG) {
+        function removeBoxes(boxesG) {
             boxesG.exit().remove().call(_box);
         }
 
-        function yAxisRangeRatio () {
-
-            var max = parseInt(d3.max(_chart.data(), function (e) {
+        function yAxisRangeRatio() {
+            const max = parseInt(d3.max(_chart.data(), function(e) {
                 return d3.max(_chart.valueAccessor()(e));
-            }));
+            }), 10);
 
-            var min = parseInt(d3.min(_chart.data(), function (e) {
+            const min = parseInt(d3.min(_chart.data(), function(e) {
                 return d3.min(_chart.valueAccessor()(e));
-            }));
+            }), 10);
 
             return ((max - min) / _chart.effectiveHeight());
         }
 
-        _chart.fadeDeselectedArea = function (brushSelection) {
+        _chart.fadeDeselectedArea = function(brushSelection) {
             if (_chart.hasFilter()) {
                 if (_chart.isOrdinal()) {
-                    _chart.g().selectAll('g.box').each(function (d) {
+                    _chart.g().selectAll('g.box').each(function(d) {
                         if (_chart.isSelectedNode(d)) {
                             _chart.highlightSelected(this);
                         } else {
@@ -493,11 +491,11 @@ export class PlotHelperService {
                     if (!(_chart.brushOn() || _chart.parentBrushOn())) {
                         return;
                     }
-                    var start = brushSelection[0];
-                    var end = brushSelection[1];
-                    var keyAccessor = _chart.keyAccessor();
-                    _chart.g().selectAll('g.box').each(function (d) {
-                        var key = keyAccessor(d);
+                    const start = brushSelection[0];
+                    const end = brushSelection[1];
+                    const keyAccessor = _chart.keyAccessor();
+                    _chart.g().selectAll('g.box').each(function(d) {
+                        const key = keyAccessor(d);
                         if (key < start || key >= end) {
                             _chart.fadeDeselected(this);
                         } else {
@@ -506,25 +504,25 @@ export class PlotHelperService {
                     });
                 }
             } else {
-                _chart.g().selectAll('g.box').each(function () {
+                _chart.g().selectAll('g.box').each(function() {
                     _chart.resetHighlight(this);
                 });
             }
         };
 
-        _chart.isSelectedNode = function (d) {
+        _chart.isSelectedNode = function(d) {
             return _chart.hasFilter(_chart.keyAccessor()(d));
         };
 
-        _chart.yAxisMin = function () {
-            var padding = _yRangePadding * yAxisRangeRatio();
-            var min = parseInt(d3.min(_chart.data(), function (g) { return g['min']; })) - 1;
+        _chart.yAxisMin = function() {
+            const padding = _yRangePadding * yAxisRangeRatio();
+            const min = parseInt(d3.min(_chart.data(), function(g) { return g['min']; }), 10) - 1;
             return dc.utils.subtract(min - padding, _chart.yAxisPadding());
         };
 
-        _chart.yAxisMax = function () {
-            var padding = _yRangePadding * yAxisRangeRatio();
-            var max = parseInt(d3.max(_chart.data(), function (g) { return g['max']; })) + 1;
+        _chart.yAxisMax = function() {
+            const padding = _yRangePadding * yAxisRangeRatio();
+            const max = parseInt(d3.max(_chart.data(), function(g) { return g['max']; }), 10) + 1;
             return dc.utils.add(max + padding, _chart.yAxisPadding());
         };
 
@@ -540,7 +538,7 @@ export class PlotHelperService {
          * @param {Function} [tickFormat]
          * @returns {Number|Function|dc.boxPlot}
          */
-        _chart.tickFormat = function (tickFormat) {
+        _chart.tickFormat = function(tickFormat) {
             if (!arguments.length) {
                 return _tickFormat;
             }
@@ -560,7 +558,7 @@ export class PlotHelperService {
          * @param {Function} [yRangePadding = 8]
          * @returns {Number|Function|dc.boxPlot}
          */
-        _chart.yRangePadding = function (yRangePadding) {
+        _chart.yRangePadding = function(yRangePadding) {
             if (!arguments.length) {
                 return _yRangePadding;
             }
@@ -579,7 +577,7 @@ export class PlotHelperService {
          * @param {Boolean} [show=false]
          * @returns {Boolean|dc.boxPlot}
          */
-        _chart.renderDataPoints = function (show) {
+        _chart.renderDataPoints = function(show) {
             if (!arguments.length) {
                 return _renderDataPoints;
             }
@@ -598,7 +596,7 @@ export class PlotHelperService {
          * @param {Number} [opacity=0.3]
          * @returns {Number|dc.boxPlot}
          */
-        _chart.dataOpacity = function (opacity) {
+        _chart.dataOpacity = function(opacity) {
             if (!arguments.length) {
                 return _dataOpacity;
             }
@@ -617,7 +615,7 @@ export class PlotHelperService {
          * @param {Number} [percentage=0.8]
          * @returns {Number|dc.boxPlot}
          */
-        _chart.dataWidthPortion = function (percentage) {
+        _chart.dataWidthPortion = function(percentage) {
             if (!arguments.length) {
                 return _dataWidthPortion;
             }
@@ -636,7 +634,7 @@ export class PlotHelperService {
          * @param {Boolean} [show=true]
          * @returns {Boolean|dc.boxPlot}
          */
-        _chart.showOutliers = function (show) {
+        _chart.showOutliers = function(show) {
             if (!arguments.length) {
                 return _showOutliers;
             }
@@ -655,7 +653,7 @@ export class PlotHelperService {
          * @param {Boolean} [show=false]
          * @returns {Boolean|dc.boxPlot}
          */
-        _chart.boldOutlier = function (show) {
+        _chart.boldOutlier = function(show) {
             if (!arguments.length) {
                 return _boldOutlier;
             }
