@@ -92,7 +92,7 @@ export class PlotHelperService {
                     .remove();
 
                 // Update innerquartile box.
-                const _box = g.selectAll('rect.box')
+                const _box = el.selectAll('rect.box')
                     .data([quartiles]);
 
                 _box.enter().append('rect')
