@@ -254,7 +254,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-<<<<<<< HEAD
     updateYDomain() {
         // Draw the horizontal lines
         const evidenceData = this.dataService.getEvidenceData();
@@ -270,9 +269,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     addXAxisTooltips(chart: dc.BoxPlot) {
-=======
-    addXAxisTooltips(chart: any) {
->>>>>>> develop
         const self = this;
         chart.selectAll('g.axis.x g.tick').each(function() {
             const text = d3.select(this).select('text');
