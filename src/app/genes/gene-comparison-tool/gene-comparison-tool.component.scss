@@ -145,6 +145,8 @@
     position: absolute;
     top: -49px;
     pointer-events: none;
+    left: 44px;
+    right: 44px;
 
     th:not(:first-child) {
         pointer-events: auto;
@@ -204,8 +206,6 @@
                 border-radius: 5px;
                 padding: 10px 0;
 
-
-
                 ul {
                     padding: 0;
 
@@ -220,7 +220,7 @@
                             font-weight: 900;
                         }
 
-                        &.ui-disabled {
+                        &.ui-state-disabled {
 
                             span {
                                 color: #A6A6A6;
@@ -236,7 +236,7 @@
 
                         }
 
-                        &:not(.ui-disabled):hover {
+                        &:not(.ui-state-disabled):hover {
                             background-color: color(primary);
 
                             span {
@@ -485,6 +485,15 @@
 
         &:hover {
             border-color: #000000 !important;
+        }
+
+        .gene-indicator-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 12px;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
         }
     }
 

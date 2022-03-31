@@ -1,23 +1,27 @@
+import { SelectItem } from 'primeng/api';
+import { MedianExpression } from '../../models';
+
 export interface GCTGeneTissue {
    name: string;
    logfc: number;
    adj_p_val: number;
    ci_l: number;
    ci_r: number;
-   medianlogcpm: number;
+   medianexpression?: MedianExpression;
 }
 
 export interface GCTGene {
    ensembl_gene_id: string;
    hgnc_symbol: string;
    tissues: GCTGeneTissue[];
-   minMedianLogcpm?: number;
-   maxMedianLogcpm?: number;
 }
 
-export interface GCTSelectOption {
-   name: string;
-   value?: any;
+export interface GCTSelectOption extends SelectItem {
+   label?: string;
+   value: any;
+   disabled?: boolean;
+
+   name?: string;
 }
 
 export interface GCTFilterOption {

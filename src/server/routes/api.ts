@@ -82,6 +82,7 @@ connection.once('open', () => {
     // Get the genes collection size
     let tableGenesById: GeneInfo[] = [];
     let allGenes: Gene[] = [];
+    let allGeneInfo: GeneInfo[] = [];
     let allTeams: TeamInfo[] = [];
     const genesADDMF: Gene[] = [];
     const genesADDAODMF: Gene[] = [];
@@ -193,6 +194,14 @@ connection.once('open', () => {
                     break;
             }
         });
+    });
+
+    GenesInfo.find().lean().exec(async (err, data: GeneInfo[], next) => {
+        if (err) {
+            next(err);
+        } else {
+            allGeneInfo = data;
+        }
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } }).lean()
@@ -603,8 +612,7 @@ connection.once('open', () => {
 
     // Get the cached list of genes for comparison tool
     router.get('/genes/comparison', async (req, res, next) => {
-
-        let genes = allGenes.slice();
+        let genes = allGenes;
         const _genes = {};
 
         if (req.query.model) {
@@ -679,20 +687,10 @@ connection.once('open', () => {
     });
 
     router.get('/gene/infos', (req, res, next) => {
-        GenesInfo.find().lean().exec((err, geneInfos) => {
-            if (err) {
-                next(err);
-            } else {
-                if (geneInfos.length === 0) {
-                    res.json({ items: [] });
-                } else {
-                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                    res.setHeader('Pragma', 'no-cache');
-                    res.setHeader('Expires', 0);
-                    res.json({ items: geneInfos });
-                }
-            }
-        });
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json({ items: allGeneInfo });
     });
 
     // Query for all genesInfos that match an array of ENSG - used to populate the Similar Genes table
