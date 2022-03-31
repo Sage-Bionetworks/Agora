@@ -254,7 +254,21 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    addXAxisTooltips(chart: any) {
+    updateYDomain() {
+        // Draw the horizontal lines
+        const evidenceData = this.dataService.getEvidenceData();
+        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+
+        currentGenes.forEach((g) => {
+            if (Math.abs(+g.logfc) > this.max) {
+                this.max = Math.abs(+g.logfc);
+            }
+        });
+    }
+
+    addXAxisTooltips(chart: dc.BoxPlot) {
         const self = this;
         chart.selectAll('g.axis.x g.tick').each(function() {
             const text = d3.select(this).select('text');
@@ -305,12 +319,15 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const lineCenter = chart.selectAll('line.center');
         const yDomainLength = Math.abs(chart.yAxisMax() - chart.yAxisMin());
         const mult = (self.boxPlot.nativeElement.offsetHeight - 60) / yDomainLength;
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
         const logVals: number[] = [];
         const phrases: string[] = [];
         const significanceTexts: string[] = [];
+
+        const evidenceData = this.dataService.getEvidenceData();
+        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+            return g.model === this.geneService.getCurrentModel();
+        });
+
         currentGenes.forEach((g) => {
             logVals.push(self.dataService.getSignificantFigures(g.logfc));
             significanceTexts.push((g.adj_p_val <= 0.05) ?

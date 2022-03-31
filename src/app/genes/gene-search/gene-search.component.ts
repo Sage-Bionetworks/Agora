@@ -69,8 +69,8 @@ export class GeneSearchComponent implements OnInit {
                     this.isNotFound = true;
                     this.setErrorMessage(
                         this.isEnsemblIdSearch ?
-                        this.ensemblIdNotFoundString :
-                        this.hgncSymbolNotFoundString
+                            this.ensemblIdNotFoundString :
+                            this.hgncSymbolNotFoundString
                     );
                 } else {
                     this.isNotFound = false;

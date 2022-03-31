@@ -195,6 +195,12 @@ export class ApiService {
         return this.http.get(baseUrl, { headers, params });
     }
 
+    getEvidencenData(id: string): Observable<any> {
+        const headers = new HttpHeaders(defaultHeaders);
+        const params = new HttpParams().set('id', id);
+        return this.http.get<any>('/api/evidence', { headers, params });
+    }
+
     getRnaDistributionData(): Observable<RnaDistribution[]> {
         const headers = new HttpHeaders(defaultHeaders);
         // Get all the genes to render the charts

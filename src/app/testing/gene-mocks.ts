@@ -41,6 +41,20 @@ export const mockGene2: Gene = {
   model: 'AD Diagnosis (males and females)',
 };
 
+export const mockGeneCorrelationData: any = [
+  {
+    _id: '61e994f7f0ad252bb8361138',
+    ci_lower: 0.91803550719735,
+    ci_upper: 1.21903693075933,
+    ensg: 'ENSG00000078043',
+    gname: 'PIAS2',
+    neuropath_type: 'BRAAK',
+    oddsratio: 1.05766612357586,
+    pval: 0.438026367318651,
+    pval_adj: 0.717412210719562
+  }
+];
+
 export const emptyGene: Gene = {
   _id: '',
   ensembl_gene_id: '',
@@ -212,6 +226,11 @@ export const mockGenesResponse: GenesResponse = {
   maxAdjPValue: Math.max(mockGene1.adj_p_val, mockGene2.adj_p_val),
   geneTissues: mockTissues,
   geneModels: mockModels,
+};
+
+export const mockEvidenceDataResponse: any = {
+  rnaDifferentialExpression: [mockGene1],
+  rnaCorrelation: mockGeneCorrelationData,
 };
 
 export const mockLinksListResponse: LinksListResponse = {

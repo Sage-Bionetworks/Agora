@@ -53,8 +53,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
     @ViewChild('studies', {static: false}) stdCol: ElementRef;
 
     max: number = -Infinity;
+    evidenceData: any;
+    currentGenes: any;
     currentModel: string;
-    currentTissue: string;
     canDisplay: boolean = false;
     canResize: boolean = false;
     colors: string[] = ['#5171C0'];
@@ -80,7 +81,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     ngOnInit() {
         this.currentModel = this.geneService.getDefaultModel();
-        this.currentTissue = this.geneService.getDefaultTissue();
+        this.evidenceData = this.dataService.getEvidenceData();
 
         // If we move away from the overview page, remove
         // the charts
@@ -205,6 +206,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     return d.key[0];
                 })
                 .on('preRender', function(chart) {
+                    self.currentGenes = self.evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                        return g.model === self.geneService.getCurrentModel();
+                    });
                     self.max = -Infinity;
                     self.updateXDomain();
                     if (self.max !== -Infinity) {
@@ -218,6 +222,9 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                     }
                 })
                 .on('preRedraw', function(chart) {
+                    self.currentGenes = self.evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                        return g.model === self.geneService.getCurrentModel();
+                    });
                     self.max = -Infinity;
                     self.updateXDomain();
                     if (self.max !== -Infinity) {
@@ -333,11 +340,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
 
     updateXDomain() {
         // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
-
-        currentGenes.forEach((g) => {
+        this.currentGenes.forEach((g) => {
             if (Math.abs(+g.ci_l) > this.max) {
                 this.max = Math.abs(+g.ci_l);
             }
@@ -481,10 +484,6 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
 
         // Draw the horizontal lines
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
-
         chart.selectAll('g.row g.hline line')
             .attr('stroke-width', 1.5)
             .attr('stroke', (d, i) => {
@@ -492,7 +491,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             })
             // ES6 method shorthand for object literals
             .attr('x1', (d) => {
-                const gene = currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -507,7 +506,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                 return yPos;
             })
             .attr('x2', (d) => {
-                const gene = currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -528,16 +527,13 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         const self = this;
 
         // Draw the confidence texts
-        const currentGenes = this.dataService.getGeneEntries().slice().filter((g) => {
-            return g.model === this.geneService.getCurrentModel();
-        });
         const posQueryString = (isNeg) ? '-left' : '-right';
         const queryString = 'g.row g.confidence-text' + posQueryString + ' text';
         chart.group(self.group);
         chart.selectAll(queryString)
             // ES6 method shorthand for object literals
             .attr('x', (d) => {
-                const gene = currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 
@@ -571,7 +567,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             })
             .attr('text-anchor', 'middle')
             .text((d) => {
-                const gene = currentGenes.slice().find((g) => {
+                const gene = self.currentGenes.slice().find((g) => {
                     return d.key[0] === g.tissue;
                 });
 

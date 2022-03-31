@@ -6,6 +6,7 @@ import { Gene, GeneInfo } from '../../../models';
 import { GeneService } from '../../../core/services';
 
 import * as d3 from 'd3';
+import { Interface } from 'readline';
 
 export interface GeneResourceType {
     title: string;

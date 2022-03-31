@@ -495,6 +495,7 @@ connection.once('open', () => {
                     return [];
                 }
             );
+
             groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
 
             if (Object.keys(groups).length > 0) {
@@ -550,58 +551,13 @@ connection.once('open', () => {
                     if (!genes.length) {
                         res.json({items: genes});
                     } else {
-                        const geneEntries = genes.slice();
-                        const geneTissues = [];
-                        const geneModels = [];
-
-                        let minFC: number = +Infinity;
-                        let maxFC: number = -Infinity;
-                        let minLogFC: number = +Infinity;
-                        let maxLogFC: number = -Infinity;
-                        let maxAdjPValue: number = -Infinity;
-                        let minAdjPValue: number = Infinity;
-                        geneTissues.length = 0;
-                        geneModels.length = 0;
-                        await genes.forEach((g) => {
-                            if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                            if (+g.fc < minFC) { minFC = (+g.fc); }
-                            if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                            if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                            const adjPVal: number = +g.adj_p_val;
-                            if (+g.adj_p_val) {
-                                if (adjPVal > maxAdjPValue) {
-                                    maxAdjPValue = adjPVal;
-                                }
-                                if (adjPVal < minAdjPValue) {
-                                    minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
-                                }
-                            }
-                            if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
-                                geneTissues.push(g.tissue);
-                            }
-                            if (g['model'] && geneModels.indexOf(g['model']) === -1) {
-                                geneModels.push(g['model']);
-                            }
-                        });
-                        geneTissues.sort();
-                        geneModels.sort();
-
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
                         await res.json({
-                            geneEntries,
-                            minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                            maxFC,
-                            minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC : minLogFC,
-                            maxLogFC,
-                            minAdjPValue,
-                            maxAdjPValue,
-                            geneModels,
-                            geneTissues,
+                            genes,
                             geneProteomics: geneProteomics.filter(p =>
-                                p.ensembl_gene_id === geneEntries[0].ensembl_gene_id
+                                p.ensembl_gene_id === genes[0].ensembl_gene_id
                             )
                         });
                     }
@@ -1115,6 +1071,32 @@ connection.once('open', () => {
         }
         return noData;
     };
+
+    router.get('/evidence', async (req, res, next) => {
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({ item: null });
+        } else {
+            // Find all the Genes with the current id
+            await Genes.find({ensembl_gene_id: req.query.id}).lean().sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+                .exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    if (!genes.length) {
+                        res.json({items: []});
+                    } else {
+                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                        res.setHeader('Pragma', 'no-cache');
+                        res.setHeader('Expires', 0);
+                        res.json({
+                            rnaDifferentialExpression: genes,
+                            rnaCorrelation: getGeneCorrelationData(req.query.id)
+                        });
+                    }
+                }
+            });
+        }
+    });
 
     router.get('/rnadistribution', async (req, res, next) => {
         await RnaDistribution.find({}).lean().exec(async (err, data) => {
