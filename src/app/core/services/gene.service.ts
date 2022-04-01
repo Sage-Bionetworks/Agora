@@ -286,4 +286,9 @@ export class GeneService {
     setInfoDataState(state: boolean) {
         this.noInfoData = state;
     }
+
+    hasMedianExpression(): boolean  {
+        const info = this.getCurrentInfo();
+        return info && info.medianexpression && info.medianexpression.length > 0 ? true : false;
+    }
 }

@@ -77,7 +77,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
-
         // If we move away from the overview page, remove
         // the charts
         this.routerSubscription = this.router.events.subscribe((event) => {
@@ -90,10 +89,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
-            if (state) {
-                this.updateCircleRadius();
-                this.initChart();
-            }
+            this.updateCircleRadius();
+            this.initChart();
         });
     }
 
