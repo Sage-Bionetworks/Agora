@@ -10,7 +10,8 @@ import {
     mockModels,
     mockGeneStatistics,
     mockGenesResponse,
-    mockLinksListResponse
+    mockLinksListResponse,
+    mockEvidenceDataResponse
 } from './gene-mocks';
 
 import {
@@ -19,6 +20,7 @@ import {
     GenesResponse,
     GeneNetwork,
     GeneResponse,
+    RnaDistribution
 } from '../models';
 
 import { forkJoin, of, Observable } from 'rxjs';
@@ -29,11 +31,13 @@ import * as crossfilter from 'crossfilter2';
 export class DataServiceStub {
     data: any;
     ndx: any;
+    rnaDistributionData: any;
 
     loadData(gene: Gene): Observable<any[]> {
         return forkJoin([
             of(mockGenesResponse),
-            of(mockLinksListResponse)
+            of(mockLinksListResponse),
+            of(mockEvidenceDataResponse)
         ]);
     }
 
@@ -58,5 +62,27 @@ export class DataServiceStub {
     // Assuming the rows are already properly formatted
     exportToCsv(filename: string, rows: string[]) {
         //
+    }
+
+    setEvidenceData(data: any) {
+        //
+    }
+
+    getEvidenceData(): Gene[] {
+        return mockEvidenceDataResponse;
+    }
+
+    setRnaDistributionData(data) {
+        this.rnaDistributionData = data;
+    }
+
+    loadRnaDistributionData(data) {
+        if (data) {
+            this.setRnaDistributionData(data);
+        }
+    }
+
+    getRnaDistributionData(): RnaDistribution[] {
+        return this.rnaDistributionData;
     }
 }

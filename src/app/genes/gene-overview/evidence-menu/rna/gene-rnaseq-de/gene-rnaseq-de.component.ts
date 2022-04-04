@@ -107,7 +107,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.selectedTissues = (index !== -1) ?
                 this.tissues.slice(index, index + 1).map((a) => a.value) :
                 this.tissues.slice(0, 1).map((a) => a.value);
-            this.geneService.setDefaultTissue(this.selectedTissues[0]);
 
             this.selectedModels = this.models.slice(0, 1).map((a) => a.value);
 

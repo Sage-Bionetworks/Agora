@@ -1,17 +1,22 @@
 @import "../../../assets/css/helpers/variables";
 @import "../../../assets/css/helpers/mixins";
 
-.p-tooltip {
+.gct-tooltip {
+    max-width: none;
+    transform: translateY(-18px);
     background-color: #63676C;
     padding: 10px 15px !important;
 
-    .p-tooltip-text {
+    .ui-tooltip-text {
         @include lato-font('normal');
+        background: none;
+        box-shadow: none;
         font-size: 14px;
         color: #ffffff;
+        white-space: nowrap;
     }
 
-    .p-tooltip-arrow {
+    .ui-tooltip-arrow {
         bottom: -10px;
         width: 0;
         height: 0;
@@ -19,15 +24,6 @@
         border-right: 10px solid transparent;
         border-top: 10px solid #63676C;
         margin-left: -10px;
-    }
-}
-
-.gct-tooltip {
-    max-width: none;
-    transform: translateY(-18px);
-
-    .p-tooltip-text {
-        white-space: nowrap;
     }
 }
 
@@ -149,14 +145,16 @@
     position: absolute;
     top: -49px;
     pointer-events: none;
+    left: 44px;
+    right: 44px;
 
     th:not(:first-child) {
         pointer-events: auto;
     }
 
-    .p-sortable-column-icon {
-        transform: translateY(-3px);
-    }
+    // .ui-sortable-column-icon {
+    //     transform: translateY(-3px);
+    // }
 }
 
 
@@ -186,29 +184,27 @@
             font-weight: 900;
         }
 
-        .p-dropdown {
+        .ui-dropdown {
 
-            .p-dropdown-label {
+            .ui-dropdown-label {
                 padding-left: 0;
                 font-size: 14px;
                 font-weight: 400;
-                padding-right: 12px;
+                padding-right: 25px;
                 color: color(primary);
             }
 
-            .p-dropdown-trigger-icon {
+            .ui-dropdown-trigger-icon {
                 font-size: 16px;
                 transform: translateY(-1px);
                 color: color(primary);
             }
 
-            .p-dropdown-panel {
+            .ui-dropdown-panel {
                 background-color: #ffffff;
                 box-shadow: 0 1px 10px 0 rgba(0,0,0,0.15);
                 border-radius: 5px;
                 padding: 10px 0;
-
-
 
                 ul {
                     padding: 0;
@@ -224,14 +220,14 @@
                             font-weight: 900;
                         }
 
-                        &.p-disabled {
+                        &.ui-state-disabled {
 
                             span {
                                 color: #A6A6A6;
                             }
                         }
 
-                        &.p-highlight {
+                        &.ui-state-highlight {
                             background-color: color(primary);
 
                             span {
@@ -240,7 +236,7 @@
 
                         }
 
-                        &:not(.p-disabled):hover {
+                        &:not(.ui-state-disabled):hover {
                             background-color: color(primary);
 
                             span {
@@ -254,13 +250,12 @@
     }
     .analysis-filter {
 
-        .p-dropdown-label {
+        .ui-dropdown-label {
             text-transform: uppercase;
             font-weight: 900 !important;
         }
 
-        .p-dropdown-panel {
-
+        .ui-dropdown-panel {
 
             ul {
 
@@ -345,8 +340,8 @@
         padding-right: 44px;
     }
 
-    .p-datatable-thead,
-    .p-datatable-tbody {
+    .ui-table-thead,
+    .ui-table-tbody {
 
         td, th {
             &:first-child {
@@ -358,14 +353,14 @@
         }
     }
 
-    .p-datatable-thead {
+    .ui-table-thead {
 
         th {
             padding-bottom: 25px !important;
         }
     }
 
-    .p-datatable-tbody {
+    .ui-table-tbody {
         td {
             position: relative;
             vertical-align: middle;
@@ -408,7 +403,7 @@
         }
     }
 
-    .p-paginator-bottom {
+    .ui-paginator-bottom {
         display: block;
         padding: 20px 44px;
         margin-left: -44px;
@@ -416,16 +411,16 @@
         text-align: right;
         border-top: 1px solid #EEEEEE;
 
-        .p-paginator-pages {
+        .ui-paginator-pages {
             display: none;
         }
 
-        .p-paginator-current {
+        .ui-paginator-current {
             margin-right: 15px;
             font-size: 15px;
         }
 
-        .p-paginator-icon {
+        .ui-paginator-icon {
             color: color(actionPrimary);
             cursor: pointer;
             transition: .3s;
@@ -491,6 +486,15 @@
         &:hover {
             border-color: #000000 !important;
         }
+
+        .gene-indicator-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 12px;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+        }
     }
 
     .pinned {
@@ -548,7 +552,7 @@
     }
 }
 
-.p-paginator-bottom {
+.ui-paginator-bottom {
 
     &:before {
         content: " ";

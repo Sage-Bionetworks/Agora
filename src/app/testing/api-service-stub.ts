@@ -25,7 +25,7 @@ import {
 } from '../models';
 
 import { Observable, of } from 'rxjs';
-import { mockGenesResponse, mockTissues, mockModels } from './gene-mocks';
+import { mockGenesResponse, mockTissues, mockModels, mockEvidenceDataResponse } from './gene-mocks';
 
 @Injectable()
 export class ApiServiceStub {
@@ -47,35 +47,6 @@ export class ApiServiceStub {
 
     getTableData(): Observable<object> {
         return of([mockGene1, mockGene2]);
-    }
-
-    getComparisonData(): Observable<object> {
-        const genes = [mockGene1];
-        const _genes = {};
-
-        for (const gene of genes) {
-            if (!_genes.hasOwnProperty(gene.ensembl_gene_id)) {
-                _genes[gene.ensembl_gene_id] = {
-                    ensembl_gene_id : gene.ensembl_gene_id,
-                    hgnc_symbol     : gene.hgnc_symbol,
-                    tissues         : []
-                }
-            }
-
-            _genes[gene.ensembl_gene_id].tissues.push({
-                name        : gene.tissue,
-                logfc       : gene.logfc,
-                adj_p_val   : gene.adj_p_val,
-                ci_l        : gene.ci_l,
-                ci_r        : gene.ci_r,
-            });
-        }
-
-        return of({ items: Object.values(_genes) });
-    }
-
-    getInfos(): Observable<object> {
-        return of({ items: [mockInfo1], isEnsembl: false });
     }
 
     getInfosMatchId(id?: string): Observable<GeneInfosResponse> {
@@ -113,5 +84,21 @@ export class ApiServiceStub {
 
     getGeneMetabolomics(id: string): Observable<object> {
         return of(mockMetabolomics);
+    }
+
+    getEvidencenData(id: string): Observable<object> {
+        return of(mockEvidenceDataResponse);
+    }
+
+    getComparisonData(): Observable<object> {
+        return of({ items: [mockGene1] });
+    }
+
+    getInfos(): Observable<object> {
+        return of({ items: [mockInfo1] });
+    }
+
+    getRnaDistributionData(): Observable<object> {
+        return of({ items: [mockInfo1] });
     }
 }

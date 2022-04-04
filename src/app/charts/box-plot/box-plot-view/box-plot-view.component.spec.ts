@@ -17,6 +17,7 @@ import {
 import { BoxPlotViewComponent } from './box-plot-view.component';
 
 import { GeneService, DataService } from '../../../core/services';
+import { PlotHelperService } from '../../../shared/services';
 import { ChartService } from '../../services';
 
 describe('Component: BoxPlotView', () => {
@@ -41,7 +42,8 @@ describe('Component: BoxPlotView', () => {
                 { provide: DataService, useValue: new DataServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
-                { provide: SpyLocation, useValue: new SpyLocation() }
+                { provide: SpyLocation, useValue: new SpyLocation() },
+                PlotHelperService,
             ]
         })
         .compileComponents();

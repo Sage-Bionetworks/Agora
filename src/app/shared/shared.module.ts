@@ -27,7 +27,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
 
-
 import { MessageService } from 'primeng/api';
 
 import { DownloadComponent } from './components/download';
@@ -42,7 +41,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { AlertService, ErrorHandlerService } from './services';
+import { AlertService, ErrorHandlerService, PlotHelperService } from './services';
 
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 
@@ -100,7 +99,8 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         InputTextModule,
         DropdownModule,
         MenuModule,
-        TooltipModule
+        TooltipModule,
+        ContextMenuModule
     ],
     exports: [
         // Angular modules
@@ -129,7 +129,7 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         DropdownModule,
         MenuModule,
         TooltipModule,
-
+        ContextMenuModule,
         // Other declarations
         AlertComponent,
         DownloadComponent,
@@ -145,12 +145,13 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
 })
 // Changed the name so it does not conflict with primeng module
 export class AppSharedModule {
-    static forRoot(): ModuleWithProviders<any> {
+    static forRoot(): ModuleWithProviders {
         return {
             ngModule: AppSharedModule,
             providers: [
                 AlertService,
                 MessageService,
+                PlotHelperService,
                 {
                     provide: RollbarService,
                     useFactory: rollbarFactory

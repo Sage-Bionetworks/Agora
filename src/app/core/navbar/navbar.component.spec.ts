@@ -83,7 +83,7 @@ describe('Component: Navbar', () => {
         component.showMobileMenu = true;
         fixture.detectChanges();
 
-        const el = fixture.debugElement.query(By.css('p-menu'));
+        const el = fixture.debugElement.query(By.css('p-splitButton'));
         expect(el).not.toBeNull();
     });
 

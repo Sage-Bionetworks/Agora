@@ -1,5 +1,4 @@
 import {
-    async,
     fakeAsync,
     ComponentFixture,
     TestBed,
@@ -25,11 +24,11 @@ const mockFilters: GCTFilter[] = [
     },
 ];
 
-fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
+describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     let component: GeneComparisonToolFilterPanelComponent;
     let fixture: ComponentFixture<GeneComparisonToolFilterPanelComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(fakeAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneComparisonToolFilterPanelComponent,
@@ -44,10 +43,24 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
 
         fixture = TestBed.createComponent(GeneComparisonToolFilterPanelComponent);
         component = fixture.componentInstance; // Component test instance
+        component.filters = JSON.parse(JSON.stringify(mockFilters));
+        fixture.detectChanges();
+        tick();
     }));
 
     it('should create component', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should have data', () => {
+        // Check if filters has data
+        expect(component.filters?.length).not.toEqual(0);
+
+        // Check if html elements have been created
+        const panes = fixture.debugElement.nativeElement.querySelectorAll('.gct-filter-panel-pane');
+        expect(panes?.length).toEqual(mockFilters.length);
+        const options = fixture.debugElement.nativeElement.querySelectorAll('.gct-filter-panel-pane:first-child li');
+        expect(options?.length).toEqual(mockFilters[0].options.length);
     });
 
     it('should have close button', () => {
@@ -55,20 +68,6 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
         expect(closeButton).toBeDefined();
         expect(closeButton.length).toEqual(1);
     });
-
-    it('should load filters', fakeAsync(() => {
-        // Add mock data
-        component.filters = mockFilters;
-
-        fixture.detectChanges();
-        tick();
-
-        // Check if html elements have been created
-        const panes = fixture.debugElement.nativeElement.querySelectorAll('.gct-filter-panel-pane');
-        expect(panes?.length).toEqual(mockFilters.length);
-        const options = fixture.debugElement.nativeElement.querySelectorAll('.gct-filter-panel-pane:first-child li');
-        expect(options?.length).toEqual(mockFilters[0].options.length);
-    }));
 
     it('should open', fakeAsync(() => {
         // Set to close
@@ -87,8 +86,8 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
     }));
 
     it('should close', fakeAsync(() => {
-        // Set to open
         component.isOpen = true;
+        component.open();
 
         // Close programmatically
         component.close();
@@ -130,9 +129,6 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
     }));
 
     it('should open pane', fakeAsync(() => {
-        // Add mock data
-        component.filters = mockFilters;
-
         // Set to all close
         component.activePane = -1;
 
@@ -149,9 +145,6 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
     }));
 
     it('should close pane', fakeAsync(() => {
-        // Add mock data
-        component.filters = mockFilters;
-
         /// Set to first pane
         component.activePane = 0;
 
@@ -168,14 +161,8 @@ fdescribe('Component: GeneComparisonToolFilterPanelComponent', () => {
     }));
 
     it('should toggle option', fakeAsync(() => {
-        // Add mock data
-        component.filters = mockFilters;
-
-        fixture.detectChanges();
-        tick();
-
         // Toggle (check) first option with click event
-        const checkbox = fixture.debugElement.nativeElement.querySelector('.gct-filter-panel-pane:first-child li:first-child .p-checkbox-box');
+        const checkbox = fixture.debugElement.nativeElement.querySelector('.gct-filter-panel-pane:first-child li:first-child .ui-chkbox-box');
         checkbox.click();
 
         fixture.detectChanges();

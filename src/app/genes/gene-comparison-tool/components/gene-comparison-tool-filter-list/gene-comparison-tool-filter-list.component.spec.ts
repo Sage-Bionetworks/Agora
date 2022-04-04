@@ -1,5 +1,4 @@
 import {
-    async,
     fakeAsync,
     ComponentFixture,
     TestBed,
@@ -23,11 +22,11 @@ const mockFilters: GCTFilter[] = [
     },
 ];
 
-fdescribe('Component: GeneComparisonToolFilterListComponent', () => {
+describe('Component: GeneComparisonToolFilterListComponent', () => {
     let component: GeneComparisonToolFilterListComponent;
     let fixture: ComponentFixture<GeneComparisonToolFilterListComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(fakeAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 GeneComparisonToolFilterListComponent,
@@ -41,31 +40,25 @@ fdescribe('Component: GeneComparisonToolFilterListComponent', () => {
 
         fixture = TestBed.createComponent(GeneComparisonToolFilterListComponent);
         component = fixture.componentInstance; // Component test instance
+        component.filters = JSON.parse(JSON.stringify(mockFilters));
+        fixture.detectChanges();
+        tick();
     }));
 
     it('should create component', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should load filters', fakeAsync(() => {
-        // Add mock data
-        component.filters = JSON.parse(JSON.stringify(mockFilters));
-
-        fixture.detectChanges();
-        tick();
+    it('should have data', () => {
+        // Check if filters has data
+        expect(component.filters?.length).not.toEqual(0);
 
         // Check if html elements have been created
         const items = fixture.debugElement.nativeElement.querySelectorAll('.gct-filter-list-item');
         expect(items?.length).not.toEqual(0);
-    }));
+    });
 
     it('should remove filter', fakeAsync(() => {
-        // Add mock data
-        component.filters = JSON.parse(JSON.stringify(mockFilters));
-
-        fixture.detectChanges();
-        tick();
-
         // Clear first filter with click event
         const clearButton = fixture.debugElement.nativeElement.querySelector('.gct-filter-list-item:first-child .gct-filter-list-item-clear');
         clearButton.click();
@@ -78,12 +71,6 @@ fdescribe('Component: GeneComparisonToolFilterListComponent', () => {
     }));
 
     it('should remove all filters', fakeAsync(() => {
-        // Add mock data
-        component.filters = JSON.parse(JSON.stringify(mockFilters));
-
-        fixture.detectChanges();
-        tick();
-
         // Clear all filters with click event
         const clearButton = fixture.debugElement.nativeElement.querySelector('.gct-filter-list-clear-all');
         clearButton.click();

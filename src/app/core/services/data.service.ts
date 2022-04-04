@@ -3,17 +3,11 @@ import { DecimalPipe } from '@angular/common';
 
 import { ApiService, ForceService } from '.';
 
-import { Gene, GenesResponse } from '../../models';
+import { Gene, GenesResponse, RnaDistribution } from '../../models';
 
 import { Observable, forkJoin } from 'rxjs';
 
 import * as crossfilter from 'crossfilter2';
-
-declare global {
-    interface Navigator {
-        msSaveBlob?: (blob: any, defaultName?: string) => boolean
-    }
-}
 
 @Injectable()
 export class DataService {
@@ -27,6 +21,8 @@ export class DataService {
     modelsDim: any;
     dbgenes: Observable<Gene[]>;
     geneEntries: Gene[];
+    evidenceData: any;
+    rnaDistributionData: RnaDistribution[];
     // To be used by the DecimalPipe from Angular. This means
     // a minimum of 1 digit will be shown before decimal point,
     // at least, but not more than, 2 digits after decimal point
@@ -46,10 +42,12 @@ export class DataService {
     loadData(gene: Gene): Observable<any[]> {
         const genesResponse = this.apiService.getGenes(gene.ensembl_gene_id);
         const nodesResponse = this.apiService.getLinksList(gene);
+        const evidenceResponse = this.apiService.getEvidencenData(gene.ensembl_gene_id);
 
         return forkJoin([
             genesResponse,
-            nodesResponse
+            nodesResponse,
+            evidenceResponse
         ]);
     }
 
@@ -119,5 +117,27 @@ export class DataService {
                 document.body.removeChild(link);
             }
         }
+    }
+
+    setEvidenceData(data: any) {
+        this.evidenceData = data;
+    }
+
+    getEvidenceData(): Gene[] {
+        return this.evidenceData;
+    }
+
+    setRnaDistributionData(data) {
+        this.rnaDistributionData = data;
+    }
+
+    loadRnaDistributionData(data) {
+        if (data) {
+            this.setRnaDistributionData(data);
+        }
+    }
+
+    getRnaDistributionData(): RnaDistribution[] {
+        return this.rnaDistributionData;
     }
 }

@@ -9,18 +9,16 @@ export class ErrorHandlerService implements ErrorHandler {
     ) { }
 
     handleError(error) {
-        // const self = this;
+        const self = this;
 
-        // this.messageService.clear();
-        // this.messageService.add({
-        //     severity: 'warn',
-        //     sticky: true,
-        //     summary: 'Error',
-        //     detail: 'An unexpected error has occurred, we recommend reloading the application.'
-        // });
-        // setTimeout(() => { self.messageService.clear(); }, 3000);
-
-        alert('An unexpected error has occurred, we recommend reloading the application.');
+        this.messageService.clear();
+        this.messageService.add({
+            severity: 'warn',
+            sticky: true,
+            summary: 'Error',
+            detail: 'An unexpected error has occurred, we recommend reloading the application.'
+        });
+        setTimeout(() => { self.messageService.clear(); }, 5000);
 
         throw error;
     }
