@@ -28,7 +28,6 @@ import * as awsParamStore from 'aws-param-store';
 import * as crossfilter from 'crossfilter2';
 // required when verbose debugging is enabled
 import * as util from 'util';
-import { Console } from 'console';
 
 const router = express.Router();
 const database = { url: '' };
@@ -74,7 +73,7 @@ connection.on('error', console.error.bind(console, 'MongoDB connection error:'))
 // Get our grid file system instance
 Grid.mongo = mongoose.mongo;
 
-connection.once('open', () => {
+connection.once('open', async () => {
     const gfs = Grid(connection.db);
 
     // Preprocess the data when the server goes up
@@ -93,6 +92,7 @@ connection.once('open', () => {
     let genesExpValidation: GeneExpValidation[] = [];
     let geneScoreDistribution: GeneScoreDistribution[] = [];
     let genesOverallScores: GeneOverallScores[] = [];
+    let comparisonGenes: {} = {};
     let totalRecords = 0;
 
     // Crossfilter instance
@@ -141,6 +141,14 @@ connection.once('open', () => {
 
     // initialize data caches
 
+    await GenesInfo.find().lean().exec(async (err, data: GeneInfo[], next) => {
+        if (err) {
+            next(err);
+        } else {
+            allGeneInfo = data;
+        }
+    });
+
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
         [
@@ -170,8 +178,11 @@ connection.once('open', () => {
     ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
+        const geneInfos = new Map(allGeneInfo.map(g => [g.ensembl_gene_id, g]));
+        const _comparisonGenes = {};
 
         await allGenes.forEach((g) => {
+            const geneInfo = geneInfos.get(g.ensembl_gene_id);
             // Separate the columns we need
             g.logfc = getSignificantFigures(+g.logfc);
             g.fc = getSignificantFigures(+g.fc);
@@ -193,15 +204,92 @@ connection.once('open', () => {
                 default:
                     break;
             }
-        });
-    });
 
-    GenesInfo.find().lean().exec(async (err, data: GeneInfo[], next) => {
-        if (err) {
-            next(err);
-        } else {
-            allGeneInfo = data;
+            if (!_comparisonGenes.hasOwnProperty(g.model)) {
+                _comparisonGenes[g.model] = {};
+            }
+
+            if (!_comparisonGenes[g.model].hasOwnProperty(g.ensembl_gene_id)) {
+                const comparisonGene = {
+                    ensembl_gene_id         : g.ensembl_gene_id,
+                    hgnc_symbol             : g.hgnc_symbol,
+                    search_string           : '',
+                    nominations             : 0,
+                    teams                   : [],
+                    studies                 : [],
+                    input_datas             : [],
+                    year_first_nominated    : null,
+                    tissues                 : []
+                };
+
+                if (geneInfo) {
+                    comparisonGene.hgnc_symbol = geneInfo.hgnc_symbol;
+                    comparisonGene.search_string = comparisonGene.hgnc_symbol + ' ' + comparisonGene.ensembl_gene_id;
+                    comparisonGene.nominations = geneInfo.nominations || 0;
+
+                    if (geneInfo.nominatedtarget && geneInfo.nominatedtarget.length > 0) {
+                        for (const nominated of geneInfo.nominatedtarget) {
+
+                            if (nominated.team) {
+                                comparisonGene.teams.push(nominated.team);
+                            }
+
+                            if (nominated.study) {
+                                nominated.study.split(', ').forEach(study => {
+                                    comparisonGene.studies.push(study);
+                                });
+                            }
+
+                            if (nominated.input_data) {
+                                nominated.input_data.split(', ').forEach(inputData => {
+                                    comparisonGene.input_datas.push(inputData);
+                                });
+                            }
+
+                            if (nominated.initial_nomination) {
+                                if (
+                                    !comparisonGene.year_first_nominated
+                                    || nominated.initial_nomination < comparisonGene.year_first_nominated
+                                ) {
+                                    comparisonGene.year_first_nominated = nominated.initial_nomination;
+                                }
+                            }
+                        }
+                    }
+
+                    if (geneInfo.medianexpression) {
+                        for (const medianExp of geneInfo.medianexpression) {
+                            const tissue = comparisonGene.tissues.find(t => t.name === medianExp.tissue);
+                            if (tissue) {
+                                    tissue.medianexpression = {
+                                    medianlogcpm: medianExp.medianlogcpm,
+                                    minimumlogcpm: medianExp.minimumlogcpm,
+                                    maximumlogcpm: medianExp.maximumlogcpm
+                                };
+                            }
+                        }
+                    }
+                }
+
+                _comparisonGenes[g.model][g.ensembl_gene_id] = comparisonGene;
+            }
+
+            _comparisonGenes[g.model][g.ensembl_gene_id].tissues.push({
+                name        : g.tissue,
+                logfc       : g.logfc,
+                adj_p_val   : g.adj_p_val,
+                ci_l        : g.ci_l,
+                ci_r        : g.ci_r,
+            });
+        });
+
+        for (const index in _comparisonGenes) {
+            if (_comparisonGenes.hasOwnProperty(index)) {
+                _comparisonGenes[index] = Object.values(_comparisonGenes[index]);
+            }
         }
+
+        comparisonGenes = _comparisonGenes;
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } }).lean()
@@ -568,35 +656,17 @@ connection.once('open', () => {
 
     // Get the cached list of genes for comparison tool
     router.get('/genes/comparison', async (req, res, next) => {
-        let genes = allGenes;
-        const _genes = {};
+        const model = req.query.model || 'AD Diagnosis (males and females)';
+        let genes = [];
 
-        if (req.query.model) {
-            genes = genes.filter(gene => gene.model === req.query.model);
-        }
-
-        for (const gene of genes) {
-            if (!_genes.hasOwnProperty(gene.ensembl_gene_id)) {
-                _genes[gene.ensembl_gene_id] = {
-                    ensembl_gene_id : gene.ensembl_gene_id,
-                    hgnc_symbol     : gene.hgnc_symbol,
-                    tissues         : []
-                };
-            }
-
-            _genes[gene.ensembl_gene_id].tissues.push({
-                name        : gene.tissue,
-                logfc       : gene.logfc,
-                adj_p_val   : gene.adj_p_val,
-                ci_l        : gene.ci_l,
-                ci_r        : gene.ci_r,
-            });
+        if (comparisonGenes.hasOwnProperty(model)) {
+            genes = comparisonGenes[model];
         }
 
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', 0);
-        res.json({ items: Object.values(_genes) });
+        res.json({ items: genes });
     });
 
     // Get the cached list of nominated targets to populate the table
