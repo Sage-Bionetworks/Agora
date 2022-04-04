@@ -15,6 +15,7 @@ import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { PlotHelperService } from '../../../shared/services';
+import { RnaDistribution } from '../../../models';
 
 import { Subscription } from 'rxjs';
 
@@ -77,7 +78,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
-
         // If we move away from the overview page, remove
         // the charts
         this.routerSubscription = this.router.events.subscribe((event) => {
@@ -167,13 +167,24 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const bpGroup = {
             all() {
-                const distributionData = self.dataService.getRnaDistributionData().filter((data) => {
-                    return data.model === self.geneService.getCurrentModel();
+                const evidenceData = self.dataService.getEvidenceData();
+                const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                    return g.model === self.geneService.getCurrentModel();
+                });
+                const distributionData = this.dataService.getRnaDistributionData().filter((data) => {
+                    return data.model === this.geneService.getCurrentModel();
                 });
 
-                return distributionData.map((data) => {
-                    data['key'] = data['tissue'];
-                    data['value'] = [data['min'], data['median'], data['max']];
+                return currentGenes.map((gene) => {
+                    const data = distributionData.find((d) => {
+                        return d.tissue === gene.tissue;
+                    });
+
+                    if (data) {
+                        data['key'] = data['tissue'];
+                        data['value'] = [data['min'], data['median'], data['max']];
+                    }
+
                     return data;
                 });
             },
