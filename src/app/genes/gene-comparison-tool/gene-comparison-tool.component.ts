@@ -7,7 +7,7 @@ import { SortEvent } from 'primeng/api';
 import { FilterUtils } from 'primeng/utils';
 
 import { ApiService } from '../../core/services';
-import { GeneInfosResponse, GenesResponse } from '../../models';
+import { GenesResponse } from '../../models';
 
 import { GCTSelectOption, GCTFilter, GCTGene } from '.';
 
@@ -62,7 +62,6 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
 
    /* Dynamic data ---------------------------------------------------------- */
    tissues: string[] = [];
-   geneInfos: Map<string, object> = null;
    maxLogfc: number = null;
    minLogfc: number = null;
 
@@ -155,7 +154,6 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          }
 
          this.loadGenes();
-         this.loadGeneInfos();
       });
 
       FilterUtils['intersect'] = (value, filters): boolean => {
@@ -188,88 +186,34 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       this.availableGenes = [];
       this.apiService.getComparisonData({model: this.selectedModel || 'AD Diagnosis (males and females)'})
          .subscribe((data: GenesResponse) => {
-            this.availableGenes = data.items;
-            if (this.geneInfos) {
-               this.initGenes();
-            }
+            this.initGenes(data.items);
          });
    }
 
-   loadGeneInfos() {
-      if (this.geneInfos) { return; }
-      this.loading = true;
-      this.apiService.getInfos()
-         .subscribe((data: GeneInfosResponse) => {
-            this.geneInfos = new Map(data.items.map(info => [info.ensembl_gene_id, info]));
-            if (this.availableGenes.length > 0) {
-               this.initGenes();
-            }
-         });
-   }
-
-   initGenes() {
+   initGenes(genes) {
       const tissues = [];
+      this.availableGenes = genes;
+      this.pinnedGenes = [];
       this.minLogfc = null;
       this.maxLogfc = null;
 
       for (const gene of this.availableGenes) {
-         const info: any = this.geneInfos.get(gene.ensembl_gene_id);
+         this.setFilterOption('nominations', gene.nominations);
 
-         if (info) {
-            gene.hgnc_symbol = info.hgnc_symbol;
-            gene.search_string = gene.hgnc_symbol + ' ' + gene.ensembl_gene_id;
-            gene.nominations = info.nominations || 0;
+         gene.teams.forEach((team) => {
+            this.setFilterOption('teams', team);
+         });
 
-            this.setFilterOption('nominations', gene.nominations);
+         gene.studies.forEach((study) => {
+            this.setFilterOption('studies', study);
+         });
 
-            gene.teams = [];
-            gene.studies = [];
-            gene.input_datas = [];
-            gene.year_first_nominated = null;
+         gene.input_datas.forEach((inputData) => {
+            this.setFilterOption('input_datas', inputData);
+         });
 
-            if (info.nominatedtarget && info.nominatedtarget.length > 0) {
-               for (const nominated of info.nominatedtarget) {
-
-                  if (nominated.team) {
-                     gene.teams.push(nominated.team);
-                     this.setFilterOption('teams', nominated.team);
-                  }
-
-                  if (nominated.study) {
-                     nominated.study.split(', ').forEach(study => {
-                        gene.studies.push(study);
-                        this.setFilterOption('studies', study);
-                     });
-                  }
-
-                  if (nominated.input_data) {
-                     nominated.input_data.split(', ').forEach(inputData => {
-                        gene.input_datas.push(inputData);
-                        this.setFilterOption('input_datas', inputData);
-                     });
-                  }
-
-                  if (nominated.initial_nomination) {
-                     if (!gene.year_first_nominated || nominated.initial_nomination < gene.year_first_nominated) {
-                        gene.year_first_nominated = nominated.initial_nomination;
-                        this.setFilterOption('year_first_nominated', gene.year_first_nominated);
-                     }
-                  }
-               }
-            }
-
-            if (info.medianexpression) {
-               for (const medianExp of info.medianexpression) {
-                  const tissue = gene.tissues.find(t => t.name === medianExp.tissue);
-                  if (tissue) {
-                     tissue.medianexpression = {
-                        medianlogcpm: medianExp.medianlogcpm,
-                        minimumlogcpm: medianExp.minimumlogcpm,
-                        maximumlogcpm: medianExp.maximumlogcpm
-                     };
-                  }
-               }
-            }
+         if (gene.year_first_nominated) {
+            this.setFilterOption('year_first_nominated', gene.year_first_nominated);
          }
 
          gene.tissues.forEach(tissue => {
@@ -420,18 +364,18 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
 
             if (tissueA && tissueB) {
                if (tissueA.logfc == null && tissueB.logfc != null) {
-                  result = event.order;
+                  result = event.order * 1;
                } else if (tissueA.logfc != null && tissueB.logfc == null) {
-                  result = !event.order;
+                  result = event.order * -1;
                } else if (tissueA.logfc == null && tissueB.logfc == null) {
                   result = 0;
                } else {
                   result = (tissueA.logfc < tissueB.logfc) ? -1 : (tissueA.logfc > tissueB.logfc) ? 1 : 0;
                }
             } else if (!tissueA && tissueB) {
-               result = event.order;
+               result = event.order * 1;
             } else if (tissueA && !tissueB) {
-               result = !event.order;
+               result = event.order * -1;
             } else {
                result = 0;
             }
@@ -467,8 +411,8 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          if (availableGeneIndex !== -1) {
             this.availableGenes.splice(availableGeneIndex, 1);
          }
-         this.updateUrl();
          if (refresh) {
+            this.updateUrl();
             this.refresh();
          }
       }
@@ -488,8 +432,8 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
             this.availableGenes.push(gene);
          }
          this.pinnedGenes.splice(pinnedGeneIndex, 1);
-         this.updateUrl();
          if (refresh) {
+            this.updateUrl();
             this.refresh();
          }
       }
