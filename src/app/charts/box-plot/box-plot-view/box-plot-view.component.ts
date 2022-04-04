@@ -15,6 +15,7 @@ import { Router, NavigationStart } from '@angular/router';
 
 import { ChartService } from '../../services';
 import { PlotHelperService } from '../../../shared/services';
+import { RnaDistribution } from '../../../models';
 
 import { Subscription } from 'rxjs';
 
@@ -45,6 +46,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() rcRadius: number = 12.5;
     @Input() boxRadius: number = 8;
 
+    distributionData: RnaDistribution[];
     firstRender: boolean = true;
     max: number = -Infinity;
     oldMax: number = -Infinity;
@@ -77,6 +79,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
+        this.distributionData = this.dataService.getRnaDistributionData().filter((data) => {
+            return data.model === this.geneService.getCurrentModel();
+        });
 
         // If we move away from the overview page, remove
         // the charts
@@ -167,13 +172,21 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const bpGroup = {
             all() {
-                const distributionData = self.dataService.getRnaDistributionData().filter((data) => {
-                    return data.model === self.geneService.getCurrentModel();
+                const evidenceData = self.dataService.getEvidenceData();
+                const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                    return g.model === self.geneService.getCurrentModel();
                 });
 
-                return distributionData.map((data) => {
-                    data['key'] = data['tissue'];
-                    data['value'] = [data['min'], data['median'], data['max']];
+                return currentGenes.map((gene) => {
+                    const data = self.distributionData.find((data) => {
+                        return data.tissue === gene.tissue;
+                    });
+
+                    if (data) {
+                        data['key'] = data['tissue'];
+                        data['value'] = [data['min'], data['median'], data['max']];
+                    }
+
                     return data;
                 });
             },
