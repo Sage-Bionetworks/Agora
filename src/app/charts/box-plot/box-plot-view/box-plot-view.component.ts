@@ -46,7 +46,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() rcRadius: number = 12.5;
     @Input() boxRadius: number = 8;
 
-    distributionData: RnaDistribution[];
     firstRender: boolean = true;
     max: number = -Infinity;
     oldMax: number = -Infinity;
@@ -79,10 +78,6 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     ) { }
 
     ngOnInit() {
-        this.distributionData = this.dataService.getRnaDistributionData().filter((data) => {
-            return data.model === this.geneService.getCurrentModel();
-        });
-
         // If we move away from the overview page, remove
         // the charts
         this.routerSubscription = this.router.events.subscribe((event) => {
@@ -176,10 +171,13 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
                     return g.model === self.geneService.getCurrentModel();
                 });
+                const distributionData = this.dataService.getRnaDistributionData().filter((data) => {
+                    return data.model === this.geneService.getCurrentModel();
+                });
 
                 return currentGenes.map((gene) => {
-                    const data = self.distributionData.find((data) => {
-                        return data.tissue === gene.tissue;
+                    const data = distributionData.find((d) => {
+                        return d.tissue === gene.tissue;
                     });
 
                     if (data) {
