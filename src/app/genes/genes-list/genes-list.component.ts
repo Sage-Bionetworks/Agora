@@ -307,8 +307,8 @@ export class GenesListComponent implements OnInit {
             let value2 = null;
 
             if ('hgnc_symbol' === event.field) {
-                value1 = data1.hgnc_symbol ?? data1.ensembl_gene_id;
-                value2 = data2.hgnc_symbol ?? data2.ensembl_gene_id;
+                value1 = data1.hgnc_symbol || data1.ensembl_gene_id;
+                value2 = data2.hgnc_symbol || data2.ensembl_gene_id;
             } else {
                 value1 = data1[event.field];
                 value2 = data2[event.field];
