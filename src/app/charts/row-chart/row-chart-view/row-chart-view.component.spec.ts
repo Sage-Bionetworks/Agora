@@ -69,15 +69,10 @@ describe('Component: RowChartView', () => {
 
         component.ngOnInit();
         geneService.setDefaultModel(mockModels[0]);
-        // geneService.setDefaultTissue(mockTissues[0]);
         fixture.detectChanges();
         expect(oiSpy).toHaveBeenCalled();
+        expect(icSpy).toHaveBeenCalled();
 
-        const state = false;
-        chartService.chartsReadySource.next(state);
-        expect(icSpy).not.toHaveBeenCalled();
-
-        // expect(component.currentTissue).toEqual(mockTissues[0]);
         expect(component.currentModel).toEqual(mockModels[0]);
     });
 

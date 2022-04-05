@@ -131,12 +131,6 @@ export class DataService {
         this.rnaDistributionData = data;
     }
 
-    loadRnaDistributionData(data) {
-        if (data) {
-            this.setRnaDistributionData(data);
-        }
-    }
-
     getRnaDistributionData(): RnaDistribution[] {
         return this.rnaDistributionData;
     }

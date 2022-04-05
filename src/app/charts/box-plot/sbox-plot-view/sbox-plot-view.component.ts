@@ -164,6 +164,8 @@ export class SBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         });
 
+        console.log(valuesArray);
+
         this.group = {
             all() {
                 return valuesArray;

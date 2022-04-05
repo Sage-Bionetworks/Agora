@@ -211,4 +211,9 @@ export class GeneServiceStub {
     getGeneProteomics(): Proteomics[] {
         return [];
     }
+
+    hasMedianExpression(): boolean  {
+        const info = this.getCurrentInfo();
+        return info && info.medianexpression && info.medianexpression.length > 0 ? true : false;
+    }
 }

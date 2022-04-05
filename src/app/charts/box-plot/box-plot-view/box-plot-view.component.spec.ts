@@ -71,10 +71,7 @@ describe('Component: BoxPlotView', () => {
         component.ngOnInit();
         fixture.detectChanges();
         expect(oiSpy).toHaveBeenCalled();
-
-        const state = false;
-        chartService.chartsReadySource.next(state);
-        expect(icSpy).not.toHaveBeenCalled();
+        expect(icSpy).toHaveBeenCalled();
     });
 
     it('should call init if the statistical model was already selected', () => {
