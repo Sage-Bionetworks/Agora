@@ -40,11 +40,11 @@
                 </div>
                 <div class="gct-controls-right">
                     <div class="analysis-filter-container">
-                        <p-dropdown class="analysis-filter" [options]="analyses" [(ngModel)]="selectedAnalysis" (onChange)="updateUrl();filter();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="analysis-filter" [options]="analyses" [(ngModel)]="selectedAnalysis" (onChange)="updateUrl();filter();" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                     <div>
                         <div class="gct-filter-label">Models</div>
-                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="updateUrl();loadGenes();" optionLabel="name" dropdownIcon="pi pi-caret-down"></p-dropdown>
+                        <p-dropdown class="model-filter" [options]="models" [(ngModel)]="selectedModel" (onChange)="updateUrl();loadGenes();" dropdownIcon="pi pi-caret-down"></p-dropdown>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th></th>
-                            <th *ngFor="let tissue of tissues" [pSortableColumn]="tissue.name">{{ tissue.name }} <p-sortIcon [field]="tissue.name"></p-sortIcon></th>
+                            <th *ngFor="let tissue of tissues" [pSortableColumn]="tissue">{{ tissue }} <p-sortIcon [field]="tissue"></p-sortIcon></th>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -110,8 +110,8 @@
                             <td *ngFor="let tissue of tissues">
                                 <button
                                     class="gene-indicator"
-                                    [style]="getCircleStyle(tissue.name, gene)"
-                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue.name, gene))"
+                                    [style]="getCircleStyle(tissue, gene)"
+                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue, gene))"
                                 ></button>
                             </td>
                         </tr>
@@ -166,8 +166,8 @@
                             <td *ngFor="let tissue of tissues">
                                 <button
                                     class="gene-indicator"
-                                    [style]="getCircleStyle(tissue.name, gene)"
-                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue.name, gene))"
+                                    [style]="getCircleStyle(tissue, gene)"
+                                    (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue, gene))"
                                 ></button>
                             </td>
                         </tr>
