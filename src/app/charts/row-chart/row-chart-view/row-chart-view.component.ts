@@ -95,9 +95,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         });
 
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
-            if (state) {
-                this.initChart();
-            }
+            this.initChart();
         });
     }
 

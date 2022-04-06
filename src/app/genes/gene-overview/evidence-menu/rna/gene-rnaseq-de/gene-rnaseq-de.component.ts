@@ -58,6 +58,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = true;
+    hasMedianExpression: boolean = false;
     isViewReady: boolean = false;
     canFilter: boolean = false;
     chartSubscription: Subscription;
@@ -115,6 +116,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
             this.geneService.updateEmptyGeneState();
             this.isEmptyGene = this.geneService.getEmptyGeneState();
+            this.hasMedianExpression = this.geneService.hasMedianExpression();
 
             this.refreshChartsData();
         });

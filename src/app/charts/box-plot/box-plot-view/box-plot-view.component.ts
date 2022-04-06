@@ -90,10 +90,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.chartSubscription = this.chartService.chartsReady$.subscribe((state: boolean) => {
-            if (state) {
-                this.updateCircleRadius();
-                this.initChart();
-            }
+            this.updateCircleRadius();
+            this.initChart();
         });
     }
 
@@ -168,11 +166,11 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const bpGroup = {
             all() {
                 const evidenceData = self.dataService.getEvidenceData();
-                const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+                const currentGenes = evidenceData['rnaDifferentialExpression'].filter((g) => {
                     return g.model === self.geneService.getCurrentModel();
                 });
-                const distributionData = this.dataService.getRnaDistributionData().filter((data) => {
-                    return data.model === this.geneService.getCurrentModel();
+                const distributionData = self.dataService.getRnaDistributionData().filter((data) => {
+                    return data.model === self.geneService.getCurrentModel();
                 });
 
                 return currentGenes.map((gene) => {
@@ -268,7 +266,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     updateYDomain() {
         // Draw the horizontal lines
         const evidenceData = this.dataService.getEvidenceData();
-        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+        const currentGenes = evidenceData['rnaDifferentialExpression'].filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
 
@@ -335,7 +333,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         const significanceTexts: string[] = [];
 
         const evidenceData = this.dataService.getEvidenceData();
-        const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
+        const currentGenes = evidenceData['rnaDifferentialExpression'].filter((g) => {
             return g.model === this.geneService.getCurrentModel();
         });
 

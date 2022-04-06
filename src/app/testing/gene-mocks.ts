@@ -10,7 +10,9 @@ import {
     GeneExpValidation,
     GeneScoreDistribution,
     DistributionData,
-    GeneOverallScores, GeneResponse,
+    GeneOverallScores,
+    GeneResponse,
+    RnaDistribution
 } from '../models';
 
 export const mockGene1: Gene = {
@@ -228,10 +230,23 @@ export const mockGenesResponse: GenesResponse = {
   geneModels: mockModels,
 };
 
-export const mockEvidenceDataResponse: any = {
+export const mockEvidenceData: any = {
   rnaDifferentialExpression: [mockGene1],
   rnaCorrelation: mockGeneCorrelationData,
 };
+
+export const mockRnaDistributionData: RnaDistribution[] = [
+  {
+    _id: '624a90996daa8dee2e0bf34e',
+    model: 'AD Diagnosis (males and females)',
+    tissue: 'ACC',
+    min: -1.004,
+    max: 1.598,
+    first_quartile: -0.066,
+    median: -0.004,
+    third_quartile: 0.06
+  }
+];
 
 export const mockLinksListResponse: LinksListResponse = {
   items: [mockDataLink1, mockDataLink2],

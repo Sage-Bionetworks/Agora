@@ -76,6 +76,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.geneinfo) {
             return;
         }
+
         const data = this.geneinfo.medianexpression.filter(
             d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
         );

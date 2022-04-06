@@ -17,13 +17,13 @@
             in the plot.
         </p>
         <div #stme>
-            <ng-container *ngIf="!isEmptyGene; else noDataMedian">
+            <ng-container *ngIf="!isEmptyGene && hasMedianExpression; else noDataMedian">
                 <median-chart *ngIf="dataLoaded" [geneinfo]="geneInfo"></median-chart>
                 <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
             </ng-container>
         </div>
         <ng-template #noDataMedian>
-            <div *ngIf="isEmptyGene" class="no-median-data">
+            <div *ngIf="isEmptyGene || !hasMedianExpression" class="no-median-data">
                 <h2 class="placeholder-text">No expression data is currently available.</h2>
             </div>
         </ng-template>
