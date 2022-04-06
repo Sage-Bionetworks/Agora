@@ -291,7 +291,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     const textElementRec = textElement.getBoundingClientRect();
 
                     // Get the text based on the brain tissue
-                    self.sDiv.html(self.geneService.getGeneTissueName(text.text()));
+                    self.sDiv.html(self.chartService.getTooltipText(text.text()));
 
                     // Position the tooltip
                     self.sDiv

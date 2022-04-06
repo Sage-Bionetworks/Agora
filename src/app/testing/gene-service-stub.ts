@@ -102,43 +102,6 @@ export class GeneServiceStub {
         this.defaultTissue = tissue;
     }
 
-    getGeneTissueName(tissue: string): string {
-        switch (tissue) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
-            case 'ACC':
-                return 'Anterior Cingulate Cortex';
-            case 'PCC':
-                return 'Posterior Cingulate Cortex';
-            case 'AntPFC':
-                return 'Anterior Prefrontal Cortex';
-            case 'MFG':
-                return 'Middle Frontal Gyrus';
-            case 'BRAAK':
-                return 'Neurofibrillary Tangles';
-            case 'CERAD':
-                return 'Neuritic Plaques';
-            case 'COGDX':
-                return 'Clinical Consensus Diagnosis';
-            case 'DCFDX':
-                return 'Clinical Cognitive Diagnosis';
-            default:
-                return '';
-        }
-    }
-
     getDefaultModel(): string {
         return this.defaultModel;
     }

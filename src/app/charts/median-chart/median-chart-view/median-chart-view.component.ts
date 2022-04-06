@@ -213,7 +213,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     const textElementRec = textElement.getBoundingClientRect();
 
                     // Get the text based on the brain tissue
-                    self.div.html(self.geneService.getGeneTissueName(text.text()));
+                    self.div.html(self.chartService.getTooltipText(text.text()));
 
                     // Position the tooltip
                     self.div

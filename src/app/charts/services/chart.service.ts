@@ -197,36 +197,36 @@ export class ChartService {
 
     getTooltipText(text: string): string {
         switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
+            case 'ACC':
+                return 'Anterior Cingulate Cortex';
             case 'AntPFC':
                 return 'Anterior Prefrontal Cortex';
-            case 'MFG':
-                return 'Middle Frontal Gyrus';
             case 'BRAAK':
                 return 'Neurofibrillary Tangles';
+            case 'CBE':
+                return 'Cerebellum';
             case 'CERAD':
                 return 'Neuritic Plaques';
             case 'COGDX':
                 return 'Clinical Consensus Diagnosis';
             case 'DCFDX':
                 return 'Clinical Cognitive Diagnosis';
-            case 'ACC':
-                return 'Anterior Cingulate Cortex';
+            case 'DLPFC':
+                return 'Dorsolateral Prefrontal Cortex';
+            case 'FP':
+                return 'Frontal Pole';
+            case 'IFG':
+                return 'Inferior Frontal Gyrus';
+            case 'MFG':
+                return 'Middle Frontal Gyrus';
             case 'PCC':
                 return 'Posterior Cingulate Cortex';
+            case 'PHG':
+                return 'Parahippocampal Gyrus';
+            case 'STG':
+                return 'Superior Temporal Gyrus';
+            case 'TCX':
+                return 'Temporal Cortex';
             default:
                 return '';
         }

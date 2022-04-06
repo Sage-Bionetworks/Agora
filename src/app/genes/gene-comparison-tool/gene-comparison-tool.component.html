@@ -67,7 +67,7 @@
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th></th>
-                                    <th *ngFor="let tissue of tissues" [pSortableColumn]="tissue" [pTooltip]="geneService.getGeneTissueName(tissue)" tooltipPosition="top" tooltipStyleClass="gct-tooltip">{{ tissue }} <p-sortIcon [field]="tissue"></p-sortIcon></th>
+                                    <th *ngFor="let tissue of tissues" [pSortableColumn]="tissue" [pTooltip]="chartService.getTooltipText(tissue)" tooltipPosition="top" tooltipStyleClass="gct-tooltip">{{ tissue }} <p-sortIcon [field]="tissue"></p-sortIcon></th>
                                 </tr>
                             </ng-template>
                         </p-table>
