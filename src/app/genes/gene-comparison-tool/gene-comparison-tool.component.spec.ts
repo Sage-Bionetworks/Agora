@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
     RouterStub,
     ApiServiceStub,
+    ChartServiceStub,
 } from '../../testing';
 
 import {
@@ -22,6 +23,7 @@ import {
 } from '.';
 
 import { ApiService } from '../../core/services';
+import { ChartService } from '../../charts/services';
 
 class ActivatedRouteStub {
     queryParams = new Observable(observer => {
@@ -50,7 +52,7 @@ describe('Component: GeneComparisonToolComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
-                // { provide: FilterService, useValue: new FilterService() },
+                { provide: ChartService, useValue: new ChartServiceStub() },
             ]
         })
         .compileComponents();

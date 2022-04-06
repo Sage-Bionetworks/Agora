@@ -244,29 +244,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
-    getTooltipText(text: string): string {
-        switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
-            case 'ACC':
-                return 'Anterior Cingulate Cortex';
-            case 'PCC':
-                return 'Posterior Cingulate Cortex';
-        }
-    }
-
     onResize(event?: any) {
         const self = this;
 

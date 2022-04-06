@@ -7,6 +7,7 @@ import { SortEvent } from 'primeng/api';
 import { FilterUtils } from 'primeng/utils';
 
 import { ApiService } from '../../core/services';
+import { ChartService } from '../../charts/services';
 import { GenesResponse } from '../../models';
 
 import { GCTSelectOption, GCTFilter, GCTGene } from '.';
@@ -126,7 +127,8 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
    constructor(
       private router: Router,
       private route: ActivatedRoute,
-      private apiService: ApiService
+      private apiService: ApiService,
+      private chartService: ChartService
    ) { }
 
    ngOnInit() {
