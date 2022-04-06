@@ -246,7 +246,7 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
                     const textElementRec = textElement.getBoundingClientRect();
 
                     // Get the text based on the brain tissue
-                    self.xAxisTooltip.html(self.chartService.getTooltipText(text.text()));
+                    self.xAxisTooltip.html(self.geneService.getGeneTissueName(text.text()));
 
                     // Position the tooltip
                     self.xAxisTooltip

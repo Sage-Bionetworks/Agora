@@ -171,8 +171,8 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 const currentGenes = evidenceData['rnaDifferentialExpression'].slice().filter((g) => {
                     return g.model === self.geneService.getCurrentModel();
                 });
-                const distributionData = this.dataService.getRnaDistributionData().filter((data) => {
-                    return data.model === this.geneService.getCurrentModel();
+                const distributionData = self.dataService.getRnaDistributionData().filter((data) => {
+                    return data.model === self.geneService.getCurrentModel();
                 });
 
                 return currentGenes.map((gene) => {
@@ -291,7 +291,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     const textElementRec = textElement.getBoundingClientRect();
 
                     // Get the text based on the brain tissue
-                    self.sDiv.html(self.chartService.getTooltipText(text.text()));
+                    self.sDiv.html(self.geneService.getGeneTissueName(text.text()));
 
                     // Position the tooltip
                     self.sDiv

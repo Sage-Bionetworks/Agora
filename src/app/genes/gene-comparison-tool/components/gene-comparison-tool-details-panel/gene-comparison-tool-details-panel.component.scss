@@ -3,6 +3,7 @@
 
 .gct-details-panel {
     @include lato-font('normal');
+    color: color(text, demphasized-alt);
 
     .ui-overlaypanel {
         background: #ffffff;
@@ -10,27 +11,26 @@
     }
 
     .ui-overlaypanel-content {
-        padding: 30px;
-
+        padding: 20px;
     }
 
     .gct-details-panel-label {
         font-size: 12px;
-        color: #8E91A2;
         margin-bottom: 6px;
         font-weight: 900;
     }
 
     .gct-details-panel-heading {
         font-size: 21px;
-        color: $span-color;
+        color: color(text, primary);
         font-weight: 900;
     }
 
     .gct-details-panel-sub-heading {
         font-size: 14px;
-        color: $span-color;
+        color: color(text, primary);
         font-weight: 900;
+        text-transform: uppercase;
         margin-bottom: 15px;
     }
 
@@ -41,7 +41,6 @@
             &:first-child {
                 display: flex;
                 font-size: 12px;
-                color: #C4C4C4;
 
                 > div {
                     flex-grow: 1;
@@ -55,14 +54,15 @@
             &:last-child {
                 display: flex;
                 font-size: 21px;
-                color: #44B5A0;
+                font-weight: 600;
+                color: color(actionSecondary);
 
                 > div {
                     flex-grow: 1;
 
                     &:last-child:not(:first-child) {
                         text-align: right;
-                        color: #C4C4C4;
+                        color: color(text, primary);
                     }
                 }
             }
@@ -87,7 +87,7 @@
                         margin-left: -10px;
                         width: 20px;
                         height: 20px;
-                        background-color: #44B5A0;
+                        background-color: color(actionSecondary);
                         border-radius: 50%;
                         z-index: 100;
                     }
@@ -111,7 +111,6 @@
             &:last-child {
                 display: flex;
                 font-size: 12px;
-                color: #C4C4C4;
                 margin-bottom: 10px;
 
                 > div {
@@ -127,6 +126,5 @@
 
     .gct-details-panel-footer {
         font-size: 15px;
-        color: color(text, primary);
     }
 }

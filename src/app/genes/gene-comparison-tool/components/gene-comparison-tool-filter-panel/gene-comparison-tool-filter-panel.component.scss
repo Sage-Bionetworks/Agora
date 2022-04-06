@@ -130,16 +130,17 @@
 .gct-filter-panel-pane {
     position: absolute;
     top: 0;
-    left: 1px;
+    left: 0;
     bottom: 0;
     min-width: 380px;
     border-right: 1px solid color(border);
     background-color: #ffffff;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-200px);
+    transform: translateX(-100%);
     transition: .6s;
     overflow: auto;
+    box-shadow: 0 0px 10px 0 rgba(0,0,0,0.15);
 
     .ui-chkbox-box {
         width: 15px;
@@ -183,7 +184,7 @@
     &.open {
         opacity: 1;
         visibility: visible;
-        transform: translateX(0px);
+        transform: translateX(0%);
     }
 
     .gct-filter-panel-pane-inner {

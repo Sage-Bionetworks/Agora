@@ -432,7 +432,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
                         self.div.transition()
                             .duration(200)
                             .style('opacity', 1);
-                        self.div.html(self.chartService.getTooltipText(d3.select(this).text()))
+                        self.div.html(self.geneService.getGeneTissueName(d3.select(this).text()))
                             .style('left', (el.getBoundingClientRect().right) + 'px')
                             .style('top', (el.offsetTop + (currentStep + (vSpacing))) + 'px');
                     })

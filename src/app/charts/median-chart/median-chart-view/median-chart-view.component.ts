@@ -213,7 +213,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     const textElementRec = textElement.getBoundingClientRect();
 
                     // Get the text based on the brain tissue
-                    self.div.html(self.chartService.getTooltipText(text.text()));
+                    self.div.html(self.geneService.getGeneTissueName(text.text()));
 
                     // Position the tooltip
                     self.div
@@ -241,29 +241,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                         .style('opacity', 0);
                 });
         });
-    }
-
-    getTooltipText(text: string): string {
-        switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
-            case 'ACC':
-                return 'Anterior Cingulate Cortex';
-            case 'PCC':
-                return 'Posterior Cingulate Cortex';
-        }
     }
 
     onResize(event?: any) {
