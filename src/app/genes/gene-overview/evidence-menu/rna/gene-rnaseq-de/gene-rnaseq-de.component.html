@@ -1,14 +1,9 @@
 <ng-container>
     <div class="section-thin rna-seq-me no-padding-top">
-        <h3 *ngIf="isEmptyGene" class="filters-header">
-            Overall Expression of Selected Gene Across Brain Regions
-        </h3>
-        <h3 *ngIf="!isEmptyGene" class="filters-header">
+        <h3>
             Overall Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} Across Brain Regions
             <span class="icon-spacing"></span>
             <span class="icon-spacing"></span>
-            <!-- Hide for now -->
-            <!--<download [target]="stme" [name]="getDownloadFileName('Overall Expression')"></download>-->
         </h3>
         <p class="black-paragraph">
             This plot depicts the median expression of the selected gene across brain regions,
@@ -64,14 +59,9 @@
             </div>
             <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
         </div>
-        <h3 *ngIf="isEmptyGene">
-            Differential Expression of Selected Gene Across Brain Regions
-        </h3>
-        <h3 *ngIf="!isEmptyGene">
+        <h3>
             Differential Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} Across Brain Regions
             <span class="icon-spacing"></span>
-            <!-- Hide for now -->
-            <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
         </h3>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-12 col-fixer">
@@ -98,8 +88,6 @@
         <h3>
             Consistency of Change in Expression
             <span class="icon-spacing"></span>
-            <!-- Hide for now -->
-            <!--<download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>-->
         </h3>
         <p class="black-paragraph">
             This forest plot indicates the estimate of the log fold change with standard errors
@@ -122,8 +110,6 @@
         <h3>
             Correlation of {{gene.hgnc_symbol || gene.ensembl_gene_id}} with Hallmarks of AD
             <span class="icon-spacing"></span>
-            <!-- Hide for now -->
-            <!--<download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('Forest Plot')"></download>-->
         </h3>
         <h2 class="vmi-wrapper">
             <more-info [name]="'cc'">

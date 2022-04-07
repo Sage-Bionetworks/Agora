@@ -44,14 +44,9 @@
         </div>
         <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
     </div>
-    <h3 *ngIf="isEmptyGene">
-        Differential Expression of Selected Gene
-    </h3>
-    <h3 *ngIf="!isEmptyGene">
+    <h3>
         Differential Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} and Selected Protein
         <span class="icon-spacing"></span>
-        <!-- Hide for now -->
-        <!--<download [target]="stbp" [name]="getDownloadFileName('Differential Expression')"></download>-->
     </h3>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12 col-fixer">
