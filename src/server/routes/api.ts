@@ -635,9 +635,6 @@ connection.once('open', async () => {
                 .exec(async (err, genes) => {
                 if (err) {
                     next(err);
-                } else {
-                    if (!genes.length) {
-                        res.json({items: genes});
                     } else {
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
@@ -645,11 +642,10 @@ connection.once('open', async () => {
                         await res.json({
                             genes,
                             geneProteomics: geneProteomics.filter(p =>
-                                p.ensembl_gene_id === genes[0].ensembl_gene_id
+                                p.ensembl_gene_id === req.query.id
                             )
                         });
                     }
-                }
             });
         }
     });
