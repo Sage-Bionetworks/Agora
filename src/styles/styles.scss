@@ -1416,6 +1416,7 @@ p-dialog {
   @include link
 }
 
+
 .custom-toast {
     @include respond-to('ex-small') {
         width: 80%;
@@ -1433,6 +1434,24 @@ p-dialog {
         color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-x-regular;
+    }
+
+    .ui-toast-message-content {
+        padding: 10px;
+    }
+
+    .ui-toast-message-text {
+        padding-left: 8px;
+    }
+
+    .ui-toast-message-icon {
+        transform: translateY(2px);
+    }
+
+    .ui-toast-icon {
+        left: 0.6em;
+        top: 0.3em;
+        font-size: 1.5em;
     }
 
     .ui-toast-summary {

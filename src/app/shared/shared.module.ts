@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
+import { NgModule, ModuleWithProviders, InjectionToken, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -41,7 +41,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { AlertService, PlotHelperService } from './services';
+import { AlertService, ErrorHandlerService, PlotHelperService } from './services';
 
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 
@@ -160,6 +160,10 @@ export class AppSharedModule {
                     provide: HTTP_INTERCEPTORS,
                     useClass: HttpErrorInterceptor,
                     multi: true
+                },
+                {
+                    provide: ErrorHandler,
+                    useClass: ErrorHandlerService,
                 }
             ]
         };
