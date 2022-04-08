@@ -99,6 +99,10 @@
                     }
                 }
 
+                svg {
+                    margin-top: 4px;
+                }
+
                 &.active,
                 &:hover {
                     background-color: color(primary);
@@ -200,6 +204,22 @@
         height: 80px;
         font-size: 24px;
         font-weight: 900;
+    }
+
+    .gct-filter-panel-pane-heading-info {
+        display: inline-block;
+        transform: translateY(2px);
+        margin-left: 4px;
+        border-radius: 50%;
+        transition: $transition-duration;
+
+        svg {
+            display: block;
+        }
+
+        &:hover {
+            background-color: rgba(135, 142, 149, 0.3);
+        }
     }
 
     ul {

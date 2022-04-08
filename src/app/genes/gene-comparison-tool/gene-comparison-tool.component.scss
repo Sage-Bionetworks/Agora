@@ -27,6 +27,14 @@
     }
 }
 
+.gct-tooltip-filter {
+    max-width: 350px;
+
+    .ui-tooltip-text {
+        white-space: normal;
+    }
+}
+
 .gct {
     @include lato-font('normal');
     color: color(primary);
