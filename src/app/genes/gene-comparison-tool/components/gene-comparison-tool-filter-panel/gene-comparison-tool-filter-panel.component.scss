@@ -9,7 +9,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateX(-200px);
-    transition: .6s;
+    transition: $transition-duration;
     z-index: 500;
 
     .ui-overlaypanel {
@@ -36,7 +36,7 @@
         cursor: pointer;
 
         svg path {
-            transition: .3s;
+            transition: $transition-duration;
         }
 
         &:hover {
@@ -85,7 +85,7 @@
                 display: flex;
                 width: 100%;
                 padding: 10px 15px;
-                transition: .3s;
+                transition: $transition-duration;
                 cursor: pointer;
                 font-size: 18px;
                 font-weight: 700;
@@ -138,7 +138,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateX(-100%);
-    transition: .6s;
+    transition: $transition-duration;
     overflow: auto;
     box-shadow: 0 0px 10px 0 rgba(0,0,0,0.15);
 
@@ -149,10 +149,10 @@
         border: 1px solid color(border);
         border-radius: 2px;
         transform: translateY(-1px);
-        transition: .3s;
+        transition: $transition-duration;
 
         .ui-chkbox-icon {
-            transition: .3s;
+            transition: $transition-duration;
 
             &:before {
                 display: block;
@@ -214,7 +214,7 @@
                 display: flex;
                 align-items: center;
                 cursor: pointer;
-                transition: .3s;
+                transition: $transition-duration;
 
                 > div {
                     display: flex;

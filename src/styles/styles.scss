@@ -1418,14 +1418,18 @@ p-dialog {
 
 
 .custom-toast {
+    max-width: 960px;
+
     @include respond-to('ex-small') {
         width: 80%;
     }
     @include respond-to('small') {
+        min-width: 480px;
         width: 60%;
     }
     @include respond-to('medium') {
-        width: 50%;
+        min-width: 480px;
+        width: 100%;
     }
 
     .ui-toast-message {
@@ -1437,11 +1441,15 @@ p-dialog {
     }
 
     .ui-toast-message-content {
-        padding: 10px;
+        padding: 15px;
     }
 
     .ui-toast-message-text {
         padding-left: 8px;
+    }
+
+    .ui-toast-message-text-content {
+        padding: 0;
     }
 
     .ui-toast-message-icon {
@@ -1449,17 +1457,20 @@ p-dialog {
     }
 
     .ui-toast-icon {
-        left: 0.6em;
-        top: 0.3em;
+        left: 15px;
+        top: 12px;
         font-size: 1.5em;
     }
 
     .ui-toast-summary {
         @include lato-font('bold');
-
         color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-xx-regular;
+
+        &:empty {
+            display: none;
+        }
     }
 
     .ui-toast-close-icon {
@@ -1467,6 +1478,8 @@ p-dialog {
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
+        top: 14px;
+        right: 15px;
     }
 
     .ui-toast-message-error {
@@ -1475,6 +1488,16 @@ p-dialog {
 
     .ui-toast-message-warn {
         background: #ffe399;
+    }
+
+    .ui-toast-message-info {
+        background: color(secondary);
+
+        .ui-toast-icon,
+        .ui-toast-detail,
+        .ui-toast-close-icon {
+            color: #ffffff;
+        }
     }
 }
 

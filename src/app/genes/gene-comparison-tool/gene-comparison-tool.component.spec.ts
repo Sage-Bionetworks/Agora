@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 import {
     RouterStub,
@@ -53,6 +54,7 @@ describe('Component: GeneComparisonToolComponent', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
+                { provide: MessageService, useValue: new MessageService() },
             ]
         })
         .compileComponents();

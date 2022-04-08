@@ -18,7 +18,7 @@
         color: color(text, demphasized);
         text-transform: uppercase;
         cursor: pointer;
-        transition: .3s;
+        transition: $transition-duration;
 
         &:hover {
             color: #000000;
@@ -67,7 +67,7 @@
         margin-left: 12px;
 
         svg path {
-            transition: .3s;
+            transition: $transition-duration;
         }
 
         &:hover {
