@@ -114,10 +114,10 @@
                                     </td>
                                     <td *ngFor="let tissue of tissues">
                                         <button
-                                            class="gene-indicator"
+                                            [class]="getCircleClass(tissue, gene)"
                                             [style]="getCircleStyle(tissue, gene)"
                                             (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue, gene))"
-                                        ></button>
+                                        ><span></span></button>
                                     </td>
                                 </tr>
                             </ng-template>
@@ -170,10 +170,10 @@
                                     </td>
                                     <td *ngFor="let tissue of tissues">
                                         <button
-                                            class="gene-indicator"
+                                            [class]="getCircleClass(tissue, gene)"
                                             [style]="getCircleStyle(tissue, gene)"
                                             (click)="detailsPanel.toggle($event, getDetailsPanelData(tissue, gene))"
-                                        ></button>
+                                        ><span></span></button>
                                     </td>
                                 </tr>
                             </ng-template>

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Table } from 'primeng/table';
-import { SortEvent } from 'primeng/api';
+import { SortEvent, MessageService } from 'primeng/api';
 import { FilterUtils } from 'primeng/utils';
 
 import { ApiService } from '../../core/services';
@@ -72,6 +72,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          name: 'nominations',
          label: 'Number of Nominations',
          short: 'Nominations',
+         description: 'Filter for genes based on how many times they have been nominated as a potential target for AD.',
          matchMode: 'in',
          options: [],
       },
@@ -79,6 +80,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          name: 'teams',
          label: 'Nominating Teams',
          short: 'Team',
+         description: 'Filter for genes based on the nominating research team.',
          matchMode: 'intersect',
          options: [],
       },
@@ -86,6 +88,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          name: 'year_first_nominated',
          label: 'Year First Nominated',
          short: 'Year',
+         description: 'Filter for genes based on the year that they were first nominated as a potential target for AD.',
          matchMode: 'in',
          options: [],
       },
@@ -93,6 +96,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          name: 'studies',
          label: 'Cohort Study',
          short: 'Study',
+         description: 'Filter for genes based on which study or cohort the nominating research team analyzed to identify the gene as a potential target for AD.',
          matchMode: 'intersect',
          options: [],
       },
@@ -100,6 +104,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          name: 'input_datas',
          label: 'Input Data',
          short: 'Data',
+         description: 'Filter for genes based on the type of data that the nominating research team analyzed to identify the gene as a potential target for AD.',
          matchMode: 'intersect',
          options: [],
       }
@@ -128,7 +133,8 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       private router: Router,
       private route: ActivatedRoute,
       private apiService: ApiService,
-      private chartService: ChartService
+      private chartService: ChartService,
+      private messageService: MessageService
    ) { }
 
    ngOnInit() {
@@ -514,6 +520,15 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
 
    copyUrl() {
       navigator.clipboard.writeText(window.location.href);
+      const self = this;
+      this.messageService.clear();
+      this.messageService.add({
+         severity: 'info',
+         sticky: true,
+         summary: null,
+         detail: 'URL copied to clipboard! Use this URL to share or bookmark the current table configuration.'
+      });
+      setTimeout(() => { self.messageService.clear(); }, 5000);
    }
 
    /* ----------------------------------------------------------------------- */
@@ -581,11 +596,27 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       }
    }
 
+   getCircleClass(tissueName: string, gene: GCTGene) {
+      let classes = 'gene-indicator';
+      const tissue = gene.tissues.find(t => t.name === tissueName);
+
+      if (tissue) {
+         if (tissue.logfc) {
+            if (tissue.logfc >= 0) {
+               classes += ' plus';
+            } else {
+               classes += ' minus';
+            }
+         }
+      }
+
+      return classes;
+   }
+
    getCircleStyle(tissueName: string, gene: GCTGene) {
       let size = 0;
       let bgRGB = [236, 236, 236];
       let bgAlpha = 0.4;
-      let borderColor = '#C2C2C2';
 
       const tissue = gene.tissues.find(t => t.name === tissueName);
 
@@ -599,11 +630,9 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          if (tissue.logfc) {
             if (tissue.logfc >= 0) {
                bgRGB = [139, 233, 210];
-               borderColor = '#069C81';
                bgAlpha = 0.4 + (0.4 * (tissue.logfc / this.maxLogfc));
             } else {
                bgRGB = [201, 175, 255];
-               borderColor = '#A684EE';
                bgAlpha = 0.4 + (0.4 * (Math.abs(tissue.logfc) / Math.abs(this.maxLogfc)));
             }
          }
@@ -613,8 +642,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          display: size ? 'block' : 'none',
          width: size + 'px',
          height: size + 'px',
-         backgroundColor: 'rgba(' + bgRGB[0] + ',' + bgRGB[1] + ',' + bgRGB[2] + ',' + bgAlpha + ')',
-         borderColor
+         backgroundColor: 'rgba(' + bgRGB[0] + ',' + bgRGB[1] + ',' + bgRGB[2] + ',' + bgAlpha + ')'
       };
    }
 

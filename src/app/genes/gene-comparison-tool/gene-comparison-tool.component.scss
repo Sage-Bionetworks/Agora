@@ -27,6 +27,14 @@
     }
 }
 
+.gct-tooltip-filter {
+    max-width: 350px;
+
+    .ui-tooltip-text {
+        white-space: normal;
+    }
+}
+
 .gct {
     @include lato-font('normal');
     color: color(primary);
@@ -110,7 +118,7 @@
             font-size: 16px;
             font-weight: 600;
             text-transform: uppercase;
-            transition: .3s;
+            transition: $transition-duration;
             cursor: pointer;
 
             svg {
@@ -118,7 +126,7 @@
                 transform: translateY(-2px);
 
                 path {
-                    transition: .3s;
+                    transition: $transition-duration;
                 }
             }
 
@@ -141,7 +149,7 @@
             color: #FFFFFF;
             padding: 10px 20px;
             border-radius: 30px;
-            transition: .3s;
+            transition: $transition-duration;
             cursor: pointer;
 
             &:hover {
@@ -211,7 +219,7 @@
 
                     li {
                         padding: 5px 15px;
-                        transition: .3s;
+                        transition: $transition-duration;
 
                         span {
                             white-space: nowrap;
@@ -295,7 +303,7 @@
             border: 1px solid color(border);
             padding: 12px 40px 12px 34px;
             width: 100%;
-            transition: .3s;
+            transition: $transition-duration;
 
             &:focus {
                 border-color: color(primary);
@@ -311,7 +319,7 @@
             cursor: pointer;
 
             svg path {
-                transition: .3s;
+                transition: $transition-duration;
             }
 
             &:hover {
@@ -420,7 +428,7 @@
         .ui-paginator-icon {
             color: color(actionPrimary);
             cursor: pointer;
-            transition: .3s;
+            transition: $transition-duration;
 
             &:hover {
                 color: darken(color(actionPrimary), 10%);
@@ -435,7 +443,7 @@
     .gene-controls {
         display: flex;
         background-color: transparent;
-        transition: .4s;
+        transition: $transition-duration;
         align-items: center;
         padding: 6px 15px 6px 7px;
         margin-right: 0px;
@@ -472,14 +480,41 @@
         border-radius: 50%;
         background: rgba(139, 233, 210, 0.65);
         opacity: 0.75;
-        border: 1px solid #069C81;
+        border: 1px solid #C2C2C2;
         z-index: 100;
-        //transform: translateY(1px);
-        transition: .3s;
+        transition: $transition-duration;
         cursor: pointer;
 
+        > span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #C2C2C2;
+            opacity: 0;
+            visibility: hidden;
+            transition: $transition-duration;
+        }
+
+        &.plus {
+            &, > span {
+                border-color: #069C81;
+            }
+        }
+
+        &.minus {
+            &, > span {
+                border-color: #A684EE;
+            }
+        }
+
         &:hover {
-            border-color: #000000 !important;
+            box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.25);
+
+            > span {
+                opacity: 1;
+                visibility: visible;
+            }
         }
 
         .gene-indicator-text {
@@ -540,7 +575,7 @@
 
         &:hover {
             color: color(text, primary);
-            transition: .3s;
+            transition: $transition-duration;
         }
     }
 }

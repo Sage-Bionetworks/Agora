@@ -34,6 +34,7 @@ export interface GCTFilter {
    name: string;
    label: string;
    short?: string;
+   description?: string;
    matchMode?: string;
    options: GCTFilterOption[];
 }
