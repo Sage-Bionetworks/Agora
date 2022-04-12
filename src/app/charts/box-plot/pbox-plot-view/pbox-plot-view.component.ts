@@ -134,8 +134,8 @@ export class PBoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getGeneSymbol(): string {
-        const geneSymbol = this.geneService.getCurrentInfo().hgnc_symbol ?
-            this.geneService.getCurrentInfo().hgnc_symbol : this.geneService.getCurrentInfo().ensembl_gene_id;
+        const geneSymbol = this.geneService.getCurrentInfo().hgnc_symbol
+            ?? this.geneService.getCurrentInfo().ensembl_gene_id;
         return geneSymbol;
     }
 
