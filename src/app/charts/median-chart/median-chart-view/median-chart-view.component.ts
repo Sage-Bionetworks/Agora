@@ -130,7 +130,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         const self = this;
         dc['config'].defaultColors(d3.schemeCategory10);
         this.chart = dc.barChart(this.medianChart.nativeElement)
-            .yAxisLabel('LOG CPM', 20);
+            .yAxisLabel('LOG2 CPM', 20);
         this.chart.margins({
             left: 70,
             right: 10,
@@ -178,7 +178,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     { x: chart.x().range()[1], y: chart.y()(righty) }];
                     const line = d3.line()
                         .x((d: any) =>  d.x)
-                        .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log10(5)) * mult));
+                        .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log2(5)) * mult));
                     const chartBody = chart.select('g.chart-body');
                     let path = chartBody.selectAll('path.extra').data([extradata]);
                     path = path
