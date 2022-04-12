@@ -20,6 +20,7 @@ export class ErrorHandlerService implements ErrorHandler {
         });
         setTimeout(() => { self.messageService.clear(); }, 5000);
 
+        console.error(error);
         throw error;
     }
 }
