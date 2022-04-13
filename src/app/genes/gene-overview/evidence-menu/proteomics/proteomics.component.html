@@ -42,7 +42,6 @@
                 </div>
             </div>
         </div>
-        <loading-page *ngIf="!dataLoaded && !isEmptyGene" [ngStyle]="{'margin-top': '40px'}"></loading-page>
     </div>
     <h3>
         Differential Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} and Selected Protein
