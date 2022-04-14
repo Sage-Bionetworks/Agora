@@ -47,8 +47,6 @@ export class GeneSimilarComponent implements OnInit {
     msgs: Message[] = [];
     cols: any[] = [
         { field: 'hgnc_symbol', header: 'Gene name' },
-        { field: 'brain_regions_display_value', header: 'Brain Regions' },
-        { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
         { field: 'nominated_target_display_value', header: 'Nominated Target' },
         { field: 'isIGAP', header: 'Genetic Association with LOAD'},
         { field: 'haseqtl', header: 'Brain eQTL' },
@@ -255,7 +253,7 @@ export class GeneSimilarComponent implements OnInit {
         // The headers row for the csv file
         downloadArray[0] = this.cols.map((c) => c.header).join();
         // List of columns with values containing commas
-        const escapeFields = ['brain_regions_display_value', 'sm_druggability_display_value',
+        const escapeFields = ['sm_druggability_display_value',
             'safety_rating_display_value', 'ab_modality_display_value'];
 
         this.genesInfo.forEach((de: GeneInfo) => {
