@@ -8,8 +8,7 @@
         <p class="black-paragraph">
             This plot depicts the median expression of the selected gene across brain regions,
             as measured by RNA-seq read counts per million (CPM) reads. Meaningful expression
-            is considered to be anything greater than 5 CPM, which is depicted by the red line
-            in the plot.
+            is considered to be a log2 CPM greater than log2(5), depicted by the red line in the plot.
         </p>
         <div #stme>
             <ng-container *ngIf="!isEmptyGene && hasMedianExpression; else noDataMedian">
@@ -68,7 +67,8 @@
                     After selecting a statistical model, you will be able to see whether the selected gene is differentially expressed
                     between AD cases and controls. The box plot depicts how the differential expression of the selected gene of interest
                     (red dot) compares with expression of other genes in a given tissue. Summary statistics for each tissue can be viewed
-                    by hovering over the red dots.
+                    by hovering over the red dots. Meaningful differential expression is considered to be a log2 fold change
+                    value greater than 0.2630344, or less than -0.2630344.
                 </p>
             </div>
         </div>
