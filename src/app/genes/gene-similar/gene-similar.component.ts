@@ -121,7 +121,7 @@ export class GeneSimilarComponent implements OnInit {
                     this.gene = data.item;
                     this.geneInfo = data.info;
                 },
-                (error) => {},
+                (error) => { console.log('Error getting gene: ' + error.message); },
                 () => { this.initTissuesModels(); }
             );
         } else {

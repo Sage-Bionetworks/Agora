@@ -75,18 +75,15 @@ export class GeneService {
         }
     }
 
-    loadGeneData(ensembl_gene_id, tissue = null, model = null) {
-        return this.apiService.getGene(ensembl_gene_id, tissue, model).pipe(tap(
+    loadGeneData(id: string, tissue?: string, model?: string) {
+        return this.apiService.getGene(id, tissue, model).pipe(tap(
             (data: GeneResponse) => {
                 if (!data.info) {
                     this.router.navigate(['/genes']);
                 }
                 if (!data.item) {
                     // Fill in a new gene with the info attributes
-                    // data.item = {
-                    //     ensembl_gene_id: data.info.ensembl_gene_id || '',
-                    //     hgnc_symbol: data.info.hgnc_symbol || ''
-                    // }
+                    data.item = this.getEmptyGene(data.info.ensembl_gene_id, data.info.hgnc_symbol);
                 }
                 this.updatePreviousGene();
                 this.updateGeneData(data);
