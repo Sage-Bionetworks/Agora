@@ -523,12 +523,13 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       const self = this;
       this.messageService.clear();
       this.messageService.add({
+         key: 'gctToast',
          severity: 'info',
          sticky: true,
          summary: null,
          detail: 'URL copied to clipboard! Use this URL to share or bookmark the current table configuration.'
       });
-      setTimeout(() => { self.messageService.clear(); }, 5000);
+      setTimeout(() => { self.messageService.clear(); }, 50000);
    }
 
    /* ----------------------------------------------------------------------- */
