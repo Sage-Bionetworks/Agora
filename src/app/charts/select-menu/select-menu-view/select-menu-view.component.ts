@@ -270,34 +270,10 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
     }
 
     getNewGene() {
-        let gene = null;
-        this.apiService.getGene(
+        this.geneService.loadGeneData(
             this.geneService.getCurrentGene().ensembl_gene_id,
             this.geneService.getCurrentTissue(),
             this.geneService.getCurrentModel()
-        ).subscribe((data: GeneResponse) => {
-                if (!data.info) {
-                    this.router.navigate(['/genes']);
-                } else {
-                    if (!data.item) {
-                        // Fill in a new gene with the info attributes
-                        data.item = this.geneService.getEmptyGene(
-                            data.info.ensembl_gene_id, data.info.hgnc_symbol
-                        );
-                    }
-                }
-
-                this.geneService.updateGeneData(data);
-                gene = data.item;
-            }, (error) => {
-                console.log('Error getting gene: ' + error.message);
-            }, () => {
-                // Check if we have a database id at this point
-                if (gene && gene._id) {
-                    this.geneService.setCurrentTissue(gene.tissue);
-                    this.geneService.setCurrentModel(gene.model);
-                }
-            }
         );
     }
 

@@ -57,20 +57,15 @@ export class GeneBRComponent implements OnInit {
         }
         this.apiService.getGene(id).subscribe((data: GeneResponse) => {
             this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            const currentUrl = this.router.url + '?';
-            if (!data.item) {
-                this.router.navigate(['/genes']);
-                return;
-            }
             this.geneService.updateGeneData(data);
-            this.router.navigateByUrl(currentUrl)
+            this.router.navigateByUrl(this.router.url + '?')
                 .then(() => {
                     this.router.navigated = false;
                     this.router.navigate(['/genes',
                         {
                             outlets:
                             {
-                                'genes-router': ['gene-details', data.item.ensembl_gene_id]
+                                'genes-router': ['gene-details', data.info.ensembl_gene_id]
                             }
                         }]);
                 });

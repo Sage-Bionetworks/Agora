@@ -116,27 +116,14 @@ export class GeneSimilarComponent implements OnInit {
             this.id !== this.gene.ensembl_gene_id ||
             this.gene.ensembl_gene_id !== this.geneService.getCurrentGene().ensembl_gene_id
         ) {
-            this.apiService.getGene(this.id).subscribe((data: GeneResponse) => {
-                if (!data.info) {
-                    this.navService.goToRoute('/genes');
-                } else {
-                    if (!data.item) {
-                        // Fill in a new gene with the info attributes
-                        data.item = this.geneService.getEmptyGene(
-                            data.info.ensembl_gene_id, data.info.hgnc_symbol
-                        );
-                        this.geneService.setInfoDataState(true);
-                    }
-                    this.geneService.updatePreviousGene();
-                    this.geneService.updateGeneData(data);
+            this.geneService.loadGeneData(this.id).subscribe(
+                (data: GeneResponse) => {
                     this.gene = data.item;
                     this.geneInfo = data.info;
-                }
-            }, (error) => {
-                console.log('Error loading gene overview! ' + error.message);
-            }, () => {
-                this.initTissuesModels();
-            });
+                },
+                (error) => {},
+                () => { this.initTissuesModels(); }
+            );
         } else {
             this.initTissuesModels();
         }

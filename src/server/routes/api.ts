@@ -768,9 +768,11 @@ connection.once('open', async () => {
                             const validation = genesExpValidation.filter(g => g.ensembl_gene_id === req.query.id);
                             const expValidation = validation.length ? validation : undefined;
 
-                            res.setHeader(
-                                'Cache-Control', 'no-cache, no-store, must-revalidate'
-                            );
+                            if (item) {
+                                item.hgnc_symbol = info.hgnc_symbol || '';
+                            }
+
+                            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                             res.setHeader('Pragma', 'no-cache');
                             res.setHeader('Expires', 0);
                             await res.json({

@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
 import {
     Gene,
@@ -45,7 +47,10 @@ export class GeneService {
     pTissuesNum: number = 4;
     isEmptyGene: boolean = true;
 
-    constructor(private apiService: ApiService) {}
+    constructor(
+        private router: Router,
+        private apiService: ApiService
+    ) {}
 
     setCurrentGene(gene: Gene) {
         this.currentGene = gene;
@@ -68,6 +73,28 @@ export class GeneService {
         if (this.getCurrentGene() && this.getCurrentGene().ensembl_gene_id) {
             this.setPreviousGene(this.getCurrentGene());
         }
+    }
+
+    loadGeneData(ensembl_gene_id, tissue = null, model = null) {
+        return this.apiService.getGene(ensembl_gene_id, tissue, model).pipe(tap(
+            (data: GeneResponse) => {
+                if (!data.info) {
+                    this.router.navigate(['/genes']);
+                }
+                if (!data.item) {
+                    // Fill in a new gene with the info attributes
+                    // data.item = {
+                    //     ensembl_gene_id: data.info.ensembl_gene_id || '',
+                    //     hgnc_symbol: data.info.hgnc_symbol || ''
+                    // }
+                }
+                this.updatePreviousGene();
+                this.updateGeneData(data);
+            },
+            (error) => {
+                console.log('Error getting gene: ' + error.message);
+            },
+        ));
     }
 
     // To be used everytime a new gene data arrives from the server

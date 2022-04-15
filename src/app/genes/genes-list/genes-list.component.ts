@@ -269,20 +269,18 @@ export class GenesListComponent implements OnInit {
     }
 
     getGene(ensemblGeneId: string) {
-        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
-            if (!data.item) { this.navService.getRouter().navigate(['/genes']); }
-            this.geneService.updatePreviousGene();
-            this.geneService.updateGeneData(data);
+        this.geneService.loadGeneData(ensemblGeneId).subscribe((data: GeneResponse) => {
             this.navService.goToRoute(
                 '/genes',
                 {
                     outlets: {
-                        'genes-router': [ 'gene-details', this.selectedInfo.ensembl_gene_id ]
+                        'genes-router': [
+                            'gene-details',
+                            this.geneService.getCurrentGene().ensembl_gene_id
+                        ]
                     }
                 }
             );
-        }, (error) => {
-            console.log('Error getting gene: ' + error.message);
         });
     }
 

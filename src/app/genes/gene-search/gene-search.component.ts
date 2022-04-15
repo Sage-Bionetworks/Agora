@@ -175,45 +175,19 @@ export class GeneSearchComponent implements OnInit {
     }
 
     getGene(ensemblGeneId: string) {
-        this.apiService.getGene(ensemblGeneId).subscribe((data: GeneResponse) => {
-            if (!data.info) {
-                this.navService.goToRoute('./genes');
-            } else {
-                if (!data.item) {
-                    // Fill in a new gene with the info attributes
-                    data.item = this.geneService.getEmptyGene(
-                        data.info.ensembl_gene_id, data.info.hgnc_symbol
-                    );
+        this.geneService.loadGeneData(ensemblGeneId).subscribe((data: GeneResponse) => {
+            this.gene = data.item;
+            this.navService.goToRoute(
+                '/genes',
+                {
+                    outlets: {
+                        'genes-router': [
+                            'gene-details',
+                            this.geneService.getCurrentGene().ensembl_gene_id
+                        ]
+                    }
                 }
-
-                // Remove hgnc_symbol if missing from info
-                if (!data.info.hgnc_symbol) {
-                    data.item.hgnc_symbol = '';
-                }
-
-                const updatePromise = new Promise((resolve, reject) => {
-                    this.geneService.updatePreviousGene();
-                    this.geneService.updateGeneData(data);
-                    this.gene = data.item;
-
-                    resolve(true);
-                });
-                updatePromise.then(() => {
-                    this.navService.goToRoute(
-                        '/genes',
-                        {
-                            outlets: {
-                                'genes-router': [
-                                    'gene-details',
-                                    this.geneService.getCurrentGene().ensembl_gene_id
-                                ]
-                            }
-                        }
-                    );
-                });
-            }
-        }, (error) => {
-            console.log('Routing error! ' + error.message);
+            );
         });
     }
 
