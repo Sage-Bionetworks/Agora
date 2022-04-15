@@ -10,7 +10,8 @@ import {
     mockTeam4,
     mockMetabolomics,
     mockExpValidation,
-    mockGeneScoreDistribution
+    mockGeneScoreDistribution,
+    mockComparisonData
 } from '../testing';
 
 import {
@@ -19,9 +20,7 @@ import {
     GenesResponse,
     GeneInfosResponse,
     TeamMember,
-    GeneResponse,
-    GeneInfo,
-    GeneScoreDistribution
+    GeneResponse
 } from '../models';
 
 import { Observable, of } from 'rxjs';
@@ -91,7 +90,7 @@ export class ApiServiceStub {
     }
 
     getComparisonData(): Observable<object> {
-        return of({ items: [mockGene1] });
+        return of({ items: JSON.parse(JSON.stringify(mockComparisonData)) });
     }
 
     getInfos(): Observable<object> {
