@@ -529,7 +529,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          summary: null,
          detail: 'URL copied to clipboard! Use this URL to share or bookmark the current table configuration.'
       });
-      setTimeout(() => { self.messageService.clear(); }, 50000);
+      setTimeout(() => { self.messageService.clear(); }, 5000);
    }
 
    /* ----------------------------------------------------------------------- */
