@@ -40,7 +40,7 @@ export class ProteomicsComponent implements OnInit {
     ngOnInit() {
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
-        if (this.gene && this.geneService.getGeneProteomics()) { this.isEmptyGene = false; }
+        if (this.gene && this.geneService.getGeneProteomics().length > 0) { this.isEmptyGene = false; }
         this.emptySelection.push({
             label: this.emptySelectionLabel,
             value: this.emptySelectionValue
