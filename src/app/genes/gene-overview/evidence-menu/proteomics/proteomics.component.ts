@@ -40,6 +40,7 @@ export class ProteomicsComponent implements OnInit {
     ngOnInit() {
         this.gene = this.geneService.getCurrentGene();
         this.geneInfo = this.geneService.getCurrentInfo();
+        if (this.gene && this.geneService.getGeneProteomics()) { this.isEmptyGene = false; }
         this.emptySelection.push({
             label: this.emptySelectionLabel,
             value: this.emptySelectionValue
@@ -63,12 +64,6 @@ export class ProteomicsComponent implements OnInit {
                 'Proteomics'
             ).subscribe((d) => {
                 this.chartService.filteredData = d;
-                // Check if we have any log2fc value
-                if (!d.bpGroup || !d.bpGroup.top || !d.bpGroup.top.length) {
-                    this.isEmptyGene = true;
-                } else {
-                    this.isEmptyGene = false;
-                }
                 this.dataLoaded = true;
             });
         });
