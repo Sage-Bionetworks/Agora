@@ -587,7 +587,11 @@
     }
 }
 
-.custom-toast.page-gene-comparison-tool {
-    top: auto;
-    bottom: 5%;
+.gct-toast {
+
+    &.ui-toast-bottom-center {
+        margin-left: 0;
+        bottom: 5%;
+        transform: translateX(-50%);
+    }
 }

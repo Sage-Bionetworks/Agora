@@ -20,7 +20,20 @@ export class ErrorHandlerService implements ErrorHandler {
         });
         setTimeout(() => { self.messageService.clear(); }, 5000);
 
-        console.error(JSON.stringify(error));
+        const getCircularReplacer = () => {
+            const seen = new WeakSet();
+            return (key, value) => {
+                if (typeof value === 'object' && value !== null) {
+                    if (seen.has(value)) {
+                        return;
+                    }
+                    seen.add(value);
+                }
+                return value;
+            };
+        };
+
+        console.error(JSON.stringify(error, getCircularReplacer()));
         throw error;
     }
 }

@@ -531,6 +531,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       const self = this;
       this.messageService.clear();
       this.messageService.add({
+         key: 'gctToast',
          severity: 'info',
          sticky: true,
          summary: null,
