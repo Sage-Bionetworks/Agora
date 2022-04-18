@@ -586,3 +586,12 @@
         content: " ";
     }
 }
+
+.gct-toast {
+
+    &.ui-toast-bottom-center {
+        margin-left: 0;
+        bottom: 5%;
+        transform: translateX(-50%);
+    }
+}
