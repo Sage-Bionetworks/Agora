@@ -230,19 +230,23 @@ connection.once('open', async () => {
                     if (geneInfo.nominatedtarget && geneInfo.nominatedtarget.length > 0) {
                         for (const nominated of geneInfo.nominatedtarget) {
 
-                            if (nominated.team) {
+                            if (nominated.team && !comparisonGene.teams.includes(nominated.team)) {
                                 comparisonGene.teams.push(nominated.team);
                             }
 
                             if (nominated.study) {
                                 nominated.study.split(', ').forEach(study => {
-                                    comparisonGene.studies.push(study);
+                                    if (!comparisonGene.studies.includes(study)) {
+                                        comparisonGene.studies.push(study);
+                                    }
                                 });
                             }
 
                             if (nominated.input_data) {
                                 nominated.input_data.split(', ').forEach(inputData => {
-                                    comparisonGene.input_datas.push(inputData);
+                                    if (!comparisonGene.input_datas.includes(inputData)) {
+                                        comparisonGene.input_datas.push(inputData);
+                                    }
                                 });
                             }
 

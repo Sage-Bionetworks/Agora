@@ -234,7 +234,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
       }
 
       this.getUrlParam('pinned', true).forEach(pinned => {
-         this.pinGene(this.availableGenes.find(gene => gene.ensembl_gene_id === pinned), false);
+         this.pinGene(this.availableGenes.find(gene => gene.ensembl_gene_id === pinned), false, false);
       });
 
       tissues.sort();
@@ -402,6 +402,7 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
    }
 
    sort() {
+      this.pinnedGeneTable.reset();
       this.sortTable(this.pinnedGeneTable || null);
       this.sortTable(this.availableGeneTable || null);
    }
@@ -410,8 +411,8 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
    /* Pin/Unpin
    /* ----------------------------------------------------------------------- */
 
-   pinGene(gene: GCTGene, refresh: boolean = true) {
-      if (this.pinnedGenes.findIndex(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id) === -1) {
+   pinGene(gene: GCTGene, refresh: boolean = true, updateUrl: boolean = true) {
+      if (!this.pinnedGenes.find(pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id)) {
          const availableGeneIndex = this.availableGenes.findIndex(
             availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id
          );
@@ -419,35 +420,38 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          if (availableGeneIndex !== -1) {
             this.availableGenes.splice(availableGeneIndex, 1);
          }
-         if (refresh) {
+         if (updateUrl) {
             this.updateUrl();
+         }
+         if (refresh) {
             this.refresh();
          }
       }
    }
 
-   unpinGene(gene: GCTGene, refresh: boolean = true) {
+   unpinGene(gene: GCTGene, refresh: boolean = true, updateUrl: boolean = true) {
       const pinnedGeneIndex = this.pinnedGenes.findIndex(
          pinnedGene => pinnedGene.ensembl_gene_id === gene.ensembl_gene_id
       );
       if (pinnedGeneIndex !== -1) {
          if (
-            this.availableGenes.findIndex(
+            !this.availableGenes.find(
                availableGene => availableGene.ensembl_gene_id === gene.ensembl_gene_id
             )
-            === -1
          ) {
             this.availableGenes.push(gene);
          }
          this.pinnedGenes.splice(pinnedGeneIndex, 1);
-         if (refresh) {
+         if (updateUrl) {
             this.updateUrl();
+         }
+         if (refresh) {
             this.refresh();
          }
       }
    }
 
-   clearPinned() {
+   clearPinned(refresh: boolean = true, updateUrl: boolean = true) {
       this.pinnedGenes.forEach(gene => {
          if (
             this.availableGenes.findIndex(
@@ -459,8 +463,12 @@ export class GeneComparisonToolComponent implements OnInit, OnDestroy  {
          }
       });
       this.pinnedGenes = [];
-      this.updateUrl();
-      this.refresh();
+      if (updateUrl) {
+         this.updateUrl();
+      }
+      if (refresh) {
+         this.refresh();
+      }
    }
 
    /* ----------------------------------------------------------------------- */

@@ -84,6 +84,7 @@
                         </div>
                         <p-table
                             #pinnedGeneTable
+                            id="table-pinned-genes"
                             [value]="pinnedGenes"
                             responsiveLayout="scroll"
                             (sortFunction)="sortCallback($event)"
@@ -131,6 +132,7 @@
                         </div>
                         <p-table
                             #availableGeneTable
+                            id="table-available-genes"
                             [value]="availableGenes"
                             [paginator]="true"
                             [rows]="10"
