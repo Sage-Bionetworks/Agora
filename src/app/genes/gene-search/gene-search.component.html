@@ -24,11 +24,13 @@
             </div>
         </div>
         <ul *ngIf="errorMessage"  class="filter-select">
-            <li class="filter-select-list" [class.italic-result]="isNotFound">
+            <li class="filter-select-error" [class.italic-result]="isNotFound">
                 <div class="gene-name row">
-                    <div class="col-md-12 col-sm-12 col-12">
-                        {{errorMessage}}
-                    </div>
+                    <span class="gene-search-error">
+                        <div class="col-md-12 col-sm-12 col-12">
+                            {{errorMessage}}
+                        </div>
+                    </span>
                 </div>
             </li>
         </ul>

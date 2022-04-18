@@ -117,14 +117,15 @@
     margin-right: 30px;
 }
 
+.filter-select-error,
 .filter-select-list {
     cursor: pointer;
     padding: 5px 10px;
-    height: 60px;
+    height: auto;
+    width: 100%;
     color: color(text, secondary);
     line-height: normal;
     font-size: $font-size-regular;
-    color: color(text, secondary);
     padding-left: 4%;
 
     span {
@@ -162,10 +163,21 @@
     .gene-aliases {
         font-weight: bold;
     }
+
+    .gene-search-error {
+      white-space: normal;
+      word-wrap: break-word;
+      text-align: left;
+      line-height: 34px;
+    }
 }
 
 .filter-select-list:hover {
     background: $faded-secondary-background;
+}
+
+.filter-select-error:hover {
+  background: $background;
 }
 
 .list-highlight,
