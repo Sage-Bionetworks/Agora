@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { resolve } from 'dns';
+import { of } from 'rxjs';
 
 import {
     Gene,
@@ -163,6 +165,15 @@ export class GeneServiceStub {
             // Only update the previous gene if we already have a current one
             this.setPreviousGene(this.getCurrentGene());
         }
+    }
+
+    loadGeneData(id: string, tissue?: string, model?: string) {
+        return of({
+            info: this.getCurrentInfo(),
+            item: this.getCurrentGene(),
+            expValidation: this.getCurrentExpValidation(),
+            overallScores: this.getCurrentGeneOverallScores(),
+        });
     }
 
     // To be used everytime a new gene data arrives from the server
