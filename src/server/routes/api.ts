@@ -400,13 +400,13 @@ connection.once('open', async () => {
                 ]}).lean().sort('uniprotid')
                     .exec((err, gene: Proteomics) => {
                     if (err) {
-                        res.send({error: 'Empty Proteomics array', items: []});
+                        res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                     } else {
                         if (gene) {
                             filter = gene.uniprotid;
                             resolve(true);
                         } else {
-                            res.send({error: 'Empty Proteomics array', items: []});
+                            res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                         }
                     }
                 });
@@ -518,7 +518,7 @@ connection.once('open', async () => {
                         });
                     }
                 } else {
-                    res.send({error: 'Empty Proteomics array', items: geneProteomics});
+                    res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                 }
             });
         });
