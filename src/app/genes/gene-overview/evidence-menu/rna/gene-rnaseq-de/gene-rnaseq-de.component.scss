@@ -11,8 +11,9 @@
 
 .rna-seq-bplot {
     .bplot-filter-row {
-        background: $faded-grey-background;
         border-top: 2px solid $secondary-grey-border-color;
+        margin-left: 0px;
+        margin-right: 0px;
     }
 
     @include respond-to('medium') {
@@ -273,17 +274,21 @@
     }
 }
 
-.rna-seq-fplot {
-    .fa-info-circle:before {
-        color: $info-circle-color;
-    }
+.rna-seq-bplot-plot,
+.rna-seq-fplot,
+.rna-seq-candlestick {
+  .fa-info-circle:before {
+    color: $info-circle-color;
+  }
 
-    .rc-empty-plot-content {
-        height: 450px;
-        position: relative;
-        display: block;
-        background: $faded-grey-background;
-    }
+  .rc-empty-plot-content {
+    height: 450px;
+    position: relative;
+    display: block;
+    background: $faded-grey-background;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
 
 .show-box-plot {
