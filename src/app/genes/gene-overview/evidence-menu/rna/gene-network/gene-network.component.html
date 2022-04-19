@@ -26,15 +26,15 @@
                 <div class="dot first"></div><div class="legend-text">2-3 Edges</div>
                 <div class="dot second"></div><div class="legend-text">4-5 Edges</div>
                 <div class="dot third"></div><div class="legend-text">6-7 Edges</div>
-                <div class="dot fourth"></div><div class="legend-text">8-9 Edges</div>
+<!--                <div class="dot fourth"></div><div class="legend-text">8-9 Edges</div>-->
             </div>
         </div>
         <ng-template #noDataImage>
-            <div class="col-md-8 col-sm-8 col-12 network-container no-data-vertical">
+            <div class="col-12 network-container no-data-vertical">
                 <h2 class="placeholder-text">No expression data is currently available.</h2>
             </div>
         </ng-template>
-        <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData; else noDataSecImage">
+        <div class="col-md-4 col-sm-4 col-12 current-gene-col" *ngIf="!noData">
             <div class="row cg-row">
                 <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
                     <h3>{{geneInfo.hgnc_symbol || geneInfo.ensembl_gene_id}}</h3>
@@ -112,9 +112,9 @@
                 </div>
             </div>
         </div>
-        <ng-template #noDataSecImage>
-            <div class="col-md-4 col-sm-4 col-12 currentGene">
-                <h2 class="placeholder-text">No expression data is currently available.</h2>
-            </div>
-        </ng-template>
+<!--        <ng-template #noDataSecImage>-->
+<!--            <div class="col-md-4 col-sm-4 col-12 currentGene">-->
+<!--                <h2 class="placeholder-text">No expression data is currently available.</h2>-->
+<!--            </div>-->
+<!--        </ng-template>-->
 </div>
