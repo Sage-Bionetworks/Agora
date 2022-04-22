@@ -270,7 +270,7 @@
 
     .empty-bplot-col {
         background: $faded-grey-background;
-        height: 450px;
+        height: $no-data-height;
     }
 }
 
@@ -282,7 +282,7 @@
   }
 
   .rc-empty-plot-content {
-    height: 450px;
+    height: $no-data-height;
     position: relative;
     display: block;
     background: $faded-grey-background;
@@ -315,7 +315,7 @@
 
 .no-median-data {
     position: relative;
-    height: 350px;
+    height: $no-data-height;
     background: $faded-grey-background;
     width: 100%;
 }
