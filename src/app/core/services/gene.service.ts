@@ -304,9 +304,12 @@ export class GeneService {
 
     hasMedianExpression(): boolean  {
         const info = this.getCurrentInfo();
-        const data = info.medianexpression.filter(
-            d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
-        );
+        let data = [];
+        if (info.medianexpression) {
+            data = info.medianexpression.filter(
+                d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
+            );
+        }
         return info && info.medianexpression && data.length > 0 ? true : false;
     }
 }
