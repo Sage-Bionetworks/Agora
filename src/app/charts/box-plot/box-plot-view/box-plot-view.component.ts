@@ -137,6 +137,12 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.chartService.removeChart(this.chart);
     }
 
+    getGeneSymbol(): string {
+        const geneSymbol = this.geneService.getCurrentInfo().hgnc_symbol
+            || this.geneService.getCurrentInfo().ensembl_gene_id;
+        return geneSymbol;
+    }
+
     getModel(): string {
         const model = this.geneService.getCurrentModel();
         return (model) ? model : '';
@@ -341,7 +347,7 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
             logVals.push(self.dataService.getSignificantFigures(g.logfc));
             significanceTexts.push((g.adj_p_val <= 0.05) ?
             ' ' : 'not ');
-            phrases.push((g.hgnc_symbol || g.ensembl_gene_id) +
+            phrases.push(this.getGeneSymbol() +
                 ' is ' + significanceTexts[significanceTexts.length - 1] +
                 'significantly differentially expressed in ' +
                 g.tissue +
