@@ -26,11 +26,11 @@
         <ul *ngIf="errorMessage"  class="filter-select">
             <li class="filter-select-error" [class.italic-result]="isNotFound">
                 <div class="gene-name row">
-                    <span class="gene-search-error">
-                        <div class="col-md-12 col-sm-12 col-12">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <span class="gene-search-error">
                             {{errorMessage}}
-                        </div>
-                    </span>
+                        </span>
+                    </div>
                 </div>
             </li>
         </ul>
