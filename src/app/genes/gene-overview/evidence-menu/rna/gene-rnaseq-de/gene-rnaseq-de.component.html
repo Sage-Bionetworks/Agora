@@ -76,7 +76,7 @@
             <box-plot *ngIf="dataLoaded && !isEmptyGene" [label]="'box-plot'"></box-plot>
             <loading-page *ngIf="!dataLoaded && !isEmptyGene"></loading-page>
         </div>
-        <div class="row">
+        <div class="rna-seq-bplot-plot">
             <div *ngIf="isEmptyGene" class="col-md-12 col-sm-12 col-12 empty-bplot-col">
                 <h2 class="placeholder-text">No expression data is currently available.</h2>
             </div>

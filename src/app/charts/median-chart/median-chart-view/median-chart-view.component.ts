@@ -76,11 +76,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.geneinfo) {
             return;
         }
-
-        const data = this.geneinfo.medianexpression.filter(
-            d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
-        );
-        this.ndx = crossfilter(data);
+        this.ndx = crossfilter(this.geneinfo.medianexpression);
         this.group = this.ndx.groupAll();
         this.dimension = this.ndx.dimension( (d) =>  d.tissue );
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
