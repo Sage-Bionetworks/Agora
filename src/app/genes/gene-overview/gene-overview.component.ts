@@ -303,10 +303,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         );
                         this.geneService.setInfoDataState(true);
                     }
-                    // Remove hgnc_symbol if missing from info
-                    if (!data.info.hgnc_symbol) {
-                        data.item.hgnc_symbol = '';
-                    }
+
+                    // Ensure that we only use hgnc_symbol from geneInfo
+                    data.item.hgnc_symbol = data.info.hgnc_symbol;
 
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
