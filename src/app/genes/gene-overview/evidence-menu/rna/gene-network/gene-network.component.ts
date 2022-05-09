@@ -65,6 +65,9 @@ export class GeneNetworkComponent implements OnInit {
             this.geneInfo = this.geneService.getCurrentInfo();
             this.id = this.navService.getId();
 
+            // Ensure that we only use hgnc_symbol from geneInfo
+            this.gene.hgnc_symbol = this.geneInfo.hgnc_symbol;
+
             // If we move away from the overview page, remove
             // the charts
             this.routerSubscription = this.router.events.subscribe((event) => {

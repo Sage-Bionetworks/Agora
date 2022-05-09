@@ -204,13 +204,6 @@ export class GeneSimilarComponent implements OnInit {
                         de.isAnyProteinChangedInADBrain.toString() : 'No data';
                     de.nominated_target_display_value = de.nominations > 0;
 
-                    // Populate MedianExpression display fields
-                    const meArray = (de.medianexpression.length) ?
-                        de.medianexpression.map((me: MedianExpression) => me.tissue) : [];
-                    de.brain_regions_display_value = (meArray.length) ? meArray.filter(this.getUnique)
-                        .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                    de.num_brain_regions_display_value = meArray.length.toString();
-
                     // Populate Druggability display fields
                     if (de.druggability && de.druggability.length) {
                         de.pharos_class_display_value = de.druggability[0].pharos_class ?
