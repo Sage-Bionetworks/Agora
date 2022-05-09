@@ -280,7 +280,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                     // A font size of 12 has 16 pixels per letter, so we pick
                     // half the word and make a negative dx. The anchor is in
                     // the middle so we half the result again
-                    return (((-(node.hgnc_symbol.length || node.ensembl_gene_id.length) * 16) / 2) / 2);
+                    return (((-(node.hgnc_symbol?.length || node.ensembl_gene_id.length) * 16) / 2) / 2);
                 })
                 .attr('dy', (node: any) => {
                     return 35;
