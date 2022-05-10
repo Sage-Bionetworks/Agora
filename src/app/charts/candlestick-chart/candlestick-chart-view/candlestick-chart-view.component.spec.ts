@@ -29,23 +29,24 @@ describe('Component: CandlestickChartViewComponent', () => {
     let chartService: ChartServiceStub2;
     let location: SpyLocation;
     const rawData = [{
-        id: 'abc1',
-        ensg: 'ENSG001',
-        oddsratio: 0.1,
-        ci_lower: 0.2,
-        ci_upper: 0.4,
-        pval: 0.001,
-        pval_adj: 0.02,
-        neuropath_type: 'AAA'
+        _id: '61e994f7f0ad252bb8361138',
+        ci_lower: 0.91803550719735,
+        ci_upper: 1.21903693075933,
+        ensg: 'ENSG00000078043',
+        gname: 'PIAS2',
+        neuropath_type: 'BRAAK',
+        oddsratio: 1.05766612357586,
+        pval: 0.438026367318651,
+        pval_adj: 0.717412210719562
     }];
     const chartData = [{
-        key: 'AAA',
-        ensg: 'ENSG001',
+        key: 'BRAAK',
+        ensg: 'ENSG00000078043',
         value: {
-            min: 0.2,
-            max: 0.4,
-            mean: 0.1,
-            pval_adj: 0.02
+            max: 1.21903693075933,
+            mean: 1.05766612357586,
+            min: 0.91803550719735,
+            pval_adj: 0.717412210719562
         }
     }];
 

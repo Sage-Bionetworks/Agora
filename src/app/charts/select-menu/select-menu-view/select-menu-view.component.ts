@@ -206,7 +206,9 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
         chart.filterHandler(async (dimension, filters) => {
             if (filters.length === 0) {
                 // The empty case (no filtering)
-                dimension.filter(null);
+                if (dimension) {
+                    dimension.filter(null);
+                }
             } else if (filters.length === 1 && !filters[0].isFiltered) {
                 // Single value and not a function-based filter
                 // Before filters are applied, update the gene
@@ -446,6 +448,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 const cPromise = new Promise(async (resolve, reject) => {
                     if (self.type === 'RNA') {
                         self.chartService.queryFilter.smGroup = c.innerHTML;
+                        const gene = self.geneService.getCurrentGene().ensembl_gene_id;
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(
@@ -459,6 +462,7 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                         });
                     } else if (self.type === 'Proteomics') {
                         self.chartService.pQueryFilter.spGroup = c.innerHTML;
+                        const gene = self.geneService.getCurrentGene().ensembl_gene_id;
                         self.isActive = false;
 
                         await self.apiService.refreshChartsData(

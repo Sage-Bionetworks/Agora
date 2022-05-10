@@ -10,6 +10,7 @@ import { CoreModule } from './core';
 
 // Third-party modules
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { CookieService } from 'ngx-cookie-service';
 
 // Platform and Environment providers
 import { environment } from 'environments/environment';
@@ -52,7 +53,8 @@ interface StoreType {
     providers: [
         environment.ENV_PROVIDERS,
         APP_PROVIDERS,
-        HammerGestureConfig
+        HammerGestureConfig,
+        CookieService
     ]
 })
 export class AppModule {}

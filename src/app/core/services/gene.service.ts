@@ -153,7 +153,16 @@ export class GeneService {
     }
 
     getGeneTissues(): string[] {
-        return this.geneTissues;
+        return [
+            'CBE',
+            'DLPFC',
+            'FP',
+            'IFG',
+            'PHG',
+            'STG',
+            'TCX'
+        ];
+        // return this.geneTissues;
     }
 
     setGeneTissues(tissues: string[]) {
@@ -169,7 +178,13 @@ export class GeneService {
     }
 
     getGeneModels(): string[] {
-        return this.geneModels;
+        return [
+            'AD Diagnosis (males and females)',
+            'AD Diagnosis x AOD (males and females)',
+            'AD Diagnosis x Sex (females only)',
+            'AD Diagnosis x Sex (males only)'
+        ];
+        // return this.geneModels;
     }
 
     setGeneModels(models: string[]) {
@@ -285,5 +300,16 @@ export class GeneService {
 
     setInfoDataState(state: boolean) {
         this.noInfoData = state;
+    }
+
+    hasMedianExpression(): boolean  {
+        const info = this.getCurrentInfo();
+        let data = [];
+        if (info.medianexpression) {
+            data = info.medianexpression.filter(
+                d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
+            );
+        }
+        return info && info.medianexpression && data.length > 0 ? true : false;
     }
 }

@@ -55,7 +55,8 @@ export class CandlestickChartViewComponent implements OnInit, OnDestroy, AfterVi
     }
 
     ngOnInit() {
-        this.rawData = this.chartService.filteredData['cpGroup'];
+        const evidenceData = this.dataService.getEvidenceData();
+        this.rawData = evidenceData['rnaCorrelation'];
         if (this.rawData.length > 0) {
             this.dataEmpty = false;
         }

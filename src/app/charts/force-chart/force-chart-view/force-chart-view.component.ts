@@ -211,6 +211,15 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                     .attr('fill', this.getNodeColor(this.pnode.node,
                             this.pnode.index,
                             []));
+                } else {
+                    for (let j = 0; j < nodes.length; j++) {
+                        const el = d3.select(nodes[j]);
+                        const data: any = el.data();
+                        if (data && this.networkData.origin.ensembl_gene_id === data[0].ensembl_gene_id) {
+                            el.attr('fill', this.getNodeColor(data[0], j, []));
+                            break;
+                        }
+                    }
                 }
                 this.pnode = {index: i, node: d};
                 d3.select(nodes[i]).attr('fill', '#FCCB6F');
@@ -271,7 +280,7 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
                     // A font size of 12 has 16 pixels per letter, so we pick
                     // half the word and make a negative dx. The anchor is in
                     // the middle so we half the result again
-                    return (((-(node.hgnc_symbol.length || node.ensembl_gene_id.length) * 16) / 2) / 2);
+                    return (((-(node.hgnc_symbol?.length || node.ensembl_gene_id.length) * 16) / 2) / 2);
                 })
                 .attr('dy', (node: any) => {
                     return 35;
@@ -380,10 +389,13 @@ export class ForceChartViewComponent implements OnInit, AfterViewInit, OnChanges
 
     getNodeColor(node: GeneNode , index, arr): string {
         if (!!arr.length && arr[index].getAttribute('origin') === 'true') {
-            return '#F47E6C';
+            return '#FCCB6F';
         }
         if (this.networkData && this.networkData.origin.ensembl_gene_id === node.ensembl_gene_id) {
             return '#F47E6C';
+        }
+        if (node.brainregions.length >= 8) {
+            return '#1C3A35';
         }
         if (node.brainregions.length >= 6) {
             return '#0C656B';

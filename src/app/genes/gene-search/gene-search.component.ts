@@ -69,8 +69,8 @@ export class GeneSearchComponent implements OnInit {
                     this.isNotFound = true;
                     this.setErrorMessage(
                         this.isEnsemblIdSearch ?
-                        this.ensemblIdNotFoundString :
-                        this.hgncSymbolNotFoundString
+                            this.ensemblIdNotFoundString :
+                            this.hgncSymbolNotFoundString
                     );
                 } else {
                     this.isNotFound = false;
@@ -186,10 +186,8 @@ export class GeneSearchComponent implements OnInit {
                     );
                 }
 
-                // Remove hgnc_symbol if missing from info
-                if (!data.info.hgnc_symbol) {
-                    data.item.hgnc_symbol = '';
-                }
+                // Ensure that we only use hgnc_symbol from geneInfo
+                data.item.hgnc_symbol = data.info.hgnc_symbol;
 
                 const updatePromise = new Promise((resolve, reject) => {
                     this.geneService.updatePreviousGene();

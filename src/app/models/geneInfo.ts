@@ -41,6 +41,11 @@ export interface GeneInfo {
 
 export interface MedianExpression {
     medianlogcpm: number;
+    minimumlogcpm?: number;
+    quartile1logcpm?: number;
+    meanlogcpm?: number;
+    quartile3logcpm?: number;
+    maximumlogcpm?: number;
     tissue: string;
 }
 
