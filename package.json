@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "data-file": "syn13363290",
-  "data-version": "35",
+  "data-version": "37",
   "description": "An application to aggregate genomic evidence supporting candidate gene and module targets nominated by members of the AMP-AD consortium.",
   "keywords": [
     "angular8",
@@ -52,6 +52,7 @@
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
     "github-deploy": "npm run github-deploy:dev",
     "lint": "npm run tslint -f \"src/**/*.ts\"",
+    "pre-commit-lint": "npm run tslint \"src/**/*.ts\"",
     "mongo:import": "sh mongo-import.sh",
     "node": "node",
     "ngsw-config": "node_modules/.bin/ngsw-config /dist ngsw-config.json",
@@ -75,6 +76,7 @@
     "server:prod:ci": "http-server dist -p 8080 -c-1 --cors",
     "server:staging": "cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
     "server:wds": "npm run webpack-dev-server -- --config config/webpack.server.js --open --progress --profile --watch --content-base src/",
+    "server:createindexes": "mongo --host localhost ./src/server/test/manual/createIndexes.js",
     "start": "node --max_old_space_size=2000  ./dist/server.js",
     "start:mongo": "sh start-mongo.sh '/var/lib/mongodb/'",
     "start:mongo:windows": "sh start-mongo.sh 'C:\\data\\db'",
@@ -82,6 +84,7 @@
     "start:hmr": "npm run server:dev:hmr",
     "test": "npm run lint && karma start",
     "test:load": "artillery run load.yml",
+    "test:collectionbenchmark": "mongo --host localhost ./src/server/test/manual/collectionBenchmark.js",
     "tslint": "tslint",
     "typedoc": "typedoc",
     "version": "npm run build",
@@ -102,6 +105,10 @@
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
   },
+  "pre-commit": [
+    "pre-commit-lint",
+    "test"
+  ],
   "dependencies": {
     "@angular/animations": "^9.1.13",
     "@angular/common": "^9.1.13",
@@ -126,6 +133,7 @@
     "core-js": "^2.6.11",
     "cors": "^2.8.5",
     "crossfilter2": "~1.4.8",
+    "d3-box": "^1.0.0",
     "d3-format": "^3.0.1",
     "express": "^4.17.1",
     "gridfs": "^1.0.0",
@@ -134,9 +142,11 @@
     "ie-shim": "^0.1.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
+    "ngx-cookie-service": "^11.0.2",
     "ngx-popperjs": "^12.2.1",
     "npm": "^6.14.4",
     "opencollective": "^1.0.3",
+    "pre-commit": "^1.2.2",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0",
     "protractor": "^5.4.3",

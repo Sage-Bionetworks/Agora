@@ -29,7 +29,19 @@ export class GenesListComponent implements OnInit {
     msgs: Message[] = [];
     selectedInfo: GeneInfo;
     totalRecords: number;
-    cols: any[];
+    cols: any[] = [
+        { field: 'hgnc_symbol', header: 'Gene Symbol'},
+        { field: 'nominations', header: 'Nominations' },
+        { field: 'initial_nomination_display_value', header: 'Year First Nominated' },
+        { field: 'teams_display_value', header: 'Nominating Teams' },
+        { field: 'study_display_value', header: 'Cohort Study' },
+        { field: 'input_data_display_value', header: 'Input Data' },
+        { field: 'pharos_class_display_value', header: 'Pharos Class' },
+        { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+        { field: 'safety_rating_display_value', header: 'Safety Rating' },
+        { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+        { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
+    ];
     selectedColumns: any[];
     loading: boolean = true;
     noValue = 'No value';
@@ -42,20 +54,6 @@ export class GenesListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene Symbol'},
-            { field: 'nominations', header: 'Nominations' },
-            { field: 'initial_nomination_display_value', header: 'Year First Nominated' },
-            { field: 'teams_display_value', header: 'Nominating Teams' },
-            { field: 'study_display_value', header: 'Cohort Study' },
-            { field: 'input_data_display_value', header: 'Input Data' },
-            { field: 'pharos_class_display_value', header: 'Pharos Class' },
-            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
-            { field: 'safety_rating_display_value', header: 'Safety Rating' },
-            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
-            { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
-        ];
-
         // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;
@@ -170,7 +168,12 @@ export class GenesListComponent implements OnInit {
         return array;
     }
 
-    reorderValues(event) {
+    onColumnSelectionChange(event) {
+        // Force 'hgnc_symbol' (name) column to be selected
+        if (!this.selectedColumns.find(d => d.field === 'hgnc_symbol')) {
+            this.selectedColumns.unshift(this.cols.find(d => d.field === 'hgnc_symbol'));
+        }
+
         this.selectedColumns.sort((a: any, b: any) => {
             return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0);
         });
@@ -297,10 +300,19 @@ export class GenesListComponent implements OnInit {
     }
 
     customSort(event: SortEvent) {
+        console.log(event);
         event.data.sort((data1, data2) => {
             let result = null;
-            const value1 = data1[event.field];
-            const value2 = data2[event.field];
+            let value1 = null;
+            let value2 = null;
+
+            if ('hgnc_symbol' === event.field) {
+                value1 = data1.hgnc_symbol || data1.ensembl_gene_id;
+                value2 = data2.hgnc_symbol || data2.ensembl_gene_id;
+            } else {
+                value1 = data1[event.field];
+                value2 = data2[event.field];
+            }
 
             if (value1 == null && value2 != null) {
                 result = -1;

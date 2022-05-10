@@ -18,6 +18,7 @@ import {
     GenesExperimentalValidation,
     GenesScoreDistribution,
     GenesOverallScores,
+    RnaDistribution
 } from '../../app/schemas';
 
 import * as express from 'express';
@@ -27,7 +28,6 @@ import * as awsParamStore from 'aws-param-store';
 import * as crossfilter from 'crossfilter2';
 // required when verbose debugging is enabled
 import * as util from 'util';
-import { Console } from 'console';
 
 const router = express.Router();
 const database = { url: '' };
@@ -73,7 +73,7 @@ connection.on('error', console.error.bind(console, 'MongoDB connection error:'))
 // Get our grid file system instance
 Grid.mongo = mongoose.mongo;
 
-connection.once('open', () => {
+connection.once('open', async () => {
     const gfs = Grid(connection.db);
 
     // Preprocess the data when the server goes up
@@ -81,6 +81,7 @@ connection.once('open', () => {
     // Get the genes collection size
     let tableGenesById: GeneInfo[] = [];
     let allGenes: Gene[] = [];
+    let allGeneInfo: GeneInfo[] = [];
     let allTeams: TeamInfo[] = [];
     const genesADDMF: Gene[] = [];
     const genesADDAODMF: Gene[] = [];
@@ -91,6 +92,7 @@ connection.once('open', () => {
     let genesExpValidation: GeneExpValidation[] = [];
     let geneScoreDistribution: GeneScoreDistribution[] = [];
     let genesOverallScores: GeneOverallScores[] = [];
+    let comparisonGenes: {} = {};
     let totalRecords = 0;
 
     // Crossfilter instance
@@ -139,6 +141,14 @@ connection.once('open', () => {
 
     // initialize data caches
 
+    await GenesInfo.find().lean().exec(async (err, data: GeneInfo[], next) => {
+        if (err) {
+            next(err);
+        } else {
+            allGeneInfo = data;
+        }
+    });
+
     // Group by id and sort by hgnc_symbol
     Genes.aggregate(
         [
@@ -168,8 +178,11 @@ connection.once('open', () => {
     ).allowDiskUse(true).exec().then(async (genes) => {
         // All the genes, ordered by hgnc_symbol
         allGenes = genes.slice();
+        const geneInfos = new Map(allGeneInfo.map(g => [g.ensembl_gene_id, g]));
+        const _comparisonGenes = {};
 
         await allGenes.forEach((g) => {
+            const geneInfo = geneInfos.get(g.ensembl_gene_id);
             // Separate the columns we need
             g.logfc = getSignificantFigures(+g.logfc);
             g.fc = getSignificantFigures(+g.fc);
@@ -191,7 +204,96 @@ connection.once('open', () => {
                 default:
                     break;
             }
+
+            if (!_comparisonGenes.hasOwnProperty(g.model)) {
+                _comparisonGenes[g.model] = {};
+            }
+
+            if (!_comparisonGenes[g.model].hasOwnProperty(g.ensembl_gene_id)) {
+                const comparisonGene = {
+                    ensembl_gene_id         : g.ensembl_gene_id,
+                    hgnc_symbol             : g.hgnc_symbol,
+                    search_string           : '',
+                    nominations             : 0,
+                    teams                   : [],
+                    studies                 : [],
+                    input_datas             : [],
+                    year_first_nominated    : null,
+                    tissues                 : []
+                };
+
+                if (geneInfo) {
+                    comparisonGene.hgnc_symbol = geneInfo.hgnc_symbol;
+                    comparisonGene.search_string = comparisonGene.hgnc_symbol + ' ' + comparisonGene.ensembl_gene_id;
+                    comparisonGene.nominations = geneInfo.nominations || 0;
+
+                    if (geneInfo.nominatedtarget && geneInfo.nominatedtarget.length > 0) {
+                        for (const nominated of geneInfo.nominatedtarget) {
+
+                            if (nominated.team && !comparisonGene.teams.includes(nominated.team)) {
+                                comparisonGene.teams.push(nominated.team);
+                            }
+
+                            if (nominated.study) {
+                                nominated.study.split(', ').forEach(study => {
+                                    if (!comparisonGene.studies.includes(study)) {
+                                        comparisonGene.studies.push(study);
+                                    }
+                                });
+                            }
+
+                            if (nominated.input_data) {
+                                nominated.input_data.split(', ').forEach(inputData => {
+                                    if (!comparisonGene.input_datas.includes(inputData)) {
+                                        comparisonGene.input_datas.push(inputData);
+                                    }
+                                });
+                            }
+
+                            if (nominated.initial_nomination) {
+                                if (
+                                    !comparisonGene.year_first_nominated
+                                    || nominated.initial_nomination < comparisonGene.year_first_nominated
+                                ) {
+                                    comparisonGene.year_first_nominated = nominated.initial_nomination;
+                                }
+                            }
+                        }
+                    }
+
+                    if (geneInfo.medianexpression) {
+                        for (const medianExp of geneInfo.medianexpression) {
+                            const tissue = comparisonGene.tissues.find(t => t.name === medianExp.tissue);
+                            if (tissue) {
+                                    tissue.medianexpression = {
+                                    medianlogcpm: medianExp.medianlogcpm,
+                                    minimumlogcpm: medianExp.minimumlogcpm,
+                                    maximumlogcpm: medianExp.maximumlogcpm
+                                };
+                            }
+                        }
+                    }
+                }
+
+                _comparisonGenes[g.model][g.ensembl_gene_id] = comparisonGene;
+            }
+
+            _comparisonGenes[g.model][g.ensembl_gene_id].tissues.push({
+                name        : g.tissue,
+                logfc       : g.logfc,
+                adj_p_val   : g.adj_p_val,
+                ci_l        : g.ci_l,
+                ci_r        : g.ci_r,
+            });
         });
+
+        for (const index in _comparisonGenes) {
+            if (_comparisonGenes.hasOwnProperty(index)) {
+                _comparisonGenes[index] = Object.values(_comparisonGenes[index]);
+            }
+        }
+
+        comparisonGenes = _comparisonGenes;
     });
 
     GenesInfo.find({ nominations: { $gt: 0 } }).lean()
@@ -298,13 +400,13 @@ connection.once('open', () => {
                 ]}).lean().sort('uniprotid')
                     .exec((err, gene: Proteomics) => {
                     if (err) {
-                        res.send({error: 'Empty Proteomics array', items: []});
+                        res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                     } else {
                         if (gene) {
                             filter = gene.uniprotid;
                             resolve(true);
                         } else {
-                            res.send({error: 'Empty Proteomics array', items: []});
+                            res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                         }
                     }
                 });
@@ -395,12 +497,12 @@ connection.once('open', () => {
                                                         indexOf(obj['key']) === pos;
                                                 }
                                             ),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 } else {
                                     results[groupName] = {
                                         values: groups[groupName].all(),
-                                        top: groups[groupName].top(1)[0].value
+                                        top: groups[groupName].top(1)[0]?.value
                                     };
                                 }
                             });
@@ -416,7 +518,7 @@ connection.once('open', () => {
                         });
                     }
                 } else {
-                    res.send({error: 'Empty Proteomics array', items: geneProteomics});
+                    res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                 }
             });
         });
@@ -485,6 +587,7 @@ connection.once('open', () => {
                     return [];
                 }
             );
+
             groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
 
             if (Object.keys(groups).length > 0) {
@@ -496,7 +599,7 @@ connection.once('open', () => {
                                 values: groups[groupName].all(),
                                 top: (groupName === 'fpGroup') ?
                                     null :
-                                    groups[groupName].top(1)[0].value
+                                    groups[groupName].top(1)[0]?.value
                             };
                         } else {
                             const newGroup = rmEmptyBinsFP(
@@ -536,68 +639,34 @@ connection.once('open', () => {
                 .exec(async (err, genes) => {
                 if (err) {
                     next(err);
-                } else {
-                    if (!genes.length) {
-                        res.json({items: genes});
                     } else {
-                        const geneEntries = genes.slice();
-                        const geneTissues = [];
-                        const geneModels = [];
-
-                        let minFC: number = +Infinity;
-                        let maxFC: number = -Infinity;
-                        let minLogFC: number = +Infinity;
-                        let maxLogFC: number = -Infinity;
-                        let maxAdjPValue: number = -Infinity;
-                        let minAdjPValue: number = Infinity;
-                        geneTissues.length = 0;
-                        geneModels.length = 0;
-                        await genes.forEach((g) => {
-                            if (+g.fc > maxFC) { maxFC = (+g.fc); }
-                            if (+g.fc < minFC) { minFC = (+g.fc); }
-                            if (+g.logfc > maxLogFC) { maxLogFC = (+g.logfc); }
-                            if (+g.logfc < minLogFC) { minLogFC = (+g.logfc); }
-                            const adjPVal: number = +g.adj_p_val;
-                            if (+g.adj_p_val) {
-                                if (adjPVal > maxAdjPValue) {
-                                    maxAdjPValue = adjPVal;
-                                }
-                                if (adjPVal < minAdjPValue) {
-                                    minAdjPValue = (adjPVal) < 1e-20 ? 1e-20 : adjPVal;
-                                }
-                            }
-                            if (g.tissue && geneTissues.indexOf(g.tissue) === -1) {
-                                geneTissues.push(g.tissue);
-                            }
-                            if (g['model'] && geneModels.indexOf(g['model']) === -1) {
-                                geneModels.push(g['model']);
-                            }
-                        });
-                        geneTissues.sort();
-                        geneModels.sort();
-
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
                         await res.json({
-                            geneEntries,
-                            minFC: (Math.abs(maxFC) > Math.abs(minFC)) ? -maxFC : minFC,
-                            maxFC,
-                            minLogFC: (Math.abs(maxLogFC) > Math.abs(minLogFC)) ?
-                                -maxLogFC : minLogFC,
-                            maxLogFC,
-                            minAdjPValue,
-                            maxAdjPValue,
-                            geneModels,
-                            geneTissues,
+                            genes,
                             geneProteomics: geneProteomics.filter(p =>
-                                p.ensembl_gene_id === geneEntries[0].ensembl_gene_id
+                                p.ensembl_gene_id === req.query.id
                             )
                         });
                     }
-                }
             });
         }
+    });
+
+    // Get the cached list of genes for comparison tool
+    router.get('/genes/comparison', async (req, res, next) => {
+        const model = req.query.model || 'AD Diagnosis (males and females)';
+        let genes = [];
+
+        if (comparisonGenes.hasOwnProperty(model)) {
+            genes = comparisonGenes[model];
+        }
+
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json({ items: genes });
     });
 
     // Get the cached list of nominated targets to populate the table
@@ -641,6 +710,13 @@ connection.once('open', () => {
                     }
                 });
         }
+    });
+
+    router.get('/gene/infos', (req, res, next) => {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', 0);
+        res.json({ items: allGeneInfo });
     });
 
     // Query for all genesInfos that match an array of ENSG - used to populate the Similar Genes table
@@ -1065,6 +1141,49 @@ connection.once('open', () => {
         }
         return noData;
     };
+
+    router.get('/evidence', async (req, res, next) => {
+        if (!req.params || !Object.keys(req.query).length) {
+            res.json({ item: null });
+        } else {
+            // Find all the Genes with the current id
+            await Genes.find({ensembl_gene_id: req.query.id}).lean().sort({ hgnc_symbol: 1, tissue: 1, model: 1 })
+                .exec(async (err, genes) => {
+                if (err) {
+                    next(err);
+                } else {
+                    if (!genes.length) {
+                        res.json({items: []});
+                    } else {
+                        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                        res.setHeader('Pragma', 'no-cache');
+                        res.setHeader('Expires', 0);
+                        res.json({
+                            rnaDifferentialExpression: genes,
+                            rnaCorrelation: getGeneCorrelationData(req.query.id)
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    router.get('/rnadistribution', async (req, res, next) => {
+        await RnaDistribution.find({}).lean().exec(async (err, data) => {
+            if (err) {
+                next(err);
+            } else {
+                if (!data.length) {
+                    res.json(data);
+                } else {
+                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                    res.setHeader('Pragma', 'no-cache');
+                    res.setHeader('Expires', 0);
+                    await res.json(data);
+                }
+            }
+        });
+    });
 
 });
 

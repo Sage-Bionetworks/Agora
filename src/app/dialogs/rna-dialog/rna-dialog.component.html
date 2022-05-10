@@ -6,7 +6,7 @@
                 <div class="row first-content-row">
                     <span>
                         RNA-seq data used for these analyses was generated from over 2100 samples from post-mortem brains of more
-                        than 1100 individuals. In total there are seven distinct brain regions from three human cohort studies:
+                        than 1100 individuals. In total there are nine distinct brain regions from three human cohort studies:
                     </span>
                 </div>
                 <div class="row header-row">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-md-6 col-sm-6 col-6 auto-col">
                         <span>
-                            Dorsolateral Prefrontal Cortex (DLPFC)
+                            Anterior Cingulate Cortex (ACC), Dorsolateral Prefrontal Cortex (DLPFC), Posterior Cingulate Cortex (PCC)
                         </span>
                     </div>
                 </div>
@@ -54,16 +54,18 @@
                 <div class="row last-content-row">
                     <p>
                         RNA-seq data from these studies was processed through a
-                        <span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies?Study=syn9702085')">harmonized computational pipeline</span>&nbsp;
-                        to reveal overall expression levels, measure differential expression between AD cases and controls, and describe the gene coexpression network.
+                        <span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study=syn21241740')">harmonized computational pipeline</span>
+                        to reveal overall expression levels and to measure differential expression between AD cases and controls. The gene coexpression network is based on the
+                        <span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study=syn9702085')">original harmonized computational pipeline</span>.
                     </p>
                 </div>
                 <div class="row last-content-row">
-                    <p>
-                        The data is publicly available through these links:
-                        <span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies?Study=syn9702085')">RNA-seq differential expression summary statistics;</span>&nbsp;
-                        <span class="link auto-width no-bold" (click)="openWindow('https://www.biorxiv.org/content/10.1101/510420v1')">RNA-seq network coexpression analysis</span>.
-                    </p>
+                    <p>The data and methodology is publicly available through these links:</p>
+                    <ul class="link-list">
+                       <li><span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies?Study=syn21241740')">Extended RNA-seq differential expression summary statistics</span></li>
+                      <li><span class="link auto-width no-bold" (click)="openWindow('https://adknowledgeportal.synapse.org/Explore/Studies?Study=syn9702085')">Original RNA-seq differential expression summary statistics</span></li>
+                       <li><span class="link auto-width no-bold" (click)="openWindow('https://www.cell.com/cell-reports/fulltext/S2211-1247(20)30889-5')">RNA-seq network coexpression analysis</span></li>
+                    </ul>
                 </div>
             </div>
         </div>

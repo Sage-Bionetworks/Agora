@@ -24,6 +24,8 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
     name = 'Agora';
     showDevModule: boolean = environment.showDevModule;
+    pageClass = ['page-wrap'];
+    toastClass = ['custom-toast'];
     buParams: any = {
         required: {
             e: -2,
@@ -49,6 +51,16 @@ export class AppComponent implements OnInit {
                 event: 'pageView',
                 url: e.urlAfterRedirects
             });
+
+            const genesRouter = e.urlAfterRedirects.match(/\(genes-router:([^)]+)\)/);
+            const pageClass = 'page-' + (
+                genesRouter && genesRouter.length > 1 && genesRouter[1]
+                ? genesRouter[1].split('/')[0]
+                : e.urlAfterRedirects.split('/')[1]
+            );
+
+            this.pageClass[1] = pageClass;
+            this.toastClass[1] = pageClass;
         });
     }
 

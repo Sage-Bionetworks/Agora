@@ -53,25 +53,14 @@ export class EvidenceMenuComponent implements OnInit, AfterContentChecked {
     ngOnInit() {
         // Populate the tab menu
         this.populateTabMenu();
-
         this.geneInfo = this.geneService.getCurrentInfo();
-
-        this.chartSub = this.chartService.chartsRendered$.subscribe((state: boolean) => {
-            if (state) {
-                this.items[1].disabled = false;
-                this.items[2].disabled = false;
-                this.items[2].disabled = false;
-            }
-        });
     }
 
     populateTabMenu() {
         this.items = [
             { label: 'RNA', disabled: false } as MenuItem,
-            { label: 'Protein', disabled: true } as MenuItem,
-            { label: 'Metabolomics', disabled: true } as MenuItem/*,
-            { label: '', disabled: true} as MenuItem,
-            { label: '', disabled: true} as MenuItem*/
+            { label: 'Protein', disabled: false } as MenuItem,
+            { label: 'Metabolomics', disabled: false } as MenuItem
         ];
     }
 

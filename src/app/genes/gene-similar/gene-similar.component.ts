@@ -45,7 +45,18 @@ export class GeneSimilarComponent implements OnInit {
     gene: Gene;
     geneInfo: GeneInfo;
     msgs: Message[] = [];
-    cols: any[];
+    cols: any[] = [
+        { field: 'hgnc_symbol', header: 'Gene name' },
+        { field: 'nominated_target_display_value', header: 'Nominated Target' },
+        { field: 'isIGAP', header: 'Genetic Association with LOAD'},
+        { field: 'haseqtl', header: 'Brain eQTL' },
+        { field: 'is_any_rna_changed_in_ad_brain_display_value', header: 'RNA Expression Change'},
+        { field: 'is_any_protein_changed_in_ad_brain_display_value', header: 'Protein Expression Change'},
+        { field: 'pharos_class_display_value', header: 'Pharos Class' },
+        { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
+        { field: 'safety_rating_display_value', header: 'Safety Rating' },
+        { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+    ];
     selectedColumns: any[];
     selectedInfo: GeneInfo;
     datasource: GeneInfosResponse;
@@ -66,21 +77,6 @@ export class GeneSimilarComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.cols = [
-            { field: 'hgnc_symbol', header: 'Gene name' },
-            { field: 'brain_regions_display_value', header: 'Brain Regions' },
-            { field: 'num_brain_regions_display_value', header: 'Number of Brain Regions' },
-            { field: 'nominated_target_display_value', header: 'Nominated Target' },
-            { field: 'isIGAP', header: 'Genetic Association with LOAD'},
-            { field: 'haseqtl', header: 'Brain eQTL' },
-            { field: 'is_any_rna_changed_in_ad_brain_display_value', header: 'RNA Expression Change'},
-            { field: 'is_any_protein_changed_in_ad_brain_display_value', header: 'Protein Expression Change'},
-            { field: 'pharos_class_display_value', header: 'Pharos Class' },
-            { field: 'sm_druggability_display_value', header: 'Small Molecule Druggability' },
-            { field: 'safety_rating_display_value', header: 'Safety Rating' },
-            { field: 'ab_modality_display_value', header: 'Antibody Modality' },
-        ];
-
         // Add a position property so we can add/remove at the same position
         this.cols.forEach((col, i) => {
             col.position = i;
@@ -103,8 +99,8 @@ export class GeneSimilarComponent implements OnInit {
 
     getWindowClass(): string {
         return (screenfull && !screenfull.isFullscreen) ?
-            ' pi pi-window-maximize table-icon absolute-icon-left' :
-            ' pi pi-window-minimize table-icon absolute-icon-left';
+            ' pi pi-window-maximize table-icon' :
+            ' pi pi-window-minimize table-icon';
     }
 
     updateVariables() {
@@ -208,13 +204,6 @@ export class GeneSimilarComponent implements OnInit {
                         de.isAnyProteinChangedInADBrain.toString() : 'No data';
                     de.nominated_target_display_value = de.nominations > 0;
 
-                    // Populate MedianExpression display fields
-                    const meArray = (de.medianexpression.length) ?
-                        de.medianexpression.map((me: MedianExpression) => me.tissue) : [];
-                    de.brain_regions_display_value = (meArray.length) ? meArray.filter(this.getUnique)
-                        .sort((a: string, b: string) => a.localeCompare(b)).join(', ') : '';
-                    de.num_brain_regions_display_value = meArray.length.toString();
-
                     // Populate Druggability display fields
                     if (de.druggability && de.druggability.length) {
                         de.pharos_class_display_value = de.druggability[0].pharos_class ?
@@ -240,7 +229,12 @@ export class GeneSimilarComponent implements OnInit {
         }
     }
 
-    reorderValues(event) {
+    onColumnSelectionChange(event) {
+        // Force 'hgnc_symbol' (name) column to be selected
+        if (!this.selectedColumns.find(d => d.field === 'hgnc_symbol')) {
+            this.selectedColumns.unshift(this.cols.find(d => d.field === 'hgnc_symbol'));
+        }
+
         this.selectedColumns.sort((a: any, b: any) => {
             return (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0);
         });
@@ -252,7 +246,7 @@ export class GeneSimilarComponent implements OnInit {
         // The headers row for the csv file
         downloadArray[0] = this.cols.map((c) => c.header).join();
         // List of columns with values containing commas
-        const escapeFields = ['brain_regions_display_value', 'sm_druggability_display_value',
+        const escapeFields = ['sm_druggability_display_value',
             'safety_rating_display_value', 'ab_modality_display_value'];
 
         this.genesInfo.forEach((de: GeneInfo) => {
@@ -371,8 +365,16 @@ export class GeneSimilarComponent implements OnInit {
     customSort(event: SortEvent) {
         event.data.sort((data1, data2) => {
             let result = null;
-            const value1 = data1[event.field];
-            const value2 = data2[event.field];
+            let value1 = null;
+            let value2 = null;
+
+            if ('hgnc_symbol' === event.field) {
+                value1 = data1.hgnc_symbol || data1.ensembl_gene_id;
+                value2 = data2.hgnc_symbol || data2.ensembl_gene_id;
+            } else {
+                value1 = data1[event.field];
+                value2 = data2[event.field];
+            }
 
             if (value1 == null && value2 != null) {
                 result = -1;

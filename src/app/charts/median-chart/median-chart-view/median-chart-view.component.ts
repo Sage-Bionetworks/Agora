@@ -76,7 +76,10 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.geneinfo) {
             return;
         }
-        this.ndx = crossfilter(this.geneinfo.medianexpression);
+        const data = this.geneinfo.medianexpression.filter(
+            d => d.medianlogcpm && d.medianlogcpm > 0 ? true : false
+        );
+        this.ndx = crossfilter(data);
         this.group = this.ndx.groupAll();
         this.dimension = this.ndx.dimension( (d) =>  d.tissue );
         this.tissuecoresGroup = this.dimension.group().reduceSum((d) =>
@@ -126,7 +129,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
         const self = this;
         dc['config'].defaultColors(d3.schemeCategory10);
         this.chart = dc.barChart(this.medianChart.nativeElement)
-            .yAxisLabel('LOG CPM', 20);
+            .yAxisLabel('LOG2 CPM', 20);
         this.chart.margins({
             left: 70,
             right: 10,
@@ -174,7 +177,7 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                     { x: chart.x().range()[1], y: chart.y()(righty) }];
                     const line = d3.line()
                         .x((d: any) =>  d.x)
-                        .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log10(5)) * mult));
+                        .y((d: any) => (Math.abs(chart.y().domain()[1] - Math.log2(5)) * mult));
                     const chartBody = chart.select('g.chart-body');
                     let path = chartBody.selectAll('path.extra').data([extradata]);
                     path = path
@@ -238,25 +241,6 @@ export class MedianChartViewComponent implements OnInit, OnDestroy, AfterViewIni
                         .style('opacity', 0);
                 });
         });
-    }
-
-    getTooltipText(text: string): string {
-        switch (text) {
-            case 'CBE':
-                return 'Cerebellum';
-            case 'DLPFC':
-                return 'Dorsolateral Prefrontal Cortex';
-            case 'FP':
-                return 'Frontal Pole';
-            case 'IFG':
-                return 'Inferior Frontal Gyrus';
-            case 'PHG':
-                return 'Parahippocampal Gyrus';
-            case 'STG':
-                return 'Superior Temporal Gyrus';
-            case 'TCX':
-                return 'Temporal Cortex';
-        }
     }
 
     onResize(event?: any) {

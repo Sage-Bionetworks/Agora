@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
+import { NgModule, ModuleWithProviders, InjectionToken, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -22,6 +22,10 @@ import { ToastModule } from 'primeng/toast';
 import { AccordionModule } from 'primeng/accordion';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService } from 'primeng/api';
 
@@ -37,7 +41,7 @@ import {
     FocusDirective
 } from './directives';
 
-import { AlertService } from './services';
+import { AlertService, ErrorHandlerService, PlotHelperService } from './services';
 
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 
@@ -91,6 +95,11 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         MultiSelectModule,
         ProgressSpinnerModule,
         AccordionModule,
+        ContextMenuModule,
+        InputTextModule,
+        DropdownModule,
+        MenuModule,
+        TooltipModule,
         ContextMenuModule
     ],
     exports: [
@@ -116,6 +125,11 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
         ProgressSpinnerModule,
         AccordionModule,
         ContextMenuModule,
+        InputTextModule,
+        DropdownModule,
+        MenuModule,
+        TooltipModule,
+        ContextMenuModule,
         // Other declarations
         AlertComponent,
         DownloadComponent,
@@ -137,6 +151,7 @@ export class AppSharedModule {
             providers: [
                 AlertService,
                 MessageService,
+                PlotHelperService,
                 {
                     provide: RollbarService,
                     useFactory: rollbarFactory
@@ -145,6 +160,10 @@ export class AppSharedModule {
                     provide: HTTP_INTERCEPTORS,
                     useClass: HttpErrorInterceptor,
                     multi: true
+                },
+                {
+                    provide: ErrorHandler,
+                    useClass: ErrorHandlerService,
                 }
             ]
         };

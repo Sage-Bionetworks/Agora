@@ -287,13 +287,19 @@ p-dialog {
     }
 }
 
-p-multiselectitem {
-    span, .multiselect-option {
-        @include lato-font('normal');
+.ui-multiselect-item {
 
-        font-size: $font-size-x-small;
+    .ui-chkbox {
+        min-width: 18px;
+
+        &, .ui-chkbox-icon {
+            font-size: $font-size-x-small;
+        }
+    }
+
+    span:not(.ui-chkbox-icon), .multiselect-option {
+        @include lato-font('normal');
         line-height: 29px;
-        margin-top: 4px;
     }
 }
 
@@ -396,21 +402,28 @@ p-multiselectitem {
             }
 
             .icon-col {
+                display: flex;
                 height: 100%;
+                justify-content: flex-end;
+                padding-top: 3px;
 
-                p-multiselect {
+                > div {
+                    padding-left: 3px;
+                    padding-right: 3px;
+                }
+
+                .ui-multiselect {
                     width: 100%;
                     color: $background;
+                    position: relative;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
 
-                    p-multiselectitem {
-                        li:hover {
-                            background: $menu-dark !important;
-                            color: $background;
-
-                            .pi-check::before {
-                                color: $background !important;
-                            }
-                        }
+                    .ui-multiselect-label-container,
+                    .ui-multiselect-label-empty {
+                        display: none;
                     }
 
                     .custom-bars {
@@ -440,12 +453,27 @@ p-multiselectitem {
                     }
 
                     .ui-multiselect-trigger {
-                        height: 0px;
+                        position: relative;
+                        top: auto;
+                        right: auto;
+                        bottom: auto;
+                        left: auto;
+                        width: auto;
+                        height: auto;
+                        padding: 0;
+                        transform: translateY(3px);
                     }
 
                     .ui-multiselect-trigger-icon {
+                        position: relative;
+                        display: block;
+                        margin: 0;
                         font-size: 1.5em;
                         color: white;
+                        top: auto;
+                        right: auto;
+                        bottom: auto;
+                        left: auto;
                     }
 
                     .ui-multiselect-item {
@@ -462,19 +490,16 @@ p-multiselectitem {
                         .ui-chkbox-box {
                             line-height: 23px;
                         }
+
+                        &:hover {
+                            background: $menu-dark !important;
+                            color: $background;
+
+                            .pi-check::before {
+                                color: $background !important;
+                            }
+                        }
                     }
-                }
-
-                .absolute-icon {
-                    position: absolute;
-                    top: 16px;
-                    right: 65%;
-                }
-
-                .absolute-icon-left {
-                    position: absolute;
-                    top: 16px;
-                    right: 100%;
                 }
             }
         }
@@ -1391,15 +1416,20 @@ p-multiselectitem {
   @include link
 }
 
+
 .custom-toast {
+    max-width: 960px;
+
     @include respond-to('ex-small') {
         width: 80%;
     }
     @include respond-to('small') {
+        min-width: 480px;
         width: 60%;
     }
     @include respond-to('medium') {
-        width: 50%;
+        min-width: 480px;
+        width: 100%;
     }
 
     .ui-toast-message {
@@ -1410,12 +1440,37 @@ p-multiselectitem {
         font-size: $font-size-x-regular;
     }
 
+    .ui-toast-message-content {
+        padding: 15px;
+    }
+
+    .ui-toast-message-text {
+        padding-left: 8px;
+    }
+
+    .ui-toast-message-text-content {
+        padding: 0;
+    }
+
+    .ui-toast-message-icon {
+        transform: translateY(2px);
+    }
+
+    .ui-toast-icon {
+        left: 15px;
+        top: 12px;
+        font-size: 1.5em;
+    }
+
     .ui-toast-summary {
         @include lato-font('bold');
-
         color: color(text, secondary);
         line-height: normal;
         font-size: $font-size-xx-regular;
+
+        &:empty {
+            display: none;
+        }
     }
 
     .ui-toast-close-icon {
@@ -1423,6 +1478,8 @@ p-multiselectitem {
         font-size: $font-size-xxxx-regular;
         border: none;
         text-decoration: none;
+        top: 14px;
+        right: 15px;
     }
 
     .ui-toast-message-error {
@@ -1431,6 +1488,16 @@ p-multiselectitem {
 
     .ui-toast-message-warn {
         background: #ffe399;
+    }
+
+    .ui-toast-message-info {
+        background: color(secondary);
+
+        .ui-toast-icon,
+        .ui-toast-detail,
+        .ui-toast-close-icon {
+            color: #ffffff;
+        }
     }
 }
 

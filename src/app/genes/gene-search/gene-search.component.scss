@@ -117,14 +117,13 @@
     margin-right: 30px;
 }
 
+.filter-select-error,
 .filter-select-list {
     cursor: pointer;
     padding: 5px 10px;
-    height: 60px;
     color: color(text, secondary);
     line-height: normal;
     font-size: $font-size-regular;
-    color: color(text, secondary);
     padding-left: 4%;
 
     span {
@@ -145,14 +144,17 @@
     _:-ms-lang(x), .fa-star { left: 92%; }
 }
 
+.filter-select-error {
+  margin-top: 0.75em;
+}
+
 .gene-name {
     margin: auto;
     width: 100%;
-    line-height: 50px;
     font-size: $font-size-xx-regular;
 
     .gene-id {
-
+      line-height: 50px;
     }
 
     .gene-ensembl-id {
@@ -162,10 +164,21 @@
     .gene-aliases {
         font-weight: bold;
     }
+
+    .gene-search-error {
+      white-space: normal;
+      word-wrap: break-word;
+      text-align: left;
+      line-height:34px;
+    }
 }
 
 .filter-select-list:hover {
     background: $faded-secondary-background;
+}
+
+.filter-select-error:hover {
+  background: $background;
 }
 
 .list-highlight,

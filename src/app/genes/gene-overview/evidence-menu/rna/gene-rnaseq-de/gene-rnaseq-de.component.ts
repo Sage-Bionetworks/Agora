@@ -58,6 +58,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
     displayBPDia: boolean = false;
     displayBRDia2: boolean = false;
     isEmptyGene: boolean = true;
+    hasMedianExpression: boolean = false;
     isViewReady: boolean = false;
     canFilter: boolean = false;
     chartSubscription: Subscription;
@@ -107,7 +108,6 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.selectedTissues = (index !== -1) ?
                 this.tissues.slice(index, index + 1).map((a) => a.value) :
                 this.tissues.slice(0, 1).map((a) => a.value);
-            this.geneService.setDefaultTissue(this.selectedTissues[0]);
 
             this.selectedModels = this.models.slice(0, 1).map((a) => a.value);
 
@@ -116,6 +116,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
             this.geneService.updateEmptyGeneState();
             this.isEmptyGene = this.geneService.getEmptyGeneState();
+            this.hasMedianExpression = this.geneService.hasMedianExpression();
 
             this.refreshChartsData();
         });

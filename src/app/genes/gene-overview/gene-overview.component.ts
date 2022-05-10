@@ -303,10 +303,9 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         );
                         this.geneService.setInfoDataState(true);
                     }
-                    // Remove hgnc_symbol if missing from info
-                    if (!data.info.hgnc_symbol) {
-                        data.item.hgnc_symbol = '';
-                    }
+
+                    // Ensure that we only use hgnc_symbol from geneInfo
+                    data.item.hgnc_symbol = data.info.hgnc_symbol;
 
                     this.geneService.updatePreviousGene();
                     this.geneService.updateGeneData(data);
@@ -334,12 +333,12 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         this.dataLoaded = true;
                         return;
                     } else {
-                        if (responseList[0].geneModels) {
-                            this.geneService.setGeneModels(responseList[0].geneModels);
-                        }
-                        if (responseList[0].geneTissues) {
-                            this.geneService.setGeneTissues(responseList[0].geneTissues);
-                        }
+                        // if (responseList[0].geneModels) {
+                        //     this.geneService.setGeneModels(responseList[0].geneModels);
+                        // }
+                        // if (responseList[0].geneTissues) {
+                        //     this.geneService.setGeneTissues(responseList[0].geneTissues);
+                        // }
                         if (responseList[0].geneProteomics) {
                             this.geneService.setGeneProteomics(responseList[0].geneProteomics
                                 .sort((a: Proteomics, b: Proteomics) => {
@@ -357,8 +356,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                                 })
                             );
                         }
+
                         this.dataService.loadGenes(responseList[0]);
                         this.forceService.processSelectedNode(responseList[1], this.gene);
+                        this.dataService.setEvidenceData(responseList[2]);
                     }
                 }, (error) => {
                     console.error('Error loading the data!');
@@ -373,6 +374,13 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 this.setActiveItem();
                 this.dataLoaded = true;
             }
+
+            this.apiService.getRnaDistributionData().subscribe((data) => {
+                this.dataService.setRnaDistributionData(data);
+            }, (error) => {
+                console.log('Error loading RNA distribution data!');
+            });
+
         } else {
             this.geneService.setGeneTissues([]);
             this.geneService.setGeneModels([]);
