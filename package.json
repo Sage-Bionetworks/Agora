@@ -279,7 +279,7 @@
     "url": "https://github.com/Sage-Bionetworks/Agora/issues"
   },
   "engines": {
-    "node": "12.22.3",
+    "node": "16.14.2",
     "npm": "6.14.13"
   },
   "browserslist": [
