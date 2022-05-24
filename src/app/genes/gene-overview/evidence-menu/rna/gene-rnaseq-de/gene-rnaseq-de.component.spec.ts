@@ -71,6 +71,7 @@ describe('Component: GeneRNASeqDE', () => {
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
+        dataService = fixture.debugElement.injector.get(DataService);
         chartService = fixture.debugElement.injector.get(ChartService);
         location = fixture.debugElement.injector.get(SpyLocation);
 
