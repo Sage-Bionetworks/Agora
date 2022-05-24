@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation, ViewChild, Input, OnInit} from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, Input, OnInit } from '@angular/core';
 
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/api';

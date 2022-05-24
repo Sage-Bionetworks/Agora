@@ -46,7 +46,7 @@ import { AlertService, ErrorHandlerService, PlotHelperService } from './services
 import { NumbersPipe, ArraySortPipe, OrderBy } from './pipes';
 
 import * as Rollbar from 'rollbar';
-import {RadioButtonModule} from "primeng";
+import { RadioButtonModule } from 'primeng';
 
 const rollbarConfig = {
     accessToken: 'e788198867474855a996485580b08d03',
