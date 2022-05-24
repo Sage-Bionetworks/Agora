@@ -182,16 +182,10 @@ export class ApiService {
         return this.http.get('/api/metabolomics', { headers, params });
     }
 
-    refreshChartsData(filter: any, id: string, type: string = 'RNA'): Observable<any> {
+    refreshChartsData(filter: any, id: string): Observable<any> {
         const headers = new HttpHeaders(defaultHeaders);
-
-        const params = new HttpParams().set(
-            'id', id
-        );
-
-        let baseUrl = '/api/refresh' + ((type === 'Proteomics') ? 'p' : '');
-        baseUrl += ((filter) ? '?filter=' + JSON.stringify(filter) : '');
-
+        const params = new HttpParams().set('id', id);
+        const baseUrl = '/api/refreshp' + ((filter) ? '?filter=' + JSON.stringify(filter) : '');
         return this.http.get(baseUrl, { headers, params });
     }
 

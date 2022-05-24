@@ -14,7 +14,8 @@ import {
     ApiServiceStub,
     RouterStub,
     ChartServiceStub,
-    GeneServiceStub
+    GeneServiceStub,
+    DataServiceStub
 } from '../../../../../testing';
 
 import { GeneRNASeqDEComponent } from './gene-rnaseq-de.component';
@@ -23,7 +24,8 @@ import { MoreInfoComponent } from 'app/dialogs/more-info';
 
 import {
     ApiService,
-    GeneService
+    GeneService,
+    DataService
 } from '../../../../../core/services';
 
 import { ChartService } from '../../../../../charts/services';
@@ -39,6 +41,7 @@ describe('Component: GeneRNASeqDE', () => {
     let apiService: ApiServiceStub;
     let chartService: ChartServiceStub;
     let geneService: GeneServiceStub;
+    let dataService: DataServiceStub;
     let location: SpyLocation;
 
     beforeEach(async(() => {
@@ -55,6 +58,7 @@ describe('Component: GeneRNASeqDE', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
                 { provide: SpyLocation, useValue: new SpyLocation() }
             ]
@@ -125,18 +129,6 @@ describe('Component: GeneRNASeqDE', () => {
         const aEl = fixture.debugElement.queryAll(By.css('more-info'));
         expect(aEl.length).toEqual(2);
     });
-
-    it('should refresh the charts data', fakeAsync(() => {
-        const rcdSpy = spyOn(component, 'refreshChartsData').and.callThrough();
-        component.dataLoaded = false;
-        component.refreshChartsData();
-
-        tick();
-        fixture.detectChanges();
-        expect(rcdSpy.calls.any()).toEqual(true);
-        expect(chartService.filteredData).not.toEqual(null);
-        expect(component.dataLoaded).toEqual(true);
-    }));
 
     it('should get the dropdown icon string', () => {
         const gdiSpy = spyOn(component, 'getDropdownIcon').and.callThrough();
