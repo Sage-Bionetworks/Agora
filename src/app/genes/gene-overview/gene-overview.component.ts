@@ -174,7 +174,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     updateVars() {
         // Small size
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 1024) {
             this.showMobileMenu = true;
             this.showDesktopMenu = false;
         } else {
