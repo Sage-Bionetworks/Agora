@@ -56,43 +56,28 @@
         font-size: $font-size-x-regular;
     }
 
-    p-checkbox {
+    p-radioButton {
         @include lato-font('normal');
 
         line-height: normal;
         font-size: $font-size-regular;
-        height: 32px;
         color: color(text, secondary);
-
     }
 
-    .ui-chkbox {
-        margin-right: 17px;
-    }
+  .ui-radiobutton-box {
+    width: 16px;
+    height: 16px;
+  }
 
-    .ui-chkbox-box {
-        background: $quinary-background;
-        border: 2px solid $green-border-color;
-        box-sizing: border-box;
-        border-radius: 6px;
-        width: 32px;
-        height: 32px;
-        margin-bottom: 5px;
-    }
-
-    .ui-chkbox-icon {
-        color: $background;
-        margin-top: 4px;
-
-        span {
-            height: 100%;
-
-            .pi-check:before {
-                font-size: $font-size-xx-regular-odd;
-                content: url("/assets/icon/checked_icon.png") !important;
-            }
-        }
-    }
+  .ui-radiobutton-icon {
+    border: 2px solid #EEEEEE;
+    color: #5BB0B5;
+    border-radius: 50%;
+    line-height: normal;
+    left: 0;
+    width: 20px;
+    height: 20px;
+  }
 
     .download-img {
         cursor: pointer;

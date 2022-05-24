@@ -38,6 +38,8 @@
     <h3 *ngIf="dataLoaded && !isEmptyGene">
         Levels of {{metabolomics.metabolite_full_name}} by Disease Status
         <span class="icon-spacing"></span>
+        <span class="icon-spacing"></span>
+        <download [target]="stbp" [name]="getDownloadFileName('Metabolomics')"></download>
     </h3>
     <h3 *ngIf="dataLoaded && isEmptyGene">
         Levels of Metabolite by Disease Status
@@ -48,7 +50,7 @@
             <p *ngIf="!isEmptyGene" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
                 individuals (CN). This comparison {{getSignificantText(metabolomics.ad_diagnosis_p_value[0])}}
-                signficantly different with a p-value of {{dataService.getSignificantFigures(metabolomics.ad_diagnosis_p_value[0], 2)}}.
+                significantly different with a p-value of {{dataService.getSignificantFigures(metabolomics.ad_diagnosis_p_value[0], 2)}}.
             </p>
             <p *ngIf="isEmptyGene" class="black-paragraph de-paragraph">
                 This plot shows differences in metabolite levels in AD cases and controls.
