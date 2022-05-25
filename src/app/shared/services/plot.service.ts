@@ -516,13 +516,13 @@ export class PlotHelperService {
 
         _chart.yAxisMin = function() {
             const padding = _yRangePadding * yAxisRangeRatio();
-            const min = parseInt(d3.min(_chart.data(), function(g) { return g['min']; }), 10) - 1;
+            const min = parseInt(d3.min(_chart.data(), function(g) { return g['axis_min'] || g['min']; }), 10) - 1;
             return dc.utils.subtract(min - padding, _chart.yAxisPadding());
         };
 
         _chart.yAxisMax = function() {
             const padding = _yRangePadding * yAxisRangeRatio();
-            const max = parseInt(d3.max(_chart.data(), function(g) { return g['max']; }), 10) + 1;
+            const max = parseInt(d3.max(_chart.data(), function(g) { return g['axis_max'] || g['max']; }), 10) + 1;
             return dc.utils.add(max + padding, _chart.yAxisPadding());
         };
 

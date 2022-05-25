@@ -184,12 +184,19 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                         return d.tissue === gene.tissue;
                     });
 
-                    if (data) {
-                        data['key'] = data['tissue'];
-                        data['value'] = [data['min'], data['median'], data['max']];
-                    }
+                    return {
+                        'key'               : gene.tissue,
+                        'value'             : [data['min'], data['median'], data['max']],
 
-                    return data;
+                        'min'               : data['min'],
+                        'first_quartile'    : data['first_quartile'],
+                        'median'            : data['median'],
+                        'third_quartile'    : data['third_quartile'],
+                        'max'               : data['max'],
+
+                        'axis_min'          : gene.logfc < data['min'] ? gene.logfc : data['min'],
+                        'axis_max'          : gene.logfc > data['max'] ? gene.logfc : data['max']
+                    }
                 });
             },
             order() {
