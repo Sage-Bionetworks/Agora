@@ -191,8 +191,7 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
             const chartInst = dc.rowChart(self.rowChart.nativeElement)
                 .gap(4)
                 .title(function(d) {
-                    return 'Log Fold Change: ' +
-                        self.dataService.getSignificantFigures(+d.value.logfc);
+                    return 'Log Fold Change: ' + d.value.logfc;
                 })
                 .valueAccessor((d) => {
                     return self.dataService.getSignificantFigures(+d.value.logfc);
