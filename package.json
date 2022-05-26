@@ -77,7 +77,7 @@
     "server:staging": "cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
     "server:wds": "npm run webpack-dev-server -- --config config/webpack.server.js --open --progress --profile --watch --content-base src/",
     "server:createindexes": "mongo --host localhost ./src/server/test/manual/createIndexes.js",
-    "start": "node --max_old_space_size=4096  ./dist/server.js",
+    "start": "node --max_old_space_size=2000  ./dist/server.js",
     "start:mongo": "sh start-mongo.sh '/var/lib/mongodb/'",
     "start:mongo:windows": "sh start-mongo.sh 'C:\\data\\db'",
     "start:prod": "npm run watch:server:prod",
@@ -279,8 +279,8 @@
     "url": "https://github.com/Sage-Bionetworks/Agora/issues"
   },
   "engines": {
-    "node": "16.14.2",
-    "npm": "8.10.0"
+    "node": "12.22.3",
+    "npm": "6.14.13"
   },
   "browserslist": [
     "iOS >= 7",
