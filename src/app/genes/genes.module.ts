@@ -17,7 +17,6 @@ import {
 import { NominatedFormComponent } from './nominated-form';
 import { GeneSearchComponent } from './gene-search';
 import { GeneOverviewModule } from './gene-overview';
-import { GeneBRComponent } from './gene-brainregions';
 import { GeneSimilarComponent } from './gene-similar';
 
 @NgModule({
@@ -31,7 +30,6 @@ import { GeneSimilarComponent } from './gene-similar';
         GeneComparisonToolComponent,
         NominatedFormComponent,
         GeneSearchComponent,
-        GeneBRComponent,
         GeneSimilarComponent
     ],
     imports: [
