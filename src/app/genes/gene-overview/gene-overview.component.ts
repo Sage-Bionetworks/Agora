@@ -471,10 +471,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         }
     }
 
-    viewSynapseReg() {
-        this.navService.goToRoute('/synapse-account');
-    }
-
     getAlias(): string {
         if (this.geneInfo.alias && this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
