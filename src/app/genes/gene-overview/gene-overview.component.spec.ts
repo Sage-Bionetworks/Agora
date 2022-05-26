@@ -206,22 +206,28 @@ describe('Component: GeneOverview', () => {
         expect(navService.getOvMenuTabIndex()).toEqual(0);
 
         component.menu.activeItem = null;
-        component.activateMenu({target: {textContent: 'SUMMARY'}});
-        expect(component.activeItem).toEqual({label: 'SUMMARY'});
-        expect(component.activeItem.label).toEqual('SUMMARY');
-        expect(navService.getOvMenuTabIndex()).toEqual(1);
-
-        component.menu.activeItem = null;
         component.activateMenu({target: {textContent: 'EVIDENCE'}});
         expect(component.activeItem).toEqual({label: 'EVIDENCE'});
         expect(component.activeItem.label).toEqual('EVIDENCE');
-        expect(navService.getOvMenuTabIndex()).toEqual(2);
+        expect(navService.getOvMenuTabIndex()).toEqual(1);
 
         component.menu.activeItem = null;
         component.activateMenu({target: {textContent: 'RESOURCES'}});
         expect(component.activeItem).toEqual({label: 'RESOURCES'});
         expect(component.activeItem.label).toEqual('RESOURCES');
+        expect(navService.getOvMenuTabIndex()).toEqual(2);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'NOMINATION DETAILS'}});
+        expect(component.activeItem).toEqual({label: 'NOMINATION DETAILS'});
+        expect(component.activeItem.label).toEqual('NOMINATION DETAILS');
         expect(navService.getOvMenuTabIndex()).toEqual(3);
+
+        component.menu.activeItem = null;
+        component.activateMenu({target: {textContent: 'EXPERIMENTAL VALIDATION'}});
+        expect(component.activeItem).toEqual({label: 'EXPERIMENTAL VALIDATION'});
+        expect(component.activeItem.label).toEqual('EXPERIMENTAL VALIDATION');
+        expect(navService.getOvMenuTabIndex()).toEqual(4);
 
         component.menu.activeItem = null;
         component.activateMenu({target: {textContent: 'TEST'}});
