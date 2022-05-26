@@ -267,7 +267,7 @@ describe('Component: GeneOverview', () => {
     it('update the menu variables depending on window size', fakeAsync(() => {
         component.showDesktopMenu = true;
         component.showMobileMenu = false;
-        let width = 800;
+        let width = 1024;
         const rSpy = spyOn(component, 'updateVars').and.callThrough();
         const wSpy = spyOnProperty(window, 'innerWidth').and.returnValue(width);
 
