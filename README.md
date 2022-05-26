@@ -444,9 +444,9 @@ by the CI system.
 2. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). 
 3. If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
 4. Deploy your changes in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to dev branch. 
-5. Verify new data is in the database in the dev environment. 
-6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deploy the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
-7. Check the app in the dev environment to ensure that the new data shows up, and that the expected data version is displayed in the footer. 
+5. Verify new data is in the database for the dev branch. 
+6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deployment the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
+7. Check new data shows up on [Agora's dev branch](https://agora-develop.ampadportal.org/genes). 
 8. Once verified, repeat step 4 to 7 to finish deployment to staging and production branches. 
 
 
