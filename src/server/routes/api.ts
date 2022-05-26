@@ -184,9 +184,9 @@ connection.once('open', async () => {
         await allGenes.forEach((g) => {
             const geneInfo = geneInfos.get(g.ensembl_gene_id);
             // Separate the columns we need
-            g.logfc = getSignificantFigures(+g.logfc);
-            g.fc = getSignificantFigures(+g.fc);
-            g.adj_p_val = getSignificantFigures(+g.adj_p_val);
+            g.logfc = g.logfc;
+            g.fc = g.fc;
+            g.adj_p_val = g.adj_p_val;
 
             switch (g.model) {
                 case 'AD Diagnosis (males and females)':
