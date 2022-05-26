@@ -42,6 +42,7 @@ export class GenesListComponent implements OnInit {
         { field: 'ab_modality_display_value', header: 'Antibody Modality' },
         { field: 'validation_study_details_display_value', header: 'Experimental Validation' },
     ];
+    optionalCols: any[] = this.cols.filter((col) => { return col.field !== 'hgnc_symbol' });
     selectedColumns: any[];
     loading: boolean = true;
     noValue = 'No value';
