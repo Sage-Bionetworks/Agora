@@ -69,15 +69,15 @@
         transition: $transition-duration;
 
         .ui-radiobutton-icon {
-            display: flex !important;
+            display: flex;
             width: 100%;
             height: 100%;
             align-items: center;
             justify-content: center;
             transition: $transition-duration;
-            top: 0 !important;
-            left: 0 !important;
-            margin: 0 !important;
+            top: 0;
+            left: 0;
+            margin: 0;
 
             &:before {
                 display: block;
@@ -87,13 +87,11 @@
         }
 
         &.ui-state-focus {
-            // background-color: transparent !important;
-            border-color: color(primary) !important;
+            border-color: color(primary);
         }
 
         &.ui-state-active {
-            //background-color: color(primary) !important;
-            border-color: color(primary) !important;
+            border-color: color(primary);
 
             .ui-radiobutton-icon {
                 color: color(primary);
@@ -116,7 +114,7 @@
 
 .progress-dialog {
     .ui-dialog-titlebar {
-        display: none !important;
+        display: none;
     }
 
     height: 30%;
