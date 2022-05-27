@@ -199,7 +199,9 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                             axis_max          : gene.logfc > data.max ? gene.logfc : data.max
                         };
                     }
-                }).filter(gene => gene ? true : false);
+
+                    return null;
+                }).filter(gene => gene !== null);
             },
             order() {
                 //
