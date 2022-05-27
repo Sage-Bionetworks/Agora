@@ -179,25 +179,27 @@ export class BoxPlotViewComponent implements OnInit, OnDestroy, AfterViewInit {
                     return data.model === self.geneService.getCurrentModel();
                 });
 
-                return currentGenes.map((gene) => {
+                return currentGenes.map(gene => {
                     const data = distributionData.find((d) => {
                         return d.tissue === gene.tissue;
                     });
 
-                    return {
-                        key               : gene.tissue,
-                        value             : [data['min'], data['median'], data['max']],
+                    if (data) {
+                        return {
+                            key               : gene.tissue,
+                            value             : [data.min, data.median, data.max],
 
-                        min               : data['min'],
-                        first_quartile    : data['first_quartile'],
-                        median            : data['median'],
-                        third_quartile    : data['third_quartile'],
-                        max               : data['max'],
+                            min               : data.min,
+                            first_quartile    : data.first_quartile,
+                            median            : data.median,
+                            third_quartile    : data.third_quartile,
+                            max               : data.max,
 
-                        axis_min          : gene.logfc < data['min'] ? gene.logfc : data['min'],
-                        axis_max          : gene.logfc > data['max'] ? gene.logfc : data['max']
-                    };
-                });
+                            axis_min          : gene.logfc < data.min ? gene.logfc : data.min,
+                            axis_max          : gene.logfc > data.max ? gene.logfc : data.max
+                        };
+                    }
+                }).filter(gene => gene ? true : false);
             },
             order() {
                 //
