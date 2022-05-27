@@ -393,12 +393,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                 const options = self.menuSelection.selectAll('option');
                 options['_groups'][0][e.target['index']]['selected'] = 'selected';
 
-                // Regenerate the groups inside this option callback
-                const cPromise = new Promise(async (resolve, reject) => {
-                    if (self.type === 'RNA') {
-                        self.isActive = true;
-                        resolve(true);
-                    } else if (self.type === 'Proteomics') {
+                if (self.type === 'RNA') {
+                    self.menuSelection.dispatch('change');
+                } else if (self.type === 'Proteomics') {
+                    // Regenerate the groups inside this option callback
+                    const cPromise = new Promise(async (resolve, reject) => {
                         self.chartService.pQueryFilter.spGroup = c.innerHTML;
                         self.isActive = false;
 
@@ -411,11 +410,11 @@ export class SelectMenuViewComponent implements OnInit, OnDestroy {
                             self.isActive = true;
                             resolve(true);
                         });
-                    }
-                });
-                cPromise.then(() => {
-                    self.menuSelection.dispatch('change');
-                });
+                    });
+                    cPromise.then(() => {
+                        self.menuSelection.dispatch('change');
+                    });
+                }
 
                 // When an item is clicked, update the original select box,
                 // and the selected item
