@@ -216,4 +216,8 @@ export class GeneServiceStub {
         const info = this.getCurrentInfo();
         return info && info.medianexpression && info.medianexpression.length > 0 ? true : false;
     }
+
+    filterGeneTableOptionalColumns(columns) {
+        return columns.filter(col => col.field !== 'hgnc_symbol');
+    }
 }
