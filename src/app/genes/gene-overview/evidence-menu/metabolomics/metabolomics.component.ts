@@ -58,4 +58,9 @@ export class MetabolomicsComponent implements OnInit {
     getSignificantFigures(threshold: number, figures: number): number {
         return this.dataService.getSignificantFigures(threshold, figures);
     }
+
+    getDownloadFileName(suffix: string): string {
+        return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
+            '_' + suffix + '_' + this.metabolomics.metabolite_full_name;
+    }
 }

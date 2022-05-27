@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild, Input } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, Input, OnInit } from '@angular/core';
 
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/api';
@@ -13,23 +13,29 @@ import { saveAs } from 'file-saver';
     providers: [ MessageService ],
     encapsulation: ViewEncapsulation.None
 })
-export class DownloadComponent {
+export class DownloadComponent implements OnInit {
     @Input() target: HTMLElement;
     @Input() name: string = 'example';
     @ViewChild('op', {static: false}) overlayPanel: OverlayPanel;
-    selectedTypes: string[] = ['png'];
+    selectedType: any = null;
     types: any[] = [
         {
-            value: 'png',
+            value: '.png',
             label: 'PNG'
+        },
+        {
+            value: '.jpeg',
+            label: 'JPEG'
         }
     ];
     displayDialog: boolean = false;
 
     private resizeTimer;
 
-    constructor(private messageService: MessageService) {
-        //
+    constructor(private messageService: MessageService) {}
+
+    ngOnInit() {
+        this.selectedType = this.types[0].value;
     }
 
     hide() {
@@ -47,7 +53,7 @@ export class DownloadComponent {
                 this.displayDialog = true;
                 domtoimage.toBlob(this.target, { bgcolor: '#FFFFFF' }).then((blob) => {
                     this.displayDialog = false;
-                    saveAs(blob, this.name + '.png');
+                    saveAs(blob, this.name + this.selectedType);
                 });
             } else {
                 this.messageService.clear();
@@ -55,7 +61,7 @@ export class DownloadComponent {
                     severity: 'warn',
                     sticky: true,
                     summary: 'Could not start download.',
-                    detail: 'Widget to be downloaded not found!'
+                    detail: 'Plot to be downloaded not found!'
                 });
             }
         } else {
@@ -67,6 +73,10 @@ export class DownloadComponent {
                 detail: 'Your browser version is not supported, please update it.'
             });
         }
+    }
+
+    setType(selectedType: string) {
+        this.selectedType = selectedType;
     }
 
     onRotate() {

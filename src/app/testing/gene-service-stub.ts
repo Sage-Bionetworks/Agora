@@ -31,6 +31,7 @@ export class GeneServiceStub {
     currentTissue: string;
     geneTissues: string[] = [];
     currentModel: string;
+    currentProtein: string = '';
     geneModels: string[] = [];
     models: string[] = [];
     tissues: string[] = [];
@@ -112,6 +113,14 @@ export class GeneServiceStub {
 
     getCurrentModel(): string {
         return this.currentModel;
+    }
+
+    setCurrentProtein(protein: string) {
+        this.currentProtein = protein;
+    }
+
+    getCurrentProtein(): string {
+        return this.currentProtein;
     }
 
     setCurrentTissue(tissue: string) {

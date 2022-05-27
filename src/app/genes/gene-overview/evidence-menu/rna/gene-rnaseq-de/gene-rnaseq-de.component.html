@@ -4,6 +4,7 @@
             Overall Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} Across Brain Regions
             <span class="icon-spacing"></span>
             <span class="icon-spacing"></span>
+            <download [target]="stme" [name]="getDownloadFileName('RNA_Overall_Expression')"></download>
         </h3>
         <p class="black-paragraph">
             This plot depicts the median expression of the selected gene across brain regions,
@@ -60,6 +61,7 @@
         <h3>
             Differential Expression of {{gene.hgnc_symbol || gene.ensembl_gene_id}} Across Brain Regions
             <span class="icon-spacing"></span>
+            <download [target]="stbp" [name]="getDownloadFileName('RNA_Differential_Expression', true)"></download>
         </h3>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-12 col-fixer">
@@ -87,6 +89,7 @@
         <h3>
             Consistency of Change in Expression
             <span class="icon-spacing"></span>
+            <download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('RNA_Consistency_of_Change_in_Expression', true)"></download>
         </h3>
         <p class="black-paragraph">
             This forest plot indicates the estimate of the log fold change with standard errors
@@ -109,6 +112,7 @@
         <h3>
             Correlation of {{gene.hgnc_symbol || gene.ensembl_gene_id}} with Hallmarks of AD
             <span class="icon-spacing"></span>
+            <download *ngIf="!isEmptyGene" [target]="stfp" [name]="getDownloadFileName('RNA_Correlation_with_AD')"></download>
         </h3>
         <h2 class="vmi-wrapper">
             <more-info [name]="'cc'">
