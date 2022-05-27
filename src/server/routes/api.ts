@@ -1056,15 +1056,15 @@ connection.once('open', async () => {
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
-                        let models = {};
+                        const models = {};
 
                         // Filter out possible duplicates
                         genes = genes.filter(gene => {
-                            const model = gene['model']
-                            const tissue = gene['tissue']
+                            const model = gene['model'];
+                            const tissue = gene['tissue'];
 
                             if (!models.hasOwnProperty(model)) {
-                                models[model] = []
+                                models[model] = [];
                             }
 
                             if (!models[model].includes(tissue)) {
