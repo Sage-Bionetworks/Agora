@@ -143,7 +143,24 @@ export class RowChartViewComponent implements OnInit, OnDestroy, AfterViewInit,
         };
         this.group = {
             all() {
-                return self.chartService.filteredData['fpGroup'].values;
+                const data = [];
+                const evidenceData = self.dataService.getEvidenceData();
+                const currentModel = self.geneService.getCurrentModel() || self.geneService.getDefaultModel();
+
+                evidenceData.rnaDifferentialExpression.forEach(item => {
+                    if (item.model === currentModel) {
+                        data.push({
+                            key     : [item.tissue, item.ensembl_gene_id, item.model],
+                            value   : {
+                                adj_p_val   : item.adj_p_val,
+                                fc          : item.fc,
+                                logfc       : item.logfc
+                            }
+                        });
+                    }
+                });
+
+                return data;
             },
             order() {
                 //

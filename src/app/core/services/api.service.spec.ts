@@ -174,19 +174,4 @@ describe('Service: Api: TestBed', () => {
         expect(req.request.method).toBe('GET');
         req.flush(res);
     });
-
-    it('should trigger a refresh for the charts on the server', () => {
-        const res: string[] = mockModels;
-
-        apiService.refreshChartsData('AD Diagnosis (males and females)', 'ENSG00000128564').subscribe(
-            (response) => {
-            expect(response).toEqual(res);
-        });
-
-        const req = httpMock.expectOne(
-            '/api/refresh?filter=' + JSON.stringify('AD Diagnosis (males and females)') + '&id=ENSG00000128564'
-        );
-        expect(req.request.method).toBe('GET');
-        req.flush(res);
-    });
 });
