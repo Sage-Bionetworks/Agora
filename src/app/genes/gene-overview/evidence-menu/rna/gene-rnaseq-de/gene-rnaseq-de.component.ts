@@ -167,7 +167,8 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         });
     }
 
-    getDownloadFileName(suffix: string): string {
+    getDownloadFileName(suffix: string, includeModel: boolean = false): string {
+        const model = includeModel ? ('_' + this.geneService.getCurrentModel()) : '';
         return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
         '_' + suffix + model;
     }
