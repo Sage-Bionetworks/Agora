@@ -57,6 +57,7 @@ export class GeneSimilarComponent implements OnInit {
         { field: 'safety_rating_display_value', header: 'Safety Rating' },
         { field: 'ab_modality_display_value', header: 'Antibody Modality' },
     ];
+    optionalCols: any[] = this.geneService.filterGeneTableOptionalColumns(this.cols);
     selectedColumns: any[];
     selectedInfo: GeneInfo;
     datasource: GeneInfosResponse;

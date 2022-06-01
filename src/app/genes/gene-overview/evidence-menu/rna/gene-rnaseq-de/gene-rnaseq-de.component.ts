@@ -169,7 +169,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
 
     getDownloadFileName(suffix: string): string {
         return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
-        ' ' + suffix + '_' + this.geneService.getCurrentModel();
+        '_' + suffix + model;
     }
 
     registerBoxPlot(

@@ -1986,3 +1986,30 @@ g.textGroup text {
     max-height: 450px;
 }
 
+
+.ui-button {
+    box-shadow: none;
+    user-select: none;
+    transition: $transition-duration;
+
+    .ui-button-text {
+        @include lato-font('bold');
+        padding: 15px 30px;
+        color: #000000;
+        font-size: $font-size-regular;
+    }
+}
+
+.ui-button-warning {
+    background-color: color('actionSecondary');
+    border: 1px solid color('actionSecondary');
+
+    &:hover {
+        background-color: darken(color('actionSecondary'), 4%);
+        border: 1px solid darken(color('actionSecondary'), 4%);
+    }
+}
+
+.ui-button-rounded {
+    border-radius: 40px;
+}

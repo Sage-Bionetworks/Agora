@@ -31,6 +31,7 @@ export class GeneServiceStub {
     currentTissue: string;
     geneTissues: string[] = [];
     currentModel: string;
+    currentProtein: string = '';
     geneModels: string[] = [];
     models: string[] = [];
     tissues: string[] = [];
@@ -112,6 +113,14 @@ export class GeneServiceStub {
 
     getCurrentModel(): string {
         return this.currentModel;
+    }
+
+    setCurrentProtein(protein: string) {
+        this.currentProtein = protein;
+    }
+
+    getCurrentProtein(): string {
+        return this.currentProtein;
     }
 
     setCurrentTissue(tissue: string) {
@@ -215,5 +224,9 @@ export class GeneServiceStub {
     hasMedianExpression(): boolean  {
         const info = this.getCurrentInfo();
         return info && info.medianexpression && info.medianexpression.length > 0 ? true : false;
+    }
+
+    filterGeneTableOptionalColumns(columns): any[] {
+        return columns.filter(col => col.field !== 'hgnc_symbol');
     }
 }

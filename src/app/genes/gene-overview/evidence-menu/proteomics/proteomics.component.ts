@@ -70,6 +70,11 @@ export class ProteomicsComponent implements OnInit {
         });
     }
 
+    getDownloadFileName(suffix: string): string {
+        return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
+            '_' + suffix + '_' + this.geneService.getCurrentProtein();
+    }
+
     registerCharts(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.chartService.addChartInfo(
