@@ -48,10 +48,8 @@
             <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{ntInfoArray[i].initial_nomination}}
             </p>
-            <h4>
-                <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">
-                    Learn more about the target nomination process
-                </span>
+            <h4 *ngIf="ntInfoArray[i].data_synapseid">
+                <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">Learn more about the target nomination process</span>
             </h4>
             <h1 *ngIf="i<teams.length-1" class="inner-section-divider"></h1>
         </div>
