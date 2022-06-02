@@ -34,12 +34,14 @@
             <p class="black-paragraph col-8 section-desc">
                 {{ntInfoArray[i].predicted_therapeutic_direction}}
             </p>
-            <h4>
-                The type of data used and analyses done to identify target
-            </h4>
-            <p class="black-paragraph col-8 section-desc">
-                {{ntInfoArray[i].data_used_to_support_target_selection}}
-            </p>
+            <div *ngIf="ntInfoArray[i].data_used_to_support_target_selection">
+                <h4>
+                    The type of data used and analyses done to identify target
+                </h4>
+                <p class="black-paragraph col-8 section-desc">
+                    {{ntInfoArray[i].data_used_to_support_target_selection}}
+                </p>
+            </div>
             <h4>
                 Initial date of nomination
             </h4>
