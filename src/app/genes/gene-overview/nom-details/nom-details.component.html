@@ -34,22 +34,22 @@
             <p class="black-paragraph col-8 section-desc">
                 {{ntInfoArray[i].predicted_therapeutic_direction}}
             </p>
-            <div *ngIf="ntInfoArray[i].data_used_to_support_target_selection">
                 <h4>
                     The type of data used and analyses done to identify target
                 </h4>
                 <p class="black-paragraph col-8 section-desc">
                     {{ntInfoArray[i].data_used_to_support_target_selection}}
                 </p>
-            </div>
             <h4>
                 Initial date of nomination
             </h4>
             <p class="black-paragraph custom-paragraph col-8 no-padding">
                 {{ntInfoArray[i].initial_nomination}}
             </p>
-            <h4 *ngIf="ntInfoArray[i].data_synapseid">
-                <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">Learn more about the target nomination process</span>
+            <h4>
+                <span class="link-heading custom-heading" (click)="this.viewNomProcess(i)">
+                    Learn more about the target nomination process
+                </span>
             </h4>
             <h1 *ngIf="i<teams.length-1" class="inner-section-divider"></h1>
         </div>
