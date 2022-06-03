@@ -98,7 +98,7 @@ export class SOEComponent implements OnInit {
                     title: 'Brain eQTL',
                     description:
                         'Indicates whether or not this gene locus has a significant expression Quantitative Trait Locus (eQTL) based on an',
-                    link: 'https://doi.org/10.1101/638544',
+                    link: 'https://www.nature.com/articles/s41597-020-00642-8',
                     anchorText: 'AMP-AD consortium study',
                 },
                 state:

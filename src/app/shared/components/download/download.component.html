@@ -1,11 +1,11 @@
 <img class="download-img" src="/assets/icon/download.svg" (click)="op.toggle($event)">
 <p-overlayPanel [styleClass]="'download-op'" #op (rotate)="onRotate()" (window:resize)="onResize()">
-    <h3>Download as</h3>
-    <div *ngFor="let type of types" class="col-md-12 col-sm-12 col-12 chkbox-col">
-        <p-checkbox name="group1" value="{{type.value}}" label="{{type.label}}" [(ngModel)]="selectedTypes"></p-checkbox>
+    <h3>Download this plot as:</h3>
+    <div *ngFor="let type of types" class="col-12 chkbox-col">
+        <p-radioButton name="group1"  value="{{type.value}}" label="{{type.label}}" [(ngModel)]="selectedType"></p-radioButton>
     </div>
-    <div class="col-md-12 col-sm-12 col-12 button-col">
-        <img class="download-img" src="/assets/img/download-button.svg" (click)="downloadWidget()">
+    <div class="col-12 button-col">
+        <button pButton type="button" label="Download" class="ui-button-rounded ui-button-warning" (click)="downloadWidget()"></button>
     </div>
 </p-overlayPanel>
 <p-dialog header=""

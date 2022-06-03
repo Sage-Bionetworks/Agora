@@ -71,10 +71,10 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     resizeTimer;
     mobileOpen: boolean = true;
     tabMenuLabels = {
-        NOMINATION_DETAILS: 'NOMINATION DETAILS',
         SUMMARY: 'SUMMARY',
         EVIDENCE: 'EVIDENCE',
         RESOURCES: 'RESOURCES',
+        NOMINATION_DETAILS: 'NOMINATION DETAILS',
         EXPERIMENTAL_VALIDATION: 'EXPERIMENTAL VALIDATION'
     };
 
@@ -144,7 +144,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
 
     populateTabMenu() {
         this.items = [
-            { label: this.tabMenuLabels.NOMINATION_DETAILS, disabled: this.disableMenu },
             { label: this.tabMenuLabels.SUMMARY, disabled: this.disableMenu },
             {
                 label: this.tabMenuLabels.EVIDENCE,
@@ -168,13 +167,14 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 ]
             },
             { label: this.tabMenuLabels.RESOURCES, disabled: this.disableMenu },
+            { label: this.tabMenuLabels.NOMINATION_DETAILS, disabled: this.disableMenu },
             { label: this.tabMenuLabels.EXPERIMENTAL_VALIDATION, disabled: this.disableMenu }
         ];
     }
 
     updateVars() {
         // Small size
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 1024) {
             this.showMobileMenu = true;
             this.showDesktopMenu = false;
         } else {
@@ -205,18 +205,8 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                 event ? {label: event.target.textContent} : {label: this.getFirstMenuTabName()};
             if (this.activeItem) {
                 switch (this.activeItem.label) {
-                    case this.tabMenuLabels.NOMINATION_DETAILS:
-                        this.navService.setOvMenuTabIndex(0);
-                        this.navService.goToRoute('/genes', {
-                            outlets: {
-                                'genes-router': ['gene-details', this.id],
-                                'gene-overview': ['nom-details'],
-                                'evidence-menu': null
-                            }
-                        }, this.extras);
-                        break;
                     case this.tabMenuLabels.SUMMARY:
-                        this.navService.setOvMenuTabIndex(this.items.length - 4);
+                        this.navService.setOvMenuTabIndex(0);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -226,7 +216,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     case this.tabMenuLabels.EVIDENCE:
-                        this.navService.setOvMenuTabIndex(this.items.length - 3);
+                        this.navService.setOvMenuTabIndex(this.items.length - 4);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
@@ -236,11 +226,21 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
                         }, this.extras);
                         break;
                     case this.tabMenuLabels.RESOURCES:
-                        this.navService.setOvMenuTabIndex(this.items.length - 2);
+                        this.navService.setOvMenuTabIndex(this.items.length - 3);
                         this.navService.goToRoute('/genes', {
                             outlets: {
                                 'genes-router': ['gene-details', this.id],
                                 'gene-overview': ['druggability'],
+                                'evidence-menu': null
+                            }
+                        }, this.extras);
+                        break;
+                    case this.tabMenuLabels.NOMINATION_DETAILS:
+                        this.navService.setOvMenuTabIndex(this.items.length - 2);
+                        this.navService.goToRoute('/genes', {
+                            outlets: {
+                                'genes-router': ['gene-details', this.id],
+                                'gene-overview': ['nom-details'],
                                 'evidence-menu': null
                             }
                         }, this.extras);
@@ -471,10 +471,6 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
         }
     }
 
-    viewSynapseReg() {
-        this.navService.goToRoute('/synapse-account');
-    }
-
     getAlias(): string {
         if (this.geneInfo.alias && this.geneInfo.alias.length > 0) {
             return this.geneInfo.alias.join(', ');
@@ -499,7 +495,7 @@ export class GeneOverviewComponent implements OnInit, OnDestroy, AfterContentChe
     }
 
     getFirstMenuTabName(): string {
-        return (this.geneInfo && this.geneInfo.nominations) ? 'NOMINATION DETAILS' : 'SUMMARY';
+        return 'SUMMARY';
     }
 
     onResize(event?: any) {

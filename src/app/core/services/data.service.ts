@@ -123,7 +123,7 @@ export class DataService {
         this.evidenceData = data;
     }
 
-    getEvidenceData(): Gene[] {
+    getEvidenceData() {
         return this.evidenceData;
     }
 

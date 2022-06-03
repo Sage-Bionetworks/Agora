@@ -96,16 +96,20 @@ describe('Component: Download', () => {
             {
                 value: 'png',
                 label: 'PNG'
+            },
+            {
+                value: 'jpeg',
+                label: 'JPEG'
             }
         ];
         const img = fixture.debugElement.nativeElement.querySelector('img');
         img.click();
         fixture.detectChanges();
 
-        const el = fixture.debugElement.query(By.css('p-checkbox'));
+        const el = fixture.debugElement.query(By.css('p-radioButton'));
         expect(el).toBeDefined();
 
-        const aEl = fixture.debugElement.queryAll(By.css('p-checkbox'));
-        expect(aEl.length).toEqual(1);
+        const aEl = fixture.debugElement.queryAll(By.css('p-radioButton'));
+        expect(aEl.length).toEqual(2);
     });
 });

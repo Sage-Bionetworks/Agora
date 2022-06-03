@@ -110,6 +110,7 @@ export class GeneSearchComponent implements OnInit {
     search(query: string): Observable<any> {
         this.isEnsemblIdSearch = false;
         this.errorMessage = '';
+        query = query.trim();
 
         if (query.length < 2) {
             query = '';

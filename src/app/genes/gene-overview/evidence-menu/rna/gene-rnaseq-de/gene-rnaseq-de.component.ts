@@ -20,7 +20,8 @@ import { emptyGene } from 'app/testing';
 import { ChartService } from '../../../../../charts/services';
 import {
     ApiService,
-    GeneService
+    GeneService,
+    DataService
 } from '../../../../../core/services';
 
 import { SelectItem } from 'primeng/api';
@@ -67,6 +68,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         private router: Router,
         private apiService: ApiService,
         private geneService: GeneService,
+        private dataService: DataService,
         private chartService: ChartService,
         private location: PlatformLocation
     ) { }
@@ -118,7 +120,7 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
             this.isEmptyGene = this.geneService.getEmptyGeneState();
             this.hasMedianExpression = this.geneService.hasMedianExpression();
 
-            this.refreshChartsData();
+            this.dataLoaded = true;
         });
     }
 
@@ -165,23 +167,10 @@ export class GeneRNASeqDEComponent implements OnInit, AfterViewChecked {
         });
     }
 
-    // Refreshes the charts data
-    refreshChartsData() {
-        // In the first load of dimension and groups, set a default model so we
-        // don't load all the data without filtering it
-        this.chartService.queryFilter.smGroup = this.geneService.getDefaultModel();
-        this.apiService.refreshChartsData(
-            this.chartService.queryFilter.smGroup,
-            this.gene.ensembl_gene_id
-        ).subscribe((d) => {
-            this.chartService.filteredData = d;
-            this.dataLoaded = true;
-        });
-    }
-
-    getDownloadFileName(suffix: string): string {
+    getDownloadFileName(suffix: string, includeModel: boolean = false): string {
+        const model = includeModel ? ('_' + this.geneService.getCurrentModel()) : '';
         return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
-        ' ' + suffix + '_' + this.geneService.getCurrentModel();
+        '_' + suffix + model;
     }
 
     registerBoxPlot(

@@ -312,4 +312,8 @@ export class GeneService {
         }
         return info && info.medianexpression && data.length > 0 ? true : false;
     }
+
+    filterGeneTableOptionalColumns(columns): any[] {
+        return columns.filter(col => col.field !== 'hgnc_symbol');
+    }
 }
