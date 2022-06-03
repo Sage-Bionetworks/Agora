@@ -35,7 +35,7 @@ export class GeneSearchComponent implements OnInit {
     gene: Gene;
     hgncSymbolNotFoundString: string = 'No results found. Try searching by the Ensembl Gene ID.';
     ensemblIdNotFoundString: string = 'Unable to find a matching gene. Try searching by gene symbol.';
-    notValidSearchString: string = 'Please enter a least two characters.';
+    notValidSearchString: string = 'Please enter at least two characters.';
     notValidEnsemblIdString: string = 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
     hgncSymbolCounts: {};
 
