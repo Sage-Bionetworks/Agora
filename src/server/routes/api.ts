@@ -184,9 +184,9 @@ connection.once('open', async () => {
         await allGenes.forEach((g) => {
             const geneInfo = geneInfos.get(g.ensembl_gene_id);
             // Separate the columns we need
-            g.logfc = getSignificantFigures(+g.logfc);
-            g.fc = getSignificantFigures(+g.fc);
-            g.adj_p_val = getSignificantFigures(+g.adj_p_val);
+            g.logfc = g.logfc;
+            g.fc = g.fc;
+            g.adj_p_val = g.adj_p_val;
 
             switch (g.model) {
                 case 'AD Diagnosis (males and females)':
@@ -521,108 +521,6 @@ connection.once('open', async () => {
                     res.send({spGroup: {values: []}, bpGroup: {values: [], top: []}});
                 }
             });
-        });
-    });
-
-    router.get('/refresh', async (req, res, next) => {
-        const results = {};
-        const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
-        const id = req.query.id;
-
-        registerCharts().then(async (status) => {
-            let indx: any = null;
-
-            switch (filter) {
-                case 'AD Diagnosis (males and females)':
-                    indx = await crossfilter(genesADDMF.slice());
-                    break;
-                case 'AD Diagnosis x AOD (males and females)':
-                    indx = await crossfilter(genesADDAODMF.slice());
-                    break;
-                case 'AD Diagnosis x Sex (females only)':
-                    indx = await crossfilter(genesADDSF.slice());
-                    break;
-                case 'AD Diagnosis x Sex (males only)':
-                    indx = await crossfilter(genesADDSM.slice());
-                    break;
-                default:
-                    indx = await crossfilter(allGenes.slice());
-                    break;
-            }
-
-            // Crossfilter variables
-            const dimensions = {
-                smDim: null,
-                bpDim: null,
-                fpDim: null
-            };
-            const groups = {
-                smGroup: null,
-                bpGroup: null,
-                fpGroup: null
-            };
-
-            // Load all dimensions and groups
-            dimensions.smDim = await indx.dimension((d) => d.model);
-            dimensions.bpDim = await indx.dimension((d) => d.tissue);
-            dimensions.fpDim = await getDimension(getChartInfo('forest-plot'), indx);
-
-            groups.smGroup = await dimensions.smDim.group();
-            groups.bpGroup = await dimensions.bpDim.group().reduce(
-                function(p, v) {
-                    // Retrieve the data value, if not Infinity or null add it
-                    if (v.logfc !== Infinity && v.logfc !== null) {
-                        p.push(v.logfc);
-                    }
-                    return p;
-                },
-                function(p, v) {
-                    // Retrieve the data value, if not Infinity or null remove it
-                    if (v.logfc !== Infinity && v.logfc !== null) {
-                        p.splice(p.indexOf(v.logfc), 1);
-                    }
-                    return p;
-                },
-                function() {
-                    return [];
-                }
-            );
-
-            groups.fpGroup = await getGroup(getChartInfo('forest-plot'));
-
-            if (Object.keys(groups).length > 0) {
-                const rPromise = new Promise((resolve, reject) => {
-                    Object.keys(dimensions).forEach((dimension) => {
-                        const groupName = dimension.substring(0, 2) + 'Group';
-                        if (dimension !== 'fpDim') {
-                            results[groupName] = {
-                                values: groups[groupName].all(),
-                                top: (groupName === 'fpGroup') ?
-                                    null :
-                                    groups[groupName].top(1)[0]?.value
-                            };
-                        } else {
-                            const newGroup = rmEmptyBinsFP(
-                                groups.fpGroup,
-                                (filter) ? filter : 'AD Diagnosis (males and females)',
-                                id
-                            );
-                            results[groupName] = {
-                                values: newGroup.all()
-                            };
-                        }
-                    });
-
-                    results['cpGroup'] = getGeneCorrelationData(id);
-                    resolve(results);
-                });
-                rPromise.then((r: any) => {
-                    if (r) {
-                        indx = null;
-                        res.send(r);
-                    }
-                });
-            }
         });
     });
 
@@ -1158,6 +1056,25 @@ connection.once('open', async () => {
                         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
                         res.setHeader('Pragma', 'no-cache');
                         res.setHeader('Expires', 0);
+                        const models = {};
+
+                        // Filter out possible duplicates
+                        genes = genes.filter(gene => {
+                            const model = gene['model'];
+                            const tissue = gene['tissue'];
+
+                            if (!models.hasOwnProperty(model)) {
+                                models[model] = [];
+                            }
+
+                            if (!models[model].includes(tissue)) {
+                                models[model].push(tissue);
+                                return true;
+                            }
+
+                            return false;
+                        });
+
                         res.json({
                             rnaDifferentialExpression: genes,
                             rnaCorrelation: getGeneCorrelationData(req.query.id)

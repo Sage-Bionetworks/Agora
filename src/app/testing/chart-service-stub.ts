@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 
 import { mockInfo1 } from './gene-mocks';
 
+import { GeneServiceStub, DataServiceStub } from '../../core/services';
+
 @Injectable()
 export class ChartServiceStub {
     chartInfos: Map<string, any> = new Map<string, any>();

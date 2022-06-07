@@ -56,42 +56,55 @@
         font-size: $font-size-x-regular;
     }
 
-    p-checkbox {
-        @include lato-font('normal');
-
-        line-height: normal;
-        font-size: $font-size-regular;
-        height: 32px;
-        color: color(text, secondary);
-
+    .ui-radiobutton-label {
+        font-size: 16px;
     }
 
-    .ui-chkbox {
-        margin-right: 17px;
-    }
+    .ui-radiobutton-box {
+        width: 15px;
+        height: 15px;
+        font-size: 12px;
+        border: 1px solid color(border);
+        border-radius: 50%;
+        transition: $transition-duration;
 
-    .ui-chkbox-box {
-        background: $quinary-background;
-        border: 2px solid $green-border-color;
-        box-sizing: border-box;
-        border-radius: 6px;
-        width: 32px;
-        height: 32px;
-        margin-bottom: 5px;
-    }
-
-    .ui-chkbox-icon {
-        color: $background;
-        margin-top: 4px;
-
-        span {
+        .ui-radiobutton-icon {
+            display: flex;
+            width: 100%;
             height: 100%;
+            align-items: center;
+            justify-content: center;
+            transition: $transition-duration;
+            top: 0;
+            left: 0;
+            margin: 0;
 
-            .pi-check:before {
-                font-size: $font-size-xx-regular-odd;
-                content: url("/assets/icon/checked_icon.png") !important;
+            &:before {
+                display: block;
+                font-size: 11px;
+                line-height: 11px;
             }
         }
+
+        &.ui-state-focus {
+            border-color: color(primary);
+        }
+
+        &.ui-state-active {
+            border-color: color(primary);
+
+            .ui-radiobutton-icon {
+                color: color(primary);
+
+                &, &:before {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .ui-button {
+        width: 100%;
     }
 
     .download-img {
@@ -101,7 +114,7 @@
 
 .progress-dialog {
     .ui-dialog-titlebar {
-        display: none !important;
+        display: none;
     }
 
     height: 30%;

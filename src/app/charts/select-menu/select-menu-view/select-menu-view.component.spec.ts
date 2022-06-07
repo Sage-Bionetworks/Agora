@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
     RouterStub,
     GeneServiceStub,
+    DataServiceStub,
     ChartServiceStub,
     ActivatedRouteStub,
     ApiServiceStub,
@@ -20,6 +21,7 @@ import { SelectMenuViewComponent } from './select-menu-view.component';
 
 import {
     GeneService,
+    DataService,
     ApiService
 } from '../../../core/services';
 import { ChartService } from '../../services';
@@ -33,6 +35,7 @@ describe('Component: SelectMenuView', () => {
     let router: RouterStub;
     let geneService: GeneServiceStub;
     let chartService: ChartServiceStub;
+    let dataService: DataServiceStub;
     let apiService: ApiServiceStub;
     let activatedRoute: any;
     let location: SpyLocation;
@@ -50,6 +53,7 @@ describe('Component: SelectMenuView', () => {
                 { provide: ApiService, useValue: new ApiServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: GeneService, useValue: new GeneServiceStub() },
+                { provide: DataService, useValue: new DataServiceStub() },
                 { provide: ChartService, useValue: new ChartServiceStub() },
                 { provide: SpyLocation, useValue: new SpyLocation() }
             ]
@@ -62,6 +66,7 @@ describe('Component: SelectMenuView', () => {
         router = fixture.debugElement.injector.get(Router);
         apiService = fixture.debugElement.injector.get(ApiService);
         geneService = fixture.debugElement.injector.get(GeneService);
+        dataService = fixture.debugElement.injector.get(DataService);
         chartService = fixture.debugElement.injector.get(ChartService);
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
         activatedRoute.setParamMap({ id: mockInfo1.ensembl_gene_id });

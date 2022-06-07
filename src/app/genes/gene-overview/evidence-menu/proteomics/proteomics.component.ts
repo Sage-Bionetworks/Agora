@@ -62,13 +62,17 @@ export class ProteomicsComponent implements OnInit {
             this.chartService.pQueryFilter.spGroup = '';
             this.apiService.refreshChartsData(
                 this.chartService.pQueryFilter.spGroup,
-                this.gene.ensembl_gene_id,
-                'Proteomics'
+                this.gene.ensembl_gene_id
             ).subscribe((d) => {
                 this.chartService.filteredData = d;
                 this.dataLoaded = true;
             });
         });
+    }
+
+    getDownloadFileName(suffix: string): string {
+        return (this.gene.hgnc_symbol || this.gene.ensembl_gene_id) +
+            '_' + suffix + '_' + this.geneService.getCurrentProtein();
     }
 
     registerCharts(): Promise<any> {

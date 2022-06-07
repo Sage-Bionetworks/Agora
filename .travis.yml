@@ -14,7 +14,7 @@ branches:
   - prod
 
 before_install:
-  - npm install npm@6.13.7
+  - npm install npm@6.14.13
   - npm cache verify
   - travis_retry npm prune
 
@@ -39,6 +39,7 @@ jobs:
       script:
         - ./set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
+      node_js: 12
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true

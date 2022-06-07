@@ -18,7 +18,6 @@ import {
 import { AboutComponent } from './about';
 import { NewsComponent } from './news';
 import { HelpComponent } from './help';
-import { SynapseAccountComponent } from './synapse-account';
 import { NavbarComponent } from './navbar';
 import { MenubarComponent } from './menubar';
 import { FooterComponent } from './footer';
@@ -42,8 +41,7 @@ import '../../styles/headings.scss';
         AboutComponent,
         NewsComponent,
         HelpComponent,
-        ContribTeamsPageComponent,
-        SynapseAccountComponent
+        ContribTeamsPageComponent
     ],
     exports: [
         // Exported components
@@ -53,8 +51,7 @@ import '../../styles/headings.scss';
         NoContentComponent,
         AboutComponent,
         HelpComponent,
-        ContribTeamsPageComponent,
-        SynapseAccountComponent
+        ContribTeamsPageComponent
     ],
     providers: [
         ApiService,
