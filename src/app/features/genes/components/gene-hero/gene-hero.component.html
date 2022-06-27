@@ -1,0 +1,74 @@
+<div class="section section-hero">
+  <div class="gene-hero-top">
+    <div class="section-inner">
+      <h1 class="gene-hero-heading">
+        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+      </h1>
+      <p class="gene-hero-name">
+        {{ gene.name }}
+      </p>
+      <div *ngIf="gene.nominations" class="gene-hero-nominated">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 62 56"
+          style="enable-background: new 0 0 62 56"
+          xml:space="preserve"
+          width="23"
+        >
+          <path
+            fill="#6bc5bb"
+            d="M43.9,0c1.8,0,3.5,1,4.4,2.5l13,23c0.9,1.5,0.9,3.4,0,4.9l-13,23C47.4,55,45.7,56,43.9,56H18.1
+	c-1.8,0-3.5-1-4.4-2.5l-13-23c-0.9-1.5-0.9-3.4,0-4.9l13-23C14.6,1,16.3,0,18.1,0H43.9z"
+          />
+          <path
+            fill="#389895"
+            d="M61.4,30.5c0.9-1.5,0.9-3.4,0-4.9l-13-23C47.4,1,45.7,0,43.9,0H18.1c-1.8,0-3.5,1-4.4,2.5L7.9,12.7
+	c0.1,0.2,0.2,0.3,0.2,0.5l15,26.2c0.9,1.6,2.6,2.5,4.4,2.5h27.3L61.4,30.5z"
+          />
+          <path
+            fill="#b0a5ce"
+            d="M50.8,21c-0.9-1.6-2.6-2.5-4.4-2.5H19.3c-1.8,0-3.5,1-4.4,2.5L5.1,38.3l8.6,15.2c0.9,1.6,2.6,2.5,4.4,2.5h25.9
+	c1.8,0,3.5-1,4.4-2.5L58.8,35L50.8,21z"
+          />
+          <path
+            fill="#73c8cc"
+            d="M27.9,18.4h18.5c1.8,0,3.5,1,4.4,2.5l8,14l2.6-4.5c0.9-1.5,0.9-3.4,0-4.9l-13-23C47.4,1,45.7,0,43.9,0H18.1
+	c-0.2,0-0.4,0-0.6,0L27.9,18.4z"
+          />
+          <path
+            fill="#5d80a4"
+            d="M58.8,35l-8-14c-0.9-1.6-2.6-2.5-4.4-2.5H19.3c-1.8,0-3.5,1-4.4,2.5l-1.2,2.1l9.4,16.4c0.9,1.6,2.6,2.5,4.4,2.5
+	h27.3L58.8,35z"
+          />
+          <path
+            fill="#8c8acc"
+            d="M46.1,33.1c-1.8,0-3.5,1-4.4,2.5L30,56h13.9c1.8,0,3.5-1,4.4-2.5l11.6-20.4H46.1z"
+          />
+          <path
+            fill="#4a6aa2"
+            d="M54.8,42l4-7l-1.1-1.9H46.1c-1.8,0-3.5,1-4.4,2.5L38,42H54.8z"
+          />
+        </svg>
+        <span>Nominated Target</span>
+      </div>
+    </div>
+  </div>
+  <div class="gene-hero-bottom">
+    <div class="section-inner">
+      <p class="gene-hero-summary">
+        {{ getSummary(true) }}
+      </p>
+      <p class="gene-hero-provider">
+        {{ getSummary() }}
+      </p>
+      <div *ngIf="getAlias()" class="gene-hero-aliases">
+        <div class="gene-hero-aliases-heading">Also known as</div>
+        <p>
+          {{ getAlias() }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

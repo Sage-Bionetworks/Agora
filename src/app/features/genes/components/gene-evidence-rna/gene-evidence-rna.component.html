@@ -1,0 +1,171 @@
+<div class="section">
+  <div class="section-inner">
+    <div>
+      <h2 class="full-width no-margin-bottom">RNA Expression</h2>
+      <p class="black-paragraph">
+        The results shown on this page are derived from a harmonized RNA-seq
+        analysis of post-mortem brains from AD cases and controls. The samples
+        were obtained from three human cohort studies across a total of seven
+        different brain regions.
+      </p>
+      <dialog-link
+        label="Data and Methods for this study"
+        header="About the RNAseq Analysis"
+        wikiId="612815"
+      >
+      </dialog-link>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>
+        Overall Expression of
+        {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
+        <download-dom-image
+          [target]="rnaOEChart"
+          [filename]="_gene?.ensembl_gene_id + '_rna_overall_expression'"
+        ></download-dom-image>
+      </h3>
+      <p class="black-paragraph">
+        This plot depicts the median expression of the selected gene across
+        brain regions, as measured by RNA-seq read counts per million (CPM)
+        reads. Meaningful expression is considered to be a log2 CPM greater than
+        log2(5), depicted by the red line in the plot.
+      </p>
+      <div #rnaOEChart>
+        <median-chart [gene]="gene" xAxisLabel="Brain region"></median-chart>
+      </div>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h4 class="text-default">
+        <b>Filter the following charts by statistical model</b>
+      </h4>
+      <div class="mb-lg">
+        <dialog-link
+          label="View more information"
+          header="Statistical Models"
+          wikiId="612816"
+        >
+        </dialog-link>
+      </div>
+      <gene-model-selector
+        [options]="statisticalModels"
+        (onChange)="onStatisticalModelChange($event)"
+      ></gene-model-selector>
+    </div>
+
+    <div>
+      <h3>
+        Differential Expression of
+        {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
+        <download-dom-image
+          [target]="rnaDEChart"
+          [filename]="_gene?.ensembl_gene_id + '_rna_differential_expression'"
+        ></download-dom-image>
+      </h3>
+      <p class="mb-xl">
+        After selecting a statistical model, you will be able to see whether the
+        selected gene is differentially expressed between AD cases and controls.
+        The box plot depicts how the differential expression of the selected
+        gene of interest (red dot) compares with expression of other genes in a
+        given tissue. Summary statistics for each tissue can be viewed by
+        hovering over the red dots. Meaningful differential expression is
+        considered to be a log2 fold change value greater than 0.2630344, or
+        less than -0.2630344.
+      </p>
+      <div #rnaDEChart>
+        <box-plot
+          [data]="differentialExpressionChartData"
+          [heading]="selectedStatisticalModel"
+          xAxisLabel="Brain region"
+        ></box-plot>
+      </div>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>
+        Consistency of Change in Expression
+        <download-dom-image
+          [target]="rnaCCChart"
+          [filename]="
+            _gene?.ensembl_gene_id + '_rna_consistency_of_change_in_expression'
+          "
+        ></download-dom-image>
+      </h3>
+      <p class="mb-xl">
+        This forest plot indicates the estimate of the log fold change with
+        standard errors across the brain regions in the model chosen using the
+        filter above. Genes that show consistent patterns of differential
+        expression will have similar log-fold change value across brain regions.
+      </p>
+      <div #rnaCCChart>
+        <row-chart
+          [data]="consistencyOfChangeChartData"
+          [heading]="selectedStatisticalModel"
+          xAxisLabel="LOG 2 FOLD CHANGE"
+        ></row-chart>
+      </div>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>
+        Correlation of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} with
+        Hallmarks of AD
+        <download-dom-image
+          [target]="rnaCorrChart"
+          [filename]="
+            _gene?.ensembl_gene_id + '_rna_correlation_with_hallmarks_of_AD'
+          "
+        ></download-dom-image>
+      </h3>
+      <p>
+        <dialog-link
+          label="View more information"
+          header="About the Association with Neuropathology and Cognition"
+          wikiId="612817"
+        >
+        </dialog-link>
+      </p>
+      <p class="mb-xl">
+        This plot depicts the association between expression levels of the
+        selected gene in the DLPFC and three phenotypic measures of AD. An odds
+        ratio > 1 indicates a positive correlation and an odds ratio < 1
+        indicates a negative correlation. Statistical significance and summary
+        statistics for each phenotype can be viewed by hovering over the dots.
+      </p>
+      <div #rnaCorrChart>
+        <candlestick-chart
+          [gene]="gene"
+          xAxisLabel="Phenotype"
+        ></candlestick-chart>
+      </div>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>Similarly Expressed Genes</h3>
+      <p class="black-paragraph">
+        The network diagram below is based on a coexpression network analysis of
+        RNA-seq data from AD cases and controls. The network analysis uses an
+        ensemble methodology to identify genes that show similar coexpression
+        across individuals.
+      </p>
+      <p class="black-paragraph mb-xl">
+        The color of the edges and nodes indicates how frequently significant
+        coexpression was identified. Each node represents a different gene and
+        the amount of edges within the network. Darker edges represent
+        coexpression in more brain regions.
+      </p>
+      <gene-network [gene]="gene"></gene-network>
+    </div>
+  </div>
+</div>

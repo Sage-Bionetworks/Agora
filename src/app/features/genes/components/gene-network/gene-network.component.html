@@ -1,0 +1,169 @@
+<div class="network-content" *ngIf="filteredData?.nodes?.length">
+  <div
+    *ngIf="_gene?.links?.length"
+    class="col-md-8 col-sm-8 col-12 network-container"
+  >
+    <div class="row filter" *ngIf="filters?.length">
+      <div class="col-md-7 col-sm-12 col-12">
+        <span class="filter-title">Filter by Number of Edges</span>
+      </div>
+      <div class="col-md-5 col-sm-12 col-12">
+        <ul class="steps">
+          <li
+            *ngFor="let n of filters"
+            class="steps-segment"
+            [ngClass]="{ 'is-active': n === selectedFilter }"
+          >
+            <a (click)="filter(n)" class="steps-marker"></a>
+            <span class="tooltip">&gt;{{ n }}</span>
+          </li>
+        </ul>
+        <div class="filter-reference">
+          <span class="left">&gt;0</span>
+          <span class="right">&gt;{{ filters[filters.length - 1] - 1 }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="row force-chart-container">
+      <force-chart
+        [data]="filteredData"
+        (updategene)="onNodeClick($event)"
+      ></force-chart>
+    </div>
+    <div class="row network-legend">
+      <div class="hexagon current"></div>
+      <div class="legend-text">Current gene</div>
+      <div class="dot selected"></div>
+      <div class="legend-text">Selected gene</div>
+      <div class="dot first"></div>
+      <div class="legend-text">2-3 Edges</div>
+      <div class="dot second"></div>
+      <div class="legend-text">4-5 Edges</div>
+      <div class="dot third"></div>
+      <div class="legend-text">6-7 Edges</div>
+      <div class="dot fourth"></div>
+      <div class="legend-text">8-9 Edges</div>
+    </div>
+  </div>
+  <div
+    *ngIf="_gene?.links?.length"
+    class="col-md-4 col-sm-4 col-12 current-gene-col"
+  >
+    <div class="row cg-row">
+      <div class="col-md-12 col-sm-12 col-12 cg-col top-cg-col top-cg-col">
+        <h3>
+          {{
+            selectedData.origin.hgnc_symbol ||
+              selectedData.origin.ensembl_gene_id
+          }}
+        </h3>
+        <p class="cg-col-p">{{ selectedData.origin.summary }}</p>
+        <div class="gene-info-list-item">
+          <div>
+            <h4 class="gene-info-list-item-heading">
+              Genetic Association with LOAD
+            </h4>
+          </div>
+          <div [ngClass]="getTextColorClass(selectedData.origin.isIGAP)">
+            {{ getText(selectedData.origin.isIGAP) }}
+          </div>
+        </div>
+        <div class="gene-info-list-item">
+          <div>
+            <h4 class="gene-info-list-item-heading">Brain eQTL</h4>
+          </div>
+          <div [ngClass]="getTextColorClass(selectedData.origin.haseqtl)">
+            {{ getText(selectedData.origin.haseqtl) }}
+          </div>
+        </div>
+        <div class="gene-info-list-item">
+          <div>
+            <h4 class="gene-info-list-item-heading">
+              RNA Expression Change in AD Brain
+            </h4>
+          </div>
+          <div
+            [ngClass]="
+              getTextColorClass(
+                selectedData.origin.isAnyRNAChangedInADBrain,
+                selectedData.origin.rna_brain_change_studied
+              )
+            "
+          >
+            {{
+              getText(
+                selectedData.origin.isAnyRNAChangedInADBrain,
+                selectedData.origin.rna_brain_change_studied
+              )
+            }}
+          </div>
+        </div>
+        <div class="gene-info-list-item">
+          <div>
+            <h4 class="gene-info-list-item-heading">
+              Protein Expression Change in AD Brain
+            </h4>
+          </div>
+          <div
+            [ngClass]="
+              getTextColorClass(
+                selectedData.origin.isAnyProteinChangedInADBrain,
+                selectedData.origin.protein_brain_change_studied
+              )
+            "
+          >
+            {{
+              getText(
+                selectedData.origin.isAnyProteinChangedInADBrain,
+                selectedData.origin.protein_brain_change_studied
+              )
+            }}
+          </div>
+        </div>
+        <div class="gene-info-list-item">
+          <div>
+            <h4 class="gene-info-list-item-heading">Nominated target</h4>
+          </div>
+          <div
+            [ngClass]="getTextColorClass(selectedData.origin.nominations > 0)"
+          >
+            {{ getNominationText(selectedData.origin.nominations) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row cg-row">
+      <div class="col-md-12 col-sm-12 col-12 cg-col bottom-cg-col">
+        <div class="row pathboxes-row">
+          <div class="col-md-11 col-sm-11 col-11 nopadding-left">
+            <div class="row">
+              <div class="col-md-7 col-sm-12 col-7">
+                <div *ngFor="let node of pathbox | slice: 0:6" class="pathbox">
+                  <a [routerLink]="['/genes/' + node.id]" class="genelink">
+                    {{ node.hgnc_symbol || node.ensembl_gene_id }}
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-12 col-5">
+                View all genes that show similar expression to the selected
+                gene, and learn how these genes are associated with AD.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 col-sm-1 col-1 nopadding brainregion-col">
+            <span class="btn brainregion-button">
+              <i
+                (click)="navigateToSimilarGenes()"
+                class="fa fa-angle-right fa-lg"
+              ></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!_gene?.links?.length" class="network-no-data">
+    <div class="network-no-data-text">No data is currently available.</div>
+  </div>
+</div>

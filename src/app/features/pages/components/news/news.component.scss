@@ -1,0 +1,27 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.news-page-content {
+  h3,
+  h4 {
+    margin-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 20px;
+    color: #24334f;
+
+    &:not(:first-child) {
+      margin-top: 60px;
+    }
+  }
+
+  h4 {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  h3 + h4 {
+    margin-top: 0;
+  }
+}

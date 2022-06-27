@@ -1,0 +1,70 @@
+<div class="section section-hero">
+  <div class="section-inner">
+    <h1>Nominated Target List</h1>
+    <p>
+      Researchers have nominated genes that may be good targets for new
+      Alzheimer's Disease treatment or prevention. These targets have been
+      identified using computational analyses of high-dimensional genomic,
+      proteomic and/or metabolomic data derived from human samples.
+    </p>
+    <p>
+      The initial list of nominated targets was contributed by researchers from
+      the National Institute on Aging’s Accelerating Medicines Partnership in
+      Alzheimer’s Disease (AMP-AD) consortium.
+    </p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <div class="row">
+      <div class="col-md-7 col-sm-12 col-12 header-col">
+        <div class="mb-lg">
+          <p>
+            <b>
+              Search for or select any gene from the nominated target list to
+              view the evidence that led to its nomination
+            </b>
+          </p>
+          <dialog-link
+            label="Learn more about Nominated Targets "
+            header="About the Nominated Targets"
+            wikiId="617955"
+          >
+          </dialog-link>
+        </div>
+        <div class="mb-xl">
+          <div class="search-box">
+            <div class="search-box-icon">
+              <i class="fa fa-search fa-lg"></i>
+            </div>
+            <input
+              type="text"
+              pInputText
+              size="50"
+              id="keyword"
+              placeholder="Search the columns below"
+              (input)="onSearch($event)"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-12 col-12 text-right mb-xl">
+        <p>Would you like to add to this list?</p>
+        <a
+          pButton
+          type="button"
+          label="Nominate a target"
+          class="p-button-rounded p-button-secondary"
+          [routerLink]="['/nomination-form']"
+        ></a>
+      </div>
+    </div>
+
+    <gene-table
+      [genes]="data"
+      [columns]="tableColumns"
+      [searchTerm]="searchTerm"
+    ></gene-table>
+  </div>
+</div>

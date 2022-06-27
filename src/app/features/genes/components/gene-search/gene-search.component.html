@@ -1,0 +1,47 @@
+<div #root class="gene-search" [ngClass]="{ focused: isFocused }">
+  <div class="gene-search-bar">
+    <div class="gene-search-bar-icon">
+      <i *ngIf="!isLoading" class="fas fa-magnifying-glass"></i>
+      <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+    </div>
+    <input
+      #input
+      placeholder="Search Gene Symbol or Ensembl ID"
+      autocomplete="off"
+      type="text"
+      (focus)="isFocused = true"
+      [(ngModel)]="query"
+    />
+  </div>
+  <div class="gene-search-results">
+    <div class="gene-search-results-inner">
+      <ul *ngIf="error" class="gene-search-errors">
+        <li>
+          {{ error }}
+        </li>
+      </ul>
+
+      <ul *ngIf="!error" class="gene-search-results-list">
+        <li
+          *ngFor="let result of results"
+          (click)="goToGene(result.ensembl_gene_id)"
+        >
+          <span class="gene-id">
+            {{ result.hgnc_symbol || result.ensembl_gene_id }}
+          </span>
+          <span
+            *ngIf="
+              result.hgnc_symbol && hgncSymbolCounts[result.hgnc_symbol] > 1
+            "
+            class="gene-ensembl-id"
+          >
+            &nbsp;{{ result.ensembl_gene_id }}
+          </span>
+          <span *ngIf="hasAlias(result.hgnc_symbol)" class="gene-aliases">
+            &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

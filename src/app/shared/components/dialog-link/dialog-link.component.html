@@ -1,0 +1,22 @@
+<div class="dialog-link">
+  <div class="dialog-link-inner" (click)="showDialog()">
+    <div *ngIf="icon" class="dialog-link-icon">
+      <i class="{{ icon }}"></i>
+    </div>
+    <div class="dialog-link-text">
+      {{ label }}
+    </div>
+  </div>
+  <p-dialog
+    [header]="header"
+    [(visible)]="isActive"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+  >
+    <wiki *ngIf="wikiId && hasOpened" [wikiId]="wikiId"></wiki>
+    <ng-content></ng-content>
+  </p-dialog>
+</div>

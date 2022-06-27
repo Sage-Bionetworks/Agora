@@ -9,9 +9,9 @@ addons:
 
 branches:
   only:
-  - develop
-  - staging
-  - prod
+    - develop
+    - staging
+    - prod
 
 before_install:
   - npm install npm@6.14.13
@@ -37,7 +37,7 @@ jobs:
       node_js: 12
     - stage: eb-deploy
       script:
-        - ./set-agora-version.sh || travis_terminate 1
+        - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
       node_js: 12
       deploy:

@@ -1,0 +1,63 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.gene-seo-list {
+  @include reset-ul();
+
+  .item {
+    .item-inner {
+      @include container();
+      display: flex;
+      padding-top: 20px;
+      padding-bottom: 28px;
+
+      > div {
+        &:first-child {
+          flex-grow: 1;
+          max-width: 800px;
+          padding-right: 30px;
+        }
+
+        &:last-child {
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .item-title,
+    .item-description {
+      max-width: 600px;
+    }
+
+    .item-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #3c4a63;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .item-description {
+      font-style: italic;
+    }
+
+    .item-link {
+      font-weight: 400;
+      font-style: normal;
+      cursor: pointer;
+      width: 100%;
+      line-height: normal;
+      font-size: 18px;
+      text-decoration: underline;
+      color: #5bb0b5 !important;
+      position: relative;
+      top: inherit;
+    }
+
+    &:nth-child(odd) {
+      background-color: $table-row-even;
+    }
+  }
+}

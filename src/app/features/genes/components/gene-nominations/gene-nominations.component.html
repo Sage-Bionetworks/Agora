@@ -1,0 +1,60 @@
+<div class="section">
+  <div class="section-inner">
+    <div class="row">
+      <h2>
+        Evidence Supporting the Nomination of
+        {{ gene?.hgnc_symbol || gene?.ensembl_gene_id }}
+      </h2>
+      <p class="no-margin-bottom col-8 mb-0">
+        This gene has been nominated as a potential target for AD. Nominated
+        targets are obtained from several sources, including the National
+        Institute on Aging's Accelerating Medicines Partnership in Alzheimer's
+        Disease (AMP-AD) consortium. Targets have been identified using
+        computational analyses of high-dimensional genomic, proteomic and/or
+        metabolomic data derived from human samples.
+      </p>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div class="nomination-list">
+      <div *ngFor="let nomination of nominations; let i = index">
+        <h3 class="team-name">
+          {{ getFullDisplayName(nomination) }}
+        </h3>
+        <p class="black-paragraph col-8 section-desc">
+          {{ nomination.team_data?.description }}
+        </p>
+        <h4>Why was the target selected?</h4>
+        <p class="black-paragraph col-8 section-desc">
+          {{ nomination.target_choice_justification }}
+        </p>
+        <h4>Predicted therapeutic direction</h4>
+        <p class="black-paragraph col-8 section-desc">
+          {{ nomination.predicted_therapeutic_direction }}
+        </p>
+        <div *ngIf="nomination.data_used_to_support_target_selection">
+          <h4>The type of data used and analyses done to identify target</h4>
+          <p class="black-paragraph col-8 section-desc">
+            {{ nomination.data_used_to_support_target_selection }}
+          </p>
+        </div>
+        <h4>Initial date of nomination</h4>
+        <p class="black-paragraph custom-paragraph col-8 no-padding">
+          {{ nomination.initial_nomination }}
+        </p>
+        <a
+          *ngIf="nomination.data_synapseid"
+          class="link"
+          href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
+            nomination.data_synapseid
+          }}"
+          target="_blank"
+        >
+          Learn more about the target nomination process
+        </a>
+        <hr *ngIf="i < nominations.length - 1" class="separator separator-lg" />
+      </div>
+    </div>
+  </div>
+</div>

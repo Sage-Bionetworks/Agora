@@ -1,0 +1,231 @@
+// -------------------------------------------------------------------------- //
+// Legacy - To clean
+// -------------------------------------------------------------------------- //
+$video-width: 471px;
+
+$font-size-xl-regular: 26px;
+$font-size-large: 28px;
+$font-size-x-large: 40px;
+
+$colors: (
+  primary: #3f5eab,
+  secondary: #3c4a63,
+  action-primary: #5bb0b5,
+  action-secondary: #fccb6f,
+
+  gray-light: #e8e8e8,
+
+  black-box-shadow: (
+    a10: rgba(0, 0, 0, 0.1),
+    a35: rgba(0, 0, 0, 0.35),
+    a50: rgba(0, 0, 0, 0.5),
+    a70: rgba(0, 0, 0, 0.7),
+  ),
+  box-shadow: #c7c5c5,
+  dot: (
+    background-color: #bbbbbb,
+    background-color-current: #f47e6c,
+    background-color-selected: #fccb6f,
+    background-color-first: #73c8cc,
+    background-color-second: #5bb0b5,
+    background-color-third: #0c656b,
+    background-color-fourth: #1c3a35,
+  ),
+  input-placeholder: #6c7489,
+  italic-text: (
+    base: #8d919e,
+  ),
+  li: (
+    border-color-default: #c0c0c0,
+    border-color-active: #73c8cc,
+    background-active: #2f8e94,
+  ),
+  keyword: (
+    box-shadow: #c7c5c5,
+    border-color: rgba(197, 199, 196, 0.5),
+  ),
+  rect: (
+    stroke: #bcc0ca,
+  ),
+  text: (
+    primary: #1a1c29,
+    secondary: #24334f,
+    fill: #000000,
+    title: #3f5eab,
+    span-title: #3f5eab,
+    span-grey: #a6a6a6,
+    demphasized: #9ea4b1,
+    demphasized-alt: #797979,
+  ),
+  tr-focus: (
+    bg-color: rgba(63, 94, 171, 0.25),
+  ),
+  border: #eeeeee,
+);
+
+@function color($color-name, $color-variant: null) {
+  // color variant is optional
+  @if ($color-variant != null) {
+    // map inception
+    @return map-get(map-get($colors, $color-name), $color-variant);
+  } @else {
+    @return map-get($colors, $color-name);
+  }
+}
+
+$chart-grey: #6d7078;
+$grey-border-color: #ededed;
+$secondary-grey-border-color: #e0e0e0;
+$info-circle-color: #9da3b3;
+$table-row-even: #f7f7f7;
+
+$breakpoints: (
+  "ex-small": (
+    max-width: 600px,
+  ),
+  "small": (
+    min-width: 600px,
+  ),
+  "medium": (
+    min-width: 768px,
+  ),
+  "large": (
+    min-width: 992px,
+  ),
+  "ex-large": (
+    min-width: 1200px,
+  ),
+);
+
+// -------------------------------------------------------------------------- //
+// Spacing
+// -------------------------------------------------------------------------- //
+
+$spacings: (
+  "md": 15px,
+  "lg": 30px,
+  "xl": 60px,
+);
+
+:root {
+  @each $key, $value in $spacings {
+    --spacing-#{$key}: #{$value};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Colors
+// -------------------------------------------------------------------------- //
+
+$_colors: (
+  primary: #3f5eab,
+  secondary: #5bb0b5,
+  tertiary: #a684ee,
+  quaternary: #fccb6f,
+
+  action-primary: #5bb0b5,
+  action-secondary: #fccb6f,
+
+  success: #6db56d,
+  warning: #fccb6f,
+  danger: #e0585d,
+
+  lightest: #fbfbfb,
+  lighter: #f7f7f7,
+  light: #ededed,
+  neutral: #dadce1,
+  dark: #bcc0ca,
+  darker: #a4a7b0,
+  darkest: #6d7078,
+
+  shadow: #c7c5c5,
+
+  text: #24334f,
+  link: #5bb0b5,
+);
+
+$chart-colors: (
+  axis: map-get($_colors, "light"),
+  axis-label: map-get($_colors, "darkest"),
+);
+
+:root {
+  @each $key, $color in $_colors {
+    --color-#{$key}: #{$color};
+  }
+  @each $key, $color in $chart-colors {
+    --color-chart-#{$key}: #{$color};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Fonts
+// -------------------------------------------------------------------------- //
+
+$font-family-primary: "Lato", sans-serif;
+$font-size-xxs: 0.75rem;
+$font-size-xs: 0.875rem;
+$font-size-sm: 1rem;
+$font-size-md: 1.125rem;
+$font-size-lg: 1.25rem;
+$font-size-xl: 1.375rem;
+$font-size-xxl: 1.5rem;
+
+:root {
+  --font-family-primary: #{$font-family-primary};
+
+  --font-size-xxs: #{$font-size-xxs};
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-md: #{$font-size-md};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --font-size-xxl: #{$font-size-xxl};
+}
+// -------------------------------------------------------------------------- //
+// Fonts
+// -------------------------------------------------------------------------- //
+
+$container-max-width: 90vw;
+$container-gutter-width: 30px;
+
+:root {
+  --container-max-width: #{$container-max-width};
+  --container-gutter-width: #{$container-gutter-width};
+}
+
+@media (max-width: 1500px) {
+  :root {
+    --container-max-width: 1500px;
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Transition
+// -------------------------------------------------------------------------- //
+
+$transition-duration: 0.08s;
+
+:root {
+  --transition-duration: #{$transition-duration};
+}
+
+// -------------------------------------------------------------------------- //
+// Header
+// -------------------------------------------------------------------------- //
+
+$header-height: 87px;
+
+:root {
+  --header-height: #{$header-height};
+}
+
+// -------------------------------------------------------------------------- //
+// Footer
+// -------------------------------------------------------------------------- //
+
+$footer-height: 100px;
+
+:root {
+  --footer-height: #{$footer-height};
+}

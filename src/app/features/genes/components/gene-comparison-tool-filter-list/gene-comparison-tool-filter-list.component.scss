@@ -1,0 +1,77 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.gct-filter-list {
+  white-space: nowrap;
+
+  .gct-filter-list-inner {
+    display: flex;
+    padding: 28px 44px 20px 44px;
+    border-bottom: 1px solid color(border);
+  }
+
+  .gct-filter-list-clear-all {
+    margin-top: 11px;
+    margin-right: 20px;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: $transition-duration;
+
+    &:hover {
+      color: #000000;
+    }
+  }
+}
+
+.gct-filter-list-item {
+  display: flex;
+  padding: 8px 15px;
+  border: 1px solid color(border);
+  border-radius: 40px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  float: left;
+  align-items: center;
+
+  b {
+    font-weight: 900;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .gct-filter-list-item-handle {
+    margin-right: 12px;
+
+    span {
+      display: block;
+      width: 10px;
+      height: 2px;
+      background-color: var(--color-primary);
+
+      &:not(:last-child) {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .gct-filter-list-item-clear {
+    cursor: pointer;
+    margin-left: 12px;
+
+    svg path {
+      transition: $transition-duration;
+    }
+
+    &:hover {
+      svg path {
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.dialog-link-inner {
+  display: flex;
+}
+
+.dialog-link-icon {
+  color: var(--color-link);
+  margin-right: 8px;
+}
+
+.dialog-link-text {
+  color: var(--color-link);
+  text-decoration: underline;
+  cursor: pointer;
+}

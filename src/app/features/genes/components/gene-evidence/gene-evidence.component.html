@@ -1,0 +1,39 @@
+<div>
+  <div class="gene-evidence-nav">
+    <div class="gene-evidence-nav-inner">
+      <ul>
+        <ng-container *ngFor="let panel of panels">
+          <li *ngIf="!panel.disabled">
+            <a
+              (click)="activatePanel(panel)"
+              [ngClass]="{ active: activePanel === panel.name }"
+            >
+              {{ panel.label }}
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gene-evidence-body">
+    <div
+      class="gene-evidence-panel"
+      [ngClass]="{ active: activePanel === 'rna' }"
+    >
+      <gene-evidence-rna [gene]="gene"></gene-evidence-rna>
+    </div>
+    <div
+      class="gene-evidence-panel"
+      [ngClass]="{ active: activePanel === 'proteomics' }"
+    >
+      <gene-evidence-proteomics [gene]="gene"></gene-evidence-proteomics>
+    </div>
+    <div
+      class="gene-evidence-panel"
+      [ngClass]="{ active: activePanel === 'metabolomics' }"
+    >
+      <gene-evidence-metabolomics [gene]="gene"></gene-evidence-metabolomics>
+    </div>
+  </div>
+</div>

@@ -1,33 +1,33 @@
-process.env.CHROME_BIN = process.env.CHROME_BIN || require('puppeteer').executablePath();
+process.env.CHROME_BIN =
+  process.env.CHROME_BIN || require("puppeteer").executablePath();
 
 /**
  * @author: tipe.io
  */
 
 module.exports = function (config) {
-  const testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
+  const testWebpackConfig = require("./webpack.test.js")({ env: "test" });
 
   const configuration = {
-
     /**
      * Base path that will be used to resolve all patterns (e.g. files, exclude).
-    */
-    basePath: '',
+     */
+    basePath: "",
 
     /**
      * Frameworks to use
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ["jasmine"],
 
     /**
      * List of files to exclude.
-    */
+     */
     exclude: [],
 
     client: {
-      captureConsole: false
+      captureConsole: false,
     },
 
     /**
@@ -36,15 +36,21 @@ module.exports = function (config) {
      * we are building the test environment in ./spec-bundle.js
      */
     files: [
-      { pattern: './config/spec-bundle.js', watched: false },
-      { pattern: './src/assets/**/*', watched: false, included: false, served: true, nocache: false }
+      { pattern: "./config/spec-bundle.js", watched: false },
+      {
+        pattern: "./src/assets/**/*",
+        watched: false,
+        included: false,
+        served: true,
+        nocache: false,
+      },
     ],
 
     /**
      * By default all assets are served at http://localhost:[PORT]/base/
      */
     proxies: {
-      "/assets/": "/base/src/assets/"
+      "/assets/": "/base/src/assets/",
     },
 
     /**
@@ -52,7 +58,7 @@ module.exports = function (config) {
      * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
      */
     preprocessors: {
-      './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap']
+      "./config/spec-bundle.js": ["coverage", "webpack", "sourcemap"],
     },
 
     /**
@@ -61,16 +67,14 @@ module.exports = function (config) {
     webpack: testWebpackConfig,
 
     coverageReporter: {
-      reporters: [
-        { type: 'in-memory' }
-      ]
+      reporters: [{ type: "in-memory" }],
     },
 
     remapCoverageReporter: {
-      'text-summary': null,
-      json: './coverage/coverage.json',
-      html: './coverage/html',
-      lcovonly: './coverage/lcov.info'
+      "text-summary": null,
+      json: "./coverage/coverage.json",
+      html: "./coverage/html",
+      lcovonly: "./coverage/lcov.info",
     },
 
     /**
@@ -81,7 +85,7 @@ module.exports = function (config) {
        * webpack-dev-middleware configuration
        * i.e.
        */
-      logLevel: 'warn',
+      logLevel: "warn",
       /**
        * and use stats to turn off verbose output
        */
@@ -89,8 +93,8 @@ module.exports = function (config) {
         /**
          * options i.e.
          */
-        chunks: false
-      }
+        chunks: false,
+      },
     },
 
     /**
@@ -99,11 +103,11 @@ module.exports = function (config) {
      * possible values: 'dots', 'progress'
      * available reporters: https://npmjs.org/browse/keyword/karma-reporter
      */
-    reporters: ['mocha', 'coverage', 'remap-coverage', 'coveralls'],
+    reporters: ["mocha", "coverage", "remap-coverage", "coveralls"],
 
     coverageIstanbulReporter: {
-        reports: ['text-summary', 'html'],
-        fixWebpackSourcePaths: true,
+      reports: ["text-summary", "html"],
+      fixWebpackSourcePaths: true,
     },
 
     /**
@@ -131,21 +135,19 @@ module.exports = function (config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
-    browsers: [
-      'ChromeTravisCi'
-    ],
+    browsers: ["ChromeTravisCi"],
 
     customLaunchers: {
       ChromeTravisCi: {
-        base: 'Chrome',
+        base: "Chrome",
         flags: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--headless',
-          '--disable-gpu',
-          '--remote-debugging-port=9222'
-        ]
-      }
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--headless",
+          "--disable-gpu",
+          "--remote-debugging-port=9222",
+        ],
+      },
     },
 
     /**
@@ -158,33 +160,29 @@ module.exports = function (config) {
      * wait time . Uncomment the line below if required.
      */
     // browserNoActivityTimeout: 30000
-
   };
 
   // Optional Sonar Qube Reporter
   if (process.env.SONAR_QUBE) {
-
     // SonarQube reporter plugin configuration
     configuration.sonarQubeUnitReporter = {
-      sonarQubeVersion: '5.x',
-      outputFile: 'reports/ut_report.xml',
+      sonarQubeVersion: "5.x",
+      outputFile: "reports/ut_report.xml",
       overrideTestDescription: true,
-      testPath: 'src/app',
-      testFilePattern: '.spec.ts',
-      useBrowserName: false
+      testPath: "src/app",
+      testFilePattern: ".spec.ts",
+      useBrowserName: false,
     };
 
     // Additional lcov format required for
     // sonarqube
-    configuration.remapCoverageReporter.lcovonly = './coverage/coverage.lcov';
+    configuration.remapCoverageReporter.lcovonly = "./coverage/coverage.lcov";
 
-    configuration.reporters.push('sonarqubeUnit');
+    configuration.reporters.push("sonarqubeUnit");
   }
 
   if (process.env.TRAVIS) {
-    configuration.browsers = [
-      'ChromeTravisCi'
-    ];
+    configuration.browsers = ["ChromeTravisCi"];
   }
 
   config.set(configuration);

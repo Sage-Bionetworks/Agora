@@ -1,60 +1,45 @@
-// Angular modules
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import { NgModule } from '@angular/core';
-import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
 
-// Our other developed modules
-import { AppSharedModule } from './shared';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { SharedModule } from './shared';
 import { CoreModule } from './core';
+import { GenesModule } from './features/genes';
+import { ChartsModule } from './features/charts';
+import { TeamsModule } from './features/teams';
+import { PagesModule } from './features/pages';
+import { AppRoutingModule } from './app.routing';
 
-// Third-party modules
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { CookieService } from 'ngx-cookie-service';
-
-// Platform and Environment providers
-import { environment } from 'environments/environment';
-import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-
-// Sub-components
+// -------------------------------------------------------------------------- //
+// Components
+// -------------------------------------------------------------------------- //
 import { AppComponent } from './app.component';
 
-// State related imports
-import { AppState, InternalStateType } from './app.service';
-
-// Application wide providers
-const APP_PROVIDERS = [
-    ...APP_RESOLVER_PROVIDERS,
-    AppState
-];
-
-interface StoreType {
-    state: InternalStateType;
-    restoreInputValues: () => void;
-    disposeOldHosts: () => void;
-}
-
 @NgModule({
-    bootstrap: [ AppComponent ],
-    declarations: [
-        AppComponent
-    ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterModule,
-        AppSharedModule.forRoot(),
-        NgxWebstorageModule.forRoot(),
-        CoreModule
-    ],
-    /**
-     * Expose our Services and Providers into Angular's dependency injection.
-     */
-    providers: [
-        environment.ENV_PROVIDERS,
-        APP_PROVIDERS,
-        HammerGestureConfig,
-        CookieService
-    ]
+  declarations: [AppComponent],
+  imports: [
+    // External
+    BrowserModule,
+    BrowserAnimationsModule,
+
+    // Internal
+    SharedModule,
+    CoreModule,
+    GenesModule,
+    ChartsModule,
+    TeamsModule,
+    PagesModule,
+
+    // Rounting
+    AppRoutingModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

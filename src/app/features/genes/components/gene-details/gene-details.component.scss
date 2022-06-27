@@ -1,0 +1,154 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.gene-details-nav {
+  background-color: #ffffff;
+  box-shadow: 0px 4px 6px color(black-box-shadow, a50);
+
+  ul {
+    @include reset-ul();
+
+    a {
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+
+      &.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@media (max-width: 1299px) {
+  .gene-details {
+    padding-top: 43px;
+  }
+
+  .gene-details-nav {
+    position: absolute;
+    width: 100%;
+    top: var(--header-height);
+    background: #3c4a63;
+
+    ul {
+      a {
+        position: relative;
+        display: block;
+        color: #ffffff;
+        font-size: var(--font-size-md);
+        padding: 10px var(--container-gutter-width);
+
+        .gene-details-nav-icon {
+          position: absolute;
+          display: none;
+          top: 0;
+          right: var(--container-gutter-width);
+          width: 24px;
+          height: 100%;
+
+          &:before,
+          &:after {
+            content: " ";
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 3px;
+            top: 50%;
+            left: 0;
+            border-radius: 2px;
+            background-color: var(--color-quaternary);
+          }
+
+          &:after {
+            transform: rotate(90deg);
+          }
+        }
+
+        &:not(.active) {
+          background-color: rgba(255, 255, 255, 0.05);
+          display: none;
+        }
+
+        &.active {
+          .gene-details-nav-icon {
+            display: block;
+          }
+        }
+      }
+    }
+
+    &.open {
+      ul {
+        a {
+          &:not(.active) {
+            display: block;
+          }
+
+          &.active {
+            .gene-details-nav-icon {
+              &:after {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1300px) {
+  .gene-details-nav {
+    .gene-details-nav-inner {
+      @include container();
+      display: flex;
+      height: 70px;
+    }
+
+    ul {
+      display: flex;
+      width: 100%;
+
+      li {
+        padding-right: 7vw;
+        max-width: 280px;
+      }
+
+      a {
+        display: flex;
+        height: 100%;
+        font-size: var(--font-size-lg);
+        color: var(--color-darker);
+        align-items: center;
+
+        &.active {
+          font-weight: 700;
+          color: var(--color-text);
+        }
+      }
+    }
+  }
+}
+
+.gene-details-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.gene-details-panel {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    top: auto;
+    z-index: 200;
+  }
+}

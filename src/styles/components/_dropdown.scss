@@ -1,0 +1,98 @@
+.p-dropdown {
+  padding: 12px 20px 12px 30px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-light);
+  border-radius: 5px;
+
+  .p-dropdown-panel {
+    border: 1px solid var(--color-light);
+    background-color: #ffffff;
+    border-radius: 0 0 5px 5px;
+    transform: translateY(-1px);
+
+    li {
+      padding: 11px 30px;
+
+      &:hover {
+        background-color: var(--color-lighter);
+      }
+    }
+  }
+
+  .p-dropdown-trigger {
+    margin-left: 30px;
+  }
+}
+
+.p-multiselect {
+  width: 100%;
+  color: #ffffff;
+  position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  .p-multiselect-label-container,
+  .p-multiselect-label-empty {
+    display: none;
+  }
+
+  .p-multiselect-items-wrapper {
+    padding: 0px;
+    background: white;
+  }
+
+  .p-multiselect-items {
+    background: white;
+    color: var(--color-text);
+  }
+
+  .p-multiselect-panel {
+    padding: 0px;
+    background: transparent;
+    min-width: 234px !important;
+    left: -190px !important;
+    top: 20px !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%);
+
+    .pi-check::before {
+      color: var(--color-primary);
+    }
+  }
+
+  .p-multiselect-item {
+    display: flex;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: left;
+    padding: 6px 15px;
+
+    .p-checkbox {
+      min-width: 18px;
+      margin-right: 8px;
+    }
+
+    .p-checkbox-box {
+      line-height: 23px;
+    }
+
+    &:hover {
+      background: var(--color-lighter);
+    }
+  }
+}
+
+.gene-model-selector {
+  .p-dropdown {
+    width: 600px;
+    max-width: 100%;
+  }
+}
+
+.gene-protein-selector {
+  .p-dropdown {
+    width: 600px;
+    max-width: 100%;
+  }
+}

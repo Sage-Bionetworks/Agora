@@ -1,0 +1,77 @@
+<div class="section">
+  <div class="section-inner">
+    <div *ngIf="_gene?.experimentalValidation?.length">
+      <div class="row">
+        <div>
+          <h2>
+            Experimental Validation of
+            {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }}
+          </h2>
+          <p class="mb-0">
+            Nominating teams provided details on experimental validation studies
+            they performed to examine a role for the target in AD.
+          </p>
+        </div>
+      </div>
+
+      <hr class="separator separator-lg" />
+
+      <div *ngFor="let d of _gene.experimentalValidation; let i = index">
+        <div>
+          <div *ngIf="d.team_data">
+            <h2>{{ d.team_data.program }} : {{ d.team_data.team_full }}</h2>
+            <p class="col-8 section-desc">{{ d.team_data.description }}</p>
+          </div>
+
+          <h4>Hypothesis Being Tested</h4>
+          <p class="col-8 section-desc">{{ d.hypothesis_tested }}</p>
+
+          <h4>Species and Model System</h4>
+          <p class="col-8 section-desc">
+            {{ d.species }}<span *ngIf="d.species && d.model_system">; </span>
+            <span *ngIf="d.model_system">{{ d.model_system }}</span>
+          </p>
+
+          <h4>Outcome Measure</h4>
+          <p class="col-8 section-desc">
+            {{ d.outcome_measure
+            }}<span *ngIf="d.outcome_measure && d.outcome_measure_details"
+              >;
+            </span>
+            <span *ngIf="d.outcome_measure_details">{{
+              d.outcome_measure_details
+            }}</span>
+          </p>
+
+          <h4>Summary of Findings</h4>
+          <p class="col-8 section-desc">{{ d.summary_findings }}</p>
+
+          <h4>Contributors</h4>
+          <p class="col-8 section-desc">{{ d.contributors }}</p>
+
+          <h4>Published?</h4>
+          <p class="col-8 section-desc">
+            {{ d.published
+            }}<span *ngIf="d.published && d.reference_doi">; </span>
+            <span *ngIf="d.reference_doi"
+              ><a
+                class="link-heading"
+                [href]="d.reference_doi"
+                target="_blank"
+                >{{ d.reference_doi }}</a
+              ></span
+            >
+          </p>
+
+          <h4>Date of Report</h4>
+          <p class="col-8 section-desc">{{ d.date_report }}</p>
+        </div>
+
+        <hr
+          *ngIf="i + 1 < (_gene.experimentalValidation?.length || 0)"
+          class="separator separator-lg"
+        />
+      </div>
+    </div>
+  </div>
+</div>

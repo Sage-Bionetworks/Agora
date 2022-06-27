@@ -1,0 +1,39 @@
+.p-button {
+  @include reset-button();
+  box-shadow: none;
+  user-select: none;
+  transition: $transition-duration;
+  padding: 15px 30px;
+  font-weight: 700;
+  text-decoration: none;
+
+  .p-button-text {
+    padding: 15px 30px;
+    color: #000000;
+    font-size: var(--font-size-sm);
+  }
+}
+
+.p-button-primary {
+  background-color: var(--color-action-primary);
+  border: 1px solid var(--color-action-primary);
+
+  &:hover {
+    background-color: var(--color-action-primary);
+    border: 1px solid var(--color-action-primary);
+  }
+}
+
+.p-button-secondary {
+  background-color: var(--color-action-secondary);
+  border: 1px solid var(--color-action-secondary);
+
+  &:hover {
+    background-color: var(--color-action-secondary);
+    border: 1px solid var(--color-action-secondary);
+  }
+}
+
+.p-button-rounded {
+  border-radius: 40px;
+}

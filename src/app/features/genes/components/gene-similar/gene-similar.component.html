@@ -1,0 +1,34 @@
+<div class="section section-hero">
+  <div class="section-inner">
+    <h1>Similar Genes</h1>
+    <p *ngIf="gene?.ensembl_gene_id">
+      Genes that are similar to
+      <a class="link" [routerLink]="'/genes/' + gene?.ensembl_gene_id">{{
+        gene.hgnc_symbol || gene.ensembl_gene_id
+      }}</a>
+      based on network coexpression.
+    </p>
+    <p *ngIf="!gene?.ensembl_gene_id">
+      Genes that are similar based on network coexpression.
+    </p>
+    <dialog-link
+      label="Learn more about this table"
+      header="Similar genes"
+      wikiId="612974"
+    >
+    </dialog-link>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <gene-table
+      className="similar-gene-table"
+      [exportFilename]="'genes-similar-' + gene?.ensembl_gene_id"
+      [genes]="data"
+      [columns]="tableColumns"
+      sortField="hgnc_symbol"
+      heading="Similar Genes"
+    ></gene-table>
+  </div>
+</div>

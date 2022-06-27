@@ -1,0 +1,74 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.tab-row {
+  min-height: 99px;
+  padding: 15px;
+  padding-right: 144px;
+  border: 2px solid #dddddf;
+  margin: 0px;
+  margin-bottom: 15px;
+
+  .last-row {
+    margin-top: 15px;
+  }
+
+  a {
+    display: flex;
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 0px;
+  }
+
+  .header-title {
+    line-height: var(--font-size-xxl);
+    font-size: var(--font-size-lg);
+  }
+
+  .header-title,
+  .header-link,
+  .header-description {
+    @include respond-to("ex-small") {
+      min-height: 43px;
+      margin-top: 25.5px !important;
+      line-height: $font-size-large;
+    }
+    @include respond-to("small") {
+      min-height: 43px;
+      margin-top: 25.5px !important;
+      line-height: $font-size-large;
+    }
+    @include respond-to("medium") {
+      margin-top: auto !important;
+      min-height: 0px;
+    }
+    @include respond-to("large") {
+      margin-top: auto !important;
+      min-height: 0px;
+    }
+    @include respond-to("ex-large") {
+      margin-top: auto !important;
+      min-height: 0px;
+    }
+  }
+
+  .header-link {
+    text-align: center;
+
+    a {
+      display: block;
+    }
+  }
+
+  .header-description {
+    line-height: var(--font-size-xl);
+    font-size: var(--font-size-md);
+  }
+
+  > [class*="col-"] {
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}

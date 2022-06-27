@@ -1,0 +1,12 @@
+<div class="chart median-chart" (window:resize)="onResize()">
+  <div class="chart-inner">
+    <h4 *ngIf="heading" class="chart-heading">{{ heading }}</h4>
+    <div class="chart-body">
+      <div #chartContainer class="chart-container"></div>
+    </div>
+    <div *ngIf="xAxisLabel" class="chart-x-axis-label">{{ xAxisLabel }}</div>
+    <div class="chart-no-data" *ngIf="!gene?.medianexpression?.length">
+      <div class="chart-no-data-text">No data is currently available.</div>
+    </div>
+  </div>
+</div>

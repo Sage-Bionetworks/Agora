@@ -1,0 +1,23 @@
+.section {
+  .section-inner {
+    @include container();
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+}
+
+.section-hero {
+  background-image: url("../assets/images/hero-background.svg");
+  background-size: cover !important;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

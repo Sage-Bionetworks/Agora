@@ -1,0 +1,51 @@
+<div class="gene-details">
+  <gene-hero [gene]="gene"></gene-hero>
+
+  <div class="gene-details-nav" [ngClass]="{ open: isNavigationOpen }">
+    <div class="gene-details-nav-inner">
+      <ul>
+        <ng-container *ngFor="let panel of panels">
+          <li *ngIf="!panel.disabled" class="gene-details-nav-item">
+            <a
+              (click)="onNavigationClick(panel)"
+              [ngClass]="{ active: activePanel === panel.name }"
+            >
+              {{ panel.label }}
+              <span class="gene-details-nav-icon"></span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gene-details-body">
+    <ng-container *ngFor="let panel of panels">
+      <div
+        *ngIf="!panel.disabled"
+        class="gene-details-panel"
+        [ngClass]="{
+          active: activePanel === panel.name
+        }"
+      >
+        <gene-soe *ngIf="'summary' == panel.name" [gene]="gene"></gene-soe>
+        <gene-evidence
+          *ngIf="'evidence' == panel.name"
+          [gene]="gene"
+        ></gene-evidence>
+        <gene-resources
+          *ngIf="'resources' == panel.name"
+          [gene]="gene"
+        ></gene-resources>
+        <gene-nominations
+          *ngIf="'nominations' == panel.name"
+          [gene]="gene"
+        ></gene-nominations>
+        <gene-experimental-validation
+          *ngIf="'experimental-validation' == panel.name"
+          [gene]="gene"
+        ></gene-experimental-validation>
+      </div>
+    </ng-container>
+  </div>
+</div>
