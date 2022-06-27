@@ -133,6 +133,7 @@ export class GeneComparisonToolComponent
 
   /* State ----------------------------------------------------------------- */
   loading = true;
+  tableInitialized = false;
 
   /* Components ------------------------------------------------------------ */
   @ViewChild('tableHeader', { static: false }) tableHeader: Table = {} as Table;
@@ -206,7 +207,10 @@ export class GeneComparisonToolComponent
   }
 
   ngAfterViewInit() {
-    this.updateColumnWidth();
+    const self = this;
+    setTimeout(() => {
+      self.initTables();
+    }, 10);
   }
 
   ngOnDestroy() {
@@ -225,6 +229,9 @@ export class GeneComparisonToolComponent
       .getComparisonData(this.selectedModel)
       .subscribe((data: Gene[]) => {
         this.initGenes(data);
+        this.initTables();
+        this.loading = false;
+        this.helperService.setLoading(false);
       });
   }
 
@@ -278,19 +285,17 @@ export class GeneComparisonToolComponent
 
     tissues.sort();
     this.tissues = tissues;
+  }
+
+  initTables() {
+    if (!this.tableHeader?.containerViewChild?.nativeElement) {
+      return;
+    }
 
     this.sortField = this.sortField || this.tissues[0];
     this.sortTable(this.tableHeader);
     this.filter();
-
     this.updateColumnWidth();
-    const self = this;
-    setTimeout(function () {
-      self.updateColumnWidth();
-    }, 100);
-
-    this.loading = false;
-    this.helperService.setLoading(false);
   }
 
   /* ----------------------------------------------------------------------- */
@@ -758,7 +763,12 @@ export class GeneComparisonToolComponent
   }
 
   updateColumnWidth() {
-    const table = this.tableHeader.containerViewChild.nativeElement;
+    const table = this.tableHeader?.containerViewChild?.nativeElement;
+
+    if (!table) {
+      return;
+    }
+
     const tableWidth = table.offsetWidth;
 
     if (tableWidth) {

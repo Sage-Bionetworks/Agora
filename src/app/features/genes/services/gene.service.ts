@@ -75,20 +75,14 @@ export class GeneService {
   // ------------------------------------------------------------------------ //
 
   getComparisonData(model: string) {
-    return this.apiService.getComparisonData(model).pipe(
-      tap((data: any) => {
-        this.comparisonData[model] = data;
-      })
-    );
-
-    // if (this.comparisonData[model]) {
-    //   return of(this.comparisonData[model]);
-    // } else {
-    //   return this.apiService.getComparisonData(model).pipe(
-    //     tap((data: any) => {
-    //       this.comparisonData[model] = data;
-    //     })
-    //   );
-    // }
+    if (this.comparisonData[model]) {
+      return of(this.comparisonData[model]);
+    } else {
+      return this.apiService.getComparisonData(model).pipe(
+        tap((data: any) => {
+          this.comparisonData[model] = data;
+        })
+      );
+    }
   }
 }
