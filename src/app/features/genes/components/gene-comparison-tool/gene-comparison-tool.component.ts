@@ -88,6 +88,7 @@ export class GeneComparisonToolComponent
       description:
         'Filter for genes based on how many times they have been nominated as a potential target for AD.',
       matchMode: 'in',
+      order: 'DESC',
       options: [],
     },
     {
@@ -105,6 +106,7 @@ export class GeneComparisonToolComponent
       description:
         'Filter for genes based on the year that they were first nominated as a potential target for AD.',
       matchMode: 'in',
+      order: 'DESC',
       options: [],
     },
     {
@@ -124,6 +126,50 @@ export class GeneComparisonToolComponent
         'Filter for genes based on the type of data that the nominating research team analyzed to identify the gene as a potential target for AD.',
       matchMode: 'intersect',
       options: [],
+    },
+    {
+      name: 'validation_study_details',
+      label: 'Experimental Validation',
+      short: 'Experimental Validation',
+      description:
+        'Filter for genes based on the experimental validation status indicated by the nominating team(s).',
+      order: 'DESC',
+      matchMode: 'intersect',
+      options: [],
+    },
+    {
+      name: 'nominating_programs',
+      label: 'Nominating Program',
+      short: 'Nominating Program',
+      description: 'Filter for genes based on the nominating program.',
+      matchMode: 'intersect',
+      options: [],
+    },
+    {
+      name: 'association_with_ad',
+      label: 'Association with AD',
+      short: 'Association with AD',
+      description:
+        'Filter for genes that are associated with AD based on GWAS, eQTL, and differential expression results.',
+      matchMode: 'intersect',
+      options: [
+        {
+          label: 'Genetically Associated with LOAD',
+          value: 1,
+        },
+        {
+          label: 'RNA Expression Changed in AD Brain',
+          value: 2,
+        },
+        {
+          label: 'Protein Expression Changed in AD Brain',
+          value: 3,
+        },
+        {
+          label: 'Protein Expression Changed in AD Brain',
+          value: 4,
+        },
+      ],
     },
   ];
   searchTerm = '';
@@ -258,16 +304,24 @@ export class GeneComparisonToolComponent
     for (const gene of this.availableGenes) {
       this.setFilterOption('nominations', gene.nominations);
 
-      gene.teams.forEach((team: string[]) => {
-        this.setFilterOption('teams', team);
+      gene.teams.forEach((item: string[]) => {
+        this.setFilterOption('teams', item);
       });
 
-      gene.studies.forEach((study: string[]) => {
-        this.setFilterOption('studies', study);
+      gene.studies.forEach((item: string[]) => {
+        this.setFilterOption('studies', item);
       });
 
-      gene.input_datas.forEach((inputData: string[]) => {
-        this.setFilterOption('input_datas', inputData);
+      gene.input_datas.forEach((item: string[]) => {
+        this.setFilterOption('input_datas', item);
+      });
+
+      gene.validation_study_details.forEach((item: string[]) => {
+        this.setFilterOption('validation_study_details', item);
+      });
+
+      gene.nominating_programs.forEach((item: string[]) => {
+        this.setFilterOption('nominating_programs', item);
       });
 
       if (gene.year_first_nominated) {
@@ -342,7 +396,8 @@ export class GeneComparisonToolComponent
   }
 
   filterOptionValueToLabel(value: string | number | string[] | number[]) {
-    const label = typeof value === 'string' ? value : value.toString(10);
+    let label = typeof value === 'string' ? value : value.toString(10);
+    label = label.charAt(0).toUpperCase() + label.slice(1);
     switch (label) {
       case 'and Late Onset Alzheimer&quot;s Disease Family Study':
         return 'Late Onset Alzheimer&quot;s Disease Family Study';
@@ -353,8 +408,10 @@ export class GeneComparisonToolComponent
 
   setFilterOption(name: string, value: string | number | string[] | number[]) {
     const filter = value ? this.filters.find((f) => f.name === name) : null;
+
     if (filter && !filter.options.find((option) => value === option.value)) {
       const urlParams = this.getUrlParam(filter.name, true);
+
       filter.options.push({
         label: this.filterOptionValueToLabel(value),
         value,
@@ -366,6 +423,7 @@ export class GeneComparisonToolComponent
             ? true
             : false,
       });
+
       filter.options.sort((a, b) => {
         if (a.label < b.label) {
           return -1;
@@ -374,7 +432,8 @@ export class GeneComparisonToolComponent
         }
         return 0;
       });
-      if (typeof value === 'number') {
+
+      if (filter.order === 'DESC') {
         filter.options.reverse();
       }
     }

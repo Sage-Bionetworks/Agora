@@ -36,6 +36,7 @@ export interface GCTFilter {
   short?: string;
   description?: string;
   matchMode?: string;
+  order?: string;
   options: GCTFilterOption[];
 }
 

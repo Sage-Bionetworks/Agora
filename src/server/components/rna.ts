@@ -8,12 +8,13 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
 import { setHeaders } from '../helpers';
-import { getGenesMap } from './';
+import { getGenesMap, getTeams } from './';
 import {
   RnaDifferentialExpression,
   RnaDifferentialExpressionCollection,
   RnaDifferentialExpressionDistribution,
   RnaDifferentialExpressionDistributionCollection,
+  Team,
 } from '../models';
 
 // -------------------------------------------------------------------------- //
@@ -94,6 +95,7 @@ export async function getRnaDifferentialExpressionByModel(model: string) {
 
   if (result) {
     const genesMap = await getGenesMap();
+    const teams = await getTeams();
     let grouped: any = {};
 
     result.forEach((item: any) => {
@@ -108,6 +110,9 @@ export async function getRnaDifferentialExpressionByModel(model: string) {
           input_datas: [],
           year_first_nominated: null,
           tissues: [],
+          validation_study_details: [],
+          nominating_programs: [],
+          association_with_ad: [],
         };
 
         const gene = genesMap.get(item.ensembl_gene_id);
@@ -120,6 +125,16 @@ export async function getRnaDifferentialExpressionByModel(model: string) {
           if (gene.nominatedtarget?.length) {
             for (const nominated of gene.nominatedtarget) {
               if (nominated.team) {
+                const team = teams.find(
+                  (team: Team) => team.team === nominated.team
+                );
+
+                if (team) {
+                  if (!_item.nominating_programs.includes(team.program)) {
+                    _item.nominating_programs.push(team.program);
+                  }
+                }
+
                 _item.teams.push(nominated.team);
               }
 
@@ -135,6 +150,17 @@ export async function getRnaDifferentialExpressionByModel(model: string) {
                 });
               }
 
+              if (
+                nominated.validation_study_details &&
+                !_item.validation_study_details.includes(
+                  nominated.validation_study_details
+                )
+              ) {
+                _item.validation_study_details.push(
+                  nominated.validation_study_details.trim()
+                );
+              }
+
               if (nominated.initial_nomination) {
                 if (
                   !_item.year_first_nominated ||
@@ -144,6 +170,25 @@ export async function getRnaDifferentialExpressionByModel(model: string) {
                 }
               }
             }
+          }
+
+          if (gene.isIGAP) {
+            _item.association_with_ad.push(1);
+          }
+
+          if (gene.haseqtl) {
+            _item.association_with_ad.push(2);
+          }
+
+          if (gene.rna_brain_change_studied && gene.isAnyRNAChangedInADBrain) {
+            _item.association_with_ad.push(3);
+          }
+
+          if (
+            gene.protein_brain_change_studied &&
+            gene.isAnyProteinChangedInADBrain
+          ) {
+            _item.association_with_ad.push(4);
           }
 
           if (gene.medianexpression) {
