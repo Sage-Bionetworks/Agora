@@ -14,7 +14,7 @@ branches:
     - prod
 
 before_install:
-  - npm install npm@8.11.0
+  # - npm install npm@8.11.0
   - npm cache verify
   - travis_retry npm prune
 
