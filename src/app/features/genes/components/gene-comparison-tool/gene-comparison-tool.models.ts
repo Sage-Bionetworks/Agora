@@ -1,5 +1,5 @@
 import { SelectItem } from 'primeng/api';
-import { MedianExpression } from '../../models';
+import { MedianExpression } from '../../../../models';
 
 export interface GCTGeneTissue {
   name: string;
@@ -49,4 +49,11 @@ export interface GCDetailsPanelData {
   min?: number;
   max?: number;
   footer?: string;
+}
+
+export interface GCTSortEvent {
+  //data: string[] | number[];
+  field: string;
+  mode: string;
+  order: number;
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 
 interface SummaryProperty {
   title: string;
@@ -21,11 +21,11 @@ interface Summary {
   styleUrls: ['./gene-soe-list.component.scss'],
 })
 export class GeneSoeListComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }

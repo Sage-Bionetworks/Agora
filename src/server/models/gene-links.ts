@@ -6,43 +6,29 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
+import { GeneNetworkLinks } from '../../app/models';
+export { GeneNetworkLinks } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
 
-const NeuropathCorrelationsSchema = new Schema(
+const GeneLinkSchema = new Schema<GeneNetworkLinks>(
   {
-    ensg: String,
+    geneA_ensembl_gene_id: { type: String, required: true },
+    geneB_ensembl_gene_id: { type: String, required: true },
+    geneA_external_gene_name: { type: String, required: true },
+    geneB_external_gene_name: { type: String, required: true },
+    brainRegion: { type: String, required: true },
   },
-  { collection: 'genesneuropathcorr' }
-);
-const NeuropathCorrelationsCollection = model(
-  'NeuropathCorrelationsCollection',
-  NeuropathCorrelationsSchema
+  { collection: 'geneslinks' }
 );
 
 // -------------------------------------------------------------------------- //
-//
+// Models
 // -------------------------------------------------------------------------- //
 
-export async function getGeneNeuropathCorrelations(ensg: string) {
-  try {
-    let result: any = cache.get('neuropath-correlations-' + ensg);
-
-    if (result) {
-      return result;
-    }
-
-    result = await NeuropathCorrelationsCollection.find({ ensg: ensg })
-      .lean()
-      .exec();
-    cache.set('neuropath-correlations-' + ensg, result);
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
-}
+export const GeneLinkCollection = model<GeneNetworkLinks>(
+  'GeneLinksCollection',
+  GeneLinkSchema
+);

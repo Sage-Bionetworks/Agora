@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import * as d3 from 'd3';
 
 import { BaseChartComponent } from '../base-chart';
-import { GeneInfo } from '../../../genes/models';
+import { Gene } from '../../../../models';
 import { HelperService } from '../../../../core/services';
 
 @Component({
@@ -11,11 +11,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./candlestick-chart.component.scss'],
 })
 export class CandlestickChartComponent extends BaseChartComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }
@@ -33,7 +33,10 @@ export class CandlestickChartComponent extends BaseChartComponent {
   }
 
   override init() {
-    if (!this._gene.ensembl_gene_id || !this.chartContainer.nativeElement) {
+    if (
+      !this._gene.neuropathologic_correlations?.length ||
+      !this.chartContainer.nativeElement
+    ) {
       return;
     }
 
@@ -45,9 +48,10 @@ export class CandlestickChartComponent extends BaseChartComponent {
   }
 
   initData() {
-    const neuropathCorrelations = this._gene.neuropathCorrelations.filter(
-      (item: any) => item.neuropath_type !== 'DCFDX'
-    );
+    const neuropathCorrelations =
+      this._gene.neuropathologic_correlations?.filter(
+        (item: any) => item.neuropath_type !== 'DCFDX'
+      ) || [];
 
     neuropathCorrelations.sort((a: any, b: any) =>
       a.neuropath_type > b.neuropath_type ? 1 : -1

@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
 
-import { GeneInfo, GeneNetwork, GeneNode } from '../../models';
-
+import { Gene, GeneNetwork, GeneNode } from '../../../../models';
 import { GeneService } from '../../services';
 
 @Component({
@@ -12,11 +11,11 @@ import { GeneService } from '../../services';
   styleUrls: ['./gene-network.component.scss'],
 })
 export class GeneNetworkComponent implements OnInit {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }

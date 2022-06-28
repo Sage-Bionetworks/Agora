@@ -4,7 +4,7 @@ import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
 import { HelperService } from '../../../../core/services';
 
-import { GeneInfo, NominatedTarget } from '../../models';
+import { Gene, NominatedTarget } from '../../../../models';
 
 interface TableColumn {
   field: string;
@@ -18,7 +18,7 @@ interface TableColumn {
   styleUrls: ['./gene-nominated-targets.component.scss'],
 })
 export class GeneNominatedTargetsComponent implements OnInit {
-  data: GeneInfo[] = [];
+  data: Gene[] = [];
   searchTerm = '';
 
   tableColumns: TableColumn[] = [
@@ -56,10 +56,10 @@ export class GeneNominatedTargetsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.apiService.getTableData().subscribe((data: GeneInfo[]) => {
+    this.apiService.getTableData().subscribe((data: Gene[]) => {
       this.data = data;
 
-      this.data.forEach((de: GeneInfo) => {
+      this.data.forEach((de: Gene) => {
         let teamsArray: string[] = [];
         let studyArray: string[] = [];
         let inputDataArray: string[] = [];

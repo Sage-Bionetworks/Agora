@@ -13,7 +13,12 @@ import {
 
 import * as d3 from 'd3';
 
-import { Gene, GeneNetwork, GeneLink, GeneNode } from '../../../genes/models';
+import {
+  GeneNetwork,
+  GeneLink,
+  GeneNode,
+  RnaDifferentialExpression,
+} from '../../../../models';
 
 import { hexagonSymbol } from '.';
 
@@ -33,7 +38,8 @@ export class ForceChartComponent implements OnInit, AfterViewInit, OnChanges {
     this.init();
   }
 
-  @Output() updategene: EventEmitter<Gene> = new EventEmitter<Gene>();
+  @Output() updategene: EventEmitter<RnaDifferentialExpression> =
+    new EventEmitter<RnaDifferentialExpression>();
   @ViewChild('chartContainer', { static: true }) chartContainer: ElementRef =
     {} as ElementRef;
 
@@ -498,7 +504,7 @@ export class ForceChartComponent implements OnInit, AfterViewInit, OnChanges {
     return '#D3D5DB';
   }
 
-  buildPath(gene: Gene) {
+  buildPath(gene: RnaDifferentialExpression) {
     this.updategene.emit(gene);
   }
 }

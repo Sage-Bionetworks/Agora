@@ -17,8 +17,7 @@ import {
   teamsRoute,
   teamMemberImageRoute,
   geneTableRoute,
-  geneLinksRoute,
-} from './routes';
+} from './components';
 
 // -------------------------------------------------------------------------- //
 // Logic
@@ -89,7 +88,6 @@ connection.once('open', async () => {
   router.get('/teams', teamsRoute);
   router.get('/team-member/:name/image', teamMemberImageRoute);
   router.get('/distribution', distributionRoute);
-  router.get('/links', geneLinksRoute);
 });
 
 export default router;

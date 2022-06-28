@@ -1,22 +1,22 @@
-import { Document } from 'mongoose';
+import { Team } from './';
 
-export interface GeneExperimentalValidation {
+export interface ExperimentalValidation {
   _id: string;
   ensembl_gene_id: string;
   hgnc_symbol: string;
   hypothesis_tested: string;
   summary_findings: string;
   published: string;
+  reference: string;
   species: string;
   model_system: string;
   outcome_measure: string;
   outcome_measure_details: string;
+  balanced_for_sex: string;
   contributors: string;
   team: string;
-  team_data: any;
   reference_doi: string;
   date_report: string;
+  //
+  team_data?: Team;
 }
-
-export type GeneExperimentalValidationDocument = GeneExperimentalValidation &
-  Document;

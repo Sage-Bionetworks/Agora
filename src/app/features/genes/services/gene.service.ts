@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { GeneInfo } from '../models';
+import { Gene } from '../../../models';
 import { ApiService } from '../../../core/services';
 import { GeneNetworkService } from '.';
 
 @Injectable()
 export class GeneService {
-  genes: { [key: string]: GeneInfo } = {};
+  genes: { [key: string]: Gene } = {};
   distribution: [] = [];
   distributionObservable: any = null;
   comparisonData: any = {};
@@ -20,13 +20,13 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getGene(id: string): Observable<GeneInfo> {
+  getGene(id: string): Observable<Gene> {
     if (this.genes[id]) {
       return of(this.genes[id]);
     }
 
     return this.apiService.getGene(id).pipe(
-      map((gene: GeneInfo) => {
+      map((gene: Gene) => {
         return (this.genes[id] = gene);
       })
     );
@@ -34,7 +34,7 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getStatisticalModels(gene: GeneInfo) {
+  getStatisticalModels(gene: Gene) {
     const models: string[] = [];
 
     gene.rna_differential_expression?.forEach((item: any) => {
@@ -46,7 +46,7 @@ export class GeneService {
     return models;
   }
 
-  getNetwork(gene: GeneInfo) {
+  getNetwork(gene: Gene) {
     return this.geneNetworkService.build(gene);
   }
 

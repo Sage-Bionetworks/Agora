@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Team, TeamsResponse } from '../../../../../models';
+import { Team, TeamsResponse } from '../../../../models';
 import { TeamService } from '../../services';
 import { HelperService } from '../../../../core/services';
 

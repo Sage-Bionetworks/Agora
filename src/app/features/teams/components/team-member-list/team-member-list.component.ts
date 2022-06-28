@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Team, TeamMember } from '../../../../../models';
+import { Team, TeamMember } from '../../../../models';
 import { TeamService } from '../../services';
 
 // -------------------------------------------------------------------------- //
@@ -31,6 +31,10 @@ export class TeamMemberListComponent {
   constructor(private teamService: TeamService) {}
 
   init(team: Team) {
+    if (!team.members) {
+      return;
+    }
+
     this.images = {};
 
     team.members.forEach((member: TeamMember) => {

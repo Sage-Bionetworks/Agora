@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { GeneInfo } from '../models';
+import { Gene } from '../../../models';
 
 @Injectable()
 export class GeneNetworkService {
-  gene: GeneInfo = {} as GeneInfo;
+  gene: Gene = {} as Gene;
 
   nodes: any = [];
   nodeGroups: any = [];
@@ -25,7 +25,7 @@ export class GeneNetworkService {
     this.linkMap = {};
   }
 
-  build(gene: GeneInfo) {
+  build(gene: Gene) {
     this.reset();
     this.gene = gene;
 

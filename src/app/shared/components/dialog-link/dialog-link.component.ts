@@ -11,6 +11,7 @@ export class DialogLinkComponent {
   @Input() label = '';
   @Input() header = '';
 
+  @Input() ownerId = '';
   @Input() wikiId = '';
 
   isActive = false;

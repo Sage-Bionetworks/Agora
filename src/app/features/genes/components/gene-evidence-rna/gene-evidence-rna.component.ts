@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { GeneInfo } from '../../models';
+import { Gene, RnaDifferentialExpression } from '../../../../models';
 import { GeneService } from '../../services';
 
 @Component({
@@ -9,18 +9,18 @@ import { GeneService } from '../../services';
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
 export class GeneEvidenceRnaComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }
 
   statisticalModels: string[] = [];
   selectedStatisticalModel = '';
-  differentialExpression: [] = [];
+  differentialExpression: RnaDifferentialExpression[] = [];
   differentialExpressionChartData: any = null;
   consistencyOfChangeChartData: any = null;
 
@@ -41,6 +41,10 @@ export class GeneEvidenceRnaComponent {
   }
 
   initDifferentialExpression() {
+    if (!this._gene.rna_differential_expression?.length) {
+      return;
+    }
+
     this.differentialExpression = this._gene.rna_differential_expression.filter(
       (g: any) => {
         return g.model === this.selectedStatisticalModel;
@@ -48,9 +52,11 @@ export class GeneEvidenceRnaComponent {
     );
 
     this.geneService.getDistribution().subscribe((data: any) => {
-      const distribution = data.rna.filter((data: any) => {
-        return data.model === this.selectedStatisticalModel;
-      });
+      const distribution = data.rna_differential_expression.filter(
+        (data: any) => {
+          return data.model === this.selectedStatisticalModel;
+        }
+      );
 
       const differentialExpressionChartData: any = [];
 

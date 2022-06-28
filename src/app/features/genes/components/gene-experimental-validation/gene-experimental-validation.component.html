@@ -1,6 +1,6 @@
 <div class="section">
   <div class="section-inner">
-    <div *ngIf="_gene?.experimentalValidation?.length">
+    <div *ngIf="_gene?.experimental_validation?.length">
       <div class="row">
         <div>
           <h2>
@@ -16,7 +16,7 @@
 
       <hr class="separator separator-lg" />
 
-      <div *ngFor="let d of _gene.experimentalValidation; let i = index">
+      <div *ngFor="let d of _gene.experimental_validation; let i = index">
         <div>
           <div *ngIf="d.team_data">
             <h2>{{ d.team_data.program }} : {{ d.team_data.team_full }}</h2>
@@ -68,7 +68,7 @@
         </div>
 
         <hr
-          *ngIf="i + 1 < (_gene.experimentalValidation?.length || 0)"
+          *ngIf="i + 1 < (_gene.experimental_validation?.length || 0)"
           class="separator separator-lg"
         />
       </div>

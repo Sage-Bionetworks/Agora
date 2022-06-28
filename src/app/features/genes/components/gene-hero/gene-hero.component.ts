@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 
 @Component({
   selector: 'gene-hero',
@@ -8,7 +8,7 @@ import { GeneInfo } from '../../models';
   styleUrls: ['./gene-hero.component.scss'],
 })
 export class GeneHeroComponent {
-  @Input() gene: GeneInfo = {} as GeneInfo;
+  @Input() gene: Gene = {} as Gene;
 
   getSummary(body = false): string {
     if (this.gene.summary) {

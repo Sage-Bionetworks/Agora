@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 import { GeneService } from '../../services';
 import { HelperService } from '../../../../core/services';
 
@@ -18,7 +18,7 @@ interface Panel {
   styleUrls: ['./gene-details.component.scss'],
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit {
-  gene: GeneInfo = {} as GeneInfo;
+  gene: Gene = {} as Gene;
 
   panels: Panel[] = [
     {
@@ -64,7 +64,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       if (params.get('id')) {
         this.geneService
           .getGene(params.get('id') as string)
-          .subscribe((gene: GeneInfo) => {
+          .subscribe((gene: Gene) => {
             this.helperService.setLoading(false);
             this.gene = gene;
 
@@ -78,7 +78,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
               panel.disabled = true;
             }
 
-            if (!this.gene.experimentalValidation?.length) {
+            if (!this.gene.experimental_validation?.length) {
               const panel: Panel =
                 this.panels.find((p) => p.name == 'experimental-validation') ||
                 ({} as Panel);

@@ -1,4 +1,3 @@
-import { Document } from 'mongoose';
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
 export interface GeneNode extends SimulationNodeDatum {
@@ -16,28 +15,6 @@ export interface GeneLink extends SimulationLinkDatum<SimulationNodeDatum> {
   brainregions: string[];
   geneIdA: string;
   geneIdB: string;
-}
-
-export interface GeneLinkP {
-  value: number;
-  source: GeneLinkDetail;
-  target: GeneLinkDetail;
-  brainregions: string[];
-  geneIdA: string;
-  geneIdB: string;
-}
-
-export interface GeneLinkDetail {
-  brainregions: string[];
-  ensembl_gene_id: string;
-  group: number;
-  hgnc_symbol: string;
-  id: string;
-  index: number;
-  vx: number;
-  vy: number;
-  x: number;
-  y: number;
 }
 
 export interface GeneNetwork {
@@ -58,5 +35,3 @@ export interface GeneNetworkLinks {
 export interface LinksListResponse {
   items: GeneNetworkLinks[];
 }
-
-export type GeneLinkDocument = GeneNetworkLinks & Document;

@@ -5,7 +5,7 @@ import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
 import { HelperService } from '../../../../core/services';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 
 interface TableColumn {
   field: string;
@@ -19,8 +19,8 @@ interface TableColumn {
   styleUrls: ['./gene-similar.component.scss'],
 })
 export class GeneSimilarComponent implements OnInit {
-  gene: GeneInfo = {} as GeneInfo;
-  data: GeneInfo[] = [];
+  gene: Gene = {} as Gene;
+  data: Gene[] = [];
 
   tableColumns: TableColumn[] = [
     { field: 'hgnc_symbol', header: 'Gene name', selected: true },
@@ -66,7 +66,7 @@ export class GeneSimilarComponent implements OnInit {
         this.helperService.setLoading(true);
         this.geneService
           .getGene(params.get('id') as string)
-          .subscribe((gene: GeneInfo) => {
+          .subscribe((gene: Gene) => {
             this.gene = gene;
             this.init();
           });
@@ -86,8 +86,8 @@ export class GeneSimilarComponent implements OnInit {
       ids.push(obj.ensembl_gene_id);
     });
 
-    this.apiService.getGenes(ids).subscribe((genes: GeneInfo[]) => {
-      genes.forEach((de: GeneInfo) => {
+    this.apiService.getGenes(ids).subscribe((genes: Gene[]) => {
+      genes.forEach((de: Gene) => {
         // Populate display fields & set default values
         de.is_any_rna_changed_in_ad_brain_display_value =
           de.rna_brain_change_studied

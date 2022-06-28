@@ -20,7 +20,7 @@ import { HelperService, SynapseApiService } from '../../../core/services';
   encapsulation: ViewEncapsulation.None,
 })
 export class WikiComponent implements OnInit {
-  @Input() ownerId = 'syn25913473';
+  @Input() ownerId = '';
   @Input() wikiId = '';
   @Input() className = '';
 
@@ -36,47 +36,49 @@ export class WikiComponent implements OnInit {
   ngOnInit() {
     this.helperService.setLoading(true);
 
-    this.synapseApiService.getWiki(this.ownerId, this.wikiId).subscribe(
-      (wiki: any) => {
-        if (!wiki) {
+    this.synapseApiService
+      .getWiki(this.ownerId || 'syn25913473', this.wikiId)
+      .subscribe(
+        (wiki: any) => {
+          if (!wiki) {
+            this.helperService.setLoading(false);
+            return;
+          }
+
+          // TODO: remove
+          // console.log('Wiki', wiki);
+
+          // Sanitize
+          let sanitized = sanitizeHtml(wiki.markdown);
+
+          // Add bold tags
+          sanitized = sanitized.replace(/\*\*(.*?)\*\*/g, this.replaceBold);
+
+          // Add syn links
+          sanitized = sanitized.replace(
+            /\[here\]\((.*?)\)/g,
+            this.replaceSynLinks
+          );
+
+          // Add emails
+          sanitized = sanitized.replace(
+            /([a-zA-Z0-9.*_-]+@[a-zA-Z0-9 .*_-]+\.[a-zA-Z0-9*_-]+)/gi,
+            this.replaceEmail
+          );
+
+          // Add variables
+          sanitized = sanitized.replace(/\${(.*?)}/g, this.replaceVariable);
+
+          // console.log(sanitized);
+
+          // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
+          this.safeHtml = this.sanitizer.bypassSecurityTrustHtml(sanitized);
           this.helperService.setLoading(false);
-          return;
+        },
+        () => {
+          this.helperService.setLoading(false);
         }
-
-        // TODO: remove
-        // console.log('Wiki', wiki);
-
-        // Sanitize
-        let sanitized = sanitizeHtml(wiki.markdown);
-
-        // Add bold tags
-        sanitized = sanitized.replace(/\*\*(.*?)\*\*/g, this.replaceBold);
-
-        // Add syn links
-        sanitized = sanitized.replace(
-          /\[here\]\((.*?)\)/g,
-          this.replaceSynLinks
-        );
-
-        // Add emails
-        sanitized = sanitized.replace(
-          /([a-zA-Z0-9.*_-]+@[a-zA-Z0-9 .*_-]+\.[a-zA-Z0-9*_-]+)/gi,
-          this.replaceEmail
-        );
-
-        // Add variables
-        sanitized = sanitized.replace(/\${(.*?)}/g, this.replaceVariable);
-
-        // console.log(sanitized);
-
-        // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
-        this.safeHtml = this.sanitizer.bypassSecurityTrustHtml(sanitized);
-        this.helperService.setLoading(false);
-      },
-      () => {
-        this.helperService.setLoading(false);
-      }
-    );
+      );
   }
 
   replaceSynLinks(match: string, content: string) {

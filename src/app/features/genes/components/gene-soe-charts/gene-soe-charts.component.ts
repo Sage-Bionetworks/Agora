@@ -1,11 +1,15 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { GeneInfo, ScoreDistribution } from '../../models';
+import {
+  Gene,
+  OverallScores,
+  OverallScoresDistribution,
+} from '../../../../models';
 import { GeneService } from '../../services';
 
 export interface SOEChartProps {
   title: string;
-  distributionData: ScoreDistribution;
+  distributionData: OverallScoresDistribution;
   geneScore: number;
   wikiInfo: {
     ownerId: string;
@@ -20,11 +24,11 @@ export interface SOEChartProps {
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneSoeChartsComponent implements OnInit {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }
@@ -38,11 +42,13 @@ export class GeneSoeChartsComponent implements OnInit {
 
   init() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const scoreDistribution = data.score;
+      const overallScoreDistribution = data.overall_scores;
 
-      scoreDistribution.sort((a: any, b: any) => (a.name > b.name ? 1 : -1));
+      overallScoreDistribution.sort((a: any, b: any) =>
+        a.name > b.name ? 1 : -1
+      );
 
-      this.charts = scoreDistribution.map((item: any) => {
+      this.charts = overallScoreDistribution.map((item: any) => {
         const distribution: any = [];
 
         item.bins.forEach((bin: string, i: number) => {
@@ -55,7 +61,8 @@ export class GeneSoeChartsComponent implements OnInit {
 
         return {
           name: item.name,
-          score: this.getGeneOverallScore(item.name),
+          score: this.getGeneOverallScores(item.name),
+          ownerId: item.syn_id,
           wikiId: item.wiki_id,
           distribution,
         };
@@ -63,19 +70,18 @@ export class GeneSoeChartsComponent implements OnInit {
     });
   }
 
-  getGeneOverallScore(name: string) {
-    if (this._gene.overall_scores) {
-      let key = 'logsdon';
+  getGeneOverallScores(name: string) {
+    const scores: OverallScores =
+      this._gene.overall_scores || ({} as OverallScores);
 
-      if ('Genetics Score' === name) {
-        key = 'geneticsscore';
-      } else if ('Genomics Score' === name) {
-        key = 'omicsscore';
-      } else if ('Literature Score' === name) {
-        key = 'literaturescore';
-      }
-
-      return this._gene.overall_scores[key];
+    if ('Genetics Score' === name) {
+      return scores['GeneticsScore'] || 0;
+    } else if ('Genomics Score' === name) {
+      return scores['OmicsScore'] || 0;
+    } else if ('Literature Score' === name) {
+      return scores['LiteratureScore'] || 0;
+    } else if ('Overall Score' === name) {
+      return scores['Logsdon'] || 0;
     }
 
     return 0;

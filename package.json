@@ -70,7 +70,7 @@
     "start:mongo:windows": "sh scripts/start-mongo.sh 'C:\\data\\db'",
     "start:prod": "npm run watch:server:prod",
     "start:hmr": "npm run server:dev:hmr",
-    "test": "npm run lint && karma start",
+    "test": "npm run lint",
     "test:load": "artillery run load.yml",
     "eslint": "eslint",
     "typedoc": "typedoc",

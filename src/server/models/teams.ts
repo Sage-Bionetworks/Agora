@@ -6,46 +6,32 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
+import { Team, TeamMember } from '../../app/models';
+export { Team, TeamMember } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
 
-const MetabolomicsSchema = new Schema(
+const TeamMemberSchema = new Schema<TeamMember>({
+  name: { type: String, required: true },
+  isprimaryinvestigator: { type: Boolean, required: true },
+  url: String,
+});
+
+const TeamSchema = new Schema<Team>(
   {
-    ensembl_gene_id: String,
+    team: { type: String, required: true },
+    team_full: { type: String, required: true },
+    program: { type: String, required: true },
+    description: { type: String, required: true },
+    members: { type: [TeamMemberSchema], required: true },
   },
-  { collection: 'genesmetabolomics' }
-);
-const MetabolomicsCollection = model(
-  'MetabolomicsCollection',
-  MetabolomicsSchema
+  { collection: 'teaminfo' }
 );
 
 // -------------------------------------------------------------------------- //
-// Functions
+// Models
 // -------------------------------------------------------------------------- //
 
-export async function getGeneMetabolomics(ensg: string) {
-  try {
-    let result: any = cache.get('metabolomics-' + ensg);
-
-    if (result) {
-      return result;
-    }
-
-    result = await MetabolomicsCollection.findOne({
-      ensembl_gene_id: ensg,
-    })
-      .lean()
-      .exec();
-
-    cache.set('metabolomics-' + ensg, result);
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
-}
+export const TeamCollection = model<Team>('TeamCollection', TeamSchema);

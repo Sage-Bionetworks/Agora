@@ -16,7 +16,11 @@
     [resizable]="false"
     [dismissableMask]="true"
   >
-    <wiki *ngIf="wikiId && hasOpened" [wikiId]="wikiId"></wiki>
+    <wiki
+      *ngIf="wikiId && hasOpened"
+      [ownerId]="ownerId"
+      [wikiId]="wikiId"
+    ></wiki>
     <ng-content></ng-content>
   </p-dialog>
 </div>

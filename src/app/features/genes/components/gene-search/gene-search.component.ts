@@ -20,7 +20,7 @@ import { fromEvent, Observable, empty, throwError } from 'rxjs';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneInfo, GeneInfosResponse } from '../../models';
+import { Gene, GenesResponse } from '../../../../models';
 import { ApiService } from '../../../../core/services';
 
 // -------------------------------------------------------------------------- //
@@ -32,7 +32,7 @@ import { ApiService } from '../../../../core/services';
   styleUrls: ['./gene-search.component.scss'],
 })
 export class GeneSearchComponent implements AfterViewInit {
-  results: GeneInfo[] = [];
+  results: Gene[] = [];
   isLoading = false;
   isEnsemblId = false;
   isFocused = false;
@@ -83,7 +83,7 @@ export class GeneSearchComponent implements AfterViewInit {
       });
   }
 
-  search(query: string): Observable<GeneInfosResponse> {
+  search(query: string): Observable<GenesResponse> {
     this.results = [];
     this.error = '';
     this.query = query = query.trim();
@@ -102,7 +102,7 @@ export class GeneSearchComponent implements AfterViewInit {
     return this.isLoading ? this.apiService.searchGene(query) : empty();
   }
 
-  setResults(results: GeneInfo[]) {
+  setResults(results: Gene[]) {
     // If we got an empty array as response, or no genes found
     if (results.length < 1) {
       this.error = this.isEnsemblId

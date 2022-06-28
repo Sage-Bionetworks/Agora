@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { GeneInfo, Druggability } from '../../models';
+import { Gene, Druggability } from '../../../../models';
 import { GeneService } from '../../services';
 
 import * as d3 from 'd3';
@@ -19,11 +19,11 @@ export interface GeneResourceType {
   styleUrls: ['./gene-druggability.component.scss'],
 })
 export class GeneDruggabilityComponent implements OnInit {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }

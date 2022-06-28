@@ -8,19 +8,14 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
 import { setHeaders } from '../helpers';
+import {
+  getOverallScoresDistribution,
+  getRnaDifferentialExpressionDistribution,
+} from './';
 
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
-const RnaDistributionSchema = new Schema(
-  {},
-  { collection: 'rnaboxdistribution' }
-);
-const RnaDistributionCollection = model(
-  'RnaDistributionCollection',
-  RnaDistributionSchema
-);
 
 const ProteomicsDistributionSchema = new Schema(
   {},
@@ -31,36 +26,9 @@ const ProteomicsDistributionCollection = model(
   ProteomicsDistributionSchema
 );
 
-const ScoreDistributionSchema = new Schema(
-  {},
-  { collection: 'genescoredistribution' }
-);
-const ScoreDistributionCollection = model(
-  'ScoreDistributionCollection',
-  ScoreDistributionSchema
-);
-
 // -------------------------------------------------------------------------- //
 //
 // -------------------------------------------------------------------------- //
-
-export async function getRnaDistribution() {
-  try {
-    let result: any = cache.get('rna-distribution');
-
-    if (result) {
-      return result;
-    }
-
-    result = await RnaDistributionCollection.find().lean().exec();
-    cache.set('rna-distribution', result);
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
-}
 
 // -------------------------------------------------------------------------- //
 //
@@ -88,35 +56,6 @@ export async function getProteomicsDistribution() {
 //
 // -------------------------------------------------------------------------- //
 
-export async function getScoreDistribution() {
-  try {
-    let result: any = cache.get('score-distribution');
-
-    if (result) {
-      return result;
-    }
-
-    result = await ScoreDistributionCollection.find()
-      .sort('name')
-      .lean()
-      .exec();
-
-    // Handle old format
-    if (result.length === 1) {
-      result = Object.values(result[0]).filter(
-        (d: any) => d.distribution?.length
-      );
-    }
-
-    cache.set('score-distribution', result);
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
-}
-
 // -------------------------------------------------------------------------- //
 //
 // -------------------------------------------------------------------------- //
@@ -130,9 +69,10 @@ export async function getDistribution() {
     }
 
     result = {
-      rna: await getRnaDistribution(),
+      rna_differential_expression:
+        await getRnaDifferentialExpressionDistribution(),
       proteomics: await getProteomicsDistribution(),
-      score: await getScoreDistribution(),
+      overall_scores: await getOverallScoresDistribution(),
     };
 
     cache.set('distribution', result);

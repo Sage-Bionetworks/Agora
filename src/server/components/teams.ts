@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { model, mongo, connection } from 'mongoose';
+import { mongo, connection } from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 
 // -------------------------------------------------------------------------- //
@@ -9,13 +9,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 import { setHeaders } from '../helpers';
 import { cache } from '../cache';
-import { TeamsSchema, Team, TeamMemberImage } from '../../models';
-
-// -------------------------------------------------------------------------- //
-// Schemas
-// -------------------------------------------------------------------------- //
-
-const TeamsCollection = model('TeamsCollection', TeamsSchema);
+import { Team, TeamCollection } from '../models';
 
 // -------------------------------------------------------------------------- //
 // GridFs
@@ -38,7 +32,7 @@ export async function getTeams() {
     return teams;
   }
 
-  teams = await TeamsCollection.find().lean().exec();
+  teams = await TeamCollection.find().lean().exec();
 
   cache.set('teams', teams);
   return teams;
@@ -65,9 +59,7 @@ export async function teamsRoute(
 export async function getTeamMemberImage(name: string) {
   name = name.toLowerCase().replace(/[- ]/g, '_');
 
-  let files: TeamMemberImage[] = await fsBucket
-    .find({ filename: name + '.jpg' })
-    .toArray();
+  let files = await fsBucket.find({ filename: name + '.jpg' }).toArray();
   if (!files.length) {
     files = await fsBucket.find({ filename: name + '.jpeg' }).toArray();
     if (!files.length) {
@@ -90,7 +82,7 @@ export async function teamMemberImageRoute(
 
   try {
     const name = req.params.name.trim();
-    const file: TeamMemberImage | undefined = await getTeamMemberImage(name);
+    const file = await getTeamMemberImage(name);
 
     if (file?._id) {
       const stream = fsBucket.openDownloadStream(file._id);

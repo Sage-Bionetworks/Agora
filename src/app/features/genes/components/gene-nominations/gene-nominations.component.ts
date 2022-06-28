@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import { GeneInfo, NominatedTarget } from '../../models';
+import { Gene, NominatedTarget } from '../../../../models';
 
-import { Team, TeamsResponse } from '../../../../../models';
+import { Team, TeamsResponse } from '../../../../models';
 import { TeamService } from '../../../teams/services';
 
 @Component({
@@ -11,11 +11,11 @@ import { TeamService } from '../../../teams/services';
   styleUrls: ['./gene-nominations.component.scss'],
 })
 export class GeneNominationsComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }

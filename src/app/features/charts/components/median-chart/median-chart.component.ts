@@ -10,7 +10,7 @@ import crossfilter from 'crossfilter2';
 // Internal
 // -------------------------------------------------------------------------- //
 import { BaseChartComponent } from '../base-chart';
-import { GeneInfo } from '../../../genes/models';
+import { Gene } from '../../../../models';
 import { HelperService } from '../../../../core/services';
 
 // -------------------------------------------------------------------------- //
@@ -22,11 +22,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./median-chart.component.scss'],
 })
 export class MedianChartComponent extends BaseChartComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }

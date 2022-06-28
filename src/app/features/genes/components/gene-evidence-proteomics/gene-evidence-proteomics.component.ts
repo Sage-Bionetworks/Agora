@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 import { GeneService } from '../../services';
 
 @Component({
@@ -9,11 +9,11 @@ import { GeneService } from '../../services';
   styleUrls: ['./gene-evidence-proteomics.component.scss'],
 })
 export class GeneEvidenceProteomicsComponent {
-  _gene: GeneInfo = {} as GeneInfo;
-  get gene(): GeneInfo {
+  _gene: Gene = {} as Gene;
+  get gene(): Gene {
     return this._gene;
   }
-  @Input() set gene(gene: GeneInfo) {
+  @Input() set gene(gene: Gene) {
     this._gene = gene;
     this.init();
   }
@@ -26,19 +26,17 @@ export class GeneEvidenceProteomicsComponent {
   constructor(private geneService: GeneService) {}
 
   init() {
-    if (!this._gene?.proteomics_evidence?.differential_expression) {
+    if (!this._gene?.protein_differential_expression) {
       return;
     }
 
     this.uniProtIds = [];
 
-    this._gene.proteomics_evidence.differential_expression.forEach(
-      (item: any) => {
-        if (!this.uniProtIds.includes(item.uniprotid)) {
-          this.uniProtIds.push(item.uniprotid);
-        }
+    this._gene.protein_differential_expression.forEach((item: any) => {
+      if (!this.uniProtIds.includes(item.uniprotid)) {
+        this.uniProtIds.push(item.uniprotid);
       }
-    );
+    });
 
     this.uniProtIds.sort();
     if (!this.selectedUniProtId) {
@@ -53,11 +51,9 @@ export class GeneEvidenceProteomicsComponent {
       const distribution = data.proteomics;
 
       const differentialExpression =
-        this._gene.proteomics_evidence.differential_expression.filter(
-          (item: any) => {
-            return item.uniprotid === this.selectedUniProtId;
-          }
-        );
+        this._gene.protein_differential_expression?.filter((item: any) => {
+          return item.uniprotid === this.selectedUniProtId;
+        }) || [];
 
       const differentialExpressionChartData: any = [];
 
@@ -97,7 +93,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   onProteinChange(event: any) {
-    if (!this._gene?.proteomics_evidence?.differential_expression) {
+    if (!this._gene?.protein_differential_expression) {
       return;
     }
     this.selectedUniProtId = event.value;

@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Team, TeamsResponse } from '../../../../models';
+import { Team, TeamsResponse } from '../../../models';
 import { ApiService } from '../../../core/services';
 
 // -------------------------------------------------------------------------- //
@@ -27,11 +27,13 @@ export class TeamService {
     } else if (this.teamsObservable) {
       return this.teamsObservable;
     } else {
-      return (this.teamsObservable = this.apiService.getTeams().pipe(
+      this.teamsObservable = this.apiService.getTeams().pipe(
         tap((res: TeamsResponse) => {
           this.teams = res.items;
+          this.teamsObservable = undefined;
         })
-      ));
+      );
+      return this.teamsObservable;
     }
   }
 

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
 import screenfull from 'screenfull';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 
 interface TableColumn {
   field: string;
@@ -18,11 +18,11 @@ interface TableColumn {
   styleUrls: ['./gene-table.component.scss'],
 })
 export class GeneTableComponent implements OnInit {
-  _genes: GeneInfo[] = [];
-  get genes(): GeneInfo[] {
+  _genes: Gene[] = [];
+  get genes(): Gene[] {
     return this._genes;
   }
-  @Input() set genes(genes: GeneInfo[]) {
+  @Input() set genes(genes: Gene[]) {
     this._genes = genes.map((gene) => {
       gene.hgnc_symbol = gene.hgnc_symbol || gene.ensembl_gene_id;
       return gene;

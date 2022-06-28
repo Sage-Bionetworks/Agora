@@ -3,7 +3,7 @@ export * from './gene-links';
 export * from './rna';
 export * from './overall-scores';
 export * from './experimental-validation';
-export * from './neuropath-correlations';
+export * from './neuropathologic-correlations';
 export * from './proteomics';
 export * from './metabolomics';
 export * from './distribution';

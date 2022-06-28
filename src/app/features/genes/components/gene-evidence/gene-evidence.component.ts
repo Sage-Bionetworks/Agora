@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { GeneInfo } from '../../models';
+import { Gene } from '../../../../models';
 
 interface Panel {
   name: string;
@@ -16,7 +16,7 @@ interface Panel {
   styleUrls: ['./gene-evidence.component.scss'],
 })
 export class GeneEvidenceComponent implements OnInit {
-  @Input() gene: GeneInfo = {} as GeneInfo;
+  @Input() gene: Gene = {} as Gene;
 
   panels: Panel[] = [
     {

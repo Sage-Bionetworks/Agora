@@ -1,37 +1,18 @@
 // -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
-import { Schema, model } from 'mongoose';
-
-// -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
 import { setHeaders } from '../helpers';
+import { GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
-  getGeneProteomics,
-  getGeneMetabolomics,
-  getGeneExperimentalValidation,
-  getGeneNeuropathCorrelations,
-  getGeneOverallScores,
+  getProteinDifferentialExpression,
+  getMetabolomics,
+  getExperimentalValidation,
+  getNeuropathologicCorrelations,
+  getOverallScores,
   getGeneLinks,
 } from '.';
-
-// -------------------------------------------------------------------------- //
-// Schemas
-// -------------------------------------------------------------------------- //
-
-const GenesSchema = new Schema(
-  {
-    ensembl_gene_id: String,
-    hgnc_symbol: String,
-    alias: Array,
-    nominations: Number,
-  },
-  { collection: 'geneinfo' }
-);
-export const GenesCollection = model('GenesCollection', GenesSchema);
 
 // -------------------------------------------------------------------------- //
 // Genes
@@ -51,7 +32,7 @@ export async function _getGenes() {
       return genes;
     }
 
-    const result = await GenesCollection.find()
+    const result = await GeneCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
       .exec();
@@ -118,7 +99,7 @@ export async function getGene(ensg: string) {
       return result;
     }
 
-    result = await GenesCollection.findOne({
+    result = await GeneCollection.findOne({
       ensembl_gene_id: ensg,
     }).lean();
 
@@ -126,14 +107,13 @@ export async function getGene(ensg: string) {
       result.rna_differential_expression = await getRnaDifferentialExpression(
         ensg
       );
-
-      result.proteomics_evidence = {
-        differential_expression: await getGeneProteomics(ensg),
-      };
-      result.metabolomics = await getGeneMetabolomics(ensg);
-      result.overall_scores = await getGeneOverallScores(ensg);
-      result.experimentalValidation = await getGeneExperimentalValidation(ensg);
-      result.neuropathCorrelations = await getGeneNeuropathCorrelations(ensg);
+      result.protein_differential_expression =
+        await getProteinDifferentialExpression(ensg);
+      result.metabolomics = await getMetabolomics(ensg);
+      result.neuropathologic_correlations =
+        await getNeuropathologicCorrelations(ensg);
+      result.overall_scores = await getOverallScores(ensg);
+      result.experimental_validation = await getExperimentalValidation(ensg);
       result.links = await getGeneLinks(ensg);
     }
 
@@ -188,7 +168,7 @@ export function searchGeneRoute(req: any, res: any) {
     };
   }
 
-  GenesCollection.find(query)
+  GeneCollection.find(query)
     .lean()
     .exec((err, items) => {
       if (err) return; //handleError(err);
@@ -211,7 +191,7 @@ export async function getNominatedGenes() {
       return nominatedGenes;
     }
 
-    const result = await GenesCollection.find({ nominations: { $gt: 0 } })
+    const result = await GeneCollection.find({ nominations: { $gt: 0 } })
       .select(
         [
           'hgnc_symbol',

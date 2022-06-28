@@ -10,12 +10,12 @@ import { Observable } from 'rxjs';
 // -------------------------------------------------------------------------- //
 import {
   Gene,
-  GeneInfo,
-  GeneInfosResponse,
-  RnaBoxDistribution,
-} from '../../features/genes/models';
+  GenesResponse,
+  RnaDifferentialExpression,
+  RnaDifferentialExpressionDistribution,
+} from '../../models';
 
-import { TeamsResponse } from '../../../models';
+import { TeamsResponse } from '../../models';
 
 // -------------------------------------------------------------------------- //
 // Constants
@@ -35,37 +35,40 @@ const defaultHeaders = {
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  getGene(id: string): Observable<GeneInfo> {
-    return this.http.get<GeneInfo>('/api/genes/' + id, {
+  getGene(id: string): Observable<Gene> {
+    return this.http.get<Gene>('/api/genes/' + id, {
       headers: new HttpHeaders(defaultHeaders),
     });
   }
 
-  getGenes(ids: any = null): Observable<GeneInfo[]> {
-    return this.http.get<GeneInfo[]>('/api/genes/', {
+  getGenes(ids: any = null): Observable<Gene[]> {
+    return this.http.get<Gene[]>('/api/genes/', {
       headers: new HttpHeaders(defaultHeaders),
       params: new HttpParams().set('ids', ids),
     });
   }
 
-  searchGene(id: string): Observable<GeneInfosResponse> {
-    return this.http.get<GeneInfosResponse>('/api/genes/search', {
+  searchGene(id: string): Observable<GenesResponse> {
+    return this.http.get<GenesResponse>('/api/genes/search', {
       headers: new HttpHeaders(defaultHeaders),
       params: new HttpParams().set('id', id),
     });
   }
 
-  getComparisonData(model: string): Observable<Gene[]> {
-    return this.http.get<Gene[]>('/api/genes/comparison', {
+  getComparisonData(model: string): Observable<RnaDifferentialExpression[]> {
+    return this.http.get<RnaDifferentialExpression[]>('/api/genes/comparison', {
       headers: new HttpHeaders(defaultHeaders),
       params: new HttpParams().set('model', model),
     });
   }
 
-  getDistribution(): Observable<RnaBoxDistribution[]> {
-    return this.http.get<RnaBoxDistribution[]>('/api/distribution', {
-      headers: new HttpHeaders(defaultHeaders),
-    });
+  getDistribution(): Observable<RnaDifferentialExpressionDistribution[]> {
+    return this.http.get<RnaDifferentialExpressionDistribution[]>(
+      '/api/distribution',
+      {
+        headers: new HttpHeaders(defaultHeaders),
+      }
+    );
   }
 
   getTeams(): Observable<TeamsResponse> {
@@ -88,11 +91,11 @@ export class ApiService {
     });
   }
 
-  getTableData(): Observable<GeneInfo[]> {
+  getTableData(): Observable<Gene[]> {
     const headers = new HttpHeaders(defaultHeaders);
     const params = new HttpParams();
 
-    return this.http.get<GeneInfo[]>('/api/genes/table', {
+    return this.http.get<Gene[]>('/api/genes/table', {
       headers,
       params,
     });
