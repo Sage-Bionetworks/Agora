@@ -147,7 +147,7 @@ export function searchGeneRoute(req: any, res: any) {
 
   const id = req.query.id.trim();
   const isEnsembl = id.startsWith('ENSG');
-  let query = null;
+  let query: { [key: string]: any } | null = null;
 
   if (isEnsembl) {
     if (id.length == 15) {
