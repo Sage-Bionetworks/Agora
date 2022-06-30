@@ -24,6 +24,26 @@
     border-top: 10px solid #63676c;
     margin-left: -10px;
   }
+
+
+  &.gct-tooltip-right {
+    transform: translateX(18px);
+    max-width: 250px;
+
+    .p-tooltip-text {
+      white-space: unset;
+    }
+    
+    .p-tooltip-arrow {
+      bottom: 50%;
+      top: unset;
+      margin-left: 0;
+      transform: translate(-100%, 50%);
+      border-right: 10px solid #63676c;
+      border-bottom: 10px solid transparent;
+      border-top: 10px solid transparent;
+    }
+  }
 }
 
 .gct-tooltip-filter {
@@ -118,6 +138,7 @@
       text-transform: uppercase;
       transition: $transition-duration;
       cursor: pointer;
+      color: var(--color-secondary);
 
       svg {
         margin-right: 8px;
