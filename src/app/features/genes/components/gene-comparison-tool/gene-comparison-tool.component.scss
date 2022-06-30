@@ -459,13 +459,22 @@
     padding: 6px 15px 6px 7px;
     margin-right: 0px;
 
+    .gene-control-icons {
+      display: none;
+    }
+
     &:hover {
       background-color: var(--color-primary);
       color: #ffffff;
+
+      .gene-control-icons {
+        margin-left: 14px;
+        display: flex;
+      }
     }
 
     > div {
-      &:last-child {
+      &:first-child {
         flex-grow: 1;
         text-align: right;
       }
