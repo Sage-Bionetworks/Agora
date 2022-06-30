@@ -139,12 +139,21 @@
                   <th
                     *ngFor="let tissue of tissues"
                     [pSortableColumn]="tissue"
-                    [pTooltip]="getTissueTooltipText(tissue)"
-                    tooltipPosition="top"
-                    tooltipStyleClass="gct-tooltip"
                     [style]="{ width: columnWidth }"
                   >
-                    {{ tissue }} <p-sortIcon [field]="tissue"></p-sortIcon>
+                    <span
+                      [pTooltip]="getTissueTooltipText(tissue)"
+                      tooltipPosition="top"
+                      tooltipStyleClass="gct-tooltip"
+                    >
+                      {{ tissue }}
+                    </span>
+                    <p-sortIcon
+                      [field]="tissue"
+                      pTooltip="Sort by log2 fold change value"
+                      tooltipPosition="top"
+                      tooltipStyleClass="gct-tooltip"
+                    ></p-sortIcon>
                   </th>
                 </tr>
               </ng-template>
