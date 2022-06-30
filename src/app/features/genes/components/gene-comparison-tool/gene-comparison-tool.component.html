@@ -35,7 +35,15 @@
           <h3 class="gct-heading">Gene Comparison Tool</h3>
         </div>
         <div class="gct-header-right">
-          <button (click)="copyUrl()">Copy URL</button>
+          <button
+            (click)="copyUrl()"
+            pTooltip="Copy the URL that captures exact
+          configuration of the table as you see it."
+            tooltipPosition="left"
+            tooltipStyleClass="gct-tooltip gct-tooltip-left"
+          >
+            Share URL
+          </button>
         </div>
       </div>
     </div>

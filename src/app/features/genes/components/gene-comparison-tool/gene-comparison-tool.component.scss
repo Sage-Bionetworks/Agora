@@ -1,6 +1,10 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
+.test {
+  background-color: #63676c;
+}
+
 .gct-tooltip {
   max-width: none;
   transform: translateY(-18px);
@@ -26,8 +30,7 @@
   }
 
 
-  &.gct-tooltip-right {
-    transform: translateX(18px);
+  &.gct-tooltip-right, &.gct-tooltip-left {
     max-width: 250px;
 
     .p-tooltip-text {
@@ -38,10 +41,26 @@
       bottom: 50%;
       top: unset;
       margin-left: 0;
-      transform: translate(-100%, 50%);
-      border-right: 10px solid #63676c;
       border-bottom: 10px solid transparent;
       border-top: 10px solid transparent;
+    }
+  }
+
+  &.gct-tooltip-left {
+    transform: translateX(-18px);
+    
+    .p-tooltip-arrow {
+      transform: translate(100%, 50%);
+      border-left: 10px solid #63676c;
+    }
+  }
+
+  &.gct-tooltip-right {
+    transform: translateX(18px);
+    
+    .p-tooltip-arrow {
+      transform: translate(-100%, 50%);
+      border-right: 10px solid #63676c;
     }
   }
 }
