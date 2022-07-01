@@ -86,7 +86,7 @@ export class GeneSearchComponent implements AfterViewInit {
   search(query: string): Observable<GenesResponse> {
     this.results = [];
     this.error = '';
-    this.query = query = query.trim();
+    this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
     this.isEnsemblId = 'ensg' === query.toLowerCase().substring(0, 4);
 
     if (query.length > 0 && query.length < 2) {
