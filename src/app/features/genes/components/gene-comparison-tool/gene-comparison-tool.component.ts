@@ -15,7 +15,7 @@ import { SortEvent, MessageService, FilterService } from 'primeng/api';
 
 import { GeneService } from '../../services';
 import { HelperService } from '../../../../core/services';
-import { RnaDifferentialExpression } from '../../../../models';
+import { Gene, RnaDifferentialExpression } from '../../../../models';
 
 import {
   GCTSelectOption,
@@ -618,6 +618,54 @@ export class GeneComparisonToolComponent
     this.pinnedGenes = [];
     this.updateUrl();
     this.refresh();
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Download pinned genes as CSV
+  /* ----------------------------------------------------------------------- */
+
+  downloadPinnedCsv() {
+    const sampleGene: (Gene & { tissues: GCTGeneTissue[] }) | undefined =
+      this.pinnedGenes[0];
+
+    if (!sampleGene) {
+      return;
+    }
+
+    // Clean up the export file name
+    this.pinnedGeneTable.exportFilename = this.pinnedGeneTable.exportFilename
+      .toLowerCase()
+      .replace(/( -)|[()]/gi, '')
+      .replace(/ /gi, '-');
+
+    // Create one column for each tissue name
+    const tissueNameColumns = sampleGene.tissues.map((tissue) => ({
+      field: tissue.name,
+    }));
+
+    // Update the table values to include a key for each tissue, mapped to a string containing its data values
+    this.pinnedGeneTable._value = (
+      this.pinnedGeneTable._value as typeof sampleGene[]
+    ).map((value) => ({
+      ...value,
+      ...value.tissues.reduce(
+        (accumulator, { name: tissueName, ...tissueData }) => ({
+          ...accumulator,
+          [tissueName]: Object.entries(tissueData)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(';'),
+        }),
+        {}
+      ),
+    }));
+
+    this.pinnedGeneTable.columns = [
+      { field: 'ensembl_gene_id' },
+      { field: 'hgnc_symbol' },
+      ...tissueNameColumns,
+    ];
+
+    this.pinnedGeneTable.exportCSV();
   }
 
   /* ----------------------------------------------------------------------- */

@@ -129,6 +129,7 @@
           <div class="gct-tables-inner">
             <p-table
               #tableHeader
+              #dt
               id="table-header"
               (sortFunction)="setSort($event)"
               [customSort]="true"
@@ -165,6 +166,21 @@
             >
               <div class="table-divider-inner">
                 <div>Pinned Genes</div>
+                <div class="csv-download-button">
+                  <svg
+                    width="14"
+                    height="17"
+                    fill="#3E61A9"
+                    stroke="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10 6V0H4v6H0l7 7 7-7h-4Zm-3 4.17L4.83 8H6V2h2v6h1.17L7 10.17ZM0 15h14v2H0v-2Z"
+                    />
+                  </svg>
+
+                  <button (click)="downloadPinnedCsv()">Download as CSV</button>
+                </div>
                 <div>
                   <button (click)="clearPinned()">Clear all</button>
                 </div>
@@ -176,6 +192,7 @@
               responsiveLayout="scroll"
               (sortFunction)="sortCallback($event)"
               [customSort]="true"
+              [exportFilename]="selectedAnalysis + '_' + selectedModel"
             >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
