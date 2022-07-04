@@ -1,6 +1,10 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
+.test {
+  background-color: #63676c;
+}
+
 .gct-tooltip {
   max-width: none;
   transform: translateY(-18px);
@@ -23,6 +27,41 @@
     border-right: 10px solid transparent;
     border-top: 10px solid #63676c;
     margin-left: -10px;
+  }
+
+
+  &.gct-tooltip-right, &.gct-tooltip-left {
+    max-width: 250px;
+
+    .p-tooltip-text {
+      white-space: unset;
+    }
+    
+    .p-tooltip-arrow {
+      bottom: 50%;
+      top: unset;
+      margin-left: 0;
+      border-bottom: 10px solid transparent;
+      border-top: 10px solid transparent;
+    }
+  }
+
+  &.gct-tooltip-left {
+    transform: translateX(-18px);
+    
+    .p-tooltip-arrow {
+      transform: translate(100%, 50%);
+      border-left: 10px solid #63676c;
+    }
+  }
+
+  &.gct-tooltip-right {
+    transform: translateX(18px);
+    
+    .p-tooltip-arrow {
+      transform: translate(-100%, 50%);
+      border-right: 10px solid #63676c;
+    }
   }
 }
 
@@ -118,6 +157,7 @@
       text-transform: uppercase;
       transition: $transition-duration;
       cursor: pointer;
+      color: var(--color-secondary);
 
       svg {
         margin-right: 8px;
@@ -459,13 +499,22 @@
     padding: 6px 15px 6px 7px;
     margin-right: 0px;
 
+    .gene-control-icons {
+      display: none;
+    }
+
     &:hover {
       background-color: var(--color-primary);
       color: #ffffff;
+
+      .gene-control-icons {
+        margin-left: 14px;
+        display: flex;
+      }
     }
 
     > div {
-      &:last-child {
+      &:first-child {
         flex-grow: 1;
         text-align: right;
       }
