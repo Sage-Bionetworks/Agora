@@ -9,7 +9,6 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
-  ElementRef,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -151,7 +150,7 @@ export class GeneComparisonToolComponent
       gene.pinned = pinned.includes(gene.uid);
 
       this.filters.forEach((filter: GCTFilter) => {
-        let value = this.getGeneProperty(gene, filter.name);
+        const value = this.getGeneProperty(gene, filter.name);
 
         if (value) {
           if (Array.isArray(value)) {
@@ -406,7 +405,7 @@ export class GeneComparisonToolComponent
   }
 
   getPinnedGeneList() {
-    let pinned: string[] = [];
+    const pinned: string[] = [];
 
     this.genes.forEach((g) => {
       if (g.pinned) {
@@ -545,7 +544,7 @@ export class GeneComparisonToolComponent
 
   getCircleSize(pval: number) {
     const pValue = 1 - (this.nRoot(pval, 3) || 0);
-    let size = Math.round(100 * pValue * 0.44);
+    const size = Math.round(100 * pValue * 0.44);
     return size < 6 ? 6 : size;
   }
 
