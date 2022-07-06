@@ -3,7 +3,13 @@
     <div class="gct-header">
       <div class="gct-header-inner">
         <div class="gct-header-left">
-          <button (click)="filterPanel.toggle()">
+          <button
+            (click)="filterPanel.toggle()"
+            pTooltip="Filter genes by Nominations, Teams,
+    Cohort, and more."
+            tooltipPosition="right"
+            tooltipStyleClass="gct-tooltip gct-tooltip-right"
+          >
             <svg
               width="14"
               height="14"
@@ -12,19 +18,26 @@
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill="#3F5EAB"
+                fill="currentColor"
                 d="M0,0.7C0,0.3,0.3,0,0.7,0h12.5C13.7,0,14,0.3,14,0.7v2.3c0,0.2-0.1,0.4-0.2,0.5L9,8.2v4.4
                           c0,0.3-0.2,0.6-0.6,0.7L5.9,14c-0.2,0.1-0.4,0-0.6-0.1c-0.2-0.1-0.3-0.3-0.3-0.6v-5L0.2,3.7C0.1,3.5,0,3.3,0,3.1V0.7z"
               />
             </svg>
-            Filters
+            Filter Genes
           </button>
         </div>
         <div class="gct-header-middle">
           <h3 class="gct-heading">Gene Comparison Tool</h3>
         </div>
         <div class="gct-header-right">
-          <button (click)="copyUrl()">Copy URL</button>
+          <button
+            (click)="copyUrl()"
+            pTooltip="Copy the URL that captures exact configuration of the table as you see it."
+            tooltipPosition="left"
+            tooltipStyleClass="gct-tooltip gct-tooltip-left"
+          >
+            Share URL
+          </button>
         </div>
       </div>
     </div>
@@ -121,12 +134,21 @@
                   <th
                     *ngFor="let column of columns"
                     [pSortableColumn]="column"
-                    [pTooltip]="getTissueTooltipText(column)"
-                    tooltipPosition="top"
-                    tooltipStyleClass="gct-tooltip"
                     [style]="{ width: columnWidth }"
                   >
-                    {{ column }} <p-sortIcon [field]="column"></p-sortIcon>
+                    <span
+                      [pTooltip]="getTissueTooltipText(column)"
+                      tooltipPosition="top"
+                      tooltipStyleClass="gct-tooltip"
+                    >
+                      {{ column }}
+                    </span>
+                    <p-sortIcon
+                      [field]="column"
+                      pTooltip="Sort by log2 fold change value"
+                      tooltipPosition="top"
+                      tooltipStyleClass="gct-tooltip"
+                    ></p-sortIcon>
                   </th>
                 </tr>
               </ng-template>
@@ -135,6 +157,27 @@
             <div *ngIf="hasPinnedGenes()" class="table-divider table-divider-1">
               <div class="table-divider-inner">
                 <div>Pinned Genes</div>
+                <div class="csv-download-button">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      opacity="0.3"
+                      d="M13 9V5H11V11H9.83002L12 13.17L14.17 11H13V9Z"
+                      fill="#3E61A9"
+                    />
+                    <path
+                      d="M15 9V3H9V9H5L12 16L19 9H15ZM12 13.17L9.83 11H11V5H13V11H14.17L12 13.17ZM5 18H19V20H5V18Z"
+                      fill="#3E61A9"
+                    />
+                  </svg>
+
+                  <button (click)="downloadPinnedCsv()">Download as CSV</button>
+                </div>
                 <div>
                   <button (click)="clearPinned()">Clear all</button>
                 </div>
@@ -147,11 +190,18 @@
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               responsiveLayout="scroll"
+              [exportFilename]="category + '_' + subCategory"
             >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
                   <td>
                     <div class="gene-controls">
+                      <div>
+                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
+                      </div>
                       <div>
                         <button
                           (click)="unpinGene(gene)"
@@ -193,12 +243,6 @@
                             />
                           </svg>
                         </button>
-                      </div>
-                      <div>
-                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
-                          ({{ gene.uniprotid }})
-                        </ng-container>
                       </div>
                     </div>
                   </td>
@@ -250,6 +294,12 @@
                   <td>
                     <div class="gene-controls">
                       <div>
+                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
+                      </div>
+                      <div>
                         <button
                           (click)="pinGene(gene)"
                           pTooltip="Pin this gene to the top of the list"
@@ -290,12 +340,6 @@
                             />
                           </svg>
                         </button>
-                      </div>
-                      <div>
-                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
-                          ({{ gene.uniprotid }})
-                        </ng-container>
                       </div>
                     </div>
                   </td>

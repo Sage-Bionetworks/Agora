@@ -1,6 +1,10 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
+.test {
+  background-color: #63676c;
+}
+
 .gct-tooltip {
   max-width: none;
   transform: translateY(-18px);
@@ -23,6 +27,41 @@
     border-right: 10px solid transparent;
     border-top: 10px solid #63676c;
     margin-left: -10px;
+  }
+
+  &.gct-tooltip-right,
+  &.gct-tooltip-left {
+    max-width: 250px;
+
+    .p-tooltip-text {
+      white-space: unset;
+    }
+
+    .p-tooltip-arrow {
+      bottom: 50%;
+      top: unset;
+      margin-left: 0;
+      border-bottom: 10px solid transparent;
+      border-top: 10px solid transparent;
+    }
+  }
+
+  &.gct-tooltip-left {
+    transform: translateX(-18px);
+
+    .p-tooltip-arrow {
+      transform: translate(100%, 50%);
+      border-left: 10px solid #63676c;
+    }
+  }
+
+  &.gct-tooltip-right {
+    transform: translateX(18px);
+
+    .p-tooltip-arrow {
+      transform: translate(-100%, 50%);
+      border-right: 10px solid #63676c;
+    }
   }
 }
 
@@ -113,9 +152,11 @@
       text-transform: uppercase;
       transition: $transition-duration;
       cursor: pointer;
+      color: var(--color-secondary);
 
       svg {
         margin-right: 8px;
+        transform: translateY(1px);
 
         path {
           transition: $transition-duration;
@@ -464,15 +505,32 @@
     margin-right: 0px;
     font-size: var(--font-size-sm);
 
+    .gene-control-icons {
+      display: none;
+    }
+
+    > div:first-child {
+      flex-grow: 1;
+      text-align: right;
+    }
+
+    &:not(:hover) {
+      > div:not(:first-child) {
+        display: none;
+      }
+    }
+
     &:hover {
       background-color: var(--color-primary);
       color: #ffffff;
-    }
 
-    > div {
-      &:last-child {
-        flex-grow: 1;
-        text-align: right;
+      .gene-control-icons {
+        margin-left: 14px;
+        display: flex;
+      }
+
+      > div:first-child {
+        padding-right: 6px;
       }
     }
 
@@ -560,6 +618,7 @@
   background-color: #fbfbfc;
   margin-left: -44px;
   margin-right: -44px;
+  font-size: var(--font-size-sm);
 
   .table-divider-inner {
     display: flex;
@@ -573,9 +632,10 @@
       align-items: center;
 
       &:first-child {
-        color: var(--color-primary);
+        color: #1a1c29;
         text-transform: uppercase;
         font-size: 15px;
+        font-weight: 700;
         flex-grow: 1;
       }
     }
@@ -594,5 +654,13 @@
 .p-paginator-bottom {
   &:before {
     content: " ";
+  }
+}
+
+.csv-download-button {
+  margin-right: 40px;
+
+  svg {
+    margin-right: 12px;
   }
 }

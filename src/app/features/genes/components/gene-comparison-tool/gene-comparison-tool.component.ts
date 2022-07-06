@@ -9,6 +9,7 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
+  ElementRef,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -150,7 +151,7 @@ export class GeneComparisonToolComponent
       gene.pinned = pinned.includes(gene.uid);
 
       this.filters.forEach((filter: GCTFilter) => {
-        const value = this.getGeneProperty(gene, filter.name);
+        let value = this.getGeneProperty(gene, filter.name);
 
         if (value) {
           if (Array.isArray(value)) {
@@ -303,9 +304,10 @@ export class GeneComparisonToolComponent
     };
 
     if (this.searchTerm) {
+      const terms = this.searchTerm.split(',').map((t: string) => t.trim());
       filters['search_string'] = {
-        value: this.searchTerm,
-        matchMode: 'contains',
+        value: terms,
+        matchMode: 'intersect',
       };
     }
 
@@ -405,7 +407,7 @@ export class GeneComparisonToolComponent
   }
 
   getPinnedGeneList() {
-    const pinned: string[] = [];
+    let pinned: string[] = [];
 
     this.genes.forEach((g) => {
       if (g.pinned) {
@@ -544,7 +546,7 @@ export class GeneComparisonToolComponent
 
   getCircleSize(pval: number) {
     const pValue = 1 - (this.nRoot(pval, 3) || 0);
-    const size = Math.round(100 * pValue * 0.44);
+    let size = Math.round(100 * pValue * 0.44);
     return size < 6 ? 6 : size;
   }
 
@@ -584,6 +586,42 @@ export class GeneComparisonToolComponent
     }
 
     return classes;
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Download pinned genes as CSV
+  /* ----------------------------------------------------------------------- */
+
+  downloadPinnedCsv() {
+    // Clean up the export file name
+    this.pinnedTable.exportFilename = this.pinnedTable.exportFilename
+      .toLowerCase()
+      .replace(/( -)|[()]/gi, '')
+      .replace(/ /gi, '-');
+
+    // Update the table values to include a key for each tissue, mapped to a string containing its data values
+    this.pinnedTable._value = (this.pinnedTable._value as GCTGene[]).map(
+      (value) => ({
+        ...value,
+        ...value.tissues.reduce(
+          (accumulator, { name: tissueName, ...tissueData }) => ({
+            ...accumulator,
+            [tissueName]: Object.entries(tissueData)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(';'),
+          }),
+          {}
+        ),
+      })
+    );
+
+    this.pinnedTable.columns = [
+      { field: 'ensembl_gene_id' },
+      { field: 'hgnc_symbol' },
+      ...this.columns.map((c) => ({ field: c })),
+    ];
+
+    this.pinnedTable.exportCSV();
   }
 
   /* ----------------------------------------------------------------------- */
