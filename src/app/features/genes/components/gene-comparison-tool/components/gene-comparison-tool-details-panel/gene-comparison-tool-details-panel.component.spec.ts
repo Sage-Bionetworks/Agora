@@ -10,9 +10,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { GeneComparisonToolDetailsPanelComponent } from '.';
 
-import { GCDetailsPanelData } from '../..';
+import { GCTDetailsPanelData } from '../../../../models';
 
-const mockData: GCDetailsPanelData = {
+const mockData: GCTDetailsPanelData = {
   label: 'label',
   heading: 'heading',
   subHeading: 'subHeading',

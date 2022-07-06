@@ -30,7 +30,7 @@ export async function getOverallScores(ensg: string) {
     .exec();
 
   cache.set(cacheKey, result);
-  return result;
+  return result || undefined;
 }
 
 export async function getOverallScoresDistribution() {

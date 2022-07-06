@@ -1,9 +1,4 @@
-<div
-  #gct
-  [ngClass]="{ loading: loading }"
-  class="gct"
-  (window:resize)="onResize()"
->
+<div #gct class="gct" (window:resize)="onResize()">
   <div class="gct-inner">
     <div class="gct-header">
       <div class="gct-header-inner">
@@ -46,9 +41,10 @@
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
               <div class="gene-label">DISPLAYED GENES</div>
-              <div *ngIf="availableGeneTable">
+              <div *ngIf="genesTable" class="gene-count">
                 {{
-                  (availableGeneTable._totalRecords || 0) + pinnedGenes.length
+                  (genesTable?._totalRecords || 0) +
+                    (pinnedTable?.dataToRender?.length || 0)
                 }}
               </div>
               <div class="gct-search">
@@ -90,21 +86,21 @@
               </div>
             </div>
             <div class="gct-controls-right">
-              <div class="analysis-filter-container">
+              <div class="category-filter-container">
                 <p-dropdown
-                  class="analysis-filter"
-                  [options]="analyses"
-                  [(ngModel)]="selectedAnalysis"
-                  (onChange)="updateUrl(); filter()"
+                  class="category-filter"
+                  [options]="categories"
+                  [(ngModel)]="category"
+                  (onChange)="onCategoryChange()"
                 ></p-dropdown>
               </div>
               <div>
-                <div class="gct-filter-label">Models</div>
+                <div class="gct-filter-label">{{ subCategoryLabel }}</div>
                 <p-dropdown
-                  class="model-filter"
-                  [options]="models"
-                  [(ngModel)]="selectedModel"
-                  (onChange)="updateUrl(); loadGenes()"
+                  class="sub-category-filter"
+                  [options]="subCategories"
+                  [(ngModel)]="subCategory"
+                  (onChange)="onSubCategoryChange()"
                 ></p-dropdown>
               </div>
             </div>
@@ -114,7 +110,7 @@
         <div class="gct-tables">
           <div class="gct-tables-inner">
             <p-table
-              #tableHeader
+              #headerTable
               id="table-header"
               (sortFunction)="setSort($event)"
               [customSort]="true"
@@ -123,23 +119,20 @@
                 <tr>
                   <th></th>
                   <th
-                    *ngFor="let tissue of tissues"
-                    [pSortableColumn]="tissue"
-                    [pTooltip]="getTissueTooltipText(tissue)"
+                    *ngFor="let column of columns"
+                    [pSortableColumn]="column"
+                    [pTooltip]="getTissueTooltipText(column)"
                     tooltipPosition="top"
                     tooltipStyleClass="gct-tooltip"
                     [style]="{ width: columnWidth }"
                   >
-                    {{ tissue }} <p-sortIcon [field]="tissue"></p-sortIcon>
+                    {{ column }} <p-sortIcon [field]="column"></p-sortIcon>
                   </th>
                 </tr>
               </ng-template>
             </p-table>
 
-            <div
-              *ngIf="pinnedGenes.length > 0"
-              class="table-divider table-divider-1"
-            >
+            <div *ngIf="hasPinnedGenes()" class="table-divider table-divider-1">
               <div class="table-divider-inner">
                 <div>Pinned Genes</div>
                 <div>
@@ -148,11 +141,12 @@
               </div>
             </div>
             <p-table
-              #pinnedGeneTable
-              [value]="pinnedGenes"
-              responsiveLayout="scroll"
-              (sortFunction)="sortCallback($event)"
+              #pinnedTable
+              [value]="genes"
+              [globalFilterFields]="['pinned']"
               [customSort]="true"
+              (sortFunction)="sortCallback($event)"
+              responsiveLayout="scroll"
             >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
@@ -202,20 +196,23 @@
                       </div>
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
                       </div>
                     </div>
                   </td>
                   <td
-                    *ngFor="let tissue of tissues"
+                    *ngFor="let column of columns"
                     [style]="{ width: columnWidth }"
                   >
                     <button
-                      [class]="getCircleClass(tissue, gene)"
-                      [style]="getCircleStyle(tissue, gene)"
+                      [class]="getCircleClass(column, gene)"
+                      [style]="getCircleStyle(column, gene)"
                       (click)="
                         detailsPanel.toggle(
                           $event,
-                          getDetailsPanelData(tissue, gene)
+                          getDetailsPanelData(column, gene)
                         )
                       "
                     >
@@ -226,15 +223,16 @@
               </ng-template>
             </p-table>
 
-            <div *ngIf="pinnedGenes.length > 0" class="table-divider">
+            <div *ngIf="hasPinnedGenes()" class="table-divider">
               <div class="table-divider-inner">
                 <div *ngIf="hasSelectedFilters()">Filtered Genes</div>
                 <div *ngIf="!hasSelectedFilters()">All Genes</div>
               </div>
             </div>
             <p-table
-              #availableGeneTable
-              [value]="availableGenes"
+              #genesTable
+              [value]="genes"
+              [globalFilterFields]="['pinned']"
               [paginator]="true"
               [rows]="10"
               [showCurrentPageReport]="true"
@@ -295,20 +293,23 @@
                       </div>
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
                       </div>
                     </div>
                   </td>
                   <td
-                    *ngFor="let tissue of tissues"
+                    *ngFor="let column of columns"
                     [style]="{ width: columnWidth }"
                   >
                     <button
-                      [class]="getCircleClass(tissue, gene)"
-                      [style]="getCircleStyle(tissue, gene)"
+                      [class]="getCircleClass(column, gene)"
+                      [style]="getCircleStyle(column, gene)"
                       (click)="
                         detailsPanel.toggle(
                           $event,
-                          getDetailsPanelData(tissue, gene)
+                          getDetailsPanelData(column, gene)
                         )
                       "
                     >

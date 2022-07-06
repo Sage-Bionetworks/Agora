@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import "../../../../../../../styles/variables";
+@import "../../../../../../../styles/mixins";
 
 .gct-filter-panel {
   position: absolute;
@@ -69,7 +69,7 @@
   .gct-filter-panel-main-heading {
     height: 80px;
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 700;
   }
 
   ul {
@@ -199,7 +199,7 @@
   .gct-filter-panel-pane-heading {
     height: 80px;
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 700;
   }
 
   .gct-filter-panel-pane-heading-info {

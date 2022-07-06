@@ -74,13 +74,14 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getComparisonData(model: string) {
-    if (this.comparisonData[model]) {
-      return of(this.comparisonData[model]);
+  getComparisonGenes(category: string, subCategory: string) {
+    const key = category + subCategory;
+    if (this.comparisonData[key]) {
+      return of(this.comparisonData[key]);
     } else {
-      return this.apiService.getComparisonData(model).pipe(
+      return this.apiService.getComparisonGenes(category, subCategory).pipe(
         tap((data: any) => {
-          this.comparisonData[model] = data;
+          this.comparisonData[key] = data;
         })
       );
     }

@@ -1,5 +1,5 @@
 import { SelectItem } from 'primeng/api';
-import { MedianExpression } from '../../../../models';
+import { MedianExpression } from './';
 
 export interface GCTGeneTissue {
   name: string;
@@ -10,10 +10,30 @@ export interface GCTGeneTissue {
   medianexpression?: MedianExpression;
 }
 
+export interface GCTGeneNominations {
+  count: number;
+  year: number;
+  teams: string[];
+  studies: string[];
+  inputs: string[];
+  programs: string[];
+  validations: string[];
+}
+
 export interface GCTGene {
   ensembl_gene_id: string;
   hgnc_symbol: string;
+  uniprotid?: string;
+  uid?: string;
+  search_string?: string;
   tissues: GCTGeneTissue[];
+  nominations?: GCTGeneNominations;
+  associations?: number[];
+  pinned?: boolean;
+}
+
+export interface GCTGeneResponse {
+  items: GCTGene[];
 }
 
 export interface GCTSelectOption extends SelectItem {
@@ -40,7 +60,7 @@ export interface GCTFilter {
   options: GCTFilterOption[];
 }
 
-export interface GCDetailsPanelData {
+export interface GCTDetailsPanelData {
   label?: string;
   heading?: string;
   subHeading?: string;

@@ -13,7 +13,7 @@ import {
   genesRoute,
   searchGeneRoute,
   distributionRoute,
-  comparisonDataRoute,
+  comparisonGenesRoute,
   teamsRoute,
   teamMemberImageRoute,
   geneTableRoute,
@@ -81,7 +81,7 @@ connection.on(
 
 connection.once('open', async () => {
   router.get('/genes/search', searchGeneRoute);
-  router.get('/genes/comparison', comparisonDataRoute);
+  router.get('/genes/comparison', comparisonGenesRoute);
   router.get('/genes/table', geneTableRoute);
   router.get('/genes/:id', geneRoute);
   router.get('/genes/', genesRoute);

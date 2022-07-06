@@ -1,8 +1,8 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import "../../../../../../../styles/variables";
+@import "../../../../../../../styles/mixins";
 
 .gct-details-panel {
-  color: var(--color-darker);
+  color: var(--color-darkest);
 
   .p-overlaypanel {
     background: #ffffff;
@@ -16,19 +16,19 @@
   .gct-details-panel-label {
     font-size: 12px;
     margin-bottom: 6px;
-    font-weight: 900;
+    font-weight: 700;
   }
 
   .gct-details-panel-heading {
     font-size: 21px;
     color: var(--color-text);
-    font-weight: 900;
+    font-weight: 700;
   }
 
   .gct-details-panel-sub-heading {
     font-size: 14px;
     color: var(--color-text);
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 15px;
   }

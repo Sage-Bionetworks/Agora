@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
-import { GCDetailsPanelData } from '../gene-comparison-tool';
+import { GCTDetailsPanelData } from '../../../../../../models';
+import { HelperService } from '../../../../../../core/services';
 
 @Component({
   selector: 'gene-comparison-tool-details-panel',
@@ -17,11 +18,11 @@ import { GCDetailsPanelData } from '../gene-comparison-tool';
 export class GeneComparisonToolDetailsPanelComponent {
   event: any = null;
   dataIndex = 1;
-  _data: GCDetailsPanelData[] = [];
+  _data: GCTDetailsPanelData[] = [];
   get data() {
     return this._data[this.dataIndex];
   }
-  @Input() set data(data: GCDetailsPanelData) {
+  @Input() set data(data: GCTDetailsPanelData) {
     if (
       data &&
       JSON.stringify(data) !== JSON.stringify(this._data[this.dataIndex])
@@ -34,6 +35,8 @@ export class GeneComparisonToolDetailsPanelComponent {
 
   @ViewChildren(OverlayPanel) panels: any = {} as OverlayPanel;
 
+  constructor(private helperService: HelperService) {}
+
   getMarkerStyle(data: any) {
     const percentage = Math.round(
       ((data.value - data.min) / (data.max - data.min)) * 100
@@ -41,7 +44,7 @@ export class GeneComparisonToolDetailsPanelComponent {
     return { left: percentage + '%' };
   }
 
-  show(event: any, data?: GCDetailsPanelData) {
+  show(event: any, data?: GCTDetailsPanelData) {
     this.event = event;
     this.data = data || {};
     this.panels[0 === this.dataIndex ? 'last' : 'first'].hide();
@@ -65,11 +68,15 @@ export class GeneComparisonToolDetailsPanelComponent {
     this.isShown = false;
   }
 
-  toggle(event: any, data?: GCDetailsPanelData) {
+  toggle(event: any, data?: GCTDetailsPanelData) {
     if (event.target === this.event?.target && this.isShown) {
       this.hide();
     } else {
       this.show(event, data);
     }
+  }
+
+  getSignificantFigures(n: any, b: any) {
+    return this.helperService.getSignificantFigures(n, b);
   }
 }

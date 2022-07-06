@@ -1,3 +1,4 @@
+export * from './comparison';
 export * from './genes';
 export * from './gene-links';
 export * from './rna';

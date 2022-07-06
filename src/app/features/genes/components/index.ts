@@ -1,7 +1,4 @@
 export * from './gene-comparison-tool';
-export * from './gene-comparison-tool-filter-panel';
-export * from './gene-comparison-tool-filter-list';
-export * from './gene-comparison-tool-details-panel';
 export * from './gene-details';
 export * from './gene-druggability';
 export * from './gene-evidence';

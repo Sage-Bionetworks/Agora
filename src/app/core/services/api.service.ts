@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 // -------------------------------------------------------------------------- //
 import {
   Gene,
+  GCTGeneResponse,
   GenesResponse,
   RnaDifferentialExpression,
   RnaDifferentialExpressionDistribution,
@@ -55,10 +56,17 @@ export class ApiService {
     });
   }
 
-  getComparisonData(model: string): Observable<RnaDifferentialExpression[]> {
-    return this.http.get<RnaDifferentialExpression[]>('/api/genes/comparison', {
+  getComparisonGenes(
+    category: string,
+    subCategory: string
+  ): Observable<GCTGeneResponse> {
+    const params = new HttpParams()
+      .set('category', category)
+      .set('subCategory', subCategory);
+
+    return this.http.get<GCTGeneResponse>('/api/genes/comparison', {
       headers: new HttpHeaders(defaultHeaders),
-      params: new HttpParams().set('model', model),
+      params,
     });
   }
 

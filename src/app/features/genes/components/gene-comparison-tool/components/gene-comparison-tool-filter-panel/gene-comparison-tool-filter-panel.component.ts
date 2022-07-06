@@ -6,7 +6,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { GCTFilter } from '../gene-comparison-tool';
+import { GCTFilter } from '../../../../../../models';
 
 @Component({
   selector: 'gene-comparison-tool-filter-panel',

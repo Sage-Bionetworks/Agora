@@ -44,7 +44,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
     { field: 'safety_rating_display_value', header: 'Safety Rating' },
     { field: 'ab_modality_display_value', header: 'Antibody Modality' },
     {
-      field: 'validation_study_details_display_value',
+      field: 'validations_display_value',
       header: 'Experimental Validation',
     },
   ];
@@ -115,13 +115,12 @@ export class GeneNominatedTargetsComponent implements OnInit {
             .join(', ');
         }
 
-        de.validation_study_details_display_value = '';
+        de.validations_display_value = '';
         if (validationStudyDetailsArray.length) {
-          de.validation_study_details_display_value =
-            validationStudyDetailsArray
-              .filter((e) => e)
-              .sort((a: string, b: string) => a.localeCompare(b))
-              .join(', ');
+          de.validations_display_value = validationStudyDetailsArray
+            .filter((e) => e)
+            .sort((a: string, b: string) => a.localeCompare(b))
+            .join(', ');
         }
 
         de.initial_nomination_display_value = initialNominationArray.length

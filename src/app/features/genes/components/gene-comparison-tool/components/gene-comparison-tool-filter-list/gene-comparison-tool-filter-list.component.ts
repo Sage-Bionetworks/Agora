@@ -6,7 +6,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { GCTFilter, GCTFilterOption } from '../gene-comparison-tool';
+import { GCTFilter, GCTFilterOption } from '../../../../../../models';
 
 @Component({
   selector: 'gene-comparison-tool-filter-list',

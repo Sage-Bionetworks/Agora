@@ -3,7 +3,7 @@
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
 import { setHeaders } from '../helpers';
-import { GeneCollection } from '../models';
+import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
   getProteinDifferentialExpression,
@@ -15,115 +15,95 @@ import {
 } from '.';
 
 // -------------------------------------------------------------------------- //
-// Genes
+// Functions
 // -------------------------------------------------------------------------- //
 
-let genes: any = [];
+let allGenes: Gene[] = [];
 
-export async function _getGenes() {
-  try {
-    // let result: any = cache.get('genes');
+export async function getAllGenes() {
+  if (allGenes.length) {
+    return allGenes;
+  }
 
-    // if (result) {
-    //   return result;
-    // }
+  allGenes = await GeneCollection.find()
+    .lean()
+    .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
+    .exec();
 
-    if (genes > 0) {
-      return genes;
-    }
+  return allGenes;
 
-    const result = await GeneCollection.find()
-      .lean()
-      .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
-      .exec();
+  // let result: Gene[] | undefined = cache.get('genes');
 
-    //cache.set('genes', result);
-    genes = result;
+  // if (result) {
+  //   return result;
+  // }
+
+  // result = await GeneCollection.find()
+  //   .lean()
+  //   .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
+  //   .exec();
+
+  // cache.set('genes', result);
+  // return result;
+}
+
+export async function getGenes(ids?: string | string[]) {
+  const genes: Gene[] = await getAllGenes();
+
+  if (ids) {
+    ids = typeof ids == 'string' ? ids.split(',') : ids;
+    return genes.filter((g: Gene) => ids?.includes(g.ensembl_gene_id));
+  }
+
+  return genes;
+}
+
+export async function getGenesMap() {
+  const genes = await getGenes();
+  return new Map(genes.map((g: Gene) => [g.ensembl_gene_id, g]));
+}
+
+export async function getGene(ensg: string) {
+  const cacheKey = ensg + '-gene';
+  let result: Gene | null | undefined = cache.get(cacheKey);
+
+  if (result) {
     return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
   }
+
+  result = await GeneCollection.findOne({
+    ensembl_gene_id: ensg,
+  })
+    .lean()
+    .exec();
+
+  if (result) {
+    result.rna_differential_expression = await getRnaDifferentialExpression(
+      ensg
+    );
+    result.protein_differential_expression =
+      await getProteinDifferentialExpression(ensg);
+    result.metabolomics = await getMetabolomics(ensg);
+    result.neuropathologic_correlations = await getNeuropathologicCorrelations(
+      ensg
+    );
+    result.overall_scores = await getOverallScores(ensg);
+    result.experimental_validation = await getExperimentalValidation(ensg);
+    result.links = await getGeneLinks(ensg);
+  }
+
+  cache.set(cacheKey, result);
+  return result;
 }
 
-export async function getGenes(ids?: string) {
-  const _genes = await _getGenes();
-
-  if (ids && ids.length > 0) {
-    const idsArr: any = ids.split(',');
-    return _genes.filter((gene: any) => idsArr.includes(gene.ensembl_gene_id));
-  } else {
-    return _genes;
-  }
-}
-
-let genesMap: any = [];
+// -------------------------------------------------------------------------- //
+// Routes
+// -------------------------------------------------------------------------- //
 
 export async function genesRoute(req: any, res: any) {
   const genes = await getGenes(req.query.ids);
   setHeaders(res);
   res.json(genes);
-}
-
-export async function getGenesMap() {
-  try {
-    // let result: any = cache.get('genes-map');
-
-    // if (result) {
-    //   return result;
-    // }
-
-    if (genesMap.length > 0) {
-      return genesMap;
-    }
-
-    let result: any = await getGenes();
-    result = new Map(result.map((g: any) => [g.ensembl_gene_id, g]));
-
-    //cache.set('genes-map', result);
-    genesMap = result;
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
-}
-
-export async function getGene(ensg: string) {
-  try {
-    let result: any = cache.get('gene-' + ensg);
-
-    if (result) {
-      return result;
-    }
-
-    result = await GeneCollection.findOne({
-      ensembl_gene_id: ensg,
-    }).lean();
-
-    if (result) {
-      result.rna_differential_expression = await getRnaDifferentialExpression(
-        ensg
-      );
-      result.protein_differential_expression =
-        await getProteinDifferentialExpression(ensg);
-      result.metabolomics = await getMetabolomics(ensg);
-      result.neuropathologic_correlations =
-        await getNeuropathologicCorrelations(ensg);
-      result.overall_scores = await getOverallScores(ensg);
-      result.experimental_validation = await getExperimentalValidation(ensg);
-      result.links = await getGeneLinks(ensg);
-    }
-
-    cache.set('gene-' + ensg, result);
-    return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
-  }
 }
 
 export async function geneRoute(req: any, res: any) {
@@ -138,6 +118,10 @@ export async function geneRoute(req: any, res: any) {
   setHeaders(res);
   res.json(gene);
 }
+
+// -------------------------------------------------------------------------- //
+// TO CLEAN
+// -------------------------------------------------------------------------- //
 
 export function searchGeneRoute(req: any, res: any) {
   if (!req.params || !req.query || !req.query.id) {
@@ -201,7 +185,7 @@ export async function getNominatedGenes() {
           'nominatedtarget.team',
           'nominatedtarget.study',
           'nominatedtarget.input_data',
-          'nominatedtarget.validation_study_details',
+          'nominatedtarget.validations',
           'druggability.pharos_class',
           'druggability.sm_druggability_bucket',
           'druggability.classification',

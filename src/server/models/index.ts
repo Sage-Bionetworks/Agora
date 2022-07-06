@@ -1,3 +1,4 @@
+export * from './comparison';
 export * from './experimental-validation';
 export * from './gene-links';
 export * from './genes';

@@ -85,7 +85,7 @@ export interface Gene {
   is_any_protein_changed_in_ad_brain_display_value?: string;
   nominated_target_display_value?: boolean;
   initial_nomination_display_value?: number;
-  validation_study_details_display_value?: string;
+  validations_display_value?: string;
 
   // Nominated table (not in mongo document)
   input_data_display_value?: string;
