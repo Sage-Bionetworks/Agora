@@ -13,26 +13,57 @@
     [ngClass]="getFullscreenClass()"
     [sortField]="sortField"
   >
-    <ng-template pTemplate="caption">
+    <ng-template #header pTemplate="caption">
       <div>{{ heading }}</div>
-      <div class="gene-table-header-icons">
-        <div>
-          <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
+      <div class="gene-table-header-controls">
+        <div *ngIf="comparisonToolQuery">
+          <div
+            pTooltip="User Agora Gene Comparison Tool  to compare all nominated genes in this list."
+            tooltipPosition="top"
+            tooltipStyleClass="tooltip gene-table-tooltip"
+            appendTo="target"
+          >
+            <i
+              class="fa-solid fa-arrow-right-arrow-left"
+              (click)="navigateToGeneComparisonTool()"
+            ></i>
+          </div>
         </div>
         <div>
-          <i
-            class="pi pi-download table-icon absolute-icon"
-            (click)="table.exportCSV()"
-          ></i>
+          <div
+            pTooltip="View table in full screen."
+            tooltipPosition="top"
+            tooltipStyleClass="tooltip tooltip-nowrap gene-table-tooltip"
+            appendTo="target"
+          >
+            <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
+          </div>
         </div>
         <div>
-          <p-multiSelect
-            [options]="optionalColumns"
-            [(ngModel)]="selectedColumns"
-            [showHeader]="false"
-            optionLabel="header"
-            dropdownIcon="pi pi-filter"
-          ></p-multiSelect>
+          <div
+            pTooltip="Download table as CSV."
+            tooltipPosition="top"
+            tooltipStyleClass="tooltip tooltip-nowrap gene-table-tooltip"
+            appendTo="target"
+          >
+            <i class="fa-solid fa-download" (click)="table.exportCSV()"></i>
+          </div>
+        </div>
+        <div>
+          <div
+            pTooltip="Control the columns that are displayed in this table."
+            tooltipPosition="top"
+            tooltipStyleClass="tooltip gene-table-tooltip"
+            appendTo="target"
+          >
+            <p-multiSelect
+              [options]="optionalColumns"
+              [(ngModel)]="selectedColumns"
+              [showHeader]="false"
+              optionLabel="header"
+              dropdownIcon="pi pi-filter"
+            ></p-multiSelect>
+          </div>
         </div>
       </div>
     </ng-template>

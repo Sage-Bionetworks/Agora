@@ -102,7 +102,7 @@
               [routerLink]="item.routerLink"
               (click)="(onClick)"
               routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
+              [routerLinkActiveOptions]="item.activeOptions || {}"
             >
               <span>{{ item.label }}</span>
             </a>

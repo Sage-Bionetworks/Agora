@@ -91,7 +91,7 @@ export class RowChartComponent extends BaseChartComponent {
       .gap(4)
       .title(false)
       .valueAccessor((d: any) => {
-        return self.helperService.getSignificantFigures(+d.value.logfc);
+        return self.helperService.getSignificantFigures(+d.value.logfc, 3);
       })
       .keyAccessor((d: any) => {
         return d.key[0];
@@ -552,7 +552,8 @@ export class RowChartComponent extends BaseChartComponent {
         .on('mouseover', function (event: any, d: any) {
           const offset = self.helperService.getOffset(this);
           const text = `Log Fold Change: ${self.helperService.getSignificantFigures(
-            +d.value.logfc
+            +d.value.logfc,
+            3
           )}`;
 
           tooltip

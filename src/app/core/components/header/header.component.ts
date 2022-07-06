@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
     {
       label: 'Gene Search',
       routerLink: [''],
+      activeOptions: { exact: true },
     },
     {
       label: 'Gene Comparison',

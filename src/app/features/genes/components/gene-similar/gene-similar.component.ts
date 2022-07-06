@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
@@ -53,8 +53,11 @@ export class GeneSimilarComponent implements OnInit {
     { field: 'ab_modality_display_value', header: 'Antibody Modality' },
   ];
 
+  comparisonToolQuery: { [key: string]: string } | undefined;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private apiService: ApiService,
     private helperService: HelperService,
     private geneService: GeneService
@@ -128,5 +131,11 @@ export class GeneSimilarComponent implements OnInit {
     });
 
     this.helperService.setLoading(false);
+  }
+
+  navigateToGeneComparisonTool() {
+    const ids: string[] = this.data.map((g: Gene) => g.ensembl_gene_id);
+    this.helperService.setGCTSection(ids);
+    this.router.navigate(['/genes/comparison']);
   }
 }

@@ -52,6 +52,7 @@ export interface GCTFilterOption {
 
 export interface GCTFilter {
   name: string;
+  field: string;
   label: string;
   short?: string;
   description?: string;

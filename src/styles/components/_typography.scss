@@ -79,6 +79,14 @@ b {
   text-align: right;
 }
 
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
 .link {
   @include link();
 }

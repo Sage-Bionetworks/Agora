@@ -18,11 +18,22 @@
       }
     }
 
-    .gene-table-header-icons {
+    a {
+      color: #ffffff;
+    }
+
+    .gene-table-header-controls {
       display: flex;
 
       > div {
-        padding-left: 15px;
+        position: relative;
+        margin-left: 15px;
+
+        > i {
+          display: flex;
+          height: 100%;
+          align-items: center;
+        }
       }
 
       i,
@@ -89,6 +100,34 @@
           background: rgba(63, 94, 171, 0.25);
         }
       }
+    }
+  }
+}
+
+.tooltip.gene-table-tooltip {
+  top: -30px !important;
+  left: 50% !important;
+
+  .p-tooltip-text {
+    text-align: center;
+  }
+
+  &:not(.tooltip-nowrap) {
+    width: 250px;
+  }
+
+  &.p-tooltip-top {
+    transform: translate(-50%, -100%);
+  }
+
+  &:not(.p-tooltip-top) {
+    top: auto !important;
+    left: 100% !important;
+    bottom: -20px !important;
+    transform: translate(-100%, 100%);
+
+    .p-tooltip-arrow {
+      display: none;
     }
   }
 }

@@ -4,6 +4,7 @@ import { Table } from 'primeng/table';
 import screenfull from 'screenfull';
 
 import { Gene } from '../../../../models';
+import { HelperService } from '../../../../core/services';
 
 interface TableColumn {
   field: string;
@@ -78,13 +79,14 @@ export class GeneTableComponent implements OnInit {
   @Input() className = '';
   @Input() heading = 'Nominated Target List';
   @Input() exportFilename = 'gene-list.csv';
+  @Input() comparisonToolQuery: boolean | { [key: string]: string } = false;
 
   @Input() sortField = '';
   @Input() sortOrder = -1;
 
   @ViewChild('table', { static: true }) table: Table = {} as Table;
 
-  constructor(private router: Router) {}
+  constructor(private helperService: HelperService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -134,6 +136,10 @@ export class GeneTableComponent implements OnInit {
     this.router.navigate(['/genes/' + gene.ensembl_gene_id]);
   }
 
+  isFullscreen() {
+    return screenfull && screenfull.isFullscreen;
+  }
+
   getWindowClass(): string {
     return screenfull && !screenfull.isFullscreen
       ? ' pi pi-window-maximize table-icon absolute-icon-left'
@@ -157,6 +163,18 @@ export class GeneTableComponent implements OnInit {
       } else {
         screenfull.exit();
       }
+    }
+  }
+
+  navigateToGeneComparisonTool() {
+    if (typeof this.comparisonToolQuery === 'object') {
+      this.router.navigate(['/genes/comparison'], {
+        queryParams: this.comparisonToolQuery,
+      });
+    } else {
+      const ids: string[] = this._genes.map((g: Gene) => g.ensembl_gene_id);
+      this.helperService.setGCTSection(ids);
+      this.router.navigate(['/genes/comparison']);
     }
   }
 }

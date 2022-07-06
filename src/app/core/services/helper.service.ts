@@ -21,6 +21,8 @@ declare global {
 export class HelperService {
   loading = false;
 
+  gctSelection: string[] = [];
+
   @Output() loadingChange: EventEmitter<any> = new EventEmitter();
 
   setLoading(state: boolean) {
@@ -120,5 +122,17 @@ export class HelperService {
 
     const mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
     return (Math.round(n * mult) / mult) * sign;
+  }
+
+  setGCTSection(genes: string[]) {
+    this.gctSelection = genes;
+  }
+
+  getGCTSection() {
+    return this.gctSelection;
+  }
+
+  deleteGCTSection() {
+    this.gctSelection = [];
   }
 }

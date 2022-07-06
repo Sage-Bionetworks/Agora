@@ -61,10 +61,25 @@
       </div>
     </div>
 
-    <gene-table
-      [genes]="data"
-      [columns]="tableColumns"
-      [searchTerm]="searchTerm"
-    ></gene-table>
+    <div class="mb-lg">
+      <gene-table
+        [genes]="data"
+        [columns]="tableColumns"
+        [searchTerm]="searchTerm"
+        [comparisonToolQuery]="{ nominations: '4,2,3,1' }"
+      ></gene-table>
+    </div>
+
+    <div>
+      <i class="fa-circle-info fa-solid text-secondary"></i>
+      Use
+      <a
+        class="link"
+        [routerLink]="['/genes/comparison']"
+        [queryParams]="{ nominations: '4,2,3,1' }"
+        >Agora’s Gene Comparison Tool</a
+      >
+      to compare all nominated genes in this list.
+    </div>
   </div>
 </div>

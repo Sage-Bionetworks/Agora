@@ -93,7 +93,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
         // Populate NominatedTargets display fields
         de.teams_display_value = '';
         if (teamsArray.length) {
-          teamsArray
+          de.teams_display_value = teamsArray
             .filter(this.getUnique)
             .sort((a: string, b: string) => a.localeCompare(b))
             .join(', ');

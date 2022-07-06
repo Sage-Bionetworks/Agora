@@ -310,11 +310,29 @@
   }
 
   .category-filter-container {
+    display: flex;
+    width: 100%;
     border-bottom: 1px solid var(--color-primary);
     margin-bottom: 8px;
 
-    .p-dropdown-label {
-      padding-bottom: 3px;
+    > div {
+      display: flex;
+      align-items: center;
+      padding-bottom: 5px;
+    }
+
+    .p-dropdown {
+      margin-right: 15px;
+    }
+
+    .category-filter-icon {
+      transform: translateY(1px);
+      cursor: pointer;
+
+      svg {
+        display: block;
+        pointer-events: none;
+      }
     }
   }
 
@@ -662,5 +680,17 @@
 
   svg {
     margin-right: 12px;
+  }
+}
+
+.gct-category-panel {
+  width: 425px;
+  background: #ffffff;
+  font-size: var(--font-size-xs);
+  border-radius: 3px;
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+
+  .p-overlaypanel-content {
+    padding: 20px;
   }
 }

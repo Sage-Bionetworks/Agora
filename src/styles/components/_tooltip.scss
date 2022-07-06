@@ -1,0 +1,47 @@
+.tooltip {
+  max-width: 250px;
+  background-color: #63676c;
+  padding: 8px 12px !important;
+  border-radius: 3px;
+
+  .p-tooltip-text {
+    background: none;
+    box-shadow: none;
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+  &.p-tooltip-top {
+    transform: translateY(-18px);
+
+    .p-tooltip-arrow {
+      bottom: -9px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #63676c;
+      margin-left: -10px;
+    }
+  }
+
+  &.p-tooltip-bottom {
+    transform: translateY(18px);
+
+    .p-tooltip-arrow {
+      top: -9px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #63676c;
+      margin-left: -10px;
+    }
+  }
+}
+
+.tooltip-nowrap {
+  .p-tooltip-text {
+    white-space: nowrap;
+  }
+}

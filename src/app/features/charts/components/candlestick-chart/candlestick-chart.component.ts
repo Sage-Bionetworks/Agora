@@ -169,9 +169,12 @@ export class CandlestickChartComponent extends BaseChartComponent {
           self._gene.hgnc_symbol || self._gene.ensembl_gene_id
         } ${isOrNot} significantly correlated with ${
           d.key
-        }, with an odds ratio of ${d.value.mean} and an adjusted p-value of ${
-          d.value.pval_adj
-        }.`;
+        }, with an odds ratio of ${
+          d.value.mean
+        } and an adjusted p-value of ${self.helperService.getSignificantFigures(
+          d.value.pval_adj,
+          3
+        )}.`;
         const offset = self.helperService.getOffset(this);
 
         tooltip

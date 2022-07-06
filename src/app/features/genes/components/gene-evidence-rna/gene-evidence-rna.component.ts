@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { Gene, RnaDifferentialExpression } from '../../../../models';
 import { GeneService } from '../../services';
+import { HelperService } from '../../../../core/services';
 
 @Component({
   selector: 'gene-evidence-rna',
@@ -24,7 +25,10 @@ export class GeneEvidenceRnaComponent {
   differentialExpressionChartData: any = null;
   consistencyOfChangeChartData: any = null;
 
-  constructor(private geneService: GeneService) {}
+  constructor(
+    private helperService: HelperService,
+    private geneService: GeneService
+  ) {}
 
   init() {
     if (!this._gene?.rna_differential_expression) {
@@ -78,9 +82,9 @@ export class GeneEvidenceRnaComponent {
                 'significantly differentially expressed in ' +
                 item.tissue +
                 ' with a log fold change value of ' +
-                item.logfc +
+                this.helperService.getSignificantFigures(item.logfc, 3) +
                 ' and an adjusted p-value of ' +
-                item.adj_p_val +
+                this.helperService.getSignificantFigures(item.adj_p_val, 3) +
                 '.',
             },
             quartiles:

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { Gene } from '../../../../models';
 import { GeneService } from '../../services';
+import { HelperService } from '../../../../core/services';
 
 @Component({
   selector: 'gene-evidence-proteomics',
@@ -23,7 +24,10 @@ export class GeneEvidenceProteomicsComponent {
 
   differentialExpressionChartData: any = null;
 
-  constructor(private geneService: GeneService) {}
+  constructor(
+    private helperService: HelperService,
+    private geneService: GeneService
+  ) {}
 
   init() {
     if (!this._gene?.protein_differential_expression) {
@@ -75,9 +79,9 @@ export class GeneEvidenceProteomicsComponent {
                 'significantly differentially expressed in ' +
                 item.tissue +
                 ' with a log fold change value of ' +
-                item.log2_fc +
+                this.helperService.getSignificantFigures(item.log2_fc, 3) +
                 ' and an adjusted p-value of ' +
-                item.cor_pval +
+                this.helperService.getSignificantFigures(item.cor_pval, 3) +
                 '.',
             },
             quartiles:

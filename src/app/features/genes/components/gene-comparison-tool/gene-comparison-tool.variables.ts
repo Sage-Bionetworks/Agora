@@ -40,7 +40,8 @@ export const subCategories: { [key: string]: GCTSelectOption[] } = {
 
 export const filters: GCTFilter[] = [
   {
-    name: 'nominations.count',
+    name: 'nominations',
+    field: 'nominations.count',
     label: 'Number of Nominations',
     short: 'Nominations',
     description:
@@ -50,7 +51,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.teams',
+    name: 'teams',
+    field: 'nominations.teams',
     label: 'Nominating Teams',
     short: 'Team',
     description: 'Filter for genes based on the nominating research team.',
@@ -58,7 +60,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.year',
+    name: 'year',
+    field: 'nominations.year',
     label: 'Year First Nominated',
     short: 'Year',
     description:
@@ -68,7 +71,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.studies',
+    name: 'studies',
+    field: 'nominations.studies',
     label: 'Cohort Study',
     short: 'Study',
     description:
@@ -77,7 +81,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.inputs',
+    name: 'inputs',
+    field: 'nominations.inputs',
     label: 'Input Data',
     short: 'Data',
     description:
@@ -86,7 +91,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.programs',
+    name: 'programs',
+    field: 'nominations.programs',
     label: 'Nominating Program',
     short: 'Nominating Program',
     description: 'Filter for genes based on the nominating program.',
@@ -94,7 +100,8 @@ export const filters: GCTFilter[] = [
     options: [],
   },
   {
-    name: 'nominations.validations',
+    name: 'validations',
+    field: 'nominations.validations',
     label: 'Experimental Validation',
     short: 'Experimental Validation',
     description:
@@ -105,6 +112,7 @@ export const filters: GCTFilter[] = [
   },
   {
     name: 'associations',
+    field: 'associations',
     label: 'Association with AD',
     short: 'Association with AD',
     description:

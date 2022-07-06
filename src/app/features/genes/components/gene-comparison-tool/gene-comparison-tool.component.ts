@@ -9,10 +9,10 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
-  ElementRef,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { cloneDeep } from 'lodash';
 
 import { Table } from 'primeng/table';
 import { SortEvent, MessageService, FilterService } from 'primeng/api';
@@ -51,14 +51,14 @@ export class GeneComparisonToolComponent
   genes: GCTGene[] = [];
 
   /* Categories ------------------------------------------------------------ */
-  categories: GCTSelectOption[] = variables.categories;
+  categories: GCTSelectOption[] = cloneDeep(variables.categories);
   category = '';
   subCategories: GCTSelectOption[] = [];
   subCategory = '';
   subCategoryLabel = '';
 
   /* Filters --------------------------------------------------------------- */
-  filters: GCTFilter[] = variables.filters;
+  filters: GCTFilter[] = cloneDeep(variables.filters);
   searchTerm = '';
 
   /* ----------------------------------------------------------------------- */
@@ -151,7 +151,7 @@ export class GeneComparisonToolComponent
       gene.pinned = pinned.includes(gene.uid);
 
       this.filters.forEach((filter: GCTFilter) => {
-        let value = this.getGeneProperty(gene, filter.name);
+        let value = this.getGeneProperty(gene, filter.field);
 
         if (value) {
           if (Array.isArray(value)) {
@@ -175,6 +175,12 @@ export class GeneComparisonToolComponent
     this.columns = columns;
     this.sortField = this.sortField || this.columns[0];
 
+    const preSelection = this.helperService.getGCTSection();
+    this.helperService.deleteGCTSection();
+    if (preSelection?.length) {
+      this.searchTerm = preSelection.join(',');
+    }
+
     this.genes = genes;
   }
 
@@ -189,7 +195,7 @@ export class GeneComparisonToolComponent
       this.subCategoryLabel = 'Profiling Method';
     }
 
-    this.subCategories = variables.subCategories[this.category];
+    this.subCategories = cloneDeep(variables.subCategories)[this.category];
 
     if (
       !this.subCategory ||
@@ -317,7 +323,7 @@ export class GeneComparisonToolComponent
         .map((selected) => selected.value);
 
       if (values.length) {
-        filters[filter.name] = {
+        filters[filter.field] = {
           value: values,
           matchMode: filter.matchMode || 'equals',
         };
@@ -432,10 +438,6 @@ export class GeneComparisonToolComponent
   }
 
   updateUrl() {
-    let url = this.router.serializeUrl(
-      this.router.createUrlTree(['/genes/comparison'])
-    );
-
     const params: { [key: string]: any } = this.getFilterValues();
 
     if (this.category !== this.categories[0].value) {
@@ -457,6 +459,12 @@ export class GeneComparisonToolComponent
     if (this.hasPinnedGenes()) {
       params['pinned'] = this.getPinnedGeneList();
     }
+
+    this.urlParams = params;
+
+    let url = this.router.serializeUrl(
+      this.router.createUrlTree(['/genes/comparison'])
+    );
 
     if (Object.keys(params).length > 0) {
       url += '?' + new URLSearchParams(params);
