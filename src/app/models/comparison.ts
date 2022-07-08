@@ -26,6 +26,7 @@ export interface GCTGene {
   uniprotid?: string;
   uid?: string;
   search_string?: string;
+  search_array?: string[];
   tissues: GCTGeneTissue[];
   nominations?: GCTGeneNominations;
   associations?: number[];

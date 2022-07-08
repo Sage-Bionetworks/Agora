@@ -79,7 +79,9 @@ export class GeneTableComponent implements OnInit {
   @Input() className = '';
   @Input() heading = 'Nominated Target List';
   @Input() exportFilename = 'gene-list.csv';
-  @Input() comparisonToolQuery: boolean | { [key: string]: string } = false;
+  @Input() gctLink: boolean | { [key: string]: string } = false;
+  @Input() gctLinkTooltip =
+    'Use Agora Gene Comparison Tool to compare all genes in this list.';
 
   @Input() sortField = '';
   @Input() sortOrder = -1;
@@ -167,9 +169,9 @@ export class GeneTableComponent implements OnInit {
   }
 
   navigateToGeneComparisonTool() {
-    if (typeof this.comparisonToolQuery === 'object') {
+    if (typeof this.gctLink === 'object') {
       this.router.navigate(['/genes/comparison'], {
-        queryParams: this.comparisonToolQuery,
+        queryParams: this.gctLink,
       });
     } else {
       const ids: string[] = this._genes.map((g: Gene) => g.ensembl_gene_id);

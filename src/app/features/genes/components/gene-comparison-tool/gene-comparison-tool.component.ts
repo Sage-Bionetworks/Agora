@@ -147,8 +147,18 @@ export class GeneComparisonToolComponent
     const columns: string[] = [];
 
     genes.forEach((gene: GCTGene) => {
-      gene.uid = gene.ensembl_gene_id + (gene.uniprotid || '');
-      gene.search_string = gene.hgnc_symbol + gene.uid;
+      gene.uid = gene.ensembl_gene_id;
+      gene.search_array = [
+        gene.ensembl_gene_id.toLowerCase(),
+        gene.hgnc_symbol.toLowerCase(),
+      ];
+
+      if (gene.uniprotid) {
+        gene.uid += gene.uniprotid;
+        gene.search_array.push(gene.uniprotid.toLowerCase());
+      }
+
+      gene.search_string = gene.search_array.join();
       gene.pinned = pinned.includes(gene.uid);
 
       this.filters.forEach((filter: GCTFilter) => {
@@ -315,11 +325,21 @@ export class GeneComparisonToolComponent
     };
 
     if (this.searchTerm) {
-      const terms = this.searchTerm.split(',').map((t: string) => t.trim());
-      filters['search_string'] = {
-        value: terms,
-        matchMode: 'intersect',
-      };
+      if (this.searchTerm.indexOf(',') !== -1) {
+        const terms = this.searchTerm
+          .toLowerCase()
+          .split(',')
+          .map((t: string) => t.trim());
+        filters['search_array'] = {
+          value: terms,
+          matchMode: 'intersect',
+        };
+      } else {
+        filters['search_string'] = {
+          value: this.searchTerm.toLowerCase(),
+          matchMode: 'contains',
+        };
+      }
     }
 
     this.filters.forEach((filter) => {
@@ -339,8 +359,17 @@ export class GeneComparisonToolComponent
       }
     });
 
+    const filterChanged =
+      JSON.stringify(filters) !== JSON.stringify(this.genesTable.filters);
+    const currentPage = this.genesTable._first;
+
     this.genesTable.filters = filters;
     this.genesTable._filter();
+
+    // Restoring current pagination if filters didn't change
+    if (!filterChanged) {
+      this.genesTable._first = currentPage;
+    }
   }
 
   /* ----------------------------------------------------------------------- */

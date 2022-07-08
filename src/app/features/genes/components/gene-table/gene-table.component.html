@@ -16,9 +16,9 @@
     <ng-template #header pTemplate="caption">
       <div>{{ heading }}</div>
       <div class="gene-table-header-controls">
-        <div *ngIf="comparisonToolQuery">
+        <div *ngIf="gctLink">
           <div
-            pTooltip="User Agora Gene Comparison Tool  to compare all nominated genes in this list."
+            [pTooltip]="gctLinkTooltip"
             tooltipPosition="top"
             tooltipStyleClass="tooltip gene-table-tooltip"
             appendTo="target"

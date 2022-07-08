@@ -53,7 +53,7 @@ export class GeneSimilarComponent implements OnInit {
     { field: 'ab_modality_display_value', header: 'Antibody Modality' },
   ];
 
-  comparisonToolQuery: { [key: string]: string } | undefined;
+  gctLink: { [key: string]: string } | undefined;
 
   constructor(
     private route: ActivatedRoute,
