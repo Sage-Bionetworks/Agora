@@ -24,6 +24,7 @@
           <ul>
             <li
               *ngFor="let filter of filters; index as i"
+              class="gct-filter-panel-main-menu-item-{{ filter.name }}"
               [ngClass]="{ active: activePane === i }"
             >
               <button (click)="openPane(i)">
@@ -55,7 +56,7 @@
     <div class="gct-filter-panel-panes">
       <div
         *ngFor="let filter of filters; index as i"
-        class="gct-filter-panel-pane"
+        class="gct-filter-panel-pane gct-filter-panel-pane-{{ filter.name }}"
         [ngClass]="{ open: activePane === i }"
       >
         <div class="gct-filter-panel-pane-inner">
@@ -89,7 +90,7 @@
                   <p-checkbox
                     [(ngModel)]="option.selected"
                     [binary]="true"
-                    (ngModelChange)="handleChange()"
+                    (ngModelChange)="handleChange(option)"
                   ></p-checkbox>
                 </div>
                 <div>

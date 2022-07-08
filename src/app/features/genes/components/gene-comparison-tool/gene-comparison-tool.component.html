@@ -211,25 +211,26 @@
               <div class="table-divider-inner">
                 <div>Pinned Genes</div>
                 <div class="csv-download-button">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      opacity="0.3"
-                      d="M13 9V5H11V11H9.83002L12 13.17L14.17 11H13V9Z"
-                      fill="#3E61A9"
-                    />
-                    <path
-                      d="M15 9V3H9V9H5L12 16L19 9H15ZM12 13.17L9.83 11H11V5H13V11H14.17L12 13.17ZM5 18H19V20H5V18Z"
-                      fill="#3E61A9"
-                    />
-                  </svg>
-
-                  <button (click)="downloadPinnedCsv()">Download as CSV</button>
+                  <button (click)="downloadPinnedCsv()">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        opacity="0.3"
+                        d="M13 9V5H11V11H9.83002L12 13.17L14.17 11H13V9Z"
+                        fill="#3E61A9"
+                      />
+                      <path
+                        d="M15 9V3H9V9H5L12 16L19 9H15ZM12 13.17L9.83 11H11V5H13V11H14.17L12 13.17ZM5 18H19V20H5V18Z"
+                        fill="#3E61A9"
+                      />
+                    </svg>
+                    Download as CSV
+                  </button>
                 </div>
                 <div>
                   <button (click)="clearPinned()">Clear all</button>
@@ -243,7 +244,6 @@
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               responsiveLayout="scroll"
-              [exportFilename]="category + '_' + subCategory"
             >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">

@@ -21,6 +21,7 @@ import { SortEvent, MessageService, FilterService } from 'primeng/api';
 // Internal
 // -------------------------------------------------------------------------- //
 import {
+  Gene,
   GCTSelectOption,
   GCTFilter,
   GCTGene,
@@ -151,6 +152,10 @@ export class GeneComparisonToolComponent
       gene.pinned = pinned.includes(gene.uid);
 
       this.filters.forEach((filter: GCTFilter) => {
+        if (!filter.field) {
+          return;
+        }
+
         let value = this.getGeneProperty(gene, filter.field);
 
         if (value) {
@@ -318,6 +323,10 @@ export class GeneComparisonToolComponent
     }
 
     this.filters.forEach((filter) => {
+      if (!filter.field) {
+        return;
+      }
+
       const values = filter.options
         .filter((option) => option.selected)
         .map((selected) => selected.value);
@@ -601,35 +610,59 @@ export class GeneComparisonToolComponent
   /* ----------------------------------------------------------------------- */
 
   downloadPinnedCsv() {
-    // Clean up the export file name
-    this.pinnedTable.exportFilename = this.pinnedTable.exportFilename
+    const pinned = this.genes.filter((g: GCTGene) => g.pinned);
+    const data: any[][] = [];
+
+    pinned.forEach((g: GCTGene) => {
+      const baseRow = [g.ensembl_gene_id, g.hgnc_symbol];
+
+      if ('RNA - Differential Expression' === this.category) {
+        baseRow.push(this.subCategory);
+      } else if ('Protein - Differential Expression' === this.category) {
+        baseRow.push(g.uniprotid || '');
+      }
+
+      this.columns.forEach((tissueName: string) => {
+        const tissue: GCTGeneTissue | undefined = g.tissues.find(
+          (t) => t.name === tissueName
+        );
+        data.push([
+          ...baseRow,
+          ...[
+            tissue?.name,
+            tissue?.logfc,
+            tissue?.ci_r,
+            tissue?.ci_l,
+            tissue?.adj_p_val,
+          ],
+        ]);
+      });
+    });
+
+    let csv = '';
+
+    if ('RNA - Differential Expression' === this.category) {
+      csv =
+        '"ensembl_gene_id","hgnc_symbol","model","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
+    } else if ('Protein - Differential Expression' === this.category) {
+      csv =
+        '"ensembl_gene_id","hgnc_symbol","uniprotid","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
+    }
+
+    data.forEach((row) => {
+      csv += row.map((d) => `"${d}"`).join(',') + '\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const filename = (this.category + '-' + this.subCategory)
       .toLowerCase()
       .replace(/( -)|[()]/gi, '')
       .replace(/ /gi, '-');
-
-    // Update the table values to include a key for each tissue, mapped to a string containing its data values
-    this.pinnedTable._value = (this.pinnedTable._value as GCTGene[]).map(
-      (value) => ({
-        ...value,
-        ...value.tissues.reduce(
-          (accumulator, { name: tissueName, ...tissueData }) => ({
-            ...accumulator,
-            [tissueName]: Object.entries(tissueData)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(';'),
-          }),
-          {}
-        ),
-      })
-    );
-
-    this.pinnedTable.columns = [
-      { field: 'ensembl_gene_id' },
-      { field: 'hgnc_symbol' },
-      ...this.columns.map((c) => ({ field: c })),
-    ];
-
-    this.pinnedTable.exportCSV();
+    a.setAttribute('href', url);
+    a.setAttribute('download', filename + '.csv');
+    a.click();
   }
 
   /* ----------------------------------------------------------------------- */

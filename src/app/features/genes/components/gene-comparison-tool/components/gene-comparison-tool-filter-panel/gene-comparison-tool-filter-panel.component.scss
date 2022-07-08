@@ -116,6 +116,21 @@
       }
     }
   }
+
+  .gct-filter-panel-main-menu-item-presets {
+    position: relative;
+    margin-bottom: 60px;
+
+    &:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: -35px;
+      border-bottom: 1px solid var(--color-light);
+    }
+  }
 }
 
 .gct-filter-panel-panes {
@@ -249,6 +264,12 @@
           }
         }
       }
+    }
+  }
+
+  &.gct-filter-panel-pane-presets {
+    ul li label > div:first-child {
+      display: none;
     }
   }
 

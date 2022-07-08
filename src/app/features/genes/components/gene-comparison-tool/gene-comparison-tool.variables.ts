@@ -40,6 +40,33 @@ export const subCategories: { [key: string]: GCTSelectOption[] } = {
 
 export const filters: GCTFilter[] = [
   {
+    name: 'presets',
+    field: 'none',
+    label: 'Quick Filters',
+    description:
+      'Applying a quick filter will reset your current filter state.',
+    options: [
+      {
+        label: 'All Nominated targets',
+        preset: {
+          nominations: [1, 2, 3, 4],
+        },
+      },
+      {
+        label: 'Genetically Associated with LOAD',
+        preset: {
+          associations: [1],
+        },
+      },
+      {
+        label: 'eQTL in Brain',
+        preset: {
+          associations: [2],
+        },
+      },
+    ],
+  },
+  {
     name: 'nominations',
     field: 'nominations.count',
     label: 'Number of Nominations',
@@ -124,11 +151,11 @@ export const filters: GCTFilter[] = [
         value: 1,
       },
       {
-        label: 'RNA Expression Changed in AD Brain',
+        label: 'eQTL in Brain',
         value: 2,
       },
       {
-        label: 'Protein Expression Changed in AD Brain',
+        label: 'RNA Expression Changed in AD Brain',
         value: 3,
       },
       {

@@ -22,7 +22,22 @@ export class GeneComparisonToolFilterPanelComponent {
 
   @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 
-  handleChange() {
+  handleChange(option: any) {
+    if (option.preset) {
+      this.filters.forEach((filter) => {
+        filter.options.forEach((o) => {
+          if (
+            option.preset[filter.name] &&
+            option.preset[filter.name].includes(o.value)
+          ) {
+            o.selected = true;
+          } else {
+            o.selected = false;
+          }
+        });
+      });
+    }
+
     this.onChange.emit(this.filters);
   }
 

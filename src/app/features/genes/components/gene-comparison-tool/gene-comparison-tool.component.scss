@@ -678,8 +678,13 @@
 .csv-download-button {
   margin-right: 40px;
 
+  button {
+    display: flex;
+    align-items: center;
+  }
+
   svg {
-    margin-right: 12px;
+    margin-right: 8px;
   }
 }
 

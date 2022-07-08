@@ -46,16 +46,17 @@ export interface GCTSelectOption extends SelectItem {
 
 export interface GCTFilterOption {
   label: string;
-  value: any;
+  value?: any;
+  preset?: any;
   selected?: boolean;
 }
 
 export interface GCTFilter {
   name: string;
-  field: string;
   label: string;
   short?: string;
   description?: string;
+  field?: string;
   matchMode?: string;
   order?: string;
   options: GCTFilterOption[];
