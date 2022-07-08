@@ -41,17 +41,7 @@ export async function getOverallScoresDistribution() {
     return result;
   }
 
-  result = await OverallScoresDistributionCollection.find(
-    {},
-    {
-      _id: 0,
-      distribution: 1,
-      bins: 1,
-      name: 1,
-      syn_id: 1,
-      wiki_id: 1,
-    }
-  )
+  result = await OverallScoresDistributionCollection.find({})
     .sort('name')
     .lean()
     .exec();
