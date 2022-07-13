@@ -12,8 +12,7 @@ import {
   Gene,
   GCTGeneResponse,
   GenesResponse,
-  RnaDifferentialExpression,
-  RnaDifferentialExpressionDistribution,
+  DistributionResponse,
 } from '../../models';
 
 import { TeamsResponse } from '../../models';
@@ -70,13 +69,10 @@ export class ApiService {
     });
   }
 
-  getDistribution(): Observable<RnaDifferentialExpressionDistribution[]> {
-    return this.http.get<RnaDifferentialExpressionDistribution[]>(
-      '/api/distribution',
-      {
-        headers: new HttpHeaders(defaultHeaders),
-      }
-    );
+  getDistribution(): Observable<DistributionResponse> {
+    return this.http.get<DistributionResponse>('/api/distribution', {
+      headers: new HttpHeaders(defaultHeaders),
+    });
   }
 
   getTeams(): Observable<TeamsResponse> {

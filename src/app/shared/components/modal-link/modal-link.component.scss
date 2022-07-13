@@ -1,0 +1,30 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+modal-link {
+  display: inline-block;
+}
+
+.modal-link-inner {
+  display: flex;
+}
+
+.modal-link-icon {
+  color: var(--color-link);
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.modal-link-text {
+  color: var(--color-link);
+  text-decoration: underline;
+  cursor: pointer;
+}

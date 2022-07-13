@@ -1,6 +1,8 @@
 .p-dialog-mask {
   background-color: rgba(157, 163, 179, 0.5);
   z-index: 99999 !important;
+  padding: 30px;
+  box-sizing: border-box;
 }
 
 .p-dialog {

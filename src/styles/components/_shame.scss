@@ -322,3 +322,63 @@
     margin-bottom: auto;
   }
 }
+
+p-inputswitch {
+  display: block;
+
+  .p-inputswitch {
+    display: block;
+    width: 36px;
+    height: 20px;
+  }
+  .p-inputswitch .p-inputswitch-slider {
+    background: #ced4da;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+      box-shadow 0.2s;
+    border-radius: 30px;
+  }
+  .p-inputswitch .p-inputswitch-slider:before {
+    background: #ffffff;
+    width: 14px;
+    height: 14px;
+    left: 4px;
+    margin-top: -7px;
+    border-radius: 50%;
+    transition-duration: 0.2s;
+  }
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+    transform: translateX(14px);
+  }
+  .p-inputswitch.p-focus .p-inputswitch-slider {
+    outline: 0 none;
+    outline-offset: 0;
+    //box-shadow: 0 0 0 0.2rem #bfdbfe;
+  }
+  .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
+    background: #b6bfc8;
+  }
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background: var(--color-secondary);
+  }
+  .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+    background: #ffffff;
+  }
+  .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover
+    .p-inputswitch-slider {
+    background: var(--color-secondary);
+  }
+}
+
+p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
+  border-color: #e24c4c;
+}
+
+.overlay-panel {
+  max-width: 425px;
+  background: #ffffff;
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+
+  .p-overlaypanel-content {
+    padding: 40px;
+  }
+}

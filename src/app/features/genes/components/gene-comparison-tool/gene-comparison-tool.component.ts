@@ -58,11 +58,7 @@ export class GeneComparisonToolComponent
   subCategory = '';
   subCategoryLabel = '';
 
-  /* Filters --------------------------------------------------------------- */
-  filters: GCTFilter[] = cloneDeep(variables.filters);
-  searchTerm = '';
-
-  /* ----------------------------------------------------------------------- */
+  /* Columns --------------------------------------------------------------- */
   columns: string[] = [];
   columnWidth = 'auto';
 
@@ -70,9 +66,20 @@ export class GeneComparisonToolComponent
   sortField = '';
   sortOrder = -1;
 
+  /* Filters --------------------------------------------------------------- */
+  filters: GCTFilter[] = cloneDeep(variables.filters);
+  searchTerm = '';
+
   /* URL ------------------------------------------------------------------- */
   urlParams: { [key: string]: any } | undefined;
   urlParamsSubscription: Subscription | undefined;
+
+  /* Pinned ---------------------------------------------------------------- */
+  pinnedCount = 0;
+  maxPinnedCount = 50;
+
+  significanceThreshold = 0.05;
+  significanceThresholdActive = false;
 
   /* Components ------------------------------------------------------------ */
   @ViewChild('headerTable', { static: true }) headerTable!: Table;
@@ -148,6 +155,7 @@ export class GeneComparisonToolComponent
 
     genes.forEach((gene: GCTGene) => {
       gene.uid = gene.ensembl_gene_id;
+
       gene.search_array = [
         gene.ensembl_gene_id.toLowerCase(),
         gene.hgnc_symbol.toLowerCase(),
@@ -159,7 +167,11 @@ export class GeneComparisonToolComponent
       }
 
       gene.search_string = gene.search_array.join();
-      gene.pinned = pinned.includes(gene.uid);
+
+      if (pinned.includes(gene.uid)) {
+        gene.pinned = true;
+        this.pinnedCount++;
+      }
 
       this.filters.forEach((filter: GCTFilter) => {
         if (!filter.field) {
@@ -188,7 +200,10 @@ export class GeneComparisonToolComponent
 
     columns.sort();
     this.columns = columns;
-    this.sortField = this.sortField || this.columns[0];
+
+    if (!this.sortField || !this.columns.includes(this.sortField)) {
+      this.sortField = this.columns[0];
+    }
 
     const preSelection = this.helperService.getGCTSection();
     this.helperService.deleteGCTSection();
@@ -421,45 +436,69 @@ export class GeneComparisonToolComponent
   /* Pin/Unpin
   /* ----------------------------------------------------------------------- */
 
+  getPinnedGenes() {
+    return this.genes.filter((g) => g.pinned);
+  }
+
+  updatePinnedCount() {
+    this.pinnedCount = this.getPinnedGenes().length || 0;
+  }
+
+  pinFilteredGenes() {
+    const remaining = this.maxPinnedCount - this.pinnedCount;
+
+    if (remaining < 1) {
+      return;
+    } else if (remaining < this.genesTable.filteredValue?.length) {
+      const self = this;
+      this.messageService.clear();
+      this.messageService.add({
+        severity: 'info',
+        sticky: true,
+        summary: '',
+        detail:
+          'Only ' +
+          remaining +
+          ' genes were added, because you reached the maxium of ' +
+          this.maxPinnedCount +
+          ' pinned genes. ',
+      });
+      setTimeout(() => {
+        self.messageService.clear();
+      }, 5000);
+    }
+
+    this.genesTable.filteredValue.slice(0, remaining).forEach((g: GCTGene) => {
+      g.pinned = true;
+    });
+
+    this.updatePinnedCount();
+    this.filter();
+    this.updateUrl();
+  }
+
   pinGene(gene: GCTGene) {
+    if (this.pinnedCount >= this.maxPinnedCount) {
+      return;
+    }
     gene.pinned = true;
+    this.updatePinnedCount();
     this.filter();
     this.updateUrl();
   }
 
   unpinGene(gene: GCTGene) {
     gene.pinned = false;
+    this.updatePinnedCount();
     this.filter();
     this.updateUrl();
   }
 
-  clearPinned() {
-    this.genes.forEach((g) => {
-      g.pinned = false;
-    });
+  clearPinnedGenes() {
+    this.getPinnedGenes().forEach((g: GCTGene) => (g.pinned = false));
+    this.updatePinnedCount();
     this.filter();
     this.updateUrl();
-  }
-
-  hasPinnedGenes() {
-    for (const gene of this.genes) {
-      if (gene.pinned) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  getPinnedGeneList() {
-    let pinned: string[] = [];
-
-    this.genes.forEach((g) => {
-      if (g.pinned) {
-        pinned.push(g.uid || g.ensembl_gene_id);
-      }
-    });
-
-    return pinned;
   }
 
   /* ----------------------------------------------------------------------- */
@@ -494,8 +533,10 @@ export class GeneComparisonToolComponent
       params['sortOrder'] = this.sortOrder;
     }
 
-    if (this.hasPinnedGenes()) {
-      params['pinned'] = this.getPinnedGeneList();
+    if (this.pinnedCount > 0) {
+      params['pinned'] = this.getPinnedGenes().map(
+        (g: GCTGene) => g.uid || g.ensembl_gene_id
+      );
     }
 
     this.urlParams = params;
@@ -563,26 +604,27 @@ export class GeneComparisonToolComponent
   }
 
   getCircleColor(logfc: number) {
-    if (logfc > 0) {
-      if (logfc < 0.1) {
+    const rounded = this.helperService.getSignificantFigures(logfc, 3);
+    if (rounded > 0) {
+      if (rounded < 0.1) {
         return '#B5CBEF';
-      } else if (logfc < 0.2) {
+      } else if (rounded < 0.2) {
         return '#84A5DB';
-      } else if (logfc < 0.3) {
+      } else if (rounded < 0.3) {
         return '#5E84C3';
-      } else if (logfc < 0.4) {
+      } else if (rounded < 0.4) {
         return '#3E68AA';
       } else {
         return '#245299';
       }
     } else {
-      if (logfc > -0.1) {
+      if (rounded > -0.1) {
         return '#FBB8C5';
-      } else if (logfc > -0.2) {
+      } else if (rounded > -0.2) {
         return '#F78BA0';
-      } else if (logfc > -0.3) {
+      } else if (rounded > -0.3) {
         return '#F16681';
-      } else if (logfc > -0.4) {
+      } else if (rounded > -0.4) {
         return '#EC4769';
       } else {
         return '#D72247';
@@ -591,6 +633,10 @@ export class GeneComparisonToolComponent
   }
 
   getCircleSize(pval: number) {
+    if (this.significanceThresholdActive && pval > this.significanceThreshold) {
+      return 0;
+    }
+
     const pValue = 1 - (this.nRoot(pval, 3) || 0);
     let size = Math.round(100 * pValue * 0.44);
     return size < 6 ? 6 : size;
@@ -658,11 +704,11 @@ export class GeneComparisonToolComponent
         data.push([
           ...baseRow,
           ...[
-            tissue?.name,
-            tissue?.logfc,
-            tissue?.ci_r,
-            tissue?.ci_l,
-            tissue?.adj_p_val,
+            tissueName,
+            tissue?.logfc || '',
+            tissue?.ci_r || '',
+            tissue?.ci_l || '',
+            tissue?.adj_p_val || '',
           ],
         ]);
       });

@@ -1,1 +1,6 @@
-<div #wiki [innerHtml]="safeHtml" class="wiki" [ngClass]="className"></div>
+<div #wiki class="wiki" [ngClass]="getClassName()">
+  <div class="wiki-inner" [innerHtml]="safeHtml"></div>
+  <div class="wiki-overlay">
+    <loading-icon></loading-icon>
+  </div>
+</div>

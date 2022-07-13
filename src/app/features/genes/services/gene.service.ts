@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, share, finalize } from 'rxjs/operators';
 
-import { Gene } from '../../../models';
+import { Gene, DistributionResponse } from '../../../models';
 import { ApiService } from '../../../core/services';
 import { GeneNetworkService } from '.';
 
 @Injectable()
 export class GeneService {
   genes: { [key: string]: Gene } = {};
-  distribution: [] = [];
-  distributionObservable: any = null;
+  distribution: DistributionResponse | undefined = undefined;
+  distributionObservable: Observable<DistributionResponse> | undefined;
   comparisonData: any = {};
 
   constructor(
@@ -56,18 +56,17 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getDistribution(): Observable<any> {
-    if (this.distribution.length > 0) {
+  getDistribution(): Observable<DistributionResponse> {
+    if (this.distribution) {
       return of(this.distribution);
     } else if (this.distributionObservable) {
       return this.distributionObservable;
     } else {
       this.distributionObservable = this.apiService.getDistribution().pipe(
-        tap((data: any) => {
-          this.distribution = data;
-        })
+        tap((data: any) => (this.distribution = data)),
+        share(),
+        finalize(() => (this.distributionObservable = undefined))
       );
-
       return this.distributionObservable;
     }
   }

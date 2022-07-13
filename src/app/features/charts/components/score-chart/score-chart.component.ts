@@ -67,7 +67,7 @@ export class ScoreChartComponent extends BaseChartComponent {
         this.scoreIndex = i;
       }
 
-      if (!this.break.origin) {
+      if (i < 1 && !this.break.origin) {
         const nextItem = this.distribution[i + 1] || {};
         const diff = item.value - (nextItem.value || 0);
 

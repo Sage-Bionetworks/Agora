@@ -3,7 +3,7 @@
 // -------------------------------------------------------------------------- //
 import { Injectable } from '@angular/core';
 import { Observable, of, map } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, share, finalize } from 'rxjs/operators';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -28,10 +28,9 @@ export class TeamService {
       return this.teamsObservable;
     } else {
       this.teamsObservable = this.apiService.getTeams().pipe(
-        tap((res: TeamsResponse) => {
-          this.teams = res.items;
-          this.teamsObservable = undefined;
-        })
+        tap((res: TeamsResponse) => (this.teams = res.items)),
+        share(),
+        finalize(() => (this.teamsObservable = undefined))
       );
       return this.teamsObservable;
     }

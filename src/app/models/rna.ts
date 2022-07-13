@@ -22,3 +22,9 @@ export interface RnaDifferentialExpressionDistribution {
   median: number;
   third_quartile: number;
 }
+
+export interface DistributionResponse {
+  rna_differential_expression: [];
+  proteomics: [];
+  overall_scores: [];
+}

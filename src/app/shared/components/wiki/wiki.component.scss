@@ -1,40 +1,77 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
 .wiki {
-  white-space: pre-wrap;
+  position: relative;
 
-  a {
-    color: var(--color-link);
-  }
+  .wiki-inner {
+    white-space: pre-wrap;
 
-  .email-link {
-    color: var(--color-text);
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .wiki-no-data {
-    color: var(--color-neutral);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 30px 0;
-
-    th,
-    td {
-      padding: 15px;
+    a {
+      color: var(--color-link);
     }
 
-    th {
-      text-align: left;
+    .email-link {
+      color: var(--color-text);
+      font-weight: 700;
+      text-decoration: none;
     }
 
-    tr:nth-child(odd) {
-      background-color: var(--color-lighter);
+    .wiki-no-data {
+      color: var(--color-neutral);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+
+      th,
+      td {
+        padding: 15px;
+      }
+
+      th {
+        text-align: left;
+      }
+
+      tr:nth-child(odd) {
+        background-color: var(--color-lighter);
+      }
+    }
+  }
+
+  .wiki-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #ffffff;
+    align-items: center;
+    justify-content: center;
+    //opacity: 0;
+    //visibility: hidden;
+
+    //transition: var(--transition-duration);
+  }
+
+  &.loading {
+    .wiki-inner {
+      min-height: 120px;
+    }
+
+    .wiki-overlay {
+      display: flex;
+      //opacity: 1;
+      //visibility: visible;
     }
   }
 }
 
 .wiki.news-page-content {
-  white-space: normal;
+  .wiki-inner {
+    white-space: normal;
+  }
 }

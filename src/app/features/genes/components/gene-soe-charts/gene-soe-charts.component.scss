@@ -18,7 +18,7 @@
     align-items: center;
     gap: 5px;
     border-bottom: 1px solid color(text, title);
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 
     > div {
       &:first-child {
@@ -31,7 +31,7 @@
       }
     }
 
-    .dialog-link-icon {
+    .modal-link-icon {
       margin: 0;
     }
 
@@ -47,5 +47,10 @@
     font-size: 16px;
     font-weight: 700;
     margin: 0px;
+  }
+
+  .chart-body {
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 }

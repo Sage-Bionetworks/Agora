@@ -1,6 +1,10 @@
 import { Component, Input } from '@angular/core';
 
-import { Gene, RnaDifferentialExpression } from '../../../../models';
+import {
+  Gene,
+  MedianExpression,
+  RnaDifferentialExpression,
+} from '../../../../models';
 import { GeneService } from '../../services';
 import { HelperService } from '../../../../core/services';
 
@@ -21,6 +25,8 @@ export class GeneEvidenceRnaComponent {
 
   statisticalModels: string[] = [];
   selectedStatisticalModel = '';
+
+  medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
   differentialExpressionChartData: any = null;
   consistencyOfChangeChartData: any = null;
@@ -40,12 +46,25 @@ export class GeneEvidenceRnaComponent {
       this.selectedStatisticalModel = this.statisticalModels[0];
     }
 
+    this.initMedianExpression();
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
   }
 
+  initMedianExpression() {
+    if (!this._gene.medianexpression?.length) {
+      this.medianExpression = [];
+      return;
+    }
+
+    this.medianExpression = this._gene.medianexpression.filter(
+      (d) => d.medianlogcpm && d.medianlogcpm > 0
+    );
+  }
+
   initDifferentialExpression() {
     if (!this._gene.rna_differential_expression?.length) {
+      this.differentialExpression = [];
       return;
     }
 

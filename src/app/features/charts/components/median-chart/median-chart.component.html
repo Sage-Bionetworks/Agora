@@ -5,7 +5,7 @@
       <div #chartContainer class="chart-container"></div>
     </div>
     <div *ngIf="xAxisLabel" class="chart-x-axis-label">{{ xAxisLabel }}</div>
-    <div class="chart-no-data" *ngIf="!gene?.medianexpression?.length">
+    <div class="chart-no-data" *ngIf="!data.length">
       <div class="chart-no-data-text">No data is currently available.</div>
     </div>
   </div>

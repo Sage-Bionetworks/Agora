@@ -10,7 +10,6 @@ import * as cors from 'cors';
 import * as http from 'http';
 import * as path from 'path';
 import helmet from 'helmet';
-import crypto from 'crypto';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -32,45 +31,20 @@ app.set('trust proxy', true);
 app.set('trust proxy', 'loopback');
 
 app.use(cors());
-// app.use(helmet());
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   res.locals.cspNonce = crypto.randomBytes(16).toString('hex');
-//   next();
-// });
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     useDefaults: true,
-//     directives: {
-//       'default-src': ['*'],
-//       'script-src': [
-//         '*',
-//         // "'self'",
-//         // 'https://docs.google.com',
-//         // 'https://player.vimeo.com',
-//         // (req, res: any): string => `'nonce-${res.locals.cspNonce}'`,
-//       ],
-//       'img-src': [
-//         "'self'",
-//         'blob:',
-//         'www.googletagmanager.com',
-//         'https://player.vimeo.com/*',
-//       ],
-//       // 'connect-src': [
-//       //   "'self'",
-//       //   'https://repo-prod.prod.sagebase.org',
-//       //   'https://player.vimeo.com/*',
-//       // ],
-//       // 'frame-src': [
-//       //   // 'https://docs.google.com',
-//       //   // 'https://player.vimeo.com'
-//       // ],
-//       // 'frame-ancestors': [
-//       //   'https://docs.google.com',
-//       //   'https://player.vimeo.com',
-//       // ],
-//     },
-//   })
-// );
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      'img-src': ["'self'", 'blob:'],
+      'connect-src': [
+        "'self'",
+        'https://repo-prod.prod.sagebase.org',
+        'https://vimeo.com/',
+      ],
+      'frame-src': ['https://player.vimeo.com/'],
+    },
+  })
+);
 
 app.use(compression());
 app.use(express.json({ limit: '50mb' }));

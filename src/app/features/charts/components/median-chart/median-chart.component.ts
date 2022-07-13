@@ -10,7 +10,7 @@ import crossfilter from 'crossfilter2';
 // Internal
 // -------------------------------------------------------------------------- //
 import { BaseChartComponent } from '../base-chart';
-import { Gene } from '../../../../models';
+import { MedianExpression } from '../../../../models';
 import { HelperService } from '../../../../core/services';
 
 // -------------------------------------------------------------------------- //
@@ -22,19 +22,18 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./median-chart.component.scss'],
 })
 export class MedianChartComponent extends BaseChartComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
-    return this._gene;
+  _data: MedianExpression[] = [];
+  get data() {
+    return this._data;
   }
-  @Input() set gene(gene: Gene) {
-    this._gene = gene;
+  @Input() set data(data) {
+    this._data = data;
     this.init();
   }
 
   @Input() xAxisLabel = '';
   @Input() yAxisLabel = 'LOG2 CPM';
 
-  override name = 'median-chart';
   dimension: any;
   group: any;
 
@@ -43,10 +42,7 @@ export class MedianChartComponent extends BaseChartComponent {
   }
 
   override init() {
-    if (
-      !this._gene?.medianexpression?.length ||
-      !this.chartContainer.nativeElement
-    ) {
+    if (!this._data?.length || !this.chartContainer.nativeElement) {
       return;
     }
 
@@ -57,11 +53,7 @@ export class MedianChartComponent extends BaseChartComponent {
   }
 
   initData() {
-    const medianExpression = this._gene.medianexpression.filter((d) =>
-      d.medianlogcpm && d.medianlogcpm > 0 ? true : false
-    );
-
-    const ndx = crossfilter(medianExpression);
+    const ndx = crossfilter(this.data);
     this.dimension = ndx.dimension((d: any) => d.tissue);
     this.group = this.dimension
       .group()
@@ -85,7 +77,7 @@ export class MedianChartComponent extends BaseChartComponent {
 
     // Y axis
     this.chart
-      .y(d3.scaleLinear().domain([0, this.group.top(1)[0].value]))
+      .y(d3.scaleLinear().domain([0, this.group.top(1)[0]?.value || 0]))
       .yAxisLabel(this.yAxisLabel)
       .yAxis()
       .ticks(3);

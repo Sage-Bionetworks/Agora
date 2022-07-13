@@ -24,6 +24,8 @@ export class WikiComponent implements OnInit {
   @Input() wikiId = '';
   @Input() className = '';
 
+  loading = true;
+
   safeHtml: SafeHtml | null =
     '<div class="wiki-no-data">No data found...</div>';
 
@@ -34,7 +36,7 @@ export class WikiComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.helperService.setLoading(true);
+    this.loading = true;
 
     this.synapseApiService
       .getWiki(this.ownerId || 'syn25913473', this.wikiId)
@@ -44,9 +46,6 @@ export class WikiComponent implements OnInit {
             this.helperService.setLoading(false);
             return;
           }
-
-          // TODO: remove
-          // console.log('Wiki', wiki);
 
           // Sanitize
           let sanitized = sanitizeHtml(wiki.markdown);
@@ -69,14 +68,12 @@ export class WikiComponent implements OnInit {
           // Add variables
           sanitized = sanitized.replace(/\${(.*?)}/g, this.replaceVariable);
 
-          // console.log(sanitized);
-
           // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
           this.safeHtml = this.sanitizer.bypassSecurityTrustHtml(sanitized);
-          this.helperService.setLoading(false);
+          this.loading = false;
         },
         () => {
-          this.helperService.setLoading(false);
+          this.loading = false;
         }
       );
   }
@@ -133,5 +130,13 @@ export class WikiComponent implements OnInit {
     }
 
     return content;
+  }
+
+  getClassName() {
+    const className = [this.className];
+    if (this.loading) {
+      className.push('loading');
+    }
+    return className;
   }
 }

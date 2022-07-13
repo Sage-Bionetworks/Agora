@@ -1,16 +1,25 @@
 @import "../../../../styles/variables";
 @import "../../../../styles/mixins";
 
-.dialog-link-inner {
+.overlay-link-inner {
   display: flex;
 }
 
-.dialog-link-icon {
+.overlay-link-icon {
   color: var(--color-link);
-  margin-right: 8px;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
 }
 
-.dialog-link-text {
+.overlay-link-text {
   color: var(--color-link);
   text-decoration: underline;
   cursor: pointer;

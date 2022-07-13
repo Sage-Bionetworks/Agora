@@ -15,7 +15,7 @@
             [ngClass]="{ 'is-active': n === selectedFilter }"
           >
             <a (click)="filter(n)" class="steps-marker"></a>
-            <span class="tooltip">&gt;{{ n }}</span>
+            <span class="tooltip">&gt;{{ n - 1 }}</span>
           </li>
         </ul>
         <div class="filter-reference">
@@ -41,8 +41,8 @@
       <div class="legend-text">4-5 Edges</div>
       <div class="dot third"></div>
       <div class="legend-text">6-7 Edges</div>
-      <div class="dot fourth"></div>
-      <div class="legend-text">8-9 Edges</div>
+      <!-- <div class="dot fourth"></div>
+      <div class="legend-text">8-9 Edges</div> -->
     </div>
   </div>
   <div
