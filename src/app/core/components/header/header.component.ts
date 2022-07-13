@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   navItems: Array<any> = [];
   defaultNavItems: Array<any> = [
     {
-      label: 'Gene Search',
+      label: 'Home',
       routerLink: [''],
       activeOptions: { exact: true },
     },

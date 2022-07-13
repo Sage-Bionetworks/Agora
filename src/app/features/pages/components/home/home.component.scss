@@ -1,43 +1,29 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
-.section-hero {
+.section {
   display: flex;
+  flex-direction: column;
+  gap: 40px;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  align-items: center;
-  overflow: hidden;
+  color: var(--color-accent-secondary);
+  padding: var(--spacing-xl) 15%;
 
-  h1 {
-    text-align: center;
+  p {
+    font-size: var(--font-size-xl);
   }
-}
 
-.section .section-inner {
-  width: 100%;
+  a {
+    color: var(--color-link);
+  }
 }
 
 .home-heading {
-  font-size: 40px;
-}
-
-.home-video {
-  width: 100%;
-  max-width: $video-width;
-  margin: 0 auto 60px auto;
-
-  .home-video-inner {
-    position: relative;
-    height: 0px;
-    padding-top: 56.25%;
-  }
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  color: var(--color-accent-secondary);
+  font-size: 60px;
+  line-height: 68px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .home-search {
