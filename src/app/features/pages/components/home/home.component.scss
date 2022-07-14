@@ -6,7 +6,11 @@
   flex-direction: column;
   gap: 40px;
   color: var(--color-accent-secondary);
-  padding: var(--spacing-xl) 15%;
+  padding: var(--spacing-xl) var(--spacing-lg);
+
+  @include respond-to("large") {
+    padding: var(--spacing-xl) 100px;
+  }
 
   p {
     font-size: var(--font-size-xl);
@@ -32,12 +36,22 @@
   margin-right: auto;
 }
 
-.content {
+.card-container {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+    
+  @include respond-to("medium") {
+    flex-wrap: nowrap;
+  }
 
   > div, > button {
-    max-width: 31%;
+    width: 100%;
+
+    @include respond-to("medium") {
+      width: 31%;
+    }
   }
 }
 

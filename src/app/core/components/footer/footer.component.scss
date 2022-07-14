@@ -13,7 +13,6 @@
   font-weight: 300;
 
   .footer-nav {
-    
     ul {
       display: flex;
       align-items: center;
@@ -30,6 +29,10 @@
           height: fit-content;
           line-height: 0;
         }
+      }
+
+      svg {
+        margin-right: var(--spacing-lg);
       }
     }
 

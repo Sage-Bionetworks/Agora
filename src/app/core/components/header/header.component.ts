@@ -27,6 +27,10 @@ export class HeaderComponent implements OnInit {
       label: 'Teams',
       routerLink: ['teams'],
     },
+    {
+      label: 'News',
+      routerLink: ['news'],
+    },
   ];
   mobileNavItems: Array<any> = [
     {
