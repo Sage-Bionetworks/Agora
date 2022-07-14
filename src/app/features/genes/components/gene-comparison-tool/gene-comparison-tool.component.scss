@@ -1,74 +1,6 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
-// .test {
-//   background-color: #63676c;
-// }
-
-// .gct-tooltip {
-//   max-width: 280px;
-
-//   background-color: #63676c;
-//   padding: 6px 12px !important;
-
-//   .p-tooltip-text {
-//     background: none;
-//     box-shadow: none;
-//     font-size: 14px;
-//     color: #ffffff;
-//     white-space: normal;
-//   }
-
-//   .p-tooltip-arrow {
-//     bottom: -10px;
-//     width: 0;
-//     height: 0;
-//     border-left: 10px solid transparent;
-//     border-right: 10px solid transparent;
-//     border-top: 10px solid #63676c;
-//     margin-left: -10px;
-//   }
-
-//   &.p-tooltip-top {
-//     transform: translateY(-18px);
-//   }
-
-//   &.p-tooltip-right,
-//   &.p-tooltip-left {
-//     max-width: 250px;
-
-//     .p-tooltip-text {
-//       white-space: unset;
-//     }
-
-//     .p-tooltip-arrow {
-//       bottom: 50%;
-//       top: unset;
-//       margin-left: 0;
-//       border-bottom: 10px solid transparent;
-//       border-top: 10px solid transparent;
-//     }
-//   }
-
-//   &.p-tooltip-left {
-//     transform: translateX(-18px);
-
-//     .p-tooltip-arrow {
-//       transform: translate(100%, 50%);
-//       border-left: 10px solid #63676c;
-//     }
-//   }
-
-//   &.p-tooltip-right {
-//     transform: translateX(18px);
-
-//     .p-tooltip-arrow {
-//       transform: translate(-100%, 50%);
-//       border-right: 10px solid #63676c;
-//     }
-//   }
-// }
-
 .gct-tooltip-filter {
   max-width: 350px;
 
@@ -793,5 +725,37 @@
     padding: 8px;
     font-size: 14px;
     outline: none;
+  }
+}
+
+.gct-help-links {
+  position: relative;
+  margin-top: -40px;
+  margin-bottom: 24px;
+  padding-left: 300px;
+  z-index: 100;
+  pointer-events: none;
+
+  .gct-help-links-inner {
+    display: flex;
+
+    > div:not(:last-child) {
+      padding-right: 13px;
+      margin-right: 13px;
+      border-right: 1px solid var(--color-light);
+    }
+  }
+
+  .gct-help-link {
+    display: block;
+    font-size: var(--font-size-sm);
+    line-height: var(--font-size-sm);
+    color: var(--color-secondary);
+    cursor: pointer;
+    pointer-events: all;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

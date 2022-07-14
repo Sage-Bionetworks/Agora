@@ -21,7 +21,6 @@ import { SortEvent, MessageService, FilterService } from 'primeng/api';
 // Internal
 // -------------------------------------------------------------------------- //
 import {
-  Gene,
   GCTSelectOption,
   GCTFilter,
   GCTGene,

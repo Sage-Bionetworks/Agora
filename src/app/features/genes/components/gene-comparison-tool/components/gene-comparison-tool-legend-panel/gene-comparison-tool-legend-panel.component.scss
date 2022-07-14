@@ -1,0 +1,45 @@
+@import "../../../../../../../styles/variables";
+@import "../../../../../../../styles/mixins";
+
+.gct-legend-panel {
+  color: var(--color-text);
+
+  .p-dialog-title:not(:empty) {
+    padding: 40px 40px 20px 40px;
+    margin-bottom: -40px;
+    text-align: left;
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .p-dialog-header-icons {
+    top: 45px;
+    right: 40px;
+  }
+
+  .p-dialog-content {
+    padding: 20px 40px 0 40px;
+  }
+
+  .p-dialog-footer {
+    padding: 30px 40px 30px 40px;
+    text-align: right;
+
+    a {
+      color: var(--color-secondary);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

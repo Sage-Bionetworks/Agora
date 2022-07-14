@@ -139,7 +139,11 @@
             <div class="row">
               <div class="col-md-7 col-sm-12 col-7">
                 <div *ngFor="let node of pathbox | slice: 0:6" class="pathbox">
-                  <a [routerLink]="['/genes/' + node.id]" class="genelink">
+                  <a
+                    href="/genes/{{ node.id }}"
+                    class="genelink"
+                    target="_blank"
+                  >
                     {{ node.hgnc_symbol || node.ensembl_gene_id }}
                   </a>
                 </div>
