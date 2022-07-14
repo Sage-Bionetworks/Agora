@@ -144,7 +144,8 @@ $_colors: (
   text: #24334f,
   link: #5bb0b5,
 
-  accent-secondary: map-get($colors, "secondary")
+  accent-secondary: map-get($colors, "secondary"),
+  border: map-get($colors, "border")
 );
 
 $chart-colors: (
