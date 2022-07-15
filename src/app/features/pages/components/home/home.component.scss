@@ -2,11 +2,19 @@
 @import "../../../../../styles/mixins";
 
 .section {
+  @include container();
+
   display: flex;
   flex-direction: column;
   gap: 40px;
+  position: relative;
   color: var(--color-accent-secondary);
-  padding: var(--spacing-xl) var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
+
+  @media(min-width: 990px) {
+    background-color: none;
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
 
   @include respond-to("ex-large") {
     padding: var(--spacing-xl) 100px;
@@ -18,6 +26,19 @@
 
   a {
     color: var(--color-link);
+    text-decoration: none;
+  }
+}
+
+.text-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--spacing-md);
+  
+  @media(min-width: 990px) {
+    width: 70%;
+    padding: 0;
   }
 }
 
@@ -42,14 +63,14 @@
   flex-wrap: wrap;
   gap: var(--spacing-lg);
     
-  @include respond-to("medium") {
+  @media(min-width: 990px) {
     flex-wrap: nowrap;
   }
 
   > div, > button {
     width: 100%;
 
-    @include respond-to("medium") {
+    @media(min-width: 990px) {
       width: 33%;
     }
   }
@@ -95,5 +116,41 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+  }
+}
+
+.background {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  svg {
+    position: absolute;
+    width: 30vh;
+
+    &:first-child {
+      position: absolute;
+      bottom: 12vh;
+      left: -5vh;
+      transform: rotate(260deg);
+    }
+
+    &:nth-child(2) {
+      position: absolute;
+      bottom: 60vh;
+      right: -10vh;
+      transform: rotate(30deg);
+    }
+
+    &:last-child {
+      position: absolute;
+      width: 45vh;
+      bottom: 0;
+      right: -13vh;
+      transform: rotate(125deg);
+    }
   }
 }
