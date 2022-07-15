@@ -76,6 +76,16 @@
     color: var(--color-text);
     text-decoration: none;
   }
+
+  .separator {
+    border-left: 2px solid var(--color-border);
+    height: var(--spacing-lg);
+    box-sizing: border-box;
+  }
+
+  .header-search {
+    height: fit-content;
+  }
 }
 
 #header:not(.is-mobile) {
@@ -88,6 +98,8 @@
       display: flex;
       height: 100%;
       justify-content: flex-end;
+      align-items: center;
+      gap: var(--spacing-lg);
     }
 
     ul {
@@ -161,5 +173,9 @@
         visibility: visible;
       }
     }
+  }
+
+  .header-search {
+    display: none;
   }
 }

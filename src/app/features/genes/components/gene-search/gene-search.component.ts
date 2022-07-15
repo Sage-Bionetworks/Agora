@@ -7,6 +7,7 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  Input,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -32,6 +33,8 @@ import { ApiService } from '../../../../core/services';
   styleUrls: ['./gene-search.component.scss'],
 })
 export class GeneSearchComponent implements AfterViewInit {
+  @Input() variant: 'header' | 'home' = 'header';
+
   results: Gene[] = [];
   isLoading = false;
   isEnsemblId = false;
@@ -52,7 +55,7 @@ export class GeneSearchComponent implements AfterViewInit {
   };
 
   @ViewChild('root') root: ElementRef = {} as ElementRef;
-  @ViewChild('input') input: ElementRef = {} as ElementRef;
+  @ViewChild('input') input: ElementRef<HTMLInputElement> = {} as ElementRef;
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {
@@ -66,7 +69,6 @@ export class GeneSearchComponent implements AfterViewInit {
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
-        //filter(Boolean),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((event: any) => {
@@ -140,10 +142,17 @@ export class GeneSearchComponent implements AfterViewInit {
   }
 
   goToGene(id: string) {
+    this.input.nativeElement.blur();
+    this.isFocused = false;
+    this.query = '';
     this.router.navigate(['/genes/' + id]);
   }
 
   hasAlias(hgnc: string): boolean {
     return !hgnc.includes(this.query.toUpperCase());
+  }
+
+  focusInput() {
+    this.input.nativeElement.focus();
   }
 }
