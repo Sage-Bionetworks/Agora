@@ -33,7 +33,7 @@ import { ApiService } from '../../../../core/services';
   styleUrls: ['./gene-search.component.scss'],
 })
 export class GeneSearchComponent implements AfterViewInit {
-  @Input() variant: 'header' | 'home' = 'header';
+  @Input() location: 'header' | 'home' = 'header';
 
   results: Gene[] = [];
   isLoading = false;

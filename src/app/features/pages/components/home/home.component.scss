@@ -8,7 +8,7 @@
   color: var(--color-accent-secondary);
   padding: var(--spacing-xl) var(--spacing-lg);
 
-  @include respond-to("large") {
+  @include respond-to("ex-large") {
     padding: var(--spacing-xl) 100px;
   }
 
@@ -50,7 +50,7 @@
     width: 100%;
 
     @include respond-to("medium") {
-      width: 31%;
+      width: 33%;
     }
   }
 }

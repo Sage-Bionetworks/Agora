@@ -16,11 +16,20 @@
     .gene-search-bar {
       background-color: transparent;
       border: 3px solid var(--color-secondary);
+      padding-left: var(--spacing-md);
+
+      @include respond-to("ex-large") {
+        padding-left: var(--spacing-lg);
+      }
     }
 
     input {
       font-size: var(--font-size-md);
-      padding: var(--spacing-lg);
+      padding: 35px var(--spacing-sm);
+      
+      @include respond-to("ex-large") {
+        padding-left: var(--spacing-md);
+      }
     }
   }
 
@@ -48,6 +57,12 @@
       border: none;
       outline: none;
       box-sizing: border-box;
+
+      &:placeholder-shown {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 
