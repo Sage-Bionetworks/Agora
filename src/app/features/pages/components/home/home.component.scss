@@ -2,18 +2,22 @@
 @import "../../../../../styles/mixins";
 
 .section {
-  @include container();
 
   display: flex;
   flex-direction: column;
   gap: 40px;
   position: relative;
   color: var(--color-accent-secondary);
-  padding: var(--spacing-lg) var(--spacing-xl);
+  max-width: 90vw;
+  margin: 0 auto;
+  padding: var(--spacing-md) 0;
+
+  @media(min-width: 750px) {
+    max-width: 80vw;
+  }
 
   @media(min-width: 990px) {
     background-color: none;
-    padding: var(--spacing-xl) var(--spacing-lg);
   }
 
   @include respond-to("ex-large") {
@@ -27,6 +31,7 @@
   a {
     color: var(--color-link);
     text-decoration: none;
+    white-space: nowrap;
   }
 }
 
@@ -39,6 +44,14 @@
   @media(min-width: 990px) {
     width: 70%;
     padding: 0;
+  }
+}
+
+.description {
+  width: 70%;
+  
+  @media(min-width: 990px) {
+    width: 100%;
   }
 }
 
@@ -149,7 +162,7 @@
       position: absolute;
       width: 45vh;
       bottom: 0;
-      right: -13vh;
+      right: -18vh;
       transform: rotate(125deg);
     }
   }
