@@ -28,6 +28,7 @@ import {
   GCTSortEvent,
   GCTGeneTissue,
   GCTGeneResponse,
+  GCTDetailsPanelData,
 } from '../../../../models';
 
 import { GeneService } from '../../services';
@@ -574,12 +575,14 @@ export class GeneComparisonToolComponent
 
   getDetailsPanelData(tissueName: string, gene: GCTGene) {
     const tissue: any = gene.tissues.find((t) => t.name === tissueName);
-    return helpers.getDetailsPanelData(
-      this.category,
-      this.subCategory,
-      gene,
-      tissue
-    );
+    return tissue
+      ? helpers.getDetailsPanelData(
+          this.category,
+          this.subCategory,
+          gene,
+          tissue
+        )
+      : undefined;
   }
 
   /* ----------------------------------------------------------------------- */
@@ -776,5 +779,12 @@ export class GeneComparisonToolComponent
 
   onResize() {
     this.updateColumnWidth();
+  }
+
+  getRoundedGeneData(gene: GCTDetailsPanelData) {
+    return {
+      l2fc: this.helperService.getSignificantFigures(gene.value || 0, 3),
+      pValue: this.helperService.getSignificantFigures(gene.pValue || 0, 3),
+    };
   }
 }
