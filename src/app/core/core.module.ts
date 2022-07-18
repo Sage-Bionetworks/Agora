@@ -8,6 +8,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // Modules
 // -------------------------------------------------------------------------- //
 import { SharedModule } from '../shared';
+import { GenesModule } from '../features/genes';
 
 // -------------------------------------------------------------------------- //
 // Services
@@ -34,7 +35,7 @@ import { HeaderComponent, FooterComponent } from './components';
 // -------------------------------------------------------------------------- //
 @NgModule({
   declarations: [HeaderComponent, FooterComponent],
-  imports: [SharedModule],
+  imports: [SharedModule, GenesModule],
   exports: [HeaderComponent, FooterComponent],
   providers: [
     ApiService,

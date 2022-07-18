@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   navItems: Array<any> = [];
   defaultNavItems: Array<any> = [
     {
-      label: 'Gene Search',
+      label: 'Home',
       routerLink: [''],
       activeOptions: { exact: true },
     },
@@ -26,6 +26,10 @@ export class HeaderComponent implements OnInit {
     {
       label: 'Teams',
       routerLink: ['teams'],
+    },
+    {
+      label: 'News',
+      routerLink: ['news'],
     },
   ];
   mobileNavItems: Array<any> = [
@@ -51,7 +55,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onResize() {
-    this.isMobile = window.innerWidth < 945;
+    this.isMobile = window.innerWidth < 990;
     if (this.isMobile) {
       this.navItems = [...this.defaultNavItems, ...this.mobileNavItems];
     } else {

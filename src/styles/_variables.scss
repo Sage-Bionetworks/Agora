@@ -102,6 +102,7 @@ $breakpoints: (
 // -------------------------------------------------------------------------- //
 
 $spacings: (
+  "sm": 6px,
   "md": 15px,
   "lg": 30px,
   "xl": 60px,
@@ -142,6 +143,9 @@ $_colors: (
 
   text: #24334f,
   link: #5bb0b5,
+
+  accent-secondary: map-get($colors, "secondary"),
+  border: map-get($colors, "border")
 );
 
 $chart-colors: (
@@ -224,7 +228,7 @@ $header-height: 87px;
 // Footer
 // -------------------------------------------------------------------------- //
 
-$footer-height: 100px;
+$footer-height: 240px;
 
 :root {
   --footer-height: #{$footer-height};
