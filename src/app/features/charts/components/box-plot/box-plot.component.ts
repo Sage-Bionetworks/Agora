@@ -26,6 +26,9 @@ export class BoxPlotComponent extends BaseChartComponent {
   @Input() rcSmallRadius = 9;
   @Input() rcRadius = 12.5;
 
+  @Input() yAxisMin: number | undefined;
+  @Input() yAxisMax: number | undefined;
+
   override name = 'box-plot';
   dimension: any;
   group: any;
@@ -72,7 +75,10 @@ export class BoxPlotComponent extends BaseChartComponent {
   initChart() {
     const self = this;
 
-    this.chart = agoraBoxPlot(this.chartContainer.nativeElement);
+    this.chart = agoraBoxPlot(this.chartContainer.nativeElement, null, {
+      yAxisMin: this.yAxisMin,
+      yAxisMax: this.yAxisMax,
+    });
 
     this.chart.group(this.group).dimension(this.dimension);
 
@@ -83,7 +89,7 @@ export class BoxPlotComponent extends BaseChartComponent {
       .yAxisLabel(this.yAxisLabel, 20)
       .yRangePadding(this.rcRadius * 1.5)
       .yAxis()
-      .ticks(6);
+      .ticks(8);
 
     this.chart
       .renderTitle(false)

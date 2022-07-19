@@ -27,6 +27,7 @@ import {
   GeneComparisonToolFilterListComponent,
   GeneComparisonToolHowToPanelComponent,
   GeneComparisonToolLegendPanelComponent,
+  GeneComparisonToolPinnedGenesModalComponent,
   GeneSoeComponent,
   GeneSoeChartsComponent,
   GeneSoeListComponent,
@@ -45,7 +46,7 @@ import {
 // -------------------------------------------------------------------------- //
 // Services
 // -------------------------------------------------------------------------- //
-import { GeneService, GeneNetworkService } from './services';
+import { GeneService } from './services';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { GeneService, GeneNetworkService } from './services';
     GeneComparisonToolFilterListComponent,
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
+    GeneComparisonToolPinnedGenesModalComponent,
   ],
   imports: [CommonModule, SharedModule, ChartsModule],
   exports: [
@@ -103,8 +105,9 @@ import { GeneService, GeneNetworkService } from './services';
     GeneComparisonToolFilterListComponent,
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
+    GeneComparisonToolPinnedGenesModalComponent,
   ],
-  providers: [GeneService, GeneNetworkService],
+  providers: [GeneService],
 })
 // Changed the name so it does not conflict with primeng module
 export class GenesModule {}

@@ -2,7 +2,7 @@
   <p-table
     #table
     [value]="_genes"
-    [columns]="selectedColumns"
+    [columns]="_columns"
     [paginator]="false"
     [responsive]="false"
     [scrollable]="true"
@@ -58,7 +58,7 @@
           >
             <p-multiSelect
               [options]="optionalColumns"
-              [(ngModel)]="selectedColumns"
+              [(ngModel)]="_selectedColumns"
               [showHeader]="false"
               optionLabel="header"
               dropdownIcon="pi pi-filter"
@@ -72,6 +72,7 @@
         <th
           *ngFor="let column of columns; let i = index"
           [style]="{ width: column.width + 'px' }"
+          [ngClass]="{ hidden: !selectedColumns.includes(column) }"
           [ngSwitch]="column.field"
         >
           <div class="tr">
@@ -88,6 +89,7 @@
         <td
           *ngFor="let column of columns"
           [style]="{ width: column.width + 'px' }"
+          [ngClass]="{ hidden: !selectedColumns.includes(column) }"
         >
           {{ item[column.field] }}
         </td>

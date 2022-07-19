@@ -35,17 +35,35 @@ export class GeneNominatedTargetsComponent implements OnInit {
       selected: true,
     },
     { field: 'study_display_value', header: 'Cohort Study', selected: true },
-    { field: 'input_data_display_value', header: 'Input Data' },
-    { field: 'pharos_class_display_value', header: 'Pharos Class' },
+    {
+      field: 'input_data_display_value',
+      header: 'Input Data',
+      selected: false,
+    },
+    {
+      field: 'pharos_class_display_value',
+      header: 'Pharos Class',
+      selected: false,
+    },
     {
       field: 'sm_druggability_display_value',
       header: 'Small Molecule Druggability',
+      selected: false,
     },
-    { field: 'safety_rating_display_value', header: 'Safety Rating' },
-    { field: 'ab_modality_display_value', header: 'Antibody Modality' },
+    {
+      field: 'safety_rating_display_value',
+      header: 'Safety Rating',
+      selected: false,
+    },
+    {
+      field: 'ab_modality_display_value',
+      header: 'Antibody Modality',
+      selected: false,
+    },
     {
       field: 'validations_display_value',
       header: 'Experimental Validation',
+      selected: false,
     },
   ];
 

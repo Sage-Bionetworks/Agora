@@ -355,3 +355,19 @@
   pointer-events: none;
   z-index: 999;
 }
+
+.network-chart {
+  .chart-container {
+    height: auto;
+  }
+
+  svg {
+    text {
+      text-shadow: -1px 0 #fff, 1px -1px 0 #fff, -1.4px 1px 0 #fff,
+        1px 1px 0 #fff;
+    }
+    circle {
+      cursor: pointer;
+    }
+  }
+}

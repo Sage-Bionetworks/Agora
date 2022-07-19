@@ -34,6 +34,7 @@ export class MedianChartComponent extends BaseChartComponent {
   @Input() xAxisLabel = '';
   @Input() yAxisLabel = 'LOG2 CPM';
 
+  override name = 'median-chart';
   dimension: any;
   group: any;
 

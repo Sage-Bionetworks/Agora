@@ -8,7 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { SynapseApiService } from '../../../../../../core/services';
+// import { SynapseApiService } from '../../../../../../core/services';
 
 interface Pane {
   heading: string;
@@ -41,7 +41,7 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
 
   constructor(
     private cookieService: CookieService,
-    private synapseApiService: SynapseApiService,
+    //private synapseApiService: SynapseApiService,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -67,7 +67,7 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
       {
         heading: 'View Detailed Expression Info',
         content: this.sanitizer.bypassSecurityTrustHtml(
-          `<p>Click on the bubble to show detailed information about expresion in a specific brain region.</p>
+          `<p>Click on the bubble to show detailed information about expression in a specific brain region.</p>
           <img src="/assets/images/gct-how-to-1.png" />`
         ),
       },
@@ -132,6 +132,7 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
 
   onHide() {
     this.cookieService.set(this.willHideCookieName, this.willHide ? '1' : '0');
+    this.activePane = 0;
   }
 
   toggle() {

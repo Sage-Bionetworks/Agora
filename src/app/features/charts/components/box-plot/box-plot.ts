@@ -4,6 +4,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { min, max, ascending, quantile, range } from 'd3-array';
 import { timerFlush } from 'd3-timer';
+import * as d3 from 'd3';
 
 import { CoordinateGridMixin } from '../../../../../../node_modules/dc/src/base/coordinate-grid-mixin';
 import { transition } from '../../../../../../node_modules/dc/src/core/core';
@@ -582,7 +583,7 @@ export class AgoraBoxPlot extends CoordinateGridMixin {
    * @param {String} [chartGroup] - The name of the chart group this chart instance should be placed in.
    * Interaction with a chart will only trigger events and redraws within the chart's group.
    */
-  constructor(parent, chartGroup?) {
+  constructor(parent, chartGroup?, options?) {
     super();
 
     this._whiskerIqrFactor = 1.5;
@@ -600,6 +601,9 @@ export class AgoraBoxPlot extends CoordinateGridMixin {
     // Used in yAxisMin and yAxisMax to add padding in pixel coordinates
     // so the min and max data points/whiskers are within the chart
     this._yRangePadding = 8;
+
+    this._yAxisMin = options?.yAxisMin || undefined;
+    this._yAxisMax = options?.yAxisMax || undefined;
 
     this._boxWidth = (innerChartWidth, xUnits) => {
       if (this.isOrdinal()) {
@@ -833,12 +837,16 @@ export class AgoraBoxPlot extends CoordinateGridMixin {
 
   yAxisMin() {
     const padding = this._yRangePadding * this._yAxisRangeRatio();
-    return utils.subtract(this._minDataValue() - padding, this.yAxisPadding());
+    let min = this._minDataValue();
+    min = this._yAxisMin && this._yAxisMin < min ? this._yAxisMin : min - 0.2;
+    return utils.subtract(min - padding, this.yAxisPadding());
   }
 
   yAxisMax() {
     const padding = this._yRangePadding * this._yAxisRangeRatio();
-    return utils.add(this._maxDataValue() + padding, this.yAxisPadding());
+    let max = this._maxDataValue();
+    max = this._yAxisMax && this._yAxisMax > max ? this._yAxisMax : max + 0.2;
+    return utils.add(max + padding, this.yAxisPadding());
   }
 
   /**
@@ -956,5 +964,5 @@ export class AgoraBoxPlot extends CoordinateGridMixin {
   }
 }
 
-export const agoraBoxPlot = (parent, chartGroup?) =>
-  new AgoraBoxPlot(parent, chartGroup);
+export const agoraBoxPlot = (parent, chartGroup?, options?) =>
+  new AgoraBoxPlot(parent, chartGroup, options);

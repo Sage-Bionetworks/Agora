@@ -5,7 +5,7 @@
       <p class="black-paragraph">
         The results shown on this page are derived from a harmonized RNA-seq
         analysis of post-mortem brains from AD cases and controls. The samples
-        were obtained from three human cohort studies across a total of seven
+        were obtained from three human cohort studies across a total of nine
         different brain regions.
       </p>
       <modal-link
@@ -82,9 +82,11 @@
       </p>
       <div #rnaDEChart>
         <box-plot
-          [data]="differentialExpressionChartData"
-          [heading]="selectedStatisticalModel"
           xAxisLabel="Brain region"
+          [yAxisMin]="differentialExpressionYAxisMin"
+          [yAxisMax]="differentialExpressionYAxisMax"
+          [heading]="selectedStatisticalModel"
+          [data]="differentialExpressionChartData"
         ></box-plot>
       </div>
     </div>

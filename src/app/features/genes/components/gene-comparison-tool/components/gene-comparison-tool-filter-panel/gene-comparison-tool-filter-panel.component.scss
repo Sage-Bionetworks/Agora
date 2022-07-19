@@ -133,6 +133,10 @@
   }
 }
 
+.active .gct-filter-panel-main .gct-filter-panel-close {
+  display: none;
+}
+
 .gct-filter-panel-panes {
   position: absolute;
   top: 0;
@@ -208,7 +212,9 @@
 
   .gct-filter-panel-pane-top {
     height: 60px;
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
   }
 
   .gct-filter-panel-pane-heading {
@@ -268,8 +274,29 @@
   }
 
   &.gct-filter-panel-pane-presets {
-    ul li label > div:first-child {
-      display: none;
+    ul li {
+      padding-left: 15px;
+      padding-right: 15px;
+      margin-left: -15px;
+      margin-right: -15px;
+      transition: var(--transition-duration);
+
+      label {
+        transition: var(--transition-duration);
+
+        > div:first-child {
+          display: none;
+        }
+      }
+
+      &:hover {
+        background-color: var(--color-primary);
+
+        &,
+        label {
+          color: #ffffff;
+        }
+      }
     }
   }
 

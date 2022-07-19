@@ -6,29 +6,29 @@ import { SharedModule } from '../../shared';
 import {
   BoxPlotComponent,
   CandlestickChartComponent,
-  ForceChartComponent,
   MedianChartComponent,
   RowChartComponent,
   ScoreChartComponent,
+  NetworkChartComponent,
 } from './components';
 
 @NgModule({
   declarations: [
     BoxPlotComponent,
     CandlestickChartComponent,
-    ForceChartComponent,
     MedianChartComponent,
     RowChartComponent,
     ScoreChartComponent,
+    NetworkChartComponent,
   ],
   imports: [CommonModule, SharedModule],
   exports: [
     BoxPlotComponent,
     CandlestickChartComponent,
-    ForceChartComponent,
     MedianChartComponent,
     RowChartComponent,
     ScoreChartComponent,
+    NetworkChartComponent,
   ],
   providers: [],
 })

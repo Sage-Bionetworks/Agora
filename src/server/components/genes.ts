@@ -185,7 +185,7 @@ export async function getNominatedGenes() {
           'nominatedtarget.team',
           'nominatedtarget.study',
           'nominatedtarget.input_data',
-          'nominatedtarget.validations',
+          'nominatedtarget.validation_study_details',
           'druggability.pharos_class',
           'druggability.sm_druggability_bucket',
           'druggability.classification',

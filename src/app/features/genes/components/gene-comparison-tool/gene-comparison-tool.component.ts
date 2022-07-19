@@ -35,8 +35,11 @@ import { HelperService } from '../../../../core/services';
 import * as variables from './gene-comparison-tool.variables';
 import * as helpers from './gene-comparison-tool.helpers';
 
-import { GeneComparisonToolDetailsPanelComponent } from './';
-import { GeneComparisonToolFilterPanelComponent } from './';
+import {
+  GeneComparisonToolDetailsPanelComponent,
+  GeneComparisonToolFilterPanelComponent,
+  GeneComparisonToolPinnedGenesModalComponent,
+} from './';
 
 @Component({
   selector: 'gene-comparison-tool',
@@ -74,9 +77,11 @@ export class GeneComparisonToolComponent
   urlParamsSubscription: Subscription | undefined;
 
   /* Pinned ---------------------------------------------------------------- */
-  pinnedCount = 0;
-  maxPinnedCount = 50;
+  pinnedGenes: GCTGene[] = [];
+  pendingPinnedGenes: GCTGene[] = [];
+  maxPinnedGenes = 50;
 
+  /* ----------------------------------------------------------------------- */
   significanceThreshold = 0.05;
   significanceThresholdActive = false;
 
@@ -89,6 +94,8 @@ export class GeneComparisonToolComponent
   filterPanel!: GeneComparisonToolFilterPanelComponent;
   @ViewChild('detailsPanel')
   detailsPanel!: GeneComparisonToolDetailsPanelComponent;
+  @ViewChild('pinnedGenesModal')
+  pinnedGenesModal!: GeneComparisonToolPinnedGenesModalComponent;
 
   constructor(
     private router: Router,
@@ -114,6 +121,10 @@ export class GeneComparisonToolComponent
     });
 
     this.filterService.register('intersect', helpers.intersectFilterCallback);
+    this.filterService.register(
+      'exclude_ensembl_gene_id',
+      helpers.excludeEnsemblGeneIdFilterCallback
+    );
   }
 
   ngAfterViewInit() {
@@ -149,28 +160,37 @@ export class GeneComparisonToolComponent
   }
 
   initData(genes: GCTGene[]) {
-    const pinned = this.getUrlParam('pinned', true);
     const columns: string[] = [];
+    let urlPins = this.getUrlParam('pinned', true);
+    let pinnedGenes: GCTGene[] = [];
 
     genes.forEach((gene: GCTGene) => {
       gene.uid = gene.ensembl_gene_id;
-
       gene.search_array = [
         gene.ensembl_gene_id.toLowerCase(),
         gene.hgnc_symbol.toLowerCase(),
       ];
 
-      if (gene.uniprotid) {
+      if ('Protein - Differential Expression' === this.category) {
         gene.uid += gene.uniprotid;
-        gene.search_array.push(gene.uniprotid.toLowerCase());
+        gene.search_array.push(gene.uniprotid?.toLowerCase() || '');
+
+        if (
+          urlPins.includes(gene.uid) ||
+          urlPins.includes(gene.ensembl_gene_id)
+        ) {
+          pinnedGenes.push(gene);
+        }
+      } else {
+        // Make sure we have a list of ENSGs
+        urlPins = urlPins.map((id: string) => id.substring(0, 15));
+
+        if (urlPins.includes(gene.uid)) {
+          pinnedGenes.push(gene);
+        }
       }
 
       gene.search_string = gene.search_array.join();
-
-      if (pinned.includes(gene.uid)) {
-        gene.pinned = true;
-        this.pinnedCount++;
-      }
 
       this.filters.forEach((filter: GCTFilter) => {
         if (!filter.field) {
@@ -210,6 +230,22 @@ export class GeneComparisonToolComponent
       this.searchTerm = preSelection.join(',');
     }
 
+    pinnedGenes.sort((a, b) =>
+      a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1
+    );
+
+    if (
+      'Protein - Differential Expression' === this.category &&
+      pinnedGenes.length > this.maxPinnedGenes
+    ) {
+      this.pendingPinnedGenes = pinnedGenes;
+      this.pinnedGenesModal.show();
+    } else {
+      this.pinnedGenes = [];
+      this.pendingPinnedGenes = [];
+      this.pinGenes(pinnedGenes);
+    }
+
     this.genes = genes;
   }
 
@@ -218,10 +254,10 @@ export class GeneComparisonToolComponent
   /* ----------------------------------------------------------------------- */
 
   updateSubCategories() {
-    if ('RNA - Differential Expression' === this.category) {
-      this.subCategoryLabel = 'Models';
-    } else if ('Protein - Differential Expression' === this.category) {
+    if ('Protein - Differential Expression' === this.category) {
       this.subCategoryLabel = 'Profiling Method';
+    } else {
+      this.subCategoryLabel = 'Models';
     }
 
     this.subCategories = cloneDeep(variables.subCategories)[this.category];
@@ -238,6 +274,7 @@ export class GeneComparisonToolComponent
 
   onCategoryChange() {
     this.updateSubCategories();
+
     this.updateUrl();
     this.loadGenes();
   }
@@ -326,16 +363,11 @@ export class GeneComparisonToolComponent
   }
 
   filter() {
-    // Pinned Table
-    this.pinnedTable.filters['pinned'] = {
-      value: true,
-      matchMode: 'equals',
-    };
-    this.pinnedTable._filter();
-
-    // Available Table
     const filters: { [key: string]: any } = {
-      pinned: { value: true, matchMode: 'notEquals' },
+      ensembl_gene_id: {
+        value: this.getPinnedEnsemblGeneIds(),
+        matchMode: 'exclude_ensembl_gene_id',
+      },
     };
 
     if (this.searchTerm) {
@@ -435,20 +467,33 @@ export class GeneComparisonToolComponent
   /* Pin/Unpin
   /* ----------------------------------------------------------------------- */
 
-  getPinnedGenes() {
-    return this.genes.filter((g) => g.pinned);
+  refreshPinnedGenes() {
+    this.filter();
+    this.updateUrl();
   }
 
-  updatePinnedCount() {
-    this.pinnedCount = this.getPinnedGenes().length || 0;
+  pinGene(gene: GCTGene, refresh = true) {
+    const index = this.pinnedGenes.findIndex(
+      (g: GCTGene) => g.uid === gene.uid
+    );
+
+    if (index > -1 || this.pinnedGenes.length >= this.maxPinnedGenes) {
+      return;
+    }
+
+    this.pinnedGenes.push(gene);
+
+    if (refresh) {
+      this.refreshPinnedGenes();
+    }
   }
 
-  pinFilteredGenes() {
-    const remaining = this.maxPinnedCount - this.pinnedCount;
+  pinGenes(genes: GCTGene[]) {
+    const remaining = this.maxPinnedGenes - this.pinnedGenes.length;
 
     if (remaining < 1) {
       return;
-    } else if (remaining < this.genesTable.filteredValue?.length) {
+    } else if (remaining < genes?.length) {
       const self = this;
       this.messageService.clear();
       this.messageService.add({
@@ -459,7 +504,7 @@ export class GeneComparisonToolComponent
           'Only ' +
           remaining +
           ' genes were added, because you reached the maxium of ' +
-          this.maxPinnedCount +
+          this.maxPinnedGenes +
           ' pinned genes. ',
       });
       setTimeout(() => {
@@ -467,37 +512,51 @@ export class GeneComparisonToolComponent
       }, 5000);
     }
 
-    this.genesTable.filteredValue.slice(0, remaining).forEach((g: GCTGene) => {
-      g.pinned = true;
+    genes.slice(0, remaining).forEach((g: GCTGene) => {
+      this.pinGene(g, false);
     });
 
-    this.updatePinnedCount();
-    this.filter();
-    this.updateUrl();
+    this.refreshPinnedGenes();
   }
 
-  pinGene(gene: GCTGene) {
-    if (this.pinnedCount >= this.maxPinnedCount) {
+  unpinGene(gene: GCTGene, refresh = true) {
+    const index = this.pinnedGenes.findIndex(
+      (g: GCTGene) => g.uid === gene.uid
+    );
+
+    if (index === -1) {
       return;
     }
-    gene.pinned = true;
-    this.updatePinnedCount();
-    this.filter();
-    this.updateUrl();
-  }
 
-  unpinGene(gene: GCTGene) {
-    gene.pinned = false;
-    this.updatePinnedCount();
-    this.filter();
-    this.updateUrl();
+    this.pinnedGenes.splice(index, 1);
+
+    if (refresh) {
+      this.refreshPinnedGenes();
+    }
   }
 
   clearPinnedGenes() {
-    this.getPinnedGenes().forEach((g: GCTGene) => (g.pinned = false));
-    this.updatePinnedCount();
-    this.filter();
-    this.updateUrl();
+    this.pinnedGenes = [];
+    this.refreshPinnedGenes();
+  }
+
+  getPinnedEnsemblGeneIds() {
+    return this.pinnedGenes.map((g: GCTGene) => g.ensembl_gene_id);
+  }
+
+  pinFilteredGenes() {
+    this.pinGenes(this.genesTable.filteredValue);
+  }
+
+  onPinnedGenesModalChange(response: boolean) {
+    if (response) {
+      this.pinnedGenes = [];
+      this.pinGenes(this.pendingPinnedGenes);
+    } else {
+      this.category = this.categories[0].value;
+      this.onCategoryChange();
+    }
+    this.pendingPinnedGenes = [];
   }
 
   /* ----------------------------------------------------------------------- */
@@ -532,8 +591,8 @@ export class GeneComparisonToolComponent
       params['sortOrder'] = this.sortOrder;
     }
 
-    if (this.pinnedCount > 0) {
-      params['pinned'] = this.getPinnedGenes().map(
+    if (this.pinnedGenes.length > 0) {
+      params['pinned'] = this.pinnedGenes.map(
         (g: GCTGene) => g.uid || g.ensembl_gene_id
       );
     }
@@ -690,10 +749,10 @@ export class GeneComparisonToolComponent
     pinned.forEach((g: GCTGene) => {
       const baseRow = [g.ensembl_gene_id, g.hgnc_symbol];
 
-      if ('RNA - Differential Expression' === this.category) {
-        baseRow.push(this.subCategory);
-      } else if ('Protein - Differential Expression' === this.category) {
+      if ('Protein - Differential Expression' === this.category) {
         baseRow.push(g.uniprotid || '');
+      } else {
+        baseRow.push(this.subCategory);
       }
 
       this.columns.forEach((tissueName: string) => {
@@ -715,12 +774,12 @@ export class GeneComparisonToolComponent
 
     let csv = '';
 
-    if ('RNA - Differential Expression' === this.category) {
-      csv =
-        '"ensembl_gene_id","hgnc_symbol","model","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
-    } else if ('Protein - Differential Expression' === this.category) {
+    if ('Protein - Differential Expression' === this.category) {
       csv =
         '"ensembl_gene_id","hgnc_symbol","uniprotid","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
+    } else {
+      csv =
+        '"ensembl_gene_id","hgnc_symbol","model","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
     }
 
     data.forEach((row) => {

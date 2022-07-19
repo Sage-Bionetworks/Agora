@@ -20,13 +20,11 @@ export class GeneNetworkComponent implements OnInit {
     this.init();
   }
 
-  originalData: GeneNetwork = {} as GeneNetwork;
-  filteredData: GeneNetwork = {} as GeneNetwork;
-  selectedData: GeneNetwork = {} as GeneNetwork;
+  data: GeneNetwork | undefined;
+  selectedGene: Gene | undefined;
 
   filters: number[] = [];
   selectedFilter = 1;
-  pathbox: GeneNode[] = [];
 
   constructor(private router: Router, private geneService: GeneService) {}
 
@@ -37,49 +35,29 @@ export class GeneNetworkComponent implements OnInit {
       return;
     }
 
-    this.originalData = this.geneService.getNetwork(this._gene);
-    this.filteredData = cloneDeep(this.originalData);
-    this.selectedData = cloneDeep(this.originalData);
-    this.setPathbox();
-    this.filters = [...Array(this.filteredData.maxEdges).keys()].map((n) => {
+    if (!this._gene.network) {
+      this._gene.network = cloneDeep(this.geneService.getNetwork(this._gene));
+    }
+
+    this.data = this._gene.network;
+    this.selectedGene = this._gene;
+
+    this.filters = [...Array(this.data.maxEdges).keys()].map((n) => {
       return ++n;
     });
   }
 
-  setPathbox() {
-    this.pathbox = cloneDeep(this.selectedData.nodes)
-      .filter(
-        (node: any) =>
-          node.ensembl_gene_id !== this.selectedData.origin.ensembl_gene_id
-      )
-      .sort((a: any, b: any) => {
-        if (a == null) {
-          a = 0;
-        }
-        if (b == null) {
-          b = 0;
-        }
-        if (a['brainregions'].length < b['brainregions'].length) {
-          return 1;
-        } else if (a['brainregions'].length > b['brainregions'].length) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
+  onNodeClick(node: GeneNode) {
+    this.geneService.getGene(node.ensembl_gene_id).subscribe((gene: any) => {
+      if (!gene.network) {
+        gene.network = this.geneService.getNetwork(gene);
+      }
+      this.selectedGene = gene;
+    });
   }
 
-  filter(n: number) {
-    this.selectedFilter = n;
-
-    if (n > 1) {
-      this.filteredData = this.geneService.filterNetwork(
-        cloneDeep(this.originalData),
-        n
-      );
-    } else {
-      this.filteredData = this.geneService.getNetwork(this._gene);
-    }
+  navigateToSimilarGenes() {
+    this.router.navigate(['/genes/' + this._gene.ensembl_gene_id + '/similar']);
   }
 
   // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
@@ -120,20 +98,5 @@ export class GeneNetworkComponent implements OnInit {
       colorClassObj['text-danger'] = true;
     }
     return colorClassObj;
-  }
-
-  onNodeClick(gene: any) {
-    this.geneService.getGene(gene.ensembl_gene_id).subscribe((gene: any) => {
-      this.selectedData = this.geneService.getNetwork(gene);
-      this.setPathbox();
-    });
-  }
-
-  onNavigate() {
-    // console.log('onNavigate', path);
-  }
-
-  navigateToSimilarGenes() {
-    this.router.navigate(['/genes/' + this._gene.ensembl_gene_id + '/similar']);
   }
 }

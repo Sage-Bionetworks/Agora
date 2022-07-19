@@ -69,6 +69,10 @@
     thead tr th,
     tbody tr td {
       flex-grow: 1 !important;
+
+      &.hidden {
+        display: none;
+      }
     }
 
     th {

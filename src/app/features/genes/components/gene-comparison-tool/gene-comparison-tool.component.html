@@ -143,7 +143,7 @@
                           Statistical significance
                         </p>
                         <p>
-                          Enter the p-value to use for the significance cutoff.
+                          Enter the P-value to use for the significance cutoff.
                         </p>
                         <input
                           type="number"
@@ -225,7 +225,10 @@
               </ng-template>
             </p-table>
 
-            <div *ngIf="pinnedCount > 0" class="table-divider table-divider-1">
+            <div
+              *ngIf="pinnedGenes.length > 0"
+              class="table-divider table-divider-1"
+            >
               <div class="table-divider-inner">
                 <div>Pinned Genes</div>
                 <div class="csv-download-button">
@@ -257,8 +260,7 @@
             </div>
             <p-table
               #pinnedTable
-              [value]="genes"
-              [globalFilterFields]="['pinned']"
+              [value]="pinnedGenes"
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               responsiveLayout="scroll"
@@ -348,12 +350,14 @@
                 <div *ngIf="genesTable.filteredValue?.length">
                   <button
                     class="pin-all-button"
-                    [ngClass]="{ disabled: pinnedCount >= maxPinnedCount }"
+                    [ngClass]="{
+                      disabled: pinnedGenes.length >= maxPinnedGenes
+                    }"
                     (click)="pinFilteredGenes()"
                     [pTooltip]="
-                      pinnedCount >= maxPinnedCount
+                      pinnedGenes.length >= maxPinnedGenes
                         ? 'You have already pinned the maximum number of genes (' +
-                          maxPinnedCount +
+                          maxPinnedGenes +
                           '). You must unpin some genes before you can pin more.'
                         : 'Add all matching genes to Pinned list.'
                     "
@@ -378,7 +382,9 @@
               </div>
             </div>
             <div
-              *ngIf="!searchTerm && !hasSelectedFilters() && pinnedCount > 0"
+              *ngIf="
+                !searchTerm && !hasSelectedFilters() && pinnedGenes.length > 0
+              "
               class="table-divider"
             >
               <div class="table-divider-inner">
@@ -388,7 +394,6 @@
             <p-table
               #genesTable
               [value]="genes"
-              [globalFilterFields]="['pinned']"
               [paginator]="true"
               [rows]="10"
               [showCurrentPageReport]="true"
@@ -415,12 +420,12 @@
                         <button
                           (click)="pinGene(gene)"
                           [ngClass]="{
-                            disabled: pinnedCount >= maxPinnedCount
+                            disabled: pinnedGenes.length >= maxPinnedGenes
                           }"
                           [pTooltip]="
-                            pinnedCount >= maxPinnedCount
+                            pinnedGenes.length >= maxPinnedGenes
                               ? 'You have already pinned the maximum number of genes (' +
-                                maxPinnedCount +
+                                maxPinnedGenes +
                                 '). You must unpin some genes before you can pin more.'
                               : 'Pin this gene to the top of the list'
                           "
@@ -520,5 +525,12 @@
       #legendPanel
       (howToClick)="legendPanel.toggle(); howToPanel.toggle()"
     ></gene-comparison-tool-legend-panel>
+    <gene-comparison-tool-pinned-genes-modal
+      #pinnedGenesModal
+      (onChange)="onPinnedGenesModalChange($event)"
+      [pinnedGenes]="pinnedGenes"
+      [pendingPinnedGenes]="pendingPinnedGenes"
+      [maxPinnedGenes]="maxPinnedGenes"
+    ></gene-comparison-tool-pinned-genes-modal>
   </div>
 </div>

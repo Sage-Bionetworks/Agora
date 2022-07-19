@@ -32,6 +32,13 @@ export const intersectFilterCallback = function (
   return false;
 };
 
+export const excludeEnsemblGeneIdFilterCallback = function (
+  value: string,
+  ensemblGeneIds: string[]
+): boolean {
+  return !ensemblGeneIds.includes(value);
+};
+
 export const getDetailsPanelData = function (
   category: string,
   subCategory: string,

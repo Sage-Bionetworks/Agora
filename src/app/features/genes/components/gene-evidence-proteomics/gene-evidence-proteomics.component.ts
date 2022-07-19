@@ -22,7 +22,9 @@ export class GeneEvidenceProteomicsComponent {
   uniProtIds: string[] = [];
   selectedUniProtId = '';
 
-  differentialExpressionChartData: any = null;
+  differentialExpressionChartData: any = undefined;
+  differentialExpressionYAxisMin: number | undefined;
+  differentialExpressionYAxisMax: number | undefined;
 
   constructor(
     private helperService: HelperService,
@@ -67,6 +69,23 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
+          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
+          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
+
+          if (
+            this.differentialExpressionYAxisMin == undefined ||
+            yAxisMin < this.differentialExpressionYAxisMin
+          ) {
+            this.differentialExpressionYAxisMin = yAxisMin;
+          }
+
+          if (
+            this.differentialExpressionYAxisMax == undefined ||
+            yAxisMax > this.differentialExpressionYAxisMax
+          ) {
+            this.differentialExpressionYAxisMax = yAxisMax;
+          }
+
           differentialExpressionChartData.push({
             key: data.tissue,
             value: [data.min, data.median, data.max],
@@ -91,6 +110,14 @@ export class GeneEvidenceProteomicsComponent {
           });
         }
       });
+
+      if (this.differentialExpressionYAxisMin) {
+        this.differentialExpressionYAxisMin -= 0.2;
+      }
+
+      if (this.differentialExpressionYAxisMax) {
+        this.differentialExpressionYAxisMax += 0.2;
+      }
 
       this.differentialExpressionChartData = differentialExpressionChartData;
     });

@@ -85,6 +85,10 @@ export class CandlestickChartComponent extends BaseChartComponent {
       'chart-value-tooltip candlestick-chart-value-tooltip'
     );
 
+    if (this.chart) {
+      this.chart.remove();
+    }
+
     const svg = chartContainer
       .append('svg')
       .attr('width', width)
@@ -198,5 +202,17 @@ export class CandlestickChartComponent extends BaseChartComponent {
       .attr('x2', width)
       .style('stroke', 'red')
       .style('stroke-width', '1px');
+  }
+
+  override onResize() {
+    if (!this.chart) {
+      return;
+    }
+
+    const self = this;
+    clearTimeout(this.resizeTimer);
+    this.resizeTimer = setTimeout(() => {
+      self.initChart();
+    }, 100);
   }
 }

@@ -267,6 +267,19 @@
         }
       }
     }
+
+    .overlay-link-icon {
+      border-radius: 50%;
+      color: #797979;
+
+      svg {
+        display: block;
+      }
+
+      &:hover {
+        background-color: rgba(135, 142, 149, 0.3);
+      }
+    }
   }
 
   .gct-significance-control {

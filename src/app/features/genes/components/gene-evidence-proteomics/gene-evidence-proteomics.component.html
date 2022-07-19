@@ -55,8 +55,10 @@
       </p>
       <div #pdeChart>
         <box-plot
-          [data]="differentialExpressionChartData"
           xAxisLabel="Brain tissue"
+          [yAxisMin]="differentialExpressionYAxisMin"
+          [yAxisMax]="differentialExpressionYAxisMax"
+          [data]="differentialExpressionChartData"
         ></box-plot>
       </div>
     </div>
