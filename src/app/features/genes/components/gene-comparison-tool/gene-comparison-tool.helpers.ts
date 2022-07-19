@@ -50,10 +50,10 @@ export const getDetailsPanelData = function (
     heading: '',
     subHeading: subCategory,
     valueLabel: 'Log 2 Fold Change',
-    value: tissue.logfc,
-    pValue: tissue.adj_p_val,
-    min: parseFloat(tissue.ci_l.toPrecision(2)),
-    max: parseFloat(tissue.ci_r.toPrecision(2)),
+    value: tissue?.logfc,
+    pValue: tissue?.adj_p_val,
+    min: parseFloat(tissue?.ci_l?.toPrecision(2)),
+    max: parseFloat(tissue?.ci_r?.toPrecision(2)),
     footer: 'Significance is considered to be an adjusted p-value < 0.05',
   };
 
