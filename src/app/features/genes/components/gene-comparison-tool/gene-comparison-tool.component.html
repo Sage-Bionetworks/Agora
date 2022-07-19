@@ -473,18 +473,35 @@
                     *ngFor="let column of columns"
                     [style]="{ width: columnWidth }"
                   >
-                    <button
-                      [class]="getCircleClass(column, gene)"
-                      [style]="getCircleStyle(column, gene)"
-                      (click)="
-                        detailsPanel.toggle(
-                          $event,
-                          getDetailsPanelData(column, gene)
-                        )
-                      "
+                    <ng-container
+                      *ngIf="getDetailsPanelData(column, gene); let panelData"
                     >
-                      <span></span>
-                    </button>
+                      <ng-container
+                        *ngIf="getRoundedGeneData(panelData); let roundedData"
+                      >
+                        <button
+                          [class]="getCircleClass(column, gene)"
+                          [style]="getCircleStyle(column, gene)"
+                          (click)="detailsPanel.toggle($event, panelData)"
+                          [pTooltip]="
+                            'L2FC: ' +
+                            roundedData.l2fc +
+                            '\n' +
+                            'P-value: ' +
+                            roundedData.pValue +
+                            '\n\n' +
+                            'Click for more details.'
+                          "
+                          [tooltipDisabled]="
+                            detailsPanel.panels?.first?.overlayVisible || false
+                          "
+                          tooltipPosition="bottom"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <span></span>
+                        </button>
+                      </ng-container>
+                    </ng-container>
                   </td>
                 </tr>
               </ng-template>
