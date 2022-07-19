@@ -19,9 +19,11 @@ export class GeneComparisonToolDetailsPanelComponent {
   event: any = null;
   dataIndex = 1;
   _data: GCTDetailsPanelData[] = [];
+
   get data() {
     return this._data[this.dataIndex];
   }
+
   @Input() set data(data: GCTDetailsPanelData) {
     if (
       data &&
@@ -31,7 +33,6 @@ export class GeneComparisonToolDetailsPanelComponent {
       this._data[this.dataIndex] = data;
     }
   }
-  isShown = false;
 
   @ViewChildren(OverlayPanel) panels: any = {} as OverlayPanel;
 
@@ -58,18 +59,18 @@ export class GeneComparisonToolDetailsPanelComponent {
         target
       );
     }
-
-    this.isShown = true;
   }
 
   hide() {
     this.panels['first'].hide();
     this.panels['last'].hide();
-    this.isShown = false;
   }
 
   toggle(event: any, data?: GCTDetailsPanelData) {
-    if (event.target === this.event?.target && this.isShown) {
+    if (
+      event.target === this.event?.target &&
+      this.panels.first.overlayVisible
+    ) {
       this.hide();
     } else {
       this.show(event, data);
