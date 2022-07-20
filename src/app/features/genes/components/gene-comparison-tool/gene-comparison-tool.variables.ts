@@ -33,7 +33,11 @@ export const subCategories: { [key: string]: GCTSelectOption[] } = {
   'Protein - Differential Expression': [
     {
       label: 'Label-free Quantification (LFQ)',
-      value: 'Label-free Quantification (LFQ)',
+      value: 'LFQ',
+    },
+    {
+      label: 'Tandem Mass Tag (TMT)',
+      value: 'TMT',
     },
   ],
 };

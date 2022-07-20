@@ -69,7 +69,8 @@ export interface Gene {
 
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];
-  protein_differential_expression?: ProteinDifferentialExpression[];
+  protein_LFQ?: ProteinDifferentialExpression[];
+  protein_TMT: ProteinDifferentialExpression[];
   metabolomics?: any; // TODO change;
   overall_scores?: OverallScores;
   neuropathologic_correlations?: NeuropathologicCorrelation[];
@@ -89,9 +90,10 @@ export interface Gene {
   validations_display_value?: string;
 
   // Nominated table (not in mongo document)
-  input_data_display_value?: string;
-  study_display_value?: string;
   teams_display_value?: string;
+  study_display_value?: string;
+  programs_display_value?: string;
+  input_data_display_value?: string;
 }
 
 export interface GenesResponse {

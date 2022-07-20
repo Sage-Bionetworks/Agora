@@ -16,7 +16,8 @@ import {
   RnaDifferentialExpression,
   RnaDifferentialExpressionCollection,
   ProteinDifferentialExpression,
-  ProteinDifferentialExpressionCollection,
+  ProteinLFQCollection,
+  ProteinTMTCollection,
   Team,
 } from '../models';
 import { NominatedTarget } from '../../app/models';
@@ -187,35 +188,43 @@ export async function getProteinComparisonGenes(method: string) {
     return result;
   }
 
-  const differentialExpression: ProteinDifferentialExpression[] =
-    await ProteinDifferentialExpressionCollection.find()
+  let items: ProteinDifferentialExpression[] = [];
+
+  if ('TMT' === method) {
+    items = await ProteinTMTCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
+  } else {
+    items = await ProteinLFQCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .exec();
+  }
 
-  if (differentialExpression) {
+  if (items) {
     const genes: { [key: string]: GCTGene } = {};
     const allGenes = await getGenesMap();
     const teams = await getTeams();
 
-    differentialExpression.forEach((exp: ProteinDifferentialExpression) => {
-      if (!genes[exp.uniqid]) {
+    items.forEach((item: ProteinDifferentialExpression) => {
+      if (!genes[item.uniqid]) {
         const gene: Gene =
-          allGenes.get(exp.ensembl_gene_id) ||
+          allGenes.get(item.ensembl_gene_id) ||
           ({
-            ensembl_gene_id: exp.ensembl_gene_id || '',
-            hgnc_symbol: exp.hgnc_symbol || '',
+            ensembl_gene_id: item.ensembl_gene_id || '',
+            hgnc_symbol: item.hgnc_symbol || '',
           } as Gene);
-        genes[exp.uniqid] = getComparisonGene(gene, teams);
-        genes[exp.uniqid].uniprotid = exp.uniprotid;
+        genes[item.uniqid] = getComparisonGene(gene, teams);
+        genes[item.uniqid].uniprotid = item.uniprotid;
       }
 
-      genes[exp.uniqid].tissues.push({
-        name: exp.tissue,
-        logfc: exp.log2_fc,
-        adj_p_val: exp.cor_pval,
-        ci_l: exp.ci_lwr,
-        ci_r: exp.ci_upr,
+      genes[item.uniqid].tissues.push({
+        name: item.tissue,
+        logfc: item.log2_fc,
+        adj_p_val: item.cor_pval,
+        ci_l: item.ci_lwr,
+        ci_r: item.ci_upr,
       });
     });
 

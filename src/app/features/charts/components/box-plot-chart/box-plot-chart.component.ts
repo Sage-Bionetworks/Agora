@@ -1,14 +1,23 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import { Component, Input } from '@angular/core';
 import * as d3 from 'd3';
 
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
 import { BaseChartComponent } from '../base-chart';
 import { HelperService } from '../../../../core/services';
 import { agoraBoxPlot } from './box-plot';
 
+// -------------------------------------------------------------------------- //
+// Component
+// -------------------------------------------------------------------------- //
 @Component({
-  selector: 'box-plot',
-  templateUrl: './box-plot.component.html',
-  styleUrls: ['./box-plot.component.scss'],
+  selector: 'box-plot-chart',
+  templateUrl: './box-plot-chart.component.html',
+  styleUrls: ['./box-plot-chart.component.scss'],
 })
 export class BoxPlotComponent extends BaseChartComponent {
   _data: [] = [];
@@ -22,14 +31,11 @@ export class BoxPlotComponent extends BaseChartComponent {
 
   @Input() xAxisLabel = '';
   @Input() yAxisLabel = 'LOG 2 FOLD CHANGE';
-  @Input() rcBigRadius = 12.5;
-  @Input() rcSmallRadius = 9;
-  @Input() rcRadius = 12.5;
-
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
+  @Input() rcRadius = 12.5;
 
-  override name = 'box-plot';
+  override name = 'box-plot-chart';
   dimension: any;
   group: any;
   min = 0;
@@ -49,6 +55,7 @@ export class BoxPlotComponent extends BaseChartComponent {
     if (!this.chart) {
       this.initChart();
     } else {
+      this.hideCircles();
       this.chart.redraw();
     }
 
@@ -115,58 +122,52 @@ export class BoxPlotComponent extends BaseChartComponent {
     this.chart.render();
   }
 
-  // updateCircleRadius() {
-  //   if (window.innerWidth < 768) {
-  //     this.rcRadius = this.rcSmallRadius;
-  //   } else {
-  //     this.rcRadius = this.rcBigRadius;
-  //   }
-  // }
-
   renderCircles() {
     const self = this;
     const tooltip = this.getTooltip(
       'value',
-      'chart-value-tooltip box-plot-value-tooltip'
+      'chart-value-tooltip box-plot-chart-value-tooltip'
     );
+
+    const height = this.chartContainer.nativeElement.offsetHeight;
     const lineCenter = this.chart.selectAll('line.center');
     const yDomainLength = Math.abs(
       this.chart.yAxisMax() - this.chart.yAxisMin()
     );
-    const mult =
-      (this.chartContainer.nativeElement.offsetHeight - 60) / yDomainLength;
-    const circles = this.chart.selectAll('circle');
+    const mult = (height - 60) / yDomainLength;
 
-    if (!circles.empty()) {
-      circles.remove();
-    }
+    this.chart.selectAll('circle').remove();
 
     this.chart
       .selectAll('g.box')
-      .each(function (this: any, el: any, i: number) {
+      .each(function (this: HTMLElement, el: any, i: number) {
         if (!self.data[i]['circle']) {
           return;
         }
 
+        const data = self.data[i]['circle'];
+        const cy = Math.abs(self.chart.y().domain()[1] - data['value']) * mult;
         const circle = d3.select(this).insert('circle', ':last-child');
 
         circle
           .attr('fill', '#F47E6C')
-          .style('stroke-width', 0)
           .attr('r', self.rcRadius)
-          .attr('opacity', 0)
-          .style('transition', '.3s');
+          .attr('cx', lineCenter.attr('x1'))
+          .attr('cy', isNaN(cy) ? 0.0 : cy)
+          .style('stroke-width', 0)
+          .style('opacity', 0)
+          .style('transition', 'all .3s');
 
         circle
           .on('mouseover', function () {
-            if (!self.data[i]['circle']['tooltip']) {
+            if (!data['tooltip']) {
               return;
             }
 
             const offset = self.helperService.getOffset(this);
 
             tooltip
-              .html(self.data[i]['circle']['tooltip'])
+              .html(data['tooltip'])
               .style('left', (offset?.left || 0) + 'px')
               .style('top', (offset?.top || 0) + 40 + 'px');
 
@@ -177,24 +178,17 @@ export class BoxPlotComponent extends BaseChartComponent {
           });
       });
 
-    this.chart
-      .selectAll('circle')
-      .each(function (this: any, el: any, i: number) {
-        if (!self.data[i]['circle']) {
-          return;
-        }
+    setTimeout(() => {
+      self.showCircles();
+    }, 1);
+  }
 
-        const cy =
-          Math.abs(
-            self.chart.y().domain()[1] - self.data[i]['circle']['value']
-          ) * mult;
-        const fcy = isNaN(cy) ? 0.0 : cy;
+  hideCircles() {
+    this.chart.selectAll('circle').style('opacity', 0);
+  }
 
-        d3.select(this)
-          .attr('cx', lineCenter.attr('x1'))
-          .attr('cy', fcy)
-          .attr('opacity', 1);
-      });
+  showCircles() {
+    this.chart.selectAll('circle').style('opacity', 1);
   }
 
   override getXAxisTooltipText(text: string) {

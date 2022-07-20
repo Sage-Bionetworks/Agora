@@ -6,7 +6,8 @@ import { setHeaders } from '../helpers';
 import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
-  getProteinDifferentialExpression,
+  getProteinLFQ,
+  getProteinTMT,
   getMetabolomics,
   getExperimentalValidation,
   getNeuropathologicCorrelations,
@@ -81,8 +82,8 @@ export async function getGene(ensg: string) {
     result.rna_differential_expression = await getRnaDifferentialExpression(
       ensg
     );
-    result.protein_differential_expression =
-      await getProteinDifferentialExpression(ensg);
+    result.protein_LFQ = await getProteinLFQ(ensg);
+    result.protein_TMT = await getProteinTMT(ensg);
     result.metabolomics = await getMetabolomics(ensg);
     result.neuropathologic_correlations = await getNeuropathologicCorrelations(
       ensg
@@ -184,6 +185,7 @@ export async function getNominatedGenes() {
           'nominatedtarget.initial_nomination',
           'nominatedtarget.team',
           'nominatedtarget.study',
+          'nominatedtarget.source',
           'nominatedtarget.input_data',
           'nominatedtarget.validation_study_details',
           'druggability.pharos_class',

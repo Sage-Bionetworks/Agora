@@ -36,6 +36,11 @@ export class GeneNominatedTargetsComponent implements OnInit {
     },
     { field: 'study_display_value', header: 'Cohort Study', selected: true },
     {
+      field: 'programs_display_value',
+      header: 'Program',
+      selected: true,
+    },
+    {
       field: 'input_data_display_value',
       header: 'Input Data',
       selected: false,
@@ -80,6 +85,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
       this.data.forEach((de: Gene) => {
         let teamsArray: string[] = [];
         let studyArray: string[] = [];
+        let programsArray: string[] = [];
         let inputDataArray: string[] = [];
         let validationStudyDetailsArray: string[] = [];
         let initialNominationArray: number[] = [];
@@ -91,9 +97,13 @@ export class GeneNominatedTargetsComponent implements OnInit {
           studyArray = de.nominatedtarget.map(
             (nt: NominatedTarget) => nt.study
           );
+          programsArray = de.nominatedtarget.map(
+            (nt: NominatedTarget) => nt.source
+          );
           inputDataArray = de.nominatedtarget.map(
             (nt: NominatedTarget) => nt.input_data
           );
+
           validationStudyDetailsArray = de.nominatedtarget
             .map((nt: NominatedTarget) => nt.validation_study_details)
             .filter((item) => item !== undefined);
@@ -106,6 +116,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
         // if there are separate those into new split strings
         teamsArray = this.commaFlattenArray(teamsArray);
         studyArray = this.commaFlattenArray(studyArray);
+        programsArray = this.commaFlattenArray(programsArray);
         inputDataArray = this.commaFlattenArray(inputDataArray);
 
         // Populate NominatedTargets display fields
@@ -120,6 +131,14 @@ export class GeneNominatedTargetsComponent implements OnInit {
         de.study_display_value = '';
         if (teamsArray.length) {
           de.study_display_value = studyArray
+            .filter(this.getUnique)
+            .sort((a: string, b: string) => a.localeCompare(b))
+            .join(', ');
+        }
+
+        de.programs_display_value = '';
+        if (programsArray.length) {
+          de.programs_display_value = programsArray
             .filter(this.getUnique)
             .sort((a: string, b: string) => a.localeCompare(b))
             .join(', ');

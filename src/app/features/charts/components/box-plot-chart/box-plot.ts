@@ -6,11 +6,11 @@ import { min, max, ascending, quantile, range } from 'd3-array';
 import { timerFlush } from 'd3-timer';
 import * as d3 from 'd3';
 
-import { CoordinateGridMixin } from '../../../../../../node_modules/dc/src/base/coordinate-grid-mixin';
-import { transition } from '../../../../../../node_modules/dc/src/core/core';
-import { units } from '../../../../../../node_modules/dc/src/core/units';
-import { utils } from '../../../../../../node_modules/dc/src/core/utils';
-import { d3compat } from '../../../../../../node_modules/dc/src/core/config';
+import { CoordinateGridMixin } from 'dc/src/base/coordinate-grid-mixin';
+import { transition } from 'dc/src/core/core';
+import { units } from 'dc/src/core/units';
+import { utils } from 'dc/src/core/utils';
+import { d3compat } from 'dc/src/core/config';
 
 export const d3Box = function () {
   let width = 1;

@@ -22,9 +22,13 @@ export class GeneEvidenceProteomicsComponent {
   uniProtIds: string[] = [];
   selectedUniProtId = '';
 
-  differentialExpressionChartData: any = undefined;
-  differentialExpressionYAxisMin: number | undefined;
-  differentialExpressionYAxisMax: number | undefined;
+  LFQData: any = undefined;
+  LFQYAxisMin: number | undefined;
+  LFQYAxisMax: number | undefined;
+
+  TMTData: any = undefined;
+  TMTYAxisMin: number | undefined;
+  TMTYAxisMax: number | undefined;
 
   constructor(
     private helperService: HelperService,
@@ -32,13 +36,19 @@ export class GeneEvidenceProteomicsComponent {
   ) {}
 
   init() {
-    if (!this._gene?.protein_differential_expression) {
+    if (!this._gene?.protein_LFQ) {
       return;
     }
 
     this.uniProtIds = [];
 
-    this._gene.protein_differential_expression.forEach((item: any) => {
+    this._gene.protein_LFQ.forEach((item: any) => {
+      if (!this.uniProtIds.includes(item.uniprotid)) {
+        this.uniProtIds.push(item.uniprotid);
+      }
+    });
+
+    this._gene.protein_TMT.forEach((item: any) => {
       if (!this.uniProtIds.includes(item.uniprotid)) {
         this.uniProtIds.push(item.uniprotid);
       }
@@ -49,19 +59,20 @@ export class GeneEvidenceProteomicsComponent {
       this.selectedUniProtId = this.uniProtIds[0];
     }
 
-    this.initDifferentialExpression();
+    this.initLFQ();
+    this.initTMT();
   }
 
-  initDifferentialExpression() {
+  initLFQ() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const distribution = data.proteomics;
+      const distribution = data.proteomic_LFQ;
 
       const differentialExpression =
-        this._gene.protein_differential_expression?.filter((item: any) => {
+        this._gene.protein_LFQ?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
-      const differentialExpressionChartData: any = [];
+      const LFQData: any = [];
 
       differentialExpression.forEach((item: any) => {
         const data: any = distribution.find((d: any) => {
@@ -72,21 +83,15 @@ export class GeneEvidenceProteomicsComponent {
           const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
           const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
 
-          if (
-            this.differentialExpressionYAxisMin == undefined ||
-            yAxisMin < this.differentialExpressionYAxisMin
-          ) {
-            this.differentialExpressionYAxisMin = yAxisMin;
+          if (this.LFQYAxisMin == undefined || yAxisMin < this.LFQYAxisMin) {
+            this.LFQYAxisMin = yAxisMin;
           }
 
-          if (
-            this.differentialExpressionYAxisMax == undefined ||
-            yAxisMax > this.differentialExpressionYAxisMax
-          ) {
-            this.differentialExpressionYAxisMax = yAxisMax;
+          if (this.LFQYAxisMax == undefined || yAxisMax > this.LFQYAxisMax) {
+            this.LFQYAxisMax = yAxisMax;
           }
 
-          differentialExpressionChartData.push({
+          LFQData.push({
             key: data.tissue,
             value: [data.min, data.median, data.max],
             circle: {
@@ -111,23 +116,92 @@ export class GeneEvidenceProteomicsComponent {
         }
       });
 
-      if (this.differentialExpressionYAxisMin) {
-        this.differentialExpressionYAxisMin -= 0.2;
+      if (this.LFQYAxisMin) {
+        this.LFQYAxisMin -= 0.2;
       }
 
-      if (this.differentialExpressionYAxisMax) {
-        this.differentialExpressionYAxisMax += 0.2;
+      if (this.LFQYAxisMax) {
+        this.LFQYAxisMax += 0.2;
       }
 
-      this.differentialExpressionChartData = differentialExpressionChartData;
+      this.LFQData = LFQData;
+    });
+  }
+
+  initTMT() {
+    this.geneService.getDistribution().subscribe((data: any) => {
+      const distribution = data.proteomic_TMT;
+      console.log('distribution', data);
+
+      const differentialExpression =
+        this._gene.protein_TMT?.filter((item: any) => {
+          return item.uniprotid === this.selectedUniProtId;
+        }) || [];
+
+      const TMTData: any = [];
+
+      differentialExpression.forEach((item: any) => {
+        const data: any = distribution.find((d: any) => {
+          return d.tissue === item.tissue;
+        });
+
+        if (data) {
+          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
+          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
+
+          if (this.TMTYAxisMin == undefined || yAxisMin < this.TMTYAxisMin) {
+            this.TMTYAxisMin = yAxisMin;
+          }
+
+          if (this.TMTYAxisMax == undefined || yAxisMax > this.TMTYAxisMax) {
+            this.TMTYAxisMax = yAxisMax;
+          }
+
+          TMTData.push({
+            key: data.tissue,
+            value: [data.min, data.median, data.max],
+            circle: {
+              value: item.log2_fc,
+              tooltip:
+                (item.hgnc_symbol || item.ensembl_gene_id) +
+                ' is ' +
+                (item.cor_pval <= 0.05 ? ' ' : 'not ') +
+                'significantly differentially expressed in ' +
+                item.tissue +
+                ' with a log fold change value of ' +
+                this.helperService.getSignificantFigures(item.log2_fc, 3) +
+                ' and an adjusted p-value of ' +
+                this.helperService.getSignificantFigures(item.cor_pval, 3) +
+                '.',
+            },
+            quartiles:
+              data.first_quartile > data.third_quartile
+                ? [data.third_quartile, data.median, data.first_quartile]
+                : [data.first_quartile, data.median, data.third_quartile],
+          });
+        }
+      });
+
+      if (this.TMTYAxisMin) {
+        this.TMTYAxisMin -= 0.2;
+      }
+
+      if (this.TMTYAxisMax) {
+        this.TMTYAxisMax += 0.2;
+      }
+
+      console.log(this.TMTYAxisMin, this.TMTYAxisMax);
+
+      this.TMTData = TMTData;
     });
   }
 
   onProteinChange(event: any) {
-    if (!this._gene?.protein_differential_expression) {
+    if (!this._gene?.protein_LFQ) {
       return;
     }
     this.selectedUniProtId = event.value;
-    this.initDifferentialExpression();
+    this.initLFQ();
+    this.initTMT();
   }
 }

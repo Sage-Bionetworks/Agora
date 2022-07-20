@@ -18,7 +18,9 @@ import {
 // -------------------------------------------------------------------------- //
 
 const ProteomicsDistributionSchema = new Schema(
-  {},
+  {
+    type: String,
+  },
   { collection: 'proteomicsboxdistribution' }
 );
 const ProteomicsDistributionCollection = model(
@@ -34,22 +36,19 @@ const ProteomicsDistributionCollection = model(
 //
 // -------------------------------------------------------------------------- //
 
-export async function getProteomicsDistribution() {
-  try {
-    let result: any = cache.get('proteomics-distribution');
+export async function getProteomicsDistribution(type: string) {
+  const cacheKey = 'proteomics-' + type + '-distribution';
+  let result: any = cache.get(cacheKey);
 
-    if (result) {
-      return result;
-    }
-
-    result = await ProteomicsDistributionCollection.find().lean().exec();
-    cache.set('proteomics-distribution', result);
+  if (result) {
     return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
   }
+
+  result = await ProteomicsDistributionCollection.find({ type: type })
+    .lean()
+    .exec();
+  cache.set(cacheKey, result);
+  return result;
 }
 
 // -------------------------------------------------------------------------- //
@@ -71,7 +70,9 @@ export async function getDistribution() {
     result = {
       rna_differential_expression:
         await getRnaDifferentialExpressionDistribution(),
-      proteomics: await getProteomicsDistribution(),
+      proteomics: await getProteomicsDistribution('LFQ'),
+      proteomic_LFQ: await getProteomicsDistribution('LFQ'),
+      proteomic_TMT: await getProteomicsDistribution('TMT'),
       overall_scores: await getOverallScoresDistribution(),
     };
 

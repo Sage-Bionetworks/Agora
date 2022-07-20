@@ -24,13 +24,13 @@
         Mapping of Metabolites to
         {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }}
       </h3>
-      <p *ngIf="boxPlotData.length < 1">
+      <p *ngIf="_gene?.metabolomics || boxPlotData.length < 1">
         <i>No metabolomic data is currently available.</i>
       </p>
-      <p *ngIf="boxPlotData.length > 0">
+      <p *ngIf="_gene?.metabolomics && boxPlotData.length > 0">
         Genetic mapping revealed that the top metabolite associated with
         {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }} is
-        {{ _gene?.metabolomics?.metabolite_full_name }}, with a p-value of
+        {{ _gene?.metabolomics.metabolite_full_name }}, with a p-value of
         {{
           getSignificantFigures(
             _gene.metabolomics.gene_wide_p_threshold_1kgp,
@@ -74,7 +74,10 @@
         </p>
       </div>
       <div #mdeChart>
-        <box-plot xAxisLabel="Diagnosis" [data]="boxPlotData"></box-plot>
+        <box-plot-chart
+          xAxisLabel="Diagnosis"
+          [data]="boxPlotData"
+        ></box-plot-chart>
       </div>
     </div>
   </div>

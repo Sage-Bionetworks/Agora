@@ -47,6 +47,14 @@ export class CandlestickChartComponent extends BaseChartComponent {
     this.isInitialized = true;
   }
 
+  override destroy() {
+    if (this.tooltips) {
+      for (const name in this.tooltips) {
+        this.tooltips[name].remove();
+      }
+    }
+  }
+
   initData() {
     const neuropathCorrelations =
       this._gene.neuropathologic_correlations?.filter(

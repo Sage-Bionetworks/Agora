@@ -5,11 +5,11 @@
       <p>
         The results shown on this page are derived from proteomics analysis of
         post-mortem brains from AD cases and controls. The samples were obtained
-        from four human cohort studies across a total of four different brain
-        regions.
+        from up to four human cohort studies across a total of four different
+        brain regions.
       </p>
       <modal-link
-        text="Data and Methods for this study"
+        text="Data and Methods for these studies"
         header="About the Proteomics Analysis"
         wikiId="612871"
       >
@@ -19,7 +19,7 @@
     <hr class="separator separator-lg" />
 
     <div class="mb-lg">
-      <h4>Filter the following chart by protein</h4>
+      <h4>Filter the following charts by protein</h4>
       <p>
         Multiple proteins map to a single gene. Please select a protein of
         interest from the dropdown.
@@ -36,30 +36,71 @@
       <h3>
         Differential Expression of
         {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }} and Selected Protein
-        <download-dom-image
-          [target]="pdeChart"
-          [filename]="_gene?.ensembl_gene_id + '_proteomics'"
-        ></download-dom-image>
       </h3>
       <p>
         After selecting a protein from the dropdown menu, you will be able to
         see whether the selected protein product is differentially expressed
-        between AD cases and controls. The box plot depicts how the differential
+        between AD cases and controls. The box plots depict how the differential
         expression of the selected protein of interest (red dot) compares with
         expression of other proteins in a given brain region. Summary statistics
         for each tissue can be viewed by hovering over the red dots.
+      </p>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>
+        LFQ Differential Protein Expression
+        <download-dom-image
+          [target]="lfqChart"
+          [filename]="_gene?.ensembl_gene_id + '_LFQ'"
+        ></download-dom-image>
+      </h3>
+      <p>
+        Liquid-free quantification (LFQ) data was generated from post-mortem
+        brains of more than 500 individuals. Samples were taken from four human
+        cohort studies, representing four different brain regions.
       </p>
       <p class="mb-xl">
         Note that proteins may not be detected in all four brain regions; for
         these proteins, the plot will show fewer than four brain regions.
       </p>
-      <div #pdeChart>
-        <box-plot
+      <div #lfqChart>
+        <box-plot-chart
           xAxisLabel="Brain tissue"
-          [yAxisMin]="differentialExpressionYAxisMin"
-          [yAxisMax]="differentialExpressionYAxisMax"
-          [data]="differentialExpressionChartData"
-        ></box-plot>
+          [yAxisMin]="LFQYAxisMin"
+          [yAxisMax]="LFQYAxisMax"
+          [data]="LFQData"
+        ></box-plot-chart>
+      </div>
+    </div>
+
+    <hr class="separator separator-lg" />
+
+    <div>
+      <h3>
+        TMT Differential Protein Expression
+        <download-dom-image
+          [target]="tmtChart"
+          [filename]="_gene?.ensembl_gene_id + '_TMT'"
+        ></download-dom-image>
+      </h3>
+      <p>
+        Tandem mass tagged (TMT) data was generated from the DLPFC region of
+        post-mortem brains of 400 individuals from the ROSMAP cohort.
+      </p>
+      <p class="mb-xl">
+        Note that proteins may not be detected in this brain region; for these
+        proteins, the plot will show no data.
+      </p>
+      <div #tmtChart>
+        <box-plot-chart
+          xAxisLabel="Brain tissue"
+          [yAxisMin]="TMTYAxisMin"
+          [yAxisMax]="TMTYAxisMax"
+          [data]="TMTData"
+        ></box-plot-chart>
       </div>
     </div>
   </div>
