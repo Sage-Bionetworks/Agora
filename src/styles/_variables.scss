@@ -1,77 +1,6 @@
 // -------------------------------------------------------------------------- //
 // Legacy - To clean
 // -------------------------------------------------------------------------- //
-$video-width: 471px;
-
-$font-size-xl-regular: 26px;
-$font-size-large: 28px;
-$font-size-x-large: 40px;
-
-$colors: (
-  primary: #3f5eab,
-  secondary: #3c4a63,
-  action-primary: #5bb0b5,
-  action-secondary: #fccb6f,
-
-  gray-light: #e8e8e8,
-
-  black-box-shadow: (
-    a10: rgba(0, 0, 0, 0.1),
-    a35: rgba(0, 0, 0, 0.35),
-    a50: rgba(0, 0, 0, 0.5),
-    a70: rgba(0, 0, 0, 0.7),
-  ),
-  box-shadow: #c7c5c5,
-  dot: (
-    background-color: #bbbbbb,
-    background-color-current: #f47e6c,
-    background-color-selected: #fccb6f,
-    background-color-first: #73c8cc,
-    background-color-second: #5bb0b5,
-    background-color-third: #0c656b,
-    background-color-fourth: #1c3a35,
-  ),
-  input-placeholder: #6c7489,
-  italic-text: (
-    base: #8d919e,
-  ),
-  li: (
-    border-color-default: #c0c0c0,
-    border-color-active: #73c8cc,
-    background-active: #2f8e94,
-  ),
-  keyword: (
-    box-shadow: #c7c5c5,
-    border-color: rgba(197, 199, 196, 0.5),
-  ),
-  rect: (
-    stroke: #bcc0ca,
-  ),
-  text: (
-    primary: #1a1c29,
-    secondary: #24334f,
-    fill: #000000,
-    title: #3f5eab,
-    span-title: #3f5eab,
-    span-grey: #a6a6a6,
-    demphasized: #9ea4b1,
-    demphasized-alt: #797979,
-  ),
-  tr-focus: (
-    bg-color: rgba(63, 94, 171, 0.25),
-  ),
-  border: #eeeeee,
-);
-
-@function color($color-name, $color-variant: null) {
-  // color variant is optional
-  @if ($color-variant != null) {
-    // map inception
-    @return map-get(map-get($colors, $color-name), $color-variant);
-  } @else {
-    @return map-get($colors, $color-name);
-  }
-}
 
 $chart-grey: #6d7078;
 $grey-border-color: #ededed;
@@ -102,10 +31,11 @@ $breakpoints: (
 // -------------------------------------------------------------------------- //
 
 $spacings: (
-  "sm": 6px,
+  "xs": 5px,
+  "sm": 10px,
   "md": 15px,
-  "lg": 30px,
-  "xl": 60px,
+  "lg": 25px,
+  "xl": 50px,
 );
 
 :root {
@@ -118,47 +48,44 @@ $spacings: (
 // Colors
 // -------------------------------------------------------------------------- //
 
-$_colors: (
-  primary: #3f5eab,
-  secondary: #5bb0b5,
-  tertiary: #a684ee,
-  quaternary: #fccb6f,
+$main-colors: (
+  primary: #3c4a63,
+  secondary: #8b8ad1,
+  tertiary: #42c7bb,
 
-  action-primary: #5bb0b5,
-  action-secondary: #fccb6f,
+  action-primary: #5081a7,
 
   success: #6db56d,
   warning: #fccb6f,
   danger: #e0585d,
 
-  lightest: #fbfbfb,
-  lighter: #f7f7f7,
-  light: #ededed,
-  neutral: #dadce1,
-  dark: #bcc0ca,
-  darker: #a4a7b0,
-  darkest: #6d7078,
-
-  shadow: #c7c5c5,
-
-  text: #24334f,
-  link: #5bb0b5,
-
-  accent-secondary: map-get($colors, "secondary"),
-  border: map-get($colors, "border")
+  gray-900: #353a3f,
+  gray-800: #4a5056,
+  gray-700: #878e95,
+  gray-600: #aeb5bc,
+  gray-500: #d0d4d9,
+  gray-400: #dfe2e6,
+  gray-300: #eaecee,
+  gray-200: #f1f3f5,
+  gray-100: #fbfbfc,
 );
 
-$chart-colors: (
-  axis: map-get($_colors, "light"),
-  axis-label: map-get($_colors, "darkest"),
+$extra-colors: (
+  heading: map-get($main-colors, "primary"),
+  text: map-get($main-colors, "gray-900"),
+  text-secondary: map-get($main-colors, "gray-800"),
+  link: map-get($main-colors, "action-primary"),
+  border: map-get($main-colors, "gray-300"),
+  separator: map-get($main-colors, "gray-300"),
+  shadow: #c7c5c5,
 );
 
 :root {
-  @each $key, $color in $_colors {
+  @each $key, $color in $main-colors {
     --color-#{$key}: #{$color};
   }
-  @each $key, $color in $chart-colors {
-    --color-chart-#{$key}: #{$color};
+  @each $key, $color in $extra-colors {
+    --color-#{$key}: #{$color};
   }
 }
 
@@ -167,41 +94,93 @@ $chart-colors: (
 // -------------------------------------------------------------------------- //
 
 $font-family-primary: "Lato", sans-serif;
-$font-size-xxs: 0.75rem;
-$font-size-xs: 0.875rem;
-$font-size-sm: 1rem;
-$font-size-md: 1.125rem;
-$font-size-lg: 1.25rem;
-$font-size-xl: 1.375rem;
-$font-size-xxl: 1.5rem;
+
+$headings: (
+  h1: (
+    font-size: 1.75rem /*  28px */,
+    font-weight: 700,
+    line-height: 2rem /*  32px */,
+  ),
+  h2: (
+    font-size: 1.5rem /*  24px */,
+    font-weight: 700,
+    line-height: 1.75rem /*  28px */,
+  ),
+  h3: (
+    font-size: 1.25rem /*  20px */,
+    font-weight: 500,
+    line-height: 1.5rem /*  24px */,
+  ),
+  h4: (
+    font-size: 1rem /*  16px */,
+    font-weight: 500,
+    line-height: 1.25rem /*  20px */,
+  ),
+  // h5: (
+  //   font-size: 40px,
+  //   font-weight: 500,
+  //   line-height: 40px,
+  // ),
+  // h6: (
+  //   font-size: 40px,
+  //   font-weight: 500,
+  //   line-height: 40px,
+  // ),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+);
+
+$font-sizes: (
+  xs: (
+    font-size: 0.75rem /* 12px */,
+    line-height: 1.125rem /*  18px */,
+  ),
+  sm: (
+    font-size: 0.875rem /* 14px */,
+    line-height: 1.25rem /*  20px */,
+  ),
+  md: (
+    font-size: 1rem /* 16px */,
+    line-height: 1.5rem /* 24px */,
+  ),
+  lg: (
+    font-size: 1.125rem /* 18px */,
+    line-height: 1.5rem /* 24px */,
+  ),
+  xl: (
+    font-size: 1.25rem /* 20px */,
+    line-height: 1.625rem /*  26px */,
+  ),
+);
 
 :root {
   --font-family-primary: #{$font-family-primary};
 
-  --font-size-xxs: #{$font-size-xxs};
-  --font-size-xs: #{$font-size-xs};
-  --font-size-sm: #{$font-size-sm};
-  --font-size-md: #{$font-size-md};
-  --font-size-lg: #{$font-size-lg};
-  --font-size-xl: #{$font-size-xl};
-  --font-size-xxl: #{$font-size-xxl};
+  @each $size, $properties in $headings {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  @each $size, $properties in $font-sizes {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
 }
 // -------------------------------------------------------------------------- //
-// Fonts
+// Container
 // -------------------------------------------------------------------------- //
 
-$container-max-width: 90vw;
+$container-max-width-sm: 925px;
+$container-max-width-md: 1440px;
+$container-max-width-lg: 1920px;
+
 $container-gutter-width: 30px;
 
 :root {
-  --container-max-width: #{$container-max-width};
+  --container-max-width-sm: #{$container-max-width-sm};
+  --container-max-width-md: #{$container-max-width-md};
+  --container-max-width-lg: #{$container-max-width-lg};
   --container-gutter-width: #{$container-gutter-width};
-}
-
-@media (max-width: 1500px) {
-  :root {
-    --container-max-width: 1500px;
-  }
 }
 
 // -------------------------------------------------------------------------- //
@@ -233,3 +212,45 @@ $footer-height: 240px;
 :root {
   --footer-height: #{$footer-height};
 }
+
+// -------------------------------------------------------------------------- //
+// Gene details
+// -------------------------------------------------------------------------- //
+
+$gene-details-nav-height: 80px;
+$gene-details-subnav-offset: -19px;
+
+:root {
+  --gene-details-nav-height: #{$gene-details-nav-height};
+  --gene-details-subnav-offset: #{$gene-details-subnav-offset};
+}
+
+// -------------------------------------------------------------------------- //
+// Charts
+// -------------------------------------------------------------------------- //
+
+$chart-colors: (
+  axis: #989898,
+  axis-label: #000000,
+  axis-tick: #989898,
+  axis-tick-label: #000000,
+);
+
+:root {
+  @each $key, $value in $chart-colors {
+    --color-chart-#{$key}: #{$value};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Gene network
+// -------------------------------------------------------------------------- //
+
+$gene-network-colors: (
+  "default": map-get($main-colors, "gray-300"),
+  "main": map-get($main-colors, "secondary"),
+  "selected": #edc766,
+  "2-3": #90beb6,
+  "4-5": #469285,
+  ">6": #2a5850,
+);

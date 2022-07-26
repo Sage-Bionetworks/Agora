@@ -1,18 +1,40 @@
-<div class="gene-details">
+<div *ngIf="gene" class="gene-details">
   <gene-hero [gene]="gene"></gene-hero>
 
-  <div class="gene-details-nav" [ngClass]="{ open: isNavigationOpen }">
+  <div
+    class="gene-details-nav"
+    [ngClass]="{ open: isNavigationOpen, 'has-active-child': activeParent }"
+  >
     <div class="gene-details-nav-inner">
       <ul>
-        <ng-container *ngFor="let panel of panels">
-          <li *ngIf="!panel.disabled" class="gene-details-nav-item">
-            <a
-              (click)="onNavigationClick(panel)"
-              [ngClass]="{ active: activePanel === panel.name }"
-            >
-              {{ panel.label }}
+        <ng-container *ngFor="let item of panels">
+          <li
+            *ngIf="!item.disabled"
+            class="gene-details-nav-item"
+            [ngClass]="{
+              active: activePanel === item.name || activeParent === item.name
+            }"
+          >
+            <a (click)="onNavigationClick(item)">
+              {{ item.label }}
               <span class="gene-details-nav-icon"></span>
             </a>
+            <div *ngIf="item.children" class="gene-details-subnav">
+              <ul>
+                <ng-container *ngFor="let subItem of item.children">
+                  <li
+                    *ngIf="!subItem.disabled"
+                    class="gene-details-subnav-item"
+                    [ngClass]="{ active: activePanel === subItem.name }"
+                  >
+                    <a (click)="onNavigationClick(subItem)">
+                      {{ subItem.label }}
+                      <span class="gene-details-nav-icon"></span>
+                    </a>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
           </li>
         </ng-container>
       </ul>
@@ -20,7 +42,7 @@
   </div>
 
   <div class="gene-details-body">
-    <ng-container *ngFor="let panel of panels">
+    <ng-template #panelTemplate let-panel>
       <div
         *ngIf="!panel.disabled"
         class="gene-details-panel"
@@ -29,23 +51,53 @@
         }"
       >
         <gene-soe *ngIf="'summary' == panel.name" [gene]="gene"></gene-soe>
-        <gene-evidence
-          *ngIf="'evidence' == panel.name"
+
+        <gene-evidence-rna
+          *ngIf="'rna' == panel.name"
           [gene]="gene"
-        ></gene-evidence>
+        ></gene-evidence-rna>
+
+        <gene-evidence-proteomics
+          *ngIf="'proteomics' == panel.name"
+          [gene]="gene"
+        ></gene-evidence-proteomics>
+
+        <gene-evidence-metabolomics
+          *ngIf="'metabolomics' == panel.name"
+          [gene]="gene"
+        ></gene-evidence-metabolomics>
+
         <gene-resources
           *ngIf="'resources' == panel.name"
           [gene]="gene"
         ></gene-resources>
+
         <gene-nominations
           *ngIf="'nominations' == panel.name"
           [gene]="gene"
         ></gene-nominations>
+
         <gene-experimental-validation
           *ngIf="'experimental-validation' == panel.name"
           [gene]="gene"
         ></gene-experimental-validation>
       </div>
+    </ng-template>
+
+    <ng-container *ngFor="let panel of panels">
+      <ng-container
+        *ngTemplateOutlet="panelTemplate; context: { $implicit: panel }"
+      ></ng-container>
+      <ng-container *ngIf="panel.children">
+        <ng-container *ngFor="let childPanel of panel.children">
+          <ng-container
+            *ngTemplateOutlet="
+              panelTemplate;
+              context: { $implicit: childPanel }
+            "
+          ></ng-container>
+        </ng-container>
+      </ng-container>
     </ng-container>
   </div>
 </div>

@@ -5,7 +5,7 @@ import {
   ExperimentalValidation,
   OverallScores,
   NeuropathologicCorrelation,
-  GeneNetwork,
+  SimilarGenesNetwork,
 } from './';
 
 export interface NominatedTarget {
@@ -76,7 +76,9 @@ export interface Gene {
   neuropathologic_correlations?: NeuropathologicCorrelation[];
   experimental_validation?: ExperimentalValidation[];
   links?: { [key: string]: any };
-  network?: GeneNetwork;
+
+  // Added by app (not in mongo document)
+  similar_genes_network?: SimilarGenesNetwork;
 
   // Similar table (not in mongo document)
   ab_modality_display_value?: string;

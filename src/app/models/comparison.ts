@@ -72,6 +72,8 @@ export interface GCTDetailsPanelData {
   pValue?: number;
   min?: number;
   max?: number;
+  intervalMin?: number;
+  intervalMax?: number;
   footer?: string;
 }
 

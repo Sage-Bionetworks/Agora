@@ -8,10 +8,10 @@ import { Gene } from '../../../../models';
   styleUrls: ['./gene-hero.component.scss'],
 })
 export class GeneHeroComponent {
-  @Input() gene: Gene = {} as Gene;
+  @Input() gene: Gene | undefined;
 
   getSummary(body = false): string {
-    if (this.gene.summary) {
+    if (this.gene?.summary) {
       let finalString = '';
       const parenthesisArr = this.gene.summary.split(/\(([^)]+)\)/g);
       if (parenthesisArr.length) {
@@ -65,7 +65,7 @@ export class GeneHeroComponent {
   }
 
   getAlias(): string {
-    if (this.gene.alias && this.gene.alias.length > 0) {
+    if (this.gene?.alias && this.gene.alias.length > 0) {
       return this.gene.alias.join(', ');
     }
     return '';

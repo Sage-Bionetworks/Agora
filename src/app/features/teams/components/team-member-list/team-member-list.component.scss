@@ -5,17 +5,15 @@
   .team-member-list-inner {
     display: flex;
     flex-wrap: wrap;
-    margin-left: -20px;
-    margin-right: -20px;
+    margin-left: -10px;
+    margin-right: -10px;
   }
 
   .team-member {
-    width: 85px;
-    max-width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
   }
 
   .team-member-image {
@@ -25,20 +23,30 @@
     background-size: cover;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-color: var(--color-lighter);
-    background-image: url("/assets/images/placeholder_member.png");
-    margin-bottom: 15px;
-    display: inline-table;
+    background-color: var(--color-primary);
+    background-image: url("/assets/images/team-member.svg");
+    background-size: 60%;
+    background-position: center;
+    margin: 0 auto 10px auto;
+    overflow: hidden;
+
+    > div {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
   }
 
   .team-member-name {
+    font-size: var(--font-size-md);
+    font-weight: 400;
+    line-height: var(--line-height-md);
+    margin-bottom: 0;
     text-align: center;
-    font-size: var(--font-size-sm);
-    line-height: var(--font-size-xl);
 
-    &,
     a {
-      color: var(--color-text);
+      @include link();
     }
   }
 }

@@ -1,47 +1,51 @@
-<div class="section">
-  <div class="section-inner">
-    <div *ngIf="_gene" class="mb-xl">
-      <h2>Druggability of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }}</h2>
-      <p class="druggability-description">
-        AMP-AD pharmaceutical partners scored the tractability of targets using
-        publicly-available resources and have generated ratings of
-        small-molecule druggability, therapeutic antibody feasibility, and
-        safety.
-      </p>
-      <modal-link
-        text="Learn more about the analysis"
-        header="Druggability/Ligandability Information"
-        wikiId="612874"
-      >
-      </modal-link>
-    </div>
-
-    <div class="mb-xl">
-      <gene-druggability [gene]="_gene"></gene-druggability>
-    </div>
-
-    <div *ngIf="additionalResources">
-      <div class="section-thin">
-        <h2>Additional Resources</h2>
-        <p>
-          These external sites provide useful AD-specific or general information
-          for exploring targets.
+<div *ngIf="_gene" class="section">
+  <div class="section-inner pb-0">
+    <div class="container-sm">
+      <div>
+        <h2>
+          Druggability of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }}
+        </h2>
+        <p class="druggability-description">
+          AMP-AD pharmaceutical partners scored the tractability of targets
+          using publicly-available resources and have generated ratings of
+          small-molecule druggability, therapeutic antibody feasibility, and
+          safety.
         </p>
-      </div>
-      <div class="section-thin">
-        <div
-          *ngFor="let r of additionalResources; let i = index"
-          class="row tab-row last-row"
+        <modal-link
+          text="Learn more about the analysis"
+          header="Druggability/Ligandability Information"
+          wikiId="612874"
         >
-          <div class="col-md-3 col-sm-8 col-8 header-title">{{ r.title }}</div>
-          <div class="col-md-3 col-sm-4 col-4 text-center header-link">
-            <a class="link no-bold" href="{{ r.link }}" target="_blank">{{
-              r.linkText
-            }}</a>
-          </div>
-          <div class="col-md-6 col-sm-12 col-12 header-description">
-            {{ r.description }}
-          </div>
+        </modal-link>
+
+        <hr class="separator separator-md" />
+
+        <gene-druggability *ngIf="_gene" [gene]="_gene"></gene-druggability>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="additionalResources" class="section">
+  <div class="section-inner">
+    <div class="container-sm">
+      <h2>Additional Resources</h2>
+      <p>
+        These external sites provide useful AD-specific or general information
+        for exploring targets.
+      </p>
+      <div
+        *ngFor="let r of additionalResources; let i = index"
+        class="row tab-row last-row"
+      >
+        <div class="col-md-3 col-sm-8 col-8 header-title">{{ r.title }}</div>
+        <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+          <a class="link no-bold" href="{{ r.link }}" target="_blank">{{
+            r.linkText
+          }}</a>
+        </div>
+        <div class="col-md-6 col-sm-12 col-12 header-description">
+          {{ r.description }}
         </div>
       </div>
     </div>

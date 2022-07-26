@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -10,6 +10,7 @@ interface Panel {
   name: string;
   label: string;
   disabled: boolean;
+  children?: Panel[];
 }
 
 @Component({
@@ -18,7 +19,7 @@ interface Panel {
   styleUrls: ['./gene-details.component.scss'],
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit {
-  gene: Gene = {} as Gene;
+  gene: Gene | undefined;
 
   panels: Panel[] = [
     {
@@ -30,6 +31,23 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       name: 'evidence',
       label: 'Evidence',
       disabled: false,
+      children: [
+        {
+          name: 'rna',
+          label: 'RNA',
+          disabled: false,
+        },
+        {
+          name: 'proteomics',
+          label: 'Proteomics',
+          disabled: false,
+        },
+        {
+          name: 'metabolomics',
+          label: 'Metabolomics',
+          disabled: false,
+        },
+      ],
     },
     {
       name: 'resources',
@@ -49,6 +67,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
   ];
 
   activePanel = 'summary';
+  activeParent = '';
   isNavigationOpen = false;
 
   constructor(
@@ -58,43 +77,89 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     private geneService: GeneService
   ) {}
 
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    const nav = document.querySelector('.gene-details-nav');
+    const rect = nav?.getBoundingClientRect();
+
+    if (rect && rect.y <= 0) {
+      nav?.classList.add('sticky');
+    } else {
+      nav?.classList.remove('sticky');
+    }
+  }
+
+  reset() {
+    this.activePanel = 'summary';
+    this.activeParent = '';
+    this.isNavigationOpen = false;
+  }
+
   ngOnInit() {
-    this.helperService.setLoading(true);
     this.route.paramMap.subscribe((params: ParamMap) => {
+      this.helperService.setLoading(true);
+      this.gene = undefined;
+
       if (params.get('id')) {
         this.geneService
           .getGene(params.get('id') as string)
           .subscribe((gene: Gene) => {
-            this.helperService.setLoading(false);
             this.gene = gene;
 
-            // TODO: remove
-            // console.log('Gene loaded:', gene);
+            this.panels.forEach((p: Panel) => {
+              if (p.name == 'nominations' && !this.gene?.nominations) {
+                p.disabled = true;
+              } else if (
+                p.name == 'experimental-validation' &&
+                !this.gene?.experimental_validation?.length
+              ) {
+                p.disabled = true;
+              } else {
+                p.disabled = false;
+              }
+            });
 
-            if (!this.gene.nominations) {
-              const panel: Panel =
-                this.panels.find((p) => p.name == 'nominations') ||
-                ({} as Panel);
-              panel.disabled = true;
+            const nominationsPanel = this.panels.find(
+              (p) => p.name == 'nominations'
+            );
+            if (nominationsPanel) {
+              nominationsPanel.disabled = !this.gene.nominations ? true : false;
             }
 
-            if (!this.gene.experimental_validation?.length) {
-              const panel: Panel =
-                this.panels.find((p) => p.name == 'experimental-validation') ||
-                ({} as Panel);
-              panel.disabled = true;
+            const experimentalValidationPanel = this.panels.find(
+              (p) => p.name == 'experimental-validation'
+            );
+            if (experimentalValidationPanel) {
+              experimentalValidationPanel.disabled = !this.gene
+                .experimental_validation?.length
+                ? true
+                : false;
             }
+
+            this.helperService.setLoading(false);
           });
       }
 
-      if (params.get('tab')) {
-        this.activePanel = params.get('tab') as string;
+      if (params.get('subtab')) {
+        this.activePanel = params.get('subtab') as string;
+        this.activeParent = params.get('tab') as string;
+      } else if (params.get('tab')) {
+        const panel = this.panels.find(
+          (p: Panel) => p.name === params.get('tab')
+        );
+        if (panel?.children) {
+          this.activePanel = panel.children[0].name;
+          this.activeParent = panel.name;
+        } else if (panel) {
+          this.activePanel = panel.name;
+          this.activeParent = '';
+        }
       }
     });
   }
 
   ngAfterViewInit() {
-    if (!this.gene.ensembl_gene_id) {
+    if (!this.gene?.ensembl_gene_id) {
       this.helperService.setLoading(true);
     }
   }
@@ -103,10 +168,30 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     if (panel.disabled) {
       return;
     }
-    this.activePanel = panel.name;
-    this.location.replaceState(
-      '/genes/' + this.gene.ensembl_gene_id + '/' + panel.name
-    );
+
+    let url = '/genes/' + this.gene?.ensembl_gene_id + '/';
+
+    if (panel.children) {
+      this.activePanel = panel.children[0].name;
+      this.activeParent = panel.name;
+      url += panel.name + '/' + panel.children[0].name;
+    } else if (!this.panels.find((p: Panel) => p.name === panel.name)) {
+      const parent = this.panels.find((p: Panel) =>
+        p.children?.find((c: Panel) => c.name === panel.name)
+      );
+      this.activePanel = panel.name;
+      this.activeParent = parent?.name || '';
+      url += parent?.name + '/' + panel.name;
+    } else {
+      this.activePanel = panel.name;
+      this.activeParent = '';
+      url += panel.name;
+    }
+
+    const nav = document.querySelector('.gene-details-nav');
+    window.scrollTo(0, this.helperService.getOffset(nav).top);
+
+    this.location.replaceState(url);
   }
 
   onNavigationClick(panel: Panel) {

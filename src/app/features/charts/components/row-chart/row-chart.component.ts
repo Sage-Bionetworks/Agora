@@ -45,7 +45,7 @@ export class RowChartComponent extends BaseChartComponent {
   max = -Infinity;
   canDisplay = false;
   canResize = false;
-  colors: string[] = ['#5171C0'];
+  colors: string[] = [this.helperService.getColor('secondary')];
 
   constructor(private helperService: HelperService) {
     super();
@@ -86,6 +86,8 @@ export class RowChartComponent extends BaseChartComponent {
     this.chart = dc.rowChart(this.chartContainer.nativeElement);
 
     this.chart.group(this.group).dimension(this.dimension);
+
+    //this.chart.xAxis().tickSizeOuter([0]);
 
     this.chart
       .gap(4)

@@ -8,7 +8,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
   styleUrls: ['./overlay-panel-link.component.scss'],
 })
 export class OverlayPanelLinkComponent {
-  @Input() icon = 'fa-solid fa-circle-info';
+  @Input() icon = 'svg';
   @Input() text = '';
 
   @Input() ownerId = '';

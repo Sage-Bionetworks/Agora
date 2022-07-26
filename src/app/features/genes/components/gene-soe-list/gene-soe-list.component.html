@@ -1,8 +1,8 @@
-<ul class="gene-seo-list">
+<ul *ngIf="_gene" class="gene-seo-list">
   <li *ngFor="let summary of summaries" class="item">
     <div class="item-inner">
-      <div class="item-col">
-        <h5 class="item-title">{{ summary.property.title }}</h5>
+      <div>
+        <h3 class="item-title">{{ summary.property.title }}</h3>
         <div class="item-description">
           {{ summary.property.description }}
           <a
@@ -15,10 +15,10 @@
           </a>
         </div>
       </div>
-      <div class="gene-seo-list-item-col">
-        <span ngClass="{{ getStateClass(summary) }}">
+      <div>
+        <b>
           {{ getStateText(summary) }}
-        </span>
+        </b>
       </div>
     </div>
   </li>

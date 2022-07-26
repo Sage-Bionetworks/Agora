@@ -1,8 +1,10 @@
 import {
   Component,
   Input,
+  Output,
   ViewChildren,
   ViewEncapsulation,
+  EventEmitter,
 } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
@@ -34,15 +36,31 @@ export class GeneComparisonToolDetailsPanelComponent {
     }
   }
 
+  @Output() onShowLegend: EventEmitter<object> = new EventEmitter<object>();
+  @Output() onNavigateToConsistencyOfChange: EventEmitter<object> =
+    new EventEmitter<object>();
+
   @ViewChildren(OverlayPanel) panels: any = {} as OverlayPanel;
 
   constructor(private helperService: HelperService) {}
 
-  getMarkerStyle(data: any) {
+  getValuePosition(data: any) {
     const percentage = Math.round(
       ((data.value - data.min) / (data.max - data.min)) * 100
     );
     return { left: percentage + '%' };
+  }
+
+  getIntervalPositions(data: any) {
+    const minPercentage = Math.round(
+      ((data.intervalMin - data.min) / (data.max - data.min)) * 100
+    );
+
+    const maxPercentage =
+      100 -
+      Math.round(((data.intervalMax - data.min) / (data.max - data.min)) * 100);
+
+    return { left: minPercentage + '%', right: maxPercentage + '%' };
   }
 
   show(event: any, data?: GCTDetailsPanelData) {
@@ -79,5 +97,15 @@ export class GeneComparisonToolDetailsPanelComponent {
 
   getSignificantFigures(n: any, b: any) {
     return this.helperService.getSignificantFigures(n, b);
+  }
+
+  showLegend() {
+    this.hide();
+    this.onShowLegend.emit();
+  }
+
+  navigateToConsistencyOfChange() {
+    this.hide();
+    this.onNavigateToConsistencyOfChange.emit(this.data);
   }
 }

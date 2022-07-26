@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 
 import {
   Gene,
@@ -13,18 +13,19 @@ import { HelperService } from '../../../../core/services';
   templateUrl: './gene-evidence-rna.component.html',
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
-export class GeneEvidenceRnaComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+export class GeneEvidenceRnaComponent implements AfterViewInit {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
 
   statisticalModels: string[] = [];
   selectedStatisticalModel = '';
+  initialSelectedStatisticalModel: any = {};
 
   medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
@@ -33,30 +34,63 @@ export class GeneEvidenceRnaComponent {
   differentialExpressionYAxisMin: number | undefined;
   differentialExpressionYAxisMax: number | undefined;
 
-  consistencyOfChangeChartData: any = null;
+  consistencyOfChangeChartData: any | undefined;
 
   constructor(
     private helperService: HelperService,
     private geneService: GeneService
   ) {}
 
+  reset() {
+    this.statisticalModels = [];
+    this.selectedStatisticalModel = '';
+
+    this.medianExpression = [];
+    this.differentialExpression = [];
+
+    this.differentialExpressionChartData = undefined;
+    this.differentialExpressionYAxisMin = undefined;
+    this.differentialExpressionYAxisMax = undefined;
+
+    this.consistencyOfChangeChartData = undefined;
+  }
+
   init() {
+    this.reset();
+
     if (!this._gene?.rna_differential_expression) {
       return;
     }
 
     this.statisticalModels = this.geneService.getStatisticalModels(this._gene);
+
+    this.selectedStatisticalModel =
+      this.helperService.getUrlParam('model') || '';
+
     if (!this.selectedStatisticalModel) {
       this.selectedStatisticalModel = this.statisticalModels[0];
     }
+
+    this.initialSelectedStatisticalModel = {
+      name: this.selectedStatisticalModel,
+      value: this.selectedStatisticalModel,
+    };
 
     this.initMedianExpression();
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
   }
 
+  ngAfterViewInit() {
+    const hash = window.location.hash.substr(1);
+    if (hash) {
+      const target = document.getElementById(hash);
+      window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+    }
+  }
+
   initMedianExpression() {
-    if (!this._gene.medianexpression?.length) {
+    if (!this._gene?.medianexpression?.length) {
       this.medianExpression = [];
       return;
     }
@@ -67,7 +101,7 @@ export class GeneEvidenceRnaComponent {
   }
 
   initDifferentialExpression() {
-    if (!this._gene.rna_differential_expression?.length) {
+    if (!this._gene?.rna_differential_expression?.length) {
       this.differentialExpression = [];
       return;
     }

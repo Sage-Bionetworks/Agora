@@ -78,14 +78,12 @@ export class GeneSimilarComponent implements OnInit {
   }
 
   init() {
-    if (!this.gene?.links?.length) {
+    if (!this.gene?.similar_genes_network?.nodes?.length) {
       return;
     }
 
-    const network: any = this.geneService.getNetwork(this.gene);
-
     const ids: any = [];
-    network.nodes.forEach((obj: any) => {
+    this.gene.similar_genes_network.nodes.forEach((obj: any) => {
       ids.push(obj.ensembl_gene_id);
     });
 

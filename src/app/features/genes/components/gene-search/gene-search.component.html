@@ -1,27 +1,22 @@
 <div
   #root
-  [class]="'gene-search ' + location"
+  [class]="'gene-search gene-search-' + location"
   [ngClass]="{ focused: isFocused }"
 >
   <div class="gene-search-bar" (click)="focusInput()">
     <div class="gene-search-bar-icon">
       <i
-        *ngIf="isLoading && location === 'header'"
-        class="fas fa-spinner fa-spin"
-      ></i>
-
-      <i
-        *ngIf="!isLoading && location === 'header'"
+        *ngIf="location === 'header' && !isLoading"
         class="fas fa-magnifying-glass"
       ></i>
 
       <svg
+        *ngIf="location === 'home' && !isLoading"
         width="45"
         height="45"
         viewBox="0 0 192 192"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        *ngIf="location === 'home'"
       >
         <path d="M75.928 64.432V8v56.432Z" fill="#fff" />
         <path
@@ -94,6 +89,8 @@
         />
         <path d="M160 32h-32a4 4 0 0 0 0 8h32a4 4 0 0 0 0-8Z" fill="#3E6CA7" />
       </svg>
+
+      <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
     </div>
     <input
       #input
@@ -146,7 +143,7 @@
           >
             &nbsp;{{ result.ensembl_gene_id }}
           </span>
-          <span *ngIf="hasAlias(result.hgnc_symbol)" class="gene-aliases">
+          <span *ngIf="hasAlias(result)" class="gene-aliases">
             &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
           </span>
         </li>

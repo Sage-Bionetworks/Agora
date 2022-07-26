@@ -48,7 +48,7 @@ app.use(
         "'unsafe-inline'",
         'https://www.googletagmanager.com/',
       ],
-      'frame-src': ['https://player.vimeo.com/'],
+      'frame-src': ['https://player.vimeo.com/', 'https://docs.google.com'],
     },
   })
 );

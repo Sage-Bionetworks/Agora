@@ -2,12 +2,9 @@
 @import "../../../../../styles/mixins";
 
 .tab-row {
-  min-height: 99px;
-  padding: 15px;
-  padding-right: 144px;
-  border: 2px solid #dddddf;
-  margin: 0px;
-  margin-bottom: 15px;
+  padding: var(--spacing-xl) 144px var(--spacing-xl) var(--spacing-xl);
+  border: 1px solid var(--color-gray-300);
+  margin: 0 0 var(--spacing-lg) 0;
 
   .last-row {
     margin-top: 15px;
@@ -32,12 +29,10 @@
     @include respond-to("ex-small") {
       min-height: 43px;
       margin-top: 25.5px !important;
-      line-height: $font-size-large;
     }
     @include respond-to("small") {
       min-height: 43px;
       margin-top: 25.5px !important;
-      line-height: $font-size-large;
     }
     @include respond-to("medium") {
       margin-top: auto !important;

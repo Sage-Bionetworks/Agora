@@ -1,36 +1,74 @@
 .gd-accordion {
-  .p-accordion-header {
-    min-height: 99px;
-    padding: 15px;
-    border: 2px solid #dddddf;
-    margin-top: 0px;
-    margin-bottom: 0px;
-
-    a {
-      min-height: 99px;
-      display: flex;
-      vertical-align: middle;
-      margin-top: auto;
-      margin-bottom: auto;
-      padding: 0px;
+  .p-accordion {
+    .p-accordion-tab {
+      margin-bottom: var(--spacing-lg);
     }
 
-    p-header {
-      min-height: 99px;
-      width: 100%;
+    .p-accordion-toggle-icon {
+      position: absolute;
+      right: 60px;
+      top: calc(50% - 14px);
+      font-size: 24px;
     }
-  }
 
-  .grey-background {
     .p-accordion-header {
-      background: $table-row-even;
+      padding: 0;
+      border: 1px solid var(--color-gray-300);
+
+      a {
+        padding: var(--spacing-xl) 144px var(--spacing-xl) var(--spacing-xl);
+      }
+
+      .row {
+        align-items: center;
+      }
     }
 
-    background: $table-row-even;
-    border: 1px solid #dddddf;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-  }
+    .p-accordion-content {
+      padding: var(--spacing-xl);
+      border: 1px solid var(--color-gray-300);
+      border-top: none;
+      background-color: var(--color-gray-100);
 
+      .gd-accordion-content-heading {
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .gd-accordion-content-description {
+        text-align: center;
+        font-size: var(--font-size-xs);
+        font-style: italic;
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .bucket-inner-row {
+        padding-bottom: 30px;
+      }
+
+      .content-title {
+        font-size: var(--font-size-xs);
+        vertical-align: middle;
+        padding-left: 30px;
+      }
+
+      .icon-class {
+        width: 81px;
+        font-size: var(--font-size-xs);
+        text-align: center;
+        margin-bottom: 12px;
+        margin-top: 12px;
+      }
+
+      .vertical-auto {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+    }
+  }
+}
+
+.gd-accordion {
   .inner-row-header {
     height: 46px;
   }
@@ -55,23 +93,12 @@
       }
     }
 
-    .bucket-inner-row {
-      padding-bottom: 30px;
-    }
-
     .content-header-description {
       text-align: center;
       margin-bottom: 25px;
       line-height: var(--font-size-xs);
       font-size: var(--font-size-xxs);
       height: 46px;
-    }
-
-    .content-title {
-      line-height: var(--font-size-xs);
-      font-size: var(--font-size-xxs);
-      vertical-align: middle;
-      padding-left: 30px;
     }
 
     .vertical-auto {
@@ -102,12 +129,10 @@
       @include respond-to("ex-small") {
         min-height: 43px;
         margin-top: 25.5px !important;
-        line-height: $font-size-large;
       }
       @include respond-to("small") {
         min-height: 43px;
         margin-top: 25.5px !important;
-        line-height: $font-size-large;
       }
       @include respond-to("medium") {
         margin-top: auto !important;
@@ -151,7 +176,6 @@
     top: -12px;
     left: -0.5px;
     font-size: var(--font-size-xl);
-    line-height: $font-size-xl-regular;
     text-align: center;
   }
 
@@ -179,17 +203,8 @@
     margin-left: calc(50% - 10px);
   }
 
-  .class-description-title {
-    line-height: var(--font-size-xs);
-    font-size: var(--font-size-xxs);
-  }
-
   .class-description {
     padding: 15px;
-
-    span {
-      text-align: left;
-    }
   }
 
   .criteria-row {
@@ -198,128 +213,14 @@
     min-height: 0px !important;
   }
 
-  .criteria-description {
-    line-height: var(--font-size-md)-odd;
-    font-size: var(--font-size-sm);
-    margin-top: 0px;
-  }
-
   .criteria-title {
     margin-top: 0px;
     margin-bottom: 9px;
-    line-height: var(--font-size-xl);
-    font-size: var(--font-size-md);
-  }
-
-  .p-accordion {
-    .p-accordion-toggle-icon {
-      position: absolute;
-      right: 60px;
-      top: calc(50% - 14px);
-      font-size: 24px;
-    }
-
-    a {
-      padding-left: 15px;
-      padding-right: 144px;
-    }
-
-    .p-accordion-content {
-      padding: 0px;
-    }
-
-    @include respond-to("ex-small") {
-      padding-top: 2em;
-      padding-bottom: 2em;
-    }
-    @include respond-to("small") {
-      padding-top: 2em;
-      padding-bottom: 2em;
-    }
-    @include respond-to("medium") {
-      padding-top: 2em;
-      padding-bottom: 2em;
-    }
-    @include respond-to("large") {
-      padding-top: 2em;
-      padding-bottom: 2em;
-    }
-    @include respond-to("ex-large") {
-      padding-top: 2em;
-      padding-bottom: 2em;
-    }
-  }
-}
-
-.tab-row {
-  min-height: 99px;
-  padding: 15px;
-  padding-right: 144px;
-  border: 2px solid #dddddf;
-  margin: 0px;
-  margin-bottom: 15px;
-
-  .last-row {
-    margin-top: 15px;
-  }
-
-  a {
-    display: flex;
-    vertical-align: middle;
-    margin-top: auto;
-    margin-bottom: auto;
-    padding: 0px;
-  }
-
-  .header-title {
-    line-height: var(--font-size-xxl);
     font-size: var(--font-size-lg);
   }
 
-  .header-title,
-  .header-link,
-  .header-description {
-    @include respond-to("ex-small") {
-      min-height: 43px;
-      margin-top: 25.5px !important;
-      line-height: $font-size-large;
-    }
-    @include respond-to("small") {
-      min-height: 43px;
-      margin-top: 25.5px !important;
-      line-height: $font-size-large;
-    }
-    @include respond-to("medium") {
-      margin-top: auto !important;
-      min-height: 0px;
-    }
-    @include respond-to("large") {
-      margin-top: auto !important;
-      min-height: 0px;
-    }
-    @include respond-to("ex-large") {
-      margin-top: auto !important;
-      min-height: 0px;
-    }
-  }
-
-  .header-link {
-    text-align: center;
-
-    a {
-      display: block;
-    }
-  }
-
-  .header-description {
-    line-height: var(--font-size-xl);
-    font-size: var(--font-size-md);
-  }
-
-  > [class*="col-"] {
-    vertical-align: middle;
-    margin-top: auto;
-    margin-bottom: auto;
+  .criteria-description {
+    margin-top: 0px;
   }
 }
 
@@ -358,14 +259,14 @@ p-inputswitch {
     background: #b6bfc8;
   }
   .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
-    background: var(--color-secondary);
+    background: var(--color-action-primary);
   }
   .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
     background: #ffffff;
   }
   .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover
     .p-inputswitch-slider {
-    background: var(--color-secondary);
+    background: var(--color-action-primary);
   }
 }
 

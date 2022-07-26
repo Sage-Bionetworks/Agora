@@ -19,7 +19,7 @@ module.exports = function (options) {
     (process.env.mode =
     process.env.ENV =
     process.env.NODE_ENV =
-      'development');
+      'production');
   const HOST = process.env.HOST || 'localhost';
   const PORT = process.env.PORT || 8080;
   const Analyzer = process.env.Analyzer || false;

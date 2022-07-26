@@ -1,12 +1,11 @@
 div.p-dropdown {
   display: flex;
   padding: 12px 20px 12px 30px;
-  background-color: #ffffff;
-  border: 1px solid var(--color-light);
-  border-radius: 5px;
+  background-color: var(--color-gray-100);
+  border: 1px solid var(--color-gray-300);
 
   .p-dropdown-panel {
-    border: 1px solid var(--color-light);
+    border: 1px solid var(--color-gray-300);
     background-color: #ffffff;
     border-radius: 0 0 5px 5px;
     transform: translateY(-1px);
@@ -15,7 +14,8 @@ div.p-dropdown {
       padding: 11px 30px;
 
       &:hover {
-        background-color: var(--color-lighter);
+        color: #ffffff;
+        background-color: var(--color-action-primary);
       }
     }
   }
@@ -57,8 +57,8 @@ div.p-dropdown {
     top: 20px !important;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%);
 
-    .pi-check::before {
-      color: var(--color-primary);
+    .p-checkbox-icon {
+      color: var(--color-action-primary);
     }
   }
 
@@ -79,21 +79,12 @@ div.p-dropdown {
     }
 
     &:hover {
-      background: var(--color-lighter);
+      &,
+      .p-checkbox-icon {
+        color: #ffffff;
+      }
+
+      background-color: var(--color-action-primary);
     }
-  }
-}
-
-.gene-model-selector {
-  .p-dropdown {
-    width: 600px;
-    max-width: 100%;
-  }
-}
-
-.gene-protein-selector {
-  .p-dropdown {
-    width: 600px;
-    max-width: 100%;
   }
 }

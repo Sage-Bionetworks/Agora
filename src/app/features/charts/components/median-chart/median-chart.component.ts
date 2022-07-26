@@ -74,7 +74,8 @@ export class MedianChartComponent extends BaseChartComponent {
       .brushOn(false);
 
     // X axis
-    this.chart.x(d3.scaleBand()).xUnits(dc.units.ordinal);
+    this.chart.x(d3.scaleBand()).xUnits(dc.units.ordinal).xAxis();
+    // .tickSizeOuter([0]);
 
     // Y axis
     this.chart
@@ -82,9 +83,10 @@ export class MedianChartComponent extends BaseChartComponent {
       .yAxisLabel(this.yAxisLabel)
       .yAxis()
       .ticks(3);
+    //.tickSizeOuter([0]);
 
     // Colors
-    this.chart.colors(['#5171C0']);
+    this.chart.colors([this.helperService.getColor('secondary')]);
 
     // Spacing
     this.chart

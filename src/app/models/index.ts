@@ -8,3 +8,4 @@ export * from './proteomics';
 export * from './overall-scores';
 export * from './rna';
 export * from './teams';
+export * from './misc';

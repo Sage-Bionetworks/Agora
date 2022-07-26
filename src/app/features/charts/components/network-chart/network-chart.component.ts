@@ -1,3 +1,6 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import {
   Component,
   Input,
@@ -8,22 +11,36 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
 import { HelperService } from '../../../../core/services';
-import { GeneNetwork, GeneLink, GeneNode } from '../../../../models';
-
 import { hexagonSymbol } from '.';
 
+import {
+  NetworkChartNode,
+  NetworkChartLink,
+  NetworkChartData,
+} from '../../../../models';
+
+// -------------------------------------------------------------------------- //
+// Models
+// -------------------------------------------------------------------------- //
+
+// -------------------------------------------------------------------------- //
+// Component
+// -------------------------------------------------------------------------- //
 @Component({
   selector: 'network-chart',
   templateUrl: './network-chart.component.html',
   styleUrls: ['./network-chart.component.scss'],
 })
 export class NetworkChartComponent {
-  _data: GeneNetwork | undefined;
-  get data(): GeneNetwork | undefined {
+  _data: NetworkChartData | undefined;
+  get data(): NetworkChartData | undefined {
     return this._data;
   }
-  @Input() set data(data: GeneNetwork | undefined) {
+  @Input() set data(data: NetworkChartData | undefined) {
     this._data = data;
     this.init();
   }
@@ -41,14 +58,13 @@ export class NetworkChartComponent {
   height = 800;
 
   group: any;
-  links: any;
   nodes: any;
+  links: any;
   mainNode: any;
   texts: any;
   simulation: any;
 
-  selectedNode: GeneNode | undefined;
-  highlightColor = '#FCCB6F';
+  selectedNode: NetworkChartNode | undefined;
   zoomHandler: any;
 
   chart: any;
@@ -124,8 +140,25 @@ export class NetworkChartComponent {
       .data(this._data.links)
       .enter()
       .append('line')
-      .attr('stroke-width', 2)
-      .style('stroke', (link: GeneLink) => this.getLinkColor(link));
+      .attr('stroke-width', 2);
+
+    this.updateLinkClasses();
+  }
+
+  getLinkClasses(link: NetworkChartLink) {
+    const classes = ['network-chart-link'];
+
+    if (link.class) {
+      classes.push(link.class);
+    }
+
+    return classes.join(' ');
+  }
+
+  updateLinkClasses() {
+    this.links.attr('class', (link: NetworkChartLink) => {
+      return this.getLinkClasses(link);
+    });
   }
 
   initNodes() {
@@ -141,22 +174,10 @@ export class NetworkChartComponent {
       .enter()
       .append('path')
       .attr('d', d3.symbol().size(900).type(hexagonSymbol))
-      .style('fill', (node: GeneNode) => this.getNodeColor(node))
-      .on('click', (e: any, node: any) => {
-        this.selectedNode = node;
-        this.mainNode.style('fill', (node: any) => {
-          return this.getNodeColor(node);
-        });
-        this.nodes.style('fill', (node: any) => {
-          return this.getNodeColor(node);
-        });
-        this.onNodeClick.emit(node);
-      })
-      .on('mouseover', (e: any) => {
-        d3.select(e.path[0]).style('fill', this.highlightColor);
-      })
-      .on('mouseout', (e: any, node: GeneNode) => {
-        d3.select(e.path[0]).style('fill', this.getNodeColor(node));
+      .on('click', (e: any, NetworkNode: any) => {
+        this.selectedNode = NetworkNode;
+        this.updateNodesClasses();
+        this.onNodeClick.emit(NetworkNode);
       });
 
     this.nodes = this.group
@@ -165,24 +186,10 @@ export class NetworkChartComponent {
       .enter()
       .append('circle')
       .attr('r', 10)
-      .style('fill', (node: GeneNode) => this.getNodeColor(node))
       .on('click', (e: any, node: any) => {
         this.selectedNode = node;
-        this.mainNode.style('fill', (node: any) => {
-          return this.getNodeColor(node);
-        });
-        this.nodes.style('fill', (node: any) => {
-          return this.getNodeColor(node);
-        });
+        this.updateNodesClasses();
         this.onNodeClick.emit(node);
-      })
-      .on('mouseover', (e: any) => {
-        d3.select(e.path[0]).attr('r', 14).style('fill', this.highlightColor);
-      })
-      .on('mouseout', (e: any, node: GeneNode) => {
-        d3.select(e.path[0])
-          .attr('r', 10)
-          .style('fill', this.getNodeColor(node));
       });
 
     this.texts = this.group
@@ -190,8 +197,38 @@ export class NetworkChartComponent {
       .data(this._data.nodes)
       .enter()
       .append('text')
-      .text((node: any) => node.hgnc_symbol || node.ensembl_gene_id)
+      .text((node: any) => node?.label)
       .attr('font-size', 12);
+
+    this.updateNodesClasses();
+  }
+
+  getNodeClasses(node: NetworkChartNode) {
+    const classes = ['network-chart-node'];
+
+    if (node.id === this._data?.nodes[0].id) {
+      classes.push('main');
+    }
+
+    if (node.id === this.selectedNode?.id) {
+      classes.push('selected');
+    }
+
+    if (node.class) {
+      classes.push(node.class);
+    }
+
+    return classes.join(' ');
+  }
+
+  updateNodesClasses() {
+    this.mainNode.attr('class', (node: NetworkChartNode) => {
+      return this.getNodeClasses(node);
+    });
+
+    this.nodes.attr('class', (node: NetworkChartNode) => {
+      return this.getNodeClasses(node);
+    });
   }
 
   initSimulation() {
@@ -202,7 +239,7 @@ export class NetworkChartComponent {
     this.simulation = d3
       .forceSimulation(this._data.nodes)
       .force(
-        'link',
+        'NetworkLink',
         d3
           .forceLink()
           .id(function (d: any) {
@@ -257,64 +294,29 @@ export class NetworkChartComponent {
         // A font size of 12 has 16 pixels per letter, so we pick
         // half the word and make a negative dx. The anchor is in
         // the middle so we half the result again
-        return (
-          (-(d.hgnc_symbol?.length || d.ensembl_gene_id.length) * 16) / 2 / 2
-        );
+        return (-d.label.length * 16) / 2 / 2;
       })
       .attr('y', function (d: any) {
         return d.y + 30;
       });
   }
 
-  getNodeColor(node: GeneNode) {
-    if (
-      this.selectedNode &&
-      node.ensembl_gene_id === this.selectedNode.ensembl_gene_id
-    ) {
-      return this.highlightColor;
-    } else if (
-      this._data?.nodes?.length &&
-      node.ensembl_gene_id === this._data.nodes[0].ensembl_gene_id
-    ) {
-      return '#F47E6C';
-    }
-
-    return this.getColor(node.value);
-  }
-
-  getLinkColor(link: GeneLink) {
-    return this.getColor(link.value);
-  }
-
-  getColor(value: number) {
-    if (value >= 8) {
-      return '#1C3A35';
-    } else if (value >= 6) {
-      return '#0C656B';
-    } else if (value >= 4) {
-      return '#5BB0B5';
-    } else if (value >= 2) {
-      return '#73C8CC';
-    }
-    return '#D3D5DB';
-  }
-
   filter() {
     const hiddenNodes: string[] = [];
 
-    this.nodes.attr('display', (node: GeneNode) => {
-      if (node.value < this._selectedFilter) {
+    this.nodes.attr('display', (node: NetworkChartNode) => {
+      if ((node.value || 0) < this._selectedFilter) {
         hiddenNodes.push(node.id);
         return 'none';
       }
       return 'block';
     });
 
-    this.texts.attr('display', (node: GeneNode) =>
-      node.value < this._selectedFilter ? 'none' : 'block'
+    this.texts.attr('display', (node: NetworkChartNode) =>
+      (node.value || 0) < this._selectedFilter ? 'none' : 'block'
     );
 
-    this.links.attr('display', (link: GeneLink) =>
+    this.links.attr('display', (link: NetworkChartLink) =>
       hiddenNodes.includes(link.source.id) ||
       hiddenNodes.includes(link.target.id)
         ? 'none'
@@ -330,7 +332,7 @@ export class NetworkChartComponent {
         self.chartContainer.nativeElement.parentElement.offsetWidth - 30;
       self.height = 400 + 700 * ((self._data?.nodes?.length || 0) / 100);
       self.chart.attr('width', self.width).attr('height', self.height);
-      self.group.attr('transform', 'translate(0px, 0px)');
+      self.group.attr('transform', 'translate(0, 0)');
     }, 100);
   }
 }

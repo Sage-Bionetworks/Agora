@@ -9,11 +9,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./gene-evidence-metabolomics.component.scss'],
 })
 export class GeneEvidenceMetabolomicsComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -22,8 +22,15 @@ export class GeneEvidenceMetabolomicsComponent {
 
   constructor(private helperService: HelperService) {}
 
+  reset() {
+    this.boxPlotData = [];
+  }
+
   init() {
+    this.reset();
+
     if (!this._gene?.metabolomics?.transposed_boxplot_stats) {
+      this.boxPlotData = [];
       return;
     }
 
@@ -32,7 +39,7 @@ export class GeneEvidenceMetabolomicsComponent {
     this._gene.metabolomics.transposed_boxplot_stats.forEach(
       (item: string, index: number) => {
         boxPlotData.push({
-          key: this._gene.metabolomics.boxplot_group_names[index],
+          key: this._gene?.metabolomics.boxplot_group_names[index],
           value: item,
         });
       }

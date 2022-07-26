@@ -16,7 +16,6 @@ import { retry, catchError } from 'rxjs/operators';
 // Services
 // -------------------------------------------------------------------------- //
 import { MessageService } from 'primeng/api';
-// import { RollbarService } from '../../shared/shared.module';
 
 // -------------------------------------------------------------------------- //
 // Interceptor
@@ -37,7 +36,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        // const rollbar = self.injector.get(RollbarService);
         let errorMessage = '';
         let errorSummary = '';
         let errorDetail = '';
@@ -78,9 +76,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         setTimeout(() => {
           self.messageService.clear();
         }, 3000);
-
-        // Send the error message to Rollbar
-        // rollbar.error(error);
 
         return throwError({ errorSummary, errorMessage });
       })

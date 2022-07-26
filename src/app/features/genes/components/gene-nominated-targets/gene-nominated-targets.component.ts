@@ -1,17 +1,17 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import { Component, OnInit } from '@angular/core';
 
-import { GeneService } from '../../services';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
 import { ApiService } from '../../../../core/services';
-import { HelperService } from '../../../../core/services';
+import { Gene, NominatedTarget, GeneTableColumn } from '../../../../models';
 
-import { Gene, NominatedTarget } from '../../../../models';
-
-interface TableColumn {
-  field: string;
-  header: string;
-  selected?: boolean;
-}
-
+// -------------------------------------------------------------------------- //
+// Component
+// -------------------------------------------------------------------------- //
 @Component({
   selector: 'gene-nominated-targets',
   templateUrl: './gene-nominated-targets.component.html',
@@ -20,8 +20,9 @@ interface TableColumn {
 export class GeneNominatedTargetsComponent implements OnInit {
   data: Gene[] = [];
   searchTerm = '';
+  nominations: number[] = [];
 
-  tableColumns: TableColumn[] = [
+  columns: GeneTableColumn[] = [
     { field: 'hgnc_symbol', header: 'Gene Symbol', selected: true },
     { field: 'nominations', header: 'Nominations', selected: true },
     {
@@ -38,7 +39,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
     {
       field: 'programs_display_value',
       header: 'Program',
-      selected: true,
+      selected: false,
     },
     {
       field: 'input_data_display_value',
@@ -72,11 +73,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private apiService: ApiService,
-    private geneService: GeneService,
-    private helperService: HelperService
-  ) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     this.apiService.getTableData().subscribe((data: Gene[]) => {
@@ -89,6 +86,11 @@ export class GeneNominatedTargetsComponent implements OnInit {
         let inputDataArray: string[] = [];
         let validationStudyDetailsArray: string[] = [];
         let initialNominationArray: number[] = [];
+
+        if (!this.nominations.includes(de.nominations)) {
+          this.nominations.push(de.nominations);
+          this.nominations.sort();
+        }
 
         // Handle NominatedTargets fields
         // First map all entries nested in the data to a new array
@@ -188,9 +190,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
           de.ab_modality_display_value = 'No value';
         }
       });
-      // this.genesInfo = this.dataSource;
-      // this.totalRecords = data.totalRecords ? data.totalRecords : 0;
-      // this.loading = false;
     });
   }
 

@@ -3,7 +3,7 @@
 
 .overview-header {
   .fa-star::before {
-    color: var(--color-quaternary);
+    color: var(--color-secondary);
   }
 
   p-button {
@@ -21,15 +21,4 @@
 }
 
 .nomination-list {
-  .team-name {
-    font-size: $font-size-large;
-  }
-
-  h4 {
-    font-weight: 700;
-    color: #24334f;
-    font-size: 20px;
-    margin-top: 30px;
-    margin-bottom: 15px;
-  }
 }

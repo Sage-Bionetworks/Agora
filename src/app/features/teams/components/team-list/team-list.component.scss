@@ -4,18 +4,12 @@
 .team-list {
   .team {
     &:not(:last-child) {
-      border-bottom: 1px solid var(--color-light);
-      padding-bottom: var(--spacing-xl);
-      margin-bottom: var(--spacing-xl);
+      border-bottom: 1px solid var(--color-separator);
+      margin-bottom: var(--spacing-lg);
     }
   }
 
   .team-summary {
-    max-width: 80ch;
     margin-bottom: var(--spacing-lg);
-  }
-
-  .team-member-list {
-    max-width: 80ch;
   }
 }

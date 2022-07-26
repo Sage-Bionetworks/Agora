@@ -1,6 +1,13 @@
 @import "../../../../../styles/variables";
 @import "../../../../../styles/mixins";
 
+hr {
+  border-color: #ffffff;
+  opacity: 0.25;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 .gene-hero-top {
   .section-inner {
     padding-top: 30px;
@@ -13,17 +20,17 @@
 }
 
 .gene-hero-heading {
-  margin-bottom: 2px;
+  margin-bottom: 15px;
 }
 
 .gene-hero-name {
-  margin-bottom: 6px;
+  margin-bottom: 15px;
 }
 
 .gene-hero-nominated {
   display: flex;
   align-items: center;
-  color: var(--color-primary);
+  margin-bottom: 15px;
 
   svg {
     margin-right: 6px;
@@ -36,10 +43,9 @@
 
 .gene-hero-provider {
   font-style: italic;
-  color: var(--color-darker);
 }
 
 .gene-hero-aliases-heading {
-  margin-bottom: 4px;
-  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 30px;
 }

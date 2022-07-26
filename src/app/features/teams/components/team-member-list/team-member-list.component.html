@@ -2,22 +2,20 @@
   <div class="team-member-list-inner">
     <ng-container *ngIf="team.members?.length">
       <div *ngFor="let member of team.members" class="team-member">
-        <div
-          class="team-member-image"
-          [style]="{
-            'background-image': images.hasOwnProperty(member.name)
-              ? 'url(\'' + images[member.name] + '\')'
-              : ''
-          }"
-        ></div>
-        <h3 class="team-member-name">
+        <div class="team-member-image">
+          <div
+            *ngIf="images[member.name]"
+            style="background-image: url('{{ images[member.name] }}')"
+          ></div>
+        </div>
+        <h5 class="team-member-name">
           <a *ngIf="member.url" href="{{ member.url }}">
             {{ member.name }}
           </a>
           <ng-container *ngIf="!member.url">
             {{ member.name }}
           </ng-container>
-        </h3>
+        </h5>
       </div>
     </ng-container>
   </div>

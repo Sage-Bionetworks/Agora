@@ -18,13 +18,12 @@ modal-link {
   }
 
   svg {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
+    transform: translateY(2px);
   }
 }
 
 .modal-link-text {
-  color: var(--color-link);
-  text-decoration: underline;
-  cursor: pointer;
+  @include link();
 }

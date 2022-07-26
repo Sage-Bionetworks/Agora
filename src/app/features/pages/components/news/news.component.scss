@@ -2,14 +2,12 @@
 @import "../../../../../styles/mixins";
 
 .news-page-content {
-  h3,
-  h4 {
-    margin-bottom: 6px;
-  }
-
   h3 {
-    font-size: 20px;
-    color: #24334f;
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    line-height: var(--line-height-md);
+    color: var(--color-secondary);
+    margin-bottom: 0;
 
     &:not(:first-child) {
       margin-top: 60px;
@@ -17,11 +15,15 @@
   }
 
   h4 {
-    font-size: 24px;
-    margin-top: 20px;
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
   }
 
-  h3 + h4 {
-    margin-top: 0;
+  h3:not(:first-child) {
+    border-top: 1px solid var(--color-separator);
+    padding-top: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
   }
 }

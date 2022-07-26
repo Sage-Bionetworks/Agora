@@ -1,5 +1,5 @@
-@import "../../../../../../../styles/variables";
-@import "../../../../../../../styles/mixins";
+@import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
 
 .gct-filter-panel {
   position: absolute;
@@ -41,7 +41,7 @@
 
     &:hover {
       svg path {
-        stroke: var(--color-primary);
+        stroke: var(--color-action-primary);
       }
     }
   }
@@ -52,7 +52,7 @@
   width: 344px;
   height: 100%;
   background-color: #ffffff;
-  border-right: 1px solid color(border);
+  border-right: 1px solid var(--color-border);
   z-index: 100;
 
   .gct-filter-panel-main-inner {
@@ -99,18 +99,23 @@
 
         svg {
           margin-top: 4px;
+          color: var(--color-gray-500);
         }
 
         &.active,
         &:hover {
-          background-color: var(--color-primary);
-          color: #ffffff;
+          background-color: var(--color-action-primary);
+
+          &,
+          svg {
+            color: #ffffff;
+          }
         }
       }
 
       &.active {
         button {
-          background-color: var(--color-primary);
+          background-color: var(--color-action-primary);
           color: #ffffff;
         }
       }
@@ -122,13 +127,13 @@
     margin-bottom: 60px;
 
     &:after {
-      content: " ";
+      content: ' ';
       display: block;
       position: absolute;
       left: 15px;
       right: 15px;
       bottom: -35px;
-      border-bottom: 1px solid var(--color-light);
+      border-bottom: 1px solid var(--color-gray-300);
     }
   }
 }
@@ -151,7 +156,7 @@
   left: 0;
   bottom: 0;
   min-width: 380px;
-  border-right: 1px solid color(border);
+  border-right: 1px solid var(--color-border);
   background-color: #ffffff;
   opacity: 0;
   visibility: hidden;
@@ -164,7 +169,7 @@
     width: 15px;
     height: 15px;
     font-size: 12px;
-    border: 1px solid color(border);
+    border: 1px solid var(--color-border);
     border-radius: 2px;
     transform: translateY(-1px);
     transition: $transition-duration;
@@ -181,12 +186,12 @@
 
     &.p-focus {
       background-color: transparent !important;
-      border-color: var(--color-primary) !important;
+      border-color: var(--color-action-primary) !important;
     }
 
     &.p-highlight {
-      background-color: var(--color-primary) !important;
-      border-color: var(--color-primary) !important;
+      background-color: var(--color-action-primary) !important;
+      border-color: var(--color-action-primary) !important;
 
       .p-checkbox-icon {
         color: #ffffff;
@@ -275,13 +280,13 @@
 
   &.gct-filter-panel-pane-presets {
     ul li {
-      padding-left: 15px;
-      padding-right: 15px;
+      padding: 0;
       margin-left: -15px;
       margin-right: -15px;
       transition: var(--transition-duration);
 
       label {
+        padding: 11px 15px;
         transition: var(--transition-duration);
 
         > div:first-child {
@@ -290,7 +295,7 @@
       }
 
       &:hover {
-        background-color: var(--color-primary);
+        background-color: var(--color-action-primary);
 
         &,
         label {

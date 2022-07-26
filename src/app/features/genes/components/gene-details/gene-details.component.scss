@@ -2,14 +2,10 @@
 @import "../../../../../styles/mixins";
 
 .gene-details-nav {
-  background-color: #ffffff;
-  box-shadow: 0px 4px 6px color(black-box-shadow, a50);
-
   ul {
     @include reset-ul();
 
     a {
-      text-transform: uppercase;
       cursor: pointer;
       white-space: nowrap;
 
@@ -21,7 +17,7 @@
   }
 }
 
-@media (max-width: 1299px) {
+@media (max-width: 1023px) {
   .gene-details {
     padding-top: 43px;
   }
@@ -58,7 +54,7 @@
             top: 50%;
             left: 0;
             border-radius: 2px;
-            background-color: var(--color-quaternary);
+            background-color: var(--color-secondary);
           }
 
           &:after {
@@ -99,35 +95,109 @@
   }
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 1024px) {
   .gene-details-nav {
+    position: relative;
+    height: var(--gene-details-nav-height);
+
     .gene-details-nav-inner {
-      @include container();
-      display: flex;
-      height: 70px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background-color: #ffffff;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 
     ul {
       display: flex;
       width: 100%;
+      height: var(--gene-details-nav-height);
+      margin-left: auto;
+      margin-right: auto;
+      align-items: center;
+      justify-content: center;
 
-      li {
-        padding-right: 7vw;
-        max-width: 280px;
-      }
+      > li.active {
+        > a {
+          color: var(--color-action-primary);
 
-      a {
-        display: flex;
-        height: 100%;
-        font-size: var(--font-size-lg);
-        color: var(--color-darker);
-        align-items: center;
-
-        &.active {
-          font-weight: 700;
-          color: var(--color-text);
+          &:after {
+            opacity: 1;
+            visibility: visible;
+          }
         }
       }
+    }
+
+    li {
+      padding: 0 30px;
+    }
+
+    a {
+      position: relative;
+      display: flex;
+      height: 100%;
+      padding: 8px 16px;
+      font-size: 1.313rem;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      transition: var(--transition-duration);
+      align-items: center;
+
+      &:after {
+        content: " ";
+        position: absolute;
+        display: block;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background-color: var(--color-action-primary);
+        border-radius: 2px;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition-duration);
+      }
+    }
+
+    .gene-details-subnav {
+      position: absolute;
+      height: var(--gene-details-nav-height);
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: var(--gene-details-subnav-offset);
+      background-color: var(--color-gray-100);
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      visibility: hidden;
+
+      a {
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    ul:not(.gene-details-subnav) > li.active {
+      .gene-details-subnav {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    &.sticky {
+      .gene-details-nav-inner {
+        position: fixed;
+      }
+    }
+
+    &.has-active-child {
+      height: calc(
+        var(--gene-details-nav-height) * 2 + var(--gene-details-subnav-offset)
+      );
     }
   }
 }
@@ -138,10 +208,11 @@
 }
 
 .gene-details-panel {
+  position: absolute;
+  width: 100%;
+  top: 0;
   opacity: 0;
   visibility: hidden;
-  position: absolute;
-  top: 0;
   z-index: 100;
 
   &.active {

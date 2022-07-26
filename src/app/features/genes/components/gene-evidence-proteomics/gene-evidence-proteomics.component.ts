@@ -10,11 +10,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./gene-evidence-proteomics.component.scss'],
 })
 export class GeneEvidenceProteomicsComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -35,7 +35,22 @@ export class GeneEvidenceProteomicsComponent {
     private geneService: GeneService
   ) {}
 
+  reset() {
+    this.uniProtIds = [];
+    this.selectedUniProtId = '';
+
+    this.LFQData = undefined;
+    this.LFQYAxisMin = undefined;
+    this.LFQYAxisMax = undefined;
+
+    this.TMTData = undefined;
+    this.TMTYAxisMin = undefined;
+    this.TMTYAxisMax = undefined;
+  }
+
   init() {
+    this.reset();
+
     if (!this._gene?.protein_LFQ) {
       return;
     }
@@ -60,7 +75,7 @@ export class GeneEvidenceProteomicsComponent {
     }
 
     this.initLFQ();
-    this.initTMT();
+    //this.initTMT();
   }
 
   initLFQ() {
@@ -68,7 +83,7 @@ export class GeneEvidenceProteomicsComponent {
       const distribution = data.proteomic_LFQ;
 
       const differentialExpression =
-        this._gene.protein_LFQ?.filter((item: any) => {
+        this._gene?.protein_LFQ?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
@@ -131,10 +146,9 @@ export class GeneEvidenceProteomicsComponent {
   initTMT() {
     this.geneService.getDistribution().subscribe((data: any) => {
       const distribution = data.proteomic_TMT;
-      console.log('distribution', data);
 
       const differentialExpression =
-        this._gene.protein_TMT?.filter((item: any) => {
+        this._gene?.protein_TMT?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
@@ -189,8 +203,6 @@ export class GeneEvidenceProteomicsComponent {
       if (this.TMTYAxisMax) {
         this.TMTYAxisMax += 0.2;
       }
-
-      console.log(this.TMTYAxisMin, this.TMTYAxisMax);
 
       this.TMTData = TMTData;
     });

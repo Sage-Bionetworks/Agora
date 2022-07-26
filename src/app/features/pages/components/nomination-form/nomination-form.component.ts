@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -10,7 +10,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
   selector: 'nomination-form-page',
   templateUrl: './nomination-form.component.html',
   styleUrls: ['./nomination-form.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class NominationFormPageComponent {
   constructor() {}

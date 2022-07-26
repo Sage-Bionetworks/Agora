@@ -1,17 +1,17 @@
-const path = require("path");
-const nodeExternals = require("webpack-node-externals");
-const AngularWebpackPlugin = require("@ngtools/webpack").AngularWebpackPlugin;
-const NodemonPlugin = require("nodemon-webpack-plugin");
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
+const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
-const helpers = require("./helpers");
+const helpers = require('./helpers');
 
 module.exports = function (options) {
   const ENV =
     process.env.mode ||
     process.env.NODE_ENV ||
     process.env.ENV ||
-    "development";
-  const HOST = process.env.HOST || "localhost";
+    'development';
+  const HOST = process.env.HOST || 'localhost';
 
   const MONGODB_HOST = process.env.MONGODB_HOST || null;
   const MONGODB_PORT = process.env.MONGODB_PORT || null;
@@ -21,7 +21,7 @@ module.exports = function (options) {
     {},
     /*buildUtils.DEFAULT_METADATA*/ {},
     {
-      host: process.env.HOST || "localhost",
+      host: process.env.HOST || 'localhost',
       port: process.env.PORT || 8080,
       ENV: ENV,
       MONGODB_HOST: MONGODB_HOST,
@@ -32,21 +32,21 @@ module.exports = function (options) {
 
   return {
     entry: {
-      server: helpers.root("src/server/server.ts"),
+      server: helpers.root('src/server/server.ts'),
     },
     output: {
-      filename: "[name].js",
-      path: helpers.root("dist"),
+      filename: '[name].js',
+      path: helpers.root('dist'),
     },
-    target: "node",
+    target: 'node',
     externals: [nodeExternals()],
     node: {
       __dirname: false,
       __filename: false,
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js"],
-      modules: [helpers.root("node_modules")],
+      extensions: ['.ts', '.tsx', '.js'],
+      modules: [helpers.root('node_modules')],
       fallback: {
         crypto: false,
         http: false,
@@ -70,9 +70,9 @@ module.exports = function (options) {
           test: /\.tsx?$/,
           use: [
             {
-              loader: "ts-loader",
+              loader: 'ts-loader',
               options: {
-                configFile: "tsconfig.server.json",
+                configFile: 'tsconfig.server.json',
               },
             },
           ],
@@ -83,11 +83,11 @@ module.exports = function (options) {
     plugins: [
       new NodemonPlugin({
         // What to watch.
-        watch: helpers.root("dist/server.js"),
+        watch: helpers.root('dist/server.js'),
         // Detailed log.
         verbose: true,
         // Node arguments.
-        nodeArgs: ["--inspect=9222", "--max_old_space_size=10000"],
+        nodeArgs: ['--inspect=9222', '--max_old_space_size=10000'],
       }),
     ],
   };

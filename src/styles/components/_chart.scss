@@ -20,14 +20,14 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: var(--color-lighter);
+    background-color: var(--color-gray-100);
     align-items: center;
     justify-content: center;
 
     .chart-no-data-text {
       font-size: var(--font-size-lg);
       font-style: italic;
-      color: var(--color-darker);
+      color: var(--color-gray-600);
     }
   }
 
@@ -37,18 +37,33 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: var(--color-lighter);
+    background-color: var(--color-gray-200);
 
     .loading-overlay-inner {
       height: 100%;
     }
   }
 
+  .axis {
+    .tick line {
+      opacity: 0;
+    }
+  }
+
+  .axis.y {
+    &:after {
+      content: " ";
+      display: block;
+      width: 2px;
+      background-color: var(--color-chart-axis);
+    }
+  }
+
   .chart-x-axis-label,
   .y-axis-label,
   .x-axis-label {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
     color: var(--color-chart-axis-label);
     fill: var(--color-chart-axis-label);
     text-transform: uppercase;
@@ -98,7 +113,7 @@
 
     .domain {
       stroke: var(--color-chart-axis);
-      stroke-width: 4px;
+      stroke-width: 2px;
     }
   }
 }
@@ -151,15 +166,23 @@
   }
 
   svg {
+    padding-left: 1px;
+
     .barLabel {
       font-size: 1rem;
       fill: var(--color-chart-axis-label);
       cursor: default;
     }
 
-    .axis line {
-      stroke: transparent;
-    }
+    // .axis.y {
+    //   .tick text {
+    //     transform: translateY(-12px);
+    //   }
+    // }
+
+    // .chart-body > g {
+    //   transform: translateY(-12px);
+    // }
   }
 }
 
@@ -206,7 +229,7 @@
     g.confidence-text-right text {
       cursor: default;
       font-size: var(--font-size-sm);
-      fill: var(--color-darkest);
+      fill: #4a5056;
     }
 
     g.row rect {
@@ -259,8 +282,8 @@
     .box {
       line,
       rect {
-        stroke: var(--color-dark);
-        stroke-width: 3px;
+        stroke: #bcc0ca;
+        stroke-width: 2px;
       }
     }
   }

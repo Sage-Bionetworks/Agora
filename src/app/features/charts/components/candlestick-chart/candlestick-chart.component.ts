@@ -11,11 +11,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./candlestick-chart.component.scss'],
 })
 export class CandlestickChartComponent extends BaseChartComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -34,9 +34,10 @@ export class CandlestickChartComponent extends BaseChartComponent {
 
   override init() {
     if (
-      !this._gene.neuropathologic_correlations?.length ||
+      !this._gene?.neuropathologic_correlations?.length ||
       !this.chartContainer.nativeElement
     ) {
+      this.chartData = [];
       return;
     }
 
@@ -57,7 +58,7 @@ export class CandlestickChartComponent extends BaseChartComponent {
 
   initData() {
     const neuropathCorrelations =
-      this._gene.neuropathologic_correlations?.filter(
+      this._gene?.neuropathologic_correlations?.filter(
         (item: any) => item.neuropath_type !== 'DCFDX'
       ) || [];
 
@@ -87,7 +88,7 @@ export class CandlestickChartComponent extends BaseChartComponent {
     const margin = { top: 100, right: 0, bottom: 10, left: 80 };
     const width = chartContainerEl.offsetWidth - margin.left - margin.right;
     const height = this.chartHeight - margin.top - margin.bottom;
-    const color = '#5171C0';
+    const color = this.helperService.getColor('secondary');
     const tooltip = this.getTooltip(
       'value',
       'chart-value-tooltip candlestick-chart-value-tooltip'
@@ -178,7 +179,7 @@ export class CandlestickChartComponent extends BaseChartComponent {
       .on('mouseover', function (event: any, d: any) {
         const isOrNot = d.value.pval_adj <= 0.05 ? 'is' : 'is not';
         const text = `${
-          self._gene.hgnc_symbol || self._gene.ensembl_gene_id
+          self._gene?.hgnc_symbol || self._gene?.ensembl_gene_id
         } ${isOrNot} significantly correlated with ${
           d.key
         }, with an odds ratio of ${self.helperService.getSignificantFigures(

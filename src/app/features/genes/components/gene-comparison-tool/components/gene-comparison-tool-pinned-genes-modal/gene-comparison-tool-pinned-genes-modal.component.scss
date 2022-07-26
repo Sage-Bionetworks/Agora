@@ -43,8 +43,8 @@
       height: 36px;
       border-radius: 15px;
       padding: 0 20px;
-      border: 1px solid var(--color-secondary);
-      background-color: var(--color-secondary);
+      border: 1px solid var(--color-action-primary);
+      background-color: var(--color-action-primary);
       align-items: center;
       justify-content: center;
       font-size: var(--font-size-xs);
@@ -58,7 +58,7 @@
 
       &.gct-pinned-genes-conversion-cancel {
         background-color: #ffffff;
-        color: var(--color-secondary);
+        color: var(--color-action-primary);
       }
 
       &:hover {

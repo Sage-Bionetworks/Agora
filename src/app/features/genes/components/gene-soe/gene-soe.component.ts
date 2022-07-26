@@ -8,5 +8,5 @@ import { Gene } from '../../../../models';
   styleUrls: ['./gene-soe.component.scss'],
 })
 export class GeneSoeComponent {
-  @Input() gene: Gene = {} as Gene;
+  @Input() gene: Gene | undefined;
 }

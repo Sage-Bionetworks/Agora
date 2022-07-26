@@ -1,26 +1,35 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
 
-import { Gene, GeneNetwork, GeneNode } from '../../../../models';
+import {
+  Gene,
+  SimilarGenesNetworkNode,
+  SimilarGenesNetworkLink,
+  NetworkChartData,
+  NetworkChartNode,
+  NetworkChartLink,
+} from '../../../../models';
 import { GeneService } from '../../services';
 
 @Component({
   selector: 'gene-network',
   templateUrl: './gene-network.component.html',
   styleUrls: ['./gene-network.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class GeneNetworkComponent implements OnInit {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
+    this.selectedGene = this._gene;
     this.init();
   }
 
-  data: GeneNetwork | undefined;
+  data: NetworkChartData | undefined;
   selectedGene: Gene | undefined;
 
   filters: number[] = [];
@@ -31,33 +40,61 @@ export class GeneNetworkComponent implements OnInit {
   ngOnInit() {}
 
   init() {
-    if (!this._gene?.links) {
+    if (!this._gene?.similar_genes_network?.nodes?.length) {
+      this.data = undefined;
       return;
     }
 
-    if (!this._gene.network) {
-      this._gene.network = cloneDeep(this.geneService.getNetwork(this._gene));
-    }
+    const nodes: NetworkChartNode[] =
+      this._gene.similar_genes_network.nodes.map(
+        (node: SimilarGenesNetworkNode) => {
+          return {
+            id: node.ensembl_gene_id,
+            label: node.hgnc_symbol || node.ensembl_gene_id,
+            value: node.brain_regions?.length || 0,
+            class: 'edges-' + (node.brain_regions?.length || 0),
+          };
+        }
+      );
 
-    this.data = this._gene.network;
-    this.selectedGene = this._gene;
+    const links: NetworkChartLink[] =
+      this._gene.similar_genes_network.links.map(
+        (link: SimilarGenesNetworkLink) => {
+          return {
+            source: nodes.find(
+              (node: NetworkChartNode) => node.id === link.source
+            ) as NetworkChartNode,
+            target: nodes.find(
+              (node: NetworkChartNode) => node.id === link.target
+            ) as NetworkChartNode,
+            value: link.brain_regions?.length,
+            class: 'edges-' + (link.brain_regions?.length || 0),
+          };
+        }
+      );
 
-    this.filters = [...Array(this.data.maxEdges).keys()].map((n) => {
-      return ++n;
-    });
+    this.data = {
+      nodes: nodes,
+      links: links,
+    };
+
+    this.filters = [...Array(this._gene.similar_genes_network.max).keys()].map(
+      (n) => {
+        return ++n;
+      }
+    );
   }
 
-  onNodeClick(node: GeneNode) {
-    this.geneService.getGene(node.ensembl_gene_id).subscribe((gene: any) => {
-      if (!gene.network) {
-        gene.network = this.geneService.getNetwork(gene);
-      }
+  onNodeClick(node: NetworkChartNode) {
+    this.geneService.getGene(node.id).subscribe((gene: any) => {
       this.selectedGene = gene;
     });
   }
 
   navigateToSimilarGenes() {
-    this.router.navigate(['/genes/' + this._gene.ensembl_gene_id + '/similar']);
+    this.router.navigate([
+      '/genes/' + this._gene?.ensembl_gene_id + '/similar',
+    ]);
   }
 
   // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
@@ -90,13 +127,13 @@ export class GeneNetworkComponent implements OnInit {
 
   // Use black text if 'isStateApplicable' is false ('No data')
   // Otherwise, use green text when 'state' is true, use red text when 'state' is false
-  getTextColorClass(state: boolean, isStateApplicable = true): any {
-    const colorClassObj = {} as any;
-    if (state && isStateApplicable) {
-      colorClassObj['text-success'] = true;
-    } else if (!state && isStateApplicable) {
-      colorClassObj['text-danger'] = true;
-    }
-    return colorClassObj;
-  }
+  // getTextColorClass(state: boolean, isStateApplicable = true): any {
+  //   const colorClassObj = {} as any;
+  //   if (state && isStateApplicable) {
+  //     colorClassObj['text-success'] = true;
+  //   } else if (!state && isStateApplicable) {
+  //     colorClassObj['text-danger'] = true;
+  //   }
+  //   return colorClassObj;
+  // }
 }

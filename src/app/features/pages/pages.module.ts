@@ -14,7 +14,6 @@ import { GenesModule } from '../genes';
 // -------------------------------------------------------------------------- //
 import {
   AboutPageComponent,
-  HelpPageComponent,
   HomePageComponent,
   NewsPageComponent,
   NominationFormPageComponent,
@@ -27,7 +26,6 @@ import {
 @NgModule({
   declarations: [
     AboutPageComponent,
-    HelpPageComponent,
     HomePageComponent,
     NewsPageComponent,
     NominationFormPageComponent,

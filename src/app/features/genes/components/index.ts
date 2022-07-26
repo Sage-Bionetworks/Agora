@@ -1,7 +1,6 @@
 export * from './gene-comparison-tool';
 export * from './gene-details';
 export * from './gene-druggability';
-export * from './gene-evidence';
 export * from './gene-evidence-metabolomics';
 export * from './gene-evidence-proteomics';
 export * from './gene-evidence-rna';

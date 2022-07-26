@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./modal-link.component.scss'],
 })
 export class ModalLinkComponent {
-  @Input() icon = 'fa-solid fa-circle-info';
+  @Input() icon = 'svg';
   @Input() text = '';
   @Input() header = '';
 

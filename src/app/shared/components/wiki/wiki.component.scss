@@ -8,7 +8,7 @@
     white-space: pre-wrap;
 
     a {
-      color: var(--color-link);
+      @include link();
     }
 
     .email-link {
@@ -18,7 +18,7 @@
     }
 
     .wiki-no-data {
-      color: var(--color-neutral);
+      color: var(--color-gray-400);
     }
 
     table {
@@ -36,7 +36,7 @@
       }
 
       tr:nth-child(odd) {
-        background-color: var(--color-lighter);
+        background-color: var(--color-gray-200);
       }
     }
   }

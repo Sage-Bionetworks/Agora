@@ -1,23 +1,33 @@
-<div class="section">
-  <div class="section-inner">
-    <h2>Summary of Evidence</h2>
-    <p>
-      This tab shows an overview of how the selected gene is associated with AD.
-    </p>
+<ng-container *ngIf="gene">
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2>Summary of Evidence</h2>
+        <p class="mb-lg">
+          This tab shows an overview of how the selected gene is associated with
+          AD.
+        </p>
+        <gene-soe-list [gene]="gene"></gene-soe-list>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="mb-xl">
-  <gene-soe-list [gene]="gene"></gene-soe-list>
-</div>
-
-<div class="section">
-  <div class="section-inner">
-    <h2>TREAT-AD Consortium Target Ranking Scores</h2>
-    <p>
-      The TREAT-AD Center at Emory-Sage-SGC has developed a target ranking score
-      encompassing genomics, genetics, and literature evidence.
-    </p>
-    <gene-soe-charts [gene]="gene"></gene-soe-charts>
+  <div class="section">
+    <div class="section-inner pt-0">
+      <div class="container-sm">
+        <h2>TREAT-AD Consortium Target Ranking Scores</h2>
+        <p>
+          The TREAT-AD Center at Emory-Sage-SGC has developed a target ranking
+          score encompassing genomics, genetics, and literature evidence.
+        </p>
+      </div>
+    </div>
   </div>
-</div>
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <gene-soe-charts [gene]="gene"></gene-soe-charts>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -22,7 +22,6 @@ export const d3Box = function () {
   let whiskers = boxWhiskers;
   let quartiles = boxQuartiles;
   let tickFormat = null;
-  const rx = 8;
 
   // Enhanced attributes
   let renderDataPoints = false;
@@ -144,7 +143,7 @@ export const d3Box = function () {
         .attr('width', width)
         .attr('height', (d) => x0(d[0]) - x0(d[2]))
         // ** Agora custom code
-        .attr('rx', rx || 0)
+        .attr('rx', 8)
         .style('fill-opacity', renderDataPoints ? 0.1 : 1)
         .transition()
         .duration(duration)

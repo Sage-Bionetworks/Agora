@@ -19,11 +19,11 @@ export interface GeneResourceType {
   styleUrls: ['./gene-druggability.component.scss'],
 })
 export class GeneDruggabilityComponent implements OnInit {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }

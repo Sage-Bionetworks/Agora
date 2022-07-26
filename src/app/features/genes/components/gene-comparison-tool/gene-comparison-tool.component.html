@@ -4,6 +4,7 @@
       <div class="gct-header-inner">
         <div class="gct-header-left">
           <button
+            class="btn btn-rounded btn-primary"
             (click)="filterPanel.toggle()"
             pTooltip="Filter genes by Nominations, Teams, Cohort, and more."
             tooltipPosition="right"
@@ -25,10 +26,11 @@
           </button>
         </div>
         <div class="gct-header-middle">
-          <h3 class="gct-heading">Gene Comparison Tool</h3>
+          <h1 class="gct-heading h2">Gene Comparison Tool</h1>
         </div>
         <div class="gct-header-right">
           <button
+            class="btn btn-rounded btn-outlined-primary"
             (click)="copyUrl()"
             pTooltip="Copy the URL that captures the table's current filters, sorting, and pinned genes."
             tooltipPosition="left"
@@ -221,6 +223,14 @@
                       tooltipStyleClass="tooltip"
                     ></p-sortIcon>
                   </th>
+                  <th
+                    *ngIf="columns.length < 2"
+                    class="gct-spacing-column"
+                  ></th>
+                  <th
+                    *ngIf="columns.length < 3"
+                    class="gct-spacing-column"
+                  ></th>
                 </tr>
               </ng-template>
             </p-table>
@@ -240,11 +250,11 @@
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path
+                      <!-- <path
                         opacity="0.3"
                         d="M13 9V5H11V11H9.83002L12 13.17L14.17 11H13V9Z"
                         fill="#3E61A9"
-                      />
+                      /> -->
                       <path
                         d="M15 9V3H9V9H5L12 16L19 9H15ZM12 13.17L9.83 11H11V5H13V11H14.17L12 13.17ZM5 18H19V20H5V18Z"
                         fill="#3E61A9"
@@ -275,27 +285,7 @@
                           ({{ gene.uniprotid }})
                         </ng-container>
                       </div>
-                      <div>
-                        <button
-                          (click)="unpinGene(gene)"
-                          pTooltip="Unpin this gene"
-                          tooltipPosition="top"
-                          tooltipStyleClass="tooltip"
-                        >
-                          <svg
-                            width="12"
-                            height="17"
-                            viewBox="0 0 12 17"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M7.65 1.7V5.95C7.65 6.902 7.9645 7.786 8.5 8.5H3.4C3.9525 7.769 4.25 6.885 4.25 5.95V1.7H7.65ZM10.2 0H1.7C1.2325 0 0.85 0.3825 0.85 0.85C0.85 1.3175 1.2325 1.7 1.7 1.7H2.55V5.95C2.55 7.361 1.411 8.5 0 8.5V10.2H5.0745V16.15L5.9245 17L6.7745 16.15V10.2H11.9V8.5C10.489 8.5 9.35 7.361 9.35 5.95V1.7H10.2C10.6675 1.7 11.05 1.3175 11.05 0.85C11.05 0.3825 10.6675 0 10.2 0Z"
-                              fill="white"
-                            />
-                          </svg>
-                        </button>
-                      </div>
+
                       <div>
                         <button
                           (click)="navigateToGene(gene)"
@@ -317,6 +307,27 @@
                           </svg>
                         </button>
                       </div>
+                      <div>
+                        <button
+                          (click)="unpinGene(gene)"
+                          pTooltip="Unpin this gene"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <svg
+                            width="12"
+                            height="17"
+                            viewBox="0 0 12 17"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M7.65 1.7V5.95C7.65 6.902 7.9645 7.786 8.5 8.5H3.4C3.9525 7.769 4.25 6.885 4.25 5.95V1.7H7.65ZM10.2 0H1.7C1.2325 0 0.85 0.3825 0.85 0.85C0.85 1.3175 1.2325 1.7 1.7 1.7H2.55V5.95C2.55 7.361 1.411 8.5 0 8.5V10.2H5.0745V16.15L5.9245 17L6.7745 16.15V10.2H11.9V8.5C10.489 8.5 9.35 7.361 9.35 5.95V1.7H10.2C10.6675 1.7 11.05 1.3175 11.05 0.85C11.05 0.3825 10.6675 0 10.2 0Z"
+                              fill="white"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </td>
                   <td
@@ -326,6 +337,10 @@
                     <button
                       [class]="getCircleClass(column, gene)"
                       [style]="getCircleStyle(column, gene)"
+                      [pTooltip]="getCircleTooltip(column, gene)"
+                      [tooltipDisabled]="isCircleTooltipDisabled()"
+                      tooltipPosition="bottom"
+                      tooltipStyleClass="tooltip"
                       (click)="
                         detailsPanel.toggle(
                           $event,
@@ -336,6 +351,14 @@
                       <span></span>
                     </button>
                   </td>
+                  <td
+                    *ngIf="columns.length < 2"
+                    class="gct-spacing-column"
+                  ></td>
+                  <td
+                    *ngIf="columns.length < 3"
+                    class="gct-spacing-column"
+                  ></td>
                 </tr>
               </ng-template>
             </p-table>
@@ -473,36 +496,31 @@
                     *ngFor="let column of columns"
                     [style]="{ width: columnWidth }"
                   >
-                    <ng-container
-                      *ngIf="getDetailsPanelData(column, gene); let panelData"
+                    <button
+                      [class]="getCircleClass(column, gene)"
+                      [style]="getCircleStyle(column, gene)"
+                      [pTooltip]="getCircleTooltip(column, gene)"
+                      [tooltipDisabled]="isCircleTooltipDisabled()"
+                      tooltipPosition="bottom"
+                      tooltipStyleClass="tooltip"
+                      (click)="
+                        detailsPanel.toggle(
+                          $event,
+                          getDetailsPanelData(column, gene)
+                        )
+                      "
                     >
-                      <ng-container
-                        *ngIf="getRoundedGeneData(panelData); let roundedData"
-                      >
-                        <button
-                          [class]="getCircleClass(column, gene)"
-                          [style]="getCircleStyle(column, gene)"
-                          (click)="detailsPanel.toggle($event, panelData)"
-                          [pTooltip]="
-                            'L2FC: ' +
-                            roundedData.l2fc +
-                            '\n' +
-                            'P-value: ' +
-                            roundedData.pValue +
-                            '\n\n' +
-                            'Click for more details.'
-                          "
-                          [tooltipDisabled]="
-                            detailsPanel.panels?.first?.overlayVisible || false
-                          "
-                          tooltipPosition="bottom"
-                          tooltipStyleClass="tooltip"
-                        >
-                          <span></span>
-                        </button>
-                      </ng-container>
-                    </ng-container>
+                      <span></span>
+                    </button>
                   </td>
+                  <td
+                    *ngIf="columns.length < 2"
+                    class="gct-spacing-column"
+                  ></td>
+                  <td
+                    *ngIf="columns.length < 3"
+                    class="gct-spacing-column"
+                  ></td>
                 </tr>
               </ng-template>
             </p-table>
@@ -534,6 +552,8 @@
 
     <gene-comparison-tool-details-panel
       #detailsPanel
+      (onShowLegend)="legendPanel.toggle()"
+      (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
     ></gene-comparison-tool-details-panel>
     <gene-comparison-tool-how-to-panel
       #howToPanel

@@ -35,13 +35,12 @@
   margin: 0;
 }
 
-@mixin container() {
-  max-width: var(--container-max-width);
+@mixin container($width: "md") {
+  max-width: var(--container-max-width-#{$width});
+  padding-left: 0;
+  padding-right: 0;
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--container-gutter-width);
-  padding-right: var(--container-gutter-width);
-  box-sizing: border-box;
 }
 
 /**
@@ -69,6 +68,10 @@
 
 @mixin link {
   color: var(--color-link);
-  text-decoration: underline;
   cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

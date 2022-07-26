@@ -30,7 +30,7 @@ export class GeneModelSelectorComponent {
     }
   }
 
-  selected: Option = {} as Option;
+  @Input() selected: Option = {} as Option;
 
   @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 

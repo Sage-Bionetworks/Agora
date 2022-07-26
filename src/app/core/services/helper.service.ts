@@ -22,6 +22,7 @@ export class HelperService {
   loading = false;
 
   gctSelection: string[] = [];
+  modelSelection = '';
 
   @Output() loadingChange: EventEmitter<any> = new EventEmitter();
 
@@ -94,9 +95,16 @@ export class HelperService {
   }
 
   getOffset(el: any) {
+    if (!el) {
+      return { top: 0, left: 0 };
+    }
+
     const rect = el.getBoundingClientRect();
     const scroll = this.getScrollTop();
-    return { top: rect.top + scroll.y, left: rect.left + scroll.x };
+    return {
+      top: rect.top + scroll.y,
+      left: rect.left + scroll.x,
+    };
   }
 
   truncateNumberToFixed(num: number, fixed: number): string {
@@ -134,5 +142,30 @@ export class HelperService {
 
   deleteGCTSection() {
     this.gctSelection = [];
+  }
+
+  getColor(name: string) {
+    switch (name) {
+      case 'primary':
+        return '#3c4a63';
+        break;
+      case 'secondary':
+        return '#8b8ad1';
+        break;
+      case 'tertiary':
+        return '#42c7bb';
+        break;
+      case 'action-primary':
+        return '#5081a7';
+        break;
+      default:
+        return '';
+    }
+  }
+
+  getUrlParam(name: string) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get(name);
   }
 }

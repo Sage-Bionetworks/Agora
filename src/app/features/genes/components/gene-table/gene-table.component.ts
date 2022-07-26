@@ -1,18 +1,20 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
 import screenfull from 'screenfull';
 
-import { Gene } from '../../../../models';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { Gene, GeneTableColumn } from '../../../../models';
 import { HelperService } from '../../../../core/services';
 
-interface TableColumn {
-  field: string;
-  header: string;
-  selected?: boolean;
-  width?: number;
-}
-
+// -------------------------------------------------------------------------- //
+// Component
+// -------------------------------------------------------------------------- //
 @Component({
   selector: 'gene-table',
   templateUrl: './gene-table.component.html',
@@ -44,35 +46,36 @@ export class GeneTableComponent implements OnInit {
   // Columns ---------------------------------------------------------------- //
 
   @Input() requiredColumns: string[] = ['hgnc_symbol'];
-  optionalColumns: TableColumn[] = [];
+  optionalColumns: GeneTableColumn[] = [];
 
-  _columns: TableColumn[] = [
+  _columns: GeneTableColumn[] = [
     { field: 'hgnc_symbol', header: 'Gene Symbol', selected: true },
     { field: 'ensembl_gene_id', header: 'Ensembl Gene ID', selected: true },
   ];
-  @Input() get columns(): TableColumn[] {
+  @Input() get columns(): GeneTableColumn[] {
     return this._columns;
   }
-  set columns(columns: TableColumn[]) {
-    this._columns = columns.map((c: TableColumn) => {
+  set columns(columns: GeneTableColumn[]) {
+    this._columns = columns.map((c: GeneTableColumn) => {
       if (!c.width) {
         c.width = Math.max(94 + c.header.length * 12, 250);
       }
       return c;
     });
     this.selectedColumns = this.columns.filter(
-      (c: TableColumn) => c.selected || this.requiredColumns.includes(c.field)
+      (c: GeneTableColumn) =>
+        c.selected || this.requiredColumns.includes(c.field)
     );
     this.optionalColumns = this.columns.filter(
-      (c: TableColumn) => !this.requiredColumns.includes(c.field)
+      (c: GeneTableColumn) => !this.requiredColumns.includes(c.field)
     );
   }
 
-  _selectedColumns: TableColumn[] = [];
-  @Input() get selectedColumns(): TableColumn[] {
+  _selectedColumns: GeneTableColumn[] = [];
+  @Input() get selectedColumns(): GeneTableColumn[] {
     return this._selectedColumns;
   }
-  set selectedColumns(column: TableColumn[]) {
+  set selectedColumns(column: GeneTableColumn[]) {
     this._selectedColumns = this.columns.filter((c) => column.includes(c));
   }
 
@@ -95,39 +98,38 @@ export class GeneTableComponent implements OnInit {
   customSort(event: any) {
     event.data.sort((gene1: any, gene2: any) => {
       let result = null;
-      let value1 = null;
-      let value2 = null;
+      let a = null;
+      let b = null;
 
       if ('hgnc_symbol' === event.field) {
-        value1 = gene1.hgnc_symbol || gene1.ensembl_gene_id;
-        value2 = gene2.hgnc_symbol || gene2.ensembl_gene_id;
+        a = gene1.hgnc_symbol || gene1.ensembl_gene_id;
+        b = gene2.hgnc_symbol || gene2.ensembl_gene_id;
       } else {
-        value1 = gene1[event.field];
-        value2 = gene2[event.field];
+        a = gene1[event.field];
+        b = gene2[event.field];
       }
 
-      if (value1 == null && value2 != null) {
+      if (a == null && b != null) {
         result = -1;
-      } else if (value1 != null && value2 == null) {
+      } else if (a != null && b == null) {
         result = 1;
-      } else if (value1 == null && value2 == null) {
+      } else if (a == null && b == null) {
         result = 0;
-      } else if (typeof value1 === 'string' && typeof value2 === 'string') {
+      } else if (typeof a === 'string' && typeof b === 'string') {
         // Natural sorting for this score type, which can be >= 10
         if (event.field === 'sm_druggability_display_value') {
-          const numericValue1 = parseInt(value1.split(':')[0], 10);
-          const numericValue2 = parseInt(value2.split(':')[0], 10);
-          if (!isNaN(numericValue1) && !isNaN(numericValue2)) {
-            if (numericValue1 < numericValue2) {
-              result = -1;
-            }
-            result = numericValue1 > numericValue2 ? 1 : 0;
-          }
+          let nA = parseInt(a.split(':')[0], 10);
+          let nB = parseInt(b.split(':')[0], 10);
+
+          nA = !isNaN(nA) ? nA : 999 * event.order;
+          nB = !isNaN(nB) ? nB : 999 * event.order;
+
+          result = nA < nB ? -1 : nA > nB ? 1 : 0;
         } else {
-          result = value1.localeCompare(value2);
+          result = a.localeCompare(b);
         }
       } else {
-        result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+        result = a < b ? -1 : a > b ? 1 : 0;
       }
 
       return event.order * (result || 0);

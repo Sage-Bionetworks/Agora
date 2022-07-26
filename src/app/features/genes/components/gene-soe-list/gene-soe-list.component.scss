@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .gene-seo-list {
   @include reset-ul();
@@ -8,14 +8,12 @@
     .item-inner {
       @include container();
       display: flex;
-      padding-top: 20px;
-      padding-bottom: 28px;
+      padding: 20px var(--spacing-lg) 28px var(--spacing-lg);
 
       > div {
         &:first-child {
           flex-grow: 1;
-          max-width: 800px;
-          padding-right: 30px;
+          padding-right: var(--spacing-lg);
         }
 
         &:last-child {
@@ -32,11 +30,7 @@
     }
 
     .item-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #3c4a63;
-      font-size: 18px;
-      margin-bottom: 15px;
+      color: var(--color-text);
     }
 
     .item-description {
@@ -51,13 +45,13 @@
       line-height: normal;
       font-size: 18px;
       text-decoration: underline;
-      color: #5bb0b5 !important;
+      color: var(--color-link);
       position: relative;
       top: inherit;
     }
 
     &:nth-child(odd) {
-      background-color: $table-row-even;
+      background-color: var(--color-gray-100);
     }
   }
 }

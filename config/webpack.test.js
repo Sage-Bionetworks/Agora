@@ -2,18 +2,18 @@
  * @author: @AngularClass
  */
 
-const helpers = require("./helpers");
+const helpers = require('./helpers');
 
 /**
  * Webpack Plugins
  */
-const DefinePlugin = require("webpack/lib/DefinePlugin");
-const LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
-const ContextReplacementPlugin = require("webpack/lib/ContextReplacementPlugin");
-const autoprefixer = require("autoprefixer");
+const DefinePlugin = require('webpack/lib/DefinePlugin');
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const autoprefixer = require('autoprefixer');
 
-const VERSION = JSON.stringify(require("../package.json")["version"]);
-const DATA_VERSION = JSON.stringify(require("../package.json")["data-version"]);
+const VERSION = JSON.stringify(require('../package.json')['version']);
+const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
 
 /**
  * Webpack Constants
@@ -22,7 +22,7 @@ const ENV =
   (process.env.mode =
   process.env.ENV =
   process.env.NODE_ENV =
-    "test");
+    'test');
 
 /**
  * Webpack configuration
@@ -31,14 +31,14 @@ const ENV =
  */
 module.exports = function () {
   return {
-    mode: "production",
+    mode: 'production',
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
      *
      * Do not change, leave as is or it wont work.
      * See: https://github.com/webpack/karma-webpack#source-maps
      */
-    devtool: "inline-source-map",
+    devtool: 'inline-source-map',
 
     /**
      * Options affecting the resolving of modules.
@@ -51,15 +51,15 @@ module.exports = function () {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: [".ts", ".js"],
+      extensions: ['.ts', '.js'],
 
       /**
        * Make sure root is src
        */
-      modules: [helpers.root("src"), "node_modules"],
+      modules: [helpers.root('src'), 'node_modules'],
 
       alias: {
-        crossfilter: "crossfilter2",
+        crossfilter: 'crossfilter2',
       },
     },
 
@@ -80,17 +80,17 @@ module.exports = function () {
          * See: https://github.com/webpack/source-map-loader
          */
         {
-          enforce: "pre",
+          enforce: 'pre',
           test: /\.js$/,
-          loader: "source-map-loader",
+          loader: 'source-map-loader',
           exclude: [
             /**
              * These packages have problems with their sourcemaps
              */
-            helpers.root("node_modules/rxjs"),
-            helpers.root("node_modules/@angular"),
-            helpers.root("node_modules/primeng"),
-            helpers.root("node_modules/ng-mocks"),
+            helpers.root('node_modules/rxjs'),
+            helpers.root('node_modules/@angular'),
+            helpers.root('node_modules/primeng'),
+            helpers.root('node_modules/ng-mocks'),
           ],
         },
 
@@ -103,7 +103,7 @@ module.exports = function () {
           test: /\.ts$/,
           use: [
             {
-              loader: "awesome-typescript-loader",
+              loader: 'awesome-typescript-loader',
               query: {
                 /**
                  * Use inline sourcemaps for "karma-remap-coverage" reporter
@@ -119,7 +119,7 @@ module.exports = function () {
                 },
               },
             },
-            "angular2-template-loader",
+            'angular2-template-loader',
           ],
 
           /**
@@ -140,10 +140,10 @@ module.exports = function () {
         {
           test: /\.css$/,
           loader: [
-            "to-string-loader",
-            { loader: "css-loader", options: { url: false } },
+            'to-string-loader',
+            { loader: 'css-loader', options: { url: false } },
           ],
-          exclude: [helpers.root("src/index.html")],
+          exclude: [helpers.root('src/index.html')],
         },
 
         /**
@@ -154,18 +154,18 @@ module.exports = function () {
         {
           test: /\.scss$/,
           loader: [
-            "raw-loader",
-            "css-loader",
+            'raw-loader',
+            'css-loader',
             {
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
                 sourceMap: true,
                 plugins: () => [autoprefixer()],
               },
             },
-            "sass-loader",
+            'sass-loader',
           ],
-          exclude: [helpers.root("src/index.html")],
+          exclude: [helpers.root('src/index.html')],
         },
 
         /**
@@ -176,16 +176,16 @@ module.exports = function () {
          */
         {
           test: /\.html$/,
-          loader: "raw-loader",
-          exclude: [helpers.root("src/index.html")],
+          loader: 'raw-loader',
+          exclude: [helpers.root('src/index.html')],
         },
 
         /* File loader for supporting fonts, for example, in CSS files.
          */
         {
           test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/,
-          use: "file-loader",
-          include: [helpers.root("node_modules/lato-font")],
+          use: 'file-loader',
+          include: [helpers.root('node_modules/lato-font')],
         },
 
         /**
@@ -195,10 +195,10 @@ module.exports = function () {
          * See: https://github.com/deepsweet/istanbul-instrumenter-loader
          */
         {
-          enforce: "post",
+          enforce: 'post',
           test: /\.(js|ts)$/,
-          loader: "istanbul-instrumenter-loader",
-          include: helpers.root("src"),
+          loader: 'istanbul-instrumenter-loader',
+          include: helpers.root('src'),
           exclude: [/\.(e2e|spec)\.ts$/, /node_modules/],
         },
       ],
@@ -226,7 +226,7 @@ module.exports = function () {
         HMR: false,
         VERSION: VERSION,
         DATA_VERSION: DATA_VERSION,
-        "process.env": {
+        'process.env': {
           ENV: JSON.stringify(ENV),
           NODE_ENV: JSON.stringify(ENV),
           HMR: false,
@@ -245,7 +245,7 @@ module.exports = function () {
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
         /\@angular(\\|\/)core(\\|\/)fesm5/,
-        helpers.root("src"), // location of your src
+        helpers.root('src'), // location of your src
         {
           /**
            * your Angular Async Route paths relative to this root directory
@@ -286,11 +286,11 @@ module.exports = function () {
     node: {
       global: true,
       process: false,
-      crypto: "empty",
+      crypto: 'empty',
       module: false,
       clearImmediate: false,
       setImmediate: false,
-      fs: "empty",
+      fs: 'empty',
     },
   };
 };

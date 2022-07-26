@@ -48,7 +48,7 @@
   }
 
   .p-datatable-wrapper {
-    height: 366px;
+    height: 344px;
   }
 
   p-table.fullscreen-table {
@@ -93,15 +93,22 @@
     }
 
     tr {
+      &:nth-child(odd) {
+        td {
+          background-color: #ffffff;
+        }
+      }
+
       &:nth-child(even) {
         td {
-          background-color: var(--color-lighter);
+          background-color: var(--color-gray-200);
         }
       }
 
       &:hover {
         td {
-          background: rgba(63, 94, 171, 0.25);
+          color: #ffffff;
+          background: var(--color-action-primary);
         }
       }
     }

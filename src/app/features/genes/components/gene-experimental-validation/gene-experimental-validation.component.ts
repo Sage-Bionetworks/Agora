@@ -10,11 +10,11 @@ import { TeamService } from '../../../teams/services';
   styleUrls: ['./gene-experimental-validation.component.scss'],
 })
 export class ExperimentalValidationComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -22,13 +22,13 @@ export class ExperimentalValidationComponent {
   constructor(private teamService: TeamService) {}
 
   init() {
-    if (!this._gene.experimental_validation?.length) {
+    if (!this._gene?.experimental_validation?.length) {
       return;
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
       const teams: Team[] = res.items;
-      this._gene.experimental_validation?.map((item: any) => {
+      this._gene?.experimental_validation?.map((item: any) => {
         item.team_data = teams.filter((t) => t.team == item.team)[0];
         return item;
       });

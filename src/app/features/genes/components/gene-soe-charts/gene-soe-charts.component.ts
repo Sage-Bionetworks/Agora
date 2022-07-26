@@ -24,11 +24,11 @@ export interface SOEChartProps {
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneSoeChartsComponent implements OnInit {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -72,7 +72,7 @@ export class GeneSoeChartsComponent implements OnInit {
 
   getGeneOverallScores(name: string) {
     const scores: OverallScores =
-      this._gene.overall_scores || ({} as OverallScores);
+      this._gene?.overall_scores || ({} as OverallScores);
 
     if ('Genetics Score' === name) {
       return scores['GeneticsScore'] || 0;

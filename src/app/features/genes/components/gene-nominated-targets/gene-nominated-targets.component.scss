@@ -15,14 +15,14 @@
     position: absolute;
     align-items: center;
     justify-content: center;
-    color: var(--color-light);
+    color: var(--color-gray-300);
   }
 
   input {
     padding: 20px 25px 20px 60px;
     border-radius: 5px;
     width: 100%;
-    border: 1px solid var(--color-neutral);
+    border: 1px solid var(--color-gray-400);
     outline: none;
     box-sizing: border-box;
   }

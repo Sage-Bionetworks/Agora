@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .gct-tooltip-filter {
   max-width: 350px;
@@ -10,31 +10,10 @@
 }
 
 .gct {
-  color: var(--color-primary);
-  max-width: 1600px;
-  margin: 0 auto 100px auto;
-  border: 1px solid var(--color-light);
-
-  button {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: auto;
-    overflow: visible;
-    outline: none;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    line-height: normal;
-    -webkit-font-smoothing: inherit;
-    -moz-osx-font-smoothing: inherit;
-    -webkit-appearance: none;
-
-    &::-moz-focus-inner {
-      border: 0;
-      padding: 0;
-    }
-  }
+  @include container(lg);
+  color: var(--color-text);
+  margin: 0 auto;
+  border: 1px solid var(--color-gray-300);
 
   .gct-inner {
     min-width: 1300px;
@@ -49,7 +28,7 @@
 }
 
 .gct-header {
-  border-bottom: 1px solid var(--color-light);
+  border-bottom: 1px solid var(--color-gray-300);
 
   .gct-header-inner {
     display: flex;
@@ -67,11 +46,6 @@
   }
 
   .gct-heading {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 28px;
-    line-height: 34px;
-    color: #1a1c29;
     margin: 0;
     display: flex;
     align-items: center;
@@ -82,50 +56,59 @@
   .gct-header-left {
     width: 150px;
 
-    button {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      transition: $transition-duration;
-      cursor: pointer;
-      color: var(--color-secondary);
-
+    .btn {
       svg {
-        margin-right: 8px;
+        width: 12px;
+        height: 12px;
+        margin-right: 6px;
         transform: translateY(1px);
-
-        path {
-          transition: $transition-duration;
-        }
-      }
-
-      &:hover {
-        color: #000000;
-
-        svg path {
-          fill: #000000;
-        }
       }
     }
+
+    // button {
+    //   font-size: 16px;
+    //   font-weight: 700;
+    //   text-transform: uppercase;
+    //   transition: $transition-duration;
+    //   cursor: pointer;
+    //   color: var(--color-secondary);
+
+    //   svg {
+    //     margin-right: 8px;
+    //     transform: translateY(1px);
+
+    //     path {
+    //       transition: $transition-duration;
+    //     }
+    //   }
+
+    //   &:hover {
+    //     color: #000000;
+
+    //     svg path {
+    //       fill: #000000;
+    //     }
+    //   }
+    // }
   }
 
   .gct-header-right {
     width: 150px;
     justify-content: flex-end;
 
-    button {
-      background-color: var(--color-primary);
-      color: #ffffff;
-      padding: 10px 20px;
-      border-radius: 30px;
-      transition: $transition-duration;
-      cursor: pointer;
-      font-size: var(--font-size-sm);
+    // button {
+    //   background-color: var(--color-action-primary);
+    //   color: #ffffff;
+    //   padding: 10px 20px;
+    //   border-radius: 30px;
+    //   transition: $transition-duration;
+    //   cursor: pointer;
+    //   font-size: var(--font-size-sm);
 
-      &:hover {
-        opacity: 0.7;
-      }
-    }
+    //   &:hover {
+    //     opacity: 0.7;
+    //   }
+    // }
   }
 }
 
@@ -134,10 +117,14 @@
     position: relative;
     overflow: hidden;
   }
+
+  button {
+    @include reset-button();
+  }
 }
 
 .gct-controls {
-  border-bottom: 1px solid var(--color-light);
+  border-bottom: 1px solid var(--color-gray-300);
 
   .gct-controls-inner {
     display: flex;
@@ -209,7 +196,7 @@
             }
 
             &.p-highlight {
-              background-color: var(--color-primary);
+              background-color: var(--color-action-primary);
 
               span {
                 color: #ffffff;
@@ -217,7 +204,7 @@
             }
 
             &:not(.p-disabled):hover {
-              background-color: var(--color-primary);
+              background-color: var(--color-action-primary);
 
               span {
                 color: #ffffff;
@@ -232,7 +219,7 @@
   .gct-controls-right-top {
     display: flex;
     width: 100%;
-    border-bottom: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-border);
     margin-bottom: 8px;
 
     > div {
@@ -287,6 +274,7 @@
     font-size: 14px;
     color: #797979;
     height: 20px;
+    margin-bottom: 8px;
 
     button {
       cursor: pointer;
@@ -353,7 +341,7 @@
     }
 
     input {
-      border: 1px solid var(--color-light);
+      border: 1px solid var(--color-gray-300);
       padding: 12px 40px 12px 34px;
       width: 100%;
       transition: $transition-duration;
@@ -426,6 +414,10 @@
     .p-sortable-column-icon {
       font-size: 14px;
       transform: translateY(-2px);
+
+      &:hover {
+        color: var(--color-action-primary);
+      }
     }
   }
 
@@ -439,7 +431,7 @@
 
       &:not(:first-child) {
         &:before {
-          content: " ";
+          content: ' ';
           display: block;
           position: absolute;
           top: 50%;
@@ -449,7 +441,7 @@
         }
 
         &:after {
-          content: " ";
+          content: ' ';
           display: block;
           position: absolute;
           top: 0;
@@ -494,10 +486,6 @@
       color: var(--color-action-primary);
       cursor: pointer;
       transition: $transition-duration;
-
-      &:hover {
-        //color: darken(color(actionPrimary), 10%);
-      }
     }
 
     .p-link.p-disabled {
@@ -516,7 +504,8 @@
     align-items: center;
     padding: 6px 15px 6px 7px;
     margin-right: 0px;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
+    font-weight: 700;
 
     .gene-control-icons {
       display: none;
@@ -534,7 +523,7 @@
     }
 
     &:hover {
-      background-color: var(--color-primary);
+      background-color: var(--color-action-primary);
       color: #ffffff;
 
       .gene-control-icons {
@@ -687,7 +676,7 @@
 
 .p-paginator-bottom {
   &:before {
-    content: " ";
+    content: ' ';
   }
 }
 
@@ -726,7 +715,6 @@
   }
 
   .gct-significance-control-panel-heading {
-    color: #3f5eab;
     font-size: 21px;
     font-weight: 700;
   }
@@ -755,20 +743,26 @@
     > div:not(:last-child) {
       padding-right: 13px;
       margin-right: 13px;
-      border-right: 1px solid var(--color-light);
+      border-right: 1px solid var(--color-gray-300);
     }
   }
 
   .gct-help-link {
     display: block;
-    font-size: var(--font-size-sm);
-    line-height: var(--font-size-sm);
-    color: var(--color-secondary);
+    color: var(--color-text);
+    font-weight: 700;
     cursor: pointer;
     pointer-events: all;
 
     &:hover {
       text-decoration: underline;
+      color: var(--color-action-primary);
     }
+  }
+}
+
+.gct-spacing-column {
+  &:after {
+    opacity: 0 !important;
   }
 }

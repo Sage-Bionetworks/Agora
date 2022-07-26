@@ -33,7 +33,8 @@ export class BoxPlotComponent extends BaseChartComponent {
   @Input() yAxisLabel = 'LOG 2 FOLD CHANGE';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
-  @Input() rcRadius = 12.5;
+  @Input() rcRadius = 9;
+  @Input() rcColor = this.helperService.getColor('secondary');
 
   override name = 'box-plot-chart';
   dimension: any;
@@ -89,7 +90,7 @@ export class BoxPlotComponent extends BaseChartComponent {
 
     this.chart.group(this.group).dimension(this.dimension);
 
-    this.chart.elasticX(true);
+    this.chart.elasticX(true).xAxis().tickSizeOuter([0]);
 
     this.chart
       .elasticY(true)
@@ -97,6 +98,7 @@ export class BoxPlotComponent extends BaseChartComponent {
       .yRangePadding(this.rcRadius * 1.5)
       .yAxis()
       .ticks(8);
+    //.tickSizeOuter([0]);
 
     this.chart
       .renderTitle(false)
@@ -150,7 +152,7 @@ export class BoxPlotComponent extends BaseChartComponent {
         const circle = d3.select(this).insert('circle', ':last-child');
 
         circle
-          .attr('fill', '#F47E6C')
+          .attr('fill', self.rcColor)
           .attr('r', self.rcRadius)
           .attr('cx', lineCenter.attr('x1'))
           .attr('cy', isNaN(cy) ? 0.0 : cy)

@@ -21,11 +21,11 @@ interface Summary {
   styleUrls: ['./gene-soe-list.component.scss'],
 })
 export class GeneSoeListComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -34,7 +34,8 @@ export class GeneSoeListComponent {
   constructor() {}
 
   init() {
-    if (!this._gene.ensembl_gene_id) {
+    if (!this._gene?.ensembl_gene_id) {
+      this.summaries = [];
       return;
     }
 
@@ -46,7 +47,7 @@ export class GeneSoeListComponent {
             'Indicates whether or not this gene shows significant genetic association with Late Onset AD (LOAD) based on the',
           link: 'https://doi.org/10.1038/s41588-019-0358-2',
           anchorText:
-            "International Genomics of Alzheimer's Project (IGAP) genome-wide association study",
+            'International Genomics of Alzheimer’s Project (IGAP) genome-wide association study',
         },
         state: this._gene.isIGAP === undefined ? false : this._gene.isIGAP,
         isStateApplicable: true,
@@ -66,7 +67,7 @@ export class GeneSoeListComponent {
         property: {
           title: 'RNA Expression Change in AD Brain',
           description:
-            "Indicates whether or not this gene shows significant differential expression in at least one brain region based on AMP-AD consortium work. See 'EVIDENCE' tab.",
+            'Indicates whether or not this gene shows significant differential expression in at least one brain region based on AMP-AD consortium work. See ‘EVIDENCE’ tab.',
         },
         state:
           this._gene.isAnyRNAChangedInADBrain === undefined
@@ -78,7 +79,7 @@ export class GeneSoeListComponent {
         property: {
           title: 'Protein Expression Change in AD Brain',
           description:
-            "Indicates whether or not this gene shows significant differential protein expression in at least one brain region based on AMP-AD consortium work. See 'EVIDENCE' tab.",
+            'Indicates whether or not this gene shows significant differential protein expression in at least one brain region based on AMP-AD consortium work. See ‘EVIDENCE’ tab.',
         },
         state:
           this._gene.isAnyProteinChangedInADBrain === undefined

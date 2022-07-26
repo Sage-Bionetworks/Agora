@@ -148,8 +148,13 @@ export class GeneSearchComponent implements AfterViewInit {
     this.router.navigate(['/genes/' + id]);
   }
 
-  hasAlias(hgnc: string): boolean {
-    return !hgnc.includes(this.query.toUpperCase());
+  hasAlias(gene: Gene): boolean {
+    return (
+      !gene.hgnc_symbol.toLowerCase().includes(this.query.toLowerCase()) &&
+      gene.alias
+        ?.map((s: string) => s.toLowerCase())
+        .includes(this.query.toLowerCase())
+    );
   }
 
   focusInput() {

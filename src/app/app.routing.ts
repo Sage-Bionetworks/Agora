@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import {
   AboutPageComponent,
-  HelpPageComponent,
   HomePageComponent,
   NewsPageComponent,
   NominationFormPageComponent,
@@ -31,7 +30,6 @@ const routes: Routes = [
   { path: 'genes', component: HomePageComponent },
 
   { path: 'about', component: AboutPageComponent },
-  { path: 'help', component: HelpPageComponent },
   { path: 'news', component: NewsPageComponent },
   { path: 'teams', component: TeamsPageComponent },
   { path: 'nomination-form', component: NominationFormPageComponent },
@@ -41,7 +39,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+    RouterModule.forRoot(routes, {
+      //scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+    }),
   ],
   exports: [RouterModule],
 })

@@ -4,9 +4,12 @@ import { map, tap, share, finalize } from 'rxjs/operators';
 
 import {
   Gene,
-  GeneNetwork,
-  GeneNode,
-  GeneLink,
+  SimilarGenesNetwork,
+  SimilarGenesNetworkNode,
+  SimilarGenesNetworkLink,
+  NetworkChartData,
+  NetworkChartNode,
+  NetworkChartLink,
   DistributionResponse,
 } from '../../../models';
 import { ApiService } from '../../../core/services';
@@ -29,6 +32,7 @@ export class GeneService {
 
     return this.apiService.getGene(id).pipe(
       map((gene: Gene) => {
+        gene.similar_genes_network = this.getSimilarGenesNetwork(gene);
         return (this.genes[id] = gene);
       })
     );
@@ -48,14 +52,14 @@ export class GeneService {
     return models;
   }
 
-  getNetwork(gene: Gene): GeneNetwork {
-    const nodes: { [key: string]: GeneNode } = {};
-    const links: { [key: string]: GeneLink } = {};
-    const response: GeneNetwork = {
-      origin: gene,
+  getSimilarGenesNetwork(gene: Gene): SimilarGenesNetwork {
+    const nodes: { [key: string]: SimilarGenesNetworkNode } = {};
+    const links: { [key: string]: SimilarGenesNetworkLink } = {};
+    const response: SimilarGenesNetwork = {
       nodes: [],
       links: [],
-      maxEdges: 0,
+      min: 0,
+      max: 0,
     };
 
     gene?.links?.forEach((link: any) => {
@@ -80,7 +84,6 @@ export class GeneService {
           source_hgnc_symbol: link?.geneA_external_gene_name,
           target_hgnc_symbol: link?.geneB_external_gene_name,
           brain_regions: [link.brainRegion],
-          value: 0,
         };
       } else if (!links[key].brain_regions.includes(link.brainRegion)) {
         links[key].brain_regions.push(link.brainRegion);
@@ -93,16 +96,13 @@ export class GeneService {
 
     response.links.forEach((link: any) => {
       link.brain_regions.sort();
-      link.value = link.brain_regions.length;
 
       ['source', 'target'].forEach((key: any) => {
         if (!nodes[link[key]]) {
           nodes[link[key]] = {
-            id: link[key],
             ensembl_gene_id: link[key],
             hgnc_symbol: link[key + '_hgnc_symbol'],
             brain_regions: link.brain_regions,
-            value: 0,
           };
         } else {
           link.brain_regions.forEach((brainRegion: any) => {
@@ -122,9 +122,13 @@ export class GeneService {
 
     response.nodes.forEach((node: any, i: number) => {
       node.brain_regions.sort();
-      node.value = node.brain_regions.length;
-      if (node.value > response.maxEdges) {
-        response.maxEdges = node.value;
+
+      if (node.brain_regions.length < response.min) {
+        response.min = node.brain_regions.length;
+      }
+
+      if (node.brain_regions.length > response.max) {
+        response.max = node.brain_regions.length;
       }
 
       // Insert current node to the beginning of the array

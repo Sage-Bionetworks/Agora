@@ -11,11 +11,11 @@ import { TeamService } from '../../../teams/services';
   styleUrls: ['./gene-nominations.component.scss'],
 })
 export class GeneNominationsComponent {
-  _gene: Gene = {} as Gene;
-  get gene(): Gene {
+  _gene: Gene | undefined;
+  get gene(): Gene | undefined {
     return this._gene;
   }
-  @Input() set gene(gene: Gene) {
+  @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
     this.init();
   }
@@ -24,26 +24,37 @@ export class GeneNominationsComponent {
 
   constructor(private teamService: TeamService) {}
 
+  reset() {
+    this.nominations = [];
+  }
+
   init() {
+    this.reset();
+
     if (!this._gene?.nominatedtarget?.length) {
       return;
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
+      const nominations: NominatedTarget[] = [];
       const teams: Team[] = res.items;
-      const teamNames = this._gene.nominatedtarget.map((n) => n.team);
-      const nominations: NominatedTarget[] = [] as NominatedTarget[];
+      const teamNames = this._gene?.nominatedtarget.map((n) => n.team);
 
-      // Loop teams to keep order
-      teams.forEach((team: Team) => {
-        const index = teamNames.indexOf(team.team);
+      if (teamNames) {
+        // Loop teams to keep order
+        teams.forEach((team: Team) => {
+          const index = teamNames.indexOf(team.team);
 
-        if (index > -1) {
-          const nomination = this._gene.nominatedtarget[index];
-          nomination.team_data = team;
-          nominations.push(nomination);
-        }
-      });
+          if (index > -1) {
+            const nomination = this._gene?.nominatedtarget[index];
+
+            if (nomination) {
+              nomination.team_data = team;
+              nominations.push(nomination);
+            }
+          }
+        });
+      }
 
       this.nominations = nominations;
     });
