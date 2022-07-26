@@ -1,3 +1,6 @@
+/* stylelint-disable no-duplicate-selectors */
+@use 'sass:map';
+
 // -------------------------------------------------------------------------- //
 // Legacy - To clean
 // -------------------------------------------------------------------------- //
@@ -9,19 +12,19 @@ $info-circle-color: #9da3b3;
 $table-row-even: #f7f7f7;
 
 $breakpoints: (
-  "ex-small": (
+  'ex-small': (
     max-width: 600px,
   ),
-  "small": (
+  'small': (
     min-width: 600px,
   ),
-  "medium": (
+  'medium': (
     min-width: 768px,
   ),
-  "large": (
+  'large': (
     min-width: 992px,
   ),
-  "ex-large": (
+  'ex-large': (
     min-width: 1200px,
   ),
 );
@@ -31,11 +34,11 @@ $breakpoints: (
 // -------------------------------------------------------------------------- //
 
 $spacings: (
-  "xs": 5px,
-  "sm": 10px,
-  "md": 15px,
-  "lg": 25px,
-  "xl": 50px,
+  'xs': 5px,
+  'sm': 10px,
+  'md': 15px,
+  'lg': 25px,
+  'xl': 50px,
 );
 
 :root {
@@ -71,12 +74,12 @@ $main-colors: (
 );
 
 $extra-colors: (
-  heading: map-get($main-colors, "primary"),
-  text: map-get($main-colors, "gray-900"),
-  text-secondary: map-get($main-colors, "gray-800"),
-  link: map-get($main-colors, "action-primary"),
-  border: map-get($main-colors, "gray-300"),
-  separator: map-get($main-colors, "gray-300"),
+  heading: map.get($main-colors, 'primary'),
+  text: map.get($main-colors, 'gray-900'),
+  text-secondary: map.get($main-colors, 'gray-800'),
+  link: map.get($main-colors, 'action-primary'),
+  border: map.get($main-colors, 'gray-300'),
+  separator: map.get($main-colors, 'gray-300'),
   shadow: #c7c5c5,
 );
 
@@ -93,7 +96,7 @@ $extra-colors: (
 // Fonts
 // -------------------------------------------------------------------------- //
 
-$font-family-primary: "Lato", sans-serif;
+$font-family-primary: 'Lato', sans-serif;
 
 $headings: (
   h1: (
@@ -125,7 +128,7 @@ $headings: (
   //   font-size: 40px,
   //   font-weight: 500,
   //   line-height: 40px,
-  // ),,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+  // ),,
 );
 
 $font-sizes: (
@@ -166,6 +169,7 @@ $font-sizes: (
     }
   }
 }
+
 // -------------------------------------------------------------------------- //
 // Container
 // -------------------------------------------------------------------------- //
@@ -231,9 +235,9 @@ $gene-details-subnav-offset: -19px;
 
 $chart-colors: (
   axis: #989898,
-  axis-label: #000000,
+  axis-label: #000,
   axis-tick: #989898,
-  axis-tick-label: #000000,
+  axis-tick-label: #000,
 );
 
 :root {
@@ -247,10 +251,10 @@ $chart-colors: (
 // -------------------------------------------------------------------------- //
 
 $gene-network-colors: (
-  "default": map-get($main-colors, "gray-300"),
-  "main": map-get($main-colors, "secondary"),
-  "selected": #edc766,
-  "2-3": #90beb6,
-  "4-5": #469285,
-  ">6": #2a5850,
+  'default': map.get($main-colors, 'gray-300'),
+  'main': map.get($main-colors, 'secondary'),
+  'selected': #edc766,
+  '2-3': #90beb6,
+  '4-5': #469285,
+  '>6': #2a5850,
 );

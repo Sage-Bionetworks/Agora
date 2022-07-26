@@ -1,8 +1,8 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 hr {
-  border-color: #ffffff;
+  border-color: #fff;
   opacity: 0.25;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -16,7 +16,7 @@ hr {
 }
 
 .gene-hero-bottom {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgb(255 255 255 / 35%);
 }
 
 .gene-hero-heading {

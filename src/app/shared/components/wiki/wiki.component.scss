@@ -1,5 +1,5 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .wiki {
   position: relative;
@@ -8,7 +8,7 @@
     white-space: pre-wrap;
 
     a {
-      @include link();
+      @include link;
     }
 
     .email-link {
@@ -48,13 +48,9 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: #ffffff;
+    background-color: #fff;
     align-items: center;
     justify-content: center;
-    //opacity: 0;
-    //visibility: hidden;
-
-    //transition: var(--transition-duration);
   }
 
   &.loading {
@@ -64,8 +60,6 @@
 
     .wiki-overlay {
       display: flex;
-      //opacity: 1;
-      //visibility: visible;
     }
   }
 }

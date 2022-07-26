@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "data-file": "syn13363290",
   "data-version": "40",
+  "private": true,
   "scripts": {
     "analyze:aot:prod": "cross-env Analyzer=true npm run build:aot:prod",
     "build:aot:prod": "npm run clean:dist && npm run clean:aot && cross-env BUILD_AOT=1 SOURCE_MAP=1 npm run webpack -- --config config/webpack.prod.js  --profile --bail",
@@ -61,13 +62,13 @@
     "server:prod:ci": "http-server dist -p 8080 -c-1 --cors",
     "server:staging": "cross-env PORT=8080 NODE_ENV=production npm run webpack:server -- --config config/webpack.server.js  --progress --profile --bail",
     "server:wds": "npm run webpack-dev-server -- --config config/webpack.server.js --open --progress --profile --watch --content-base src/",
-    "server:createindexes": "mongo --host localhost ./src/server/test/manual/createIndexes.js",
+    "server:createindexes": "mongo --host localhost ./src/server/scripts/createIndexes.js",
     "start": "node --max_old_space_size=2000  ./dist/server.js",
     "start:mongo": "sh scripts/start-mongo.sh '/var/lib/mongodb/'",
     "start:mongo:windows": "sh scripts/start-mongo.sh 'C:\\data\\db'",
     "start:prod": "npm run watch:server:prod",
     "start:hmr": "npm run server:dev:hmr",
-    "test": "npm run lint && karma start",
+    "test": "npm run lint",
     "test:load": "artillery run load.yml",
     "eslint": "eslint",
     "typedoc": "typedoc",
@@ -89,7 +90,9 @@
     "webpack": "node --max_old_space_size=6000 node_modules/webpack/bin/webpack.js",
     "webpack:server": "node --max_old_space_size=2000 node_modules/webpack/bin/webpack.js"
   },
-  "private": true,
+  "pre-commit": [
+    "test"
+  ],
   "dependencies": {
     "@angular/animations": "^13.3.0",
     "@angular/cdk": "^13.3.9",
@@ -177,11 +180,17 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "style-loader": "^3.3.1",
+    "stylelint": "^14.9.1",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard-scss": "^5.0.0",
+    "stylelint-no-unsupported-browser-features": "^5.0.3",
+    "stylelint-webpack-plugin": "^3.3.0",
     "ts-loader": "^9.3.0",
     "ts-node-register": "^1.0.0",
     "typescript": "^4.6.4",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.8.0",
     "webpack-node-externals": "^3.0.0"
   },
   "engines": {

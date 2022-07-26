@@ -6,7 +6,7 @@ div.p-dropdown {
 
   .p-dropdown-panel {
     border: 1px solid var(--color-gray-300);
-    background-color: #ffffff;
+    background-color: #fff;
     border-radius: 0 0 5px 5px;
     transform: translateY(-1px);
 
@@ -14,7 +14,7 @@ div.p-dropdown {
       padding: 11px 30px;
 
       &:hover {
-        color: #ffffff;
+        color: #fff;
         background-color: var(--color-action-primary);
       }
     }
@@ -27,7 +27,7 @@ div.p-dropdown {
 
 .p-multiselect {
   width: 100%;
-  color: #ffffff;
+  color: #fff;
   position: relative;
   top: 0;
   right: 0;
@@ -40,7 +40,7 @@ div.p-dropdown {
   }
 
   .p-multiselect-items-wrapper {
-    padding: 0px;
+    padding: 0;
     background: white;
   }
 
@@ -50,7 +50,7 @@ div.p-dropdown {
   }
 
   .p-multiselect-panel {
-    padding: 0px;
+    padding: 0;
     background: transparent;
     min-width: 234px !important;
     left: -190px !important;
@@ -81,7 +81,7 @@ div.p-dropdown {
     &:hover {
       &,
       .p-checkbox-icon {
-        color: #ffffff;
+        color: #fff;
       }
 
       background-color: var(--color-action-primary);

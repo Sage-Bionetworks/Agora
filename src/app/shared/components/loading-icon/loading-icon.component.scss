@@ -1,5 +1,5 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .loading-icon {
   position: relative;
@@ -59,6 +59,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -68,6 +69,7 @@
   0% {
     transform: rotate(120deg);
   }
+
   100% {
     transform: rotate(480deg);
   }
@@ -77,6 +79,7 @@
   0% {
     transform: rotate(240deg);
   }
+
   100% {
     transform: rotate(600deg);
   }
@@ -91,6 +94,7 @@
     left: 0%;
     top: 0%;
   }
+
   25%,
   75% {
     width: 120%;
@@ -98,6 +102,7 @@
     left: -10%;
     top: -10%;
   }
+
   12.5%,
   37.5%,
   62.5%,
@@ -119,6 +124,7 @@
     left: 0%;
     top: 0%;
   }
+
   16.66%,
   49.99%,
   83.333% {
@@ -142,6 +148,7 @@
     top: 0;
     left: 0;
   }
+
   2.77%,
   19.44%,
   36.11%,
@@ -153,6 +160,7 @@
     top: 3.25%;
     left: 3.25%;
   }
+
   5.55%,
   22.22%,
   38.88%,
@@ -164,6 +172,7 @@
     top: 7.8%;
     left: 7.8%;
   }
+
   8.33%,
   25%,
   41.66%,
@@ -175,6 +184,7 @@
     top: 13.4%;
     left: 13.4%;
   }
+
   11.11%,
   27.77%,
   44.44%,
@@ -186,6 +196,7 @@
     top: 7.8%;
     left: 7.8%;
   }
+
   13.88%,
   30.55%,
   47.22%,

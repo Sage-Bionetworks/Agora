@@ -1,12 +1,12 @@
-@import "../../../../../../../styles/variables";
-@import "../../../../../../../styles/mixins";
+@import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
 
 .gct-details-panel {
   .p-overlaypanel {
     width: 610px;
     max-width: 100%;
-    background: #ffffff;
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
   }
 
   .p-overlaypanel-content {
@@ -93,8 +93,8 @@
       height: 2px;
       background-color: var(--color-gray-300);
 
-      &:before {
-        content: " ";
+      &::before {
+        content: ' ';
         display: block;
         position: absolute;
         top: -2px;
@@ -118,11 +118,11 @@
       > div {
         position: absolute;
 
-        &:before {
-          content: " ";
+        &::before {
+          content: ' ';
           display: block;
           position: absolute;
-          top: 0px;
+          top: 0;
           width: 2px;
           height: 6px;
           background-color: var(--color-secondary);
@@ -177,7 +177,7 @@
 
         > div {
           position: relative;
-          border-top: 1px solid #dddddd;
+          border-top: 1px solid #ddd;
 
           > div {
             position: absolute;
@@ -191,17 +191,17 @@
             z-index: 100;
           }
 
-          &:before,
-          &:after {
-            content: " ";
+          &::before,
+          &::after {
+            content: ' ';
             display: block;
             position: absolute;
             top: 0;
             height: 8px;
-            border-left: 1px solid #dddddd;
+            border-left: 1px solid #ddd;
           }
 
-          &:after {
+          &::after {
             right: 0;
           }
         }
@@ -239,7 +239,8 @@
     }
 
     a {
-      @include link();
+      @include link;
+
       display: block;
       font-size: var(--font-size-sm);
       font-weight: 700;

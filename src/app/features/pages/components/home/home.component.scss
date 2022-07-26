@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .section {
   display: flex;
@@ -19,7 +19,7 @@
     background-color: none;
   }
 
-  @include respond-to("ex-large") {
+  @include respond-to('ex-large') {
     padding: var(--spacing-xl) 100px;
   }
 }
@@ -89,9 +89,7 @@
   color: inherit;
   font: inherit;
   line-height: normal;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
-  -webkit-appearance: none;
+  appearance: none;
   text-align: unset;
   cursor: pointer;
 

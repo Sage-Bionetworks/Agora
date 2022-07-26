@@ -310,7 +310,7 @@ export class GeneDruggabilityComponent implements OnInit {
       range = 6;
     }
 
-    return bucket < range ? '#FFFFFF' : '#000000';
+    return bucket < range ? '#fff' : '#000';
   }
 
   getIconStyle(bucket: number, section: string): string {
@@ -341,7 +341,7 @@ export class GeneDruggabilityComponent implements OnInit {
       return '#AFDDDF';
     }
 
-    return '#FFFFFF';
+    return '#fff';
   }
 
   getBucketIconStyle(isSelection: boolean): object {

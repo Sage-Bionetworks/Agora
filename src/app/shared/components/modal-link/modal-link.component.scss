@@ -1,5 +1,5 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 modal-link {
   display: inline-block;
@@ -25,5 +25,5 @@ modal-link {
 }
 
 .modal-link-text {
-  @include link();
+  @include link;
 }

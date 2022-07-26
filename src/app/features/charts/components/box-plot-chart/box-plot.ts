@@ -4,7 +4,6 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 import { min, max, ascending, quantile, range } from 'd3-array';
 import { timerFlush } from 'd3-timer';
-import * as d3 from 'd3';
 
 import { CoordinateGridMixin } from 'dc/src/base/coordinate-grid-mixin';
 import { transition } from 'dc/src/core/core';
@@ -902,7 +901,7 @@ export class AgoraBoxPlot extends CoordinateGridMixin {
    * Get or set the opacity when rendering data.
    * @example
    * // If individual data points are rendered increase the opacity.
-   * chart.dataOpacity(0.7);
+   * chart.dataOpacity(70%);
    * @param {Number} [opacity=0.3]
    * @returns {Number|BoxPlot}
    */

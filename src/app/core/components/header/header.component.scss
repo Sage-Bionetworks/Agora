@@ -1,5 +1,7 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 #header {
   // Uncoment for sticky header
@@ -9,11 +11,12 @@
   // right: 0;
   // border-bottom: 1px solid var(--color-gray-200);
   position: relative;
-  background-color: #ffffff;
+  background-color: #fff;
   z-index: 9999;
 
   .header-inner {
-    @include container("lg");
+    @include container('lg');
+
     padding: 0 var(--spacing-xl);
     display: flex;
     height: calc(var(--header-height) - 1px);
@@ -32,7 +35,8 @@
   align-items: center;
 
   .header-toggle {
-    @include reset-button();
+    @include reset-button;
+
     position: relative;
     width: 20px;
     height: 20px;
@@ -120,8 +124,8 @@
       transition: var(--transition-duration);
       align-items: center;
 
-      &:after {
-        content: " ";
+      &::after {
+        content: ' ';
         position: absolute;
         display: block;
         bottom: 0;
@@ -138,7 +142,7 @@
       &.active {
         color: var(--color-action-primary);
 
-        &:after {
+        &::after {
           opacity: 1;
           visibility: visible;
         }
@@ -155,7 +159,7 @@
       left: 0;
       right: 0;
       padding: 30px;
-      background-color: #ffffff;
+      background-color: #fff;
       border-top: 1px solid var(--color-gray-300);
       border-bottom: 1px solid var(--color-gray-300);
       opacity: 0;

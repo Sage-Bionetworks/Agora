@@ -4,7 +4,7 @@ export * from './gene-links';
 export * from './genes';
 export * from './metabolomics';
 export * from './neuropathologic-correlations';
-export * from './proteomics';
 export * from './overall-scores';
+export * from './proteomics';
 export * from './rna';
 export * from './teams';

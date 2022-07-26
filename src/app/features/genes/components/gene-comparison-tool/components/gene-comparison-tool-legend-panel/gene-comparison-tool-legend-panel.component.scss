@@ -1,17 +1,16 @@
-@import "../../../../../../../styles/variables";
-@import "../../../../../../../styles/mixins";
+@import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
 
 .gct-legend-panel {
   color: var(--color-text);
 
   .p-dialog-title:not(:empty) {
-    padding: 40px 40px 20px 40px;
+    padding: 40px 40px 20px;
     margin-bottom: -40px;
     text-align: left;
     font-size: var(--font-size-xl);
     color: var(--color-text);
     font-weight: 700;
-    color: var(--color-text);
   }
 
   .p-dialog-header-icons {
@@ -20,11 +19,11 @@
   }
 
   .p-dialog-content {
-    padding: 20px 40px 0 40px;
+    padding: 20px 40px 0;
   }
 
   .p-dialog-footer {
-    padding: 30px 40px 30px 40px;
+    padding: 30px 40px;
     text-align: right;
 
     a {

@@ -22,8 +22,8 @@ p-radiobutton {
       left: 0;
       margin: 0;
 
-      &:before {
-        content: " ";
+      &::before {
+        content: ' ';
         display: block;
         width: 7px;
         height: 7px;
@@ -43,7 +43,7 @@ p-radiobutton {
         color: var(--color-primary);
 
         &,
-        &:before {
+        &::before {
           margin: 0;
         }
       }

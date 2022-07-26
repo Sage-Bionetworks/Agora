@@ -1,13 +1,13 @@
 .container-sm {
-  @include container("sm");
+  @include container('sm');
 }
 
 .container-md {
-  @include container();
+  @include container;
 }
 
 .container-lg {
-  @include container("lg");
+  @include container('lg');
 }
 
 .section {
@@ -15,7 +15,7 @@
     padding: var(--spacing-xl) var(--spacing-xl);
 
     &,
-    [class*="container-"] {
+    [class*='container-'] {
       > h1,
       > h2,
       > h3,
@@ -41,9 +41,9 @@
   display: flex;
   min-height: 200px;
   background-color: var(--color-primary);
-  background-image: url("../assets/images/hero-background.svg");
+  background-image: url('../assets/images/hero-background.svg');
   background-size: cover !important;
-  color: #ffffff;
+  color: #fff;
   align-items: center;
 
   .section-inner {
@@ -56,12 +56,12 @@
   h4,
   h5,
   h6 {
-    color: #ffffff;
+    color: #fff;
   }
 
   a,
   .modal-link .modal-link-icon,
   .modal-link .modal-link-text {
-    color: #ffffff;
+    color: #fff;
   }
 }

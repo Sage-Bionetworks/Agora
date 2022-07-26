@@ -50,7 +50,7 @@ export class DownloadDomImageComponent {
     this.isLoading = true;
 
     domtoimage
-      .toBlob(this.target, { bgcolor: '#FFFFFF' })
+      .toBlob(this.target, { bgcolor: '#fff' })
       .then((blob: any) => {
         saveAs(blob, this.filename + this.selectedType);
         this.isLoading = false;

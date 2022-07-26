@@ -7,9 +7,6 @@ import {
   SimilarGenesNetwork,
   SimilarGenesNetworkNode,
   SimilarGenesNetworkLink,
-  NetworkChartData,
-  NetworkChartNode,
-  NetworkChartLink,
   DistributionResponse,
 } from '../../../models';
 import { ApiService } from '../../../core/services';

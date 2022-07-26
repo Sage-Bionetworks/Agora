@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .tab-row {
   padding: var(--spacing-xl) 144px var(--spacing-xl) var(--spacing-xl);
@@ -15,7 +15,7 @@
     vertical-align: middle;
     margin-top: auto;
     margin-bottom: auto;
-    padding: 0px;
+    padding: 0;
   }
 
   .header-title {
@@ -26,25 +26,25 @@
   .header-title,
   .header-link,
   .header-description {
-    @include respond-to("ex-small") {
+    @include respond-to('ex-small') {
       min-height: 43px;
       margin-top: 25.5px !important;
     }
-    @include respond-to("small") {
+    @include respond-to('small') {
       min-height: 43px;
       margin-top: 25.5px !important;
     }
-    @include respond-to("medium") {
+    @include respond-to('medium') {
       margin-top: auto !important;
-      min-height: 0px;
+      min-height: 0;
     }
-    @include respond-to("large") {
+    @include respond-to('large') {
       margin-top: auto !important;
-      min-height: 0px;
+      min-height: 0;
     }
-    @include respond-to("ex-large") {
+    @include respond-to('ex-large') {
       margin-top: auto !important;
-      min-height: 0px;
+      min-height: 0;
     }
   }
 
@@ -61,7 +61,7 @@
     font-size: var(--font-size-md);
   }
 
-  > [class*="col-"] {
+  > [class*='col-'] {
     vertical-align: middle;
     margin-top: auto;
     margin-bottom: auto;

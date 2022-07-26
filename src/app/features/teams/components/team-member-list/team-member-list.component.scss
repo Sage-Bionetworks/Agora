@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .team-member-list {
   .team-member-list-inner {
@@ -20,14 +20,12 @@
     width: 85px;
     height: 85px;
     border-radius: 50%;
-    background-size: cover;
-    background-position: 50% 50%;
     background-repeat: no-repeat;
     background-color: var(--color-primary);
-    background-image: url("/assets/images/team-member.svg");
+    background-image: url('/assets/images/team-member.svg');
     background-size: 60%;
     background-position: center;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 10px;
     overflow: hidden;
 
     > div {
@@ -46,7 +44,7 @@
     text-align: center;
 
     a {
-      @include link();
+      @include link;
     }
   }
 }

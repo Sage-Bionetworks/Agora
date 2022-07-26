@@ -23,7 +23,7 @@
     .p-checkbox-icon {
       transition: var(--transition-duration);
 
-      &:before {
+      &::before {
         display: block;
         font-size: 10px;
         line-height: 10px;
@@ -40,10 +40,10 @@
       border-color: var(--color-primary) !important;
 
       .p-checkbox-icon {
-        color: #ffffff;
+        color: #fff;
 
         &,
-        &:before {
+        &::before {
           margin: 0;
           transform: translate(0, 0);
         }

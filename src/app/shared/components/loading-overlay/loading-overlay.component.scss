@@ -1,8 +1,8 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .loading-overlay {
-  background-color: #ffffff;
+  background-color: #fff;
   opacity: 0;
   visibility: hidden;
   transition: var(--transition-duration);

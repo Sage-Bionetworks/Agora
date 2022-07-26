@@ -1,5 +1,7 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@use 'sass:map';
+
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .gene-network {
   min-height: 600px;
@@ -34,7 +36,7 @@
       display: block;
       width: 15px;
       height: 15px;
-      background-color: map-get($gene-network-colors, "selected");
+      background-color: map.get($gene-network-colors, 'selected');
       border-radius: 50%;
       cursor: pointer;
     }
@@ -43,21 +45,21 @@
       position: relative;
       padding-left: 40px;
 
-      &:after {
-        content: " ";
+      &::after {
+        content: ' ';
         position: absolute;
         display: block;
         width: 40px;
         height: 4px;
         top: 6px;
         left: 0;
-        background-color: map-get($gene-network-colors, "selected");
+        background-color: map.get($gene-network-colors, 'selected');
       }
     }
 
     > div.active ~ div {
       a,
-      &:after {
+      &::after {
         background-color: var(--color-gray-500);
       }
     }
@@ -79,12 +81,12 @@
 
       svg {
         margin-right: 10px;
-        color: map-get($gene-network-colors, "main");
+        color: map.get($gene-network-colors, 'main');
       }
 
       &:not(:first-child) {
-        &:before {
-          content: " ";
+        &::before {
+          content: ' ';
           display: inline-block;
           width: 20px;
           height: 20px;
@@ -93,20 +95,20 @@
         }
       }
 
-      &:nth-child(2):before {
-        background-color: map-get($gene-network-colors, "selected");
+      &:nth-child(2)::before {
+        background-color: map.get($gene-network-colors, 'selected');
       }
 
-      &:nth-child(3):before {
-        background-color: map-get($gene-network-colors, "2-3");
+      &:nth-child(3)::before {
+        background-color: map.get($gene-network-colors, '2-3');
       }
 
-      &:nth-child(4):before {
-        background-color: map-get($gene-network-colors, "4-5");
+      &:nth-child(4)::before {
+        background-color: map.get($gene-network-colors, '4-5');
       }
 
-      &:nth-child(5):before {
-        background-color: map-get($gene-network-colors, ">6");
+      &:nth-child(5)::before {
+        background-color: map.get($gene-network-colors, '>6');
       }
     }
   }
@@ -115,7 +117,7 @@
 .gene-network-selected {
   height: 100%;
   padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: #ffffff;
+  background-color: #fff;
   border: 1px solid var(--color-gray-200);
   box-sizing: border-box;
 }
@@ -154,8 +156,9 @@
 
 .gene-network-selected-similar-list {
   a {
+    @include link;
+
     display: inline-block;
-    @include link();
     font-weight: 700;
     margin-bottom: 10px;
   }
@@ -195,49 +198,49 @@
 .network-chart {
   svg {
     .network-chart-link {
-      stroke: map-get($gene-network-colors, ">6");
+      stroke: map.get($gene-network-colors, '>6');
 
       &.edges-0,
       &.edges-1 {
-        stroke: map-get($gene-network-colors, "default");
+        stroke: map.get($gene-network-colors, 'default');
       }
 
       &.edges-2,
       &.edges-3 {
-        stroke: map-get($gene-network-colors, "2-3");
+        stroke: map.get($gene-network-colors, '2-3');
       }
 
       &.edges-4,
       &.edges-5 {
-        stroke: map-get($gene-network-colors, "4-5");
+        stroke: map.get($gene-network-colors, '4-5');
       }
     }
 
     .network-chart-node {
-      fill: map-get($gene-network-colors, ">6");
+      fill: map.get($gene-network-colors, '>6');
       cursor: pointer;
 
       &.edges-0,
       &.edges-1 {
-        fill: map-get($gene-network-colors, "default");
+        fill: map.get($gene-network-colors, 'default');
       }
 
       &.edges-2,
       &.edges-3 {
-        fill: map-get($gene-network-colors, "2-3");
+        fill: map.get($gene-network-colors, '2-3');
       }
 
       &.edges-4,
       &.edges-5 {
-        fill: map-get($gene-network-colors, "4-5");
+        fill: map.get($gene-network-colors, '4-5');
       }
 
       &.main {
-        fill: map-get($gene-network-colors, "main");
+        fill: map.get($gene-network-colors, 'main');
       }
 
       &.selected {
-        fill: map-get($gene-network-colors, "selected");
+        fill: map.get($gene-network-colors, 'selected');
       }
     }
   }

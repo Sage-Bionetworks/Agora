@@ -1,12 +1,12 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .page-not-found {
   // Uncoment/Replace for sticky header
   // min-height: calc(100vh - var(--footer-height));
   // padding-top: var(--header-height);
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  background-image: url("/assets/images/page-not-found.svg");
+  background-image: url('/assets/images/page-not-found.svg');
   background-size: cover !important;
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@
 
   h1 {
     text-align: center;
-    color: #ffffff;
+    color: #fff;
   }
 
   .page-not-found-heading {

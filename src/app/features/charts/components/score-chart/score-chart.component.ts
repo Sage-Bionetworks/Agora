@@ -124,7 +124,7 @@ export class ScoreChartComponent extends BaseChartComponent {
       );
 
     // Colors
-    this.chart.colors(['rgb(166, 132, 238, 0.25)']);
+    this.chart.colors(['#8b8ad1']);
 
     // Spacing
     this.chart
@@ -154,7 +154,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .attr('class', 'score-label')
             .attr('x', barBox.x)
             .attr('y', barBox.y - 6)
-            .style('color', 'rgb(166, 132, 238, 1)')
+            .style('color', 'rgb(166 132 238)')
             .text(this.helperService.truncateNumberToFixed(this._score, 2));
 
           const labelBox = label.node().getBBox();
@@ -185,7 +185,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .append('rect')
             .attr('width', barBox.width + 8)
             .attr('height', 14)
-            .attr('fill', 'rgb(166, 132, 238)');
+            .attr('fill', '#8b8ad1');
 
           breakContainer
             .append('rect')
@@ -193,7 +193,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .attr('height', 10)
             .attr('x', -1)
             .attr('y', 2)
-            .attr('fill', '#ffffff');
+            .attr('fill', '#fff');
         }
 
         this.addTooltip(bars[i], i);

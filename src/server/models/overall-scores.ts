@@ -15,9 +15,7 @@ export { OverallScores, OverallScoresDistribution } from '../../app/models';
 
 const OverallScoresSchema = new Schema<OverallScores>(
   {
-    // _id: { type: String, required: true }, // Not used
     ENSG: { type: String, required: true },
-    // GeneName: { type: String, required: true }, // Not used
     Logsdon: { type: Number, required: true },
     GeneticsScore: { type: Number, required: true },
     OmicsScore: { type: Number, required: true },
@@ -28,16 +26,10 @@ const OverallScoresSchema = new Schema<OverallScores>(
 
 const OverallScoresDistributionSchema = new Schema(
   {
-    // _id: { type: String, required: true }, // Not used
     distribution: [{ type: Number, required: true }],
-    bins: [[{ type: Number, required: true }]], // Array of [binStart, binEnd]
-    // min: { type: Number, required: true }, // Not used
-    // max: { type: Number, required: true }, // Not used
-    // mean: { type: Number, required: true }, // Not used
-    // first_quartile: { type: Number, required: true }, // Not used
-    // third_quartile: { type: Number, required: true }, // Not used
+    bins: [[{ type: Number, required: true }]],
     name: { type: String, required: true },
-    syn_id: { type: String, required: true }, // Wiki's ownerId
+    syn_id: { type: String, required: true },
     wiki_id: { type: String, required: true },
   },
   { collection: 'genescoredistribution' }

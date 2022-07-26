@@ -1,5 +1,5 @@
-@import "../../../../../styles/variables";
-@import "../../../../../styles/mixins";
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
 
 .news-page-content {
   h3 {
@@ -10,7 +10,9 @@
     margin-bottom: 0;
 
     &:not(:first-child) {
-      margin-top: 60px;
+      border-top: 1px solid var(--color-separator);
+      padding-top: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
     }
   }
 
@@ -19,11 +21,5 @@
     line-height: var(--line-height-h3);
     margin-top: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
-  }
-
-  h3:not(:first-child) {
-    border-top: 1px solid var(--color-separator);
-    padding-top: var(--spacing-xl);
-    margin-top: var(--spacing-xl);
   }
 }

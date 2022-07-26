@@ -6,7 +6,6 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
 import { setHeaders } from '../helpers';
 import { getGenesMap, getTeams } from './';
 import {

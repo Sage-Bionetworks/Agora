@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { cloneDeep } from 'lodash';
 
 import {
   Gene,

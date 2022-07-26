@@ -1,35 +1,9 @@
-const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const helpers = require('./helpers');
 
-module.exports = function (options) {
-  const ENV =
-    process.env.mode ||
-    process.env.NODE_ENV ||
-    process.env.ENV ||
-    'development';
-  const HOST = process.env.HOST || 'localhost';
-
-  const MONGODB_HOST = process.env.MONGODB_HOST || null;
-  const MONGODB_PORT = process.env.MONGODB_PORT || null;
-  const APP_ENV = process.env.APP_ENV || null;
-
-  const METADATA = Object.assign(
-    {},
-    /*buildUtils.DEFAULT_METADATA*/ {},
-    {
-      host: process.env.HOST || 'localhost',
-      port: process.env.PORT || 8080,
-      ENV: ENV,
-      MONGODB_HOST: MONGODB_HOST,
-      MONGODB_PORT: MONGODB_PORT,
-      APP_ENV: APP_ENV,
-    }
-  );
-
+module.exports = function () {
   return {
     entry: {
       server: helpers.root('src/server/server.ts'),
@@ -47,22 +21,6 @@ module.exports = function (options) {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       modules: [helpers.root('node_modules')],
-      fallback: {
-        crypto: false,
-        http: false,
-        https: false,
-        os: false,
-        path: false,
-        stream: false,
-        process: false,
-        url: false,
-        fs: false,
-        util: false,
-        querystring: false,
-        net: false,
-        zlib: false,
-        async_hooks: false,
-      },
     },
     module: {
       rules: [
