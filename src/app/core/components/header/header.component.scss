@@ -124,6 +124,10 @@
       transition: var(--transition-duration);
       align-items: center;
 
+      &:hover {
+        color: var(--color-action-primary);
+      }
+
       &::after {
         content: ' ';
         position: absolute;
