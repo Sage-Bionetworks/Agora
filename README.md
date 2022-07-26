@@ -331,7 +331,7 @@ encapsulation: ViewEncapsulation.None,
 
 ## Use latest TypeScript compiler
 
-TypeScript 2.1.x includes everything you need. Make sure to upgrade, even if you installed TypeScript previously.
+TypeScript 4.6.x includes everything you need. Make sure to upgrade, even if you installed TypeScript previously.
 
 ```
 npm install --global typescript
@@ -365,9 +365,9 @@ npm i @types/youtube @types/gapi @types/gapi.youtube
 In some cases where your code editor doesn't support Typescript 2 yet or these types weren't listed in `tsconfig.json`, add these to **"src/custom-typings.d.ts"** to make peace with the compile check:
 
 ```es6
-import "@types/gapi.youtube";
-import "@types/gapi";
-import "@types/youtube";
+import '@types/gapi.youtube';
+import '@types/gapi';
+import '@types/youtube';
 ```
 
 ## Custom Type Definitions
@@ -384,7 +384,7 @@ If you can't find the type definition in the registry we can make an ambient def
 this file for now. For example
 
 ```typescript
-declare module "my-module" {
+declare module 'my-module' {
   export function doesSomething(value: string): string;
 }
 ```
@@ -400,7 +400,7 @@ declare var $: any;
 If you're importing a module that uses Node.js modules which are CommonJS you need to import as
 
 ```typescript
-import * as _ from "lodash";
+import * as _ from 'lodash';
 ```
 
 # Local Development and Testing (Updated 9/30/2021)
@@ -523,6 +523,13 @@ Agora/
  │   ├──webpack.server.js             * server Webpack config
  │   └──webpack.test.js               * testing Webpack config
  │
+ ├──scripts/
+ │   ├──get-data-aws.sh               * shell script to download the data using amazon credentials from the bastian
+ │   ├──get-data-local-aws.sh         * shell script to download the data using amazon credentials locally
+ │   ├──get-data-local.sh             * shell script to download the data locally using Synapse credentials
+ │   ├──set-agora-version.sh          * shell script to set the Agora version based on the remote branch latest commit SHA id
+ │   └──start-mongo.sh                * shell script to start the MongoDB
+ │
  ├──src/                              * source files that will be compiled to javascript
  |   ├──main.browser.ts               * entry file for browser environment
  │   │
@@ -582,17 +589,11 @@ Agora/
  │       └──...                       * other files
  │
  │
- ├──get-data-aws.sh                   * shell script to download the data using amazon credentials from the bastian
- ├──get-data-local-aws.sh             * shell script to download the data using amazon credentials locally
- ├──get-data-local.sh                 * shell script to download the data locally using Synapse credentials
- ├──set-agora-version.sh              * shell script to set the Agora version based on the remote branch latest commit SHA id
- ├──start-mongo.sh                    * shell script to start the MongoDB
- ├──tslint.json                       * typescript lint config
- ├──typedoc.json                      * typescript documentation generator
- ├──tsconfig.json                     * typescript config used outside webpack
- ├──tsconfig.webpack.json             * config that Webpack uses for typescript
+ ├──.eslintrc.json                    * typescript lint config
  ├──package.json                      * what npm uses to manage its dependencies
- └──webpack.config.js                 * Webpack main configuration file
+ ├──tsconfig.json                     * typescript config
+ └──tsconfig.server.json              * typescript config for server
+
 ```
 
 # Database
