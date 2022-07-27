@@ -20,8 +20,8 @@
   color: #fff;
 
   &:hover {
-    background-color: var(--color-action-primary);
-    border: 1px solid var(--color-action-primary);
+    background-color: var(--color-action-primary-hover);
+    border: 1px solid var(--color-action-primary-hover);
   }
 }
 
@@ -30,10 +30,10 @@
   border: 1px solid var(--color-action-primary);
   color: var(--color-action-primary);
 
-  // &:hover {
-  //   background-color: var(--color-action-primary);
-  //   border: 1px solid var(--color-action-primary);
-  // }
+  &:hover {
+    color: var(--color-action-primary-hover);
+    border: 1px solid var(--color-action-primary-hover);
+  }
 }
 
 .btn-secondary {

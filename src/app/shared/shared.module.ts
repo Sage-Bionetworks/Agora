@@ -29,6 +29,7 @@ import { MessageService } from 'primeng/api';
 // Components
 // -------------------------------------------------------------------------- //
 import {
+  SvgIconComponent,
   LoadingIconComponent,
   LoadingOverlayComponent,
   WikiComponent,
@@ -44,6 +45,7 @@ import {
 
 @NgModule({
   declarations: [
+    SvgIconComponent,
     LoadingIconComponent,
     LoadingOverlayComponent,
     WikiComponent,
@@ -89,6 +91,7 @@ import {
     ToastModule,
     InputSwitchModule,
     //
+    SvgIconComponent,
     LoadingIconComponent,
     LoadingOverlayComponent,
     WikiComponent,

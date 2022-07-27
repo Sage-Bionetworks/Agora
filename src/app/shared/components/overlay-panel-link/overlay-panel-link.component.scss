@@ -1,27 +1,19 @@
-@import "../../../../styles/variables";
-@import "../../../../styles/mixins";
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+overlay-link,
+.overlay-link {
+  display: inline-block;
+}
 
 .overlay-link-inner {
   display: flex;
 }
 
 .overlay-link-icon {
-  color: var(--color-link);
-  cursor: pointer;
+  transform: translateY(1px);
 
   &:not(:last-child) {
     margin-right: 8px;
   }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    transform: translateY(2px);
-  }
-}
-
-.overlay-link-text {
-  color: var(--color-link);
-  text-decoration: underline;
-  cursor: pointer;
 }

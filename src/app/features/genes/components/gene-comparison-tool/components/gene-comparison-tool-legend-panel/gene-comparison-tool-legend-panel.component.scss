@@ -37,8 +37,10 @@
     }
   }
 
-  img {
-    max-width: 100%;
+  img,
+  svg {
+    display: block;
+    width: 100%;
     height: auto;
   }
 }

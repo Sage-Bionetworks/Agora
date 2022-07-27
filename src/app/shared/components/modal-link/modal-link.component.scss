@@ -1,7 +1,8 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-modal-link {
+modal-link,
+.modal-link {
   display: inline-block;
 }
 
@@ -10,20 +11,9 @@ modal-link {
 }
 
 .modal-link-icon {
-  color: var(--color-link);
-  cursor: pointer;
+  transform: translateY(1px);
 
   &:not(:last-child) {
     margin-right: 8px;
   }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    transform: translateY(2px);
-  }
-}
-
-.modal-link-text {
-  @include link;
 }

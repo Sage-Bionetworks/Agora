@@ -9,10 +9,10 @@
   <p-accordionTab>
     <p-header>
       <div class="row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">
+        <div class="col-md-3 col-sm-7 header-title">
           Small Molecule Modality
         </div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-score">
+        <div class="col-sm-4 col-md-3 text-center header-score">
           <div
             [ngStyle]="getBucketIconStyle(false)"
             [style.background-color]="
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">
+        <div class="col-sm-12 col-md-6 header-description">
           {{ druggability.classification }}
         </div>
       </div>
@@ -40,10 +40,8 @@
     </p>
 
     <div class="row inner-row bucket-inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
-        Bucket
-      </div>
-      <div class="col-md-11 col-sm-10 col-9 vertical-auto">
+      <div class="col-md-1 col-sm-2 content-title vertical-auto">Bucket</div>
+      <div class="col-md-11 col-sm-10 vertical-auto">
         <div class="icon-wrapper" *ngFor="let bucket of bucketsSM">
           <div class="icon-class caret-wrapper">
             <div
@@ -71,8 +69,8 @@
     </div>
 
     <div class="row inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title">Criteria</div>
-      <div class="col-md-5 col-sm-7 col-9 class-description-title">
+      <div class="col-md-1 col-sm-2 content-title">Criteria</div>
+      <div class="col-md-10 col-sm-9 class-description-title">
         <div
           class="container no-gutters class-description"
           [style.background-color]="getBucketBGColor(currentBucketSM, 'sm')"
@@ -100,10 +98,8 @@
   <p-accordionTab>
     <p-header>
       <div class="row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">
-          Antibody Modality
-        </div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-score">
+        <div class="col-md-3 col-sm-8 header-title">Antibody Modality</div>
+        <div class="col-md-3 col-sm-4 text-center header-score">
           <div
             [ngStyle]="getBucketIconStyle(false)"
             [style.background-color]="
@@ -118,7 +114,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">
+        <div class="col-md-6 col-sm-12 header-description">
           {{ druggability.abability_bucket_definition }}
         </div>
       </div>
@@ -131,10 +127,8 @@
     </p>
 
     <div class="row inner-row bucket-inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
-        Bucket
-      </div>
-      <div class="col-md-11 col-sm-10 col-9 vertical-auto">
+      <div class="col-md-1 col-sm-2 content-title vertical-auto">Bucket</div>
+      <div class="col-md-11 col-sm-10 vertical-auto">
         <div class="icon-wrapper" *ngFor="let bucket of bucketsAB">
           <div class="icon-class caret-wrapper">
             <div
@@ -157,8 +151,8 @@
     </div>
 
     <div class="row inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title">Criteria</div>
-      <div class="col-md-5 col-sm-7 col-9 class-description-title">
+      <div class="col-md-1 col-sm-2 content-title">Criteria</div>
+      <div class="col-md-10 col-sm-9 class-description-title">
         <div
           class="container no-gutters class-description"
           [style.background-color]="getBucketBGColor(currentBucketAB, 'ab')"
@@ -186,8 +180,8 @@
   <p-accordionTab>
     <p-header>
       <div class="row">
-        <div class="col-md-3 col-sm-8 col-8 header-title">Safety</div>
-        <div class="col-md-3 col-sm-4 col-4 text-center header-score">
+        <div class="col-md-3 col-sm-8 header-title">Safety</div>
+        <div class="col-md-3 col-sm-4 text-center header-score">
           <div
             [ngStyle]="getBucketIconStyle(false)"
             [style.background-color]="
@@ -200,7 +194,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-sm-12 col-12 header-description">
+        <div class="col-md-6 col-sm-12 header-description">
           {{ druggability.safety_bucket_definition }}
         </div>
       </div>
@@ -212,10 +206,8 @@
     </p>
 
     <div class="row inner-row bucket-inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title vertical-auto">
-        Bucket
-      </div>
-      <div class="col-md-11 col-sm-10 col-9 vertical-auto">
+      <div class="col-md-1 col-sm-2 content-title vertical-auto">Bucket</div>
+      <div class="col-md-11 col-sm-10 vertical-auto">
         <div class="icon-wrapper" *ngFor="let bucket of bucketsSF">
           <div class="icon-class caret-wrapper">
             <div
@@ -238,8 +230,8 @@
     </div>
 
     <div class="row inner-row">
-      <div class="col-md-1 col-sm-2 col-3 content-title">Criteria</div>
-      <div class="col-md-5 col-sm-7 col-9 class-description-title">
+      <div class="col-md-1 col-sm-2 content-title">Criteria</div>
+      <div class="col-md-10 col-sm-9 class-description-title">
         <div
           class="container no-gutters class-description"
           [style.background-color]="getBucketBGColor(currentBucketSF, 'sf')"

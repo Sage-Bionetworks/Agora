@@ -17,7 +17,7 @@
   }
 
   .gct-filter-list-clear-all {
-    margin-top: 11px;
+    margin-top: 7px;
     margin-right: 20px;
     font-size: 11px;
     font-weight: 700;
@@ -25,13 +25,14 @@
     cursor: pointer;
     transition: $transition-duration;
 
-    svg {
-      margin-right: 2px;
+    .svg-icon {
+      height: 12px;
+      margin-right: 8px;
       transform: translateY(1px);
     }
 
     &:hover {
-      color: #000;
+      @include link-hover;
     }
   }
 }

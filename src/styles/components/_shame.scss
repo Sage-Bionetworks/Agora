@@ -67,6 +67,10 @@
     }
   }
 
+  p-header {
+    width: 100%;
+  }
+
   .inner-row-header {
     height: 46px;
   }
@@ -112,6 +116,14 @@
   .header-title {
     line-height: var(--font-size-xxl);
     font-size: var(--font-size-lg);
+  }
+
+  .header-score > div,
+  .icon-wrapper > div:nth-child(2) {
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    cursor: pointer;
   }
 
   .container {

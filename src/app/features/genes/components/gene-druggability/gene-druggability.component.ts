@@ -346,14 +346,8 @@ export class GeneDruggabilityComponent implements OnInit {
 
   getBucketIconStyle(isSelection: boolean): object {
     const widthString = isSelection ? '62px' : '36px';
-    const marginStringString = isSelection ? '9.5px' : '22.5px';
     const iconClass: object = {
-      display: 'inline-block',
-      'border-radius': '50%',
       width: widthString,
-      'margin-left': marginStringString,
-      'margin-right': marginStringString,
-      cursor: 'pointer',
     };
 
     return iconClass;

@@ -38,8 +38,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
           disabled: false,
         },
         {
-          name: 'proteomics',
-          label: 'Proteomics',
+          name: 'protein',
+          label: 'Protein',
           disabled: false,
         },
         {
@@ -56,7 +56,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'nominations',
-      label: 'Nominations details',
+      label: 'Nomination details',
       disabled: false,
     },
     {
@@ -90,6 +90,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
   }
 
   reset() {
+    this.gene = undefined;
     this.activePanel = 'summary';
     this.activeParent = '';
     this.isNavigationOpen = false;
@@ -97,8 +98,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
+      this.reset();
       this.helperService.setLoading(true);
-      this.gene = undefined;
 
       if (params.get('id')) {
         this.geneService

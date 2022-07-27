@@ -1,3 +1,4 @@
+export * from './svg-icon';
 export * from './loading-icon';
 export * from './loading-overlay';
 export * from './wiki';

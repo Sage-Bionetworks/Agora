@@ -16,21 +16,21 @@ export class GeneProteinSelectorComponent {
     return this._options;
   }
   @Input() set options(options: any) {
+    this.selected = {} as Option;
     this._options =
       options?.map((option: any) => {
         return {
           name: option,
           value: option,
-        };
+        } as Option;
       }) || [];
 
-    if (this._options.length > 0) {
-      this.selected.name = this._options[0]?.name || '';
-      this.selected.value = this._options[0]?.value || '';
+    if (this._options.length) {
+      this.selected = this._options[0];
     }
   }
 
-  selected: Option = {} as Option;
+  @Input() selected: Option = { name: '', value: '' };
 
   @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 

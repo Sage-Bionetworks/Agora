@@ -58,12 +58,46 @@
   }
 }
 
+@mixin link-hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
 @mixin link {
   color: var(--color-link);
   cursor: pointer;
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
+    @include link-hover;
+  }
+}
+
+@mixin two-tone-icon-hover {
+  .svg-icon-bg {
+    fill: rgb(var(--color-action-primary-rgb) / 30%);
+  }
+
+  circle,
+  rect,
+  path {
+    &:not(.svg-icon-bg) {
+      fill: var(--color-action-primary);
+    }
+  }
+}
+
+@mixin two-tone-icon {
+  color: var(--color-gray-600);
+  transition: $transition-duration;
+
+  circle,
+  rect,
+  path {
+    transition: $transition-duration;
+  }
+
+  &:hover {
+    @include two-tone-icon-hover;
   }
 }

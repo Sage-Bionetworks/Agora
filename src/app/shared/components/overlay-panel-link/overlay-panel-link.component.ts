@@ -1,7 +1,12 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import { Component, Input, ViewChild } from '@angular/core';
-
 import { OverlayPanel } from 'primeng/overlaypanel';
 
+// -------------------------------------------------------------------------- //
+// Component
+// -------------------------------------------------------------------------- //
 @Component({
   selector: 'overlay-panel-link',
   templateUrl: './overlay-panel-link.component.html',

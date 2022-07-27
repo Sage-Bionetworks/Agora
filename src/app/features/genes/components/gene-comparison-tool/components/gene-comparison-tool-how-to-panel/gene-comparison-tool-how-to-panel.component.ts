@@ -62,7 +62,7 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
         content: this.sanitizer.bypassSecurityTrustHtml(
           `<p>Welcome to Agora’s Gene Comparison Tool. This overview demonstrates how to use the tool to explore results about genes related to AD. You can revisit this walkthrough by clicking the Visualization Overview link at the bottom of the page.</p>
           <p>Click on the Legend link at the bottom of the page to view the legend for the current visualization.</p>
-          <img src="/assets/images/gct-how-to-0.png" />`
+          <img src="/assets/images/gct-how-to-0.svg" />`
         ),
       },
       {

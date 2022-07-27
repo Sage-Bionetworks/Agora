@@ -15,9 +15,9 @@ import { GenesModule } from '../features/genes';
 // -------------------------------------------------------------------------- //
 import {
   ApiService,
+  ErrorService,
   HelperService,
   SynapseApiService,
-  ErrorService,
 } from './services';
 
 // -------------------------------------------------------------------------- //

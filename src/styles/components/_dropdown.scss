@@ -23,6 +23,12 @@ div.p-dropdown {
   .p-dropdown-trigger {
     margin-left: 30px;
   }
+
+  &:hover {
+    .p-dropdown-trigger-icon {
+      color: var(--color-action-primary);
+    }
+  }
 }
 
 .p-multiselect {

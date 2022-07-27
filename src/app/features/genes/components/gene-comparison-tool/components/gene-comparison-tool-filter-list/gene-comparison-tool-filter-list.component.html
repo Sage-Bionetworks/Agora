@@ -2,19 +2,8 @@
   <div *ngIf="hasSelectedFilters()" class="gct-filter-list-inner">
     <div>
       <button class="gct-filter-list-clear-all" (click)="clear()">
-        <svg
-          width="10"
-          height="12"
-          viewBox="0 0 10 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M7.04102 1.33333L6.45768 0.75H3.54102L2.95768 1.33333H0.916016V2.5H9.08268V1.33333H7.04102ZM1.49935 10.0833C1.49935 10.725 2.02435 11.25 2.66602 11.25H7.33268C7.97435 11.25 8.49935 10.725 8.49935 10.0833V3.08333H1.49935V10.0833ZM2.66602 4.25H7.33268V10.0833H2.66602V4.25Z"
-            fill="#878E95"
-          />
-        </svg>
-        Clear all
+        <svg-icon name="trash" customClass="two-tone"></svg-icon>
+        <span>Clear all</span>
       </button>
     </div>
     <div>

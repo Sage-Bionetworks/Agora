@@ -57,6 +57,7 @@ $main-colors: (
   tertiary: #42c7bb,
 
   action-primary: #5081a7,
+  action-primary-rgb: 80 129 167,
 
   success: #6db56d,
   warning: #fccb6f,
@@ -73,6 +74,10 @@ $main-colors: (
   gray-100: #fbfbfc,
 );
 
+$main-colors-hover: (
+  action-primary: #406786,
+);
+
 $extra-colors: (
   heading: map.get($main-colors, 'primary'),
   text: map.get($main-colors, 'gray-900'),
@@ -86,6 +91,9 @@ $extra-colors: (
 :root {
   @each $key, $color in $main-colors {
     --color-#{$key}: #{$color};
+  }
+  @each $key, $color in $main-colors-hover {
+    --color-#{$key}-hover: #{$color};
   }
   @each $key, $color in $extra-colors {
     --color-#{$key}: #{$color};
@@ -128,7 +136,7 @@ $headings: (
   //   font-size: 40px,
   //   font-weight: 500,
   //   line-height: 40px,
-  // ),,
+  // ),,,,,
 );
 
 $font-sizes: (

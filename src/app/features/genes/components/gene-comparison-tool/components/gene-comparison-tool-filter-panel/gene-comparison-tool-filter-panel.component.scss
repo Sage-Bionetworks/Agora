@@ -231,17 +231,11 @@
 
   .gct-filter-panel-pane-heading-info {
     display: inline-block;
-    transform: translateY(2px);
-    margin-left: 4px;
-    border-radius: 50%;
-    transition: $transition-duration;
+    margin-left: 6px;
+    transform: translateY(1px);
 
-    svg {
-      display: block;
-    }
-
-    &:hover {
-      background-color: rgb(135 142 149 / 30%);
+    .svg-icon {
+      height: 20px;
     }
   }
 

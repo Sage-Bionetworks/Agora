@@ -22,6 +22,7 @@
 @import 'components/tooltip';
 @import 'components/table';
 @import 'components/chart';
+@import 'components/icon';
 @import 'components/shame';
 
 html,
@@ -123,7 +124,9 @@ body {
   }
 
   .p-toast-message-info {
-    background: var(--color-primary);
+    background: var(--color-tertiary);
+    box-shadow: 3px 4px 9px rgb(0 0 0 / 25%);
+    border-radius: 2px;
 
     .p-toast-icon,
     .p-toast-detail,
