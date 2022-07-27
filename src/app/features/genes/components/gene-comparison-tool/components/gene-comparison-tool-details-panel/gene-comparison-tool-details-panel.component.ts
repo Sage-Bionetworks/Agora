@@ -87,7 +87,7 @@ export class GeneComparisonToolDetailsPanelComponent {
   toggle(event: any, data?: GCTDetailsPanelData) {
     if (
       event.target === this.event?.target &&
-      this.panels.first.overlayVisible
+      (this.panels.first.overlayVisible || this.panels.last.overlayVisible)
     ) {
       this.hide();
     } else {

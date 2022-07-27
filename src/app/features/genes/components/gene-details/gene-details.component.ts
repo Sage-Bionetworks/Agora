@@ -56,7 +56,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'nominations',
-      label: 'Nomination details',
+      label: 'Nomination Details',
       disabled: false,
     },
     {

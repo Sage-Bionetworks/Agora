@@ -22,6 +22,12 @@
       .row {
         align-items: center;
       }
+
+      &:hover {
+        .p-accordion-toggle-icon {
+          color: var(--color-action-primary);
+        }
+      }
     }
 
     .p-accordion-content {

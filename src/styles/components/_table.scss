@@ -53,7 +53,7 @@
 
   p-table.fullscreen-table {
     .p-datatable-wrapper {
-      height: 100vh;
+      height: calc(100vh - 58px);
     }
   }
 

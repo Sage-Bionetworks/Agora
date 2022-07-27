@@ -151,10 +151,12 @@
     }
   }
 
-  &.focused:not(.gene-search-home) {
-    .gene-search-bar {
-      background-color: transparent;
-      border-color: var(--color-action-primary);
+  &.focused {
+    &:not(.gene-search-home) {
+      .gene-search-bar {
+        background-color: transparent;
+        border-color: var(--color-action-primary);
+      }
     }
 
     .gene-search-results {
