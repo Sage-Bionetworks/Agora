@@ -9,7 +9,7 @@
   input {
     background-color: transparent;
     font-size: var(--font-size-sm);
-    padding: var(--spacing-md);
+    padding: 9px var(--spacing-md);
   }
 
   &.gene-search-home {
@@ -151,10 +151,10 @@
     }
   }
 
-  &.focused {
+  &.focused:not(.gene-search-home) {
     .gene-search-bar {
       background-color: transparent;
-      border-color: var(--color-secondary);
+      border-color: var(--color-action-primary);
     }
 
     .gene-search-results {
