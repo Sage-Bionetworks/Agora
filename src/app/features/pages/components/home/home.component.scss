@@ -43,9 +43,15 @@
 
 .description {
   width: 70%;
+  font-size: var(--font-size-xl);
+  line-height: 2rem;
 
   @media (min-width: 990px) {
     width: 100%;
+  }
+
+  a {
+    white-space: nowrap;
   }
 }
 
@@ -114,8 +120,14 @@
   padding: var(--spacing-lg);
   flex-shrink: 0;
 
-  h3 {
+  h2 {
     font-weight: bold;
+    font-size: var(--font-size-xxl);
+  }
+
+  p {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xxl);
   }
 
   .icon-container {
