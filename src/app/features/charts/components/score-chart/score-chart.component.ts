@@ -205,7 +205,7 @@ export class ScoreChartComponent extends BaseChartComponent {
 
   addTooltip(bar: HTMLElement, i: number) {
     const self = this;
-    const tooltip = this.getTooltip('bar', 'score-chart-tooltip');
+    const tooltip = this.getTooltip('internal', 'score-chart-tooltip', true);
     const distribution: any = this.distribution[i];
 
     d3.select(bar)
@@ -221,13 +221,13 @@ export class ScoreChartComponent extends BaseChartComponent {
 
         tooltip
           .html(text)
-          .style('top', window.pageYOffset + barBox.top + 'px')
-          .style('left', barBox.left + barBox.width + 10 + 'px');
+          .style('top', window.pageYOffset + barBox.top - 40 + 'px')
+          .style('left', barBox.left + barBox.width - 20 + 'px');
 
-        self.showTooltip('bar');
+        self.showTooltip('internal');
       })
       .on('mouseout', function () {
-        self.hideTooltip('bar');
+        self.hideTooltip('internal');
       });
   }
 }

@@ -90,7 +90,7 @@ export class CandlestickChartComponent extends BaseChartComponent {
     const height = this.chartHeight - margin.top - margin.bottom;
     const color = this.helperService.getColor('secondary');
     const tooltip = this.getTooltip(
-      'value',
+      'internal',
       'chart-value-tooltip candlestick-chart-value-tooltip'
     );
 
@@ -194,12 +194,12 @@ export class CandlestickChartComponent extends BaseChartComponent {
         tooltip
           .text(text)
           .style('left', (offset?.left || 0) + 'px')
-          .style('top', (offset?.top || 0) + 40 + 'px');
+          .style('top', (offset?.top || 0) + 'px');
 
-        self.showTooltip('value');
+        self.showTooltip('internal');
       })
       .on('mouseout', function () {
-        self.hideTooltip('value');
+        self.hideTooltip('internal');
       });
 
     // Add red horizontal line
