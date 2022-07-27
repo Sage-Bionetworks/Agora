@@ -24,6 +24,11 @@
   }
 }
 
+.content {
+  max-width: 1350px;
+  margin: 0 auto;
+}
+
 .text-marquee {
   display: flex;
   flex-direction: column;
