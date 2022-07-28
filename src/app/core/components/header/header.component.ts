@@ -56,7 +56,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onResize() {
-    this.isMobile = window.innerWidth < 1180;
+    this.isMobile = window.innerWidth < 1320;
     if (this.isMobile) {
       this.navItems = [...this.defaultNavItems, ...this.mobileNavItems];
     } else {
