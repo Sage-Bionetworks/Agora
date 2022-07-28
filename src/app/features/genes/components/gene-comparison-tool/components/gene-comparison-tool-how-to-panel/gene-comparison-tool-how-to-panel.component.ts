@@ -75,7 +75,7 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
       {
         heading: 'Compare Multiple Genes',
         content: this.sanitizer.bypassSecurityTrustHtml(
-          `<p>You can pin several genes to visually compare them together. Then export the data about your pinned genes into the CSV file for further analysis.</p>
+          `<p>You can pin several genes to visually compare them together. Then export the data about your pinned genes as a CSV file for further analysis.</p>
           <img src="/assets/images/gct-how-to-2.gif" />`
         ),
       },

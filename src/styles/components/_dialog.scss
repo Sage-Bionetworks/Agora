@@ -17,7 +17,11 @@
   }
 
   .p-dialog-header-close-icon {
-    color: var(--color-link);
+    color: var(--color-gray-600);
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
   }
 
   .p-dialog-title {
