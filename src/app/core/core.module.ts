@@ -17,6 +17,8 @@ import {
   ApiService,
   ErrorService,
   HelperService,
+  RollbarService,
+  rollbarFactory,
   SynapseApiService,
 } from './services';
 
@@ -41,6 +43,10 @@ import { HeaderComponent, FooterComponent } from './components';
     ApiService,
     HelperService,
     SynapseApiService,
+    {
+      provide: RollbarService,
+      useFactory: rollbarFactory,
+    },
     { provide: ErrorHandler, useClass: ErrorService },
     {
       provide: HTTP_INTERCEPTORS,

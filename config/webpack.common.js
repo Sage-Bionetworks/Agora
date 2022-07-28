@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
 
 const helpers = require('./helpers');
 

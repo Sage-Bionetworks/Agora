@@ -187,6 +187,7 @@
             <p-table
               #headerTable
               id="table-header"
+              breakpoint="0"
               (sortFunction)="setSort($event)"
               [customSort]="true"
             >
@@ -246,7 +247,7 @@
               [value]="pinnedGenes"
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
-              responsiveLayout="scroll"
+              breakpoint="0"
             >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
@@ -361,7 +362,7 @@
               [rows]="10"
               [showCurrentPageReport]="true"
               currentPageReportTemplate="{first}-{last} of {totalRecords}"
-              responsiveLayout="scroll"
+              breakpoint="0"
               (sortFunction)="sortCallback($event)"
               [customSort]="true"
             >

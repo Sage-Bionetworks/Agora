@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -11,6 +11,11 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { RollbarService } from '../services';
 
 // -------------------------------------------------------------------------- //
 // Services
@@ -23,7 +28,7 @@ import { MessageService } from 'primeng/api';
 @Injectable({ providedIn: 'root' })
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(
-    //private injector: Injector,
+    private injector: Injector,
     private messageService: MessageService
   ) {}
 
@@ -36,6 +41,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
+        const rollbar = self.injector.get(RollbarService);
         let errorMessage = '';
         let errorSummary = '';
         let errorDetail = '';
@@ -77,6 +83,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           self.messageService.clear();
         }, 3000);
 
+        // Send the error message to Rollbar
+        rollbar.error(error);
         return throwError({ errorSummary, errorMessage });
       })
     );

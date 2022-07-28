@@ -161,12 +161,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     let urlPins = this.getUrlParam('pinned', true);
     const pinnedGenes: GCTGene[] = [];
 
-    // if (this.pinnedGenesCache[this.getPinnedGenesCacheKey()]) {
-    //   console.log('load', this.pinnedGenesCache[this.getPinnedGenesCacheKey()]);
-    //   urlPins = this.pinnedGenesCache[this.getPinnedGenesCacheKey()].map(
-    //     (g: GCTGene) => g.uid
-    //   );
-    // }
+    if (this.pinnedGenesCache[this.getPinnedGenesCacheKey()]) {
+      urlPins = this.pinnedGenesCache[this.getPinnedGenesCacheKey()].map(
+        (g: GCTGene) => g.uid
+      );
+    }
 
     genes.forEach((gene: GCTGene) => {
       gene.uid = gene.ensembl_gene_id;
@@ -279,6 +278,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   onCategoryChange() {
+    if (this.category === 'Protein - Differential Expression') {
+      this.pinnedGenesCache = {};
+    }
     this.updateSubCategories();
     this.updateUrl();
     this.loadGenes();
@@ -489,8 +491,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   refreshPinnedGenes() {
-    //console.log('refreshPinnedGenes');
-    //this.pinnedGenesCache[this.getPinnedGenesCacheKey()] = this.pinnedGenes;
+    this.pinnedGenesCache[this.getPinnedGenesCacheKey()] = this.pinnedGenes;
     this.filter();
     this.updateUrl();
   }
@@ -507,10 +508,6 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.pinnedGenes.push(gene);
 
     if (refresh) {
-      // console.log(
-      //   'clear cache genes (pin)',
-      //   this.pinnedGenesCache[this.getPinnedGenesCacheKey()]
-      // );
       this.pinnedGenesCache = {};
       this.refreshPinnedGenes();
     }
@@ -559,10 +556,6 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.pinnedGenes.splice(index, 1);
 
     if (refresh) {
-      // console.log(
-      //   'clear cache genes (unpin)',
-      //   this.pinnedGenesCache[this.getPinnedGenesCacheKey()]
-      // );
       this.pinnedGenesCache = {};
       this.refreshPinnedGenes();
     }

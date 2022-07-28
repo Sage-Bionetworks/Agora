@@ -35,7 +35,12 @@ app.use(
   helmet.contentSecurityPolicy({
     useDefaults: true,
     directives: {
-      'img-src': ["'self'", 'blob:', 'data:'],
+      'img-src': [
+        "'self'",
+        'blob:',
+        'data:',
+        'https://www.google-analytics.com',
+      ],
       'connect-src': [
         "'self'",
         'https://repo-prod.prod.sagebase.org',
@@ -46,7 +51,8 @@ app.use(
       'script-src': [
         "'self'",
         "'unsafe-inline'",
-        'https://www.googletagmanager.com/',
+        'https://www.googletagmanager.com',
+        'https://www.google-analytics.com',
       ],
       'frame-src': ['https://player.vimeo.com/', 'https://docs.google.com'],
     },

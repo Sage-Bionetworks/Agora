@@ -39,7 +39,7 @@ export class RowChartComponent extends BaseChartComponent {
   group: any;
   dimension: any;
 
-  @ViewChild('leftAxis', { static: false }) leftAxis: ElementRef =
+  @ViewChild('leftAxis', { static: true }) leftAxis: ElementRef =
     {} as ElementRef;
 
   max = -Infinity;

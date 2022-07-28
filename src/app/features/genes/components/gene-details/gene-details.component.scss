@@ -139,8 +139,8 @@
       position: relative;
       display: flex;
       height: 100%;
-      padding: 8px 16px;
-      font-size: 1.313rem;
+      padding: 8px 0;
+      font-size: var(--font-size-lg);
       font-weight: 700;
       color: var(--color-text-secondary);
       transition: var(--transition-duration);

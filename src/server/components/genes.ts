@@ -212,11 +212,6 @@ export async function getNominatedGenes() {
 }
 
 export async function geneTableRoute(req: any, res: any) {
-  // if (!req.params || !req.params.id) {
-  //   res.status(404).send('Not found');
-  //   return;
-  // }
-
   setHeaders(res);
   res.json(await getNominatedGenes());
 }
