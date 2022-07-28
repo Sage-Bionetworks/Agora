@@ -39,7 +39,8 @@ export class HeaderComponent implements OnInit {
     },
     {
       label: 'Help',
-      routerLink: ['help'],
+      url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
+      target: '_blank',
     },
     {
       label: 'Terms of Service',

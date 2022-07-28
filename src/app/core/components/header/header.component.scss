@@ -179,7 +179,21 @@
 
     a {
       &.active {
-        font-weight: 700;
+        position: relative;
+        color: var(--color-action-primary);
+
+        &::after {
+          content: ' ';
+          position: absolute;
+          display: block;
+          bottom: -4px;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background-color: var(--color-action-primary);
+          border-radius: 2px;
+          transition: var(--transition-duration);
+        }
       }
     }
 
@@ -209,7 +223,8 @@
     }
   }
 
-  .header-search {
-    display: none;
+  .separator {
+    opacity: 0;
+    height: 15px;
   }
 }
