@@ -1,75 +1,58 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { DecimalPipe, TitleCasePipe } from '@angular/common';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { NgModule, ErrorHandler } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppSharedModule } from '../shared';
-import { CoreRoutingModule } from './core-routing.module';
+// -------------------------------------------------------------------------- //
+// Modules
+// -------------------------------------------------------------------------- //
+import { SharedModule } from '../shared';
+import { GenesModule } from '../features/genes';
 
+// -------------------------------------------------------------------------- //
+// Services
+// -------------------------------------------------------------------------- //
 import {
-    ApiService,
-    AuthGuardService,
-    AuthenticationService,
-    GeneService,
-    DataService,
-    ForceService,
-    NavigationService,
-    MenuService
+  ApiService,
+  ErrorService,
+  HelperService,
+  RollbarService,
+  rollbarFactory,
+  SynapseApiService,
 } from './services';
 
-import { AboutComponent } from './about';
-import { NewsComponent } from './news';
-import { HelpComponent } from './help';
-import { NavbarComponent } from './navbar';
-import { MenubarComponent } from './menubar';
-import { FooterComponent } from './footer';
-import { NoContentComponent } from './no-content';
-import { ContribTeamsPageComponent } from './contrib-teams';
+// -------------------------------------------------------------------------- //
+// Interceptors
+// -------------------------------------------------------------------------- //
+import { HttpErrorInterceptor } from './interceptors';
 
-import '../../styles/styles.scss';
-import '../../styles/headings.scss';
+// -------------------------------------------------------------------------- //
+// Components
+// -------------------------------------------------------------------------- //
+import { HeaderComponent, FooterComponent } from './components';
 
+// -------------------------------------------------------------------------- //
+// Module
+// -------------------------------------------------------------------------- //
 @NgModule({
-    imports: [
-        // Shared and route modules
-        AppSharedModule,
-        CoreRoutingModule
-    ],
-    declarations: [
-        NavbarComponent,
-        MenubarComponent,
-        FooterComponent,
-        NoContentComponent,
-        AboutComponent,
-        NewsComponent,
-        HelpComponent,
-        ContribTeamsPageComponent
-    ],
-    exports: [
-        // Exported components
-        NavbarComponent,
-        MenubarComponent,
-        FooterComponent,
-        NoContentComponent,
-        AboutComponent,
-        HelpComponent,
-        ContribTeamsPageComponent
-    ],
-    providers: [
-        ApiService,
-        AuthenticationService,
-        AuthGuardService,
-        DataService,
-        GeneService,
-        ForceService,
-        NavigationService,
-        MenuService,
-        DecimalPipe,
-        TitleCasePipe
-    ]
+  declarations: [HeaderComponent, FooterComponent],
+  imports: [SharedModule, GenesModule],
+  exports: [HeaderComponent, FooterComponent],
+  providers: [
+    ApiService,
+    HelperService,
+    SynapseApiService,
+    {
+      provide: RollbarService,
+      useFactory: rollbarFactory,
+    },
+    { provide: ErrorHandler, useClass: ErrorService },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+  ],
 })
-export class CoreModule {
-    constructor(@Optional() @SkipSelf() core: CoreModule) {
-        if (core) {
-            throw new Error('Attempt to import CoreModule more than once!');
-        }
-    }
-}
+export class CoreModule {}

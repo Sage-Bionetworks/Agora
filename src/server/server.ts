@@ -1,146 +1,129 @@
-/**
- * Module dependencies.
- */
+/* eslint-disable */
 
-import * as compression from 'compression';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
 import * as express from 'express';
-import * as path from 'path';
-import * as bodyParser from 'body-parser';
+import { Request, Response, NextFunction } from 'express';
+import * as compression from 'compression';
 import * as cors from 'cors';
 import * as http from 'http';
-import * as helmet from 'helmet';
-import * as debug from 'debug';
+import * as path from 'path';
+import helmet from 'helmet';
 
-// Get our api routes
-import api from './routes/api';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import * as helpers from './helpers';
+import api from './api';
 
-debug('agora:server');
+// -------------------------------------------------------------------------- //
+// Express setup
+// -------------------------------------------------------------------------- //
 
-const env = (process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development');
-const app: express.Express = express();
+const env =
+  process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development';
+const port = helpers.normalizePort(process.env.PORT || '8080');
+const app = express();
 
-// We are behind a proxy now so set a trsut proxy variable here
-// http://expressjs.com/en/guide/behind-proxies.html
+app.set('port', port);
 app.set('trust proxy', true);
 app.set('trust proxy', 'loopback');
 
-app.use(compression());
 app.use(cors());
+app.use(
+  helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      'img-src': [
+        "'self'",
+        'blob:',
+        'data:',
+        'https://www.google-analytics.com',
+      ],
+      'connect-src': [
+        "'self'",
+        'https://repo-prod.prod.sagebase.org',
+        'https://vimeo.com/',
+        'https://www.google-analytics.com',
+        'https://fonts.gstatic.com',
+      ],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        'https://www.googletagmanager.com',
+        'https://www.google-analytics.com',
+      ],
+      'frame-src': ['https://player.vimeo.com/', 'https://docs.google.com'],
+    },
+  })
+);
 
-app.use(helmet());
-
-// Serve static files from public folder
+app.use(compression());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// Parse application/json
-app.use(bodyParser.json({limit: '50mb'}));
-// For parsing application/x-www-form-unlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+if (env === 'development') {
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('PORT:', process.env.PORT);
+}
+
+// -------------------------------------------------------------------------- //
+// Routes
+// -------------------------------------------------------------------------- //
 
 // Set our api routes
 app.use('/api', api);
 
 // Catch all other routes and return the index file
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './index.html'));
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, './index.html'));
 });
 
-// catch 404 and forward to error handler
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const err: any = new Error('Not Found');
-    err.status = 404;
-    next(err);
+// Catch 404 and forward to error handler
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const err: any = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-// Error handlers
-// Development error handler
-// Will print stacktrace
+// -------------------------------------------------------------------------- //
+// Error handling
+// -------------------------------------------------------------------------- //
+
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.json({
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// Production error handler
-// No stacktraces leaked to user
-app.use(function(err, req, res, next) {
+  // Development: will print stacktrace
+  app.use((err: any, req: Request, res: Response) => {
     res.status(err.status || 500);
     res.json({
-        message: err.message,
-        error: {}
+      message: err.message || '',
+      error: err,
     });
-});
-
-// Adding this condition because UglifyJS can't handle ES2015, only needed for the server
-if (env === 'development') {
-    console.log('NODE_ENV: ', process.env.NODE_ENV);
-    console.log('PORT: ', process.env.PORT);
+  });
+} else {
+  // Production: no stacktraces leaked to user
+  app.use((err: any, req: Request, res: Response) => {
+    res.status(err.status || 500);
+    res.json({
+      message: err.message || '',
+      error: {},
+    });
+  });
 }
 
-// Get port from environment and store in Express
-const port = normalizePort(process.env.PORT || '8080');
-app.set('port', port);
+// -------------------------------------------------------------------------- //
+// Server
+// -------------------------------------------------------------------------- //
 
-// Create HTTP server
 const server = http.createServer(app);
 
-// Listen on provided port, on all network interfaces
 server.listen(port, () => console.log(`API running on localhost:${port}`));
+server.on('error', (err) => helpers.onError(err, port));
+server.on('listening', () => helpers.onListening(server.address()));
 
-server.on('error', onError);
-server.on('listening', onListening);
-
-// Normalize a port into a number, string, or false.
-function normalizePort(val) {
-    const tPort = parseInt(val, 10);
-
-    if (isNaN(tPort)) {
-        // named pipe
-        return val;
-    }
-
-    if (tPort >= 0) {
-        // port number
-        return tPort;
-    }
-
-    return false;
-}
-
-// Event listener for HTTP server "error" event
-function onError(error) {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-
-    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-        case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
-        break;
-        default:
-        throw error;
-    }
-}
-
-// Event listener for HTTP server "listening" event
-function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
-    debug('Listening on ' + bind);
-}
+// -------------------------------------------------------------------------- //
+// Export
+// -------------------------------------------------------------------------- //
 
 export { app };

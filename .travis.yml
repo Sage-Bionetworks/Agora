@@ -9,12 +9,12 @@ addons:
 
 branches:
   only:
-  - develop
-  - staging
-  - prod
+    - develop
+    - staging
+    - prod
 
 before_install:
-  - npm install npm@6.14.13
+  # - npm install npm@8.11.0
   - npm cache verify
   - travis_retry npm prune
 
@@ -34,12 +34,12 @@ jobs:
   include:
     - stage: test
       script: npm run ci:travis
-      node_js: 12
+      node_js: 16
     - stage: eb-deploy
       script:
-        - ./set-agora-version.sh || travis_terminate 1
+        - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-      node_js: 12
+      node_js: 16
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true

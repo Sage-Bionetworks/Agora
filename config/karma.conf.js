@@ -1,4 +1,5 @@
-process.env.CHROME_BIN = process.env.CHROME_BIN || require('puppeteer').executablePath();
+process.env.CHROME_BIN =
+  process.env.CHROME_BIN || require('puppeteer').executablePath();
 
 /**
  * @author: tipe.io
@@ -8,10 +9,9 @@ module.exports = function (config) {
   const testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
 
   const configuration = {
-
     /**
      * Base path that will be used to resolve all patterns (e.g. files, exclude).
-    */
+     */
     basePath: '',
 
     /**
@@ -23,11 +23,11 @@ module.exports = function (config) {
 
     /**
      * List of files to exclude.
-    */
+     */
     exclude: [],
 
     client: {
-      captureConsole: false
+      captureConsole: false,
     },
 
     /**
@@ -37,14 +37,20 @@ module.exports = function (config) {
      */
     files: [
       { pattern: './config/spec-bundle.js', watched: false },
-      { pattern: './src/assets/**/*', watched: false, included: false, served: true, nocache: false }
+      {
+        pattern: './src/assets/**/*',
+        watched: false,
+        included: false,
+        served: true,
+        nocache: false,
+      },
     ],
 
     /**
      * By default all assets are served at http://localhost:[PORT]/base/
      */
     proxies: {
-      "/assets/": "/base/src/assets/"
+      '/assets/': '/base/src/assets/',
     },
 
     /**
@@ -52,7 +58,7 @@ module.exports = function (config) {
      * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
      */
     preprocessors: {
-      './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap']
+      './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'],
     },
 
     /**
@@ -61,16 +67,14 @@ module.exports = function (config) {
     webpack: testWebpackConfig,
 
     coverageReporter: {
-      reporters: [
-        { type: 'in-memory' }
-      ]
+      reporters: [{ type: 'in-memory' }],
     },
 
     remapCoverageReporter: {
       'text-summary': null,
       json: './coverage/coverage.json',
       html: './coverage/html',
-      lcovonly: './coverage/lcov.info'
+      lcovonly: './coverage/lcov.info',
     },
 
     /**
@@ -89,8 +93,8 @@ module.exports = function (config) {
         /**
          * options i.e.
          */
-        chunks: false
-      }
+        chunks: false,
+      },
     },
 
     /**
@@ -102,8 +106,8 @@ module.exports = function (config) {
     reporters: ['mocha', 'coverage', 'remap-coverage', 'coveralls'],
 
     coverageIstanbulReporter: {
-        reports: ['text-summary', 'html'],
-        fixWebpackSourcePaths: true,
+      reports: ['text-summary', 'html'],
+      fixWebpackSourcePaths: true,
     },
 
     /**
@@ -131,9 +135,7 @@ module.exports = function (config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
-    browsers: [
-      'ChromeTravisCi'
-    ],
+    browsers: ['ChromeTravisCi'],
 
     customLaunchers: {
       ChromeTravisCi: {
@@ -143,9 +145,9 @@ module.exports = function (config) {
           '--disable-setuid-sandbox',
           '--headless',
           '--disable-gpu',
-          '--remote-debugging-port=9222'
-        ]
-      }
+          '--remote-debugging-port=9222',
+        ],
+      },
     },
 
     /**
@@ -158,12 +160,10 @@ module.exports = function (config) {
      * wait time . Uncomment the line below if required.
      */
     // browserNoActivityTimeout: 30000
-
   };
 
   // Optional Sonar Qube Reporter
   if (process.env.SONAR_QUBE) {
-
     // SonarQube reporter plugin configuration
     configuration.sonarQubeUnitReporter = {
       sonarQubeVersion: '5.x',
@@ -171,7 +171,7 @@ module.exports = function (config) {
       overrideTestDescription: true,
       testPath: 'src/app',
       testFilePattern: '.spec.ts',
-      useBrowserName: false
+      useBrowserName: false,
     };
 
     // Additional lcov format required for
@@ -182,9 +182,7 @@ module.exports = function (config) {
   }
 
   if (process.env.TRAVIS) {
-    configuration.browsers = [
-      'ChromeTravisCi'
-    ];
+    configuration.browsers = ['ChromeTravisCi'];
   }
 
   config.set(configuration);

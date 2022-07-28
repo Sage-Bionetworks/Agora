@@ -1,0 +1,12 @@
+@import "../../../../../styles/variables";
+@import "../../../../../styles/mixins";
+
+.form-container {
+  margin-top: -200px;
+  margin-bottom: 150px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

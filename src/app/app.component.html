@@ -1,6 +1,7 @@
-<div [ngClass]="pageClass">
-    <navbar></navbar>
-    <router-outlet></router-outlet>
-</div>
-<p-toast [styleClass]="toastClass.join(' ')" [modal]="true" position="center"></p-toast>
+<header></header>
+<main id="main">
+  <router-outlet></router-outlet>
+</main>
 <footer></footer>
+<p-toast class="global-toast" position="bottom-center"></p-toast>
+<loading-overlay [isGlobal]="true"></loading-overlay>

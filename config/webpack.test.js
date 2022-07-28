@@ -18,7 +18,11 @@ const DATA_VERSION = JSON.stringify(require('../package.json')['data-version']);
 /**
  * Webpack Constants
  */
-const ENV = (process.env.mode = process.env.ENV = process.env.NODE_ENV = 'test');
+const ENV =
+  (process.env.mode =
+  process.env.ENV =
+  process.env.NODE_ENV =
+    'test');
 
 /**
  * Webpack configuration
@@ -55,8 +59,8 @@ module.exports = function () {
       modules: [helpers.root('src'), 'node_modules'],
 
       alias: {
-        'crossfilter': 'crossfilter2'
-      }
+        crossfilter: 'crossfilter2',
+      },
     },
 
     /**
@@ -86,8 +90,8 @@ module.exports = function () {
             helpers.root('node_modules/rxjs'),
             helpers.root('node_modules/@angular'),
             helpers.root('node_modules/primeng'),
-            helpers.root('node_modules/ng-mocks')
-          ]
+            helpers.root('node_modules/ng-mocks'),
+          ],
         },
 
         /**
@@ -107,26 +111,24 @@ module.exports = function () {
                 sourceMap: false,
                 inlineSourceMap: true,
                 compilerOptions: {
-
                   /**
                    * Remove TypeScript helpers to be injected
                    * below by DefinePlugin
                    */
-                  removeComments: true
-
-                }
+                  removeComments: true,
+                },
               },
             },
-            'angular2-template-loader'
+            'angular2-template-loader',
           ],
 
           /**
-         * To string and css loader support for *.css files (from Angular components)
-         * Returns file content as string
-         *
-         */
+           * To string and css loader support for *.css files (from Angular components)
+           * Returns file content as string
+           *
+           */
 
-          exclude: [/\.e2e\.ts$/]
+          exclude: [/\.e2e\.ts$/],
         },
 
         /**
@@ -137,8 +139,11 @@ module.exports = function () {
          */
         {
           test: /\.css$/,
-          loader: ['to-string-loader', { loader: 'css-loader', options: { url: false } }],
-          exclude: [helpers.root('src/index.html')]
+          loader: [
+            'to-string-loader',
+            { loader: 'css-loader', options: { url: false } },
+          ],
+          exclude: [helpers.root('src/index.html')],
         },
 
         /**
@@ -148,14 +153,19 @@ module.exports = function () {
          */
         {
           test: /\.scss$/,
-          loader: ['raw-loader', 'css-loader', {
-            loader: 'postcss-loader',
-            options: {
+          loader: [
+            'raw-loader',
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
                 sourceMap: true,
-                plugins: () => [autoprefixer()]
-            }
-          }, 'sass-loader'],
-          exclude: [helpers.root('src/index.html')]
+                plugins: () => [autoprefixer()],
+              },
+            },
+            'sass-loader',
+          ],
+          exclude: [helpers.root('src/index.html')],
         },
 
         /**
@@ -167,15 +177,15 @@ module.exports = function () {
         {
           test: /\.html$/,
           loader: 'raw-loader',
-          exclude: [helpers.root('src/index.html')]
+          exclude: [helpers.root('src/index.html')],
         },
 
         /* File loader for supporting fonts, for example, in CSS files.
-        */
+         */
         {
           test: /\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/,
           use: 'file-loader',
-          include: [helpers.root('node_modules/lato-font')]
+          include: [helpers.root('node_modules/lato-font')],
         },
 
         /**
@@ -189,9 +199,9 @@ module.exports = function () {
           test: /\.(js|ts)$/,
           loader: 'istanbul-instrumenter-loader',
           include: helpers.root('src'),
-          exclude: [/\.(e2e|spec)\.ts$/, /node_modules/]
-        }
-      ]
+          exclude: [/\.(e2e|spec)\.ts$/, /node_modules/],
+        },
+      ],
     },
 
     /**
@@ -212,15 +222,15 @@ module.exports = function () {
        * NOTE: when adding more properties make sure you include them in custom-typings.d.ts
        */
       new DefinePlugin({
-        'ENV': JSON.stringify(ENV),
-        'HMR': false,
-        'VERSION': VERSION,
-        'DATA_VERSION': DATA_VERSION,
+        ENV: JSON.stringify(ENV),
+        HMR: false,
+        VERSION: VERSION,
+        DATA_VERSION: DATA_VERSION,
         'process.env': {
-          'ENV': JSON.stringify(ENV),
-          'NODE_ENV': JSON.stringify(ENV),
-          'HMR': false,
-        }
+          ENV: JSON.stringify(ENV),
+          NODE_ENV: JSON.stringify(ENV),
+          HMR: false,
+        },
       }),
 
       /**
@@ -254,8 +264,8 @@ module.exports = function () {
           /**
            * legacy options go here
            */
-        }
-      })
+        },
+      }),
     ],
 
     /**
@@ -264,7 +274,7 @@ module.exports = function () {
      * See: https://github.com/a-tarasyuk/rr-boilerplate/blob/master/webpack/dev.config.babel.js#L41
      */
     performance: {
-      hints: false
+      hints: false,
     },
 
     /**
@@ -280,8 +290,7 @@ module.exports = function () {
       module: false,
       clearImmediate: false,
       setImmediate: false,
-      fs: 'empty'
-    }
-
+      fs: 'empty',
+    },
   };
-}
+};
