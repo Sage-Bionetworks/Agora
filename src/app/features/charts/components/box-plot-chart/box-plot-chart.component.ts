@@ -171,7 +171,7 @@ export class BoxPlotComponent extends BaseChartComponent {
             tooltip
               .html(data['tooltip'])
               .style('left', (offset?.left || 0) + 'px')
-              .style('top', (offset?.top || 0) + 40 + 'px');
+              .style('top', (offset?.top || 0) + 'px');
 
             self.showTooltip('internal');
           })

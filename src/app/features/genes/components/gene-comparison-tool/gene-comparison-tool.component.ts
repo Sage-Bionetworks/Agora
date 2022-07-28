@@ -158,14 +158,14 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   initData(genes: GCTGene[]) {
     const columns: string[] = [];
 
-    let urlPins = this.getUrlParam('pinned', true);
     const pinnedGenes: GCTGene[] = [];
-
-    if (this.pinnedGenesCache[this.getPinnedGenesCacheKey()]) {
-      urlPins = this.pinnedGenesCache[this.getPinnedGenesCacheKey()].map(
-        (g: GCTGene) => g.uid
-      );
-    }
+    const currentPinnedGenesCache = this.getPinnedGenesCache(
+      this.category,
+      this.subCategory
+    );
+    const urlPins = currentPinnedGenesCache.length
+      ? currentPinnedGenesCache.map((g: GCTGene) => g.uid)
+      : this.getUrlParam('pinned', true);
 
     genes.forEach((gene: GCTGene) => {
       gene.uid = gene.ensembl_gene_id;
@@ -185,10 +185,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
           pinnedGenes.push(gene);
         }
       } else {
-        // Make sure we have a list of ENSGs
-        urlPins = urlPins.map((id: string) => id.substring(0, 15));
-
-        if (urlPins.includes(gene.uid)) {
+        // Filter to get a list of ENSGs
+        if (
+          urlPins.map((id: string) => id.substring(0, 15)).includes(gene.uid)
+        ) {
           pinnedGenes.push(gene);
         }
       }
@@ -278,9 +278,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   onCategoryChange() {
-    if (this.category === 'Protein - Differential Expression') {
-      this.pinnedGenesCache = {};
+    // Make sure we clear the protein cache so pins are converted from RNA to Protein
+    if (this.category === 'RNA - Differential Expression') {
+      this.clearPinnedGenesCache('Protein - Differential Expression');
     }
+
     this.updateSubCategories();
     this.updateUrl();
     this.loadGenes();
@@ -484,14 +486,42 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* Pin/Unpin
   /* ----------------------------------------------------------------------- */
 
-  getPinnedGenesCacheKey() {
-    return (this.category + '-' + this.subCategory)
+  getPinnedGenesCacheKey(category: string, subCategory?: string) {
+    return (category + (subCategory ? '-' + subCategory : ''))
       .replace(/[^a-z0-9]/gi, '')
       .toLowerCase();
   }
 
+  getPinnedGenesCache(category: string, subCategory?: string) {
+    const key = this.getPinnedGenesCacheKey(category, subCategory);
+    return this.pinnedGenesCache[key] || [];
+  }
+
+  setPinnedGenesCache(genes: GCTGene[], category: string, subCategory: string) {
+    const key = this.getPinnedGenesCacheKey(category, subCategory);
+    this.pinnedGenesCache[key] = genes;
+  }
+
+  clearPinnedGenesCache(category?: string, subCategory?: string) {
+    if (!category && !subCategory) {
+      this.pinnedGenesCache = {};
+    } else {
+      const key = this.getPinnedGenesCacheKey(category as string, subCategory);
+
+      if (subCategory) {
+        delete this.pinnedGenesCache[key];
+      } else {
+        for (const k in this.pinnedGenesCache) {
+          if (k.indexOf(key) === 0) {
+            delete this.pinnedGenesCache[k];
+          }
+        }
+      }
+    }
+  }
+
   refreshPinnedGenes() {
-    this.pinnedGenesCache[this.getPinnedGenesCacheKey()] = this.pinnedGenes;
+    this.setPinnedGenesCache(this.pinnedGenes, this.category, this.subCategory);
     this.filter();
     this.updateUrl();
   }
@@ -508,7 +538,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.pinnedGenes.push(gene);
 
     if (refresh) {
-      this.pinnedGenesCache = {};
+      this.clearPinnedGenesCache();
       this.refreshPinnedGenes();
     }
   }
@@ -556,14 +586,14 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.pinnedGenes.splice(index, 1);
 
     if (refresh) {
-      this.pinnedGenesCache = {};
+      this.clearPinnedGenesCache();
       this.refreshPinnedGenes();
     }
   }
 
   clearPinnedGenes() {
     this.pinnedGenes = [];
-    this.pinnedGenesCache = {};
+    this.clearPinnedGenesCache();
     this.refreshPinnedGenes();
   }
 
@@ -622,6 +652,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       params['pinned'] = this.pinnedGenes.map(
         (g: GCTGene) => g.uid || g.ensembl_gene_id
       );
+      params['pinned'].sort();
     }
 
     this.urlParams = params;
