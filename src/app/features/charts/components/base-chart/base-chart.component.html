@@ -1,0 +1,11 @@
+<div class="chart" (window:resize)="onResize()">
+  <div class="chart-inner">
+    <h4 *ngIf="heading" class="chart-heading">{{ heading }}</h4>
+    <div class="chart-body">
+      <div #chartContainer class="chart-container"></div>
+    </div>
+    <div class="chart-no-data" *ngIf="!_data">
+      <div class="chart-no-data-text">No data is currently available.</div>
+    </div>
+  </div>
+</div>

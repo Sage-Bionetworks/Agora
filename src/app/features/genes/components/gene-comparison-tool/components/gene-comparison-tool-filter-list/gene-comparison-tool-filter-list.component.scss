@@ -1,0 +1,85 @@
+@use 'sass:map';
+
+@import '../../../../../../../styles/variables';
+@import '../../../../../../../styles/mixins';
+
+.gct-filter-list {
+  white-space: nowrap;
+
+  button {
+    @include reset-button;
+  }
+
+  .gct-filter-list-inner {
+    display: flex;
+    padding: 28px 44px 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .gct-filter-list-clear-all {
+    margin-top: 7px;
+    margin-right: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: $transition-duration;
+
+    .svg-icon {
+      height: 12px;
+      margin-right: 8px;
+      transform: translateY(1px);
+    }
+
+    &:hover {
+      @include link-hover;
+    }
+  }
+}
+
+.gct-filter-list-item {
+  display: flex;
+  padding: 8px 15px;
+  background-color: rgba(map.get($main-colors, 'action-primary'), 0.2);
+  border-radius: 40px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  float: left;
+  align-items: center;
+
+  b {
+    font-weight: 700;
+  }
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .gct-filter-list-item-handle {
+    margin-right: 12px;
+
+    span {
+      display: block;
+      width: 10px;
+      height: 2px;
+      background-color: var(--color-action-primary);
+
+      &:not(:last-child) {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .gct-filter-list-item-clear {
+    cursor: pointer;
+    margin-left: 12px;
+    color: var(--color-action-primary);
+
+    svg path {
+      transition: $transition-duration;
+    }
+  }
+}

@@ -19,9 +19,8 @@ function hasNpmFlag(flag) {
 }
 
 function isWebpackDevServer() {
-  return process.argv[1] && !! (/webpack-dev-server/.exec(process.argv[1]));
+  return process.argv[1] && !!/webpack-dev-server/.exec(process.argv[1]);
 }
-
 
 var root = path.join.bind(path, ROOT);
 

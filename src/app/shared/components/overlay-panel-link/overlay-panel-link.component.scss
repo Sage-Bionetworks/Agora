@@ -1,0 +1,19 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+overlay-link,
+.overlay-link {
+  display: inline-block;
+}
+
+.overlay-link-inner {
+  display: flex;
+}
+
+.overlay-link-icon {
+  transform: translateY(1px);
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}
