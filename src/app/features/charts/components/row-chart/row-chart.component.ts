@@ -525,7 +525,7 @@ export class RowChartComponent extends BaseChartComponent {
     chart.selectAll('g.row rect').each(function (this: any) {
       const circle = d3.select(this);
       const tooltip = self.getTooltip(
-        'value',
+        'internal',
         'chart-value-tooltip row-chart-value-tooltip'
       );
 
@@ -559,15 +559,16 @@ export class RowChartComponent extends BaseChartComponent {
           )}`;
 
           tooltip
-            .html(text)
             .style('left', (offset?.left || 0) + 'px')
-            .style('top', (offset?.top || 0) + 40 + 'px');
+            .style('top', (offset?.top + 15 || 0) + 'px')
+            .html(text);
 
-          self.showTooltip('value');
+          self.showTooltip('internal');
         })
         .on('mouseout', function () {
-          self.hideTooltip('value');
-        });
+          self.hideTooltip('internal');
+        })
+        .on('click', () => {});
     });
   }
 

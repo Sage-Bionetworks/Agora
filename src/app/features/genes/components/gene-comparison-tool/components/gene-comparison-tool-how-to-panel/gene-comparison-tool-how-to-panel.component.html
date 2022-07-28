@@ -31,14 +31,14 @@
         class="gct-how-to-panel-previous"
         (click)="previous()"
       >
-        <i class="fa-solid fa-angle-left"></i>
+        <i class="fa-solid fa-angle-left"></i> Back
       </button>
       <button
         *ngIf="activePane != panes.length - 1"
         class="gct-how-to-panel-next"
         (click)="next()"
       >
-        <i class="fa-solid fa-angle-right"></i>
+        Next <i class="fa-solid fa-angle-right"></i>
       </button>
       <button
         *ngIf="activePane == panes.length - 1"

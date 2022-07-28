@@ -42,7 +42,7 @@
 
     input {
       font-size: var(--font-size-md);
-      padding: 35px var(--spacing-sm);
+      padding: 23px var(--spacing-sm);
 
       @include respond-to('ex-large') {
         padding-left: var(--spacing-md);
