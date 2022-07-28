@@ -47,7 +47,7 @@ jobs:
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true
-          bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
+          bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
           local_dir: dist
@@ -68,7 +68,7 @@ jobs:
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true
-          bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
+          bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
           local_dir: dist
@@ -89,7 +89,7 @@ jobs:
       deploy:
         - provider: elasticbeanstalk
           skip_cleanup: true
-          bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
+          bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
           local_dir: dist
