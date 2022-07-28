@@ -46,7 +46,8 @@ body {
 }
 
 .separator {
-  border-top: var(--color-separator);
+  border: 0;
+  border-top: 1px solid var(--color-separator);
 }
 
 .separator-md {
