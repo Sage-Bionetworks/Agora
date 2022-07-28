@@ -71,19 +71,17 @@ export class BaseChartComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  getTooltip(name: string, className = '') {
+  getTooltip(name: string, className = '', arrowBelow = false) {
     if (!this.tooltips[name]) {
       this.tooltips[name] = d3
         .select('body')
         .append('div')
         .attr(
           'class',
-          `chart-tooltip ${this.name}-tooltip${
-            className ? ' ' + className : ''
-          }`
-        )
-        .style('opacity', 0)
-        .style('visibility', 'hidden');
+          `chart-tooltip ${
+            arrowBelow ? 'arrow-below' : 'arrow-above'
+          } chart-${name}-tooltip${className ? ' ' + className : ''}`
+        );
     }
 
     return this.tooltips[name];
