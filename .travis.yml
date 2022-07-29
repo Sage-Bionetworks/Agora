@@ -46,7 +46,8 @@ jobs:
       node_js: 16
       deploy:
         - provider: elasticbeanstalk
-          skip_cleanup: true
+          edge: true
+          cleanup: true
           bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
@@ -67,7 +68,8 @@ jobs:
       node_js: 16
       deploy:
         - provider: elasticbeanstalk
-          skip_cleanup: true
+          edge: true
+          cleanup: true
           bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
@@ -88,7 +90,8 @@ jobs:
       node_js: 16
       deploy:
         - provider: elasticbeanstalk
-          skip_cleanup: true
+          edge: true
+          cleanup: true
           bucket_name: org-sagebase-agora-deployment-agora-$TRAVIS_BRANCH
           zip_file: /tmp/agora-app.zip
           region: us-east-1
