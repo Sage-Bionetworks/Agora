@@ -2,209 +2,149 @@
 @import '../../../../../styles/mixins';
 
 .gene-details-nav {
+  position: relative;
+  height: var(--gene-details-nav-height);
+
+  .gene-details-nav-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  }
+
   ul {
     @include reset-ul;
 
-    a {
-      cursor: pointer;
-      white-space: nowrap;
-
-      &:not(.disabled) {
-        &:hover {
-          color: var(--color-action-primary);
-        }
-      }
-
-      &.disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-@media (max-width: 1023px) {
-  .gene-details {
-    padding-top: 43px;
-  }
-
-  .gene-details-nav {
-    position: absolute;
+    display: flex;
     width: 100%;
-    top: var(--header-height);
-    background: var(--color-primary);
+    height: var(--gene-details-nav-height);
+    align-items: center;
+    z-index: 50;
 
-    ul {
-      a {
-        position: relative;
-        display: block;
-        color: #fff;
-        font-size: var(--font-size-md);
-        padding: 10px var(--container-gutter-width);
+    > li.active {
+      > a {
+        color: var(--color-action-primary);
 
-        .gene-details-nav-icon {
-          position: absolute;
-          display: none;
-          top: 0;
-          right: var(--container-gutter-width);
-          width: 24px;
-          height: 100%;
-
-          &::before,
-          &::after {
-            content: ' ';
-            position: absolute;
-            display: block;
-            width: 100%;
-            height: 3px;
-            top: 50%;
-            left: 0;
-            border-radius: 2px;
-            background-color: var(--color-secondary);
-          }
-
-          &::after {
-            transform: rotate(90deg);
-          }
-        }
-
-        &:not(.active) {
-          background-color: rgb(255 255 255 / 5%);
-          display: none;
-        }
-
-        &.active {
-          .gene-details-nav-icon {
-            display: block;
-          }
-        }
-      }
-    }
-
-    &.open {
-      ul {
-        a {
-          &:not(.active) {
-            display: block;
-          }
-
-          &.active {
-            .gene-details-nav-icon {
-              &::after {
-                display: none;
-              }
-            }
-          }
+        &::after {
+          opacity: 1;
+          visibility: visible;
         }
       }
     }
   }
-}
 
-@media (min-width: 1024px) {
-  .gene-details-nav {
+  li {
+    padding: 0 30px;
+  }
+
+  a {
     position: relative;
-    height: var(--gene-details-nav-height);
+    display: flex;
+    height: 100%;
+    padding: 8px 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    transition: var(--transition-duration);
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
 
-    .gene-details-nav-inner {
+    &::after {
+      content: ' ';
       position: absolute;
-      top: 0;
+      display: block;
+      bottom: 0;
       left: 0;
       right: 0;
-      z-index: 999;
-      background-color: #fff;
-      box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
-    }
-
-    ul {
-      display: flex;
-      width: 100%;
-      height: var(--gene-details-nav-height);
-      margin-left: auto;
-      margin-right: auto;
-      align-items: center;
-      justify-content: center;
-
-      > li.active {
-        > a {
-          color: var(--color-action-primary);
-
-          &::after {
-            opacity: 1;
-            visibility: visible;
-          }
-        }
-      }
-    }
-
-    li {
-      padding: 0 30px;
-    }
-
-    a {
-      position: relative;
-      display: flex;
-      height: 100%;
-      padding: 8px 0;
-      font-size: var(--font-size-lg);
-      font-weight: 700;
-      color: var(--color-text-secondary);
-      transition: var(--transition-duration);
-      align-items: center;
-
-      &::after {
-        content: ' ';
-        position: absolute;
-        display: block;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background-color: var(--color-action-primary);
-        border-radius: 2px;
-        opacity: 0;
-        visibility: hidden;
-        transition: var(--transition-duration);
-      }
-    }
-
-    .gene-details-subnav {
-      position: absolute;
-      height: var(--gene-details-nav-height);
-      top: 100%;
-      left: 0;
-      right: 0;
-      margin-top: var(--gene-details-subnav-offset);
-      background-color: var(--color-gray-100);
-      box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+      height: 4px;
+      background-color: var(--color-action-primary);
+      border-radius: 2px;
       opacity: 0;
       visibility: hidden;
+      transition: var(--transition-duration);
+    }
 
-      a {
-        &::after {
-          display: none;
-        }
+    &:not(.disabled) {
+      &:hover {
+        color: var(--color-action-primary);
       }
     }
 
-    ul:not(.gene-details-subnav) > li.active {
-      .gene-details-subnav {
-        opacity: 1;
-        visibility: visible;
+    &.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  .gene-details-subnav {
+    position: absolute;
+    height: var(--gene-details-nav-height);
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--gene-details-subnav-offset);
+    background-color: var(--color-gray-100);
+    box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+    opacity: 0;
+    visibility: hidden;
+
+    a {
+      &::after {
+        display: none;
       }
     }
+  }
 
-    &.sticky {
-      .gene-details-nav-inner {
-        position: fixed;
-      }
+  .gene-details-nav-scroll {
+    @include reset-button;
+
+    display: none;
+    position: absolute;
+    width: 50px;
+    top: 0;
+    height: var(--gene-details-nav-height);
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--color-gray-600);
+    background-color: #ffffff;
+    z-index: 100;
+    cursor: pointer;
+
+    &.gene-details-nav-scroll-prev {
+      left: 0;
     }
 
-    &.has-active-child {
-      height: calc(
-        var(--gene-details-nav-height) * 2 + var(--gene-details-subnav-offset)
-      );
+    &.gene-details-nav-scroll-next {
+      right: 0;
     }
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+  }
+
+  ul:not(.gene-details-subnav) > li.active {
+    .gene-details-subnav {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &.sticky {
+    .gene-details-nav-inner {
+      position: fixed;
+    }
+  }
+
+  &.has-active-child {
+    height: calc(
+      var(--gene-details-nav-height) * 2 + var(--gene-details-subnav-offset)
+    );
   }
 }
 
@@ -227,5 +167,39 @@
     position: relative;
     top: auto;
     z-index: 200;
+  }
+}
+
+.gene-details-nav:not(.scrollable) {
+  ul {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+  }
+}
+
+.gene-details-nav.scrollable {
+  --gene-details-nav-height: 60px;
+
+  .gene-details-nav-inner,
+  .gene-details-subnav {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .gene-details-nav-scroll {
+    display: flex;
+  }
+
+  .gene-details-nav-container {
+    overflow: hidden;
+  }
+
+  li {
+    padding: 0 20px;
+
+    &:first-child {
+      padding-left: 0;
+    }
   }
 }
