@@ -180,6 +180,7 @@
 
 .gene-details-nav.scrollable {
   --gene-details-nav-height: 60px;
+  user-select: none;
 
   .gene-details-nav-inner,
   .gene-details-subnav {
@@ -187,12 +188,12 @@
     padding-right: 50px;
   }
 
-  .gene-details-nav-scroll {
-    display: flex;
-  }
-
   .gene-details-nav-container {
     overflow: hidden;
+  }
+
+  .gene-details-nav-scroll {
+    display: flex;
   }
 
   li {

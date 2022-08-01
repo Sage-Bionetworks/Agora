@@ -95,6 +95,9 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     const navContainer = nav?.querySelector<HTMLElement>(
       '.gene-details-nav-container'
     );
+    const navList = nav?.querySelector<HTMLElement>(
+      '.gene-details-nav-container > ul'
+    );
     const navItems = nav?.querySelectorAll<HTMLElement>(
       '.gene-details-nav-container > ul > li'
     );
@@ -105,11 +108,13 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       }
     }
 
-    if (navContainer && navItemsWidth) {
+    if (navContainer && navList && navItemsWidth) {
       if (navItemsWidth > navContainer.offsetWidth) {
         nav?.classList.add('scrollable');
       } else {
         nav?.classList.remove('scrollable');
+        this.navSlideIndex = 0;
+        navList.style.marginLeft = '0px';
       }
     }
   }
@@ -263,7 +268,5 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
       navList.style.marginLeft = navItemsWidth * -1 + 'px';
     }
-
-    console.log('slideNavigation', this.navSlideIndex);
   }
 }
