@@ -41,7 +41,7 @@ jobs:
       node_js: 16
     - stage: eb-deploy-develop
       script:
-#        - ./scripts/set-agora-version.sh || travis_terminate 1
+        - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
       node_js: 16
       deploy:
@@ -58,10 +58,10 @@ jobs:
           wait_until_deployed: true
           access_key_id: AKIAY22FMBNE7T3Q36PT
           secret_access_key:
-            secure: "p+eGGT6kNwb09F4WflqAv0HGSeANScD/SCeTf+77gryh1D4gAuK6HuL8j9DaqrhMT4HUt5KPU8PO27awGTRMgnTWg59fCkjjkd4Kn+1AqBICuqMMeo19dN9mLy7VJWwZDP+dmcnFDUZef0lpn4Lx6VwIpYfx4mzZ8lOR8JVwKMbd1fsyZCQPTmpBLlsH85wLAIIImuhnAOqToMb98O/yhDGikdEnxQ9RsGktzK/DgKsgpeWLLeKcwj/c71xKsO036hI7pj6MxgLItM5TVl4crv2v2RyZguCLyZsjj9Eqp+RNd9lV0CpXjbsRaauiH2gRVfxH+m//XW5bwpxRD7vCXhCX6G+aAw17ngvUN3SwfiJb7Y/F9F+PfKerz9Ef2D9t/nmBJYVOFxfYxClFSSZ7FV8kd+09/un4uqlx25izBAsJf4z6BADXCRIq/N+miSV+BEF28ubqKELsyTWd9kGE014l9Wl9Qk7pNK/04j6f6ekHT6628dRdmfrgGmWH/fzGwbij7BhfJNX42pfZ7GvoiLlpNHz1+V8lcqwOeZkP68IGh7XTpZfhe32fSYPyXvP2pdJ42pjV+yb8bFFEINLVI27vLiAfuxGR47jzIn6D2sV/RQMM8E2ytgpVU2RXfJ4jYo1sfeqcrjjNeQFfIscXS85y5HsEHSjjE23Jfxx4uwE="
+            secure: "kjYluQ9s2QO3jiL8fqIrPOuhxfPTNLUJEELnJNXQGwSd+WCcYzax4r8iKQr7Lkb7vCn1KqKYtTlub5bTm/7jgqYVhQlFsKr/W0u6mFMBBUcwSm3R/3gMbyzWpvpLQDqLiUX9lt3u69u82pAiJO70EQ7Ybe4g+QgnMfRF3N39TwcY6kBMelXsCAdb/PRqZFCYx1kQEqVpzvOih0XpNWurhQ7ivXP48OEWjDy7H3We+QVb4AXJEpSrP2QJ6udnHBBsmj2zJ/uwEBbmVxq8JFIURNdbz2Wda5Lm/7FO8QNt558VI5L3HWd73fxztyhEOhmYHjQPxLCScoV2Mw8rAEP0DfNL8zKIGEzQOhSw1uQ8gSd9sdfC5hL+dtTlH2qUfhFM6cKCHB4QSQ+hyQi/k5PYr2tTfymnrieHj0laFx+ge6pDrdla0SH/zEQFgwdlI8Mih27tdbY6yQ6A8BT23Kl45IWzHtMgKujHeN4TR/SHrQRUTZOoD9ryh5NDGrDICii6SZL73QAhep9Smue9D0ThbNLt0stPxaklCuJhT/qi+m5RUg/uICxI/4EYPqMLYrHya8m1gJfDYyEMTQSsjypViRdov/q3K2eymDM7Qr3kgqWI3sWaHWxQqtSqMhgxCF8ozVlM2U60uiW4XhnL2iAh+7xMSQ5Ztou6nZ09nvx6qC8="
     - stage: eb-deploy-staging
       script:
-#        - ./set-agora-version.sh || travis_terminate 1
+        - ./set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
       node_js: 16
       deploy:
@@ -78,10 +78,10 @@ jobs:
           wait_until_deployed: true
           access_key_id: AKIAZ5GJ3GCELHWLMUUX
           secret_access_key:
-            secure: "e/Tr32Zyjm1loIvGUE2YNFXzfp3xbK2Ds/heaoPuEY/Haqp3G7fPSC3bCXMon8hrJyhK5WH/BY/FDnQBkC4b/yyTc39zngwSLJXVCaqJftR7b88FRe5B1H0X0sLSuOW4/Abx1BsQEcyicJN4TyeW6LXR4fLJjWxFvhltTd9eO08iu8n9XJecTEbGk8p4HaY9vvpOHDJT4u3ltIDtKuf1EJviLAgUn5dG47eeQDCrJFY1beqZXPUWn7nY1huf10s4pJpWSrBstHMJ21NhqBrBJPxm0eQ6XzelVudbqkKKcZ5uZ+NRw1ScAh9eIuDWJjKIN9QB5bGO7f1+MNWNKiWcweUBCV906AvcWhvDq6Xph3wkohKiUpTm5QarqhhkBRa8eYN5iht5KWgaAor4qFDGG4wAUe6uj8stjwSkqkoZP+vz/RTJTsVXtRZz2Y0LTyD4Skgo0/PB7riIhkFLzstSTShASQg9n9YCAfVfGdx0M97gnu/ypxEmCA5MPRKQuuP+BTF6DUi+8Gk3+kgvjyogbWE4Yl0p1kHm/efvjdIjpZ6CQ9eLmqivOzseYBg3NTDEmREjLHOT9IFUj6ooIMLySRlN0jF8oc/8l6+ycoV6Ai183GZ+GKuXkXtBMT0rWfCqKny2CxsXFTIwBjfRL5qRZjUA5M13AKg27BsQ6lvKQbo="
+            secure: "pdkHMHxbptv7ycSaTKBHihsy58h1z9b1dGg/W70KGJVNdyTFtHqgEDAfhE/ppxtygo6f9OdZl20InMKqjQ827Hgf6VYbcU5Lrc3c1k3bHMwXOySZcWoElDd3RT9a1s4tQA3SVo3lQZ4MSLTR5D/IBUkHvCOO/+v56ZyaEMfKcZ+ditIyowOt8KAlcTbYAGZvZnR5NTClUMvDZiBn5v+06DP18qcqNiG4JS13lIbLgNHtIRE1tFoQ7qKO/VfeNdYIvMNHbGRedNMX/mEwM/tefb0r6Wdw2a6vOxftzUQMg7bh0mrgn5YxXtCP9ec0rx0RS2iv31ZQt6yTPowoCXekq39RyRHgO56MmiHwH2UarGFPAA7FQ7qdxk9uU0uxrxqBl9V39UsoSGEffGLjaJoDXdcwubbTMtbnsDMLeTv/Zl+QVWVyPRLIy2iH9671fjPLoCGLmT3iDz38z4La5lvEKHYf4srektVLLd0xDryMXIjGlkwI5wIQDTZWzG67tu59OIn6nU8PFQvDD27muetw70zAx2yir9aphBgGtZSPB9jMy8olaw/J4r5PqElr4Qaed7SUPYdnzTdiwEVmCyepec3ftOjfQHatdWDxJsT854nHpxmwWcQQOGAh4q/HCr46aNJw5di3k5EWHpj6M0ktBS6T9bRsW1JYiBGQ/DBdpMk="
     - stage: eb-deploy-prod
       script:
-#        - ./set-agora-version.sh || travis_terminate 1
+        - ./set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
       node_js: 16
       deploy:
@@ -98,4 +98,4 @@ jobs:
           wait_until_deployed: true
           access_key_id: AKIAZ5GJ3GCELHWLMUUX
           secret_access_key:
-            secure: "e/Tr32Zyjm1loIvGUE2YNFXzfp3xbK2Ds/heaoPuEY/Haqp3G7fPSC3bCXMon8hrJyhK5WH/BY/FDnQBkC4b/yyTc39zngwSLJXVCaqJftR7b88FRe5B1H0X0sLSuOW4/Abx1BsQEcyicJN4TyeW6LXR4fLJjWxFvhltTd9eO08iu8n9XJecTEbGk8p4HaY9vvpOHDJT4u3ltIDtKuf1EJviLAgUn5dG47eeQDCrJFY1beqZXPUWn7nY1huf10s4pJpWSrBstHMJ21NhqBrBJPxm0eQ6XzelVudbqkKKcZ5uZ+NRw1ScAh9eIuDWJjKIN9QB5bGO7f1+MNWNKiWcweUBCV906AvcWhvDq6Xph3wkohKiUpTm5QarqhhkBRa8eYN5iht5KWgaAor4qFDGG4wAUe6uj8stjwSkqkoZP+vz/RTJTsVXtRZz2Y0LTyD4Skgo0/PB7riIhkFLzstSTShASQg9n9YCAfVfGdx0M97gnu/ypxEmCA5MPRKQuuP+BTF6DUi+8Gk3+kgvjyogbWE4Yl0p1kHm/efvjdIjpZ6CQ9eLmqivOzseYBg3NTDEmREjLHOT9IFUj6ooIMLySRlN0jF8oc/8l6+ycoV6Ai183GZ+GKuXkXtBMT0rWfCqKny2CxsXFTIwBjfRL5qRZjUA5M13AKg27BsQ6lvKQbo="
+            secure: "pdkHMHxbptv7ycSaTKBHihsy58h1z9b1dGg/W70KGJVNdyTFtHqgEDAfhE/ppxtygo6f9OdZl20InMKqjQ827Hgf6VYbcU5Lrc3c1k3bHMwXOySZcWoElDd3RT9a1s4tQA3SVo3lQZ4MSLTR5D/IBUkHvCOO/+v56ZyaEMfKcZ+ditIyowOt8KAlcTbYAGZvZnR5NTClUMvDZiBn5v+06DP18qcqNiG4JS13lIbLgNHtIRE1tFoQ7qKO/VfeNdYIvMNHbGRedNMX/mEwM/tefb0r6Wdw2a6vOxftzUQMg7bh0mrgn5YxXtCP9ec0rx0RS2iv31ZQt6yTPowoCXekq39RyRHgO56MmiHwH2UarGFPAA7FQ7qdxk9uU0uxrxqBl9V39UsoSGEffGLjaJoDXdcwubbTMtbnsDMLeTv/Zl+QVWVyPRLIy2iH9671fjPLoCGLmT3iDz38z4La5lvEKHYf4srektVLLd0xDryMXIjGlkwI5wIQDTZWzG67tu59OIn6nU8PFQvDD27muetw70zAx2yir9aphBgGtZSPB9jMy8olaw/J4r5PqElr4Qaed7SUPYdnzTdiwEVmCyepec3ftOjfQHatdWDxJsT854nHpxmwWcQQOGAh4q/HCr46aNJw5di3k5EWHpj6M0ktBS6T9bRsW1JYiBGQ/DBdpMk="
