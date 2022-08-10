@@ -26,6 +26,7 @@
     "clean:cache": "npm run rimraf -- webpack-cache",
     "clean:aot": "npm run rimraf -- compiled",
     "clean:dist": "npm run rimraf -- \"dist/**/!(server.js)\"",
+    "clean:npm": "npm cache clean --force && npm run rimraf -- node_modules",
     "clean:server": "npm run rimraf dist/server.js",
     "clean:install": "npm set progress=false && npm install",
     "clean": "npm cache clean --force && npm run rimraf -- node_modules doc coverage dist compiled dll",
