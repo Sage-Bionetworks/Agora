@@ -20,7 +20,7 @@
     "ci:jit": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:prod && npm run e2e",
     "ci:nobuild": "npm run lint && npm test && npm run e2e",
     "ci:testall": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:prod && npm run e2e && npm run build:aot && npm run e2e",
-    "ci:travis": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:aot && npm run build:server:travis",
+    "ci:travis": "cross-env BUILD_E2E=1 npm run lint && npm run test && npm run build:aot && npm run build:server:prod",
     "ci": "npm run ci:testall",
     "clean:all": "npm run rimraf -- doc coverage dist compiled webpack-cache",
     "clean:cache": "npm run rimraf -- webpack-cache",
