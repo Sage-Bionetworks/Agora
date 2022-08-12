@@ -1,52 +1,92 @@
 // -------------------------------------------------------------------------- //
-// External imports
+// External
 // -------------------------------------------------------------------------- //
-import { Schema, model } from 'mongoose';
+import { Request, Response, NextFunction } from 'express';
 
 // -------------------------------------------------------------------------- //
-// Internal imports
+// Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
 import { setHeaders } from '../helpers';
 import {
-  getOverallScoresDistribution,
-  getRnaDifferentialExpressionDistribution,
-} from './';
+  RnaDistributionCollection,
+  ProteomicDistributionCollection,
+  OverallScoresDistributionCollection,
+} from '../models';
 
 // -------------------------------------------------------------------------- //
-// Schemas
+// Functions
 // -------------------------------------------------------------------------- //
 
-const ProteomicsDistributionSchema = new Schema(
-  {
-    type: String,
-  },
-  { collection: 'proteomicsboxdistribution' }
-);
-const ProteomicsDistributionCollection = model(
-  'ProteomicsDistributionCollection',
-  ProteomicsDistributionSchema
-);
+export async function getRnaDistribution() {
+  const cacheKey = 'rna-distribution';
+  let result = cache.get(cacheKey);
 
-// -------------------------------------------------------------------------- //
-//
-// -------------------------------------------------------------------------- //
+  if (result) {
+    return result;
+  }
 
-// -------------------------------------------------------------------------- //
-//
-// -------------------------------------------------------------------------- //
+  result = await RnaDistributionCollection.find().lean().exec();
 
-export async function getProteomicsDistribution(type: string) {
+  cache.set(cacheKey, result);
+  return result;
+}
+
+export async function getProteomicDistribution(type: string) {
   const cacheKey = 'proteomics-' + type + '-distribution';
+  let result = cache.get(cacheKey);
+
+  if (result) {
+    return result;
+  }
+
+  result = await ProteomicDistributionCollection.find({ type: type })
+    .lean()
+    .exec();
+
+  cache.set(cacheKey, result);
+  return result;
+}
+
+export async function getOverallScoresDistribution() {
+  const cacheKey = 'overall-scores-distribution';
   let result: any = cache.get(cacheKey);
 
   if (result) {
     return result;
   }
 
-  result = await ProteomicsDistributionCollection.find({ type: type })
+  result = await OverallScoresDistributionCollection.find({})
+    .sort('name')
     .lean()
     .exec();
+
+  // Handle old format
+  if (result.length === 1) {
+    result = Object.values(result[0]).filter(
+      (d: any) => d.distribution?.length
+    );
+  }
+
+  cache.set(cacheKey, result);
+  return result;
+}
+
+export async function getDistribution() {
+  const cacheKey = 'distribution';
+  let result: any = cache.get(cacheKey);
+
+  if (result) {
+    return result;
+  }
+
+  result = {
+    rna_differential_expression: await getRnaDistribution(),
+    proteomics_LFQ: await getProteomicDistribution('LFQ'),
+    proteomics_TMT: await getProteomicDistribution('TMT'),
+    overall_scores: await getOverallScoresDistribution(),
+  };
+
   cache.set(cacheKey, result);
   return result;
 }
@@ -55,41 +95,16 @@ export async function getProteomicsDistribution(type: string) {
 //
 // -------------------------------------------------------------------------- //
 
-// -------------------------------------------------------------------------- //
-//
-// -------------------------------------------------------------------------- //
-
-export async function getDistribution() {
+export async function distributionRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    let result: any = cache.get('distribution');
-
-    if (result) {
-      return result;
-    }
-
-    result = {
-      rna_differential_expression:
-        await getRnaDifferentialExpressionDistribution(),
-      proteomics: await getProteomicsDistribution('LFQ'),
-      proteomic_LFQ: await getProteomicsDistribution('LFQ'),
-      proteomic_TMT: await getProteomicsDistribution('TMT'),
-      overall_scores: await getOverallScoresDistribution(),
-    };
-
-    cache.set('distribution', result);
-    return result;
+    const result = await getDistribution();
+    setHeaders(res);
+    res.json(result);
   } catch (err) {
-    //handleError(err);
-    console.error(err);
-    return;
+    next(err);
   }
-}
-
-// -------------------------------------------------------------------------- //
-//
-// -------------------------------------------------------------------------- //
-
-export async function distributionRoute(req: any, res: any) {
-  setHeaders(res);
-  res.json(await getDistribution());
 }

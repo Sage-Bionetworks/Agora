@@ -8,11 +8,10 @@ import {
 } from '../models';
 
 // -------------------------------------------------------------------------- //
-//
+// Functions
 // -------------------------------------------------------------------------- //
-
 export async function getNeuropathologicCorrelations(ensg: string) {
-  const cacheKey = ensg + 'neuropathology-correlations';
+  const cacheKey = ensg + '-neuropathology-correlations';
   let result: NeuropathologicCorrelation[] | undefined = cache.get(cacheKey);
 
   if (result) {

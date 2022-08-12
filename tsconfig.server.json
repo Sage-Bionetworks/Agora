@@ -25,6 +25,5 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "include": ["src/server/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/server/**/*"]
 }

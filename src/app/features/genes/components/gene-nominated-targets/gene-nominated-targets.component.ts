@@ -7,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
 // Internal
 // -------------------------------------------------------------------------- //
 import { ApiService } from '../../../../core/services';
-import { Gene, NominatedTarget, GeneTableColumn } from '../../../../models';
+import {
+  Gene,
+  NominatedTarget,
+  GeneTableColumn,
+  GenesResponse,
+} from '../../../../models';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -18,7 +23,7 @@ import { Gene, NominatedTarget, GeneTableColumn } from '../../../../models';
   styleUrls: ['./gene-nominated-targets.component.scss'],
 })
 export class GeneNominatedTargetsComponent implements OnInit {
-  data: Gene[] = [];
+  genes: Gene[] = [];
   searchTerm = '';
   nominations: number[] = [];
 
@@ -76,10 +81,10 @@ export class GeneNominatedTargetsComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.apiService.getTableData().subscribe((data: Gene[]) => {
-      this.data = data;
+    this.apiService.getNominatedGenes().subscribe((response: GenesResponse) => {
+      const genes = response.items;
 
-      this.data.forEach((de: Gene) => {
+      genes.forEach((de: Gene) => {
         let teamsArray: string[] = [];
         let studyArray: string[] = [];
         let programsArray: string[] = [];
@@ -190,6 +195,8 @@ export class GeneNominatedTargetsComponent implements OnInit {
           de.ab_modality_display_value = 'No value';
         }
       });
+
+      this.genes = genes;
     });
   }
 

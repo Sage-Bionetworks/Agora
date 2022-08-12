@@ -5,7 +5,7 @@ import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
 import { HelperService } from '../../../../core/services';
 
-import { Gene } from '../../../../models';
+import { Gene, GenesResponse } from '../../../../models';
 
 interface TableColumn {
   field: string;
@@ -20,7 +20,7 @@ interface TableColumn {
 })
 export class GeneSimilarComponent implements OnInit {
   gene: Gene = {} as Gene;
-  data: Gene[] = [];
+  genes: Gene[] = [];
 
   tableColumns: TableColumn[] = [
     { field: 'hgnc_symbol', header: 'Gene name', selected: true },
@@ -87,7 +87,9 @@ export class GeneSimilarComponent implements OnInit {
       ids.push(obj.ensembl_gene_id);
     });
 
-    this.apiService.getGenes(ids).subscribe((genes: Gene[]) => {
+    this.apiService.getGenes(ids).subscribe((response: GenesResponse) => {
+      const genes = response.items;
+
       genes.forEach((de: Gene) => {
         // Populate display fields & set default values
         de.is_any_rna_changed_in_ad_brain_display_value =
@@ -125,14 +127,14 @@ export class GeneSimilarComponent implements OnInit {
         }
       });
 
-      this.data = genes;
+      this.genes = genes;
     });
 
     this.helperService.setLoading(false);
   }
 
   navigateToGeneComparisonTool() {
-    const ids: string[] = this.data.map((g: Gene) => g.ensembl_gene_id);
+    const ids: string[] = this.genes.map((g: Gene) => g.ensembl_gene_id);
     this.helperService.setGCTSection(ids);
     this.router.navigate(['/genes/comparison']);
   }

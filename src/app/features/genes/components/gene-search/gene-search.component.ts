@@ -80,8 +80,8 @@ export class GeneSearchComponent implements AfterViewInit {
           return throwError(err);
         })
       )
-      .subscribe((data: any) => {
-        this.setResults(data.items);
+      .subscribe((response: any) => {
+        this.setResults(response.items);
       });
   }
 

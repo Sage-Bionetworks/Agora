@@ -1,6 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
+import { altCache } from '../cache';
 import { Request, Response, NextFunction } from 'express';
 
 // -------------------------------------------------------------------------- //
@@ -15,8 +16,8 @@ import {
   RnaDifferentialExpression,
   RnaDifferentialExpressionCollection,
   ProteinDifferentialExpression,
-  ProteinLFQCollection,
-  ProteinTMTCollection,
+  ProteomicsLFQCollection,
+  ProteomicsTMTCollection,
   Team,
 } from '../models';
 import { NominatedTarget } from '../../app/models';
@@ -26,7 +27,7 @@ import { NominatedTarget } from '../../app/models';
 // -------------------------------------------------------------------------- //
 
 function getComparisonGeneAssociations(gene: Gene) {
-  const data = [];
+  const data: number[] = [];
 
   // Genetically Associated with LOAD
   if (gene.isIGAP) {
@@ -124,14 +125,12 @@ function getComparisonGene(gene: Gene, teams: Team[]) {
   return data;
 }
 
-const rnaComparisonGenes: { [key: string]: GCTGene[] } = {};
-
 export async function getRnaComparisonGenes(model: string) {
-  //const cacheKey = 'rna-comparison-' + model.replace(/[^a-z0-9]/gi, '');
+  const cacheKey = 'rna-comparison-' + model.replace(/[^a-z0-9]/gi, '');
 
-  let result = rnaComparisonGenes[model]; // cache.get(cacheKey);
+  let result: GCTGene[] | undefined = altCache.get(cacheKey);
 
-  if (result?.length) {
+  if (result) {
     return result;
   }
 
@@ -171,17 +170,14 @@ export async function getRnaComparisonGenes(model: string) {
     result = Object.values(genes);
   }
 
-  // cache.set(cacheKey, result);
-  rnaComparisonGenes[model] = result;
+  altCache.set(cacheKey, result);
   return result;
 }
 
-const proteinComparisonGenes: { [key: string]: GCTGene[] } = {};
-
 export async function getProteinComparisonGenes(method: string) {
-  //const cacheKey = 'rna-comparison-' + model.replace(/[^a-z0-9]/gi, '');
+  const cacheKey = 'rna-comparison-' + method.replace(/[^a-z0-9]/gi, '');
 
-  let result = proteinComparisonGenes[method]; // cache.get(cacheKey);
+  let result = altCache.get(cacheKey);
 
   if (result?.length) {
     return result;
@@ -190,12 +186,12 @@ export async function getProteinComparisonGenes(method: string) {
   let items: ProteinDifferentialExpression[] = [];
 
   if ('TMT' === method) {
-    items = await ProteinTMTCollection.find()
+    items = await ProteomicsTMTCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
   } else {
-    items = await ProteinLFQCollection.find()
+    items = await ProteomicsLFQCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
@@ -230,8 +226,7 @@ export async function getProteinComparisonGenes(method: string) {
     result = Object.values(genes);
   }
 
-  // cache.set(cacheKey, result);
-  proteinComparisonGenes[method] = result;
+  altCache.set(cacheKey, result);
   return result;
 }
 
@@ -256,7 +251,7 @@ export async function comparisonGenesRoute(
   }
 
   try {
-    let items: GCTGene[] = [] as GCTGene[];
+    let items: GCTGene[] | undefined = [] as GCTGene[];
 
     if ('RNA - Differential Expression' === req.query.category) {
       items = await getRnaComparisonGenes(req.query.subCategory);

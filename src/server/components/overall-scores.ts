@@ -2,18 +2,13 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../cache';
-import {
-  OverallScores,
-  OverallScoresCollection,
-  OverallScoresDistributionCollection,
-} from '../models';
+import { OverallScores, OverallScoresCollection } from '../models';
 
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
-
 export async function getOverallScores(ensg: string) {
-  const cacheKey = ensg + 'ranking-scores';
+  const cacheKey = ensg + '-overall-scores';
   let result: OverallScores | null | undefined = cache.get(cacheKey);
 
   if (result) {
@@ -31,28 +26,4 @@ export async function getOverallScores(ensg: string) {
 
   cache.set(cacheKey, result);
   return result || undefined;
-}
-
-export async function getOverallScoresDistribution() {
-  const cacheKey = 'overall-scores-distribution';
-  let result: any = cache.get(cacheKey);
-
-  if (result) {
-    return result;
-  }
-
-  result = await OverallScoresDistributionCollection.find({})
-    .sort('name')
-    .lean()
-    .exec();
-
-  // Handle old format
-  if (result.length === 1) {
-    result = Object.values(result[0]).filter(
-      (d: any) => d.distribution?.length
-    );
-  }
-
-  cache.set(cacheKey, result);
-  return result;
 }

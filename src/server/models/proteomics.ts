@@ -12,7 +12,6 @@ export { ProteinDifferentialExpression } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const ProteinDifferentialExpressionSchema =
   new Schema<ProteinDifferentialExpression>(
     {
@@ -31,7 +30,7 @@ const ProteinDifferentialExpressionSchema =
     { collection: 'genesproteomics' }
   );
 
-const ProteinTMTSchema = new Schema<ProteinDifferentialExpression>(
+const ProteomicsTMTSchema = new Schema<ProteinDifferentialExpression>(
   {
     _id: { type: String, required: true },
     uniqid: { type: String, required: true },
@@ -51,13 +50,12 @@ const ProteinTMTSchema = new Schema<ProteinDifferentialExpression>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
-export const ProteinLFQCollection = model<ProteinDifferentialExpression>(
-  'ProteinLFQCollection',
+export const ProteomicsLFQCollection = model<ProteinDifferentialExpression>(
+  'ProteomicsLFQCollection',
   ProteinDifferentialExpressionSchema
 );
 
-export const ProteinTMTCollection = model<ProteinDifferentialExpression>(
-  'ProteinTMTCollection',
-  ProteinTMTSchema
+export const ProteomicsTMTCollection = model<ProteinDifferentialExpression>(
+  'ProteomicsTMTCollection',
+  ProteomicsTMTSchema
 );

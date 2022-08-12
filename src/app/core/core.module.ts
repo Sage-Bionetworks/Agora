@@ -9,6 +9,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 // -------------------------------------------------------------------------- //
 import { SharedModule } from '../shared';
 import { GenesModule } from '../features/genes';
+import { TeamsModule } from '../features/teams';
 
 // -------------------------------------------------------------------------- //
 // Services
@@ -25,20 +26,53 @@ import {
 // -------------------------------------------------------------------------- //
 // Interceptors
 // -------------------------------------------------------------------------- //
-import { HttpErrorInterceptor } from './interceptors';
+import { ApiInterceptor, HttpErrorInterceptor } from './interceptors';
 
 // -------------------------------------------------------------------------- //
 // Components
 // -------------------------------------------------------------------------- //
 import { HeaderComponent, FooterComponent } from './components';
 
+import {
+  AboutPageComponent,
+  HomePageComponent,
+  NewsPageComponent,
+  NominationFormPageComponent,
+  PageNotFoundComponent,
+  TeamsPageComponent,
+} from './pages';
+
 // -------------------------------------------------------------------------- //
 // Module
 // -------------------------------------------------------------------------- //
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent],
-  imports: [SharedModule, GenesModule],
-  exports: [HeaderComponent, FooterComponent],
+  declarations: [
+    // Components
+    HeaderComponent,
+    FooterComponent,
+
+    // Pages
+    AboutPageComponent,
+    HomePageComponent,
+    NewsPageComponent,
+    NominationFormPageComponent,
+    PageNotFoundComponent,
+    TeamsPageComponent,
+  ],
+  imports: [SharedModule, GenesModule, TeamsModule],
+  exports: [
+    // Components
+    HeaderComponent,
+    FooterComponent,
+
+    // Pages
+    AboutPageComponent,
+    HomePageComponent,
+    NewsPageComponent,
+    NominationFormPageComponent,
+    PageNotFoundComponent,
+    TeamsPageComponent,
+  ],
   providers: [
     ApiService,
     HelperService,
@@ -48,6 +82,11 @@ import { HeaderComponent, FooterComponent } from './components';
       useFactory: rollbarFactory,
     },
     { provide: ErrorHandler, useClass: ErrorService },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

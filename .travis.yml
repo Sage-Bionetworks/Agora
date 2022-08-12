@@ -14,7 +14,6 @@ branches:
     - prod
 
 before_install:
-  # - npm install npm@8.11.0
   - npm cache verify
   - travis_retry npm prune
 
@@ -25,20 +24,22 @@ before_script:
   - export NODE_OPTIONS=--max_old_space_size=4096
 
 stages:
-  - name: test
+  - name: build
   - name: eb-deploy
     if: (tag =~ ^v) OR (type = push)
 
 jobs:
   fast_finish: true
   include:
-    - stage: test
-      script: npm run ci:travis
+    - stage: build
+      script:
+        - npm run ci:test
+        - npm run ci:build
       node_js: 16
     - stage: eb-deploy
       script:
         - ./scripts/set-agora-version.sh || travis_terminate 1
-        - zip /tmp/agora-app.zip -qr9 * .[^.]*
+        - npm run ci:zip
       node_js: 16
       deploy:
         - provider: elasticbeanstalk
@@ -57,4 +58,4 @@ jobs:
             all_branches: true
           access_key_id: AKIAI2DBAWLFUMILTMWA
           secret_access_key:
-            secure: "XuVnNN+k+dyFy4hoSRWkGfTDUZPeDwHT1tKCgCcAGz7Jl3Mkb2ymvkINmoHkQ4ZDzjjTQSBZn1IjtW3kdRPq98qJXvj+wmlaLUV3whmpiw4RoN4/maMkVqMqWZj9Gx9cQo/jkh1jIGLr781MWb0IcEheJltMZps2RAgi7Y+/06kjW3fxIihxy7xR1CrRz1GkMGObUDNVOnAmjBeX2S1noM7TJY3b5/E+UQQ6ShB8LXpDxyiwOPmVPEXfy3xPFWd5lMNA9xQjeFAuQNyK1JgCBbOyq93CK91nVSrpG+noUM5ecz3v01kJf0OqPypByC0h3/Numxznm1FAkmFaaCYlRHNge74jMuD54Ga+Zo20JX3lVqm6C6I1pMDHYIGn4p9RI8e3qEfpdGangV0LpsWTWSBU+eHs5kiYlCR1UXo5p/Osh62ko8rJRsmOYQx0caqbn8BZeRHZJOXCm6G6QvdPUeMHprm5gZVGF7YuuNk5tjLuZ9nCH+55XDekOC2cn4cv3b699iV9tcPAbvavON2fU5yq4YSY0MtZSLU8I0MnHrOJk7rKFHCrXxZl7aIBo8WwAD+xbQ9+yWHIq+ATea9kcwzZOh8TU2cW6TkjB2WYKjquZ7a4M2vVWDCyA1F2Ha8PqfmnOMKMROwzSGHOuxp8YAX1ACHhfaNnhHTt52fpM7U="
+            secure: 'XuVnNN+k+dyFy4hoSRWkGfTDUZPeDwHT1tKCgCcAGz7Jl3Mkb2ymvkINmoHkQ4ZDzjjTQSBZn1IjtW3kdRPq98qJXvj+wmlaLUV3whmpiw4RoN4/maMkVqMqWZj9Gx9cQo/jkh1jIGLr781MWb0IcEheJltMZps2RAgi7Y+/06kjW3fxIihxy7xR1CrRz1GkMGObUDNVOnAmjBeX2S1noM7TJY3b5/E+UQQ6ShB8LXpDxyiwOPmVPEXfy3xPFWd5lMNA9xQjeFAuQNyK1JgCBbOyq93CK91nVSrpG+noUM5ecz3v01kJf0OqPypByC0h3/Numxznm1FAkmFaaCYlRHNge74jMuD54Ga+Zo20JX3lVqm6C6I1pMDHYIGn4p9RI8e3qEfpdGangV0LpsWTWSBU+eHs5kiYlCR1UXo5p/Osh62ko8rJRsmOYQx0caqbn8BZeRHZJOXCm6G6QvdPUeMHprm5gZVGF7YuuNk5tjLuZ9nCH+55XDekOC2cn4cv3b699iV9tcPAbvavON2fU5yq4YSY0MtZSLU8I0MnHrOJk7rKFHCrXxZl7aIBo8WwAD+xbQ9+yWHIq+ATea9kcwzZOh8TU2cW6TkjB2WYKjquZ7a4M2vVWDCyA1F2Ha8PqfmnOMKMROwzSGHOuxp8YAX1ACHhfaNnhHTt52fpM7U='

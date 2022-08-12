@@ -86,7 +86,7 @@
     </div>
     <div
       class="header-nav"
-      [ngClass]="{ toggled: isToggled }"
+      [ngClass]="{ show: isShown }"
       *ngIf="navItems.length"
     >
       <button class="header-toggle" (click)="toggleNav()">
@@ -100,7 +100,6 @@
             <a
               *ngIf="item.routerLink"
               [routerLink]="item.routerLink"
-              (click)="(onClick)"
               routerLinkActive="active"
               [routerLinkActiveOptions]="item.activeOptions || {}"
             >

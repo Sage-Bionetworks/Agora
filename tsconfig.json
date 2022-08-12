@@ -30,7 +30,10 @@
   "exclude": [
     "node_modules",
     "dist",
+    "cypress",
     "src/server",
+    "src/environments",
+    "src/app/testing",
     "src/**/*.spec.ts",
     "src/**/*.e2e.ts"
   ]

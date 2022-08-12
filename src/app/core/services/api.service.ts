@@ -12,7 +12,7 @@ import {
   Gene,
   GCTGeneResponse,
   GenesResponse,
-  DistributionResponse,
+  Distribution,
 } from '../../models';
 
 import { TeamsResponse } from '../../models';
@@ -41,8 +41,11 @@ export class ApiService {
     });
   }
 
-  getGenes(ids: any = null): Observable<Gene[]> {
-    return this.http.get<Gene[]>('/api/genes/', {
+  getGenes(ids: string | string[]): Observable<GenesResponse> {
+    if (typeof ids === 'object') {
+      ids = ids.join(',');
+    }
+    return this.http.get<GenesResponse>('/api/genes', {
       headers: new HttpHeaders(defaultHeaders),
       params: new HttpParams().set('ids', ids),
     });
@@ -59,18 +62,22 @@ export class ApiService {
     category: string,
     subCategory: string
   ): Observable<GCTGeneResponse> {
-    const params = new HttpParams()
-      .set('category', category)
-      .set('subCategory', subCategory);
-
     return this.http.get<GCTGeneResponse>('/api/genes/comparison', {
       headers: new HttpHeaders(defaultHeaders),
-      params,
+      params: new HttpParams()
+        .set('category', category)
+        .set('subCategory', subCategory),
     });
   }
 
-  getDistribution(): Observable<DistributionResponse> {
-    return this.http.get<DistributionResponse>('/api/distribution', {
+  getNominatedGenes(): Observable<GenesResponse> {
+    return this.http.get<GenesResponse>('/api/genes/nominated', {
+      headers: new HttpHeaders(defaultHeaders),
+    });
+  }
+
+  getDistribution(): Observable<Distribution> {
+    return this.http.get<Distribution>('/api/distribution', {
       headers: new HttpHeaders(defaultHeaders),
     });
   }
@@ -92,16 +99,6 @@ export class ApiService {
         'Access-Control-Allow-Headers': 'Content-Type',
       }),
       responseType: 'arraybuffer',
-    });
-  }
-
-  getTableData(): Observable<Gene[]> {
-    const headers = new HttpHeaders(defaultHeaders);
-    const params = new HttpParams();
-
-    return this.http.get<Gene[]>('/api/genes/table', {
-      headers,
-      params,
     });
   }
 }

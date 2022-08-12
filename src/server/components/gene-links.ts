@@ -5,9 +5,8 @@ import { cache } from '../cache';
 import { GeneLinkCollection } from '../models';
 
 // -------------------------------------------------------------------------- //
-//
+// Functions
 // -------------------------------------------------------------------------- //
-
 export async function getGeneLinks(ensg: string) {
   const cacheKey = ensg + '-gene-links';
   let result: any = cache.get(cacheKey);
@@ -56,6 +55,7 @@ export async function getGeneLinks(ensg: string) {
   }
 
   result = [...listA, ...listB, ...listC];
+
   cache.set(cacheKey, result);
   return result;
 }

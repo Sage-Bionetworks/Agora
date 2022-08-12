@@ -56,16 +56,37 @@ declare module 'modern-lru' {
 }
 */
 
+interface SystemJS {
+  import: (path?: string) => Promise<any>;
+}
+
 // Extra variables that live on Global that will be replaced by webpack DefinePlugin
-declare let ENV: string;
-declare let HMR: boolean;
-declare let System: SystemJS;
-declare let Analyzer: boolean;
+// App
 declare let VERSION: string;
 declare let DATA_VERSION: string;
+declare let API_URL: string;
+// Server
+declare let ENV: string;
+declare let APP_ENV: string;
 declare let MONGODB_HOST: string;
 declare let MONGODB_PORT: number;
-declare let APP_ENV: string;
+// ???
+declare let System: SystemJS;
+
+interface GlobalEnvironment {
+  // App
+  VERSION: string;
+  DATA_VERSION: string;
+  API_URL: string;
+  // Server
+  ENV: string;
+  APP_ENV: string;
+  MONGODB_HOST: string;
+  MONGODB_PORT: number;
+  // ???
+  SystemJS: SystemJS;
+  System: SystemJS;
+}
 
 interface FirebaseConfig {
   apiKey: string;
@@ -74,23 +95,6 @@ interface FirebaseConfig {
   projectId: string;
   storageBucket: string;
   messagingSenderId: string;
-}
-
-interface SystemJS {
-  import: (path?: string) => Promise<any>;
-}
-
-interface GlobalEnvironment {
-  ENV: string;
-  HMR: boolean;
-  SystemJS: SystemJS;
-  System: SystemJS;
-  Analyzer: boolean;
-  VERSION: string;
-  DATA_VERSION: string;
-  MONGODB_HOST: string;
-  MONGODB_PORT: number;
-  APP_ENV: string;
 }
 
 interface Es6PromiseLoader {

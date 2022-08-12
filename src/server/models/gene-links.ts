@@ -12,7 +12,6 @@ export { GeneNetworkLinks } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const GeneLinkSchema = new Schema<GeneNetworkLinks>(
   {
     geneA_ensembl_gene_id: { type: String, required: true },
@@ -27,7 +26,6 @@ const GeneLinkSchema = new Schema<GeneNetworkLinks>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const GeneLinkCollection = model<GeneNetworkLinks>(
   'GeneLinksCollection',
   GeneLinkSchema

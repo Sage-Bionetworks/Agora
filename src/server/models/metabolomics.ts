@@ -12,7 +12,6 @@ export { Metabolomics } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const MetabolomicsSchema = new Schema<Metabolomics>(
   {
     _id: { type: String, required: true },
@@ -33,7 +32,6 @@ const MetabolomicsSchema = new Schema<Metabolomics>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const MetabolomicsCollection = model<Metabolomics>(
   'MetabolomicsCollection',
   MetabolomicsSchema

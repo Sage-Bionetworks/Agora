@@ -7,7 +7,8 @@ import {
   NewsPageComponent,
   NominationFormPageComponent,
   PageNotFoundComponent,
-} from './features/pages/components';
+  TeamsPageComponent,
+} from './core/pages/';
 
 import {
   GeneDetailsComponent,
@@ -15,8 +16,6 @@ import {
   GeneNominatedTargetsComponent,
   GeneSimilarComponent,
 } from './features/genes/components';
-
-import { TeamsPageComponent } from './features/teams/components';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },

@@ -6,14 +6,11 @@ import { cache } from '../cache';
 import {
   RnaDifferentialExpression,
   RnaDifferentialExpressionCollection,
-  RnaDifferentialExpressionDistribution,
-  RnaDifferentialExpressionDistributionCollection,
 } from '../models';
 
 // -------------------------------------------------------------------------- //
-// Differential Expression
+// Functions
 // -------------------------------------------------------------------------- //
-
 export async function getRnaDifferentialExpression(ensg: string) {
   const cacheKey = ensg + '-rna-differential-expression';
   let result: RnaDifferentialExpression[] | undefined = cache.get(cacheKey);
@@ -46,23 +43,6 @@ export async function getRnaDifferentialExpression(ensg: string) {
       return false;
     });
   }
-
-  cache.set(cacheKey, result);
-  return result;
-}
-
-export async function getRnaDifferentialExpressionDistribution() {
-  const cacheKey = 'rna-differential-expression-distribution';
-  let result: RnaDifferentialExpressionDistribution[] | undefined =
-    cache.get(cacheKey);
-
-  if (result) {
-    return result;
-  }
-
-  result = await RnaDifferentialExpressionDistributionCollection.find()
-    .lean()
-    .exec();
 
   cache.set(cacheKey, result);
   return result;

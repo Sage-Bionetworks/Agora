@@ -494,8 +494,6 @@ This project follows the directions provided by the official [angular style guid
 
 - Keep the consistency in file and folder names. Use dashes to separate words in the descriptive prefix name and dots to separate the suffix words. Use the type and extension names in the file name, e.g. `a.component.ts`, `a.service.ts` or `a.module.ts`. The style guide has references about naming the other types of files in an Angular project.
 
-- The guide advises to use a `main.ts` file for boostrapping, we are using the notation `main.browser.ts` since it was modified for different configurations. It is also a reminder that is where the `platform browser` is.
-
 - Use camel case for variable names, even for constants as they are easy to read. If the values don't change, use a const declaration. For Interfaces use an upper camel case, e.g. `MyInterface`.
 
 - The guide advises separating application from third party imports. This projects goes one step further separating imports by source and purpose also, grouping Angular framework, project components and services, third party typescript/javascript libraries separately.
@@ -531,7 +529,7 @@ Agora/
  │   └──start-mongo.sh                * shell script to start the MongoDB
  │
  ├──src/                              * source files that will be compiled to javascript
- |   ├──main.browser.ts               * entry file for browser environment
+ |   ├──main.ts                       * entry file for browser environment
  │   │
  |   ├──index.html                    * Index.html: where we generate our index page
  │   │
@@ -544,13 +542,13 @@ Agora/
  │   │   ├   |   |──chart.service.ts  * chart related service with different utility methods
  │   │   ├   |   |──...               * other files
  │   │   ├   |──...                   * other nested folders and files including the charts themselves
- │   │   ├──core                      * the core module main folder, imports the other modules
- │   │   ├   |──core.module.ts        * the core module file, to be imported once by the app module
- │   │   ├   |──services              * the core services folder, to be used by different modules
- │   │   ├   |   |──data.service.ts   * data related service, e.g. loading data into the app
- │   │   ├   |   |──gene.service.ts   * gene related service, e.g. current selected gene
- │   │   ├   |   |──...               * other files
- │   │   ├   |──...                   * other nested folders and files
+ │   │   ├──core                      * Core components and services
+ │   │   ├──core                      * Core components and services
+ │   │   ├──features                  * Feature components and services
+ │   │   ├──models                    * Interface definitions
+ │   │   ├──shared                    * Reusable components
+ │   │   ├──testing                   * Testing mocks
+
  │   │   ├──genes                     * genes module main folder
  │   │   ├   |──genes.module.ts       * the genes module file, to be imported by different modules
  │   │   ├   |──...                   * other nested files
@@ -592,7 +590,8 @@ Agora/
  ├──.eslintrc.json                    * typescript lint config
  ├──package.json                      * what npm uses to manage its dependencies
  ├──tsconfig.json                     * typescript config
- └──tsconfig.server.json              * typescript config for server
+ ├──tsconfig.server.json              * typescript config for server
+ └──tsconfig.spec.json                * typescript config for testing
 
 ```
 

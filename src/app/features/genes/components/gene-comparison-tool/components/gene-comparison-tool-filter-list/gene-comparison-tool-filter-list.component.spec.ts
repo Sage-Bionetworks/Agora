@@ -1,91 +1,35 @@
-import {
-  fakeAsync,
-  ComponentFixture,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { GeneComparisonToolFilterListComponent } from '.';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneComparisonToolFilterListComponent } from './';
 
-import { GCTFilter } from '../..';
-
-const mockFilters: GCTFilter[] = [
-  {
-    name: 'test',
-    label: 'Test',
-    options: [
-      { label: '1', value: 1, selected: true },
-      { label: '2', value: 2, selected: true },
-      { label: '3', value: 3, selected: true },
-    ],
-  },
-];
-
-describe('Component: GeneComparisonToolFilterListComponent', () => {
-  let component: GeneComparisonToolFilterListComponent;
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Comparison Tool - Filter List', () => {
   let fixture: ComponentFixture<GeneComparisonToolFilterListComponent>;
+  let component: GeneComparisonToolFilterListComponent;
 
-  beforeEach(fakeAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [GeneComparisonToolFilterListComponent],
-      // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
-      // elements and attributes
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [],
+      imports: [RouterTestingModule],
     }).compileComponents();
+  });
 
+  beforeEach(async () => {
     fixture = TestBed.createComponent(GeneComparisonToolFilterListComponent);
-    component = fixture.componentInstance; // Component test instance
-    component.filters = JSON.parse(JSON.stringify(mockFilters));
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    tick();
-  }));
+  });
 
-  it('should create component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should have data', () => {
-    // Check if filters has data
-    expect(component.filters?.length).not.toEqual(0);
-
-    // Check if html elements have been created
-    const items = fixture.debugElement.nativeElement.querySelectorAll(
-      '.gct-filter-list-item'
-    );
-    expect(items?.length).not.toEqual(0);
-  });
-
-  it('should remove filter', fakeAsync(() => {
-    // Clear first filter with click event
-    const clearButton = fixture.debugElement.nativeElement.querySelector(
-      '.gct-filter-list-item:first-child .gct-filter-list-item-clear'
-    );
-    clearButton.click();
-
-    fixture.detectChanges();
-    tick();
-
-    // Make sure the first filter is unselected
-    expect(component.filters[0].options[0].selected).toEqual(false);
-  }));
-
-  it('should remove all filters', fakeAsync(() => {
-    // Clear all filters with click event
-    const clearButton = fixture.debugElement.nativeElement.querySelector(
-      '.gct-filter-list-clear-all'
-    );
-    clearButton.click();
-
-    fixture.detectChanges();
-    tick();
-
-    // Make sure all the filter are unselected
-    for (const filter of component.filters) {
-      for (const option of filter.options) {
-        expect(option.selected).toEqual(false);
-      }
-    }
-  }));
 });

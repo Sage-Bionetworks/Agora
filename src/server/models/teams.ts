@@ -12,7 +12,6 @@ export { Team, TeamMember } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const TeamMemberSchema = new Schema<TeamMember>({
   name: { type: String, required: true },
   isprimaryinvestigator: { type: Boolean, required: true },
@@ -33,5 +32,4 @@ const TeamSchema = new Schema<Team>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const TeamCollection = model<Team>('TeamCollection', TeamSchema);

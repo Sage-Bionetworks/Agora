@@ -11,20 +11,3 @@ export interface RnaDifferentialExpression {
   study: string;
   model: string;
 }
-
-export interface RnaDifferentialExpressionDistribution {
-  _id: string;
-  model: string;
-  tissue: string;
-  min: number;
-  max: number;
-  first_quartile: number;
-  median: number;
-  third_quartile: number;
-}
-
-export interface DistributionResponse {
-  rna_differential_expression: [];
-  proteomics: [];
-  overall_scores: [];
-}

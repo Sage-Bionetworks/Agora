@@ -1,0 +1,16 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": ["jasmine"]
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/server",
+    "src/environments",
+    "src/app/testing",
+    "cypress"
+  ]
+}

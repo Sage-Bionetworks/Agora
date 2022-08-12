@@ -4,23 +4,22 @@
 import { cache } from '../cache';
 import {
   ProteinDifferentialExpression,
-  ProteinLFQCollection,
-  ProteinTMTCollection,
+  ProteomicsLFQCollection,
+  ProteomicsTMTCollection,
 } from '../models';
 
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
-
-export async function getProteinLFQ(ensg: string) {
-  const cacheKey = ensg + 'protein-differential-expression';
+export async function getProteomicsLFQ(ensg: string) {
+  const cacheKey = ensg + '-protein-LFQ';
   let result: ProteinDifferentialExpression[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
   }
 
-  result = await ProteinLFQCollection.find({
+  result = await ProteomicsLFQCollection.find({
     ensembl_gene_id: ensg,
   })
     .lean()
@@ -28,7 +27,7 @@ export async function getProteinLFQ(ensg: string) {
 
   if (result) {
     result = result.filter((item: any) => {
-      return item.log2_fc /*&& p.uniprotid === filter*/;
+      return item.log2_fc;
     });
   }
 
@@ -36,15 +35,15 @@ export async function getProteinLFQ(ensg: string) {
   return result;
 }
 
-export async function getProteinTMT(ensg: string) {
-  const cacheKey = ensg + 'protein-TMT';
+export async function getProteomicsTMT(ensg: string) {
+  const cacheKey = ensg + '-protein-TMT';
   let result: ProteinDifferentialExpression[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
   }
 
-  result = await ProteinTMTCollection.find({
+  result = await ProteomicsTMTCollection.find({
     ensembl_gene_id: ensg,
   })
     .lean()
@@ -52,7 +51,7 @@ export async function getProteinTMT(ensg: string) {
 
   if (result) {
     result = result.filter((item: any) => {
-      return item.log2_fc /*&& p.uniprotid === filter*/;
+      return item.log2_fc;
     });
   }
 
