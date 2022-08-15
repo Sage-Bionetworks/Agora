@@ -57,7 +57,7 @@ module.exports = function (options) {
         {
           test: /\.html$/i,
           loader: 'html-loader',
-          exclude: [helpers.root('/src/index.html')],
+          exclude: [helpers.root('src/index.html')],
         },
       ],
     },
@@ -69,7 +69,6 @@ module.exports = function (options) {
       new webpack.DefinePlugin({
         VERSION: VERSION,
         DATA_VERSION: DATA_VERSION,
-        API_URL: JSON.stringify(''),
       }),
       new ProvidePlugin({
         dc: 'dc',

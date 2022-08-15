@@ -30,7 +30,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: 'tsconfig.server.json',
+                configFile: helpers.root('tsconfig.server.json'),
               },
             },
           ],

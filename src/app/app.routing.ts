@@ -17,7 +17,7 @@ import {
   GeneSimilarComponent,
 } from './features/genes/components';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomePageComponent },
 
   { path: 'genes/comparison', component: GeneComparisonToolComponent },

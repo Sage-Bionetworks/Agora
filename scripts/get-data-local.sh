@@ -1,4 +1,4 @@
-[ -d ../data/ ] || mkdir ../data/
+[ -d ../../data/ ] || mkdir ../../data/
 
 travisbranch=$(git rev-parse --abbrev-ref HEAD)
 echo "Branch name = $travisbranch"
@@ -12,7 +12,7 @@ if [[ $travisbranch =~ ^(develop|staging|prod)$ ]]; then
   echo "Enter you Synapse password"
   read synapsepassword
 
-  DATA_DIR='../data'
+  DATA_DIR='../../data'
 
   # get data version from agora-data-manager repo
   wget https://raw.githubusercontent.com/Sage-Bionetworks/agora-data-manager/$travisbranch/data-manifest.json -O $DATA_DIR/data-manifest-$travisbranch.json --no-check-certificate

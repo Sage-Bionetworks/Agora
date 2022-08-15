@@ -1,16 +1,18 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/spec",
+    "outDir": "./testing/spec-build/out-tsc",
     "types": ["jasmine"]
   },
   "exclude": [
-    "node_modules",
-    "dist",
-    "src/server",
-    "src/environments",
-    "src/app/testing",
-    "cypress"
+    "./node_modules",
+    "./dist",
+    "./testing",
+    "./testing/cypress",
+    "./src/app/testing",
+    "./src/environments",
+    "./src/server",
+    "./src/main.ts",
+    "./src/polyfills.ts"
   ]
 }

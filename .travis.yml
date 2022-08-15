@@ -31,10 +31,14 @@ stages:
 jobs:
   fast_finish: true
   include:
+    - stage: test
+      script: npm run test
+      node_js: 16
     - stage: build
-      script:
-        - npm run ci:test
-        - npm run ci:build
+      script: npm run build
+      node_js: 16
+    - stage: post-build
+      script: npm run test:e2e
       node_js: 16
     - stage: eb-deploy
       script:

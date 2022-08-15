@@ -11,6 +11,10 @@
 npm-debug.log
 yarn-error.log
 
+# Testing
+/testing/spec-build
+/coverage
+
 # IDEs and editors
 .idea/
 .project
@@ -36,11 +40,6 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
-
-# Cypress
-/cypress/downloads
-/cypress/screenshots
-/cypress/videos
 
 # System files
 .DS_Store

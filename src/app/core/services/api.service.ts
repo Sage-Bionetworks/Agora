@@ -88,7 +88,7 @@ export class ApiService {
     });
   }
 
-  getTeamMemberImage(name: string) {
+  getTeamMemberImage(name: string): Observable<ArrayBuffer> {
     name = name.toLowerCase().replace(/[- ]/g, '-');
     return this.http.get('/api/team-member/' + name + '/image', {
       headers: new HttpHeaders({

@@ -7,9 +7,11 @@ const helpers = require('./helpers');
 module.exports = function (options) {
   return merge(commonConfig({}), {
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     entry: {},
-    output: {},
+    output: {
+      path: helpers.root('testing/spec-build'),
+    },
     plugins: [
       new AngularWebpackPlugin({
         tsconfig: helpers.root('tsconfig.spec.json'),
