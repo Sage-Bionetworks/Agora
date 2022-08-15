@@ -64,9 +64,9 @@ export class GeneEvidenceProteomicsComponent {
     });
 
     this._gene.protein_TMT.forEach((item: any) => {
-      if (!this.uniProtIds.includes(item.uniprotid)) {
-        this.uniProtIds.push(item.uniprotid);
-      }
+      // if (!this.uniProtIds.includes(item.uniprotid)) {
+      //   this.uniProtIds.push(item.uniprotid);
+      // }
     });
 
     this.uniProtIds.sort();

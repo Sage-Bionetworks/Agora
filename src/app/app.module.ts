@@ -5,10 +5,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
+import {
+  NgxGoogleAnalyticsModule,
+  NgxGoogleAnalyticsRouterModule,
+} from 'ngx-google-analytics';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { environment } from '../environments/environment';
 import { SharedModule } from './shared';
 import { CoreModule } from './core';
 import { GenesModule } from './features/genes';
@@ -39,6 +44,9 @@ import { AppComponent } from './app.component';
 
     // Rounting
     AppRoutingModule,
+
+    NgxGoogleAnalyticsModule.forRoot(environment.ga),
+    NgxGoogleAnalyticsRouterModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],
