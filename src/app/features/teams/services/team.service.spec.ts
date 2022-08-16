@@ -12,7 +12,7 @@ import {
 // -------------------------------------------------------------------------- //
 import { TeamService } from '.';
 import { ApiService } from '../../../core/services';
-import { mockTeamsResponse, mockTeamMember } from '../../../testing';
+import { teamsResponseMock } from '../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -40,7 +40,7 @@ describe('Service: Team', () => {
   });
 
   it('should get all teams', () => {
-    const mockResponse = mockTeamsResponse;
+    const mockResponse = teamsResponseMock;
 
     teamService.getTeams().subscribe((response) => {
       expect(response).toEqual(mockResponse);
@@ -51,25 +51,25 @@ describe('Service: Team', () => {
     req.flush(mockResponse);
   });
 
-  xit('should get data from /api/team-member/marty-mcfly/image', () => {
-    const mockResponse: ArrayBuffer = new ArrayBuffer(0);
-    const mockURL = URL.createObjectURL(
-      new Blob([new Object(mockResponse) as Blob], {
-        type: 'image/jpg, image/png, image/jpeg',
-      })
-    );
-    const teamMemberName = mockTeamMember.name
-      .toLowerCase()
-      .replace(/[- ]/g, '-');
+  // it('should get data from /api/team-member/marty-mcfly/image', () => {
+  //   const mockResponse: ArrayBuffer = new ArrayBuffer(0);
+  //   const mockURL = URL.createObjectURL(
+  //     new Blob([new Object(mockResponse) as Blob], {
+  //       type: 'image/jpg, image/png, image/jpeg',
+  //     })
+  //   );
+  //   const teamMemberName = mockTeamMember.name
+  //     .toLowerCase()
+  //     .replace(/[- ]/g, '-');
 
-    teamService.getTeamMemberImageUrl(teamMemberName).subscribe((response) => {
-      expect(response).toEqual(mockURL);
-    });
+  //   teamService.getTeamMemberImageUrl(teamMemberName).subscribe((response) => {
+  //     expect(response).toEqual(mockURL);
+  //   });
 
-    const req = httpMock.expectOne(
-      '/api/team-member/' + teamMemberName + '/image'
-    );
-    expect(req.request.method).toBe('GET');
-    req.flush(mockResponse);
-  });
+  //   const req = httpMock.expectOne(
+  //     '/api/team-member/' + teamMemberName + '/image'
+  //   );
+  //   expect(req.request.method).toBe('GET');
+  //   req.flush(mockResponse);
+  // });
 });

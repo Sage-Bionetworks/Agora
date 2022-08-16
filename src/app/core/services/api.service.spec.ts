@@ -12,13 +12,13 @@ import {
 // -------------------------------------------------------------------------- //
 import { ApiService } from './';
 import {
-  mockGene1,
-  mockGene2,
-  mockGCTGene1,
-  mockNominatedGene1,
-  mockDistribution,
+  geneMock1,
+  geneMock2,
+  gctGeneMock1,
+  nominatedGeneMock1,
+  distributionMock,
   mockTeamMember,
-  mockTeamsResponse,
+  teamsResponseMock,
 } from '../../testing';
 
 // -------------------------------------------------------------------------- //
@@ -47,66 +47,66 @@ describe('Service: API', () => {
   });
 
   it('should get data from /api/genes/:id', () => {
-    const mockGene = mockGene1;
+    const geneMock = geneMock1;
 
-    apiService.getGene(mockGene1.ensembl_gene_id).subscribe((response) => {
-      expect(response).toEqual(mockGene1);
+    apiService.getGene(geneMock1.ensembl_gene_id).subscribe((response) => {
+      expect(response).toEqual(geneMock1);
     });
 
-    const req = httpMock.expectOne('/api/genes/' + mockGene1.ensembl_gene_id);
+    const req = httpMock.expectOne('/api/genes/' + geneMock1.ensembl_gene_id);
     expect(req.request.method).toBe('GET');
-    req.flush(mockGene);
+    req.flush(geneMock);
   });
 
   it('should get data from /api/genes', () => {
-    const mockResponse = { items: [mockGene1, mockGene2] };
+    const mockResponse = { items: [geneMock1, geneMock2] };
 
     apiService
-      .getGenes([mockGene1.ensembl_gene_id, mockGene2.ensembl_gene_id])
+      .getGenes([geneMock1.ensembl_gene_id, geneMock2.ensembl_gene_id])
       .subscribe((response) => {
         expect(response).toEqual(mockResponse);
       });
 
     const req = httpMock.expectOne(
       '/api/genes?ids=' +
-        mockGene1.ensembl_gene_id +
+        geneMock1.ensembl_gene_id +
         ',' +
-        mockGene2.ensembl_gene_id
+        geneMock2.ensembl_gene_id
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
 
-  it('should get data from /api/search?id=' + mockGene1.ensembl_gene_id, () => {
-    const mockResponse = { items: [mockGene1] };
+  it('should get data from /api/search?id=' + geneMock1.ensembl_gene_id, () => {
+    const mockResponse = { items: [geneMock1] };
 
-    apiService.searchGene(mockGene1.ensembl_gene_id).subscribe((response) => {
+    apiService.searchGene(geneMock1.ensembl_gene_id).subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
     const req = httpMock.expectOne(
-      '/api/genes/search?id=' + mockGene1.ensembl_gene_id
+      '/api/genes/search?id=' + geneMock1.ensembl_gene_id
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
 
-  it('should get data from /api/search?id=' + mockGene1.hgnc_symbol, () => {
-    const mockResponse = { items: [mockGene1] };
+  it('should get data from /api/search?id=' + geneMock1.hgnc_symbol, () => {
+    const mockResponse = { items: [geneMock1] };
 
-    apiService.searchGene(mockGene1.hgnc_symbol).subscribe((response) => {
+    apiService.searchGene(geneMock1.hgnc_symbol).subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
     const req = httpMock.expectOne(
-      '/api/genes/search?id=' + mockGene1.hgnc_symbol
+      '/api/genes/search?id=' + geneMock1.hgnc_symbol
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
 
   it('should get data from /api/genes/comparison', () => {
-    const mockResponse = { items: [mockGCTGene1] };
+    const mockResponse = { items: [gctGeneMock1] };
 
     apiService
       .getComparisonGenes(
@@ -125,7 +125,7 @@ describe('Service: API', () => {
   });
 
   it('should get data from /api/genes/nominated', () => {
-    const mockResponse = { items: [mockNominatedGene1] };
+    const mockResponse = { items: [nominatedGeneMock1] };
 
     apiService.getNominatedGenes().subscribe((response) => {
       expect(response).toEqual(mockResponse);
@@ -137,7 +137,7 @@ describe('Service: API', () => {
   });
 
   it('should get data from /api/distribution', () => {
-    const mockResponse = mockDistribution;
+    const mockResponse = distributionMock;
 
     apiService.getDistribution().subscribe((response) => {
       expect(response).toEqual(mockResponse);
@@ -149,7 +149,7 @@ describe('Service: API', () => {
   });
 
   it('should get data from /api/teams', () => {
-    const mockResponse = mockTeamsResponse;
+    const mockResponse = teamsResponseMock;
 
     apiService.getTeams().subscribe((response) => {
       expect(response).toEqual(mockResponse);

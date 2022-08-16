@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -9,36 +11,36 @@ import {
   TeamsResponse,
 } from '../models';
 import {
-  mockGene1,
-  mockGene2,
-  mockGCTGene1,
-  mockNominatedGene1,
-  mockTeamsResponse,
+  geneMock1,
+  geneMock2,
+  gctGeneMock1,
+  nominatedGeneMock1,
+  teamsResponseMock,
 } from './';
 
 @Injectable()
 export class ApiServiceStub {
   getGene(id: string): Observable<Gene> {
-    return of(mockGene1);
+    return of(geneMock1);
   }
 
   getGenes(ids: string | string[]): Observable<GenesResponse> {
-    return of({ items: [mockGene1, mockGene2] });
+    return of({ items: [geneMock1, geneMock2] });
   }
 
   searchGene(id: string): Observable<GenesResponse> {
-    return of({ items: [mockGene1, mockGene2] });
+    return of({ items: [geneMock1, geneMock2] });
   }
 
   getComparisonGenes(
     category: string,
     subCategory: string
   ): Observable<GCTGeneResponse> {
-    return of({ items: [mockGCTGene1] });
+    return of({ items: [gctGeneMock1] });
   }
 
   getNominatedGenes(): Observable<GenesResponse> {
-    return of({ items: [mockNominatedGene1] });
+    return of({ items: [nominatedGeneMock1] });
   }
 
   getDistribution(): Observable<Distribution> {
@@ -46,7 +48,7 @@ export class ApiServiceStub {
   }
 
   getTeams(): Observable<TeamsResponse> {
-    return of(mockTeamsResponse);
+    return of(teamsResponseMock);
   }
 
   getTeamMemberImage(name: string): Observable<ArrayBuffer> {

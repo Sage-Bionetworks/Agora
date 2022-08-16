@@ -1,9 +1,11 @@
+const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const helpers = require('./helpers');
 
-module.exports = function () {
+module.exports = function (env, argv) {
+  const mode = argv?.mode || 'development';
   return {
     entry: {
       server: helpers.root('src/server/server.ts'),
@@ -39,6 +41,9 @@ module.exports = function () {
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env.MODE': JSON.stringify(mode),
+      }),
       new NodemonPlugin({
         // What to watch.
         watch: helpers.root('dist/server.js'),

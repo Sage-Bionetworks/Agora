@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { NetworkChartComponent } from './';
 import { HelperService } from '../../../../core/services';
+import { networkChartDataMock } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -16,6 +17,7 @@ import { HelperService } from '../../../../core/services';
 describe('Component: Chart - Network', () => {
   let fixture: ComponentFixture<NetworkChartComponent>;
   let component: NetworkChartComponent;
+  let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,9 +31,25 @@ describe('Component: Chart - Network', () => {
     fixture = TestBed.createComponent(NetworkChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    element = fixture.nativeElement;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display message if not data', () => {
+    expect(component.data).not.toBeDefined();
+    expect(element.querySelector('.chart-no-data')).toBeTruthy();
+  });
+
+  it('should render the chart', () => {
+    const icSpy = spyOn(component, 'initChart').and.callThrough();
+
+    component.data = networkChartDataMock;
+    fixture.detectChanges();
+
+    expect(icSpy).toHaveBeenCalled();
+    expect(element.querySelector('svg')).toBeTruthy();
   });
 });

@@ -1,6 +1,6 @@
 import { Distribution } from '../models';
 
-export const mockDistribution: Distribution = {
+export const distributionMock: Distribution = {
   rna_differential_expression: [
     {
       _id: '628d0fde0e8d04279fcb33b7',

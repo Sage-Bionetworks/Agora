@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { MedianChartComponent } from './';
 import { HelperService } from '../../../../core/services';
+import { geneMock1 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -16,6 +17,7 @@ import { HelperService } from '../../../../core/services';
 describe('Component: Chart - Median', () => {
   let fixture: ComponentFixture<MedianChartComponent>;
   let component: MedianChartComponent;
+  let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,9 +31,34 @@ describe('Component: Chart - Median', () => {
     fixture = TestBed.createComponent(MedianChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    element = fixture.nativeElement;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display message if not data', () => {
+    expect(component.data?.length).toEqual(0);
+    expect(element.querySelector('.chart-no-data')).toBeTruthy();
+  });
+
+  it('should render the chart', () => {
+    const idSpy = spyOn(component, 'initData').and.callThrough();
+    const icSpy = spyOn(component, 'initChart').and.callThrough();
+
+    component.data = geneMock1.medianexpression;
+    fixture.detectChanges();
+
+    expect(idSpy).toHaveBeenCalled();
+    expect(icSpy).toHaveBeenCalled();
+    expect(element.querySelector('svg')).toBeTruthy();
+  });
+
+  it('should have tooltips', () => {
+    component.data = geneMock1.medianexpression;
+    component.addXAxisTooltips();
+    fixture.detectChanges();
+    expect(document.querySelector('.median-chart-x-axis-tooltip')).toBeTruthy();
   });
 });

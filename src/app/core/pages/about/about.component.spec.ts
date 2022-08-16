@@ -10,6 +10,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 // -------------------------------------------------------------------------- //
 import { AboutPageComponent } from './';
 import { SynapseApiService } from '../../services';
+import { SynapseApiServiceStub } from '../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -23,7 +24,9 @@ describe('Component: Page - About', () => {
     await TestBed.configureTestingModule({
       declarations: [AboutPageComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [SynapseApiService],
+      providers: [
+        { provide: SynapseApiService, useValue: new SynapseApiServiceStub() },
+      ],
     }).compileComponents();
   });
 
@@ -38,7 +41,7 @@ describe('Component: Page - About', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have wiki page', () => {
+  it('should have wiki component', () => {
     expect(element.querySelector('wiki')).toBeTruthy();
   });
 });

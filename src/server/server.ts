@@ -28,10 +28,6 @@ app.set('port', port);
 app.set('trust proxy', true);
 app.set('trust proxy', 'loopback');
 
-// const corsOptions = {
-//   origin: '*',
-// };
-
 app.use(cors());
 app.use(
   helmet.contentSecurityPolicy({

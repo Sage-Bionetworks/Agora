@@ -9,6 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { CandlestickChartComponent } from './';
 import { HelperService } from '../../../../core/services';
+import { geneMock1 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -16,6 +17,7 @@ import { HelperService } from '../../../../core/services';
 describe('Component: Chart - Candlestick', () => {
   let fixture: ComponentFixture<CandlestickChartComponent>;
   let component: CandlestickChartComponent;
+  let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,9 +31,38 @@ describe('Component: Chart - Candlestick', () => {
     fixture = TestBed.createComponent(CandlestickChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    element = fixture.nativeElement;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display message if not data', () => {
+    expect(component.chartData?.length).toEqual(0);
+    expect(element.querySelector('.chart-no-data')).toBeTruthy();
+  });
+
+  it('should render the chart', () => {
+    const idSpy = spyOn(component, 'initData').and.callThrough();
+    const icSpy = spyOn(component, 'initChart').and.callThrough();
+
+    component.gene = geneMock1;
+    fixture.detectChanges();
+
+    expect(idSpy).toHaveBeenCalled();
+    expect(icSpy).toHaveBeenCalled();
+    expect(element.querySelector('svg')).toBeTruthy();
+  });
+
+  it('should have tooltips', () => {
+    component.gene = geneMock1;
+    fixture.detectChanges();
+    expect(
+      document.querySelector('.candlestick-chart-x-axis-tooltip')
+    ).toBeTruthy();
+    expect(
+      document.querySelector('.candlestick-chart-value-tooltip')
+    ).toBeTruthy();
   });
 });

@@ -5,8 +5,8 @@ const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 
 const helpers = require('./helpers');
 
-module.exports = function (options) {
-  return merge(commonConfig({}), {
+module.exports = function (env, argv) {
+  return merge(commonConfig(env, argv), {
     mode: 'production',
     devtool: 'source-map',
     plugins: [
@@ -15,12 +15,10 @@ module.exports = function (options) {
       }),
       new AngularWebpackPlugin({
         tsconfig: helpers.root('tsconfig.json'),
-        // fileReplacements: [
-        //   {
-        //     replace: 'src/environments/environment.ts',
-        //     with: 'src/environments/environment.prod.ts',
-        //   },
-        // ],
+        fileReplacements: {
+          replace: '../src/environments/environment.ts',
+          with: '../src/environments/environment.prod.ts',
+        },
       }),
     ],
   });

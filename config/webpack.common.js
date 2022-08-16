@@ -13,7 +13,8 @@ const DATA_VERSION = JSON.stringify(
   packageJson['data-file'] + '-v' + packageJson['data-version']
 );
 
-module.exports = function (options) {
+module.exports = function (env, argv) {
+  const mode = argv?.mode || 'development';
   return {
     entry: {
       polyfills: './src/polyfills.ts',
@@ -67,6 +68,7 @@ module.exports = function (options) {
     devtool: 'cheap-module-source-map',
     plugins: [
       new webpack.DefinePlugin({
+        'process.env.MODE': JSON.stringify(mode),
         VERSION: VERSION,
         DATA_VERSION: DATA_VERSION,
       }),

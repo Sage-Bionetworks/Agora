@@ -8,6 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 // Internal
 // -------------------------------------------------------------------------- //
 import { SynapseApiService } from '../../../core/services';
+import { SynapseWiki } from '../../../models';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -25,12 +26,13 @@ export class WikiComponent implements OnInit {
 
   loading = true;
 
+  data: SynapseWiki = {} as SynapseWiki;
   safeHtml: SafeHtml | null =
     '<div class="wiki-no-data">No data found...</div>';
 
   constructor(
     private synapseApiService: SynapseApiService,
-    private sanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -39,16 +41,17 @@ export class WikiComponent implements OnInit {
     this.synapseApiService
       .getWiki(this.ownerId || 'syn25913473', this.wikiId)
       .subscribe(
-        (wiki: any) => {
+        (wiki: SynapseWiki) => {
           if (!wiki) {
             this.loading = false;
             return;
           }
 
-          const sanitized = this.synapseApiService.renderHtml(wiki.markdown);
-
+          this.data = wiki;
           // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
-          this.safeHtml = this.sanitizer.bypassSecurityTrustHtml(sanitized);
+          this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
+            this.synapseApiService.renderHtml(wiki.markdown)
+          );
           this.loading = false;
         },
         () => {

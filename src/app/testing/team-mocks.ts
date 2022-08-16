@@ -17,6 +17,6 @@ export const mockTeam: Team = {
   members: [mockTeamMember],
 };
 
-export const mockTeamsResponse: TeamsResponse = {
+export const teamsResponseMock: TeamsResponse = {
   items: [mockTeam],
 };

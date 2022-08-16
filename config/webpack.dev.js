@@ -6,8 +6,8 @@ const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 const helpers = require('./helpers');
 const API_URL = JSON.stringify('http://localhost:8080');
 
-module.exports = function (options) {
-  return merge(commonConfig({}), {
+module.exports = function (env, argv) {
+  return merge(commonConfig(env, argv), {
     mode: 'development',
     devtool: 'inline-source-map',
     plugins: [
