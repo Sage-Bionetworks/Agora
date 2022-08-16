@@ -8,14 +8,14 @@ describe('App', () => {
   });
 
   it('should have a header', () => {
-    cy.get('#header', { timeout: 5000 }).should('be.visible');
+    cy.get('#header', { timeout: 2000 }).should('be.visible');
   });
 
   it('should have a heading', () => {
-    cy.get('h1', { timeout: 5000 }).should('be.visible');
+    cy.get('h1', { timeout: 2000 }).should('be.visible');
   });
 
   it('should have a footer', () => {
-    cy.get('#footer', { timeout: 5000 }).should('be.visible');
+    cy.get('#footer', { timeout: 2000 }).should('be.visible');
   });
 });
