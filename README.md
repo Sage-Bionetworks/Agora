@@ -151,13 +151,13 @@ MongoDB connection it won't work.
 Open a second terminal and run the following command:
 
 ```bash
-npm run watch
+npm run dev
 ```
 
 This command is going to build the client-side and `watch` for changes. If you need more control over the process you can use a two-step process, first build the client:
 
 ```bash
-npm run build:dev
+npm run build
 ```
 
 As the name suggests, this builds the client-side of the application with the development flag set to true. The main difference between this command and the previous one
