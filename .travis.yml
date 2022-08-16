@@ -25,9 +25,7 @@ before_script:
   - export NODE_OPTIONS=--max_old_space_size=4096
 
 stages:
-  - name: test
   - name: build
-  - name: post-build
   - name: eb-deploy-develop
     if: (tag =~ ^v) OR (type = push) AND (branch = develop)
   - name: eb-deploy-staging
@@ -38,14 +36,11 @@ stages:
 jobs:
   fast_finish: true
   include:
-    - stage: test
-      script: npm run test
-      node_js: 16
     - stage: build
-      script: npm run build
-      node_js: 16
-    - stage: post-build
-      script: npm run test:e2e
+      script:
+        - npm run test
+        - npm run build
+        - npm run test:e2e
       node_js: 16
     - stage: eb-deploy-develop
       script:
@@ -54,7 +49,7 @@ jobs:
       node_js: 16
       deploy:
         - provider: elasticbeanstalk
-          edge: true  # opt in to dpl v2
+          edge: true # opt in to dpl v2
           cleanup: true
           bucket: org-sagebase-agora-deployment-agora-develop
           zip_file: /tmp/agora-app.zip
@@ -66,7 +61,7 @@ jobs:
           wait_until_deployed: true
           access_key_id: AKIAY22FMBNE7T3Q36PT
           secret_access_key:
-            secure: "O4I1YkovXOZeEXeS0NZQnoAmmBXt9Pv0lvbj+pN/7CcRNvS1EdQFvWFt1ZpH2SJU+RtB1QSiG5oM4OuxecpQ+PWIWeIn4zuM97By9j8ELEwgFsMbhh7TM13bFpNfCi1F1ZCsdU4VhPveu+OBw/tk2iQUYVKao2R1zOn2zKpdMY0ohAuzxKSj25/DRJKj9oBCdq4ZM0awijeYbxLp/Xfk0gBzQeK75HLW3IC71YInGb9aKX01FLMd2/4TeiP5rfmYa8z+GeBRVN4VsauIFonOFA7WUFfYAs49oPmZJNe/9OUGuu8BhvLIxjOoDULFPng8WgpQpvf3ih6/WK68bZMbPahP23XZ/Dejlor9wTlqbjwzdIlZl8e6S5ecvU4tyg+f+X9PkEOP40Xubce5jGcLY/+khYIbrXxQctsc25czk2Tgfd0DXw1mrpY5ZmYF3dayOd+2S7pX+XVjpkk4mFNS5jYdTUkdTsrwwpJsqfmcbvLj5PaIkAxqeuUfm2+ABeGn/OQXpBIURQRBbp4QvNiac9Eh2Jh5Hj6VUmigWfqCFyeoJAD/rIfyiJMx9KswXWECbSO174Ckh8t7QtHJt/bStJcbl9wb6ZchDQMWyWQsWMFM0V04ORwifjV0edDAbBJ3C9N3Wq3YW7Keh7NSJ8Q478ss2wfxQRqUIMXJY0FsAPI="
+            secure: 'O4I1YkovXOZeEXeS0NZQnoAmmBXt9Pv0lvbj+pN/7CcRNvS1EdQFvWFt1ZpH2SJU+RtB1QSiG5oM4OuxecpQ+PWIWeIn4zuM97By9j8ELEwgFsMbhh7TM13bFpNfCi1F1ZCsdU4VhPveu+OBw/tk2iQUYVKao2R1zOn2zKpdMY0ohAuzxKSj25/DRJKj9oBCdq4ZM0awijeYbxLp/Xfk0gBzQeK75HLW3IC71YInGb9aKX01FLMd2/4TeiP5rfmYa8z+GeBRVN4VsauIFonOFA7WUFfYAs49oPmZJNe/9OUGuu8BhvLIxjOoDULFPng8WgpQpvf3ih6/WK68bZMbPahP23XZ/Dejlor9wTlqbjwzdIlZl8e6S5ecvU4tyg+f+X9PkEOP40Xubce5jGcLY/+khYIbrXxQctsc25czk2Tgfd0DXw1mrpY5ZmYF3dayOd+2S7pX+XVjpkk4mFNS5jYdTUkdTsrwwpJsqfmcbvLj5PaIkAxqeuUfm2+ABeGn/OQXpBIURQRBbp4QvNiac9Eh2Jh5Hj6VUmigWfqCFyeoJAD/rIfyiJMx9KswXWECbSO174Ckh8t7QtHJt/bStJcbl9wb6ZchDQMWyWQsWMFM0V04ORwifjV0edDAbBJ3C9N3Wq3YW7Keh7NSJ8Q478ss2wfxQRqUIMXJY0FsAPI='
 #    - stage: eb-deploy-staging
 #      script:
 #        - ./set-agora-version.sh || travis_terminate 1
