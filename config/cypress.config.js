@@ -10,6 +10,6 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'http://127.0.0.1:8080',
     supportFile: helpers.root('testing/cypress/support/e2e.ts'),
-    specPattern: helpers.root('testing/cypress/e2e/**/*.cy.ts'),
+    integrationFolder: helpers.root('testing/cypress/e2e/'),
   },
 });
