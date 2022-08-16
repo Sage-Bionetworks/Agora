@@ -14,7 +14,7 @@ branches:
     - prod
 
 before_install:
-  - npm install npm@8.11.0
+  - npm install npm@8.5.5
   - npm cache verify
   - travis_retry npm prune
 
@@ -41,12 +41,12 @@ jobs:
         - npm run test
         - npm run build
         - npm run test:e2e
-      node_js: 16
+      node_js: 16.15.0
     - stage: eb-deploy-develop
       script:
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - npm run ci:zip
-      node_js: 16
+      node_js: 16.15.0
       deploy:
         - provider: elasticbeanstalk
           edge: true # opt in to dpl v2
