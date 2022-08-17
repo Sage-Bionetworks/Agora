@@ -39,7 +39,7 @@ jobs:
       script:
         - npm run test
         - npm run build
-        - npm run test:e2e
+        - npm run ci:test:e2e
       node_js: 16.15.0
     - stage: eb-deploy-develop
       script:
