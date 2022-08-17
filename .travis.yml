@@ -41,6 +41,7 @@ jobs:
       node_js: 16
     - stage: eb-deploy-develop
       script:
+        - npm run clean:npm
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
       node_js: 16
