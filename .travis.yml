@@ -7,6 +7,10 @@ branches:
     - develop
     - staging
     - prod
+env:
+  global:
+    - REPO_NAME="${PWD##*/}"
+    - AWS_REGION="us-east-1"
 install:
   # install awscli v2
   - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
