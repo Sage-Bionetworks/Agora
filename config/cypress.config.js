@@ -8,8 +8,10 @@ module.exports = defineConfig({
   screenshotsFolder: helpers.root('testing/cypress/screenshots'),
   videosFolder: helpers.root('testing/cypress/videos'),
   e2e: {
+    video: false,
+    screenshotOnRunFailure: false,
     baseUrl: 'http://127.0.0.1:8080',
     supportFile: helpers.root('testing/cypress/support/e2e.ts'),
-    integrationFolder: helpers.root('testing/cypress/e2e/'),
+    specPattern: helpers.root('testing/cypress/e2e/**/*.cy.ts'),
   },
 });
