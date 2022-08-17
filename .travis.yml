@@ -29,11 +29,11 @@ before_script:
 stages:
   - name: test
   - name: eb-deploy-develop
-    if: branch = develop AND type = push
+    if: (NOT type IN (pull_request)) AND (branch = develop) AND (type = push)
   - name: eb-deploy-staging
-    if: branch = staging AND type = push
+    if: (NOT type IN (pull_request)) AND (branch = develop) AND (type = push)
   - name: eb-deploy-prod
-    if: branch = prod AND type = push
+    if: (NOT type IN (pull_request)) AND (branch = develop) AND (type = push)
 jobs:
   include:
     - stage: test
