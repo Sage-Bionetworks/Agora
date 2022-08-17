@@ -34,7 +34,7 @@
     "data:local-aws": "npm run clean:data && sh ./scripts/get-data-local-aws.sh",
     "data:aws": "npm run clean:data && sh ./scripts/get-data-aws.sh",
     "cypress": "cypress",
-    "cypress:run": "cypress run --config-file ./config/cypress.config.js"
+    "cypress:run": "set NODE_OPTIONS=\"\" && cypress run --config-file ./config/cypress.config.js"
   },
   "pre-commit": [
     "test"
