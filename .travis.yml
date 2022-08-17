@@ -29,11 +29,8 @@ before_script:
 stages:
   - name: test
   - name: eb-deploy-develop
-    if: (NOT type IN (pull_request)) AND (branch = develop)
   - name: eb-deploy-staging
-    if: (NOT type IN (pull_request)) AND (branch = staging)
   - name: eb-deploy-prod
-    if: (NOT type IN (pull_request)) AND (branch = prod)
 jobs:
   include:
     - stage: test
@@ -42,18 +39,21 @@ jobs:
         - npm run ci:travis
       node_js: 16
     - stage: deploy-develop
+      if: (NOT type IN (pull_request)) AND (branch = develop)
       script:
         - npm run clean:npm
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
         - eb deploy --profile develop --verbose --region ${AWS_REGION} --staged agora-develop
     - stage: deploy-staging
+      if: (NOT type IN (pull_request)) AND (branch = staging)
       script:
         - npm run clean:npm
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
         - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-staging
     - stage: deploy-prod
+      if: (NOT type IN (pull_request)) AND (branch = prod)
       script:
         - npm run clean:npm
         - ./scripts/set-agora-version.sh || travis_terminate 1
