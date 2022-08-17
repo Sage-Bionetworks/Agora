@@ -41,6 +41,7 @@ jobs:
     - stage: deploy-develop
       if: (NOT type IN (pull_request)) AND (branch = develop)
       script:
+        - npm run ci:travis
         - npm run clean:npm
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
