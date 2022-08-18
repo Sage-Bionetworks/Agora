@@ -12,9 +12,10 @@ npm-debug.log
 yarn-error.log
 
 # Testing
-/testing/spec-build
+/testing/cypress/downloads
 /testing/cypress/screenshots
 /testing/cypress/videos
+/testing/spec-build
 /coverage
 
 # IDEs and editors
