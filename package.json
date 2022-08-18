@@ -20,7 +20,7 @@
     "test": "npm run lint && npm run test:unit",
     "test:unit": "karma start config/karma.conf.js",
     "test:watch": "npm run lint && npm run test:unit -- --auto-watch --no-single-run",
-    "test:e2e": "concurrently --kill-others-on-fail \"npm run start\" \"npm run cypress:run && npm run stop\"",
+    "test:e2e": "concurrently --kill-others \"npm run start\" \"npm run cypress:run && npm run stop\"",
     "clean": "npm run clean:app-and-server && npm run clean:testing && npm run clean:data && npm run clean:packages",
     "clean:app": "rimraf \"./dist/**/!(server.js)\"",
     "clean:server": "rimraf ./dist/server.js",
@@ -31,6 +31,7 @@
     "ci:build:develop": "APP_ENV=develop npm run build:dev",
     "ci:build:staging": "APP_ENV=staging npm run build",
     "ci:build:prod": "APP_ENV=prod npm run build",
+    "ci:test:e2e": "concurrently --success last \"npm run start\" \"npm run cypress:run\"",
     "ci:clean": "npm run clean:packages",
     "ci:zip": "zip /tmp/agora-app.zip -qr9 dist package.json package-lock.json LICENSE",
     "mongo:import": "sh ./scripts/mongo-import.sh",
@@ -41,7 +42,7 @@
     "data:local-aws": "npm run clean:data && sh ./scripts/get-data-local-aws.sh",
     "data:aws": "npm run clean:data && sh ./scripts/get-data-aws.sh",
     "cypress": "cypress",
-    "cypress:run": "set NODE_OPTIONS=\"\" && cypress run --config-file ./config/cypress.config.js"
+    "cypress:run": "cypress run --config-file ./config/cypress.config.js"
   },
   "pre-commit": [
     "test"

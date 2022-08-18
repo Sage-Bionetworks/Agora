@@ -13,6 +13,8 @@ yarn-error.log
 
 # Testing
 /testing/spec-build
+/testing/cypress/screenshots
+/testing/cypress/videos
 /coverage
 
 # IDEs and editors
