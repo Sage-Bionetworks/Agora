@@ -39,7 +39,7 @@ jobs:
       script:
         - npm run test
         - npm run build
-        - npm run ci:test:e2e
+        - npm run test:e2e
     - stage: deploy-develop
       if: (NOT type IN (pull_request)) AND (branch = develop)
       node_js: 16.15.0
