@@ -6,8 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
-import { setHeaders } from '../helpers';
+import { setHeaders, cache } from '../helpers';
 import {
   RnaDistributionCollection,
   ProteomicDistributionCollection,

@@ -20,7 +20,7 @@ import api from './api';
 // -------------------------------------------------------------------------- //
 // Express setup
 // -------------------------------------------------------------------------- //
-const env = process.env.MODE || 'development';
+const env = process.env.NODE_ENV || 'production';
 const port = helpers.normalizePort(process.env.PORT || '8080');
 const app = express();
 

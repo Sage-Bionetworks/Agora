@@ -3,19 +3,25 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
-const WebpackInlineManifestPlugin = require('webpack-inline-manifest-plugin');
+const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 
 const helpers = require('./helpers');
-
 const packageJson = require('../package.json');
-const VERSION = JSON.stringify(packageJson['version']);
-const DATA_VERSION = JSON.stringify(
-  packageJson['data-file'] + '-v' + packageJson['data-version']
-);
 
 module.exports = function (env, argv) {
-  const mode = argv?.mode || 'development';
+  const VERSION = JSON.stringify(packageJson['version']);
+  const DATA_VERSION = JSON.stringify(
+    packageJson['data-file'] + '-v' + packageJson['data-version']
+  );
+
+  const NODE_ENV = argv?.mode || process.env.NODE_ENV || 'production';
+  const APP_ENV = process.env.APP_ENV || NODE_ENV;
+
+  const API_HOST = process.env.API_HOST || (argv?.port ? 'localhost' : null);
+  const API_PORT = process.env.API_PORT || (argv?.port ? '8080' : null);
+
   return {
+    mode: NODE_ENV,
     entry: {
       polyfills: './src/polyfills.ts',
       main: './src/main.ts',
@@ -65,12 +71,18 @@ module.exports = function (env, argv) {
     devServer: {
       historyApiFallback: true,
     },
-    devtool: 'cheap-module-source-map',
+    devtool: NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.MODE': JSON.stringify(mode),
+        NODE_ENV: JSON.stringify(NODE_ENV),
+        APP_ENV: JSON.stringify(APP_ENV),
+        API_HOST: JSON.stringify(API_HOST),
+        API_PORT: JSON.stringify(API_PORT),
         VERSION: VERSION,
         DATA_VERSION: DATA_VERSION,
+      }),
+      new AngularWebpackPlugin({
+        tsconfig: helpers.root('tsconfig.json'),
       }),
       new ProvidePlugin({
         dc: 'dc',

@@ -6,8 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache, altCache } from '../cache';
-import { setHeaders } from '../helpers';
+import { setHeaders, cache, altCache } from '../helpers';
 import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,

@@ -61,28 +61,22 @@ interface SystemJS {
 }
 
 // Extra variables that live on Global that will be replaced by webpack DefinePlugin
-// App
+declare let NODE_ENV: string;
+declare let APP_ENV: string;
+declare let API_HOST: string;
+declare let API_PORT: string;
 declare let VERSION: string;
 declare let DATA_VERSION: string;
-declare let API_URL: string;
-// Server
-declare let ENV: string;
-declare let APP_ENV: string;
-declare let MONGODB_HOST: string;
-declare let MONGODB_PORT: number;
 // ???
 declare let System: SystemJS;
 
 interface GlobalEnvironment {
-  // App
+  NODE_ENV: string;
+  APP_ENV: string;
+  API_HOST: string;
+  API_PORT: string;
   VERSION: string;
   DATA_VERSION: string;
-  API_URL: string;
-  // Server
-  ENV: string;
-  APP_ENV: string;
-  MONGODB_HOST: string;
-  MONGODB_PORT: number;
   // ???
   SystemJS: SystemJS;
   System: SystemJS;

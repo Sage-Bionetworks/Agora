@@ -1,13 +1,12 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { altCache } from '../cache';
 import { Request, Response, NextFunction } from 'express';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders } from '../helpers';
+import { setHeaders, altCache } from '../helpers';
 import { getGenesMap, getTeams } from './';
 import {
   Gene,

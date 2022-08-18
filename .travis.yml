@@ -27,37 +27,43 @@ before_script:
   # setup npm dependencies
   - npm install
 stages:
-  - name: build
+  - name: test
   - name: eb-deploy-develop
   - name: eb-deploy-staging
   - name: eb-deploy-prod
 jobs:
   fast_finish: true
   include:
-    - stage: build
+    - stage: test
+      node_js: 16.15.0
       script:
         - npm run test
         - npm run build
-        - npm run ci:test:e2e
-      node_js: 16.15.0
+        - npm run test:e2e
     - stage: deploy-develop
       if: (NOT type IN (pull_request)) AND (branch = develop)
+      node_js: 16.15.0
       script:
-        - npm run clean:npm
+        - npm run ci:build:develop
+        - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
         - eb deploy --profile develop --verbose --region ${AWS_REGION} --staged agora-develop
     - stage: deploy-staging
       if: (NOT type IN (pull_request)) AND (branch = staging)
+      node_js: 16.15.0
       script:
-        - npm run clean:npm
+        - npm run ci:build:staging
+        - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
         - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-staging
     - stage: deploy-prod
       if: (NOT type IN (pull_request)) AND (branch = prod)
+      node_js: 16.15.0
       script:
-        - npm run clean:npm
+        - npm run ci:build:prod
+        - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
         - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-prod
