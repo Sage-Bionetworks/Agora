@@ -81,9 +81,6 @@ module.exports = function (env, argv) {
         VERSION: VERSION,
         DATA_VERSION: DATA_VERSION,
       }),
-      new AngularWebpackPlugin({
-        tsconfig: helpers.root('tsconfig.json'),
-      }),
       new ProvidePlugin({
         dc: 'dc',
       }),
