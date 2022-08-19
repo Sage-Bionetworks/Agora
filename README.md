@@ -40,9 +40,9 @@ Note: You can use the following scripts to start the database:
 
 ```
 # Linux and MacOS
-npm run start:mongo
+npm run mongo:start
 # Windows
-npm run start:mongo:windows
+npm run mongo:start:windows
 ```
 
 ### 3 - Import the data
