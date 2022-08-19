@@ -1,4 +1,4 @@
-# cd ../data
+# cd ../../data
 
 # Imports the data and wipes the current collections
 # Not using --mode upsert fow now because we don't have unique indexes properly set for the collections

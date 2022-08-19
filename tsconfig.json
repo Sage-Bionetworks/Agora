@@ -1,4 +1,3 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -28,10 +27,13 @@
     "strictTemplates": true
   },
   "exclude": [
-    "node_modules",
-    "dist",
-    "src/server",
-    "src/**/*.spec.ts",
-    "src/**/*.e2e.ts"
+    "./node_modules",
+    "./dist",
+    "./testing",
+    "./src/app/testing",
+    "./src/environments",
+    "./src/server",
+    "./src/**/*.spec.ts",
+    "./src/**/*.e2e.ts"
   ]
 }

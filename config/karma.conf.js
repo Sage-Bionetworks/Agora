@@ -1,13 +1,4 @@
-process.env.CHROME_BIN =
-  process.env.CHROME_BIN || require('puppeteer').executablePath();
-
-/**
- * @author: tipe.io
- */
-
 module.exports = function (config) {
-  const testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
-
   const configuration = {
     /**
      * Base path that will be used to resolve all patterns (e.g. files, exclude).
@@ -19,7 +10,7 @@ module.exports = function (config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'webpack', 'viewport'],
 
     /**
      * List of files to exclude.
@@ -33,49 +24,37 @@ module.exports = function (config) {
     /**
      * List of files / patterns to load in the browser
      *
-     * we are building the test environment in ./spec-bundle.js
+     * we are building the test environment in ../testing/spec-bundle.js
      */
-    files: [
-      { pattern: './config/spec-bundle.js', watched: false },
-      {
-        pattern: './src/assets/**/*',
-        watched: false,
-        included: false,
-        served: true,
-        nocache: false,
-      },
-    ],
+    files: [{ pattern: '../testing/spec-bundle.js', watched: false }],
 
-    /**
-     * By default all assets are served at http://localhost:[PORT]/base/
-     */
     proxies: {
-      '/assets/': '/base/src/assets/',
+      '/assets/': '../src/assets/',
     },
+
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-webpack'),
+      require('karma-coverage'),
+      require('karma-chrome-launcher'),
+      require('karma-sourcemap-loader'),
+      require('karma-mocha-reporter'),
+      require('karma-remap-coverage'),
+      require('karma-viewport'),
+    ],
 
     /**
      * Preprocess matching files before serving them to the browser
      * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
      */
     preprocessors: {
-      './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'],
+      '../testing/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'],
     },
 
     /**
      * Webpack Config at ./webpack.test.js
      */
-    webpack: testWebpackConfig,
-
-    coverageReporter: {
-      reporters: [{ type: 'in-memory' }],
-    },
-
-    remapCoverageReporter: {
-      'text-summary': null,
-      json: './coverage/coverage.json',
-      html: './coverage/html',
-      lcovonly: './coverage/lcov.info',
-    },
+    webpack: require('./webpack.spec.js')(),
 
     /**
      * Webpack please don't spam the console when running in karma!
@@ -97,18 +76,33 @@ module.exports = function (config) {
       },
     },
 
+    coverageReporter: {
+      type: 'in-memory',
+      dir: '../coverage',
+      reporters: [
+        { type: 'html', subdir: 'html' },
+        { type: 'lcov', subdir: 'lcov' },
+      ],
+    },
+
+    remapCoverageReporter: {
+      'text-summary': null,
+      html: '../coverage/html',
+      cobertura: '../coverage/cobertura.xml',
+    },
+
+    coverageIstanbulReporter: {
+      reports: ['text-summary', 'html'],
+      fixWebpackSourcePaths: true,
+    },
+
     /**
      * Test results reporter to use
      *
      * possible values: 'dots', 'progress'
      * available reporters: https://npmjs.org/browse/keyword/karma-reporter
      */
-    reporters: ['mocha', 'coverage', 'remap-coverage', 'coveralls'],
-
-    coverageIstanbulReporter: {
-      reports: ['text-summary', 'html'],
-      fixWebpackSourcePaths: true,
-    },
+    reporters: ['mocha', 'coverage', 'remap-coverage'],
 
     /**
      * Web server port.
@@ -155,11 +149,10 @@ module.exports = function (config) {
      * if true, Karma captures browsers, runs the tests and exits
      */
     singleRun: true,
-    /**
-     * For slower machines you may need to have a longer browser
-     * wait time . Uncomment the line below if required.
-     */
-    // browserNoActivityTimeout: 30000
+
+    // Concurrency level
+    // how many browser should be started simultaneous
+    concurrency: Infinity,
   };
 
   // Optional Sonar Qube Reporter
@@ -169,7 +162,7 @@ module.exports = function (config) {
       sonarQubeVersion: '5.x',
       outputFile: 'reports/ut_report.xml',
       overrideTestDescription: true,
-      testPath: 'src/app',
+      testPath: 'src/components',
       testFilePattern: '.spec.ts',
       useBrowserName: false,
     };
@@ -179,10 +172,6 @@ module.exports = function (config) {
     configuration.remapCoverageReporter.lcovonly = './coverage/coverage.lcov';
 
     configuration.reporters.push('sonarqubeUnit');
-  }
-
-  if (process.env.TRAVIS) {
-    configuration.browsers = ['ChromeTravisCi'];
   }
 
   config.set(configuration);

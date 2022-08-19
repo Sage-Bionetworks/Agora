@@ -7,8 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders } from '../helpers';
-import { cache } from '../cache';
+import { setHeaders, cache } from '../helpers';
 import { Team, TeamCollection } from '../models';
 
 // -------------------------------------------------------------------------- //

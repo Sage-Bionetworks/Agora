@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint quotes: off */
 
 // -------------------------------------------------------------------------- //
 // External
@@ -20,9 +20,7 @@ import api from './api';
 // -------------------------------------------------------------------------- //
 // Express setup
 // -------------------------------------------------------------------------- //
-
-const env =
-  process.env.mode || process.env.NODE_ENV || process.env.ENV || 'development';
+const env = process.env.NODE_ENV || 'production';
 const port = helpers.normalizePort(process.env.PORT || '8080');
 const app = express();
 
@@ -47,6 +45,7 @@ app.use(
         'https://vimeo.com/',
         'https://www.google-analytics.com',
         'https://fonts.gstatic.com',
+        'https://api.rollbar.com',
       ],
       'script-src': [
         "'self'",
@@ -65,8 +64,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
 if (env === 'development') {
-  console.log('NODE_ENV:', process.env.NODE_ENV);
-  console.log('PORT:', process.env.PORT);
+  console.log('ENV:', env);
+  console.log('PORT:', port);
 }
 
 // -------------------------------------------------------------------------- //
@@ -115,7 +114,6 @@ if (app.get('env') === 'development') {
 // -------------------------------------------------------------------------- //
 // Server
 // -------------------------------------------------------------------------- //
-
 const server = http.createServer(app);
 
 server.listen(port, () => console.log(`API running on localhost:${port}`));
@@ -125,5 +123,4 @@ server.on('listening', () => helpers.onListening(server.address()));
 // -------------------------------------------------------------------------- //
 // Export
 // -------------------------------------------------------------------------- //
-
 export { app };

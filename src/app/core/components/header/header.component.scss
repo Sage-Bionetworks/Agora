@@ -34,7 +34,7 @@
   justify-content: flex-end;
   align-items: center;
 
-  .header-toggle {
+  .header-nav-toggle {
     @include reset-button;
 
     position: relative;
@@ -94,7 +94,7 @@
 }
 
 #header:not(.is-mobile) {
-  .header-toggle {
+  .header-nav-toggle {
     display: none;
   }
 
@@ -197,8 +197,8 @@
       }
     }
 
-    &.toggled {
-      .header-toggle {
+    &.show {
+      .header-nav-toggle {
         span {
           &:nth-child(1) {
             right: -5px;

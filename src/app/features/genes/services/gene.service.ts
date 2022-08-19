@@ -7,15 +7,15 @@ import {
   SimilarGenesNetwork,
   SimilarGenesNetworkNode,
   SimilarGenesNetworkLink,
-  DistributionResponse,
+  Distribution,
 } from '../../../models';
 import { ApiService } from '../../../core/services';
 
 @Injectable()
 export class GeneService {
   genes: { [key: string]: Gene } = {};
-  distribution: DistributionResponse | undefined = undefined;
-  distributionObservable: Observable<DistributionResponse> | undefined;
+  distribution: Distribution | undefined = undefined;
+  distributionObservable: Observable<Distribution> | undefined;
   comparisonData: any = {};
 
   constructor(private apiService: ApiService) {}
@@ -141,7 +141,7 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getDistribution(): Observable<DistributionResponse> {
+  getDistribution(): Observable<Distribution> {
     if (this.distribution) {
       return of(this.distribution);
     } else if (this.distributionObservable) {

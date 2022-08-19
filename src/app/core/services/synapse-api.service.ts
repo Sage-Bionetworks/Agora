@@ -4,8 +4,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { SynapseWiki } from '../../models';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -16,7 +21,7 @@ export class SynapseApiService {
 
   constructor(private http: HttpClient) {}
 
-  getWiki(ownerId: string, wikiId: string) {
+  getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
     const key = ownerId + wikiId;
     if (this.wikis[key]) {
       return of(this.wikis[key]);
