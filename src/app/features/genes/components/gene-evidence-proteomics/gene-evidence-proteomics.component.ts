@@ -63,11 +63,11 @@ export class GeneEvidenceProteomicsComponent {
       }
     });
 
-    this._gene?.proteomics_TMT?.forEach((item: any) => {
-      if (!this.uniProtIds.includes(item.uniprotid)) {
-        this.uniProtIds.push(item.uniprotid);
-      }
-    });
+    // this._gene.protein_TMT.forEach((item: any) => {
+    //   if (!this.uniProtIds.includes(item.uniprotid)) {
+    //     this.uniProtIds.push(item.uniprotid);
+    //   }
+    // });
 
     this.uniProtIds.sort();
     if (!this.selectedUniProtId) {

@@ -5,4 +5,5 @@ export const environment = {
   api_port: API_PORT,
   version: VERSION,
   data_version: DATA_VERSION,
+  ga: 'G-Y07DD946E4',
 };
