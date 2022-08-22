@@ -3,6 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   tick,
+  flush,
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -98,6 +99,7 @@ describe('Component: GeneComparisonToolComponent', () => {
 
     expect(component.genes).toEqual([comparisonGeneMock1, comparisonGeneMock2]);
     expect(component.pinnedGenes).toEqual([comparisonGeneMock1]);
+    flush();
   }));
 
   it('should search', () => {
@@ -151,6 +153,8 @@ describe('Component: GeneComparisonToolComponent', () => {
     tick();
 
     expect(component.genesTable._totalRecords).toEqual(1);
+
+    flush();
   }));
 
   it('should pin/upin gene', () => {
@@ -177,5 +181,6 @@ describe('Component: GeneComparisonToolComponent', () => {
     component.clearPinnedGenes();
     fixture.detectChanges();
     expect(component.pinnedGenes.length).toEqual(0);
+    flush();
   }));
 });
