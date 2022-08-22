@@ -52,4 +52,40 @@ describe('Service: Synapse API', () => {
     expect(req.request.method).toBe('GET');
     req.flush(synapseWikiMock);
   });
+
+  it('should replace links', () => {
+    const res = synapseApiService.renderHtml('[test](https://test.com)');
+    expect(res).toEqual('<a href="https://test.com" target="_blank">test</a>');
+  });
+
+  it('should replace synapse links', () => {
+    const res = synapseApiService.renderHtml('[test](syn123)');
+    expect(res).toEqual(
+      '<a href="https://synapse.org/#!Synapse:syn123" target="_blank">test</a>'
+    );
+  });
+
+  it('should replace bold', () => {
+    const res = synapseApiService.renderHtml('**test**');
+    expect(res).toEqual('<b>test</b>');
+  });
+
+  it('should replace email', () => {
+    const res = synapseApiService.renderHtml('agora@sagebionetworks.org');
+    expect(res).toEqual(
+      '<a class="link email-link" href="mailto:agora@sagebionetworks.org">agora@sagebionetworks.org</a>'
+    );
+  });
+
+  it('should replace image', () => {
+    const res = synapseApiService.renderHtml('${?fileName=test.png}');
+    expect(res).toEqual('<img src="test.png" alt="" />');
+  });
+
+  it('should replace video', () => {
+    const res = synapseApiService.renderHtml('${?vimeoId=123}');
+    expect(res).toEqual(
+      '<iframe src="https://player.vimeo.com/video/123?autoplay=0&speed=1" frameborder="0" allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+    );
+  });
 });

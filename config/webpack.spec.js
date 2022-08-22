@@ -11,9 +11,24 @@ module.exports = function (env, argv) {
     output: {
       path: helpers.root('testing/spec-build'),
     },
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: {
+            loader: 'coverage-istanbul-loader',
+            options: { esModules: true },
+          },
+          enforce: 'post',
+          include: helpers.root('src'),
+          exclude: [/\.(e2e|spec)\.ts$/, /node_modules/],
+        },
+      ],
+    },
     plugins: [
       new AngularWebpackPlugin({
         tsconfig: helpers.root('tsconfig.spec.json'),
+        sourceMap: true,
       }),
     ],
   });

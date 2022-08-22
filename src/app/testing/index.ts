@@ -8,4 +8,5 @@ export * from './chart-mocks';
 export * from './gene-comparison-tool-mocks';
 // Stubs
 export * from './api-service-stub';
+export * from './gene-service-stub';
 export * from './synapse-api-service-stub';
