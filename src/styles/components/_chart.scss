@@ -150,7 +150,7 @@
 
   &.arrow-above {
     transform: translate(calc(-50% + 9px), calc(50%));
-  
+
     &::before {
       top: -9px;
       border-top: 0;
@@ -160,7 +160,7 @@
 
   &.arrow-below {
     transform: translate(calc(-50% + 9px), calc(-50%));
-    
+
     &::before {
       bottom: -9px;
       border-bottom: 0;
@@ -270,7 +270,7 @@
     }
 
     g.row rect {
-      fill-opacity: 1 !important;
+      fill-opacity: 100% !important;
       width: 18px;
       height: 18px;
       cursor: default;
@@ -373,21 +373,21 @@
 
     .bar {
       fill: var(--color-secondary);
-      fill-opacity: 0.5;
+      fill-opacity: 50%;
 
       &:hover {
         fill: var(--color-secondary);
-        fill-opacity: 1;
+        fill-opacity: 100%;
       }
     }
 
     .score-bar {
       fill: var(--color-secondary);
-      fill-opacity: 1;
+      fill-opacity: 100%;
 
       &:hover {
         fill: var(--color-secondary);
-        fill-opacity: 0.8;
+        fill-opacity: 80%;
       }
     }
 

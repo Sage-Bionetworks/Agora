@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
-const AngularWebpackPlugin = require('@ngtools/webpack').AngularWebpackPlugin;
 
 const helpers = require('./helpers');
 const packageJson = require('../package.json');
@@ -17,8 +16,8 @@ module.exports = function (env, argv) {
   const NODE_ENV = argv?.mode || process.env.NODE_ENV || 'production';
   const APP_ENV = process.env.APP_ENV || NODE_ENV;
 
-  const API_HOST = process.env.API_HOST || (argv?.port ? 'localhost' : null);
-  const API_PORT = process.env.API_PORT || (argv?.port ? '8080' : null);
+  const API_HOST = process.env.API_HOST || null;
+  const API_PORT = process.env.API_PORT || null;
 
   return {
     mode: NODE_ENV,
@@ -53,18 +52,45 @@ module.exports = function (env, argv) {
         },
         {
           test: /\.scss$/i,
-          use: ['raw-loader', 'postcss-loader', 'sass-loader'],
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                exportType: 'string',
+                url: false,
+              },
+            },
+            'sass-loader',
+          ],
           include: [helpers.root('src/app')],
         },
         {
           test: /\.s?css$/i,
-          use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              // options: {
+              //   url: false,
+              // },
+            },
+            'sass-loader',
+          ],
           exclude: [helpers.root('src/app')],
         },
         {
-          test: /\.html$/i,
-          loader: 'html-loader',
-          exclude: [helpers.root('src/index.html')],
+          test: /\.(png|jpe?g|gif|svg)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'assets/images/[name][ext][query]',
+          },
+        },
+        {
+          test: /\.(eot|ttf|woff|woff2)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'assets/fonts/[name][ext][query]',
+          },
         },
       ],
     },
@@ -85,7 +111,7 @@ module.exports = function (env, argv) {
         dc: 'dc',
       }),
       new CopyWebpackPlugin({
-        patterns: [{ from: 'src/assets', to: 'assets' }, { from: 'src/meta' }],
+        patterns: [{ from: 'src/assets', to: 'assets/' }, { from: 'src/meta' }],
       }),
       new HtmlWebpackPlugin({
         template: helpers.root('src/index.html'),

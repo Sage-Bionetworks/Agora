@@ -44,7 +44,7 @@ jobs:
       if: (NOT type IN (pull_request)) AND (branch = develop)
       node_js: 16.15.0
       script:
-        - npm run ci:build:develop
+        - npm run ci:build:prod
         - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*

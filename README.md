@@ -115,7 +115,7 @@ Go to [http://localhost:8080](http://localhost:8080)
 npm run dev
 ```
 
-Go to [http://localhost:3000](http://localhost:3000)
+Go to [http://localhost:8080](http://localhost:8080)
 
 # Testing
 

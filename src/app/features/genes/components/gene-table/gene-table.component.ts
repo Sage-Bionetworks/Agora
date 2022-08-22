@@ -177,7 +177,7 @@ export class GeneTableComponent implements OnInit {
       });
     } else {
       const ids: string[] = this._genes.map((g: Gene) => g.ensembl_gene_id);
-      this.helperService.setGCTSection(ids);
+      this.helperService.setGCTSelection(ids);
       this.router.navigate(['/genes/comparison']);
     }
   }

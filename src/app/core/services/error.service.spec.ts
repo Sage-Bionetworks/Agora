@@ -1,8 +1,6 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
 
 // -------------------------------------------------------------------------- //
@@ -17,15 +15,18 @@ describe('Service: Error', () => {
   let errorService: ErrorService;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ErrorService, MessageService],
-    });
-
-    errorService = TestBed.inject(ErrorService);
+    errorService = new ErrorService(new MessageService());
   });
 
   it('should create', () => {
     expect(errorService).toBeDefined();
+  });
+
+  it('should handle error', () => {
+    const errorMock = new Error('Error');
+
+    expect(function () {
+      errorService.handleError(errorMock);
+    }).toThrow();
   });
 });

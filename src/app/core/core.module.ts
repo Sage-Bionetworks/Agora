@@ -26,7 +26,7 @@ import {
 // -------------------------------------------------------------------------- //
 // Interceptors
 // -------------------------------------------------------------------------- //
-import { ApiInterceptor, HttpErrorInterceptor } from './interceptors';
+import { HttpErrorInterceptor } from './interceptors';
 
 // -------------------------------------------------------------------------- //
 // Components
@@ -82,11 +82,6 @@ import {
       useFactory: rollbarFactory,
     },
     { provide: ErrorHandler, useClass: ErrorService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiInterceptor,
-      multi: true,
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

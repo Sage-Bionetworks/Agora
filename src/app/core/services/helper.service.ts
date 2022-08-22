@@ -132,15 +132,15 @@ export class HelperService {
     return (Math.round(n * mult) / mult) * sign;
   }
 
-  setGCTSection(genes: string[]) {
+  setGCTSelection(genes: string[]) {
     this.gctSelection = genes;
   }
 
-  getGCTSection() {
+  getGCTSelection() {
     return this.gctSelection;
   }
 
-  deleteGCTSection() {
+  deleteGCTSelection() {
     this.gctSelection = [];
   }
 

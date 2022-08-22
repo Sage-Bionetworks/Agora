@@ -49,7 +49,7 @@ export class SynapseApiService {
     sanitized = sanitized.replace(/\*\*(.*?)\*\*/g, this.replaceBold);
 
     // Add syn links
-    sanitized = sanitized.replace(/\[here\]\((.*?)\)/g, this.replaceSynLinks);
+    sanitized = sanitized.replace(/\[(.+?)\]\((.+?)\)/g, this.replaceLinks);
 
     // Add emails
     sanitized = sanitized.replace(
@@ -63,11 +63,21 @@ export class SynapseApiService {
     return sanitized;
   }
 
-  replaceSynLinks(match: string, content: string) {
+  replaceLinks(match: string, text: string, url: string) {
+    const target = '_blank';
+
+    if (url.startsWith('syn')) {
+      url = 'https://synapse.org/#!Synapse:' + url;
+    }
+
     return (
-      '<a href="https://synapse.org/#!Synapse:' +
-      content +
-      '" target="_blank">here</a>'
+      '<a href="' +
+      url +
+      '"' +
+      (target ? ' target="' + target + '"' : '') +
+      '>' +
+      text +
+      '</a>'
     );
   }
 
@@ -92,9 +102,9 @@ export class SynapseApiService {
         return (
           '<img src="' +
           params.get('fileName') +
-          ' alt="' +
+          '" alt="' +
           (params.get('amp;altText') || '') +
-          '"/>'
+          '" />'
         );
       } else if (params.has('vimeoId')) {
         return (
