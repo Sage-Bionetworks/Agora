@@ -5,19 +5,17 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 
 const helpers = require('./helpers');
-const packageJson = require('../package.json');
+const package = require('../package.json');
 
 module.exports = function (env, argv) {
-  const VERSION = JSON.stringify(packageJson['version']);
-  const DATA_VERSION = JSON.stringify(
-    packageJson['data-file'] + '-v' + packageJson['data-version']
-  );
-
   const NODE_ENV = argv?.mode || process.env.NODE_ENV || 'production';
-  const APP_ENV = process.env.APP_ENV || NODE_ENV;
+  const APP_ENV = process.env.APP_ENV || null;
 
   const API_HOST = process.env.API_HOST || null;
   const API_PORT = process.env.API_PORT || null;
+
+  const VERSION = package['version'];
+  const DATA_VERSION = package['data-file'] + '-v' + package['data-version'];
 
   return {
     mode: NODE_ENV,
@@ -104,8 +102,8 @@ module.exports = function (env, argv) {
         APP_ENV: JSON.stringify(APP_ENV),
         API_HOST: JSON.stringify(API_HOST),
         API_PORT: JSON.stringify(API_PORT),
-        VERSION: VERSION,
-        DATA_VERSION: DATA_VERSION,
+        VERSION: JSON.stringify(VERSION),
+        DATA_VERSION: JSON.stringify(DATA_VERSION),
       }),
       new ProvidePlugin({
         dc: 'dc',
