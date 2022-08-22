@@ -12,7 +12,6 @@ export { ExperimentalValidation } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const ExperimentalValidationSchema = new Schema<ExperimentalValidation>(
   {
     _id: { type: String, required: true },
@@ -38,7 +37,6 @@ const ExperimentalValidationSchema = new Schema<ExperimentalValidation>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const ExperimentalValidationCollection = model<ExperimentalValidation>(
   'ExperimentalValidationCollection',
   ExperimentalValidationSchema

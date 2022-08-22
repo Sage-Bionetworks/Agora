@@ -1,10 +1,21 @@
+const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
-const helpers = require('./helpers');
+module.exports = function (env, argv) {
+  const helpers = require('./helpers');
 
-module.exports = function () {
+  const NODE_ENV = argv?.mode || process.env.NODE_ENV || 'production';
+  const APP_ENV = process.env.APP_ENV || NODE_ENV;
+
+  const HOST = process.env.HOST || 'localhost';
+  const PORT = process.env.PORT || 8080;
+
+  const MONGODB_HOST = process.env.MONGODB_HOST || null;
+  const MONGODB_PORT = process.env.MONGODB_PORT || null;
+
   return {
+    mode: NODE_ENV,
     entry: {
       server: helpers.root('src/server/server.ts'),
     },
@@ -14,13 +25,8 @@ module.exports = function () {
     },
     target: 'node',
     externals: [nodeExternals()],
-    node: {
-      __dirname: false,
-      __filename: false,
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
-      modules: [helpers.root('node_modules')],
     },
     module: {
       rules: [
@@ -30,7 +36,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: 'tsconfig.server.json',
+                configFile: helpers.root('tsconfig.server.json'),
               },
             },
           ],
@@ -39,14 +45,15 @@ module.exports = function () {
       ],
     },
     plugins: [
-      new NodemonPlugin({
-        // What to watch.
-        watch: helpers.root('dist/server.js'),
-        // Detailed log.
-        verbose: true,
-        // Node arguments.
-        nodeArgs: ['--inspect=9222', '--max_old_space_size=10000'],
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+        'process.env.APP_ENV': JSON.stringify(APP_ENV),
+        'process.env.HOST': JSON.stringify(HOST),
+        'process.env.PORT': JSON.stringify(PORT),
+        'process.env.MONGODB_HOST': JSON.stringify(MONGODB_HOST),
+        'process.env.MONGODB_PORT': JSON.stringify(MONGODB_PORT),
       }),
+      new NodemonPlugin(),
     ],
   };
 };

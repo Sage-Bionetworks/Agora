@@ -36,12 +36,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const self = this;
-
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        const rollbar = self.injector.get(RollbarService);
+        const rollbar = this.injector.get(RollbarService);
         let errorMessage = '';
         let errorSummary = '';
         let errorDetail = '';
@@ -71,20 +69,22 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         errorMessage = errorMessage + '\n' + errorSummary;
 
         // Displays error message on screen
-        self.messageService.clear();
-        self.messageService.add({
+        this.messageService.clear();
+        this.messageService.add({
           severity: 'warn',
           sticky: true,
           summary: errorSummary,
           detail: errorDetail,
           life: 3000,
         });
+        const self = this;
         setTimeout(() => {
           self.messageService.clear();
         }, 3000);
 
         // Send the error message to Rollbar
         rollbar.error(error);
+
         return throwError({ errorSummary, errorMessage });
       })
     );

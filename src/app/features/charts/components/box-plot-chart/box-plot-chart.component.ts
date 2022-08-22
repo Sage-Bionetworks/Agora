@@ -10,6 +10,7 @@ import * as d3 from 'd3';
 import { BaseChartComponent } from '../base-chart';
 import { HelperService } from '../../../../core/services';
 import { agoraBoxPlot } from './box-plot';
+import { boxPlotChartItem } from '../../../../models';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -20,11 +21,11 @@ import { agoraBoxPlot } from './box-plot';
   styleUrls: ['./box-plot-chart.component.scss'],
 })
 export class BoxPlotComponent extends BaseChartComponent {
-  _data: [] = [];
-  get data(): [] {
+  _data: boxPlotChartItem[] = [];
+  get data(): boxPlotChartItem[] {
     return this._data;
   }
-  @Input() set data(data: []) {
+  @Input() set data(data: boxPlotChartItem[]) {
     this._data = data;
     this.init();
   }

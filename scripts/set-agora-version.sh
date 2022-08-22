@@ -7,4 +7,4 @@ VERSION=$(jq -r '.["version"]' ./package.json | sed 's/-.*//g')
 AGORA_VERSION=$VERSION-$GIT_SHORT_SHA
 echo "AGORA_VERSION=$AGORA_VERSION"
 jq -r ".[\"version\"] = \"$AGORA_VERSION\"" ./package.json > ./new-package.json
-mv -f new-package.json package.json
+mv -f ./new-package.json ./package.json

@@ -1,9 +1,9 @@
 synapseusername=`aws secretsmanager --region us-east-1 --output text --profile agora get-secret-value --secret-id synapse-agora-username | cut -f 4`
 synapsepassword=`aws secretsmanager --region us-east-1 --output text --profile agora get-secret-value --secret-id synapse-agora-password | cut -f 4`
 
-[ -d ../data/ ] || mkdir ../data/
+[ -d ../../data/ ] || mkdir ../../data/
 
-DATA_DIR='../data'
+DATA_DIR='../../data'
 travisbranch=$(git rev-parse --abbrev-ref HEAD)
 echo "Branch name = $travisbranch"
 

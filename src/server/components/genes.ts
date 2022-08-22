@@ -1,13 +1,17 @@
 // -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { Request, Response, NextFunction } from 'express';
+
+// -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
-import { setHeaders } from '../helpers';
+import { setHeaders, cache, altCache } from '../helpers';
 import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
-  getProteinLFQ,
-  getProteinTMT,
+  getProteomicsLFQ,
+  getProteomicsTMT,
   getMetabolomics,
   getExperimentalValidation,
   getNeuropathologicCorrelations,
@@ -18,34 +22,21 @@ import {
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
-
-let allGenes: Gene[] = [];
-
 export async function getAllGenes() {
-  if (allGenes.length) {
-    return allGenes;
+  const cacheKey = 'genes';
+  let result: Gene[] | undefined = altCache.get(cacheKey);
+
+  if (result) {
+    return result;
   }
 
-  allGenes = await GeneCollection.find()
+  result = await GeneCollection.find()
     .lean()
     .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
     .exec();
 
-  return allGenes;
-
-  // let result: Gene[] | undefined = cache.get('genes');
-
-  // if (result) {
-  //   return result;
-  // }
-
-  // result = await GeneCollection.find()
-  //   .lean()
-  //   .sort({ hgnc_symbol: 1, ensembl_gene_id: 1 })
-  //   .exec();
-
-  // cache.set('genes', result);
-  // return result;
+  altCache.set(cacheKey, result);
+  return result;
 }
 
 export async function getGenes(ids?: string | string[]) {
@@ -65,6 +56,7 @@ export async function getGenesMap() {
 }
 
 export async function getGene(ensg: string) {
+  ensg = ensg.trim();
   const cacheKey = ensg + '-gene';
   let result: Gene | null | undefined = cache.get(cacheKey);
 
@@ -82,8 +74,8 @@ export async function getGene(ensg: string) {
     result.rna_differential_expression = await getRnaDifferentialExpression(
       ensg
     );
-    result.protein_LFQ = await getProteinLFQ(ensg);
-    result.protein_TMT = await getProteinTMT(ensg);
+    result.proteomics_LFQ = await getProteomicsLFQ(ensg);
+    result.proteomics_TMT = await getProteomicsTMT(ensg);
     result.metabolomics = await getMetabolomics(ensg);
     result.neuropathologic_correlations = await getNeuropathologicCorrelations(
       ensg
@@ -97,40 +89,8 @@ export async function getGene(ensg: string) {
   return result;
 }
 
-// -------------------------------------------------------------------------- //
-// Routes
-// -------------------------------------------------------------------------- //
-
-export async function genesRoute(req: any, res: any) {
-  const genes = await getGenes(req.query.ids);
-  setHeaders(res);
-  res.json(genes);
-}
-
-export async function geneRoute(req: any, res: any) {
-  if (!req.params || !req.params.id) {
-    res.status(404).send('Not found');
-    return;
-  }
-
-  const id = req.params.id.trim();
-  const gene = await getGene(id);
-
-  setHeaders(res);
-  res.json(gene);
-}
-
-// -------------------------------------------------------------------------- //
-// TO CLEAN
-// -------------------------------------------------------------------------- //
-
-export function searchGeneRoute(req: any, res: any) {
-  if (!req.params || !req.query || !req.query.id) {
-    res.status(404).send('Not found');
-    return;
-  }
-
-  const id = req.query.id.trim();
+export async function searchGene(id: string) {
+  id = id.trim();
   const isEnsembl = id.startsWith('ENSG');
   let query: { [key: string]: any } | null = null;
 
@@ -153,65 +113,118 @@ export function searchGeneRoute(req: any, res: any) {
     };
   }
 
-  GeneCollection.find(query)
-    .lean()
-    .exec((err, items) => {
-      if (err) return; //handleError(err);
-      setHeaders(res);
-      res.json({ items: items || [], isEnsembl });
-    });
+  const result = await GeneCollection.find(query).lean().exec();
+
+  return result;
 }
 
-let nominatedGenes: any = [];
-
 export async function getNominatedGenes() {
-  try {
-    // let result: any = cache.get('genes');
+  const cacheKey = 'nominated-genes';
+  let result: Gene[] | undefined = cache.get(cacheKey);
 
-    // if (result) {
-    //   return result;
-    // }
-
-    if (nominatedGenes > 0) {
-      return nominatedGenes;
-    }
-
-    const result = await GeneCollection.find({ nominations: { $gt: 0 } })
-      .select(
-        [
-          'hgnc_symbol',
-          'ensembl_gene_id',
-          'nominations',
-          'nominatedtarget.initial_nomination',
-          'nominatedtarget.team',
-          'nominatedtarget.study',
-          'nominatedtarget.source',
-          'nominatedtarget.input_data',
-          'nominatedtarget.validation_study_details',
-          'druggability.pharos_class',
-          'druggability.sm_druggability_bucket',
-          'druggability.classification',
-          'druggability.safety_bucket',
-          'druggability.safety_bucket_definition',
-          'druggability.abability_bucket',
-          'druggability.abability_bucket_definition',
-        ].join(' ')
-      )
-      .lean()
-      .sort({ nominations: -1, hgnc_symbol: 1 })
-      .exec();
-
-    //cache.set('genes', result);
-    nominatedGenes = result;
+  if (result) {
     return result;
-  } catch (err) {
-    //handleError(err);
-    console.error(err);
+  }
+
+  result = await GeneCollection.find({ nominations: { $gt: 0 } })
+    .select(
+      [
+        'hgnc_symbol',
+        'ensembl_gene_id',
+        'nominations',
+        'nominatedtarget.initial_nomination',
+        'nominatedtarget.team',
+        'nominatedtarget.study',
+        'nominatedtarget.source',
+        'nominatedtarget.input_data',
+        'nominatedtarget.validation_study_details',
+        'druggability.pharos_class',
+        'druggability.sm_druggability_bucket',
+        'druggability.classification',
+        'druggability.safety_bucket',
+        'druggability.safety_bucket_definition',
+        'druggability.abability_bucket',
+        'druggability.abability_bucket_definition',
+      ].join(' ')
+    )
+    .lean()
+    .sort({ nominations: -1, hgnc_symbol: 1 })
+    .exec();
+
+  cache.set(cacheKey, result);
+  return result;
+}
+
+// -------------------------------------------------------------------------- //
+// Routes
+// -------------------------------------------------------------------------- //
+export async function genesRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.query || !req.query.ids) {
+    res.status(404).send('Not found');
     return;
+  }
+
+  try {
+    const result = await getGenes(<string | string[]>req.query.ids);
+    setHeaders(res);
+    res.json({ items: result });
+  } catch (err) {
+    next(err);
   }
 }
 
-export async function geneTableRoute(req: any, res: any) {
-  setHeaders(res);
-  res.json(await getNominatedGenes());
+export async function geneRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.params || !req.params.id) {
+    res.status(404).send('Not found');
+    return;
+  }
+
+  try {
+    const result = await getGene(<string>req.params.id);
+    setHeaders(res);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function searchGeneRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.query || !req.query.id) {
+    res.status(404).send('Not found');
+    return;
+  }
+
+  try {
+    const result = await searchGene(<string>req.query.id);
+    setHeaders(res);
+    res.json({ items: result });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function nominatedGenesRoute(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await getNominatedGenes();
+    setHeaders(res);
+    res.json({ items: result });
+  } catch (err) {
+    next(err);
+  }
 }

@@ -1,101 +1,69 @@
-sudo: required
 dist: focal
 language: node_js
-cache:
-  npm: false
-
 addons:
   chrome: stable
-
 branches:
   only:
     - develop
     - staging
     - prod
-
-before_install:
-  - npm install npm@8.11.0
-  - npm cache verify
-  - travis_retry npm prune
-
+env:
+  global:
+    - REPO_NAME="${PWD##*/}"
+    - AWS_REGION="us-east-1"
 install:
-  - npm install
-
+  # install awscli v2
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip && sudo ./aws/install
+  # install other tools
+  - pip install travis-wait-improved awsebcli
 before_script:
-  - export NODE_OPTIONS=--max_old_space_size=4096
-
+  # Setup AWS CLI profile for multiple AWS accounts
+  - mkdir -p ~/.aws
+  - echo -e "[profile develop]\nsource_profile=ci-user-develop\nrole_arn=${AwsCfServiceRoleArn_develop}\n" > ~/.aws/config
+  - echo -e "[ci-user-develop]\naws_access_key_id=${AwsTravisAccessKey_develop}\naws_secret_access_key=${AwsTravisSecretAccessKey_develop}\n" > ~/.aws/credentials
+  - echo -e "[profile prod]\nsource_profile=ci-user-prod\nrole_arn=${AwsCfServiceRoleArn_prod}\n" >> ~/.aws/config
+  - echo -e "[ci-user-prod]\naws_access_key_id=${AwsTravisAccessKey_prod}\naws_secret_access_key=${AwsTravisSecretAccessKey_prod}\n" >> ~/.aws/credentials
+  # setup npm dependencies
+  - npm install
 stages:
   - name: test
   - name: eb-deploy-develop
-    if: (tag =~ ^v) OR (type = push) AND (branch = develop)
   - name: eb-deploy-staging
-    if: (tag =~ ^v) OR (type = push) AND (branch = staging)
   - name: eb-deploy-prod
-    if: (tag =~ ^v) OR (type = push) AND (branch = prod)
-
 jobs:
   fast_finish: true
   include:
     - stage: test
-      script: npm run ci:travis
-      node_js: 16
-    - stage: eb-deploy-develop
+      node_js: 16.15.0
       script:
+        - npm run test
+        - npm run build
+        - npm run test:e2e
+    - stage: deploy-develop
+      if: (NOT type IN (pull_request)) AND (branch = develop)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:prod
+        - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-      node_js: 16
-      deploy:
-        - provider: elasticbeanstalk
-          edge: true  # opt in to dpl v2
-          cleanup: true
-          bucket: org-sagebase-agora-deployment-agora-develop
-          zip_file: /tmp/agora-app.zip
-          region: us-east-1
-          app: agora-ampad
-          env:
-            develop: agora-develop
-            DISABLE_OPENCOLLECTIVE: true
-          wait_until_deployed: true
-          access_key_id: AKIAY22FMBNE7T3Q36PT
-          secret_access_key:
-            secure: "O4I1YkovXOZeEXeS0NZQnoAmmBXt9Pv0lvbj+pN/7CcRNvS1EdQFvWFt1ZpH2SJU+RtB1QSiG5oM4OuxecpQ+PWIWeIn4zuM97By9j8ELEwgFsMbhh7TM13bFpNfCi1F1ZCsdU4VhPveu+OBw/tk2iQUYVKao2R1zOn2zKpdMY0ohAuzxKSj25/DRJKj9oBCdq4ZM0awijeYbxLp/Xfk0gBzQeK75HLW3IC71YInGb9aKX01FLMd2/4TeiP5rfmYa8z+GeBRVN4VsauIFonOFA7WUFfYAs49oPmZJNe/9OUGuu8BhvLIxjOoDULFPng8WgpQpvf3ih6/WK68bZMbPahP23XZ/Dejlor9wTlqbjwzdIlZl8e6S5ecvU4tyg+f+X9PkEOP40Xubce5jGcLY/+khYIbrXxQctsc25czk2Tgfd0DXw1mrpY5ZmYF3dayOd+2S7pX+XVjpkk4mFNS5jYdTUkdTsrwwpJsqfmcbvLj5PaIkAxqeuUfm2+ABeGn/OQXpBIURQRBbp4QvNiac9Eh2Jh5Hj6VUmigWfqCFyeoJAD/rIfyiJMx9KswXWECbSO174Ckh8t7QtHJt/bStJcbl9wb6ZchDQMWyWQsWMFM0V04ORwifjV0edDAbBJ3C9N3Wq3YW7Keh7NSJ8Q478ss2wfxQRqUIMXJY0FsAPI="
-#    - stage: eb-deploy-staging
-#      script:
-#        - ./set-agora-version.sh || travis_terminate 1
-#        - zip /tmp/agora-app.zip -qr9 * .[^.]*
-#      node_js: 16
-#      deploy:
-#        - provider: elasticbeanstalk
-#          edge: true  # opt in to dpl v2
-#          cleanup: true
-#          bucket: org-sagebase-agora-deployment-agora-staging
-#          zip_file: /tmp/agora-app.zip
-#          region: us-east-1
-#          app: agora-ampad
-#          env:
-#            staging: agora-staging
-#            DISABLE_OPENCOLLECTIVE: true
-#          wait_until_deployed: true
-#          access_key_id: AKIAZ5GJ3GCELHWLMUUX
-#          secret_access_key:
-#            secure: "ZsDft7x8Aof2VTfqDIP+h27WkeSbHx16QaxspwM/i68Qz1BGqxsPqVQgdQ9BLDze1wGn0/iq36rV18y3KGf4LdLEzsUFdFBfLnxctjD1y3atLYAPWCREvTGqVtvM/v4oaay3lqM+HeOucPdVwaMwBor0oznGrLaCyDq3bSfHSw6cnqB7EODitt4eyhuaFkkrLMy//NV6VuMy8Uj5spaRrILkaJeiKYZJTe168eKxlz53nh++4vQxQi7w/Q/7fSrttSv4pPmntthtW3xrodVdDBvf3bdUSoBcj/guqjAWIupxSgv3UasKRtI5rIH6t8JeHz18oPb4EFIqSZhIItY9MB2jgUhfuM3IQbPTIrVAUbV7iWgSI9+SOvNkemVcbkeATwZR+Feth5+O0kYnwadJNNzLDZGTn9nLrs4rcCYsArdkv9lnCgxKdHzpaGPRaD3BVBWZ6duUt6fQlRDP1OgbIxlMyvLbtCPp5m8tN/+R3Xdv62xcOBt9Fp/A+KS2Iuo5SGWhJTKIjs/GhsT/UiqlhXbK8vwng5o+2gv6pSN6ZXpIub3b4EEROQly7d0XxipY/J4QN9yPfifIV5VlRKXy2YIpg1H/Icd1lqrSq4cfc48VEGPjFldV9gEsCMr8TDLfTple9q2fT9UcVzsUIwlzqg8LAprqLao8blsHJixeOr4="
-#    - stage: eb-deploy-prod
-#      script:
-#        - ./set-agora-version.sh || travis_terminate 1
-#        - zip /tmp/agora-app.zip -qr9 * .[^.]*
-#      node_js: 16
-#      deploy:
-#        - provider: elasticbeanstalk
-#          edge: true  # opt in to dpl v2
-#          cleanup: true
-#          bucket: org-sagebase-agora-deployment-agora-prod
-#          zip_file: /tmp/agora-app.zip
-#          region: us-east-1
-#          app: agora-ampad
-#          env:
-#            prod: agora-prod
-#            DISABLE_OPENCOLLECTIVE: true
-#          wait_until_deployed: true
-#          access_key_id: AKIAZ5GJ3GCELHWLMUUX
-#          secret_access_key:
-#            secure: "ZsDft7x8Aof2VTfqDIP+h27WkeSbHx16QaxspwM/i68Qz1BGqxsPqVQgdQ9BLDze1wGn0/iq36rV18y3KGf4LdLEzsUFdFBfLnxctjD1y3atLYAPWCREvTGqVtvM/v4oaay3lqM+HeOucPdVwaMwBor0oznGrLaCyDq3bSfHSw6cnqB7EODitt4eyhuaFkkrLMy//NV6VuMy8Uj5spaRrILkaJeiKYZJTe168eKxlz53nh++4vQxQi7w/Q/7fSrttSv4pPmntthtW3xrodVdDBvf3bdUSoBcj/guqjAWIupxSgv3UasKRtI5rIH6t8JeHz18oPb4EFIqSZhIItY9MB2jgUhfuM3IQbPTIrVAUbV7iWgSI9+SOvNkemVcbkeATwZR+Feth5+O0kYnwadJNNzLDZGTn9nLrs4rcCYsArdkv9lnCgxKdHzpaGPRaD3BVBWZ6duUt6fQlRDP1OgbIxlMyvLbtCPp5m8tN/+R3Xdv62xcOBt9Fp/A+KS2Iuo5SGWhJTKIjs/GhsT/UiqlhXbK8vwng5o+2gv6pSN6ZXpIub3b4EEROQly7d0XxipY/J4QN9yPfifIV5VlRKXy2YIpg1H/Icd1lqrSq4cfc48VEGPjFldV9gEsCMr8TDLfTple9q2fT9UcVzsUIwlzqg8LAprqLao8blsHJixeOr4="
+        - eb deploy --profile develop --verbose --region ${AWS_REGION} --staged agora-develop
+    - stage: deploy-staging
+      if: (NOT type IN (pull_request)) AND (branch = staging)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:staging
+        - npm run ci:clean
+        - ./scripts/set-agora-version.sh || travis_terminate 1
+        - zip /tmp/agora-app.zip -qr9 * .[^.]*
+        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-staging
+    - stage: deploy-prod
+      if: (NOT type IN (pull_request)) AND (branch = prod)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:prod
+        - npm run ci:clean
+        - ./scripts/set-agora-version.sh || travis_terminate 1
+        - zip /tmp/agora-app.zip -qr9 * .[^.]*
+        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-prod

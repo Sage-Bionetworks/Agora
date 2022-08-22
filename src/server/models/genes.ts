@@ -17,7 +17,6 @@ export { Gene } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const NominatedTargetSchema = new Schema<NominatedTarget>({
   source: { type: String, required: true },
   team: { type: String, required: true },
@@ -81,5 +80,4 @@ const GeneSchema = new Schema<Gene>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const GeneCollection = model<Gene>('GeneCollection', GeneSchema);

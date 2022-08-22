@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
+import { cache } from '../helpers';
 import {
   ExperimentalValidation,
   ExperimentalValidationCollection,
@@ -12,9 +12,8 @@ import {
 // -------------------------------------------------------------------------- //
 
 export async function getExperimentalValidation(ensg: string) {
-  let result: ExperimentalValidation[] | undefined = cache.get(
-    'experimental-validation-' + ensg
-  );
+  const cacheKey = 'experimental-validation-' + ensg;
+  let result: ExperimentalValidation[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
@@ -26,6 +25,6 @@ export async function getExperimentalValidation(ensg: string) {
     .lean()
     .exec();
 
-  cache.set('experimental-validation-' + ensg, result);
+  cache.set(cacheKey, result);
   return result;
 }

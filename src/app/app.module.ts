@@ -9,6 +9,7 @@ import {
   NgxGoogleAnalyticsModule,
   NgxGoogleAnalyticsRouterModule,
 } from 'ngx-google-analytics';
+import { APP_BASE_HREF } from '@angular/common';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -19,7 +20,6 @@ import { CoreModule } from './core';
 import { GenesModule } from './features/genes';
 import { ChartsModule } from './features/charts';
 import { TeamsModule } from './features/teams';
-import { PagesModule } from './features/pages';
 import { AppRoutingModule } from './app.routing';
 
 // -------------------------------------------------------------------------- //
@@ -40,7 +40,6 @@ import { AppComponent } from './app.component';
     GenesModule,
     ChartsModule,
     TeamsModule,
-    PagesModule,
 
     // Rounting
     AppRoutingModule,
@@ -48,7 +47,7 @@ import { AppComponent } from './app.component';
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
     NgxGoogleAnalyticsRouterModule,
   ],
-  providers: [CookieService],
+  providers: [CookieService, { provide: APP_BASE_HREF, useValue: '/' }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

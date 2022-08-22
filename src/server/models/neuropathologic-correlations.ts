@@ -12,7 +12,6 @@ export { NeuropathologicCorrelation } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-
 const NeuropathologicCorrelationSchema = new Schema<NeuropathologicCorrelation>(
   {
     _id: { type: String, required: true },
@@ -31,7 +30,6 @@ const NeuropathologicCorrelationSchema = new Schema<NeuropathologicCorrelation>(
 // -------------------------------------------------------------------------- //
 // Models
 // -------------------------------------------------------------------------- //
-
 export const NeuropathologicCorrelationCollection =
   model<NeuropathologicCorrelation>(
     'NeuropathologicCorrelationCollection',

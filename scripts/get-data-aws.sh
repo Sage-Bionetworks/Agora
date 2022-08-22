@@ -3,7 +3,7 @@ set -ex
 
 CURRENT_DIR=$(pwd)
 PARENT_DIR="$(dirname "$CURRENT_DIR")"
-DATA_DIR=$PARENT_DIR/data
+DATA_DIR=$PARENT_DIR/../data
 
 travisbranch=$(git rev-parse --abbrev-ref HEAD)
 echo "Branch name = $travisbranch"

@@ -6,8 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  isToggled = false;
   isMobile = false;
+  isShown = false;
+
   navItems: Array<any> = [];
   defaultNavItems: Array<any> = [
     {
@@ -49,14 +50,11 @@ export class HeaderComponent implements OnInit {
     },
   ];
 
-  constructor() {}
-
   ngOnInit() {
     this.onResize();
   }
 
-  onResize() {
-    this.isMobile = window.innerWidth < 1320;
+  refreshNavItems() {
     if (this.isMobile) {
       this.navItems = [...this.defaultNavItems, ...this.mobileNavItems];
     } else {
@@ -64,9 +62,12 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  toggleNav() {
-    this.isToggled = !this.isToggled;
+  onResize() {
+    this.isMobile = window.innerWidth < 1320;
+    this.refreshNavItems();
   }
 
-  onClick() {}
+  toggleNav() {
+    this.isShown = !this.isShown;
+  }
 }

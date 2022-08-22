@@ -5,6 +5,7 @@ import * as dc from 'dc';
 
 import { BaseChartComponent } from '../base-chart';
 import { HelperService } from '../../../../core/services';
+import { rowChartItem } from '../../../../models';
 
 // Using a d3 v4 function to get all nodes
 d3.selection.prototype['nodes'] = function () {
@@ -22,11 +23,11 @@ d3.selection.prototype['nodes'] = function () {
   styleUrls: ['./row-chart.component.scss'],
 })
 export class RowChartComponent extends BaseChartComponent {
-  _data: [] = [];
-  get data(): [] {
+  _data: rowChartItem[] = [];
+  get data(): rowChartItem[] {
     return this._data;
   }
-  @Input() set data(data: []) {
+  @Input() set data(data: rowChartItem[]) {
     this._data = data;
     this.init();
   }
