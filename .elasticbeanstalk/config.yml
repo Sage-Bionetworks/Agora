@@ -1,0 +1,31 @@
+branch-defaults:
+  develop:
+    environment: agora-develop
+  staging:
+    environment: agora-staging
+  prod:
+    environment: agora-prod
+environment-defaults:
+  agora-develop:
+    branch: null
+    repository: null
+  agora-staging:
+    branch: null
+    repository: null
+  agora-prod:
+    branch: null
+    repository: null
+global:
+  application_name: agora-ampad
+  default_ec2_keyname: agora-access
+  default_platform: Node.js 16 running on 64bit Amazon Linux 2
+  default_region: us-east-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+#  profile: agoradev-admin
+  sc: git
+  workspace_type: Application
+deploy:
+  artifact: /tmp/agora-app.zip

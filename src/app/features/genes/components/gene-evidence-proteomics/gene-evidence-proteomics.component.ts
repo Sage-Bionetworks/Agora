@@ -51,23 +51,23 @@ export class GeneEvidenceProteomicsComponent {
   init() {
     this.reset();
 
-    if (!this._gene?.protein_LFQ) {
+    if (!this._gene?.proteomics_LFQ && this._gene?.proteomics_TMT) {
       return;
     }
 
     this.uniProtIds = [];
 
-    this._gene.protein_LFQ.forEach((item: any) => {
+    this._gene?.proteomics_LFQ?.forEach((item: any) => {
       if (!this.uniProtIds.includes(item.uniprotid)) {
         this.uniProtIds.push(item.uniprotid);
       }
     });
 
-    this._gene.protein_TMT.forEach((item: any) => {
-      if (!this.uniProtIds.includes(item.uniprotid)) {
-        this.uniProtIds.push(item.uniprotid);
-      }
-    });
+    // this._gene.protein_TMT.forEach((item: any) => {
+    //   if (!this.uniProtIds.includes(item.uniprotid)) {
+    //     this.uniProtIds.push(item.uniprotid);
+    //   }
+    // });
 
     this.uniProtIds.sort();
     if (!this.selectedUniProtId) {
@@ -80,10 +80,10 @@ export class GeneEvidenceProteomicsComponent {
 
   initLFQ() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const distribution = data.proteomic_LFQ;
+      const distribution = data.proteomics_LFQ;
 
       const differentialExpression =
-        this._gene?.protein_LFQ?.filter((item: any) => {
+        this._gene?.proteomics_LFQ?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
@@ -145,10 +145,10 @@ export class GeneEvidenceProteomicsComponent {
 
   initTMT() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const distribution = data.proteomic_TMT;
+      const distribution = data.proteomics_TMT;
 
       const differentialExpression =
-        this._gene?.protein_TMT?.filter((item: any) => {
+        this._gene?.proteomics_TMT?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
@@ -209,7 +209,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   onProteinChange(event: any) {
-    if (!this._gene?.protein_LFQ) {
+    if (!this._gene?.proteomics_LFQ) {
       return;
     }
     this.selectedUniProtId = event.value;

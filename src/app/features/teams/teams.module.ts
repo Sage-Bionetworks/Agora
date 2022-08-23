@@ -8,23 +8,15 @@ import { NgModule } from '@angular/core';
 // -------------------------------------------------------------------------- //
 import { SharedModule } from '../../shared';
 import { TeamService } from './services';
-import {
-  TeamListComponent,
-  TeamMemberListComponent,
-  TeamsPageComponent,
-} from './components';
+import { TeamListComponent, TeamMemberListComponent } from './components';
 
 // -------------------------------------------------------------------------- //
 // Module
 // -------------------------------------------------------------------------- //
 @NgModule({
-  declarations: [
-    TeamListComponent,
-    TeamMemberListComponent,
-    TeamsPageComponent,
-  ],
+  declarations: [TeamListComponent, TeamMemberListComponent],
   imports: [SharedModule],
-  exports: [TeamListComponent, TeamMemberListComponent, TeamsPageComponent],
+  exports: [TeamListComponent, TeamMemberListComponent],
   providers: [TeamService],
 })
 export class TeamsModule {}

@@ -9,20 +9,19 @@ import * as awsParamStore from 'aws-param-store';
 // Internal
 // -------------------------------------------------------------------------- //
 import {
+  comparisonGenesRoute,
+  distributionRoute,
   geneRoute,
   genesRoute,
+  nominatedGenesRoute,
   searchGeneRoute,
-  distributionRoute,
-  comparisonGenesRoute,
-  teamsRoute,
   teamMemberImageRoute,
-  geneTableRoute,
+  teamsRoute,
 } from './components';
 
 // -------------------------------------------------------------------------- //
-// Logic
+// Mongo Connection
 // -------------------------------------------------------------------------- //
-const router = express.Router();
 const database = { url: '' };
 
 // Uncomment when in need of verbose debugging
@@ -79,15 +78,20 @@ connection.on(
   console.error.bind(console, 'MongoDB connection error:')
 );
 
+// -------------------------------------------------------------------------- //
+// Routes
+// -------------------------------------------------------------------------- //
+const router = express.Router();
+
 connection.once('open', async () => {
   router.get('/genes/search', searchGeneRoute);
   router.get('/genes/comparison', comparisonGenesRoute);
-  router.get('/genes/table', geneTableRoute);
+  router.get('/genes/nominated', nominatedGenesRoute);
   router.get('/genes/:id', geneRoute);
-  router.get('/genes/', genesRoute);
+  router.get('/genes', genesRoute);
+  router.get('/distribution', distributionRoute);
   router.get('/teams', teamsRoute);
   router.get('/team-member/:name/image', teamMemberImageRoute);
-  router.get('/distribution', distributionRoute);
 });
 
 export default router;

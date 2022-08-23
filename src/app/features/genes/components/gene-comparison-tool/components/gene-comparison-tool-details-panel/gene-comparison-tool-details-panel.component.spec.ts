@@ -1,112 +1,101 @@
-import {
-  fakeAsync,
-  ComponentFixture,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { OverlayPanel } from 'primeng/overlaypanel';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { GeneComparisonToolDetailsPanelComponent } from '.';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneComparisonToolDetailsPanelComponent } from './';
+import { HelperService } from '../../../../../../core/services';
+import { gctDetailsPanelDataMock } from '../../../../../../testing';
 
-import { GCTDetailsPanelData } from '../../../../models';
-
-const mockData: GCTDetailsPanelData = {
-  label: 'label',
-  heading: 'heading',
-  subHeading: 'subHeading',
-  value: 5,
-  valueLabel: 'valueLabel',
-  pValue: 5,
-  min: 0,
-  max: 10,
-  footer: 'footer',
-};
-
-describe('Component: GeneComparisonToolDetailsPanelComponent', () => {
-  let component: GeneComparisonToolDetailsPanelComponent;
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Comparison Tool - Details Panel', () => {
   let fixture: ComponentFixture<GeneComparisonToolDetailsPanelComponent>;
+  let component: GeneComparisonToolDetailsPanelComponent;
+  let element: HTMLElement;
 
-  beforeEach(fakeAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [GeneComparisonToolDetailsPanelComponent, OverlayPanel],
-      // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
-      // elements and attributes
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [NoopAnimationsModule],
-      providers: [],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [GeneComparisonToolDetailsPanelComponent],
+      imports: [RouterTestingModule, BrowserAnimationsModule],
+      providers: [HelperService],
     }).compileComponents();
+  });
 
+  beforeEach(async () => {
     fixture = TestBed.createComponent(GeneComparisonToolDetailsPanelComponent);
-    component = fixture.componentInstance; // Component test instance
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    component.show({}, JSON.parse(JSON.stringify(mockData)));
+    element = fixture.nativeElement;
+    component.show({}, JSON.parse(JSON.stringify(gctDetailsPanelDataMock)));
     fixture.detectChanges();
-    tick();
-  }));
+  });
 
-  it('should create component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should have data', () => {
-    // Check if filters has data
-    expect(component.data).toEqual(mockData);
+    expect(component.data).toEqual(gctDetailsPanelDataMock);
   });
 
-  it('should have label', fakeAsync(() => {
-    // Check if html element is valid
-    const label = fixture.debugElement.nativeElement.querySelector(
+  it('should have label', () => {
+    const label = element.querySelector(
       '.gct-details-panel-label'
+    ) as HTMLElement;
+
+    expect(label).toBeTruthy();
+    expect(label?.innerHTML.trim()).toEqual(
+      gctDetailsPanelDataMock.label as string
     );
-    expect(label?.innerHTML.trim()).toEqual(mockData.label);
-  }));
+  });
 
   it('should have heading', () => {
-    // Check if html element is valid
-    const heading = fixture.debugElement.nativeElement.querySelector(
+    const heading = element.querySelector(
       '.gct-details-panel-heading'
+    ) as HTMLElement;
+
+    expect(heading).toBeTruthy();
+    expect(heading?.innerHTML.trim()).toEqual(
+      gctDetailsPanelDataMock.heading as string
     );
-    expect(heading?.innerHTML.trim()).toEqual(mockData.heading);
   });
 
-  it('should have subHeading', () => {
-    // Check if html element is valid
-    const subHeading = fixture.debugElement.nativeElement.querySelector(
+  it('should have sub heading', () => {
+    const subHeading = element.querySelector(
       '.gct-details-panel-sub-heading'
+    ) as HTMLElement;
+
+    expect(subHeading).toBeTruthy();
+    expect(subHeading?.innerHTML.trim()).toEqual(
+      gctDetailsPanelDataMock.subHeading as string
     );
-    expect(subHeading?.innerHTML.trim()).toEqual(mockData.subHeading);
+  });
+
+  it('should have links', () => {
+    expect(element.querySelector('.gct-details-panel-links')).toBeTruthy();
   });
 
   it('should have values', () => {
-    // Check if html element is valid
     const elements = fixture.debugElement.nativeElement.querySelectorAll(
       '.gct-details-panel-data > div > div'
     );
     expect(elements?.length).toEqual(4);
 
     expect(elements[0]?.innerHTML.trim()).toEqual(
-      mockData.valueLabel.toString()
+      gctDetailsPanelDataMock.valueLabel?.toString()
     );
-    expect(elements[2]?.innerHTML.trim()).toEqual(mockData.value.toString());
-    expect(elements[3]?.innerHTML.trim()).toEqual(mockData.pValue.toString());
-  });
-
-  it('should have marker', fakeAsync(() => {
-    // Check if html element is valid
-    const marker = fixture.debugElement.nativeElement.querySelector(
-      '.gct-details-panel-range > div > div > div'
+    expect(elements[2]?.innerHTML.trim()).toEqual(
+      gctDetailsPanelDataMock.value?.toString()
     );
-    expect(marker).toBeTruthy();
-    expect(component.getMarkerStyle(mockData)).toEqual({ left: '50%' });
-  }));
-
-  it('should have footer', () => {
-    // Check if html element is valid
-    const footer = fixture.debugElement.nativeElement.querySelector(
-      '.gct-details-panel-footer'
+    expect(elements[3]?.innerHTML.trim()).toEqual(
+      gctDetailsPanelDataMock.pValue?.toString()
     );
-    expect(footer?.innerHTML?.trim()).toEqual(mockData.footer);
   });
 });

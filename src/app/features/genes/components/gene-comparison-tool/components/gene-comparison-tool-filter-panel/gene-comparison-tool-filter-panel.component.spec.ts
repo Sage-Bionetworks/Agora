@@ -1,77 +1,64 @@
-import {
-  fakeAsync,
-  ComponentFixture,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Checkbox } from 'primeng/checkbox';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { GeneComparisonToolFilterPanelComponent } from '.';
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneComparisonToolFilterPanelComponent } from './';
+import { HelperService } from '../../../../../../core/services';
+import { gctFiltersMocks } from '../../../../../../testing';
 
-import { GCTFilter } from '../..';
-
-const mockFilters: GCTFilter[] = [
-  {
-    name: 'test',
-    label: 'Test',
-    options: [
-      { label: '1', value: 1, selected: false },
-      { label: '2', value: 1, selected: false },
-      { label: '3', value: 3, selected: false },
-    ],
-  },
-];
-
-describe('Component: GeneComparisonToolFilterPanelComponent', () => {
-  let component: GeneComparisonToolFilterPanelComponent;
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Comparison Tool - Filter Panel', () => {
   let fixture: ComponentFixture<GeneComparisonToolFilterPanelComponent>;
+  let component: GeneComparisonToolFilterPanelComponent;
+  let element: HTMLElement;
 
-  beforeEach(fakeAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [GeneComparisonToolFilterPanelComponent, Checkbox],
-      // The NO_ERRORS_SCHEMA tells the Angular compiler to ignore unrecognized
-      // elements and attributes
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [GeneComparisonToolFilterPanelComponent],
+      imports: [RouterTestingModule, BrowserAnimationsModule],
+      providers: [HelperService],
     }).compileComponents();
+  });
 
+  beforeEach(async () => {
     fixture = TestBed.createComponent(GeneComparisonToolFilterPanelComponent);
-    component = fixture.componentInstance; // Component test instance
-    component.filters = JSON.parse(JSON.stringify(mockFilters));
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    tick();
-  }));
+    element = fixture.nativeElement;
+    component.filters = JSON.parse(JSON.stringify(gctFiltersMocks));
+    fixture.detectChanges();
+  });
 
-  it('should create component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should have data', () => {
-    // Check if filters has data
-    expect(component.filters?.length).not.toEqual(0);
+    expect(component.filters).toEqual(gctFiltersMocks);
+  });
 
-    // Check if html elements have been created
-    const panes = fixture.debugElement.nativeElement.querySelectorAll(
-      '.gct-filter-panel-pane'
+  it('should display filters', () => {
+    expect(element.querySelectorAll('.gct-filter-panel-pane').length).toEqual(
+      gctFiltersMocks.length
     );
-    expect(panes?.length).toEqual(mockFilters.length);
-    const options = fixture.debugElement.nativeElement.querySelectorAll(
-      '.gct-filter-panel-pane:first-child li'
-    );
-    expect(options?.length).toEqual(mockFilters[0].options.length);
+    expect(
+      element.querySelectorAll('.gct-filter-panel-pane:first-child li').length
+    ).toEqual(gctFiltersMocks[0].options.length);
   });
 
   it('should have close button', () => {
-    const closeButton = fixture.debugElement.queryAll(
-      By.css('.gct-filter-panel-close')
-    );
-    expect(closeButton).toBeDefined();
-    expect(closeButton.length).toEqual(1);
+    expect(element.querySelector('.gct-filter-panel-close')).toBeTruthy();
   });
 
-  it('should open', fakeAsync(() => {
+  it('should open', () => {
     // Set to close
     component.isOpen = false;
 
@@ -80,15 +67,13 @@ describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     expect(component.isOpen).toEqual(true);
 
     fixture.detectChanges();
-    tick();
 
     // Make sure panel is open
-    const panel =
-      fixture.debugElement.nativeElement.querySelector('.gct-filter-panel');
+    const panel = element.querySelector('.gct-filter-panel');
     expect(panel?.classList?.contains('open')).toEqual(true);
-  }));
+  });
 
-  it('should close', fakeAsync(() => {
+  it('should close', () => {
     component.isOpen = true;
     component.open();
 
@@ -100,25 +85,22 @@ describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     component.isOpen = true;
 
     fixture.detectChanges();
-    tick();
 
     // Close with click event
-    const closeButton = fixture.debugElement.nativeElement.querySelector(
+    const closeButton = element.querySelector(
       '.gct-filter-panel-close'
-    );
+    ) as HTMLElement;
     closeButton.click();
     expect(component.isOpen).toEqual(false);
 
     fixture.detectChanges();
-    tick();
 
     // Make sure panel is close
-    const panel =
-      fixture.debugElement.nativeElement.querySelector('.gct-filter-panel');
+    const panel = element.querySelector('.gct-filter-panel');
     expect(panel?.classList?.contains('open')).toEqual(false);
-  }));
+  });
 
-  it('should toggle', fakeAsync(() => {
+  it('should toggle', () => {
     // Set to open
     component.isOpen = true;
 
@@ -127,15 +109,13 @@ describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     expect(component.isOpen).toEqual(false);
 
     fixture.detectChanges();
-    tick();
 
     // Make sure panel is close
-    const panel =
-      fixture.debugElement.nativeElement.querySelector('.gct-filter-panel');
+    const panel = element.querySelector('.gct-filter-panel');
     expect(panel?.classList?.contains('open')).toEqual(false);
-  }));
+  });
 
-  it('should open pane', fakeAsync(() => {
+  it('should open pane', () => {
     // Set to all close
     component.activePane = -1;
 
@@ -144,16 +124,13 @@ describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     expect(component.activePane).toEqual(0);
 
     fixture.detectChanges();
-    tick();
 
     // Make sure first pane is open
-    const pane = fixture.debugElement.nativeElement.querySelector(
-      '.gct-filter-panel-pane:first-child'
-    );
+    const pane = element.querySelector('.gct-filter-panel-pane:first-child');
     expect(pane?.classList?.contains('open')).toEqual(true);
-  }));
+  });
 
-  it('should close pane', fakeAsync(() => {
+  it('should close pane', () => {
     /// Set to first pane
     component.activePane = 0;
 
@@ -162,29 +139,25 @@ describe('Component: GeneComparisonToolFilterPanelComponent', () => {
     expect(component.activePane).toEqual(-1);
 
     fixture.detectChanges();
-    tick();
 
     // Make sure first pane is open
-    const pane = fixture.debugElement.nativeElement.querySelector(
-      '.gct-filter-panel-pane:first-child'
-    );
+    const pane = element.querySelector('.gct-filter-panel-pane:first-child');
     expect(pane?.classList?.contains('open')).toEqual(false);
-  }));
+  });
 
-  it('should toggle option', fakeAsync(() => {
+  it('should toggle option', () => {
     // Toggle (check) first option with click event
-    const checkbox = fixture.debugElement.nativeElement.querySelector(
-      '.gct-filter-panel-pane:first-child li:first-child .p-checkbox-box'
-    );
-    checkbox.click();
+    const checkbox = element.querySelector(
+      '.gct-filter-panel-pane:first-child li:first-child .ui-chkbox-box'
+    ) as HTMLElement | null;
+    checkbox?.click();
 
     fixture.detectChanges();
-    tick();
 
     // Make sure input reflects changes
-    const input = fixture.nativeElement.querySelector(
+    const input = element.querySelector(
       '.gct-filter-panel-pane:first-child li:first-child input'
-    );
-    expect(input.checked).toBe(true);
-  }));
+    ) as HTMLInputElement;
+    expect(input?.checked).toBe(true);
+  });
 });

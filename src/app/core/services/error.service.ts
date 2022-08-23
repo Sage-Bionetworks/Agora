@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 export class ErrorService implements ErrorHandler {
   constructor(private messageService: MessageService) {}
 
-  handleError(error: Error) {
+  handleError(error: any) {
     const self = this;
 
     this.messageService.clear();

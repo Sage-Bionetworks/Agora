@@ -1,10 +1,11 @@
 const nodeExternals = require('webpack-node-externals');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
-const helpers = require('./helpers');
+module.exports = function (env, argv) {
+  const helpers = require('./helpers');
 
-module.exports = function () {
   return {
+    mode: argv?.mode || process.env.NODE_ENV || 'production',
     entry: {
       server: helpers.root('src/server/server.ts'),
     },
@@ -14,13 +15,8 @@ module.exports = function () {
     },
     target: 'node',
     externals: [nodeExternals()],
-    node: {
-      __dirname: false,
-      __filename: false,
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
-      modules: [helpers.root('node_modules')],
     },
     module: {
       rules: [
@@ -30,7 +26,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: 'tsconfig.server.json',
+                configFile: helpers.root('tsconfig.server.json'),
               },
             },
           ],
@@ -38,15 +34,6 @@ module.exports = function () {
         },
       ],
     },
-    plugins: [
-      new NodemonPlugin({
-        // What to watch.
-        watch: helpers.root('dist/server.js'),
-        // Detailed log.
-        verbose: true,
-        // Node arguments.
-        nodeArgs: ['--inspect=9222', '--max_old_space_size=10000'],
-      }),
-    ],
+    plugins: [new NodemonPlugin()],
   };
 };

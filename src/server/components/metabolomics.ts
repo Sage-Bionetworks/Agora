@@ -1,13 +1,12 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { cache } from '../cache';
+import { cache } from '../helpers';
 import { Metabolomics, MetabolomicsCollection } from '../models';
 
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
-
 export async function getMetabolomics(ensg: string) {
   const cacheKey = ensg + '-metabolomics';
   let result: Metabolomics | null | undefined = cache.get(cacheKey);

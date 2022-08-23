@@ -69,8 +69,8 @@ export interface Gene {
 
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];
-  protein_LFQ?: ProteinDifferentialExpression[];
-  protein_TMT: ProteinDifferentialExpression[];
+  proteomics_LFQ?: ProteinDifferentialExpression[];
+  proteomics_TMT?: ProteinDifferentialExpression[];
   metabolomics?: any; // TODO change;
   overall_scores?: OverallScores;
   neuropathologic_correlations?: NeuropathologicCorrelation[];

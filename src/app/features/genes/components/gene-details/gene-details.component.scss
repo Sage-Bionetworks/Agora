@@ -1,3 +1,5 @@
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
 @import '../../../../../styles/variables';
 @import '../../../../../styles/mixins';
 
@@ -111,7 +113,7 @@
     justify-content: center;
     font-size: 22px;
     color: var(--color-gray-600);
-    background-color: #ffffff;
+    background-color: #fff;
     z-index: 100;
     cursor: pointer;
 
@@ -180,6 +182,7 @@
 
 .gene-details-nav.scrollable {
   --gene-details-nav-height: 60px;
+
   user-select: none;
 
   .gene-details-nav-inner,

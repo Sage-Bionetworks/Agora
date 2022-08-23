@@ -227,8 +227,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       this.sortField = this.columns[0];
     }
 
-    const preSelection = this.helperService.getGCTSection();
-    this.helperService.deleteGCTSection();
+    const preSelection = this.helperService.getGCTSelection();
+    this.helperService.deleteGCTSelection();
     if (preSelection?.length) {
       this.searchTerm = preSelection.join(',');
     }

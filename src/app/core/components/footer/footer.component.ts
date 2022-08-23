@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   navItems: Array<any> = [
     {
       label: 'About',
@@ -25,9 +27,7 @@ export class FooterComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
-
   getVersion(data?: boolean): string {
-    return (data ? DATA_VERSION : VERSION) || '0.0.0';
+    return (data ? environment.data_version : environment.version) || '0.0.0';
   }
 }
