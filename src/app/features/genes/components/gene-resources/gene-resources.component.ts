@@ -61,7 +61,7 @@ export class GeneResourcesComponent {
       {
         title: 'Genomics DB',
         description:
-          'View this gene on the National Institute on Aging Alzheimer&quot;s Genetics of Alzheimer&quot;s Disease Data Storage Site (NIAGADS) Genomics Database.',
+          'View this gene on the National Institute on Aging Genetics of Alzheimer\'s Disease Data Storage Site (NIAGADS) Genomics Database.',
         linkText: 'Visit Genomics DB',
         link: `https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=${this.gene?.ensembl_gene_id}`,
       },
