@@ -68,7 +68,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   activePanel = 'summary';
   activeParent = '';
-  isNavigationOpen = false;
+  navSlideIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -79,7 +79,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    const nav = document.querySelector('.gene-details-nav');
+    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
     const rect = nav?.getBoundingClientRect();
 
     if (rect && rect.y <= 0) {
@@ -89,11 +89,41 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
+    const navContainer = nav?.querySelector<HTMLElement>(
+      '.gene-details-nav-container'
+    );
+    const navList = nav?.querySelector<HTMLElement>(
+      '.gene-details-nav-container > ul'
+    );
+    const navItems = nav?.querySelectorAll<HTMLElement>(
+      '.gene-details-nav-container > ul > li'
+    );
+    let navItemsWidth = 0;
+    if (navItems) {
+      for (let i = 0; i < navItems.length; ++i) {
+        navItemsWidth += navItems[i].offsetWidth;
+      }
+    }
+
+    if (navContainer && navList && navItemsWidth) {
+      if (navItemsWidth > navContainer.offsetWidth) {
+        nav?.classList.add('scrollable');
+      } else {
+        nav?.classList.remove('scrollable');
+        this.navSlideIndex = 0;
+        navList.style.marginLeft = '0px';
+      }
+    }
+  }
+
   reset() {
     this.gene = undefined;
     this.activePanel = 'summary';
     this.activeParent = '';
-    this.isNavigationOpen = false;
+    this.navSlideIndex = 0;
   }
 
   ngOnInit() {
@@ -137,6 +167,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
                 : false;
             }
 
+            this.onWindowResize();
             this.helperService.setLoading(false);
           });
       }
@@ -163,6 +194,10 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     if (!this.gene?.ensembl_gene_id) {
       this.helperService.setLoading(true);
     }
+    const self = this;
+    setTimeout(function () {
+      self.onWindowResize();
+    }, 100);
   }
 
   activatePanel(panel: Panel) {
@@ -195,8 +230,43 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     this.location.replaceState(url);
   }
 
-  onNavigationClick(panel: Panel) {
+  getPanelCount() {
+    return this.panels.map((p: Panel) => !p.disabled).length;
+  }
+
+  onNavigationItemClick(panel: Panel) {
     this.activatePanel(panel);
-    this.isNavigationOpen = !this.isNavigationOpen;
+  }
+
+  slideNavigation(direction: number) {
+    this.navSlideIndex += direction;
+
+    if (this.navSlideIndex < 0) {
+      this.navSlideIndex = 0;
+    } else if (this.navSlideIndex > this.getPanelCount() - 1) {
+      this.navSlideIndex = this.panels.length - 1;
+    }
+
+    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
+    const navList = nav?.querySelector<HTMLElement>(
+      '.gene-details-nav-container > ul'
+    );
+    const navItems = nav?.querySelectorAll<HTMLElement>(
+      '.gene-details-nav-container > ul > li'
+    );
+
+    if (navList && navItems) {
+      let navItemsWidth = 0;
+
+      for (let i = 0; i < this.navSlideIndex; ++i) {
+        navItemsWidth += navItems[i].offsetWidth;
+      }
+
+      if (this.navSlideIndex > 0) {
+        navItemsWidth += 20;
+      }
+
+      navList.style.marginLeft = navItemsWidth * -1 + 'px';
+    }
   }
 }
