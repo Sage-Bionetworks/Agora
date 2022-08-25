@@ -1,0 +1,10 @@
+{
+  "/synapse": {
+    "target": "https://repo-prod.prod.sagebase.org/repo/v1/",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/synapse": ""
+    }
+  }
+}

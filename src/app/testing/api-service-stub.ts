@@ -1,103 +1,57 @@
+/* eslint-disable */
+
 import { Injectable } from '@angular/core';
-
-import {
-    mockGene1,
-    mockGene2,
-    mockDataLink1,
-    mockDataLink2,
-    mockInfo1,
-    mockTeam1,
-    mockTeam4,
-    mockMetabolomics,
-    mockExpValidation,
-    mockGeneScoreDistribution,
-    mockComparisonData
-} from '../testing';
-
-import {
-    Gene,
-    LinksListResponse,
-    GenesResponse,
-    GeneInfosResponse,
-    TeamMember,
-    GeneResponse
-} from '../models';
-
 import { Observable, of } from 'rxjs';
-import { mockGenesResponse, mockTissues, mockModels, mockEvidenceData } from './gene-mocks';
+
+import {
+  Gene,
+  GenesResponse,
+  GCTGeneResponse,
+  Distribution,
+  TeamsResponse,
+} from '../models';
+import {
+  geneMock1,
+  geneMock2,
+  gctGeneMock1,
+  nominatedGeneMock1,
+  teamsResponseMock,
+} from './';
 
 @Injectable()
 export class ApiServiceStub {
-    getLinksList(sgene?: Gene): Observable<LinksListResponse> {
-        return of({ items: [mockDataLink1, mockDataLink2] });
-    }
+  getGene(id: string): Observable<Gene> {
+    return of(geneMock1);
+  }
 
-    getGene(id?: string): Observable<object> {
-        return of({
-            item: mockGene1,
-            info: mockInfo1,
-            expValidation: mockExpValidation
-        } as GeneResponse);
-    }
+  getGenes(ids: string | string[]): Observable<GenesResponse> {
+    return of({ items: [geneMock1, geneMock2] });
+  }
 
-    getGenes(id: string): Observable<GenesResponse> {
-        return of(mockGenesResponse);
-    }
+  searchGene(id: string): Observable<GenesResponse> {
+    return of({ items: [geneMock1, geneMock2] });
+  }
 
-    getTableData(): Observable<object> {
-        return of([mockGene1, mockGene2]);
-    }
+  getComparisonGenes(
+    category: string,
+    subCategory: string
+  ): Observable<GCTGeneResponse> {
+    return of({ items: [gctGeneMock1] });
+  }
 
-    getInfosMatchId(id?: string): Observable<GeneInfosResponse> {
-        return of({ items: [mockInfo1], isEnsembl: false });
-    }
+  getNominatedGenes(): Observable<GenesResponse> {
+    return of({ items: [nominatedGeneMock1] });
+  }
 
-    getInfosMatchIds(ids: string[]): Observable<GeneInfosResponse> {
-        return of({ items: [mockInfo1], isEnsembl: false });
-    }
+  getDistribution(): Observable<Distribution> {
+    return of({} as Distribution);
+  }
 
-    getAllGeneScores(): Observable<object> {
-        return of([mockGeneScoreDistribution]);
-    }
+  getTeams(): Observable<TeamsResponse> {
+    return of(teamsResponseMock);
+  }
 
-    getTeams(teamNames?: string[]): Observable<object> {
-        return of([mockTeam4]);
-    }
-
-    getAllTeams(): Observable<object> {
-        return of([mockTeam1, mockTeam4]);
-    }
-
-    getTeamMemberImages(members: TeamMember[]): Observable<object[]> {
-        return of([]);
-    }
-
-    refreshChartsData(filter: any, id: string): Observable<any> {
-        return of({
-            smGroup: {
-                values: [],
-                top: {}
-            }
-        });
-    }
-
-    getGeneMetabolomics(id: string): Observable<object> {
-        return of(mockMetabolomics);
-    }
-
-    getEvidencenData(id: string): Observable<object> {
-        return of(mockEvidenceData);
-    }
-
-    getComparisonData(): Observable<object> {
-        return of({ items: JSON.parse(JSON.stringify(mockComparisonData)) });
-    }
-
-    getInfos(): Observable<object> {
-        return of({ items: [mockInfo1] });
-    }
-
-    getRnaDistributionData(): Observable<object> {
-        return of({ items: [mockInfo1] });
-    }
+  getTeamMemberImage(name: string): Observable<ArrayBuffer> {
+    return of(new ArrayBuffer(0));
+  }
 }

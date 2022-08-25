@@ -1,60 +1,69 @@
-sudo: required
-dist: xenial
+dist: focal
 language: node_js
-cache:
-  npm: false
-
 addons:
   chrome: stable
-
 branches:
   only:
-  - develop
-  - staging
-  - prod
-
-before_install:
-  - npm install npm@6.14.13
-  - npm cache verify
-  - travis_retry npm prune
-
+    - develop
+    - staging
+    - prod
+env:
+  global:
+    - REPO_NAME="${PWD##*/}"
+    - AWS_REGION="us-east-1"
 install:
-  - npm install
-
+  # install awscli v2
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip && sudo ./aws/install
+  # install other tools
+  - pip install travis-wait-improved awsebcli
 before_script:
-  - export NODE_OPTIONS=--max_old_space_size=4096
-
+  # Setup AWS CLI profile for multiple AWS accounts
+  - mkdir -p ~/.aws
+  - echo -e "[profile develop]\nsource_profile=ci-user-develop\nrole_arn=${AwsCfServiceRoleArn_develop}\n" > ~/.aws/config
+  - echo -e "[ci-user-develop]\naws_access_key_id=${AwsTravisAccessKey_develop}\naws_secret_access_key=${AwsTravisSecretAccessKey_develop}\n" > ~/.aws/credentials
+  - echo -e "[profile prod]\nsource_profile=ci-user-prod\nrole_arn=${AwsCfServiceRoleArn_prod}\n" >> ~/.aws/config
+  - echo -e "[ci-user-prod]\naws_access_key_id=${AwsTravisAccessKey_prod}\naws_secret_access_key=${AwsTravisSecretAccessKey_prod}\n" >> ~/.aws/credentials
+  # setup npm dependencies
+  - npm install
 stages:
   - name: test
-  - name: eb-deploy
-    if: (tag =~ ^v) OR (type = push)
-
+  - name: eb-deploy-develop
+  - name: eb-deploy-staging
+  - name: eb-deploy-prod
 jobs:
   fast_finish: true
   include:
     - stage: test
-      script: npm run ci:travis
-      node_js: 12
-    - stage: eb-deploy
+      node_js: 16.15.0
       script:
-        - ./set-agora-version.sh || travis_terminate 1
+        - npm run test
+        - npm run build
+        - npm run test:e2e
+    - stage: deploy-develop
+      if: (NOT type IN (pull_request)) AND (branch = develop)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:develop
+        - npm run ci:clean
+        - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-      node_js: 12
-      deploy:
-        - provider: elasticbeanstalk
-          skip_cleanup: true
-          bucket_name: org-sagebionetworks-agora-deployment-agora-$TRAVIS_BRANCH
-          zip_file: /tmp/agora-app.zip
-          region: us-east-1
-          local_dir: dist
-          app: agora-ampad
-          env:
-            develop: agora-develop
-            staging: agora-staging
-            prod: agora-prod
-            DISABLE_OPENCOLLECTIVE: true
-          on:
-            all_branches: true
-          access_key_id: AKIAI2DBAWLFUMILTMWA
-          secret_access_key:
-            secure: "XuVnNN+k+dyFy4hoSRWkGfTDUZPeDwHT1tKCgCcAGz7Jl3Mkb2ymvkINmoHkQ4ZDzjjTQSBZn1IjtW3kdRPq98qJXvj+wmlaLUV3whmpiw4RoN4/maMkVqMqWZj9Gx9cQo/jkh1jIGLr781MWb0IcEheJltMZps2RAgi7Y+/06kjW3fxIihxy7xR1CrRz1GkMGObUDNVOnAmjBeX2S1noM7TJY3b5/E+UQQ6ShB8LXpDxyiwOPmVPEXfy3xPFWd5lMNA9xQjeFAuQNyK1JgCBbOyq93CK91nVSrpG+noUM5ecz3v01kJf0OqPypByC0h3/Numxznm1FAkmFaaCYlRHNge74jMuD54Ga+Zo20JX3lVqm6C6I1pMDHYIGn4p9RI8e3qEfpdGangV0LpsWTWSBU+eHs5kiYlCR1UXo5p/Osh62ko8rJRsmOYQx0caqbn8BZeRHZJOXCm6G6QvdPUeMHprm5gZVGF7YuuNk5tjLuZ9nCH+55XDekOC2cn4cv3b699iV9tcPAbvavON2fU5yq4YSY0MtZSLU8I0MnHrOJk7rKFHCrXxZl7aIBo8WwAD+xbQ9+yWHIq+ATea9kcwzZOh8TU2cW6TkjB2WYKjquZ7a4M2vVWDCyA1F2Ha8PqfmnOMKMROwzSGHOuxp8YAX1ACHhfaNnhHTt52fpM7U="
+        - eb deploy --profile develop --verbose --region ${AWS_REGION} --staged agora-develop
+    - stage: deploy-staging
+      if: (NOT type IN (pull_request)) AND (branch = staging)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:staging
+        - npm run ci:clean
+        - ./scripts/set-agora-version.sh || travis_terminate 1
+        - zip /tmp/agora-app.zip -qr9 * .[^.]*
+        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-staging
+    - stage: deploy-prod
+      if: (NOT type IN (pull_request)) AND (branch = prod)
+      node_js: 16.15.0
+      script:
+        - npm run ci:build:prod
+        - npm run ci:clean
+        - ./scripts/set-agora-version.sh || travis_terminate 1
+        - zip /tmp/agora-app.zip -qr9 * .[^.]*
+        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-prod

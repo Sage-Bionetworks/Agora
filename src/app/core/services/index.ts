@@ -1,10 +1,5 @@
-﻿// Order makes a difference here for now, the data service is
-// using the force service
 export * from './api.service';
-export * from './auth-guard.service';
-export * from './authentication.service';
-export * from './navigation.service';
-export * from './gene.service';
-export * from './force.service';
-export * from './data.service';
-export * from './menu.service';
+export * from './error.service';
+export * from './helper.service';
+export * from './rollbar.service';
+export * from './synapse-api.service';

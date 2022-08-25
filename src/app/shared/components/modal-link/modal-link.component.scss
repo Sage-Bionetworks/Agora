@@ -1,0 +1,19 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+modal-link,
+.modal-link {
+  display: inline-block;
+}
+
+.modal-link-inner {
+  display: flex;
+}
+
+.modal-link-icon {
+  transform: translateY(1px);
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}

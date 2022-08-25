@@ -1,71 +1,63 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  async,
-  TestBed,
-  ComponentFixture
-} from '@angular/core/testing';
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import browserUpdate from 'browser-update';
 
-/**
- * Load the implementations that should be tested
- */
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
-import { AppState } from './app.service';
 
-import * as browserUpdate from 'browser-update';
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let component: AppComponent;
+  let element: HTMLElement;
 
-describe(`App`, () => {
-    let component: AppComponent;
-    let fixture: ComponentFixture<AppComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AppComponent],
+      imports: [RouterTestingModule, AppModule],
+    }).compileComponents();
+  });
 
-    /**
-     * async beforeEach
-     */
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            declarations: [ AppComponent ],
-            imports: [ RouterTestingModule ],
-            schemas: [ NO_ERRORS_SCHEMA ],
-            providers: [ AppState ]
-        })
-        /**
-         * Compile template and css
-         */
-        .compileComponents();
-    }));
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+  });
 
-    /**
-     * Synchronous beforeEach
-     */
-    beforeEach(() => {
-        fixture = TestBed.createComponent(AppComponent);
-        component = fixture.componentInstance;
+  it('should create the app', () => {
+    expect(component).toBeTruthy();
+  });
 
-        /**
-         * Trigger initial data binding
-         */
-        fixture.detectChanges();
-    });
+  it('should have a title', () => {
+    expect(component.title).toEqual('Agora');
+  });
 
-    it(`should be readly initialized`, () => {
-        expect(fixture).toBeDefined();
-        expect(component).toBeDefined();
-    });
+  it('should have a header', () => {
+    expect(element.querySelector('#header')).toBeTruthy();
+  });
 
-    it(`app should be named Agora`, () => {
-        expect(component.name).toEqual('Agora');
-    });
+  it('should have a footer', () => {
+    expect(element.querySelector('#footer')).toBeTruthy();
+  });
 
-    it(`should have BrowserUpdate loaded`, () => {
-        const oiSpy = spyOn(component, 'initBrowserUpdate').
-            withArgs(browserUpdate, component.buParams).
-            and.callThrough();
+  it('should initialize "browser-update"', () => {
+    const oiSpy = spyOn(component, 'initBrowserUpdate');
 
-        component.initBrowserUpdate(browserUpdate, component.buParams);
-        fixture.detectChanges();
-        // There is no way to access properties inside BrowserUpdate scope
-        // The component.buParams gets modified when passed to browserUpdate
-        expect(oiSpy).toHaveBeenCalledWith(browserUpdate, component.buParams);
-        expect(browserUpdate).toBeDefined();
-    });
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(browserUpdate).toBeDefined();
+
+    // There is no way to access properties inside BrowserUpdate scope
+    // The component.buOptions gets modified when passed to browserUpdate
+    expect(oiSpy).toHaveBeenCalledWith(component.buOptions);
+  });
 });
