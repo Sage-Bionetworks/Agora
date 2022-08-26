@@ -167,7 +167,6 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
                 : false;
             }
 
-            this.onWindowResize();
             this.helperService.setLoading(false);
           });
       }
@@ -198,6 +197,10 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     setTimeout(function () {
       self.onWindowResize();
     }, 100);
+  }
+
+  ngAfterViewChecked() {
+    this.onWindowResize();
   }
 
   activatePanel(panel: Panel) {
