@@ -102,6 +102,7 @@
               [routerLink]="item.routerLink"
               routerLinkActive="active"
               [routerLinkActiveOptions]="item.activeOptions || {}"
+              (click)="toggleNav()"
             >
               <span>{{ item.label }}</span>
             </a>
