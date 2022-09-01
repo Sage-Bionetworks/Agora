@@ -70,8 +70,4 @@ export class HeaderComponent implements OnInit {
   toggleNav() {
     this.isShown = !this.isShown;
   }
-
-  onSearchNavigation() {
-    this.toggleNav();
-  }
 }
