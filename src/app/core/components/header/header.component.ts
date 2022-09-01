@@ -72,6 +72,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onSearchNavigation() {
-      this.toggleNav()
+    this.toggleNav();
   }
 }

@@ -147,7 +147,7 @@ export class GeneSearchComponent implements AfterViewInit {
     this.isFocused = false;
     this.query = '';
     this.results = [];
-    this.searchNavigated.emit()
+    this.searchNavigated.emit();
     this.router.navigate(['/genes/' + id]);
   }
 
