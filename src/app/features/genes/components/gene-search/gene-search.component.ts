@@ -7,7 +7,7 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
-  Input,
+  Input, Output, EventEmitter,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -34,6 +34,7 @@ import { ApiService } from '../../../../core/services';
 })
 export class GeneSearchComponent implements AfterViewInit {
   @Input() location: 'header' | 'home' = 'header';
+  @Output() searchNavigated = new EventEmitter();
 
   results: Gene[] = [];
   isLoading = false;
@@ -146,6 +147,7 @@ export class GeneSearchComponent implements AfterViewInit {
     this.isFocused = false;
     this.query = '';
     this.results = [];
+    this.searchNavigated.emit()
     this.router.navigate(['/genes/' + id]);
   }
 
