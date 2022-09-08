@@ -92,7 +92,7 @@ npm run mongo:import
 
 To add indexes to your local database, use the following script command: 
 
-````angular2html
+````bash
 # Creates indexes
 npm run mongo:create:indexes
 ````
