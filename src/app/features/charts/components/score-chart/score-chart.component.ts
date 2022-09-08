@@ -207,12 +207,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     const self = this;
     const tooltip = this.getTooltip('internal', 'score-chart-tooltip', true);
     const distribution: any = this.distribution[i];
+    // only the first bin has an inclusive left bound
+    const leftBoundCharacter = i == 0 ? '[' : '(';
 
     d3.select(bar)
       .on('mouseover', function () {
         const barBox = bar.getBoundingClientRect();
         const text =
-          'Score Range: [' +
+          'Score Range: ' + leftBoundCharacter +
           parseFloat(distribution.range[0]).toFixed(2) +
           ', ' +
           parseFloat(distribution.range[1]).toFixed(2) +
