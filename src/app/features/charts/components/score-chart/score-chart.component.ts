@@ -91,7 +91,7 @@ export class ScoreChartComponent extends BaseChartComponent {
   // Returns the smallest positive difference between the provided
   // bucket value and all other bucket values in the distribution
   getMinDiff(value: number, distribution: any[]) {
-    let arr = distribution.map(d => value - d.value).filter(v => v > 0)
+    const arr = distribution.map(d => value - d.value).filter(v => v > 0);
     const min = Math.min(...arr);
     return min === Infinity ? 0 : min;
   }
