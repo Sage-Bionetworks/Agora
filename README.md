@@ -31,7 +31,7 @@ npm install
 
 ### 2 - Create database
 
-You will need to create a MongoDB database and name it `agora`. Use `genes` for the collection name.
+You will need to create a MongoDB database and name it `agora`. 
 
 - [Using the MongoDB Shell](https://www.mongodb.com/basics/create-database#option-2)
 - [Using MongoDB Compass](https://www.mongodb.com/basics/create-database#option-3)
@@ -47,7 +47,7 @@ npm run mongo:start:windows
 
 ### 3 - Import the data
 
-The following commands will download the data files and all of the team images. You can download all of them using the `synapseclient`. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
+The following commands will download the data files and all the team images. You can download all of them using the `synapseclient`. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). After that, install the `synapseclient` using the following command:
 
 ```bash
 pip install synapseclient
@@ -75,13 +75,13 @@ If the `aws` command fails in any of the scripts, you might be running the wrong
 
 ```bash
 aws --version
-# Exemple of incorrect version
+# Example of incorrect version
 aws-cli/1.14.65 Python/2.7.9 Windows/8 botocore/1.9.18
 ```
 
 To manually update your version go to [this](https://docs.aws.amazon.com/cli/latest/userguide/cli-install-macos.html) link.
 
-You should see all of the data files and teams members pictures in the folders created by any of the scripts above.
+You should see all the data files and teams members pictures in the folders created by any of the scripts above.
 
 To add those images to our database, we are going to use the `mongofiles` executable. If you did not add mongo to your `PATH`, copy the images to the `Mongo` binary directory or run the executable remotely from the images directory (replace `mongofiles` in the next command for the binary path). If you have `Mongo` in your `PATH` use the following script command:
 
@@ -90,7 +90,14 @@ To add those images to our database, we are going to use the `mongofiles` execut
 npm run mongo:import
 ```
 
-You'll need `Linux` to run the previous script. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` (e.g. `Ubuntu`).
+To add indexes to your local database, use the following script command: 
+
+````angular2html
+# Creates indexes
+npm run mongo:create:indexes
+````
+
+You'll need `Linux` to run the previous scripts. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` (e.g. `Ubuntu`).
 
 ### 4 - Build
 
@@ -158,7 +165,7 @@ npm run start
 
 ## Continuous Deployment
 
-We have setup Travis to deploy Agora to our [AWS infrastructure](https://github.com/Sage-Bionetworks/Agora-infra).
+We have set up Travis to deploy Agora to our [AWS infrastructure](https://github.com/Sage-Bionetworks/Agora-infra).
 We continuously deploy to three environments:
 
 - Development -> https://agora-develop.ampadportal.org
@@ -168,7 +175,7 @@ We continuously deploy to three environments:
 ## Deployment Workflow
 
 To deploy Agora updates to one of the environments just merge code to the branch you would like
-to deploy to then Travis will take care of building, testing and deployming the Agora
+to deploy to then Travis will take care of building, testing and deploying the Agora
 application.
 
 ## Deployment configurations
@@ -183,16 +190,28 @@ by the CI system.
 
 - https://app.travis-ci.com/github/Sage-Bionetworks/Agora
 
-## Deployment for New Data (Updated 9/30/2021)
+## Deployment for New Data (Updated 9/8/22)
 
-1. First, make sure the data file is available in [Synapse](https://www.synapse.org/#!Synapse:syn12177492)
-2. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290).
-3. If there is a new json file (i.e. not updating existing data), add an entry to `import-data.sh`. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
-4. Deploy your changes in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to dev branch.
-5. Verify new data is in the database for the dev branch.
-6. Update data version in Agora app. ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then deployment the change to [Agora's dev branch](https://agora-develop.ampadportal.org/genes).
-7. Check new data shows up on [Agora's dev branch](https://agora-develop.ampadportal.org/genes).
-8. Once verified, repeat step 4 to 7 to finish deployment to staging and production branches.
+1. Ensure the new data file is available in the [Synapse Agora Live Data folder](https://www.synapse.org/#!Synapse:syn12177492).
+2. Determine the version number of the `data_manifest.csv` file to use for the data release:
+   1. The manifest must specify the appropriate version of each json file for the data release 
+   2. If a suitable `data_manifest.csv` does not exist, you can manually generate one and upload it to [Synapse](https://www.synapse.org/#!Synapse:syn13363290)
+3. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)):
+   1. The version should match the version of the desired `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290).
+4. If there is a new json file (i.e. not updating existing data):
+   1. add an entry for the new file to `import-data.sh`. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65))
+   2. add an entry for the new file to `./scripts/mongo-import.sh` in Agora (this repository)
+5. Merge your changes to [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to the develop branch.
+6. Verify new data is in the database in the develop environment.
+7. Update `data-version` in `package.json` in Agora (this repository). ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then merge the change to [Agora's develoc branch](https://agora-develop.ampadportal.org/genes).
+8. Check new data shows up on [Agora's dev branch](https://agora-develop.adknowledgeportal.org).
+9. Check new data version shows up in the footer  on [Agora's dev branch](https://agora-develop.adknowledgeportal.org).
+10. Once verified in the develop environment, you can promote the data release to staging by:
+    1. Merging the [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) develop branch to the staging branch
+    2. Verifying the new data is in the staging environment's database
+    3. Merging the Agora develop branch to staging
+    4. Verifying the new data and data version in the staging environment
+11. To promote to production, repeat step 10 but merge the staging branches to the prod branches
 
 ## New Data Testing
 
