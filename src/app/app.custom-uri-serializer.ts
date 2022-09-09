@@ -5,13 +5,13 @@ import {UrlSerializer, UrlTree, DefaultUrlSerializer} from '@angular/router';
 // from being stripped before Angular route handling.
 export class CustomUrlSerializer implements UrlSerializer {
   parse(url: any): UrlTree {
-    let dus = new DefaultUrlSerializer();
+    const dus = new DefaultUrlSerializer();
     url = url.replace('(','').replace(')','');
     return dus.parse(url);
   }
 
   serialize(tree: UrlTree): any {
-    let dus = new DefaultUrlSerializer();
+    const dus = new DefaultUrlSerializer();
     return dus.serialize(tree);
   }
 }
