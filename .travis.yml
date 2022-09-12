@@ -48,7 +48,7 @@ jobs:
         - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-        - eb deploy --profile develop --verbose --region ${AWS_REGION} --staged agora-develop
+        - eb deploy --profile develop --verbose --region ${AWS_REGION}  --timeout 15 --staged agora-develop
     - stage: deploy-staging
       if: (NOT type IN (pull_request)) AND (branch = staging)
       node_js: 16.15.0
@@ -57,7 +57,7 @@ jobs:
         - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-staging --timeout 15
+        - eb deploy --profile prod --verbose --region ${AWS_REGION}  --timeout 15 --staged agora-staging
     - stage: deploy-prod
       if: (NOT type IN (pull_request)) AND (branch = prod)
       node_js: 16.15.0
@@ -66,4 +66,4 @@ jobs:
         - npm run ci:clean
         - ./scripts/set-agora-version.sh || travis_terminate 1
         - zip /tmp/agora-app.zip -qr9 * .[^.]*
-        - eb deploy --profile prod --verbose --region ${AWS_REGION} --staged agora-prod
+        - eb deploy --profile prod --verbose --region ${AWS_REGION}  --timeout 15 --staged agora-prod
