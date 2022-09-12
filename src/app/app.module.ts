@@ -4,6 +4,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {UrlSerializer} from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import {
   NgxGoogleAnalyticsModule,
@@ -21,6 +22,7 @@ import { GenesModule } from './features/genes';
 import { ChartsModule } from './features/charts';
 import { TeamsModule } from './features/teams';
 import { AppRoutingModule } from './app.routing';
+import {CustomUrlSerializer} from './app.custom-uri-serializer';
 
 // -------------------------------------------------------------------------- //
 // Components
@@ -41,13 +43,17 @@ import { AppComponent } from './app.component';
     ChartsModule,
     TeamsModule,
 
-    // Rounting
+    // Routing
     AppRoutingModule,
 
     NgxGoogleAnalyticsModule.forRoot(environment.ga),
     NgxGoogleAnalyticsRouterModule,
   ],
-  providers: [CookieService, { provide: APP_BASE_HREF, useValue: '/' }],
+  providers: [
+    CookieService,
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: UrlSerializer, useClass: CustomUrlSerializer }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

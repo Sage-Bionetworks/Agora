@@ -102,6 +102,7 @@
               [routerLink]="item.routerLink"
               routerLinkActive="active"
               [routerLinkActiveOptions]="item.activeOptions || {}"
+              (click)="toggleNav()"
             >
               <span>{{ item.label }}</span>
             </a>
@@ -109,6 +110,7 @@
               *ngIf="item.url"
               [attr.href]="item.url"
               [attr.target]="item.target"
+              (click)="toggleNav()"
             >
               <span>{{ item.label }}</span>
             </a>
@@ -117,7 +119,7 @@
 
         <div class="separator"></div>
 
-        <gene-search class="header-search"></gene-search>
+        <gene-search class="header-search" (searchNavigated)="toggleNav()"></gene-search>
       </div>
     </div>
   </div>

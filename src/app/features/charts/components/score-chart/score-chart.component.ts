@@ -67,20 +67,17 @@ export class ScoreChartComponent extends BaseChartComponent {
         this.scoreIndex = i;
       }
 
-      if (i < 1 && !this.break.origin) {
-        const nextItem = this.distribution[i + 1] || {};
-        const diff = item.value - (nextItem.value || 0);
+      // Introduce a y-axis break if this bar is huge relative to other bars
+      const minDiff = this.getMinDiff(item.value, this.distribution);
+      if (minDiff > 2000) {
+        this.break = {
+          index: i,
+          upper: Math.floor(item.value / 1000) * 1000,
+          lower: Math.ceil((item.value - minDiff) / 1000) * 1000 + 1000,
+        };
 
-        if (diff > 2000) {
-          this.break = {
-            index: i,
-            upper: Math.floor(item.value / 1000) * 1000,
-            lower: Math.ceil(nextItem.value / 1000) * 1000 + 1000,
-          };
-
-          this.distribution[i].truncated =
-            this.break.lower + (item.value - this.break.upper);
-        }
+        this.distribution[i].truncated =
+          this.break.lower + (item.value - this.break.upper);
       }
     });
 
@@ -89,6 +86,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     this.group = this.dimension.group().reduceSum((d: any) => {
       return d.truncated || d.value;
     });
+  }
+
+  // Returns the smallest positive difference between the provided
+  // bucket value and all other bucket values in the distribution
+  getMinDiff(value: number, distribution: any[]) {
+    const arr = distribution.map(d => value - d.value).filter(v => v > 0);
+    const min = Math.min(...arr);
+    return min === Infinity ? 0 : min;
   }
 
   initChart() {
@@ -207,12 +212,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     const self = this;
     const tooltip = this.getTooltip('internal', 'score-chart-tooltip', true);
     const distribution: any = this.distribution[i];
+    // only the first bin has an inclusive left bound
+    const leftBoundCharacter = i == 0 ? '[' : '(';
 
     d3.select(bar)
       .on('mouseover', function () {
         const barBox = bar.getBoundingClientRect();
         const text =
-          'Score Range: [' +
+          'Score Range: ' + leftBoundCharacter +
           parseFloat(distribution.range[0]).toFixed(2) +
           ', ' +
           parseFloat(distribution.range[1]).toFixed(2) +

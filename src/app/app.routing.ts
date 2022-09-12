@@ -22,6 +22,8 @@ export const routes: Routes = [
 
   { path: 'genes/comparison', component: GeneComparisonToolComponent },
   { path: 'genes/nominated-targets', component: GeneNominatedTargetsComponent },
+  { path: 'genes/genes-router:genes-list', redirectTo: 'genes/nominated-targets', pathMatch: 'full' },
+  { path: 'genes/genes-router:gene-details/:id', redirectTo: 'genes/:id', pathMatch: 'full' },
   { path: 'genes/:id/similar', component: GeneSimilarComponent },
   { path: 'genes/:id/:tab/:subtab', component: GeneDetailsComponent },
   { path: 'genes/:id/:tab', component: GeneDetailsComponent },
