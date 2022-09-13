@@ -44,7 +44,7 @@ import * as _ from 'lodash'
  */
 
 // support NodeJS modules without type definitions
-declare module '*';
+// declare module '*';
 
 /*
 // for legacy tslint etc to understand rename 'modern-lru' with your package
@@ -56,16 +56,31 @@ declare module 'modern-lru' {
 }
 */
 
+interface SystemJS {
+  import: (path?: string) => Promise<any>;
+}
+
 // Extra variables that live on Global that will be replaced by webpack DefinePlugin
-declare var ENV: string;
-declare var HMR: boolean;
-declare var System: SystemJS;
-declare var Analyzer: boolean;
-declare var VERSION: string;
-declare var DATA_VERSION: string;
-declare var MONGODB_HOST: string;
-declare var MONGODB_PORT: number;
-declare var APP_ENV: string;
+declare let NODE_ENV: string;
+declare let APP_ENV: string;
+declare let API_HOST: string;
+declare let API_PORT: string;
+declare let VERSION: string;
+declare let DATA_VERSION: string;
+// ???
+declare let System: SystemJS;
+
+interface GlobalEnvironment {
+  NODE_ENV: string;
+  APP_ENV: string;
+  API_HOST: string;
+  API_PORT: string;
+  VERSION: string;
+  DATA_VERSION: string;
+  // ???
+  SystemJS: SystemJS;
+  System: SystemJS;
+}
 
 interface FirebaseConfig {
   apiKey: string;
@@ -76,23 +91,6 @@ interface FirebaseConfig {
   messagingSenderId: string;
 }
 
-interface SystemJS {
-  import: (path?: string) => Promise<any>;
-}
-
-interface GlobalEnvironment {
-  ENV: string;
-  HMR: boolean;
-  SystemJS: SystemJS;
-  System: SystemJS;
-  Analyzer: boolean;
-  VERSION: string;
-  DATA_VERSION: string;
-  MONGODB_HOST: string;
-  MONGODB_PORT: number;
-  APP_ENV: string;
-}
-
 interface Es6PromiseLoader {
   (id: string): (exportName?: string) => Promise<any>;
 }
@@ -100,39 +98,58 @@ interface Es6PromiseLoader {
 type FactoryEs6PromiseLoader = () => Es6PromiseLoader;
 type FactoryPromise = () => Promise<any>;
 
-type AsyncRoutes = {
-  [component: string]: Es6PromiseLoader |
-                               Function |
-                FactoryEs6PromiseLoader |
-                         FactoryPromise ;
-};
+// type AsyncRoutes = {
+//   [component: string]:
+//     | Es6PromiseLoader
+//     | Function
+//     | FactoryEs6PromiseLoader
+//     | FactoryPromise;
+// };
 
-type IdleCallbacks = Es6PromiseLoader |
-                             Function |
-              FactoryEs6PromiseLoader |
-                       FactoryPromise ;
+// type IdleCallbacks =
+//   | Es6PromiseLoader
+//   | Function
+//   | FactoryEs6PromiseLoader
+//   | FactoryPromise;
 
 interface WebpackModule {
-hot: {
-  data?: any,
-  idle: any,
-  accept(dependencies?: string | string[], callback?: (updatedDependencies?: any) => void): void;
-  decline(deps?: any | string | string[]): void;
-  dispose(callback?: (data?: any) => void): void;
-  addDisposeHandler(callback?: (data?: any) => void): void;
-  removeDisposeHandler(callback?: (data?: any) => void): void;
-  check(autoApply?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
-  apply(options?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
-  status(callback?: (status?: string) => void): void | string;
-  removeStatusHandler(callback?: (status?: string) => void): void;
-};
+  hot: {
+    data?: any;
+    idle: any;
+    accept(
+      dependencies?: string | string[],
+      callback?: (updatedDependencies?: any) => void
+    ): void;
+    decline(deps?: any | string | string[]): void;
+    dispose(callback?: (data?: any) => void): void;
+    addDisposeHandler(callback?: (data?: any) => void): void;
+    removeDisposeHandler(callback?: (data?: any) => void): void;
+    check(
+      autoApply?: any,
+      callback?: (err?: Error, outdatedModules?: any[]) => void
+    ): void;
+    apply(
+      options?: any,
+      callback?: (err?: Error, outdatedModules?: any[]) => void
+    ): void;
+    status(callback?: (status?: string) => void): void | string;
+    removeStatusHandler(callback?: (status?: string) => void): void;
+  };
 }
 
 interface WebpackRequire {
   (id: string): any;
   (paths: string[], callback: (...modules: any[]) => void): void;
-  ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
-  context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
+  ensure(
+    ids: string[],
+    callback: (req: WebpackRequire) => void,
+    chunkName?: string
+  ): void;
+  context(
+    directory: string,
+    useSubDirectories?: boolean,
+    regExp?: RegExp
+  ): WebpackContext;
 }
 
 interface WebpackContext extends WebpackRequire {
@@ -140,12 +157,17 @@ interface WebpackContext extends WebpackRequire {
 }
 
 interface ErrorStackTraceLimit {
-stackTraceLimit: number;
+  stackTraceLimit: number;
 }
 
 // Extend typings
 interface NodeRequire extends WebpackRequire {}
 interface ErrorConstructor extends ErrorStackTraceLimit {}
-interface NodeRequireFunction extends Es6PromiseLoader  {}
+interface NodeRequireFunction extends Es6PromiseLoader {}
 interface NodeModule extends WebpackModule {}
-interface Global extends GlobalEnvironment  {}
+interface Global extends GlobalEnvironment {}
+
+declare module 'dom-to-image-more' {
+  import domToImage = require('dom-to-image');
+  export = domToImage;
+}

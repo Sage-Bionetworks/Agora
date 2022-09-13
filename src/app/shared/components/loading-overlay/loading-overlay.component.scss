@@ -1,0 +1,36 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.loading-overlay {
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-duration);
+
+  .loading-overlay-inner {
+    display: flex;
+    padding: 30px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  &.global {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+
+    .loading-overlay-inner {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}

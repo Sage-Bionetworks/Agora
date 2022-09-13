@@ -1,0 +1,132 @@
+<ng-container *ngIf="_gene">
+  <div class="section">
+    <div class="section-inner pb-0">
+      <div class="container-sm">
+        <div>
+          <h2>Proteomics</h2>
+          <p>
+            The results shown on this page are derived from proteomics analysis
+            of post-mortem brains from AD cases and controls.
+          </p>
+          <modal-link
+            text="Data and Methods for this study"
+            header="About the Proteomics Analysis"
+            wikiId="612871"
+          >
+          </modal-link>
+        </div>
+
+        <hr class="separator separator-md" />
+
+        <div class="mb-lg">
+          <h4>Filter the following chart by protein</h4>
+          <p>
+            Multiple proteins map to a single gene. Please select a protein of
+            interest from the dropdown.
+          </p>
+          <gene-protein-selector
+            [options]="uniProtIds"
+            (onChange)="onProteinChange($event)"
+          ></gene-protein-selector>
+        </div>
+
+        <hr class="separator separator-md" />
+
+        <div>
+          <h3>
+            Differential Expression of
+            {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} and Selected
+            Protein
+          </h3>
+          <p class="mb-0">
+            After selecting a protein from the dropdown menu, you will be able
+            to see whether the selected protein product is differentially
+            expressed between AD cases and controls. The box plot depicts how
+            the differential expression of the selected protein of interest
+            (purple dot) compares with expression of other proteins in a given
+            brain region. Summary statistics for each tissue can be viewed by
+            hovering over the purple dots.
+          </p>
+          <hr class="separator separator-md" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-inner pt-0">
+      <div class="container-sm">
+        <h3>
+          LFQ Differential Protein Expression
+          <download-dom-image
+            [target]="lfqChart"
+            [filename]="_gene?.ensembl_gene_id + '_LFQ'"
+          ></download-dom-image>
+        </h3>
+        <p>
+          Liquid-free quantification (LFQ) data was generated from post-mortem
+          brains of more than 500 individuals. Samples were taken from four
+          human cohort studies, representing four different brain regions.
+        </p>
+        <p class="mb-0">
+          Note that proteins may not be detected in all four brain regions; for
+          these proteins, the plot will show fewer than four brain regions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <div #lfqChart>
+          <box-plot-chart
+            xAxisLabel="Brain tissue"
+            [yAxisMin]="LFQYAxisMin"
+            [yAxisMax]="LFQYAxisMax"
+            [data]="LFQData"
+          ></box-plot-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="TMTData === 'remove this container to activate TMT'">
+    <div class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <h3>
+            TMT Differential Protein Expression
+            <download-dom-image
+              [target]="tmtChart"
+              [filename]="_gene?.ensembl_gene_id + '_TMT'"
+            ></download-dom-image>
+          </h3>
+          <p>
+            Tandem mass tagged (TMT) data was generated from the DLPFC region of
+            post-mortem brains of 400 individuals from the ROSMAP cohort.
+          </p>
+          <p class="mb-0">
+            Note that proteins may not be detected in this brain region; for
+            these proteins, the plot will show no data.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner">
+        <div class="container-lg">
+          <div #tmtChart>
+            <box-plot-chart
+              xAxisLabel="Brain tissue"
+              [yAxisMin]="TMTYAxisMin"
+              [yAxisMax]="TMTYAxisMax"
+              [data]="TMTData"
+            ></box-plot-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

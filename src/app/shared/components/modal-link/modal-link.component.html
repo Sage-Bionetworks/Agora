@@ -1,0 +1,32 @@
+<a class="modal-link link">
+  <span class="modal-link-inner" (click)="toggle()">
+    <span *ngIf="icon" class="modal-link-icon">
+      <svg-icon
+        *ngIf="icon == 'svg'"
+        name="info-circle"
+        customClass="two-tone"
+      ></svg-icon>
+      <i *ngIf="icon != 'svg'" class="{{ icon }}"></i>
+    </span>
+    <div *ngIf="text" class="modal-link-text">
+      {{ text }}
+    </div>
+  </span>
+  <p-dialog
+    [header]="header"
+    [(visible)]="isActive"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '100%', maxWidth: '960px' }"
+    appendTo="body"
+  >
+    <wiki
+      *ngIf="wikiId && hasActived"
+      [ownerId]="ownerId"
+      [wikiId]="wikiId"
+    ></wiki>
+    <ng-content></ng-content>
+  </p-dialog>
+</a>

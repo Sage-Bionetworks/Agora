@@ -1,0 +1,19 @@
+<div *ngIf="_gene" class="gene-score-charts">
+  <div *ngFor="let chart of charts">
+    <div class="gene-score-charts-header">
+      <div>
+        <h2 class="gene-score-charts-heading">
+          {{ chart.name?.toUpperCase() }}
+        </h2>
+      </div>
+      <div>
+        <overlay-panel-link [ownerId]="chart.ownerId" [wikiId]="chart.wikiId">
+        </overlay-panel-link>
+      </div>
+    </div>
+    <score-chart
+      [score]="chart.score"
+      [distribution]="chart.distribution"
+    ></score-chart>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<a class="overlay-link link">
+  <span class="overlay-link-inner" (click)="toggle($event)">
+    <span *ngIf="icon" class="overlay-link-icon">
+      <svg-icon
+        *ngIf="icon == 'svg'"
+        name="info-circle"
+        customClass="two-tone"
+      ></svg-icon>
+      <i *ngIf="icon != 'svg'" class="{{ icon }}"></i>
+    </span>
+    <div *ngIf="text" class="overlay-link-text">
+      {{ text }}
+    </div>
+  </span>
+  <p-overlayPanel #panel styleClass="overlay-panel">
+    <ng-template pTemplate>
+      <wiki
+        *ngIf="wikiId && hasActived"
+        [ownerId]="ownerId"
+        [wikiId]="wikiId"
+      ></wiki>
+      <ng-content></ng-content>
+    </ng-template>
+  </p-overlayPanel>
+</a>
