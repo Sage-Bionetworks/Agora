@@ -35,10 +35,10 @@ export const subCategories: { [key: string]: GCTSelectOption[] } = {
       label: 'Label-free Quantification (LFQ)',
       value: 'LFQ',
     },
-    // {
-    //   label: 'Tandem Mass Tag (TMT)',
-    //   value: 'TMT',
-    // },
+    {
+      label: 'Tandem Mass Tag (TMT)',
+      value: 'TMT',
+    },
   ],
 };
 
