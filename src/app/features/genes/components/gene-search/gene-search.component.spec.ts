@@ -91,6 +91,7 @@ describe('Component: Gene Search', () => {
 
   it('should navigate when clicking gene', fakeAsync(() => {
     component.results = [geneMock1];
+    component.showGeneResults = true;
     fixture.detectChanges();
 
     const link = element.querySelector(

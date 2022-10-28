@@ -1,9 +1,8 @@
 <div
   #root
   [class]="'gene-search gene-search-' + location"
-  [ngClass]="{ focused: isFocused }"
 >
-  <div class="gene-search-bar" (click)="focusInput()">
+  <div class="gene-search-bar">
     <div class="gene-search-bar-icon">
       <i
         *ngIf="location === 'header' && !isLoading"
@@ -99,11 +98,28 @@
       "
       autocomplete="off"
       type="text"
-      (focus)="isFocused = true"
+      (focus)="onFocus()"
       [(ngModel)]="query"
     />
+    <div class="gene-search-bar-close" *ngIf="query" >
+      <button (click)="clearInput()">
+        <svg
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M1 9L9 1M1 1L9 9"
+            stroke="#C4C4C4"
+            stroke-width="2"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
-  <div class="gene-search-results" *ngIf="error || results.length">
+  <div class="gene-search-results" *ngIf="showGeneResults && (error || results.length > 0)">
     <div class="gene-search-results-inner">
       <ul *ngIf="error" class="gene-search-errors">
         <li>
