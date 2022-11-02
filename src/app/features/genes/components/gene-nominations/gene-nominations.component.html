@@ -36,8 +36,11 @@
           </p>
 
           <h3>The type of data used and analyses done to identify target</h3>
-          <p class="mb-xl">
+          <p>
             {{ nomination.data_used_to_support_target_selection }}
+          </p>
+          <p class="mb-xl" *ngIf="nomination.study">
+            Cohort study data: {{ nomination.study}}
           </p>
 
           <h3>Initial date of nomination</h3>
