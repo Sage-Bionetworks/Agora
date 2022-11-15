@@ -47,6 +47,14 @@
           <p class="mb-xl">
             {{ nomination.initial_nomination }}
           </p>
+
+          <ng-container *ngIf="nomination.validation_study_details">
+            <h3>Planned Experimental Validation</h3>
+            <p class="mb-xl">
+              {{ nomination.validation_study_details }}
+            </p>
+          </ng-container>
+
           <a
             *ngIf="nomination.data_synapseid"
             class="link"
