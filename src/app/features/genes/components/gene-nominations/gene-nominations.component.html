@@ -18,55 +18,60 @@
 
       <div class="nomination-list">
         <div *ngFor="let nomination of nominations; let i = index">
-          <h3 class="team-name h2">
-            {{ getFullDisplayName(nomination) }}
-          </h3>
-          <p class="mb-xl">
-            {{ nomination.team_data?.description }}
-          </p>
-
-          <h3>Why was the target selected?</h3>
-          <p class="mb-xl">
-            {{ nomination.target_choice_justification }}
-          </p>
-
-          <h3>Predicted therapeutic direction</h3>
-          <p class="mb-xl">
-            {{ nomination.predicted_therapeutic_direction }}
-          </p>
-
-          <h3>The type of data used and analyses done to identify target</h3>
-          <p class="mb-xl">
-            {{ nomination.data_used_to_support_target_selection }}
-          </p>
-
-          <h3>Initial date of nomination</h3>
-          <p class="mb-xl">
-            {{ nomination.initial_nomination }}
-          </p>
-
-          <ng-container *ngIf="nomination.validation_study_details">
-            <h3>Planned Experimental Validation</h3>
-            <p class="mb-xl validation-study-details">
-              {{ nomination.validation_study_details }}
+          <div class="mb-xl">
+            <h3 class="team-name h2">
+              {{ getFullDisplayName(nomination) }}
+            </h3>
+            <p>
+              {{ nomination.team_data?.description }}
             </p>
-          </ng-container>
+          </div>
 
-          <a
-            *ngIf="nomination.data_synapseid"
-            class="link"
-            href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
+          <div class="mb-xl">
+            <h3>Why was the target selected?</h3>
+            <p>
+              {{ nomination.target_choice_justification }}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            <h3>Predicted therapeutic direction</h3>
+            <p>
+              {{ nomination.predicted_therapeutic_direction }}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            <h3>The type of data used and analyses done to identify target</h3>
+            <p>
+              {{ nomination.data_used_to_support_target_selection }}
+            </p>
+            <p *ngIf="nomination.study">
+              Cohort study data: {{ nomination.study}}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            <h3>Initial date of nomination</h3>
+            <p>
+              {{ nomination.initial_nomination }}
+            </p>
+            
+            <ng-container *ngIf="nomination.validation_study_details">
+              <h3>Planned Experimental Validation</h3>
+              <p class="mb-xl validation-study-details">
+                {{ nomination.validation_study_details }}
+              </p>
+            </ng-container>
+            
+            <a *ngIf="nomination.data_synapseid" class="link" href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
               nomination.data_synapseid
-            }}"
-            target="_blank"
-          >
-            Learn more about the target nomination process
-          </a>
+            }}" target="_blank">
+              Learn more about the target nomination process
+            </a>
+          </div>
 
-          <hr
-            *ngIf="i < nominations.length - 1"
-            class="separator separator-md"
-          />
+          <hr *ngIf="i < nominations.length - 1" class="separator separator-md" />
         </div>
       </div>
     </div>
