@@ -49,7 +49,7 @@ export const routes: Routes = [
     path: 'genes/:id', component: GeneDetailsComponent,
     data: {
       title: 'Agora | Gene Details',
-      description: 'View information and evidence about genes in Alzheimer\'s disease'
+      description: 'View information and evidence about genes in Alzheimer\'s disease.'
     }
   },
   { 
@@ -84,7 +84,7 @@ export const routes: Routes = [
     path: 'nomination-form', component: NominationFormPageComponent,
     data: {
       title: 'Nominate a Target | Suggest a new AD therapeutic target',
-      description: 'Nominate a gene as a new candidate for AD treatment or prevention'
+      description: 'Nominate a gene as a new candidate for AD treatment or prevention.'
     }
   },
   { path: '**', component: PageNotFoundComponent },
