@@ -4,7 +4,7 @@ describe('App', () => {
   });
 
   it('should have a title', () => {
-    cy.title().should('eq', 'Agora');
+    cy.title().should('eq', 'Agora | Explore Alzheimer\'s Disease Genes');
   });
 
   it('should have a header', () => {
