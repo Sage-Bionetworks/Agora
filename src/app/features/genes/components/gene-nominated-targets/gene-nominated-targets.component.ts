@@ -71,11 +71,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
       header: 'Antibody Modality',
       selected: false,
     },
-    {
-      field: 'validations_display_value',
-      header: 'Experimental Validation',
-      selected: false,
-    },
   ];
 
   constructor(private apiService: ApiService) {}
@@ -89,7 +84,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
         let studyArray: string[] = [];
         let programsArray: string[] = [];
         let inputDataArray: string[] = [];
-        let validationStudyDetailsArray: string[] = [];
         let initialNominationArray: number[] = [];
 
         if (!this.nominations.includes(de.nominations)) {
@@ -111,9 +105,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
             (nt: NominatedTarget) => nt.input_data
           );
 
-          validationStudyDetailsArray = de.nominatedtarget
-            .map((nt: NominatedTarget) => nt.validation_study_details)
-            .filter((item) => item !== undefined);
           initialNominationArray = de.nominatedtarget
             .map((nt: NominatedTarget) => nt.initial_nomination)
             .filter((item) => item !== undefined);
@@ -155,14 +146,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
         if (inputDataArray.length) {
           de.input_data_display_value = inputDataArray
             .filter(this.getUnique)
-            .sort((a: string, b: string) => a.localeCompare(b))
-            .join(', ');
-        }
-
-        de.validations_display_value = '';
-        if (validationStudyDetailsArray.length) {
-          de.validations_display_value = validationStudyDetailsArray
-            .filter((e) => e)
             .sort((a: string, b: string) => a.localeCompare(b))
             .join(', ');
         }

@@ -39,10 +39,11 @@ export class GeneSearchComponent implements AfterViewInit {
   results: Gene[] = [];
   isLoading = false;
   isEnsemblId = false;
-  isFocused = false;
   query = '';
   error = '';
   hgncSymbolCounts: { [key: string]: number } = {};
+
+  showGeneResults = false;  // controls display of gene results list items
 
   errorMessages: { [key: string]: string } = {
     hgncSymbolNotFound:
@@ -60,9 +61,7 @@ export class GeneSearchComponent implements AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {
-    if (!this.root.nativeElement.contains(event.target)) {
-      this.isFocused = false;
-    }
+    this.checkClickIsInsideComponent(event);
   }
 
   constructor(private router: Router, private apiService: ApiService) {}
@@ -82,6 +81,7 @@ export class GeneSearchComponent implements AfterViewInit {
         })
       )
       .subscribe((response: any) => {
+        this.showGeneResults = true;
         this.setResults(response.items);
       });
   }
@@ -93,6 +93,7 @@ export class GeneSearchComponent implements AfterViewInit {
     this.isEnsemblId = 'ensg' === query.toLowerCase().substring(0, 4);
 
     if (query.length > 0 && query.length < 2) {
+      this.showGeneResults = true;
       this.error = this.errorMessages.notValidSearch;
     } else if (this.isEnsemblId) {
       const digits = query.toLowerCase().substring(4, query.length);
@@ -144,7 +145,6 @@ export class GeneSearchComponent implements AfterViewInit {
 
   goToGene(id: string) {
     this.input.nativeElement.blur();
-    this.isFocused = false;
     this.query = '';
     this.results = [];
     this.searchNavigated.emit();
@@ -160,7 +160,23 @@ export class GeneSearchComponent implements AfterViewInit {
     );
   }
 
-  focusInput() {
+  onFocus() {
+    if (this.results.length > 0 || this.error) {
+      this.showGeneResults = true;
+    }
+  }
+
+  clearInput() {
     this.input.nativeElement.focus();
+    this.query = '';
+    this.error = '';
+    this.results = [];
+  }
+
+  checkClickIsInsideComponent(event: Event) {
+    // if clicked element is not part of this component, hide gene results
+    if (!this.root.nativeElement.contains(event.target)) {
+      this.showGeneResults = false;
+    }
   }
 }

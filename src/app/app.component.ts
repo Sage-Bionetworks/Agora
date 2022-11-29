@@ -2,11 +2,14 @@
 // External
 // -------------------------------------------------------------------------- //
 import { Component, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
 import browserUpdate from 'browser-update';
+import { filter } from 'rxjs';
 import '../styles/styles.scss';
 
 // -------------------------------------------------------------------------- //
@@ -18,7 +21,6 @@ import '../styles/styles.scss';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'Agora';
   buOptions: { [key: string]: any } = {
     required: {
       e: -2,
@@ -33,8 +35,41 @@ export class AppComponent implements OnInit {
     insecure: true,
   };
 
+  constructor(private router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    private titleService: Title,
+    private metaService: Meta) {
+  }
+
   ngOnInit() {
     this.initBrowserUpdate(this.buOptions);
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      const route = this.getChildRoute(this.activatedRoute);
+      route.data.subscribe((data: any) => {
+        if (data.title) {
+          this.titleService.setTitle(data.title);
+        } else {
+          this.titleService.setTitle('Agora');
+        }
+          
+        if (data.description) {
+          this.metaService.updateTag({ name: 'description', content: data.description });
+        } else {
+          this.metaService.removeTag('name=\'description\'');
+        }
+      });
+    });
+  }
+
+  getChildRoute(activatedRoute: ActivatedRoute): ActivatedRoute {
+    if (activatedRoute.firstChild) {
+      return this.getChildRoute(activatedRoute.firstChild);
+    } else {
+      return activatedRoute;
+    }
   }
 
   initBrowserUpdate(options: { [key: string]: any }) {
