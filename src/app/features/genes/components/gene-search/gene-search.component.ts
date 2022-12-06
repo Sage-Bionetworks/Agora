@@ -15,6 +15,7 @@ import {
   distinctUntilChanged,
   switchMap,
   catchError,
+  takeUntil,
 } from 'rxjs/operators';
 import { fromEvent, Observable, empty, throwError } from 'rxjs';
 
@@ -23,6 +24,7 @@ import { fromEvent, Observable, empty, throwError } from 'rxjs';
 // -------------------------------------------------------------------------- //
 import { Gene, GenesResponse } from '../../../../models';
 import { ApiService } from '../../../../core/services';
+import { Unsub } from '../../../../models/unsub';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -32,7 +34,7 @@ import { ApiService } from '../../../../core/services';
   templateUrl: './gene-search.component.html',
   styleUrls: ['./gene-search.component.scss'],
 })
-export class GeneSearchComponent implements AfterViewInit {
+export class GeneSearchComponent extends Unsub implements AfterViewInit {
   @Input() location: 'header' | 'home' = 'header';
   @Output() searchNavigated = new EventEmitter();
 
@@ -64,11 +66,14 @@ export class GeneSearchComponent implements AfterViewInit {
     this.checkClickIsInsideComponent(event);
   }
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private apiService: ApiService) {
+    super();
+  }
 
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
+        takeUntil(this.unsubscribe$),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((event: any) => {
@@ -125,6 +130,8 @@ export class GeneSearchComponent implements AfterViewInit {
           this.error = this.errorMessages.ensemblIdNotFound;
         } else {
           this.goToGene(results[0].ensembl_gene_id);
+          this.isLoading = false;
+          return;
         }
       } else {
         this.hgncSymbolCounts = {};
