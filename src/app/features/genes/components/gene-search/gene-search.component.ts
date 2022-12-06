@@ -98,6 +98,7 @@ export class GeneSearchComponent implements AfterViewInit {
     } else if (this.isEnsemblId) {
       const digits = query.toLowerCase().substring(4, query.length);
       if (digits.length !== 11 || !/^\d+$/.test(digits)) {
+        this.showGeneResults = true;
         this.error = this.errorMessages.notValidEnsemblId;
       }
     }
