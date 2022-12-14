@@ -15,6 +15,7 @@ import {
   distinctUntilChanged,
   switchMap,
   catchError,
+  takeUntil,
 } from 'rxjs/operators';
 import { fromEvent, Observable, empty, throwError } from 'rxjs';
 
@@ -23,6 +24,7 @@ import { fromEvent, Observable, empty, throwError } from 'rxjs';
 // -------------------------------------------------------------------------- //
 import { Gene, GenesResponse } from '../../../../models';
 import { ApiService } from '../../../../core/services';
+import { Unsub } from '../../../../models/unsub';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -32,17 +34,18 @@ import { ApiService } from '../../../../core/services';
   templateUrl: './gene-search.component.html',
   styleUrls: ['./gene-search.component.scss'],
 })
-export class GeneSearchComponent implements AfterViewInit {
+export class GeneSearchComponent extends Unsub implements AfterViewInit {
   @Input() location: 'header' | 'home' = 'header';
   @Output() searchNavigated = new EventEmitter();
 
   results: Gene[] = [];
   isLoading = false;
   isEnsemblId = false;
-  isFocused = false;
   query = '';
   error = '';
   hgncSymbolCounts: { [key: string]: number } = {};
+
+  showGeneResults = false;  // controls display of gene results list items
 
   errorMessages: { [key: string]: string } = {
     hgncSymbolNotFound:
@@ -60,16 +63,17 @@ export class GeneSearchComponent implements AfterViewInit {
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {
-    if (!this.root.nativeElement.contains(event.target)) {
-      this.isFocused = false;
-    }
+    this.checkClickIsInsideComponent(event);
   }
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  constructor(private router: Router, private apiService: ApiService) {
+    super();
+  }
 
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
+        takeUntil(this.unsubscribe$),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((event: any) => {
@@ -82,6 +86,7 @@ export class GeneSearchComponent implements AfterViewInit {
         })
       )
       .subscribe((response: any) => {
+        this.showGeneResults = true;
         this.setResults(response.items);
       });
   }
@@ -93,10 +98,12 @@ export class GeneSearchComponent implements AfterViewInit {
     this.isEnsemblId = 'ensg' === query.toLowerCase().substring(0, 4);
 
     if (query.length > 0 && query.length < 2) {
+      this.showGeneResults = true;
       this.error = this.errorMessages.notValidSearch;
     } else if (this.isEnsemblId) {
       const digits = query.toLowerCase().substring(4, query.length);
       if (digits.length !== 11 || !/^\d+$/.test(digits)) {
+        this.showGeneResults = true;
         this.error = this.errorMessages.notValidEnsemblId;
       }
     }
@@ -123,6 +130,8 @@ export class GeneSearchComponent implements AfterViewInit {
           this.error = this.errorMessages.ensemblIdNotFound;
         } else {
           this.goToGene(results[0].ensembl_gene_id);
+          this.isLoading = false;
+          return;
         }
       } else {
         this.hgncSymbolCounts = {};
@@ -144,9 +153,9 @@ export class GeneSearchComponent implements AfterViewInit {
 
   goToGene(id: string) {
     this.input.nativeElement.blur();
-    this.isFocused = false;
     this.query = '';
     this.results = [];
+    this.showGeneResults = false;
     this.searchNavigated.emit();
     this.router.navigate(['/genes/' + id]);
   }
@@ -160,7 +169,23 @@ export class GeneSearchComponent implements AfterViewInit {
     );
   }
 
-  focusInput() {
+  onFocus() {
+    if (this.results.length > 0 || this.error) {
+      this.showGeneResults = true;
+    }
+  }
+
+  clearInput() {
     this.input.nativeElement.focus();
+    this.query = '';
+    this.error = '';
+    this.results = [];
+  }
+
+  checkClickIsInsideComponent(event: Event) {
+    // if clicked element is not part of this component, hide gene results
+    if (!this.root.nativeElement.contains(event.target)) {
+      this.showGeneResults = false;
+    }
   }
 }

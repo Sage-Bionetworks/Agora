@@ -69,6 +69,29 @@
       pointer-events: none;
     }
 
+    .gene-search-bar-close {
+      button {
+        @include reset-button;
+        
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        cursor: pointer;
+
+        svg path {
+          transition: $transition-duration;
+        }
+
+        &:hover {
+          svg path {
+            stroke: var(--color-primary);
+          }
+        }
+      }
+    }
+
     input {
       width: 100%;
       border: none;
@@ -90,8 +113,6 @@
     color: var(--color-text);
     box-sizing: border-box;
     z-index: 10;
-    opacity: 0;
-    visibility: hidden;
     background-color: #fff;
     padding: 10px 0;
     border-radius: 10px;
@@ -148,20 +169,6 @@
           }
         }
       }
-    }
-  }
-
-  &.focused {
-    &:not(.gene-search-home) {
-      .gene-search-bar {
-        background-color: transparent;
-        border-color: var(--color-action-primary);
-      }
-    }
-
-    .gene-search-results {
-      opacity: 1;
-      visibility: visible;
     }
   }
 }

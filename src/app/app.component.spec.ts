@@ -37,10 +37,6 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a title', () => {
-    expect(component.title).toEqual('Agora');
-  });
-
   it('should have a header', () => {
     expect(element.querySelector('#header')).toBeTruthy();
   });

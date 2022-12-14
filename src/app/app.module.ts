@@ -2,7 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Meta } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {UrlSerializer} from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -52,7 +52,8 @@ import { AppComponent } from './app.component';
   providers: [
     CookieService,
     { provide: APP_BASE_HREF, useValue: '/' },
-    { provide: UrlSerializer, useClass: CustomUrlSerializer }
+    { provide: UrlSerializer, useClass: CustomUrlSerializer },
+    Meta
   ],
   bootstrap: [AppComponent],
 })
