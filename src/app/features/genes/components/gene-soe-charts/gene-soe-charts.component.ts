@@ -42,11 +42,14 @@ export class GeneSoeChartsComponent implements OnInit {
 
   init() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const overallScoreDistribution = data.overall_scores;
+      let overallScoreDistribution = data.overall_scores;
 
       overallScoreDistribution.sort((a: any, b: any) =>
         a.name > b.name ? 1 : -1
       );
+
+      //remove literature score
+      overallScoreDistribution = overallScoreDistribution.filter((item: any) => (item.name !== 'Literature Score'));
 
       this.charts = overallScoreDistribution.map((item: any) => {
         const distribution: any = [];
