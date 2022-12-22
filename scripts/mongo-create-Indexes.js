@@ -23,15 +23,22 @@ const collections = [
   },
   {
     name: 'geneslinks',
-    indexes: [{ geneA_ensembl_gene_id: 1 }, { geneB_ensembl_gene_id: 1 }],
+    indexes: [
+      { geneA_ensembl_gene_id: 1 },
+      { geneB_ensembl_gene_id: 1 }
+    ],
   },
   {
     name: 'genesmetabolomics',
-    indexes: [{ ensembl_gene_id: 1 }],
+    indexes: [
+      { ensembl_gene_id: 1 }
+    ],
   },
   {
     name: 'genesproteomics',
-    indexes: [{ ensembl_gene_id: 1 }],
+    indexes: [
+      { ensembl_gene_id: 1 }
+    ],
   },
   {
     name: 'proteomicstmt',
