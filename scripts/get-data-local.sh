@@ -1,40 +1,108 @@
-[ -d ../../data/ ] || mkdir ../../data/
+AGORA_LIVE_DATA_MANIFEST='syn13363290'
+AGORA_TESTING_DATA_MANIFEST='syn18387112'
+DATA_DIR='../data'
+TEAM_IMAGES_DIR='../data/team_images/'
+OVERRIDE_OPTIONS=('Use default manifest' 'Specify manifest override')
+DATA_FOLDERS=("Agora Live Data (default)" "Agora Testing Data" "Other data_manifest")
+PS3='Please select one of the available options: '
 
+# Create the data directory and team_images subdirectory if they don't already exist
+[ -d $DATA_DIR ] || mkdir $DATA_DIR
+[ -d $TEAM_IMAGES_DIR ] || mkdir $TEAM_IMAGES_DIR
+echo "Data directory: $DATA_DIR"
+echo "Team images directory: $TEAM_IMAGES_DIR"
+
+# Determine the currently checked out Agora branch
 travisbranch=$(git rev-parse --abbrev-ref HEAD)
-echo "Branch name = $travisbranch"
+echo "Agora branch name = $travisbranch"
 
+# Determine which agora-data-manager branch to use to populate default manifest version information
+# Defaults to agora-data-manager:develop if you aren't on one of the three standard Agora branches (develop, staging, production)
 if [[ $travisbranch =~ ^(develop|staging|prod)$ ]]; then
-  echo "Valid git branch used!"
+  echo "You are working on the Agora $travisbranch branch; this script will use default values from the corresponding agora-data-manager branch."
+else
+  travisbranch='develop'
+  echo "You are working on an Agora branch that is not develop, staging, or production; this script will use default values from the $travisbranch agora-data-manager branch."
+fi
 
-  echo "Enter your Synapse username"
-  read synapseusername
+# Downloads the default manifest synId and version from $travisbranch in agora-data-manager repo, as well as the synId for the team_images folder
+wget https://raw.githubusercontent.com/Sage-Bionetworks/agora-data-manager/$travisbranch/data-manifest.json -O $DATA_DIR/default-data-manifest-$travisbranch.json --no-check-certificate
+DATA_VERSION=$(cat $DATA_DIR/default-data-manifest-$travisbranch.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+DATA_MANIFEST_ID=$(cat $DATA_DIR/default-data-manifest-$travisbranch.json | grep data-manifest-id | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+TEAM_IMAGES_ID=$(cat $DATA_DIR/default-data-manifest-$travisbranch.json | grep team-images-id | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
+echo "Default manifest is Agora Live Data/data_mainfest.csv from agora-data-manager branch $travisbranch: $DATA_MANIFEST_ID.$DATA_VERSION"
 
-  echo "Enter you Synapse password"
-  read synapsepassword
-
-  DATA_DIR='../../data'
-
-  # get data version from agora-data-manager repo
-  wget https://raw.githubusercontent.com/Sage-Bionetworks/agora-data-manager/$travisbranch/data-manifest.json -O $DATA_DIR/data-manifest-$travisbranch.json --no-check-certificate
-
-  # Version key/value should be on his own line
-  DATA_VERSION=$(cat $DATA_DIR/data-manifest-$travisbranch.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-  DATA_MANIFEST_ID=$(cat $DATA_DIR/data-manifest-$travisbranch.json | grep data-manifest-id | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-  TEAM_IMAGES_ID=$(cat $DATA_DIR/data-manifest-$travisbranch.json | grep team-images-id | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
-  echo "data-manifest-$travisbranch.json DATA_VERSION = $DATA_VERSION"
-
-  sed -i 's/\(.*data-version": \)\([^ ]*\)/\1"'"$DATA_VERSION"'",/g' package.json
-
-  # Version key/value should be on his own line
-  # cat package.json | grep data-version | head -1 | awk -F: '{ print $2 }' | sed 's/[^"]*"/$DATA_VERSION/g'
-
-  synapse -u ${synapseusername} -p ${synapsepassword} cat --version $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
-    synapse -u ${synapseusername} -p ${synapsepassword} get --downloadLocation ../data/ -v $version $id ;
+# Prompt user to override the default manifest and/or manifest version if desired
+select oo in "${OVERRIDE_OPTIONS[@]}"; do
+      case $oo in
+          'Use default manifest')
+              echo "Data will be downloaded using the default data manifest file and version: $DATA_MANIFEST_ID.$DATA_VERSION"
+  	          break
+              ;;
+           'Specify manifest override')
+              echo "Select the data_manifest.json file you want to use:"
+              select folder in "${DATA_FOLDERS[@]}"; do
+                  case $folder in
+                      "Agora Live Data (default)")
+                          DATA_MANIFEST_ID=$AGORA_LIVE_DATA_MANIFEST
+                          echo "Using data_manifest.csv $DATA_MANIFEST_ID"
+                          break
+                          ;;
+                      "Agora Testing Data")
+                          DATA_MANIFEST_ID=$AGORA_TESTING_DATA_MANIFEST
+                          echo "Using data_manifest.csv $DATA_MANIFEST_ID"
+                          break
+                          ;;
+                      "Other data_manifest")
+                            echo "Enter the synId of the data_manifest.csv you want to use:"
+                              read DATA_MANIFEST_ID
+                              echo "Using data_manifest.csv $DATA_MANIFEST_ID"
+              	            break
+                          ;;
+                      *) echo "invalid option $REPLY";;
+                  esac
+              done
+              echo "Enter the target data manifest version, or hit enter to default to the latest version:"
+                read DATA_VERSION
+  	          break
+              ;;
+          *) echo "invalid option $REPLY";;
+      esac
   done
 
-  [ -d ../data/team_images/ ] || mkdir ../data/team_images/
-  synapse -u ${synapseusername} -p ${synapsepassword} get -r --downloadLocation ../data/team_images/ $TEAM_IMAGES_ID
-else
-  echo Not a valid branch!
-  exit 1
-fi
+  echo "Downloading files specified in data-manifest.csv ($DATA_MANIFEST_ID) version $DATA_VERSION"
+
+  # login using credentials (PAT preferred) stored in ~/.synapseCredentials (https://python-docs.synapse.org/build/html/Credentials.html#use-synapseconfig)
+  synapse login
+
+  # update package.json to reflect the loaded manifest file and version
+  sed -i '' 's/\(.*data-version": \)\([^ ]*\)/\1"'"$DATA_MANIFEST_ID.$DATA_VERSION"'",/g' package.json
+
+  # iterate through the specified manifest file version to download each referenced file
+  if [[ -z "$DATA_VERSION" ]];
+  then
+    # use the latest manifest version to find the files to download
+    synapse cat $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+      # download the correct version of data_manifest.csv (AG-543)
+      if [[ $DATA_MANIFEST_ID == $id ]]; then
+              version=$DATA_VERSION
+      fi
+      synapse get --downloadLocation $DATA_DIR -v $version $id ;
+      echo "Downloaded $id.$version"
+    done
+  else
+    # iterate over the specified data_manifest version to find the files to download
+    synapse cat --version $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+      # download the correct version of data_manifest.csv (AG-543)
+      if [[ $DATA_MANIFEST_ID == $id ]]; then
+              version=$DATA_VERSION
+      fi
+        synapse get --downloadLocation $DATA_DIR -v $version $id ;
+        echo "Downloaded $id.$version"
+    done
+  fi
+
+#  Download team image files
+  echo "Downloading team image files from $TEAM_IMAGES_ID"
+  synapse get -r --downloadLocation ../data/team_images/ $TEAM_IMAGES_ID
+
