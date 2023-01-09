@@ -26,7 +26,7 @@
     "clean:server": "rimraf ./dist/server.js",
     "clean:app-and-server": "rimraf ./dist",
     "clean:testing": "rimraf ./testing/spec-build coverage",
-    "clean:data": "rimraf ../data/*.json & rimraf ../data/team_images/*.jpg",
+    "clean:data": "rimraf ../data/*.json & rimraf ../data/*.csv & rimraf ../data/team_images/*.jpg",
     "clean:packages": "npm cache clean --force && rimraf ./node_modules",
     "ci:build:develop": "APP_ENV=develop npm run build:dev",
     "ci:build:staging": "APP_ENV=staging npm run build",
