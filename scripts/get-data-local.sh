@@ -1,12 +1,14 @@
 AGORA_LIVE_DATA_MANIFEST='syn13363290'
 AGORA_TESTING_DATA_MANIFEST='syn18387112'
-DATA_DIR='../data'
-TEAM_IMAGES_DIR='../data/team_images/'
+LOCAL_DIR='./local'
+DATA_DIR='./local/data'
+TEAM_IMAGES_DIR='./local/data/team_images/'
+PS3='Please select one of the available options: '
 OVERRIDE_OPTIONS=('Use default manifest' 'Specify manifest override')
 DATA_FOLDERS=("Agora Live Data" "Agora Testing Data" "Other data_manifest")
-PS3='Please select one of the available options: '
 
 # Create the data directory and team_images subdirectory if they don't already exist
+[ -d $LOCAL_DIR ] || mkdir $LOCAL_DIR
 [ -d $DATA_DIR ] || mkdir $DATA_DIR
 [ -d $TEAM_IMAGES_DIR ] || mkdir $TEAM_IMAGES_DIR
 echo "Data directory: $DATA_DIR"
@@ -106,4 +108,4 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
 
 #  Download team image files
   echo "Downloading team image files from $TEAM_IMAGES_ID"
-  synapse get -r --downloadLocation ../data/team_images/ $TEAM_IMAGES_ID
+  synapse get -r --downloadLocation $TEAM_IMAGES_DIR $TEAM_IMAGES_ID
