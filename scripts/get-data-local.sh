@@ -3,7 +3,7 @@ AGORA_TESTING_DATA_MANIFEST='syn18387112'
 DATA_DIR='../data'
 TEAM_IMAGES_DIR='../data/team_images/'
 OVERRIDE_OPTIONS=('Use default manifest' 'Specify manifest override')
-DATA_FOLDERS=("Agora Live Data (default)" "Agora Testing Data" "Other data_manifest")
+DATA_FOLDERS=("Agora Live Data" "Agora Testing Data" "Other data_manifest")
 PS3='Please select one of the available options: '
 
 # Create the data directory and team_images subdirectory if they don't already exist
@@ -43,20 +43,17 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
               echo "Select the data_manifest.json file you want to use:"
               select folder in "${DATA_FOLDERS[@]}"; do
                   case $folder in
-                      "Agora Live Data (default)")
+                      "Agora Live Data")
                           DATA_MANIFEST_ID=$AGORA_LIVE_DATA_MANIFEST
-                          echo "Using data_manifest.csv $DATA_MANIFEST_ID"
                           break
                           ;;
                       "Agora Testing Data")
                           DATA_MANIFEST_ID=$AGORA_TESTING_DATA_MANIFEST
-                          echo "Using data_manifest.csv $DATA_MANIFEST_ID"
                           break
                           ;;
                       "Other data_manifest")
                             echo "Enter the synId of the data_manifest.csv you want to use:"
                               read DATA_MANIFEST_ID
-                              echo "Using data_manifest.csv $DATA_MANIFEST_ID"
               	            break
                           ;;
                       *) echo "invalid option $REPLY";;
@@ -70,7 +67,7 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
       esac
   done
 
-  echo "Downloading files specified in data-manifest.csv ($DATA_MANIFEST_ID) version $DATA_VERSION"
+  echo "Downloading files specified in data-manifest.csv $DATA_MANIFEST_ID.$DATA_VERSION"
 
   # login using credentials (PAT preferred) stored in ~/.synapseCredentials (https://python-docs.synapse.org/build/html/Credentials.html#use-synapseconfig)
   synapse login
@@ -78,31 +75,35 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
   # update package.json to reflect the loaded manifest file and version
   sed -i '' 's/\(.*data-version": \)\([^ ]*\)/\1"'"$DATA_MANIFEST_ID.$DATA_VERSION"'",/g' package.json
 
-  # iterate through the specified manifest file version to download each referenced file
-  if [[ -z "$DATA_VERSION" ]];
-  then
-    # use the latest manifest version to find the files to download
-    synapse cat $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
-      # download the correct version of data_manifest.csv (AG-543)
-      if [[ $DATA_MANIFEST_ID == $id ]]; then
-              version=$DATA_VERSION
-      fi
-      synapse get --downloadLocation $DATA_DIR -v $version $id ;
-      echo "Downloaded $id.$version"
-    done
-  else
-    # iterate over the specified data_manifest version to find the files to download
-    synapse cat --version $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
-      # download the correct version of data_manifest.csv (AG-543)
-      if [[ $DATA_MANIFEST_ID == $id ]]; then
-              version=$DATA_VERSION
-      fi
-        synapse get --downloadLocation $DATA_DIR -v $version $id ;
-        echo "Downloaded $id.$version"
-    done
+  # read and iterate over the specified data_manifest.csv to download files
+  # if no manifest version was specified, read the latest version
+  if [[ -z "$DATA_VERSION" ]]; then
+      synapse cat $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+        # if data_manifest.csv references its own synId (older versions don't), download the latest version
+        if [[ $DATA_MANIFEST_ID == $id ]]; then
+          synapse get --downloadLocation $DATA_DIR $id ;
+          echo "Downloaded most recent version of $id"
+        # download the files and versions specified in the manifest
+        else
+          synapse get --downloadLocation $DATA_DIR -v $version $id ;
+          echo "Downloaded $id.$version"
+        fi
+      done
+    # otherwise read the specified version of the data_manifest.csv
+    else
+      synapse cat -v $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+        # if data_manifest.csv references its own synId (older versions don't), download the correct version (AG-543)
+        if [[ $DATA_MANIFEST_ID == $id ]]; then
+          synapse get --downloadLocation $DATA_DIR -v $DATA_VERSION $id ;
+          echo "Downloaded data_manifest.csv $id.$DATA_VERSION"
+        # download the files and versions specified in the manifest
+        else
+          synapse get --downloadLocation $DATA_DIR -v $version $id ;
+          echo "Downloaded $id.$version"
+        fi
+      done
   fi
 
 #  Download team image files
   echo "Downloading team image files from $TEAM_IMAGES_ID"
   synapse get -r --downloadLocation ../data/team_images/ $TEAM_IMAGES_ID
-
