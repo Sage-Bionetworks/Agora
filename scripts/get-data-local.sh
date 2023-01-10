@@ -75,7 +75,8 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
   synapse login
 
   # update package.json to reflect the loaded manifest file and version
-  sed -i '' 's/\(.*data-version": \)\([^ ]*\)/\1"'"$DATA_MANIFEST_ID.$DATA_VERSION"'",/g' package.json
+  sed -i '' 's/\(.*data-file": \)\([^ ]*\)/\1"'"$DATA_MANIFEST_ID"'",/g' package.json
+  sed -i '' 's/\(.*data-version": \)\([^ ]*\)/\1"'"$DATA_VERSION"'",/g' package.json
 
   # read and iterate over the specified data_manifest.csv to download files
   # if no manifest version was specified, read the latest version
@@ -109,3 +110,5 @@ select oo in "${OVERRIDE_OPTIONS[@]}"; do
 #  Download team image files
   echo "Downloading team image files from $TEAM_IMAGES_ID"
   synapse get -r --downloadLocation $TEAM_IMAGES_DIR $TEAM_IMAGES_ID
+
+  exit 0
