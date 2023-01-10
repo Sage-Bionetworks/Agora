@@ -65,6 +65,7 @@ describe('Component: Footer', () => {
     const el = element.querySelector('.data-version') as HTMLElement;
     expect(el).toBeTruthy();
     expect(el.textContent).not.toEqual('');
+    expect(el.textContent).withContext('You are trying to merge a non-production data version').toContain('syn13363290');
   });
 
   it('should navigate when clicking on logo', fakeAsync(() => {
