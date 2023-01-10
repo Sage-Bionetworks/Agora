@@ -33,6 +33,7 @@
     "ci:build:prod": "APP_ENV=prod npm run build",
     "ci:clean": "npm run clean:packages",
     "ci:zip": "zip /tmp/agora-app.zip -qr9 * .[^.]*",
+    "data:local:mongo": "npm run data:local && npm run mongo:import && npm run mongo:create:indexes",
     "mongo:import": "sh ./scripts/mongo-import.sh",
     "mongo:create:indexes": "mongo --host localhost ./scripts/mongo-create-Indexes.js",
     "mongo:start": "sh ./scripts/start-mongo.sh '/var/lib/mongodb/'",

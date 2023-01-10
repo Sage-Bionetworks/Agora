@@ -1,4 +1,4 @@
-cd ../data
+cd ./local/data
 
 # Imports the data and wipes the current collections
 # Not using --mode upsert fow now because we don't have unique indexes properly set for the collections
@@ -20,3 +20,5 @@ mongoimport --db agora --collection genesbiodomains --jsonArray --drop --file ./
 
 cd ./team_images
 ls -1r *.jpg *.jpeg *.png | while read x; do mongofiles -d agora -v put $x --replace; echo $x; done
+
+cd ../..
