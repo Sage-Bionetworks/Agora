@@ -111,6 +111,14 @@ if (app.get('env') === 'development') {
   });
 }
 
+//http to https redirects
+app.get('/', (req: Request, res: Response) => {
+    if (req.protocol == 'http') {
+        res.redirect('https://' +
+        req.get('host') + req.originalUrl);
+    }
+});
+
 // -------------------------------------------------------------------------- //
 // Server
 // -------------------------------------------------------------------------- //
