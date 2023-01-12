@@ -81,7 +81,7 @@ export class GeneTableComponent implements OnInit {
 
   @Input() className = '';
   @Input() heading = 'Nominated Target List';
-  @Input() exportFilename = 'gene-list.csv';
+  @Input() exportFilename = 'gene-list';
   @Input() gctLink: boolean | { [key: string]: string } = false;
   @Input() gctLinkTooltip =
     'Use Agora Gene Comparison Tool to compare all genes in this list.';
