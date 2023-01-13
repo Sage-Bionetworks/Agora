@@ -74,13 +74,13 @@ export class GeneSoeChartsComponent implements OnInit {
     const scores: OverallScores =
       this._gene?.overall_scores || ({} as OverallScores);
 
-    if ('Genetics Score' === name) {
+    if ('Genetic Risk Score' === name) {
       return scores['genetics_score'] || 0;
-    } else if ('Genomics Score' === name) {
+    } else if ('Multi-omic Risk Score' === name) {
       return scores['multi_omics_score'] || 0;
     } else if ('Literature Score' === name) {
       return scores['literature_score'] || 0;
-    } else if ('Overall Score' === name) {
+    } else if ('Target Risk Score' === name) {
       return scores['target_risk_score'] || 0;
     }
 
