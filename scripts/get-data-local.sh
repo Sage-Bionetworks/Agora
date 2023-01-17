@@ -36,37 +36,37 @@ echo "Default manifest is Agora Live Data/data_mainfest.csv from agora-data-mana
 
 # Prompt user to override the default manifest and/or manifest version if desired
 select oo in "${OVERRIDE_OPTIONS[@]}"; do
-      case $oo in
-          'Use default manifest')
-              echo "Data will be downloaded using the default data manifest file and version: $DATA_MANIFEST_ID.$DATA_VERSION"
-  	          break
-              ;;
-           'Specify manifest override')
-              echo "Select the data_manifest.json file you want to use:"
-              select folder in "${DATA_FOLDERS[@]}"; do
-                  case $folder in
-                      "Agora Live Data")
-                          DATA_MANIFEST_ID=$AGORA_LIVE_DATA_MANIFEST
-                          break
-                          ;;
-                      "Agora Testing Data")
-                          DATA_MANIFEST_ID=$AGORA_TESTING_DATA_MANIFEST
-                          break
-                          ;;
-                      "Other data_manifest")
-                            echo "Enter the synId of the data_manifest.csv you want to use:"
-                              read DATA_MANIFEST_ID
-              	            break
-                          ;;
-                      *) echo "invalid option $REPLY";;
-                  esac
-              done
-              echo "Enter the target data manifest version, or hit enter to default to the latest version:"
-                read DATA_VERSION
-  	          break
-              ;;
-          *) echo "invalid option $REPLY";;
+  case $oo in
+  'Use default manifest')
+    echo "Data will be downloaded using the default data manifest file and version: $DATA_MANIFEST_ID.$DATA_VERSION"
+    break
+    ;;
+  'Specify manifest override')
+    echo "Select the data_manifest.json file you want to use:"
+    select folder in "${DATA_FOLDERS[@]}"; do
+      case $folder in
+      "Agora Live Data")
+        DATA_MANIFEST_ID=$AGORA_LIVE_DATA_MANIFEST
+        break
+        ;;
+      "Agora Testing Data")
+        DATA_MANIFEST_ID=$AGORA_TESTING_DATA_MANIFEST
+        break
+        ;;
+      "Other data_manifest")
+        echo "Enter the synId of the data_manifest.csv you want to use:"
+        read DATA_MANIFEST_ID
+        break
+        ;;
+      *) echo "invalid option $REPLY" ;;
       esac
+    done
+    echo "Enter the target data manifest version, or hit enter to default to the latest version:"
+    read DATA_VERSION
+    break
+    ;;
+  *) echo "invalid option $REPLY" ;;
+  esac
 done
 
 echo "Downloading files specified in data-manifest.csv $DATA_MANIFEST_ID.$DATA_VERSION"
@@ -77,30 +77,30 @@ synapse login
 # iterate over the specified data_manifest.csv to download files
 # if no manifest version was specified, read the latest version of the specified manifest file
 if [[ -z "$DATA_VERSION" ]]; then
-    synapse cat $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
-      # if data_manifest.csv references its own synId (older versions don't), download the latest version
-      if [[ $DATA_MANIFEST_ID == $id ]]; then
-        synapse get --downloadLocation $DATA_DIR $id ;
-        echo "Downloaded most recent version of $id"
-      # download the files and versions specified in the manifest
-      else
-        synapse get --downloadLocation $DATA_DIR -v $version $id ;
-        echo "Downloaded $id.$version"
-      fi
-    done
+  synapse cat $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+    # if data_manifest.csv references its own synId (older versions don't), download the latest version
+    if [[ $DATA_MANIFEST_ID == $id ]]; then
+      synapse get --downloadLocation $DATA_DIR $id
+      echo "Downloaded most recent version of $id"
+    # download the files and versions specified in the manifest
+    else
+      synapse get --downloadLocation $DATA_DIR -v $version $id
+      echo "Downloaded $id.$version"
+    fi
+  done
 # otherwise iterate over the specified version of the data_manifest.csv
 else
-    synapse cat -v $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
-      # if data_manifest.csv references its own synId (older versions don't), download the correct version (AG-543)
-      if [[ $DATA_MANIFEST_ID == $id ]]; then
-        synapse get --downloadLocation $DATA_DIR -v $DATA_VERSION $id ;
-        echo "Downloaded data_manifest.csv $id.$DATA_VERSION"
-      # download the files and versions specified in the manifest
-      else
-        synapse get --downloadLocation $DATA_DIR -v $version $id ;
-        echo "Downloaded $id.$version"
-      fi
-    done
+  synapse cat -v $DATA_VERSION $DATA_MANIFEST_ID | tail -n +2 | while IFS=, read -r id version; do
+    # if data_manifest.csv references its own synId (older versions don't), download the correct version (AG-543)
+    if [[ $DATA_MANIFEST_ID == $id ]]; then
+      synapse get --downloadLocation $DATA_DIR -v $DATA_VERSION $id
+      echo "Downloaded data_manifest.csv $id.$DATA_VERSION"
+    # download the files and versions specified in the manifest
+    else
+      synapse get --downloadLocation $DATA_DIR -v $version $id
+      echo "Downloaded $id.$version"
+    fi
+  done
 fi
 
 # update package.json to reflect the loaded manifest file and version
