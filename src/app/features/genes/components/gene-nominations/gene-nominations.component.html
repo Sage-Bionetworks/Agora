@@ -41,9 +41,9 @@
             </p>
           </div>
 
-          <div class="mb-xl">
+          <div class="mb-xl" *ngIf="nomination.study || nomination.data_used_to_support_target_selection">
             <h3>The type of data used and analyses done to identify target</h3>
-            <p>
+            <p *ngIf="nomination.data_used_to_support_target_selection">
               {{ nomination.data_used_to_support_target_selection }}
             </p>
             <p *ngIf="nomination.study">

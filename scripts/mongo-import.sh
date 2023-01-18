@@ -1,4 +1,4 @@
-# cd ../../data
+cd ../data
 
 # Imports the data and wipes the current collections
 # Not using --mode upsert fow now because we don't have unique indexes properly set for the collections
@@ -15,6 +15,7 @@ mongoimport --db agora --collection genesoverallscores --jsonArray --drop --file
 mongoimport --db agora --collection rnaboxdistribution --jsonArray --drop --file ./rna_distribution_data.json
 mongoimport --db agora --collection proteomicsboxdistribution --jsonArray --drop --file ./proteomics_distribution_data.json
 mongoimport --db agora --collection proteomicstmt --jsonArray --drop --file ./proteomics_tmt.json
+mongoimport --db agora --collection genesbiodomains --jsonArray --drop --file ./biodomains.json
 
 
 cd ./team_images
