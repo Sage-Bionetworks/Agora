@@ -41,21 +41,17 @@ export class GeneNominationsComponent {
       const teamNames = this._gene?.nominatedtarget.map((n) => n.team);
 
       if (teamNames) {
-        // Loop teams to keep order
-        teams.forEach((team: Team) => {
-          const index = teamNames.indexOf(team.team);
-
+        for (let i=0; i<teams.length; i++) {
+          const index = teamNames.indexOf(teams[i].team);
           if (index > -1) {
             const nomination = this._gene?.nominatedtarget[index];
-
             if (nomination) {
-              nomination.team_data = team;
+              nomination.team_data = teams[i];
               nominations.push(nomination);
             }
           }
-        });
+        }
       }
-
       this.nominations = nominations;
     });
   }
