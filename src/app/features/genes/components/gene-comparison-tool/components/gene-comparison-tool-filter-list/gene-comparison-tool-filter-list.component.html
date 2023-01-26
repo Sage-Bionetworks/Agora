@@ -10,13 +10,6 @@
       <ng-container *ngFor="let filter of filters; index as i">
         <ng-container *ngFor="let option of filter.options; index as j">
           <div *ngIf="option.selected" class="gct-filter-list-item">
-            <div>
-              <button class="gct-filter-list-item-handle">
-                <span></span>
-                <span></span>
-                <span></span>
-              </button>
-            </div>
             <div class="gct-filter-list-item-text">
               <b>{{ filter.short }}:</b>&nbsp;<span>{{ option.label }}</span>
             </div>
