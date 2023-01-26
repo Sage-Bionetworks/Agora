@@ -58,6 +58,10 @@
     align-items: center;
   }
 
+  .gct-filter-list-item-text > *:hover {
+    cursor: default;
+  }
+
   .gct-filter-list-item-clear {
     cursor: pointer;
     margin-left: 12px;
