@@ -39,8 +39,6 @@
     "mongo:start": "sh ./scripts/start-mongo.sh '/var/lib/mongodb/'",
     "mongo:start:windows": "sh ./scripts/start-mongo.sh 'C:\\data\\db'",
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
-    "data:local-aws": "npm run clean:data && sh ./scripts/get-data-local-aws.sh",
-    "data:aws": "npm run clean:data && sh ./scripts/get-data-aws.sh",
     "cypress": "cypress",
     "cypress:run": "cypress run --config-file ./config/cypress.config.js"
   },
