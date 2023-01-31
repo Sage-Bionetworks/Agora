@@ -223,14 +223,14 @@ by the CI system.
 
 - https://app.travis-ci.com/github/Sage-Bionetworks/Agora
 
-## Deployment for New Data (Updated 9/8/22)
+## Deployment for New Data (Updated 1/31/23)
 
 1. Ensure the new data files are available in the [Synapse Agora Live Data folder](https://www.synapse.org/#!Synapse:syn12177492).
 2. Determine the version number of the `data_manifest.csv` file to use for the data release:
    1. The manifest must specify the appropriate version of each json file for the data release 
    2. If a suitable `data_manifest.csv` does not exist, you can manually generate one and upload it to [Synapse](https://www.synapse.org/#!Synapse:syn13363290)
 3. Update data version in `data-manifest.json` in [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/). ([example](https://github.com/Sage-Bionetworks/agora-data-manager/commit/d9006f01ae01b6c896bdc075e02ae1b683ecfd65)):
-   1. The version should match the version of the desired `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290).
+   1. The version should match the version of the desired `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Note that the manifest references itself internally, but the version in that internal reference is always off by one. Use the manifest version surfaced via the Synapse UI, not the one in the manifest.
 4. If there is a new json file (i.e. not updating existing data):
    1. add an entry for the new file to agora-data-manager's `import-data.sh` script. ([example](https://github.com/Sage-Bionetworks/agora-data-manager/pull/66/files))
    2. add an entry for the new collection to agora-data-manager's `create-indexes.sh` script ([example](https://github.com/Sage-Bionetworks/agora-data-manager/pull/60/files))
