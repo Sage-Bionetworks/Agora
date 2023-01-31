@@ -14,11 +14,11 @@ export { OverallScores, OverallScoresDistribution } from '../../app/models';
 // -------------------------------------------------------------------------- //
 const OverallScoresSchema = new Schema<OverallScores>(
   {
-    ENSG: { type: String, required: true },
-    Logsdon: { type: Number, required: true },
-    GeneticsScore: { type: Number, required: true },
-    OmicsScore: { type: Number, required: true },
-    LiteratureScore: { type: Number, required: true },
+    ensembl_gene_id: { type: String, required: true },
+    target_risk_score: { type: Number, required: true },
+    genetics_score: { type: Number, required: true },
+    multi_omics_score: { type: Number, required: true },
+    literature_score: { type: Number, required: true },
   },
   { collection: 'genesoverallscores' }
 );
