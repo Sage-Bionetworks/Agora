@@ -44,10 +44,10 @@ export class GeneSoeListComponent {
         property: {
           title: 'Genetic Association with LOAD',
           description:
-            'Indicates whether or not this gene shows significant genetic association with Late Onset AD (LOAD) based on the',
-          link: 'https://doi.org/10.1038/s41588-019-0358-2',
+            'Indicates whether or not this gene shows significant genetic association with Late Onset AD (LOAD) based on evidence from multiple studies compiled by the',
+          link: 'https://adsp.niagads.org/index.php/gvc-top-hits-list/',
           anchorText:
-            'International Genomics of Alzheimer’s Project (IGAP) genome-wide association study',
+            'ADSP Gene Verification Committee',
         },
         state: this._gene.isIGAP === undefined ? false : this._gene.isIGAP,
         isStateApplicable: true,

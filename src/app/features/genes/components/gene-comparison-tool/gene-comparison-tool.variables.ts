@@ -53,7 +53,7 @@ export const filters: GCTFilter[] = [
       {
         label: 'All Nominated targets',
         preset: {
-          nominations: [1, 2, 3, 4],
+          nominations: [1, 2, 3, 4, 5],
         },
       },
       {
