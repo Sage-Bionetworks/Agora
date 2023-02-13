@@ -9,3 +9,4 @@ export * from './proteomics';
 export * from './metabolomics';
 export * from './distribution';
 export * from './teams';
+export * from './scores';

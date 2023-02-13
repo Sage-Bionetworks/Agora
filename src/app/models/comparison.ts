@@ -30,6 +30,9 @@ export interface GCTGene {
   tissues: GCTGeneTissue[];
   nominations?: GCTGeneNominations;
   associations?: number[];
+  target_risk_score: number | null;
+  genetics_score: number | null;
+  multi_omics_score: number | null;
   pinned?: boolean;
 }
 

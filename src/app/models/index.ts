@@ -12,3 +12,4 @@ export * from './teams';
 export * from './misc';
 export * from './synapse';
 export * from './charts';
+export * from './scores';

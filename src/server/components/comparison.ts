@@ -7,7 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 // Internal
 // -------------------------------------------------------------------------- //
 import { setHeaders, altCache } from '../helpers';
-import { getGenesMap, getTeams } from './';
+import { getGenesMap, getAllScores, getTeams } from './';
 import {
   Gene,
   GCTGene,
@@ -19,7 +19,7 @@ import {
   ProteomicsTMTCollection,
   Team,
 } from '../models';
-import { NominatedTarget } from '../../app/models';
+import { NominatedTarget, Scores } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -112,13 +112,18 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
   return data;
 }
 
-function getComparisonGene(gene: Gene, teams: Team[]) {
+function getComparisonGene(gene: Gene, teams: Team[], scores: Scores[]) {
+  const geneScores = scores.find(score => score.ensembl_gene_id == gene.ensembl_gene_id);
+  
   const data: GCTGene = {
     ensembl_gene_id: gene.ensembl_gene_id || '',
     hgnc_symbol: gene.hgnc_symbol || '',
     tissues: [],
     nominations: getComparisonGeneNominations(gene, teams),
     associations: getComparisonGeneAssociations(gene),
+    target_risk_score: geneScores ? geneScores.target_risk_score : null,
+    genetics_score: geneScores ? geneScores.genetics_score: null,
+    multi_omics_score: geneScores ? geneScores.multi_omics_score : null
   };
 
   return data;
@@ -145,6 +150,7 @@ export async function getRnaComparisonGenes(model: string) {
     const genes: { [key: string]: GCTGene } = {};
     const allGenes = await getGenesMap();
     const teams = await getTeams();
+    const scores = await getAllScores();
 
     differentialExpression.forEach((exp: RnaDifferentialExpression) => {
       if (!genes[exp.ensembl_gene_id]) {
@@ -154,7 +160,7 @@ export async function getRnaComparisonGenes(model: string) {
             ensembl_gene_id: exp.ensembl_gene_id || '',
             hgnc_symbol: exp.hgnc_symbol || '',
           } as Gene);
-        genes[exp.ensembl_gene_id] = getComparisonGene(gene, teams);
+        genes[exp.ensembl_gene_id] = getComparisonGene(gene, teams, scores);
       }
 
       genes[exp.ensembl_gene_id].tissues.push({
@@ -200,6 +206,7 @@ export async function getProteinComparisonGenes(method: string) {
     const genes: { [key: string]: GCTGene } = {};
     const allGenes = await getGenesMap();
     const teams = await getTeams();
+    const scores = await getAllScores();
 
     items.forEach((item: ProteinDifferentialExpression) => {
       if (!genes[item.uniqid]) {
@@ -209,7 +216,7 @@ export async function getProteinComparisonGenes(method: string) {
             ensembl_gene_id: item.ensembl_gene_id || '',
             hgnc_symbol: item.hgnc_symbol || '',
           } as Gene);
-        genes[item.uniqid] = getComparisonGene(gene, teams);
+        genes[item.uniqid] = getComparisonGene(gene, teams, scores);
         genes[item.uniqid].uniprotid = item.uniprotid;
       }
 
