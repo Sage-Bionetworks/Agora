@@ -42,11 +42,14 @@ export class GeneSoeChartsComponent implements OnInit {
 
   init() {
     this.geneService.getDistribution().subscribe((data: any) => {
-      const overallScoreDistribution = data.overall_scores;
+      let overallScoreDistribution = data.overall_scores;
 
       overallScoreDistribution.sort((a: any, b: any) =>
         a.name > b.name ? 1 : -1
       );
+
+      //remove literature score
+      overallScoreDistribution = overallScoreDistribution.filter((item: any) => (item.name !== 'Literature Score'));
 
       this.charts = overallScoreDistribution.map((item: any) => {
         const distribution: any = [];
@@ -74,14 +77,14 @@ export class GeneSoeChartsComponent implements OnInit {
     const scores: OverallScores =
       this._gene?.overall_scores || ({} as OverallScores);
 
-    if ('Genetics Score' === name) {
-      return scores['GeneticsScore'] || 0;
-    } else if ('Genomics Score' === name) {
-      return scores['OmicsScore'] || 0;
+    if ('Genetic Risk Score' === name) {
+      return scores['genetics_score'] || 0;
+    } else if ('Multi-omic Risk Score' === name) {
+      return scores['multi_omics_score'] || 0;
     } else if ('Literature Score' === name) {
-      return scores['LiteratureScore'] || 0;
-    } else if ('Overall Score' === name) {
-      return scores['Logsdon'] || 0;
+      return scores['literature_score'] || 0;
+    } else if ('Target Risk Score' === name) {
+      return scores['target_risk_score'] || 0;
     }
 
     return 0;

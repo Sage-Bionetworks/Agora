@@ -785,11 +785,11 @@ export const geneMock1: Gene = {
     },
   ],
   overall_scores: {
-    ENSG: 'ENSG00000147065',
-    Logsdon: 3.27647279338428,
-    GeneticsScore: 0.36140442487816,
-    OmicsScore: 1.99912990696766,
-    LiteratureScore: 0.915938461538462,
+    ensembl_gene_id: 'ENSG00000147065',
+    target_risk_score: 3.27647279338428,
+    genetics_score: 0.36140442487816,
+    multi_omics_score: 1.99912990696766,
+    literature_score: 0.915938461538462,
   },
   experimental_validation: [
     {

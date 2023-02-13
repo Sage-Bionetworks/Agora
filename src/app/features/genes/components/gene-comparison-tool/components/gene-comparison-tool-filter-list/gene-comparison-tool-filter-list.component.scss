@@ -58,19 +58,8 @@
     align-items: center;
   }
 
-  .gct-filter-list-item-handle {
-    margin-right: 12px;
-
-    span {
-      display: block;
-      width: 10px;
-      height: 2px;
-      background-color: var(--color-action-primary);
-
-      &:not(:last-child) {
-        margin-bottom: 2px;
-      }
-    }
+  .gct-filter-list-item-text > *:hover {
+    cursor: default;
   }
 
   .gct-filter-list-item-clear {
