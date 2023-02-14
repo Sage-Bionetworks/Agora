@@ -148,11 +148,22 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* Genes
   /* ----------------------------------------------------------------------- */
 
+  getScoreForNumericColumn(columnName: string, gene: GCTGene) {
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[0]) {
+      return gene.genetics_score;
+    }
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[1]) {
+      return gene.multi_omics_score;
+    }
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[2]) {
+      return gene.target_risk_score;
+    }
+    return null;
+  }
+
   loadGenes() {
     this.helperService.setLoading(true);
     this.genes = [];
-
-
 
     this.geneService
       .getComparisonGenes(this.category, this.subCategory)
@@ -241,15 +252,6 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       if (!columns.includes(columnName))
         columns.unshift(columnName);  
     });
-    const geneticColumnName = 'GENETIC';
-    if (!columns.includes(geneticColumnName))
-      columns.unshift(geneticColumnName);
-    const multiomicsColumnName = 'MULTI-OMICS';
-    if (!columns.includes(multiomicsColumnName))
-      columns.unshift(multiomicsColumnName);
-    const riskScoreColumnName = 'RISK SCORE';
-    if (!columns.includes(riskScoreColumnName))
-      columns.unshift(riskScoreColumnName);
     
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
@@ -482,29 +484,24 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       return;
     }
     if (this.COLUMN_NAMES_WITH_NUMERICS.indexOf(event.field) > -1) {
-      // if it is one of the scores
+      // if it is one of the numeric scores
       event.data.sort((a, b) => {
-        // if target_risk_score
-        const value1 = a.target_risk_score;
-        const value2 = b.target_risk_score;
-        let result = null;
-
-        if (value1 == null && value2 != null)
-          result = -1;
-        else if (value1 != null && value2 == null)
-          result = 1;
-        else if (value1 == null && value2 == null)
-          result = 0;
-        else if (typeof value1 === 'string' && typeof value2 === 'string')
-          result = value1.localeCompare(value2);
-        else
-          result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
-
+        const value1 = this.getScoreForNumericColumn(event.field as string, a);
+        const value2 = this.getScoreForNumericColumn(event.field as string, b);
+        
+        if (value1 === value2)
+          return 0; // equal so don't do anything
+        if (value1 === null)
+          return 1; // sort null after everything
+        if (value2 === null)
+          return -1; // sort null after everything
+        
+        const result = (value1 < value2) ? -1 : 1;
         return (order * result);
       });
     } else {
       //it's one of the tissues
-      event.data?.sort((a, b) => {
+      event.data.sort((a, b) => {
         let result = null;
 
         a = a.tissues.find(
