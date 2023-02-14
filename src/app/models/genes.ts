@@ -6,7 +6,6 @@ import {
   OverallScores,
   NeuropathologicCorrelation,
   SimilarGenesNetwork,
-  Scores,
 } from './';
 
 export interface NominatedTarget {
@@ -73,7 +72,6 @@ export interface Gene {
   proteomics_LFQ?: ProteinDifferentialExpression[];
   proteomics_TMT?: ProteinDifferentialExpression[];
   metabolomics?: any; // TODO change;
-  scores: Scores;
   overall_scores?: OverallScores;
   neuropathologic_correlations?: NeuropathologicCorrelation[];
   experimental_validation?: ExperimentalValidation[];

@@ -62,8 +62,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   columns: string[] = [];
   columnWidth = 'auto';
 
-  COLUMNS_WITH_NUMERICS = ['RISK SCORE','MULTI-OMICS','GENETIC'];
-
+  COLUMN_NAMES_WITH_NUMERICS = ['GENETIC','MULTI-OMICS','RISK SCORE'];
   /* Sort ------------------------------------------------------------------ */
   sortField = '';
   sortOrder = -1;
@@ -237,8 +236,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
     columns.sort();
     this.columns = columns;
-
     // add scores columns
+    this.COLUMN_NAMES_WITH_NUMERICS.forEach((columnName) => {
+      if (!columns.includes(columnName))
+        columns.unshift(columnName);  
+    });
     const geneticColumnName = 'GENETIC';
     if (!columns.includes(geneticColumnName))
       columns.unshift(geneticColumnName);
@@ -479,7 +481,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     if (!event.field || !event.data) {
       return;
     }
-    if (this.COLUMNS_WITH_NUMERICS.indexOf(event.field) > -1) {
+    if (this.COLUMN_NAMES_WITH_NUMERICS.indexOf(event.field) > -1) {
       // if it is one of the scores
       event.data.sort((a, b) => {
         // if target_risk_score

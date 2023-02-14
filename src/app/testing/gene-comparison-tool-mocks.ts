@@ -81,6 +81,9 @@ export const comparisonGeneMock1: GCTGene = {
     ],
   },
   associations: [3, 4],
+  target_risk_score: 3.1,
+  genetics_score: 2.2,
+  multi_omics_score: 3.3
 };
 
 export const comparisonGeneMock2: GCTGene = {
@@ -164,6 +167,9 @@ export const comparisonGeneMock2: GCTGene = {
     ],
   },
   associations: [2, 3, 4],
+  target_risk_score: 2.1,
+  genetics_score: 4.2,
+  multi_omics_score: 1.3
 };
 
 export const gctDetailsPanelDataMock: GCTDetailsPanelData = {

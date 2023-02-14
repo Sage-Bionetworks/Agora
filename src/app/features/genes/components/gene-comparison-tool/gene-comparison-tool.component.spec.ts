@@ -183,4 +183,28 @@ describe('Component: GeneComparisonToolComponent', () => {
     expect(component.pinnedGenes.length).toEqual(0);
     flush();
   }));
+
+  it('should have a grid with 12 columns', fakeAsync(() => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns.length).toEqual(12);
+  }));
+ 
+  it('should have a grid with RISK SCORE being the 1st column', fakeAsync(() => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[0]).toEqual('RISK SCORE');
+  }));
+
+  it('should have a grid with MULTI-OMICS being the 2nd column', fakeAsync(() => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[1]).toEqual('MULTI-OMICS');
+  }));
+
+  it('should have a grid with GENETIC being the 3rd column', fakeAsync(() => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[2]).toEqual('GENETIC');
+  }));
 });
