@@ -1,7 +1,6 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { sortedLastIndex } from 'lodash';
 import { cache } from '../helpers';
 import { Scores, ScoresCollection } from '../models';
 
