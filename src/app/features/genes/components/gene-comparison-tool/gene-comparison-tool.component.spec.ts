@@ -10,7 +10,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
 
@@ -183,4 +183,174 @@ describe('Component: GeneComparisonToolComponent', () => {
     expect(component.pinnedGenes.length).toEqual(0);
     flush();
   }));
+
+  it('should have a grid with 12 columns', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns.length).toEqual(12);
+  });
+ 
+  it('should have a grid with RISK SCORE being the 1st column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[0]).toEqual('RISK SCORE');
+  });
+
+  it('should have a grid with MULTI-OMICS being the 2nd column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[1]).toEqual('MULTI-OMICS');
+  });
+
+  it('should have a grid with GENETIC being the 3rd column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[2]).toEqual('GENETIC');
+  });
+
+  it('should have a grid with ACC being the 4th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[3]).toEqual('ACC');
+  });
+
+  it('should have a grid with ACC being the 5th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[4]).toEqual('CBE');
+  });
+
+  it('should have a grid with DLPFC being the 6th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[5]).toEqual('DLPFC');
+  });
+
+  it('should have a grid with FP being the 7th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[6]).toEqual('FP');
+  });
+
+  it('should have a grid with IFG being the 8th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[7]).toEqual('IFG');
+  });
+
+  it('should have a grid with PCC being the 9th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[8]).toEqual('PCC');
+  });
+
+  it('should have a grid with PHG being the 10th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[9]).toEqual('PHG');
+  });
+
+  it('should have a grid with STG being the 11th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[10]).toEqual('STG');
+  });
+
+  it('should have a grid with TCX being the 12th column', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    expect(component.columns[11]).toEqual('TCX');
+  });
+
+  it('sortCallback() should sort increasing', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    const event: SortEvent = {
+      field: 'RISK SCORE',
+      order: 1,
+      data: [
+        { target_risk_score: 1 },
+        { target_risk_score: -2 },
+        { target_risk_score: 3 }
+      ],
+    };
+    component.sortCallback(event);
+    if (!event.data)
+      fail('Missing data');
+    else {
+      expect(event.data[0].target_risk_score).toEqual(-2);
+      expect(event.data[1].target_risk_score).toEqual(1);
+      expect(event.data[2].target_risk_score).toEqual(3);
+    }
+  });
+
+  it('sortCallback() should sort null last for increasing', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    const event: SortEvent = {
+      field: 'RISK SCORE',
+      order: 1,
+      data: [
+        { target_risk_score: null },
+        { target_risk_score: 1 },
+        { target_risk_score: -2 },
+        { target_risk_score: 3 }
+      ],
+    };
+    component.sortCallback(event);
+    if (!event.data)
+      fail('Missing data');
+    else {
+      expect(event.data[0].target_risk_score).toEqual(-2);
+      expect(event.data[1].target_risk_score).toEqual(1);
+      expect(event.data[2].target_risk_score).toEqual(3);
+      expect(event.data[3].target_risk_score).toEqual(null);
+    }
+  });
+
+  it('sortCallback() should sort decreasing', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    const event: SortEvent = {
+      field: 'RISK SCORE',
+      order: -1,
+      data: [
+        { target_risk_score: 1 },
+        { target_risk_score: -2 },
+        { target_risk_score: 3 }
+      ],
+    };
+    component.sortCallback(event);
+    if (!event.data)
+      fail('Missing data');
+    else {
+      expect(event.data[0].target_risk_score).toEqual(3);
+      expect(event.data[1].target_risk_score).toEqual(1);
+      expect(event.data[2].target_risk_score).toEqual(-2);
+    }
+  });
+
+  it('sortCallback() should sort null last for decreasing', () => {
+    component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    fixture.detectChanges();
+    const event: SortEvent = {
+      field: 'RISK SCORE',
+      order: -1,
+      data: [
+        { target_risk_score: null },
+        { target_risk_score: 1 },
+        { target_risk_score: -2 },
+        { target_risk_score: 3 }
+      ],
+    };
+    component.sortCallback(event);
+    if (!event.data)
+      fail('Missing data');
+    else {
+      expect(event.data[0].target_risk_score).toEqual(3);
+      expect(event.data[1].target_risk_score).toEqual(1);
+      expect(event.data[2].target_risk_score).toEqual(-2);
+      expect(event.data[3].target_risk_score).toEqual(null);
+    }
+  });
 });

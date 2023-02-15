@@ -3167,6 +3167,9 @@ export const gctGeneMock1: GCTGene = {
     ],
   },
   associations: [3, 4],
+  target_risk_score: 2.2,
+  genetics_score: 3.3,
+  multi_omics_score: 4.4
 };
 
 export const nominatedGeneMock1: Gene = {

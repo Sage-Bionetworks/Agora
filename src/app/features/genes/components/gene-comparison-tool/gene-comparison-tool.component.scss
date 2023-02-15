@@ -379,7 +379,16 @@
   }
 
   .p-datatable-tbody {
-    td {
+    td.cell-numeric {
+      position: relative;
+      vertical-align: middle;
+      height: 56px;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+      text-align: center;
+    }
+
+    td.cell-default {
       position: relative;
       vertical-align: middle;
       height: 56px;

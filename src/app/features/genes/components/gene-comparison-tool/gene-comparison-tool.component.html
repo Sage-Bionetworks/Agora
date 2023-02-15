@@ -411,27 +411,39 @@
                       </div>
                     </div>
                   </td>
-                  <td
+                  <ng-container
                     *ngFor="let column of columns"
-                    [style]="{ width: columnWidth }"
+                    
                   >
-                    <button
-                      [class]="getCircleClass(column, gene)"
-                      [style]="getCircleStyle(column, gene)"
-                      [pTooltip]="getCircleTooltip(column, gene)"
-                      [tooltipDisabled]="isCircleTooltipDisabled()"
-                      tooltipPosition="bottom"
-                      tooltipStyleClass="tooltip"
-                      (click)="
-                        detailsPanel.toggle(
-                          $event,
-                          getDetailsPanelData(column, gene)
-                        )
-                      "
-                    >
-                      <span></span>
-                    </button>
-                  </td>
+                    
+                    <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
+                      {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMICS'" [style]="{ width: columnWidth }">
+                      {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
+                      {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                    </td>
+                    <td class="cell-default" *ngIf="COLUMN_NAMES_WITH_NUMERICS.indexOf(column) === -1" [style]="{ width: columnWidth }">
+                      <button
+                        [class]="getCircleClass(column, gene)"
+                        [style]="getCircleStyle(column, gene)"
+                        [pTooltip]="getCircleTooltip(column, gene)"
+                        [tooltipDisabled]="isCircleTooltipDisabled()"
+                        tooltipPosition="bottom"
+                        tooltipStyleClass="tooltip"
+                        (click)="
+                          detailsPanel.toggle(
+                            $event,
+                            getDetailsPanelData(column, gene)
+                          )
+                        "
+                      >
+                        <span></span>
+                      </button>
+                    </td>
+                  </ng-container>
                   <td
                     *ngIf="columns.length < 2"
                     class="gct-spacing-column"

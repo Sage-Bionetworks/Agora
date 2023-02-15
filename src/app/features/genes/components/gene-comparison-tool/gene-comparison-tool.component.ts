@@ -62,6 +62,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   columns: string[] = [];
   columnWidth = 'auto';
 
+  COLUMN_NAMES_WITH_NUMERICS = ['GENETIC','MULTI-OMICS','RISK SCORE'];
   /* Sort ------------------------------------------------------------------ */
   sortField = '';
   sortOrder = -1;
@@ -134,13 +135,36 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.urlParamsSubscription?.unsubscribe();
   }
 
+
+  public isNumber(value: string | number): boolean
+  {
+    return ((value != null) &&
+            (value !== '') &&
+            !isNaN(Number(value.toString())));
+  }
+
+
   /* ----------------------------------------------------------------------- */
   /* Genes
   /* ----------------------------------------------------------------------- */
 
+  getScoreForNumericColumn(columnName: string, gene: GCTGene) {
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[0]) {
+      return gene.genetics_score;
+    }
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[1]) {
+      return gene.multi_omics_score;
+    }
+    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[2]) {
+      return gene.target_risk_score;
+    }
+    return null;
+  }
+
   loadGenes() {
     this.helperService.setLoading(true);
     this.genes = [];
+
     this.geneService
       .getComparisonGenes(this.category, this.subCategory)
       .subscribe((res: GCTGeneResponse) => {
@@ -213,6 +237,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         }
       });
 
+      // add tissue columns
       gene.tissues?.forEach((tissue: GCTGeneTissue) => {
         if (!columns.includes(tissue.name)) {
           columns.push(tissue.name);
@@ -222,7 +247,12 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
     columns.sort();
     this.columns = columns;
-
+    // add scores columns
+    this.COLUMN_NAMES_WITH_NUMERICS.forEach((columnName) => {
+      if (!columns.includes(columnName))
+        columns.unshift(columnName);  
+    });
+    
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
     }
@@ -450,25 +480,46 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   sortCallback(event: SortEvent) {
     const order = event.order || 1;
+    if (!event.field || !event.data) {
+      return;
+    }
+    if (this.COLUMN_NAMES_WITH_NUMERICS.indexOf(event.field) > -1) {
+      // if it is one of the numeric scores
+      event.data.sort((a, b) => {
+        const value1 = this.getScoreForNumericColumn(event.field as string, a);
+        const value2 = this.getScoreForNumericColumn(event.field as string, b);
+        
+        if (value1 === value2)
+          return 0; // equal so don't do anything
+        if (value1 === null)
+          return 1; // sort null after everything
+        if (value2 === null)
+          return -1; // sort null after everything
+        
+        const result = (value1 < value2) ? -1 : 1;
+        return (order * result);
+      });
+    } else {
+      //it's one of the tissues
+      event.data.sort((a, b) => {
+        let result = null;
 
-    event.data?.sort((a, b) => {
-      let result = null;
+        a = a.tissues.find(
+          (tissue: GCTGeneTissue) => tissue.name === event.field
+        )?.logfc;
 
-      a = a.tissues.find(
-        (tissue: GCTGeneTissue) => tissue.name === event.field
-      )?.logfc;
+        b = b.tissues.find(
+          (tissue: GCTGeneTissue) => tissue.name === event.field
+        )?.logfc;
 
-      b = b.tissues.find(
-        (tissue: GCTGeneTissue) => tissue.name === event.field
-      )?.logfc;
+        if (a == null && b != null) result = 1 * order;
+        else if (a != null && b == null) result = -1 * order;
+        else if (a == null && b == null) result = 0;
+        else result = a < b ? -1 : a > b ? 1 : 0;
 
-      if (a == null && b != null) result = 1 * order;
-      else if (a != null && b == null) result = -1 * order;
-      else if (a == null && b == null) result = 0;
-      else result = a < b ? -1 : a > b ? 1 : 0;
-
-      return order * result;
-    });
+        return order * result;
+      });
+    }
   }
 
   sortTable(table: Table) {
