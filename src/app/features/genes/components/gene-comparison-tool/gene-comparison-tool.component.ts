@@ -192,13 +192,13 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   getScoreForNumericColumn(columnName: string, gene: GCTGene) {
     if (columnName === this.scoresColumns[0].field) {
-      return gene.genetics_score;
+      return gene.target_risk_score;
     }
     if (columnName === this.scoresColumns[1].field) {
       return gene.multi_omics_score;
     }
     if (columnName === this.scoresColumns[2].field) {
-      return gene.target_risk_score;
+      return gene.genetics_score;
     }
     return null;
   }
