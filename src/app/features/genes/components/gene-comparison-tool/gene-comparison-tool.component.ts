@@ -27,6 +27,7 @@ import {
   GCTGeneTissue,
   GCTGeneResponse,
   GCTDetailsPanelData,
+  GCTColumn,
 } from '../../../../models';
 
 import { GeneService } from '../../services';
@@ -62,7 +63,24 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   columns: string[] = [];
   columnWidth = 'auto';
 
-  COLUMN_NAMES_WITH_NUMERICS = ['GENETIC','MULTI-OMICS','RISK SCORE'];
+  scoresColumns: GCTColumn[] = [
+    { field: 'RISK SCORE', header: 'AD Risk Score', selected: true, visible: true },
+    { field: 'MULTI-OMICS', header: 'Genomic Score', selected: true, visible: true },
+    { field: 'GENETIC', header: 'Genetic Score', selected: true, visible: true },
+  ];
+
+  brainRegionsColumns: GCTColumn[] = [
+    { field: 'ACC', header: 'ACC - Anterior Cingulate Cortex', selected: true, visible: true },
+    { field: 'CBE', header: 'CBE - Cerebellum', selected: true, visible: true },
+    { field: 'DLPFC', header: 'DLPFC - Dorsolateral Prefrontal Cortex', selected: true, visible: true },
+    { field: 'FP', header: 'FP - Frontal Pole', selected: true, visible: true },
+    { field: 'IFG', header: 'IFG - Inferior Frontal Gyrus', selected: true, visible: true },
+    { field: 'PCC', header: 'PCC - Posterior Cingulate Cortex', selected: true, visible: true },
+    { field: 'PHG', header: 'PHG - Parahippocampal Gyrus', selected: true, visible: true },
+    { field: 'STG', header: 'STG - Superior Temporal Gyrus', selected: true, visible: true },
+    { field: 'TCX', header: 'TCX - Temporal Cortex', selected: true, visible: true },
+  ];
+
   /* Sort ------------------------------------------------------------------ */
   sortField = '';
   sortOrder = -1;
@@ -135,6 +153,28 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.urlParamsSubscription?.unsubscribe();
   }
 
+  isScoresColumn(column: string) {
+    const isScore = this.scoresColumns.find(c => c.field === column);
+    return isScore !== undefined;
+  }
+
+  toggleGCTColumn(column: GCTColumn) {
+    column.selected = !column.selected;
+    this.updateVisibleColumns();
+    this.onResize();
+  }
+
+  updateVisibleColumns() {
+    const visibleScoresColumns: string[] = 
+      this.scoresColumns
+        .filter(c => c.visible && c.selected)
+        .map(c => c.field);
+    const visibleBrainRegionColumns: string[] = 
+      this.brainRegionsColumns
+        .filter(c => c.visible && c.selected)
+        .map(c => c.field);
+    this.columns = visibleScoresColumns.concat(visibleBrainRegionColumns);
+  }
 
   public isNumber(value: string | number): boolean
   {
@@ -149,14 +189,14 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* ----------------------------------------------------------------------- */
 
   getScoreForNumericColumn(columnName: string, gene: GCTGene) {
-    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[0]) {
-      return gene.genetics_score;
+    if (columnName === this.scoresColumns[0].field) {
+      return gene.target_risk_score;
     }
-    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[1]) {
+    if (columnName === this.scoresColumns[1].field) {
       return gene.multi_omics_score;
     }
-    if (columnName === this.COLUMN_NAMES_WITH_NUMERICS[2]) {
-      return gene.target_risk_score;
+    if (columnName === this.scoresColumns[2].field) {
+      return gene.genetics_score;
     }
     return null;
   }
@@ -180,8 +220,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   initData(genes: GCTGene[]) {
-    const columns: string[] = [];
-
+    this.brainRegionsColumns.forEach(c => c.visible = false);
+    
     const pinnedGenes: GCTGene[] = [];
     const currentPinnedGenesCache = this.getPinnedGenesCache(
       this.category,
@@ -239,19 +279,15 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
       // add tissue columns
       gene.tissues?.forEach((tissue: GCTGeneTissue) => {
-        if (!columns.includes(tissue.name)) {
-          columns.push(tissue.name);
-        }
+        //if (!this.brainRegionsColumns.map(c => c.field).includes(tissue.name)) {
+        const column = this.brainRegionsColumns.find(c => c.field === tissue.name);
+        if (column)
+          column.visible = true;
+        //}
       });
     });
 
-    columns.sort();
-    this.columns = columns;
-    // add scores columns
-    this.COLUMN_NAMES_WITH_NUMERICS.forEach((columnName) => {
-      if (!columns.includes(columnName))
-        columns.unshift(columnName);  
-    });
+    this.updateVisibleColumns();
     
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
@@ -483,7 +519,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     if (!event.field || !event.data) {
       return;
     }
-    if (this.COLUMN_NAMES_WITH_NUMERICS.indexOf(event.field) > -1) {
+    const isScoresColumnSort = this.scoresColumns.find(c => c.field === event.field);
+    if (isScoresColumnSort) {
       // if it is one of the numeric scores
       event.data.sort((a, b) => {
         const value1 = this.getScoreForNumericColumn(event.field as string, a);
@@ -953,8 +990,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     window.open(url, '_blank');
   }
 
-  getTissueTooltipText(tissue: string) {
-    return this.helperService.getTissueTooltipText(tissue);
+  getGCTColumnTooltipText(tissue: string) {
+    return this.helperService.getGCTColumnTooltipText(tissue);
   }
 
   onSearchInput(event: Event) {
@@ -963,10 +1000,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   updateColumnWidth() {
-    const count = this.columns.length < 3 ? 3 : this.columns.length;
+    const count = this.columns.length < 5 ? 5 : this.columns.length;
     const width =
       this.headerTable?.containerViewChild?.nativeElement?.offsetWidth || 0;
-    this.columnWidth = Math.ceil((width - 300) / count - 1) + 'px';
+    this.columnWidth = Math.ceil((width - 300) / count) + 'px';
   }
 
   onResize() {

@@ -27,8 +27,14 @@ describe('Service: Helper', () => {
     expect(res).toEqual(false);
   });
 
-  it('should get tissue tooltip text', () => {
-    const res = helperService.getTissueTooltipText('ACC');
+  it('should get GCT column tooltip text for Risk Score', () => {
+    const res = helperService.getGCTColumnTooltipText('RISK SCORE');
+    expect(res).toEqual('AD Risk Score');
+  });
+
+
+  it('should get GCT column tooltip text for ACC brain region', () => {
+    const res = helperService.getGCTColumnTooltipText('ACC');
     expect(res).toEqual('Anterior Cingulate Cortex');
   });
 
