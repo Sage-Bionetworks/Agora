@@ -35,8 +35,14 @@ export class HelperService {
     return this.loading;
   }
 
-  getTissueTooltipText(text: string): string {
+  getGCTColumnTooltipText(text: string): string {
     switch (text) {
+      case 'RISK SCORE':
+        return 'AD Risk Score';
+      case 'MULTI-OMICS':
+        return 'Genomic Score';
+      case 'GENETIC':
+        return 'Genetic Score';
       case 'ACC':
         return 'Anterior Cingulate Cortex';
       case 'AntPFC':

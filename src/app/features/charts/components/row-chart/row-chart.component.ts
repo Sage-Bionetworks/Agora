@@ -348,7 +348,7 @@ export class RowChartComponent extends BaseChartComponent {
             }
 
             tooltip.html(
-              self.helperService.getTissueTooltipText(tickText.text())
+              self.helperService.getGCTColumnTooltipText(tickText.text())
             );
 
             const tickTextRect = tickTextNode.getBoundingClientRect() || null;
