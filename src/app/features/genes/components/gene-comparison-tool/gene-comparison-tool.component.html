@@ -171,18 +171,6 @@
                       styleClass="gct-toggle-columns"
                     >
                       <ng-template pTemplate>
-                        <!-- {{visibleScoresColumns | json}} -->
-                        <!-- <p-listbox
-                          [options]="optionalColumns"
-                          [(ngModel)]="_selectedColumns"
-                          [metaKeySelection]="false"
-                          optionLabel="header"
-                          [multiple]="true"
-                          [checkbox]="true"
-                        ></p-listbox> -->
-                        <!-- <h1 class="text-3xl font-bold underline">
-                          Hello world!
-                        </h1> -->
                         <ul>
                           <li *ngFor="let column of scoresColumns">
                             <div class="column-toggle" (click)="toggleGCTColumn(column)">

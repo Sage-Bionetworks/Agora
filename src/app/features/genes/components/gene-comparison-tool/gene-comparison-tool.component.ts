@@ -155,7 +155,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   isScoresColumn(column: string) {
     const isScore = this.scoresColumns.find(c => c.field === column);
-    return isScore !== undefined ? true : false;
+    return isScore !== undefined;
   }
 
   toggleGCTColumn(column: GCTColumn) {
@@ -167,13 +167,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   updateVisibleColumns() {
     const visibleScoresColumns: string[] = 
       this.scoresColumns
-        .filter(c => c.visible === true)
-        .filter(c => c.selected === true)
+        .filter(c => c.visible && c.selected)
         .map(c => c.field);
     const visibleBrainRegionColumns: string[] = 
       this.brainRegionsColumns
-        .filter(c => c.visible === true)
-        .filter(c => c.selected === true)
+        .filter(c => c.visible && c.selected)
         .map(c => c.field);
     this.columns = visibleScoresColumns.concat(visibleBrainRegionColumns);
   }
