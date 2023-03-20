@@ -196,10 +196,10 @@ describe('Component: GeneComparisonToolComponent', () => {
     expect(component.columns[0]).toEqual('RISK SCORE');
   });
 
-  it('should have a grid with MULTI-OMICS being the 2nd column', () => {
+  it('should have a grid with MULTI-OMIC being the 2nd column', () => {
     component.initData([comparisonGeneMock1, comparisonGeneMock2]);
     fixture.detectChanges();
-    expect(component.columns[1]).toEqual('MULTI-OMICS');
+    expect(component.columns[1]).toEqual('MULTI-OMIC');
   });
 
   it('should have a grid with GENETIC being the 3rd column', () => {
