@@ -331,7 +331,7 @@
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
                       {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
                     </td>
-                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMICS'" [style]="{ width: columnWidth }">
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
                       {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
                     </td>
                     <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
@@ -462,7 +462,7 @@
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
                       {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
                     </td>
-                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMICS'" [style]="{ width: columnWidth }">
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
                       {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
                     </td>
                     <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">

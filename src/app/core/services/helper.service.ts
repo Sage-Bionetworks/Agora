@@ -39,7 +39,7 @@ export class HelperService {
     switch (text) {
       case 'RISK SCORE':
         return 'AD Risk Score';
-      case 'MULTI-OMICS':
+      case 'MULTI-OMIC':
         return 'Genomic Score';
       case 'GENETIC':
         return 'Genetic Score';

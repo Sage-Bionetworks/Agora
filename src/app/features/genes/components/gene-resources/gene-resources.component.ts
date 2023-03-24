@@ -68,7 +68,7 @@ export class GeneResourcesComponent {
       {
         title: 'AD Atlas',
         description:
-          'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.',
+          'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omic context.',
         linkText: 'Visit AD Atlas',
         link: `https://adatlas.org/?geneID=${this._gene?.ensembl_gene_id}`,
       },

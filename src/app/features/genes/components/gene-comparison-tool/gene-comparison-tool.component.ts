@@ -65,7 +65,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   scoresColumns: GCTColumn[] = [
     { field: 'RISK SCORE', header: 'AD Risk Score', selected: true, visible: true },
-    { field: 'MULTI-OMICS', header: 'Genomic Score', selected: true, visible: true },
+    { field: 'MULTI-OMIC', header: 'Genomic Score', selected: true, visible: true },
     { field: 'GENETIC', header: 'Genetic Score', selected: true, visible: true },
   ];
 
