@@ -15,13 +15,30 @@
   <div class="section">
     <div class="section-inner pt-0">
       <div class="container-sm">
-        <h2>TREAT-AD Consortium Target Risk Scores</h2>
-        <p>
-          The TREAT-AD Center at Emory-Sage-SGC has developed target risk scores encompassing genetic and multi-omic evidence.
-        </p>
+        <h2>AD Risk Scores</h2>
+        <div id="sub-headings">
+          <div>
+            <h3>About AD Risk Scores</h3>
+            <p>
+              The TREAT-AD Center at Emory-Sage-SGC has developed a Target Risk Score (TRS) to objectively rank the potential involvement of specific genes in AD. 
+              The TRS is derived by summing two component risk scores, the Genetic Risk Score and the Multi-omic Risk Score, each of which is derived from a meta-analysis of multiple harmonized data sets. 
+              More information about the methodology used to define these risk scores is available 
+              <a href="https://sagebionetworks.jira.com/wiki/spaces/APD/pages/2826567691/Biological+Domains+Data+and+Methods" target="_blank">here</a>.
+            </p>
+          </div>
+          <div>
+            <h3>AD Risk Scores for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}</h3>
+            <p>
+              The TRS for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}, along with the component Genetic and Multi-omic Risk Scores, is shown here. 
+              The scores for {{ gene.hgnc_symbol || gene.ensembl_gene_id }} are superimposed on the genome-wide score distributions. 
+              If <i>No Data is Currently Available</i> is displayed for a score, that score was not calculated for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}. 
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
   <div class="section section-gray-100">
     <div class="section-inner">
       <div class="container-lg">
