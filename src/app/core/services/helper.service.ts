@@ -2,6 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { round } from 'lodash';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -113,15 +114,29 @@ export class HelperService {
     };
   }
 
-  truncateNumberToFixed(num: number, fixed: number): string {
-    /*
-     * You might think that truncating a number to a certain number of decimal
-     * places in JavaScript would be simple, but then you would be wrong.
-     * See https://stackoverflow.com/a/11818658/9723359
-     */
-    const regex = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
-    const matches = num.toString().match(regex);
-    return matches ? matches[0] : '';
+  roundNumberAsString(num: string, fixed: number): string {
+    const n = parseFloat(num);
+    return this.roundNumber(n, fixed);
+  }
+
+  roundNumber(num: number, decimalPlaces: number): string {
+    // https://dfkaye.com/posts/2021/07/17/fixing-number.tofixed/
+    // (1.005).toFixed(2) == '1.01' || (function() {
+    //   Number.prototype.toFixed = function(fractionDigits) {
+    //     return this.toLocaleString(undefined, {
+    //       minimumFractionDigits: fractionDigits,
+    //       maximumFractionDigits: fractionDigits
+    //     });
+    //   };
+    // }());
+    // return num.toFixed(fixed);
+
+    //lodash will drop trailing zeros
+    const roundedResult = round(num, decimalPlaces);
+    //pad trailing zeros as necessary
+    const paddedResult = roundedResult.toFixed(decimalPlaces);
+    //return as string
+    return paddedResult.toString();
   }
 
   getSignificantFigures(n: number, sig = 2) {
