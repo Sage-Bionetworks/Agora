@@ -30,10 +30,12 @@ export class ScoreChartComponent extends BaseChartComponent {
     this.init();
   }
 
+  @Input() barColor = '#8b8ad1';
+  
   @Input() distribution: any = [];
   @Input() xAxisLabel = 'Gene score';
   @Input() yAxisLabel = 'Number of genes';
-
+  
   override name = 'score-chart';
   dimension: any;
   group: any;
@@ -129,7 +131,7 @@ export class ScoreChartComponent extends BaseChartComponent {
       );
 
     // Colors
-    this.chart.colors(['#8b8ad1']);
+    this.chart.colors(this.barColor);
 
     // Spacing
     this.chart
@@ -152,14 +154,13 @@ export class ScoreChartComponent extends BaseChartComponent {
         const barBox = bars[i].getBBox();
 
         if (i == this.scoreIndex) {
-          bars[i].classList.add('score-bar');
           const label = chart.select('g.chart-body').append('text');
 
           label
-            .attr('class', 'score-label')
             .attr('x', barBox.x)
             .attr('y', barBox.y - 6)
-            .style('color', 'rgb(166 132 238)')
+            .attr('font-size', '12px')
+            .attr('fill', this.barColor)
             .text(this.helperService.truncateNumberToFixed(this._score, 2));
 
           const labelBox = label.node().getBBox();
@@ -190,7 +191,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .append('rect')
             .attr('width', barBox.width + 8)
             .attr('height', 14)
-            .attr('fill', '#8b8ad1');
+            .attr('fill', this.barColor);
 
           breakContainer
             .append('rect')

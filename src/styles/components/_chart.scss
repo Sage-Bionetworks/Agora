@@ -371,26 +371,6 @@
       }
     }
 
-    .bar {
-      fill: var(--color-secondary);
-      fill-opacity: 50%;
-
-      &:hover {
-        fill: var(--color-secondary);
-        fill-opacity: 100%;
-      }
-    }
-
-    .score-bar {
-      fill: var(--color-secondary);
-      fill-opacity: 100%;
-
-      &:hover {
-        fill: var(--color-secondary);
-        fill-opacity: 80%;
-      }
-    }
-
     .score-label {
       font-size: 12px;
       fill: var(--color-secondary);
