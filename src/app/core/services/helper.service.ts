@@ -120,17 +120,6 @@ export class HelperService {
   }
 
   roundNumber(num: number, decimalPlaces: number): string {
-    // https://dfkaye.com/posts/2021/07/17/fixing-number.tofixed/
-    // (1.005).toFixed(2) == '1.01' || (function() {
-    //   Number.prototype.toFixed = function(fractionDigits) {
-    //     return this.toLocaleString(undefined, {
-    //       minimumFractionDigits: fractionDigits,
-    //       maximumFractionDigits: fractionDigits
-    //     });
-    //   };
-    // }());
-    // return num.toFixed(fixed);
-
     //lodash will drop trailing zeros
     const roundedResult = round(num, decimalPlaces);
     //pad trailing zeros as necessary

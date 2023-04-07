@@ -45,7 +45,6 @@ export class ScoreChartComponent extends BaseChartComponent {
   }
 
   override init() {
-    console.log(this._score);
     if (
       !this._score ||
       !this.distribution?.length ||
