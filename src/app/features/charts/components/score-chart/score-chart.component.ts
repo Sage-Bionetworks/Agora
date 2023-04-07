@@ -131,7 +131,7 @@ export class ScoreChartComponent extends BaseChartComponent {
       );
 
     // Colors
-    this.chart.colors(this.barColor);
+    this.chart.colors([this.barColor]);
 
     // Spacing
     this.chart
