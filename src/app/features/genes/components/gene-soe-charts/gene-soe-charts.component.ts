@@ -77,8 +77,8 @@ export class GeneSoeChartsComponent implements OnInit {
     });
   }
 
-  getBarColor(title: string) {
-    if (title === 'Genetic Risk Score') {
+  getBarColor(chartName: string) {
+    if (chartName === 'Target Risk Score') {
       return this.barAlternativeColor;
     }
     return this.barPrimaryColor;
