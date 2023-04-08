@@ -16,7 +16,7 @@
     <div class="section-inner pt-0">
       <div class="container-sm">
         <h2>AD Risk Scores</h2>
-        <div id="sub-headings">
+        <div class="sub-headings">
           <div>
             <h3>About AD Risk Scores</h3>
             <p>
@@ -43,6 +43,32 @@
     <div class="section-inner">
       <div class="container-lg">
         <gene-soe-charts [gene]="gene"></gene-soe-charts>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2>Biological Domain Classification</h2>
+          <div class="sub-headings">
+          <div>
+            <h3>About Biological Domains</h3>
+            <p>
+              A biological domain represents a standardized area of biology defined by a set of discrete, biologically coherent GO terms. 
+              The TREAT-AD Center at Emory-Sage-SGC has defined nineteen biological domains associated with AD, and objectively mapped genes to those biological domains using GO term annotations. 
+              More information about the methodology used to define AD biological domains, and to generate genome-wide biological domain mappings, is available here.
+            </p>
+          </div>
+          <div>
+            <h3>Biological Domains for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}</h3>
+            <p>
+              Select a biological domain on the left to see the list of GO terms that link {{ gene.hgnc_symbol || gene.ensembl_gene_id }} to it on the right. 
+              The percentage value displayed next to the currently selected biological domain indicates the proportion of {{ gene.hgnc_symbol || gene.ensembl_gene_id }}'s total unique GO terms that map to the biological domain. 
+              The ratio displayed on the right indicates how many of the biological domain's total GO terms {{ gene.hgnc_symbol || gene.ensembl_gene_id }} is annotated with.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
