@@ -154,6 +154,7 @@ export class ScoreChartComponent extends BaseChartComponent {
         const barBox = bars[i].getBBox();
 
         if (i == this.scoreIndex) {
+          bars[i].classList.add('score-bar');
           const label = chart.select('g.chart-body').append('text');
 
           label
@@ -161,7 +162,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .attr('y', barBox.y - 6)
             .attr('font-size', '12px')
             .attr('fill', this.barColor)
-            .text(this.helperService.truncateNumberToFixed(this._score, 2));
+            .text(this.helperService.roundNumber(this._score, 2));
 
           const labelBox = label.node().getBBox();
           const widthDiff = labelBox.width - barBox.width;
@@ -219,13 +220,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     d3.select(bar)
       .on('mouseover', function () {
         const barBox = bar.getBoundingClientRect();
+
+        const lowerRange = parseFloat(distribution.range[0]).toFixed(2);
+        const upperRange = parseFloat(distribution.range[1]).toFixed(2);
+
         const text =
-          'Score Range: ' + leftBoundCharacter +
-          parseFloat(distribution.range[0]).toFixed(2) +
-          ', ' +
-          parseFloat(distribution.range[1]).toFixed(2) +
-          ']  <br>  Gene Count: ' +
-          distribution.value;
+          `Score Range: ${ leftBoundCharacter } ${ lowerRange }, ${ upperRange }]
+          <br>
+          Gene Count: ${ distribution.value }`;
 
         tooltip
           .html(text)

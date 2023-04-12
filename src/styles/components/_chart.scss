@@ -370,6 +370,22 @@
         display: block;
       }
     }
+
+    .bar {
+      fill-opacity: 50%;
+
+      &:hover {
+        fill-opacity: 100%;
+      }
+    }
+
+    .score-bar {
+      fill-opacity: 100%;
+
+      &:hover {
+        fill-opacity: 80%;
+      }
+    }
   }
 }
 
