@@ -36,6 +36,9 @@ export class GeneSoeChartsComponent implements OnInit {
   @Input() wikiId = '';
   charts: any[] = [];
 
+  barPrimaryColor = '#8b8ad1';
+  barAlternativeColor = '#42C7BB';
+
   constructor(private geneService: GeneService) {}
 
   ngOnInit() {}
@@ -64,6 +67,7 @@ export class GeneSoeChartsComponent implements OnInit {
 
         return {
           name: item.name,
+          barColor: this.getBarColor(item.name),
           score: this.getGeneOverallScores(item.name),
           ownerId: item.syn_id,
           wikiId: item.wiki_id,
@@ -71,6 +75,13 @@ export class GeneSoeChartsComponent implements OnInit {
         };
       });
     });
+  }
+
+  getBarColor(chartName: string) {
+    if (chartName === 'Target Risk Score') {
+      return this.barAlternativeColor;
+    }
+    return this.barPrimaryColor;
   }
 
   getGeneOverallScores(name: string) {
