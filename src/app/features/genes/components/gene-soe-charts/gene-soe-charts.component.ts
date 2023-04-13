@@ -51,7 +51,7 @@ export class GeneSoeChartsComponent implements OnInit {
         a.name > b.name ? 1 : -1
       );
 
-      //remove literature score
+      // remove literature score
       overallScoreDistribution = overallScoreDistribution.filter((item: any) => (item.name !== 'Literature Score'));
 
       this.charts = overallScoreDistribution.map((item: any) => {
@@ -74,6 +74,22 @@ export class GeneSoeChartsComponent implements OnInit {
           distribution,
         };
       });
+
+      // sort charts so Target Risk Score appears first
+      this.sortScoreCharts(this.charts);
+    });
+  }
+
+  sortScoreCharts(charts: any[]) {
+    // sort charts alphabetically on name property
+    charts.sort((a, b) => {
+      if (a.name === 'Target Risk Score') {
+        return -1;
+      } else if (b.name === 'Target Risk Score') {
+        return 1;
+      } else {
+        return a.name.localeCompare(b.name);
+      }
     });
   }
 
