@@ -21,11 +21,11 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./score-chart.component.scss'],
 })
 export class ScoreChartComponent extends BaseChartComponent {
-  _score: number | undefined;
-  get score(): number | undefined {
+  _score: number | null = null;
+  get score(): number | null {
     return this._score;
   }
-  @Input() set score(score: number | undefined) {
+  @Input() set score(score: number | null) {
     this._score = score;
     this.init();
   }
@@ -64,7 +64,7 @@ export class ScoreChartComponent extends BaseChartComponent {
 
   initData() {
     this.distribution.forEach((item: any, i: number) => {
-      if (this._score !== undefined) {   
+      if (this._score !== null) {   
         if (this._score >= item.range[0] && this._score < item.range[1]) {
           this.scoreIndex = i;
         }
@@ -166,7 +166,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .attr('font-size', '12px')
             .attr('fill', this.barColor);
           
-          if (this._score !== undefined)
+          if (this._score !== null)
             label.text(this.helperService.roundNumber(this._score, 2));
           
           const labelBox = label.node().getBBox();
