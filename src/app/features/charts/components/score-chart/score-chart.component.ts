@@ -166,10 +166,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .attr('font-size', '12px')
             .attr('fill', this.barColor);
           
-          if (this._score === undefined) {
-            label.text = 'n/a';
-          }
-          else
+          if (this._score !== undefined)
             label.text(this.helperService.roundNumber(this._score, 2));
           
           const labelBox = label.node().getBBox();
