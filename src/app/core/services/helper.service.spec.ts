@@ -48,9 +48,49 @@ describe('Service: Helper', () => {
     expect(res).toEqual({ top: 0, left: 0 });
   });
 
-  it('should truncate number to fixed', () => {
-    const res = helperService.truncateNumberToFixed(0.123, 2);
+  it('should round 0.123 to 0.12', () => {
+    const res = helperService.roundNumber(0.123, 2);
     expect(res).toEqual('0.12');
+  });
+
+  it('should round 1.96897662132087 to 1.97', () => {
+    const res = helperService.roundNumber(1.96897662132087, 2);
+    expect(res).toEqual('1.97');
+  });
+
+  it('should round 0.1 to 0.10', () => {
+    const res = helperService.roundNumber(0.1, 2);
+    expect(res).toEqual('0.10');
+  });
+
+  it('should round 1.015 to 1.02', () => {
+    const res = helperService.roundNumber(1.015, 2);
+    expect(res).toEqual('1.02');
+  });
+
+  it('should round 4.015 to 4.02', () => {
+    const res = helperService.roundNumber(4.015, 2);
+    expect(res).toEqual('4.02');
+  });
+
+  it('should round 5.015 to 5.02', () => {
+    const res = helperService.roundNumber(5.015, 2);
+    expect(res).toEqual('5.02');
+  });
+
+  it('should round 6.015 to 6.02', () => {
+    const res = helperService.roundNumber(6.015, 2);
+    expect(res).toEqual('6.02');
+  });
+
+  it('should round 7.015 to 7.02', () => {
+    const res = helperService.roundNumber(7.015, 2);
+    expect(res).toEqual('7.02');
+  });
+
+  it('should round 128.015 to 128.02', () => {
+    const res = helperService.roundNumber(128.015, 2);
+    expect(res).toEqual('128.02');
   });
 
   it('should get significant figures', () => {

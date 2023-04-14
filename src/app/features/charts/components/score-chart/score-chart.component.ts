@@ -30,10 +30,12 @@ export class ScoreChartComponent extends BaseChartComponent {
     this.init();
   }
 
+  @Input() barColor = '#8b8ad1';
+  
   @Input() distribution: any = [];
   @Input() xAxisLabel = 'Gene score';
   @Input() yAxisLabel = 'Number of genes';
-
+  
   override name = 'score-chart';
   dimension: any;
   group: any;
@@ -132,7 +134,7 @@ export class ScoreChartComponent extends BaseChartComponent {
       );
 
     // Colors
-    this.chart.colors(['#8b8ad1']);
+    this.chart.colors([this.barColor]);
 
     // Spacing
     this.chart
@@ -159,16 +161,16 @@ export class ScoreChartComponent extends BaseChartComponent {
           const label = chart.select('g.chart-body').append('text');
 
           label
-            .attr('class', 'score-label')
             .attr('x', barBox.x)
             .attr('y', barBox.y - 6)
-            .style('color', 'rgb(166 132 238)');
+            .attr('font-size', '12px')
+            .attr('fill', this.barColor);
           
           if (this._score === undefined) {
             label.text = 'n/a';
           }
           else
-            label.text(this.helperService.truncateNumberToFixed(this._score, 2));
+            label.text(this.helperService.roundNumber(this._score, 2));
           
           const labelBox = label.node().getBBox();
           const widthDiff = labelBox.width - barBox.width;
@@ -198,7 +200,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .append('rect')
             .attr('width', barBox.width + 8)
             .attr('height', 14)
-            .attr('fill', '#8b8ad1');
+            .attr('fill', this.barColor);
 
           breakContainer
             .append('rect')
@@ -226,13 +228,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     d3.select(bar)
       .on('mouseover', function () {
         const barBox = bar.getBoundingClientRect();
+
+        const lowerRange = parseFloat(distribution.range[0]).toFixed(2);
+        const upperRange = parseFloat(distribution.range[1]).toFixed(2);
+
         const text =
-          'Score Range: ' + leftBoundCharacter +
-          parseFloat(distribution.range[0]).toFixed(2) +
-          ', ' +
-          parseFloat(distribution.range[1]).toFixed(2) +
-          ']  <br>  Gene Count: ' +
-          distribution.value;
+          `Score Range: ${ leftBoundCharacter } ${ lowerRange }, ${ upperRange }]
+          <br>
+          Gene Count: ${ distribution.value }`;
 
         tooltip
           .html(text)
