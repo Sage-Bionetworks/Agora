@@ -39,7 +39,7 @@ describe('Component: Chart - Score', () => {
   });
 
   it('should display message if not data', () => {
-    expect(component.score).toEqual(0);
+    expect(component.score).toEqual(undefined);
     expect(element.querySelector('.chart-no-data')).toBeTruthy();
   });
 
