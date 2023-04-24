@@ -1,9 +1,12 @@
+$tooltip-color: #63676C;
+$primary-color: #5081A7;
+
 .tooltip {
   position: absolute;
   text-align: center;
   padding: 5px;
   font-size: 14px;
-  background-color: #63676C;
+  background-color: $tooltip-color;
   color: white;
   display: none;
   z-index: 200;
@@ -25,7 +28,7 @@
     &::before {
         bottom: -10px;
         border-bottom: 0;
-        border-top-color: #63676C;
+        border-top-color: $tooltip-color;
     }
   }
 }
@@ -40,7 +43,7 @@
     fill: black;
     
     &:hover {
-        fill: #5081A7;
+        fill: $primary-color;
         cursor: pointer;
     }
 }

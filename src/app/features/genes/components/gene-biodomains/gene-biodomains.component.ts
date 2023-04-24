@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Gene } from 'app/models';
+import { BioDomain, Gene } from 'app/models';
 
 @Component({
   selector: 'gene-biodomains',
@@ -15,7 +15,7 @@ export class GeneBioDomainsComponent implements OnInit {
     return '';
   }
 
-  selectedBioDomain = '';
+  selectedBioDomain: BioDomain | undefined;
   // selectedBioDomainIndex: number | null = null;
   goTerms: string[] = [];
 
@@ -53,7 +53,7 @@ export class GeneBioDomainsComponent implements OnInit {
   onSelectedBioDomain(index: number) {
     console.log('in onselectedbiodomain' + index);
     this.goTerms = this.getGoTerms(index);
-    this.selectedBioDomain = this.gene?.bio_domains?.gene_biodomains[index].biodomain || '';
+    this.selectedBioDomain = this.gene?.bio_domains?.gene_biodomains[index];
   }
 
   ngOnInit(): void {
@@ -90,7 +90,7 @@ export class GeneBioDomainsComponent implements OnInit {
   getHeaderText() {
     if (this.goTerms.length === 0)
       return 'NO LINKING GO TERMS';
-    return `LINKING GO TERMS FOR ${this.selectedBioDomain.toUpperCase()}`;
+    return `LINKING GO TERMS FOR ${ this.selectedBioDomain?.biodomain.toUpperCase() } (${ this.selectedBioDomain?.n_gene_biodomain_terms}/${ this.selectedBioDomain?.n_biodomain_terms})`;
   }
 
   capitalizeGoTerm(goTerm: string) {
