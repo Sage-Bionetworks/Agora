@@ -38,9 +38,18 @@ describe('Component: Chart - Score', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display message if not data', () => {
+  it('should display no data message if score is null', () => {
+    const validValue1 = 0;
+    const validValue2 = 1.5;
+
     expect(component.score).toEqual(null);
     expect(element.querySelector('.chart-no-data')).toBeTruthy();
+    component.score = validValue1;
+    fixture.detectChanges();
+    expect(element.querySelector('.chart-no-data')).toBeFalsy();
+    component.score = validValue2;
+    fixture.detectChanges();
+    expect(element.querySelector('.chart-no-data')).toBeFalsy();
   });
 
   it('should render the chart', () => {
