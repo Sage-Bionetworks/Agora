@@ -21,23 +21,25 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./score-chart.component.scss'],
 })
 export class ScoreChartComponent extends BaseChartComponent {
-  _score = 0;
-  get score(): number {
+  _score: number | null = null;
+  get score(): number | null {
     return this._score;
   }
-  @Input() set score(score: number) {
+  @Input() set score(score: number | null) {
     this._score = score;
     this.init();
   }
 
+  @Input() barColor = '#8b8ad1';
+  
   @Input() distribution: any = [];
   @Input() xAxisLabel = 'Gene score';
   @Input() yAxisLabel = 'Number of genes';
-
+  
   override name = 'score-chart';
   dimension: any;
   group: any;
-  scoreIndex = 0;
+  scoreIndex = -1;
   break: any = {};
 
   constructor(private helperService: HelperService) {
@@ -46,7 +48,6 @@ export class ScoreChartComponent extends BaseChartComponent {
 
   override init() {
     if (
-      !this._score ||
       !this.distribution?.length ||
       !this.chartContainer?.nativeElement
     ) {
@@ -63,21 +64,23 @@ export class ScoreChartComponent extends BaseChartComponent {
 
   initData() {
     this.distribution.forEach((item: any, i: number) => {
-      if (this._score >= item.range[0] && this._score < item.range[1]) {
-        this.scoreIndex = i;
-      }
+      if (this._score !== null) {   
+        if (this._score >= item.range[0] && this._score < item.range[1]) {
+          this.scoreIndex = i;
+        }
 
-      // Introduce a y-axis break if this bar is huge relative to other bars
-      const minDiff = this.getMinDiff(item.value, this.distribution);
-      if (minDiff > 2000) {
-        this.break = {
-          index: i,
-          upper: Math.floor(item.value / 1000) * 1000,
-          lower: Math.ceil((item.value - minDiff) / 1000) * 1000 + 1000,
-        };
+        // Introduce a y-axis break if this bar is huge relative to other bars
+        const minDiff = this.getMinDiff(item.value, this.distribution);
+        if (minDiff > 2000) {
+          this.break = {
+            index: i,
+            upper: Math.floor(item.value / 1000) * 1000,
+            lower: Math.ceil((item.value - minDiff) / 1000) * 1000 + 1000,
+          };
 
-        this.distribution[i].truncated =
-          this.break.lower + (item.value - this.break.upper);
+          this.distribution[i].truncated =
+            this.break.lower + (item.value - this.break.upper);
+        }
       }
     });
 
@@ -117,10 +120,12 @@ export class ScoreChartComponent extends BaseChartComponent {
       .xAxis()
       .ticks(2)
       .tickFormat(d3.format('d'));
-
+      
     // Y axis
     this.chart
-      .y(d3.scaleLinear().domain([0, this.group.top(1)[0].value]))
+      .y(d3.scaleLinear()
+        .domain([0, this.group.top(1)[0].value])
+      )
       .yAxisLabel(this.yAxisLabel)
       .yAxis()
       .ticks(yTickCount)
@@ -129,7 +134,7 @@ export class ScoreChartComponent extends BaseChartComponent {
       );
 
     // Colors
-    this.chart.colors(['#8b8ad1']);
+    this.chart.colors([this.barColor]);
 
     // Spacing
     this.chart
@@ -156,12 +161,14 @@ export class ScoreChartComponent extends BaseChartComponent {
           const label = chart.select('g.chart-body').append('text');
 
           label
-            .attr('class', 'score-label')
             .attr('x', barBox.x)
             .attr('y', barBox.y - 6)
-            .style('color', 'rgb(166 132 238)')
-            .text(this.helperService.truncateNumberToFixed(this._score, 2));
-
+            .attr('font-size', '12px')
+            .attr('fill', this.barColor);
+          
+          if (this._score !== null)
+            label.text(this.helperService.roundNumber(this._score, 2));
+          
           const labelBox = label.node().getBBox();
           const widthDiff = labelBox.width - barBox.width;
           label.attr(
@@ -190,7 +197,7 @@ export class ScoreChartComponent extends BaseChartComponent {
             .append('rect')
             .attr('width', barBox.width + 8)
             .attr('height', 14)
-            .attr('fill', '#8b8ad1');
+            .attr('fill', this.barColor);
 
           breakContainer
             .append('rect')
@@ -218,13 +225,14 @@ export class ScoreChartComponent extends BaseChartComponent {
     d3.select(bar)
       .on('mouseover', function () {
         const barBox = bar.getBoundingClientRect();
+
+        const lowerRange = parseFloat(distribution.range[0]).toFixed(2);
+        const upperRange = parseFloat(distribution.range[1]).toFixed(2);
+
         const text =
-          'Score Range: ' + leftBoundCharacter +
-          parseFloat(distribution.range[0]).toFixed(2) +
-          ', ' +
-          parseFloat(distribution.range[1]).toFixed(2) +
-          ']  <br>  Gene Count: ' +
-          distribution.value;
+          `Score Range: ${ leftBoundCharacter } ${ lowerRange }, ${ upperRange }]
+          <br>
+          Gene Count: ${ distribution.value }`;
 
         tooltip
           .html(text)

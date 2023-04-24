@@ -36,6 +36,9 @@ export class GeneSoeChartsComponent implements OnInit {
   @Input() wikiId = '';
   charts: any[] = [];
 
+  barPrimaryColor = '#8b8ad1';
+  barAlternativeColor = '#42C7BB';
+
   constructor(private geneService: GeneService) {}
 
   ngOnInit() {}
@@ -48,7 +51,7 @@ export class GeneSoeChartsComponent implements OnInit {
         a.name > b.name ? 1 : -1
       );
 
-      //remove literature score
+      // remove literature score
       overallScoreDistribution = overallScoreDistribution.filter((item: any) => (item.name !== 'Literature Score'));
 
       this.charts = overallScoreDistribution.map((item: any) => {
@@ -64,13 +67,37 @@ export class GeneSoeChartsComponent implements OnInit {
 
         return {
           name: item.name,
+          barColor: this.getBarColor(item.name),
           score: this.getGeneOverallScores(item.name),
           ownerId: item.syn_id,
           wikiId: item.wiki_id,
           distribution,
         };
       });
+
+      // sort charts so Target Risk Score appears first
+      this.sortScoreCharts(this.charts);
     });
+  }
+
+  sortScoreCharts(charts: any[]) {
+    // sort charts alphabetically on name property
+    charts.sort((a, b) => {
+      if (a.name === 'Target Risk Score') {
+        return -1;
+      } else if (b.name === 'Target Risk Score') {
+        return 1;
+      } else {
+        return a.name.localeCompare(b.name);
+      }
+    });
+  }
+
+  getBarColor(chartName: string) {
+    if (chartName === 'Target Risk Score') {
+      return this.barAlternativeColor;
+    }
+    return this.barPrimaryColor;
   }
 
   getGeneOverallScores(name: string) {
@@ -78,13 +105,13 @@ export class GeneSoeChartsComponent implements OnInit {
       this._gene?.overall_scores || ({} as OverallScores);
 
     if ('Genetic Risk Score' === name) {
-      return scores['genetics_score'] || 0;
+      return scores['genetics_score'];
     } else if ('Multi-omic Risk Score' === name) {
-      return scores['multi_omics_score'] || 0;
+      return scores['multi_omics_score'];
     } else if ('Literature Score' === name) {
-      return scores['literature_score'] || 0;
+      return scores['literature_score'];
     } else if ('Target Risk Score' === name) {
-      return scores['target_risk_score'] || 0;
+      return scores['target_risk_score'];
     }
 
     return 0;
