@@ -105,13 +105,13 @@ export class GeneSoeChartsComponent implements OnInit {
       this._gene?.overall_scores || ({} as OverallScores);
 
     if ('Genetic Risk Score' === name) {
-      return scores['genetics_score'] || 0;
+      return scores['genetics_score'];
     } else if ('Multi-omic Risk Score' === name) {
-      return scores['multi_omics_score'] || 0;
+      return scores['multi_omics_score'];
     } else if ('Literature Score' === name) {
-      return scores['literature_score'] || 0;
+      return scores['literature_score'];
     } else if ('Target Risk Score' === name) {
-      return scores['target_risk_score'] || 0;
+      return scores['target_risk_score'];
     }
 
     return 0;
