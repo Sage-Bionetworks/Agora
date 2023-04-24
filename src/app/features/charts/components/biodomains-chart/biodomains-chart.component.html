@@ -1,12 +1,6 @@
-<div id="container">
-    <div id="left-hand-pane">
-        <h3>BIOLOGICAL DOMAIN ENRICHMENT</h3>
-        <div class="chart-container"></div>
-    </div>
-    <div id="right-hand-pane">
-        <h3>GO TERMS FOR {{ selection }}</h3>
-        <ul>
-            <li *ngFor="let item of goTerms">{{ item }}</li>
-        </ul>
-    </div>
+<div id="chart"></div>
+
+<div *ngIf="!data">
+    No data is currently available
 </div>
+

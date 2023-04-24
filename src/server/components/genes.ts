@@ -17,6 +17,7 @@ import {
   getNeuropathologicCorrelations,
   getOverallScores,
   getGeneLinks,
+  getBioDomains
 } from '.';
 
 // -------------------------------------------------------------------------- //
@@ -83,6 +84,7 @@ export async function getGene(ensg: string) {
     result.overall_scores = await getOverallScores(ensg);
     result.experimental_validation = await getExperimentalValidation(ensg);
     result.links = await getGeneLinks(ensg);
+    result.bio_domains = await getBioDomains(ensg);
   }
 
   cache.set(cacheKey, result);

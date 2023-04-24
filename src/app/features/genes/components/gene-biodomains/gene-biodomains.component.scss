@@ -1,0 +1,32 @@
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+
+    #left-hand-pane {
+        // width: 430px;
+        border: 1px solid #F1F3F5;
+        padding: 15px;
+
+        h3 {
+            text-align: center;
+        }
+    }
+
+    #right-hand-pane {
+        width: 445px;
+        background-color: #F1F3F5;
+        padding: 15px;
+    }
+}
+
+h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+ul {
+    li {
+        font-size: 14px;
+    }
+}

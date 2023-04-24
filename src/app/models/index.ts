@@ -14,3 +14,4 @@ export * from './synapse';
 export * from './charts';
 export * from './scores';
 export * from './GCTColumn';
+export * from './biodomains';
