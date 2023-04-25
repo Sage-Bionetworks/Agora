@@ -87,10 +87,14 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
+          d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
+          if (this.selectedIndex !== index) {
+            d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
+            d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+          }
         });
 
       const bar = svg
@@ -112,12 +116,15 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
+          d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           // check to make sure that the selected index
-          if (this.selectedIndex !== index)
+          if (this.selectedIndex !== index) {
             d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
+            d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+          }
         });
 
       const barName = svg
