@@ -41,7 +41,6 @@ export class BiodomainsChartComponent implements OnInit {
       if (this.selectedIndex > -1)
         this.selectedBioDomain = this.data[this.selectedIndex].biodomain;
 
-      // const svg = d3.select(this.chart.nativeElement);
       const svg = d3.select('#chart')
         .append('svg')
         .attr('width', 500)
@@ -62,7 +61,6 @@ export class BiodomainsChartComponent implements OnInit {
         .domain(this.data.map(d => d.biodomain))
         .range([0, chartHeight])
         .paddingInner(0.4);
-
 
       const tooltip = d3
         .select('body')
@@ -87,13 +85,14 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
+          // if the target is the selected index
           if (this.selectedIndex !== index) {
             d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
           }
         });
 
@@ -116,24 +115,23 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          // check to make sure that the selected index
+          // if the target is the selected index
           if (this.selectedIndex !== index) {
             d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
           }
         });
 
       const barName = svg
         .append('g')
-        .attr('id', 'b-text')
+        .attr('id', 'bar-name')
         .selectAll('text')
         .data(this.data)
         .enter().append('text')
-        // .attr('x', d => xScale(d.pct_linking_terms) - 4)
         .attr('x', labelWidth - 10)
         .attr('y', d => (yScale(d.biodomain) || 0) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
@@ -142,12 +140,12 @@ export class BiodomainsChartComponent implements OnInit {
         .style('font-weight', d => this.selectedBioDomain === d.biodomain ? 'bold' : 'normal')
         .text(d => d.biodomain)
         .on('click', (event) => {
-          const index = d3.select('#b-text').selectAll('text').nodes().indexOf(event.currentTarget);
+          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
           this.setStyles(index);
         })
         .on('mouseover', (event, data) => {
-          const index = d3.select('#b-text').selectAll('text').nodes().indexOf(event.currentTarget);
-          d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
+          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
 
           const tooltipText = this.getToolTipText(data.pct_linking_terms);
           d3.select('.tooltip')
@@ -155,7 +153,6 @@ export class BiodomainsChartComponent implements OnInit {
             .style('display', 'block');
         })
         .on('mousemove', (event) => {
-          
           d3.select('.tooltip')
             .style('left', `${ event.pageX }px`)
             .style('top', `${ event.pageY }px`);
@@ -163,9 +160,10 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseleave', (event) => {
           d3.select('.tooltip')
             .style('display', 'none');
-          const index = d3.select('#b-text').selectAll('text').nodes().indexOf(event.currentTarget);
+          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
+          // if the target is the selected index
           if (this.selectedIndex !== index)
-            d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
         });
 
       const barValue = svg
@@ -200,11 +198,11 @@ export class BiodomainsChartComponent implements OnInit {
     // emit change to index to populate GO terms
     this.selectedBioDomainIndex.emit(index);
     // reset all elements to non-bold
-    d3.select('#b-text').selectAll('text').style('font-weight', 'normal');
+    d3.select('#bar-name').selectAll('text').style('font-weight', 'normal');
     d3.select('#bars').selectAll('rect').style('fill-opacity', '50%');
     d3.select('#bar-value').selectAll('text').style('display', 'none');
     // bold the selected elements
-    d3.select('#b-text').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+    d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
     d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
     d3.select('#bar-value').select(`text:nth-child(${ index + 1 })`).style('display', 'block');
   }
