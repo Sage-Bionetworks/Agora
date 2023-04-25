@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { HelperService } from '../../../../core/services';
 import { BioDomain } from 'app/models';
 import * as d3 from 'd3';
 
@@ -16,7 +17,7 @@ export class BiodomainsChartComponent implements OnInit {
   selectedBioDomain = '';
   selectedIndex = -1;
 
-  constructor() {}
+  constructor(private helperService: HelperService) {}
 
   ngOnInit(): void {
     this.createChart();
@@ -169,7 +170,12 @@ export class BiodomainsChartComponent implements OnInit {
         .attr('dy', '0.35em')
         .attr('text-anchor', 'start')
         .style('font-size', '12px')
-        .text(d => d.pct_linking_terms + '%')
+        .text(data => {
+          let percentage = this.helperService.roundNumber(data.pct_linking_terms, 1);
+          if (percentage === '0.0')
+            percentage = '0';
+          return `${ percentage }%`;
+        })
         .style('display', (d) => this.selectedBioDomain === d.biodomain ? 'block' : 'none' );
     }
   }
