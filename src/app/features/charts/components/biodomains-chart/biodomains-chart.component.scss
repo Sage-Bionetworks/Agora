@@ -36,6 +36,13 @@ $primary-color: #5081A7;
 #negative-bars rect {
     &:hover {
         fill: transparent;
+        cursor: pointer;
+    }
+}
+
+#bars {
+    &:hover {
+        cursor: pointer;
     }
 }
 
