@@ -42,13 +42,15 @@ export class BiodomainsChartComponent implements OnInit {
         this.selectedBioDomain = this.data[this.selectedIndex].biodomain;
 
       // const svg = d3.select(this.chart.nativeElement);
-      const svg = d3.select('#chart').append('svg')
-        .attr('width', 418).attr('height', 560);
+      const svg = d3.select('#chart')
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 560);
 
       const chartWidth = +svg.attr('width');
       const chartHeight = +svg.attr('height');
 
-      const labelWidth = 160;
+      const labelWidth = 200;
 
       const barColor = '#8B8AD1';
       

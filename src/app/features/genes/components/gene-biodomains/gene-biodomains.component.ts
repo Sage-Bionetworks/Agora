@@ -16,26 +16,28 @@ export class GeneBioDomainsComponent implements OnInit {
   }
 
   selectedBioDomain: BioDomain | undefined;
-  // selectedBioDomainIndex: number | null = null;
   goTerms: string[] = [];
 
   defaultBioDomains = [
-    'Structural Stabilization', 
+    'Apoptosis',
+    'APP Metabolism',
+    'Autophagy',
+    'Cell Cycle',
+    'DNA Repair',
+    'Endolysosome',
+    'Epigenetic',
     'Immune Response',
     'Lipid Metabolism',
-    'Vasculature',
-    'Tau Homeostasis',
-    'Synapse',
-    'RNA Spliceosome',
-    'Proteostais',
-    'Oxidative Stree',
-    'Myelination',
+    'Metal Binding and Homeostasis',
     'Mitochondrial Metabolism',
-    'Epigenetics',
-    'Endolysosome',
-    'Autophagy',
-    'APP Metabolism',
-    'Apoptosis'
+    'Myelination',
+    'Oxidative Stress',
+    'Proteostasis',
+    'RNA Spliceosome',
+    'Structural Stabilization', 
+    'Synapse',
+    'Tau Homeostasis',
+    'Vasculature',
   ];
 
   getGoTerms(index: number): string[] {
