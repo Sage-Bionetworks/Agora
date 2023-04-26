@@ -9,12 +9,6 @@ import { BioDomain, Gene } from 'app/models';
 export class GeneBioDomainsComponent implements OnInit {
   @Input() gene: Gene | undefined;
 
-  getGeneName() {
-    if (this.gene)
-      return this.gene.hgnc_symbol || this.gene.ensembl_gene_id;
-    return '';
-  }
-
   selectedBioDomain: BioDomain | undefined;
   goTerms: string[] = [];
 
@@ -40,6 +34,18 @@ export class GeneBioDomainsComponent implements OnInit {
     'Vasculature',
   ];
 
+  constructor() {}
+
+  ngOnInit(): void {
+    this.processBioDomains();
+  }
+
+  getGeneName() {
+    if (this.gene)
+      return this.gene.hgnc_symbol || this.gene.ensembl_gene_id;
+    return '';
+  }
+
   getGoTerms(index: number): string[] {
     if (this.gene && this.gene.bio_domains) {
       const biodomain = this.gene.bio_domains.gene_biodomains[index];
@@ -53,17 +59,12 @@ export class GeneBioDomainsComponent implements OnInit {
   }
 
   onSelectedBioDomain(index: number) {
-    console.log('in onselectedbiodomain' + index);
     this.goTerms = this.getGoTerms(index);
     this.selectedBioDomain = this.gene?.bio_domains?.gene_biodomains[index];
   }
-
-  ngOnInit(): void {
-    this.processBioDomains();
-  }
   
   processBioDomains() {
-    // add missing biodomains
+    // add biodomains missing from api call
     this.defaultBioDomains.forEach((d) => {
       const exists = this.gene?.bio_domains?.gene_biodomains.find((b) => b.biodomain === d);
       if (!exists) {
