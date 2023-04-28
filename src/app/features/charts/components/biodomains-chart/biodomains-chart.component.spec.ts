@@ -10,7 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BiodomainsChartComponent } from './';
 import { HelperService } from '../../../../core/services';
 import { geneMock1 } from '../../../../testing';
-import { getRandomInt } from '../../../../core/helpers/helpers';
+import { getRandomInt } from '../../../../shared/helpers/app-helpers';
 
 // -------------------------------------------------------------------------- //
 // Tests
