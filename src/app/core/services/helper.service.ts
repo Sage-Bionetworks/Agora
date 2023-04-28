@@ -178,4 +178,8 @@ export class HelperService {
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get(name);
   }
+
+  capitalizeFirstLetterOfString(s: string) {
+    return s[0].toUpperCase() + s.slice(1);
+  }
 }

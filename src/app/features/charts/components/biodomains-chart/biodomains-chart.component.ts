@@ -15,7 +15,7 @@ export class BiodomainsChartComponent implements OnInit {
   @Output() selectedBioDomainIndex = new EventEmitter<number>();
 
   selectedBioDomain = '';
-  selectedIndex = -1;
+  selectedIndex = 0;
 
   constructor(private helperService: HelperService) {}
 
@@ -23,19 +23,8 @@ export class BiodomainsChartComponent implements OnInit {
     this.createChart();
   }
 
-  getLargestBioDomainsIndexByPercentage(biodomains: BioDomain[]) {
-    let largestIndex = 0;
-    for (let i = 0; i < biodomains.length; i++) {
-      if (biodomains[i].pct_linking_terms > biodomains[largestIndex].pct_linking_terms) {
-        largestIndex = i;
-      }
-    }
-    return largestIndex;
-  }
-
   createChart() {
     if (this.data) {
-      this.selectedIndex = this.getLargestBioDomainsIndexByPercentage(this.data);
       this.selectedBioDomainIndex.emit(this.selectedIndex);
 
       if (this.selectedIndex > -1)
@@ -62,12 +51,14 @@ export class BiodomainsChartComponent implements OnInit {
         .range([0, chartHeight])
         .paddingInner(0.4);
 
-      const tooltip = d3
+      // tooltip
+      d3
         .select('body')
         .append('div')
         .attr('class', 'tooltip arrow-below tooltip-arrow');
 
-      const negBar = svg
+      // negative space above bar
+      svg
         .append('g')
         .attr('id', 'negative-bars')
         .selectAll('rect')
@@ -85,18 +76,19 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           // if the target is the selected index
           if (this.selectedIndex !== index) {
             d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
           }
         });
 
-      const bar = svg
+      // bar
+      svg
         .append('g')
         .attr('id', 'bars')
         .selectAll('rect')
@@ -115,20 +107,21 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseover', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
         })
         .on('mouseout', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
           // if the target is the selected index
           if (this.selectedIndex !== index) {
             d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
           }
         });
 
-      const barName = svg
+      // bar label
+      svg
         .append('g')
-        .attr('id', 'bar-name')
+        .attr('id', 'bar-label')
         .selectAll('text')
         .data(this.data)
         .enter().append('text')
@@ -140,12 +133,12 @@ export class BiodomainsChartComponent implements OnInit {
         .style('font-weight', d => this.selectedBioDomain === d.biodomain ? 'bold' : 'normal')
         .text(d => d.biodomain)
         .on('click', (event) => {
-          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
+          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
           this.setStyles(index);
         })
         .on('mouseover', (event, data) => {
-          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
-          d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
+          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
 
           const tooltipText = this.getToolTipText(data.pct_linking_terms);
           d3.select('.tooltip')
@@ -160,13 +153,14 @@ export class BiodomainsChartComponent implements OnInit {
         .on('mouseleave', (event) => {
           d3.select('.tooltip')
             .style('display', 'none');
-          const index = d3.select('#bar-name').selectAll('text').nodes().indexOf(event.currentTarget);
+          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
           // if the target is the selected index
           if (this.selectedIndex !== index)
-            d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
         });
 
-      const barValue = svg
+      // bar value
+      svg
         .append('g')
         .attr('id', 'bar-value')
         .selectAll('text')
@@ -187,7 +181,7 @@ export class BiodomainsChartComponent implements OnInit {
     }
   }
 
-  private getToolTipText(linkingTerms: number) {
+  getToolTipText(linkingTerms: number) {
     if (linkingTerms === 0)
       return `No GO Terms link this biological domain to ${this.geneName}`;
     return `Click to explore to GO Terms that link this biological domain to ${this.geneName}`;
@@ -198,11 +192,11 @@ export class BiodomainsChartComponent implements OnInit {
     // emit change to index to populate GO terms
     this.selectedBioDomainIndex.emit(index);
     // reset all elements to non-bold
-    d3.select('#bar-name').selectAll('text').style('font-weight', 'normal');
+    d3.select('#bar-label').selectAll('text').style('font-weight', 'normal');
     d3.select('#bars').selectAll('rect').style('fill-opacity', '50%');
     d3.select('#bar-value').selectAll('text').style('display', 'none');
     // bold the selected elements
-    d3.select('#bar-name').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
     d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
     d3.select('#bar-value').select(`text:nth-child(${ index + 1 })`).style('display', 'block');
   }

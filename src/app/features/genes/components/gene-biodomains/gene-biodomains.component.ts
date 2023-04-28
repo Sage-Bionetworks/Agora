@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HelperService } from '../../../../core/services';
 import { BioDomain, Gene } from 'app/models';
 
 @Component({
@@ -34,7 +35,7 @@ export class GeneBioDomainsComponent implements OnInit {
     'Vasculature',
   ];
 
-  constructor() {}
+  constructor(private helperService: HelperService) {}
 
   ngOnInit(): void {
     this.processBioDomains();
@@ -97,6 +98,6 @@ export class GeneBioDomainsComponent implements OnInit {
   }
 
   capitalizeGoTerm(goTerm: string) {
-    return goTerm[0].toUpperCase() + goTerm.slice(1);
+    return this.helperService.capitalizeFirstLetterOfString(goTerm);
   }
 }

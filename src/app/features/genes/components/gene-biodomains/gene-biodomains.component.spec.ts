@@ -9,7 +9,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { GeneBioDomainsComponent } from './';
 import { HelperService } from '../../../../core/services';
-import { Gene } from '../../../../models';
 import { geneMock1 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
@@ -53,11 +52,5 @@ describe('Component: Gene Biodomains', () => {
     component.goTerms = [];
     const result = component.getHeaderText();
     expect(result).toBe('NO LINKING GO TERMS');
-  });
-
-  it('should capitalize correctly when capitalizeGoTerm() is called', () => {
-    const testString = 'just do it';
-    const result = component.capitalizeGoTerm(testString);
-    expect(result).toBe('Just do it');
   });
 });

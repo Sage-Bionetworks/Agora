@@ -128,4 +128,10 @@ describe('Service: Helper', () => {
     const res = helperService.getUrlParam('test');
     expect(res).toEqual(null);
   });
+
+  it('should capitalize first letter of string', () => {
+    const testString = 'nike just do it';
+    const result = helperService.capitalizeFirstLetterOfString(testString);
+    expect(result).toEqual('Nike just do it');
+  });
 });
