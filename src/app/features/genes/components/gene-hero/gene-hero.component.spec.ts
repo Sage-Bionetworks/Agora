@@ -8,6 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { GeneHeroComponent } from './';
+import { geneMock1 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -31,5 +32,11 @@ describe('Component: Gene Hero', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should comma separate and alphabetize the biodomains', () => {
+    component.gene = geneMock1;
+    const expected = 'Immune Response, Lipid Metabolism, Structural Stabilization, Synapse, Vasculature';
+    expect(component.getBiodomains()).toBe(expected);
   });
 });
