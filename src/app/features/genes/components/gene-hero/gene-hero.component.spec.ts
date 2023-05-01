@@ -34,7 +34,7 @@ describe('Component: Gene Hero', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should comma separate and alphabetize the biodomains', () => {
+  it('should comma separate and order the biodomains alphabetically', () => {
     component.gene = geneMock1;
     const expected = 'Immune Response, Lipid Metabolism, Structural Stabilization, Synapse, Vasculature';
     expect(component.getBiodomains()).toBe(expected);
