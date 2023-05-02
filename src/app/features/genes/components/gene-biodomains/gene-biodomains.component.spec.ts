@@ -42,7 +42,7 @@ describe('Component: Gene Biodomains', () => {
     expect(result).toBe('');
   });
 
-  it('should return gene name when getGeneName() is called with undefined gene', () => {
+  it('should return gene name when getGeneName() is called with a defined gene', () => {
     component.gene = geneMock1;
     const result = component.getGeneName();
     expect(result).toBe('MSN');

@@ -24,6 +24,11 @@ export class BiodomainsChartComponent implements OnInit {
   }
 
   createChart() {
+    const chartWidth = 500;
+    const chartHeight = 560;
+
+    const highlightColor = '#5081A7';
+
     if (this.data) {
       this.selectedBioDomainIndex.emit(this.selectedIndex);
 
@@ -32,11 +37,8 @@ export class BiodomainsChartComponent implements OnInit {
 
       const svg = d3.select('#chart')
         .append('svg')
-        .attr('width', 500)
-        .attr('height', 560);
-
-      const chartWidth = +svg.attr('width');
-      const chartHeight = +svg.attr('height');
+        .attr('width', chartWidth)
+        .attr('height', chartHeight);
 
       const labelWidth = 200;
 
@@ -71,20 +73,15 @@ export class BiodomainsChartComponent implements OnInit {
         .attr('fill', 'white')
         .on('click', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.setStyles(index);
+          this.handleClick(index);
         })
         .on('mouseover', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          this.handleMouseover(index, '#negative-bars', highlightColor);
         })
         .on('mouseout', (event) => {
           const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          // if the target is the selected index
-          if (this.selectedIndex !== index) {
-            d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
-          }
+          this.handleMouseout(index);
         });
 
       // bar
@@ -102,20 +99,15 @@ export class BiodomainsChartComponent implements OnInit {
         .style('fill-opacity', d => this.selectedBioDomain === d.biodomain ? '100%' : '50%')
         .on('click', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.setStyles(index);
+          this.handleClick(index);
         })
         .on('mouseover', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+          this.handleMouseover(index, '#bars', highlightColor);
         })
         .on('mouseout', (event) => {
           const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          // if the target is the selected index
-          if (this.selectedIndex !== index) {
-            d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
-          }
+          this.handleMouseout(index);
         });
 
       // bar label
@@ -134,16 +126,13 @@ export class BiodomainsChartComponent implements OnInit {
         .text(d => d.biodomain)
         .on('click', (event) => {
           const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          this.setStyles(index);
+          this.handleClick(index);
         })
         .on('mouseover', (event, data) => {
           const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
-
+          this.handleMouseover(index, '#bar-label', highlightColor);
           const tooltipText = this.getToolTipText(data.pct_linking_terms);
-          d3.select('.tooltip')
-            .text(tooltipText)
-            .style('display', 'block');
+          this.displayTooltip(tooltipText);
         })
         .on('mousemove', (event) => {
           d3.select('.tooltip')
@@ -151,12 +140,10 @@ export class BiodomainsChartComponent implements OnInit {
             .style('top', `${ event.pageY }px`);
         })
         .on('mouseleave', (event) => {
+          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
           d3.select('.tooltip')
             .style('display', 'none');
-          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          // if the target is the selected index
-          if (this.selectedIndex !== index)
-            d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+          this.handleMouseout(index);
         });
 
       // bar value
@@ -187,17 +174,49 @@ export class BiodomainsChartComponent implements OnInit {
     return `Click to explore to GO Terms that link this biological domain to ${this.geneName}`;
   }
 
-  setStyles(index: number) {
+  handleClick(index: number) {
     this.selectedIndex = index;
     // emit change to index to populate GO terms
     this.selectedBioDomainIndex.emit(index);
     // reset all elements to non-bold
-    d3.select('#bar-label').selectAll('text').style('font-weight', 'normal');
     d3.select('#bars').selectAll('rect').style('fill-opacity', '50%');
+    d3.select('#bar-label').selectAll('text').style('font-weight', 'normal');
     d3.select('#bar-value').selectAll('text').style('display', 'none');
     // bold the selected elements
-    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
     d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
+    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', 'black');
     d3.select('#bar-value').select(`text:nth-child(${ index + 1 })`).style('display', 'block');
+  }
+
+  handleMouseover(index: number, id: '#negative-bars' | '#bars' | '#bar-label', highlightColor: string) {
+    d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
+    if (id === '#negative-bars' || id === '#bars') {
+      if (this.selectedIndex !== index) {
+        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', highlightColor);
+      }
+    }
+    if (id === '#bar-label') {
+      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
+      if (this.selectedIndex !== index) {
+        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', highlightColor);
+      }
+    }
+  }
+
+  displayTooltip(text: string) {
+    d3.select('.tooltip')
+      .text(text)
+      .style('display', 'block');
+  }
+
+  handleMouseout(index: number) {
+    // if the target is the selected index
+    if (this.selectedIndex !== index) {
+      d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
+      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
+      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', 'black');
+    }
   }
 }

@@ -1,5 +1,4 @@
 $tooltip-color: #63676C;
-$primary-color: #5081A7;
 
 .tooltip {
   position: absolute;
@@ -50,7 +49,6 @@ $primary-color: #5081A7;
     fill: black;
     
     &:hover {
-        fill: $primary-color;
         cursor: pointer;
     }
 }

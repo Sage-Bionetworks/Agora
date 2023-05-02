@@ -134,4 +134,16 @@ describe('Service: Helper', () => {
     const result = helperService.capitalizeFirstLetterOfString(testString);
     expect(result).toEqual('Nike just do it');
   });
+
+  it('should capitalize the only letter of a string having a length of 1', () => {
+    const testString = 'n';
+    const result = helperService.capitalizeFirstLetterOfString(testString);
+    expect(result).toEqual('N');
+  });
+
+  it('should return an empty string if attempting to capitalize an empty string', () => {
+    const testString = '';
+    const result = helperService.capitalizeFirstLetterOfString(testString);
+    expect(result).toEqual('');
+  });
 });

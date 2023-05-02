@@ -1,3 +1,6 @@
+$scrollbar-thumb-color: #878E95;
+$scrollbar-thumb-hover-color: #4A5056;
+
 #container {
     display: flex;
     flex-direction: row;
@@ -34,32 +37,32 @@ ul {
 
 
 
-// Custom scrollbar START
+// CUSTOM SCROLLBAR START
 
 /* WebKit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-        width: 6px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-background-color: transparent; /* Hide the track */
+    background-color: transparent; /* Hide the track */
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #878E95;
+    background-color: $scrollbar-thumb-color;
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #4A5056;
+    background-color: $scrollbar-thumb-hover-color;
 }
 
 /* Firefox */
-@supports (scrollbar-color: #878E95 transparent) {
+@supports (scrollbar-color: $scrollbar-thumb-color transparent) {
     * {
-        scrollbar-color: #878E95 transparent;
+        scrollbar-color: $scrollbar-thumb-color transparent;
         scrollbar-width: thin;
     }
 }
 
-// Custom scrollbar END
+// CUSTOM SCROLLBAR END
