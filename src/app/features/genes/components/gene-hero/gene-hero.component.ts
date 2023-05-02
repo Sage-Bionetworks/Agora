@@ -75,7 +75,6 @@ export class GeneHeroComponent {
   getBiodomains(): string {
     if (!this.gene || !this.gene.bio_domains)
       return '';
-    console.log(this.gene.bio_domains.gene_biodomains);
     const biodomains = this.gene.bio_domains.gene_biodomains
       .filter(b => b.pct_linking_terms > 0)
       .map(b => b.biodomain)
