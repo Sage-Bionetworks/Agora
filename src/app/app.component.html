@@ -1,7 +1,9 @@
-<header></header>
-<main id="main">
-  <router-outlet></router-outlet>
-</main>
-<footer></footer>
+<div id="container">
+  <header></header>
+  <div id="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <footer></footer>
+</div>
 <p-toast class="global-toast" position="bottom-center"></p-toast>
 <loading-overlay [isGlobal]="true"></loading-overlay>

@@ -11,7 +11,7 @@
   justify-content: space-between;
   background-color: var(--color-primary);
   font-weight: 300;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
 
   .footer-nav {
     ul {
@@ -36,15 +36,12 @@
       }
 
       li {
-        height: fit-content;
-
         &:first-child a {
           line-height: 0;
         }
 
         a {
           display: block;
-          height: fit-content;
         }
       }
     }
