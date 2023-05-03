@@ -21,18 +21,23 @@ $scrollbar-thumb-hover-color: #4A5056;
         background-color: #F1F3F5;
         padding: 15px;
         overflow: auto;
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        
+            li {
+                padding: 0 0 15px;
+                font-size: 14px;
+            }
+        }
     }
 }
 
 h3 {
     font-size: 16px;
     font-weight: bold;
-}
-
-ul {
-    li {
-        font-size: 14px;
-    }
 }
 
 
