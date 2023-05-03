@@ -10,3 +10,4 @@ export * from './metabolomics';
 export * from './distribution';
 export * from './teams';
 export * from './scores';
+export * from './biodomains';

@@ -2869,6 +2869,66 @@ export const geneMock1: Gene = {
     min: 0,
     max: 7,
   },
+  bio_domains: {
+    ensembl_gene_id: "ENSG00000147065",
+    gene_biodomains: [
+      {
+        biodomain: "Immune Response",
+        go_terms: [
+          "leukocyte migration",
+          "T cell proliferation",
+          "immunological synapse formation",
+          "T cell migration",
+          "leukocyte cell-cell adhesion"
+        ],
+        n_biodomain_terms: 852,
+        n_gene_biodomain_terms: 5,
+        pct_linking_terms: 33.33
+      },
+      {
+        biodomain: "Lipid Metabolism",
+        go_terms: [
+          "basolateral plasma membrane",
+          "cellular response to testosterone stimulus"
+        ],
+        n_biodomain_terms: 827,
+        n_gene_biodomain_terms: 2,
+        pct_linking_terms: 13.33
+      },
+      {
+        biodomain: "Structural Stabilization",
+        go_terms: [
+          "cytoskeleton",
+          "focal adhesion",
+          "cytoskeleton organization",
+          "adherens junction",
+          "structural constituent of cytoskeleton",
+          "cell adhesion molecule binding"
+        ],
+        n_biodomain_terms: 466,
+        n_gene_biodomain_terms: 6,
+        pct_linking_terms: 40
+      },
+      {
+        biodomain: "Synapse",
+        go_terms: [
+          "signaling receptor binding"
+        ],
+        n_biodomain_terms: 891,
+        n_gene_biodomain_terms: 1,
+        pct_linking_terms: 6.67
+      },
+      {
+        biodomain: "Vasculature",
+        go_terms: [
+          "blood microparticle"
+        ],
+        n_biodomain_terms: 315,
+        n_gene_biodomain_terms: 1,
+        pct_linking_terms: 6.67
+      },
+    ]
+  }
 };
 
 export const geneMock2: Gene = {

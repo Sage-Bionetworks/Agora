@@ -40,6 +40,7 @@ import {
   ExperimentalValidationComponent,
   GeneNominationsComponent,
   GeneDetailsComponent,
+  GeneBioDomainsComponent
 } from './components';
 
 // -------------------------------------------------------------------------- //
@@ -75,6 +76,7 @@ import { GeneService } from './services';
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
+    GeneBioDomainsComponent
   ],
   imports: [CommonModule, SharedModule, ChartsModule],
   exports: [
@@ -103,6 +105,7 @@ import { GeneService } from './services';
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
+    GeneBioDomainsComponent
   ],
   providers: [GeneService],
 })
