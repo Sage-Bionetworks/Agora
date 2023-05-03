@@ -2873,6 +2873,20 @@ export const geneMock1: Gene = {
     ensembl_gene_id: "ENSG00000147065",
     gene_biodomains: [
       {
+        biodomain: "Structural Stabilization",
+        go_terms: [
+          "cytoskeleton",
+          "focal adhesion",
+          "cytoskeleton organization",
+          "adherens junction",
+          "structural constituent of cytoskeleton",
+          "cell adhesion molecule binding"
+        ],
+        n_biodomain_terms: 466,
+        n_gene_biodomain_terms: 6,
+        pct_linking_terms: 40
+      },
+      {
         biodomain: "Immune Response",
         go_terms: [
           "leukocyte migration",
@@ -2894,20 +2908,6 @@ export const geneMock1: Gene = {
         n_biodomain_terms: 827,
         n_gene_biodomain_terms: 2,
         pct_linking_terms: 13.33
-      },
-      {
-        biodomain: "Structural Stabilization",
-        go_terms: [
-          "cytoskeleton",
-          "focal adhesion",
-          "cytoskeleton organization",
-          "adherens junction",
-          "structural constituent of cytoskeleton",
-          "cell adhesion molecule binding"
-        ],
-        n_biodomain_terms: 466,
-        n_gene_biodomain_terms: 6,
-        pct_linking_terms: 40
       },
       {
         biodomain: "Synapse",

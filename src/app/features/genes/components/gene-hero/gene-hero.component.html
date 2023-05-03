@@ -17,6 +17,10 @@
         {{ getSummary() }}
       </p>
       <hr />
+      <div class="gene-hero-biodomains">
+        <h3>BIOLOGICAL DOMAINS</h3>
+        {{ getBiodomains() }}
+      </div>
       <div *ngIf="getAlias()" class="gene-hero-aliases">
         <div class="gene-hero-aliases-heading">Also known as</div>
         <p *ngIf="gene.hgnc_symbol" class="mb-0">{{ gene.ensembl_gene_id }}</p>
