@@ -122,7 +122,7 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .domain([0, d3.max(this.chartData, d => d.distribution) as number])
         .range([innerHeight, 0]);
 
-      // negative space above bar
+      // NEGATIVE SPACE ABOVE BARS
       svg
         .selectAll('.negative-bars')
         .data(this.chartData)
@@ -136,17 +136,14 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .on('mouseenter', (event, d) => {
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target);
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const x = margin.left + (xScale(d.bins[0].toString()) as number) + xScale.bandwidth() / 2;
-          const y = yScale(d.distribution) + margin.top;
+          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
           const bar = d3.select(bars.nodes()[index]);
-          this.highlightBar(bar, index);
-          this.showTooltip(tooltipText, x, y, index);
+          this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target);
           const bar = d3.select(bars.nodes()[index]);
-          this.unhighlightBar(bar, index);
-          this.hideTooltip(event);
+          this.handleMouseLeave(bar, index, event);
         });
 
       // BARS
@@ -164,20 +161,17 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .on('mouseenter', (event, d) => {
           const index = svg.selectAll('.scorebars').nodes().indexOf(event.target);
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const x = margin.left + (xScale(d.bins[0].toString()) as number) + xScale.bandwidth() / 2;
-          const y = yScale(d.distribution) + margin.top;
+          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
           const bar = d3.select(bars.nodes()[index]);
-          this.highlightBar(bar, index);
-          this.showTooltip(tooltipText, x, y, index);
+          this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.scorebars').nodes().indexOf(event.target);
           const bar = d3.select(bars.nodes()[index]);
-          this.unhighlightBar(bar, index);
-          this.hideTooltip(event);
+          this.handleMouseLeave(bar, index, event);
         });
 
-      // SCORE LABEL
+      // SCORE LABELS
       svg
         .attr('class', 'bar-labels')
         .selectAll('.bar-labels')
@@ -199,33 +193,30 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .on('mouseenter', (_, d) => {
           const index = this.scoreIndex;
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const x = margin.left + (xScale(d.bins[0].toString()) as number) + xScale.bandwidth() / 2;
-          const y = yScale(d.distribution) + margin.top;
+          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
           const bar = d3.select(bars.nodes()[index]);
-          this.highlightBar(bar, index);
-          this.showTooltip(tooltipText, x, y, index);
+          this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', (event) => {
           const index = this.scoreIndex;
           const bar = d3.select(bars.nodes()[index]);
-          this.unhighlightBar(bar, index);
-          this.hideTooltip(event);
+          this.handleMouseLeave(bar, index, event);
         });
 
-      // x-axis
+      // X-AXIS
       const xAxis = d3.axisBottom(xScale);
       svg.append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${ innerHeight })`)
         .call(xAxis);
 
-      // y-axis
+      // Y-AXIS
       const yAxis = d3.axisLeft(yScale);
       svg.append('g')
         .attr('class', 'y-axis')
         .call(yAxis);
 
-      // x-axis label
+      // X-AXIS LABEL
       svg.append('text')
         .attr('class', 'x-axis-label')
         .attr('x', innerWidth / 2)
@@ -233,7 +224,7 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .attr('text-anchor', 'middle')
         .text('GENE SCORE');
 
-      // y-axis label
+      // Y-AXIS LABEL
       svg.append('text')
         .attr('class', 'y-axis-label')
         .attr('x', -innerHeight / 2)
@@ -245,6 +236,16 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
 
       this.initialized = true;
     }
+  }
+
+  handleMouseEnter(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number, tooltipText: string, tooltipCoordinates: { X: number; Y: number; }) {
+    this.highlightBar(bar, index);
+    this.showTooltip(tooltipText, tooltipCoordinates.X, tooltipCoordinates.Y, index);
+  }
+
+  handleMouseLeave(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number, event: any) {
+    this.unhighlightBar(bar, index);
+    this.hideTooltip(event);
   }
 
   highlightBar(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number) {
@@ -264,6 +265,14 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
       // non-score bars should be 50%
       bar.style('fill-opacity', '50%');
     }
+  }
+
+  getTooltipCoordinates(leftMargin: number, topMargin: number, xBarPosition: number, xBarWidth: number, yBarPosition: number) {
+    // x-coordinate would be the left margin + x-barPosition + half of the bar width
+    const x = leftMargin + xBarPosition + (xBarWidth / 2);
+    // y-coordinate would be the y-barPosition + top margin
+    const y = topMargin + yBarPosition;
+    return { 'X': x, 'Y': y};
   }
 
   getToolTipText(scoreRangeStart: number, scoreRangeEnd: number, geneCount: number) {

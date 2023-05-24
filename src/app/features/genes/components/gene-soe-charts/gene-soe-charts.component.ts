@@ -35,8 +35,8 @@ export class GeneSoeChartsComponent implements OnInit {
 
   @Input() wikiId = '';
 
-  barPrimaryColor = '#8b8ad1';
-  barAlternativeColor = '#42C7BB';
+  primaryBarColor = '#8B8AD1';
+  alternateBarColor = '#42C7BB';
 
   scoreDistributions: OverallScoresDistribution[] = [];
 
@@ -44,7 +44,9 @@ export class GeneSoeChartsComponent implements OnInit {
 
   ngOnInit() {}
 
-  sortScoreDistributions(distributions: OverallScoresDistribution[]) {
+  customSortDistributions(distributions: OverallScoresDistribution[]) {
+    // sort the distributions such that the order is: Target Risk Score, Genetic Risk Score, Multi-omic Risk Score
+    // this should match the default column order on the GCT page
     distributions.sort((a: OverallScoresDistribution, b: OverallScoresDistribution) => {
       if (a.name === 'Target Risk Score') {
         return -1;
@@ -67,34 +69,19 @@ export class GeneSoeChartsComponent implements OnInit {
   init() {
     this.geneService.getDistribution().subscribe((data: Distribution) => {
       this.scoreDistributions = data.overall_scores;
-      this.sortScoreDistributions(this.scoreDistributions);
+      this.customSortDistributions(this.scoreDistributions);
       // remove literature score
       this.scoreDistributions = this.scoreDistributions.filter((item: any) => (item.name !== 'Literature Score'));
-      // sort charts so Target Risk Score appears first
-      this.sortScoreCharts(this.scoreDistributions);
-    });
-  }
-
-  sortScoreCharts(charts: OverallScoresDistribution[]) {
-    // sort charts alphabetically on name property
-    charts.sort((a, b) => {
-      if (a.name === 'Target Risk Score') {
-        return -1;
-      } else if (b.name === 'Target Risk Score') {
-        return 1;
-      } else {
-        return a.name.localeCompare(b.name);
-      }
     });
   }
 
   getBarColor(chartName: string | undefined) {
     if (!chartName)
-      return this.barPrimaryColor;
+      return this.primaryBarColor;
     if (chartName === 'Target Risk Score') {
-      return this.barAlternativeColor;
+      return this.alternateBarColor;
     }
-    return this.barPrimaryColor;
+    return this.primaryBarColor;
   }
 
   getGeneOverallScores(name: string) {

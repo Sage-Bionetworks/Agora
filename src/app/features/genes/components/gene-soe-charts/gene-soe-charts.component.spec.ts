@@ -12,7 +12,7 @@ import { GeneSoeChartsComponent } from './';
 import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
 import { OverallScoresDistribution } from '../../../../models';
-import { overallScoresMock1 } from '../../../../testing';
+import { overallScoresMock1, overallScoresMock2 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -40,20 +40,29 @@ describe('Component: Gene SOE Charts', () => {
   });
 
   it('should sort target risk score first', () => {
-    const data: OverallScoresDistribution[] = overallScoresMock1;
-    component.sortScoreDistributions(data);
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[0].name).toBe('Target Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
     expect(data[0].name).toBe('Target Risk Score');
   });
 
   it('should sort genetic risk score second', () => {
-    const data: OverallScoresDistribution[] = overallScoresMock1;
-    component.sortScoreDistributions(data);
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[1].name).toBe('Genetic Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
     expect(data[1].name).toBe('Genetic Risk Score');
   });
 
   it('should sort multi-omic risk score last', () => {
-    const data: OverallScoresDistribution[] = overallScoresMock1;
-    component.sortScoreDistributions(data);
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[2].name).toBe('Multi-omic Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
     expect(data[2].name).toBe('Multi-omic Risk Score');
   });
 });

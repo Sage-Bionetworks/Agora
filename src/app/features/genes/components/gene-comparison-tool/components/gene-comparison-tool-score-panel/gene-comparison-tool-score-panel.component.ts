@@ -9,8 +9,6 @@ import {
 import { OverlayPanel } from 'primeng/overlaypanel';
   
 import { GCTScorePanelData, OverallScoresDistribution } from '../../../../../../models';
-import { HelperService } from '../../../../../../core/services';
-import { GeneService } from '../../../../../genes/services';
 
 import * as helpers from '../../gene-comparison-tool.helpers';
   
@@ -26,7 +24,7 @@ export class GeneComparisonToolScorePanelComponent {
 
   @Input() data: GCTScorePanelData | undefined;
 
-  barColor = '#8b8ad1';
+  barColor = '#8B8AD1';
     
   @Output() onNavigateToMethodology: EventEmitter<object> = new EventEmitter<object>();
   @Output() onNavigateToFeedback: EventEmitter<object> = new EventEmitter<object>();
@@ -35,7 +33,7 @@ export class GeneComparisonToolScorePanelComponent {
   
   scoreDistribution: OverallScoresDistribution | undefined;
 
-  constructor(private helperService: HelperService, private geneService: GeneService) {}
+  constructor() {}
 
   getValuePosition(data: any) {
     const percentage = Math.round(
@@ -72,11 +70,7 @@ export class GeneComparisonToolScorePanelComponent {
   }
 
   toggle(event: Event, data?: GCTScorePanelData) {
-    if (
-      event.target === this.event?.target &&
-      this.overlayPanel.overlayVisible
-    ) {
-      console.log('i will hide now');
+    if (event.target === this.event?.target && this.overlayPanel.overlayVisible) {
       this.hide();
     } else {
       this.show(event, data);
