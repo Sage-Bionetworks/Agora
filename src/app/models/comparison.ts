@@ -1,5 +1,5 @@
 import { SelectItem } from 'primeng/api';
-import { MedianExpression } from './';
+import { MedianExpression, OverallScoresDistribution } from './';
 
 export interface GCTGeneTissue {
   name: string;
@@ -78,6 +78,14 @@ export interface GCTDetailsPanelData {
   intervalMin?: number;
   intervalMax?: number;
   footer?: string;
+}
+
+export interface GCTScorePanelData {
+  geneLabel?: string;
+  scoreName?: string;
+  columnName?: string;
+  score: number | null;
+  distributions?: OverallScoresDistribution[];
 }
 
 export interface GCTSortEvent {

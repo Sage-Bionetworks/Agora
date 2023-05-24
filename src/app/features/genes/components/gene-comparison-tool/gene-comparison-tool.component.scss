@@ -380,6 +380,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      
+      button {
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--color-action-primary);
+        }
+      }
     }
 
     td.cell-default {

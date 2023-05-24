@@ -28,6 +28,8 @@ import {
   GCTGeneResponse,
   GCTDetailsPanelData,
   GCTColumn,
+  Distribution,
+  OverallScoresDistribution,
 } from '../../../../models';
 
 import { GeneService } from '../../services';
@@ -37,6 +39,7 @@ import * as variables from './gene-comparison-tool.variables';
 import * as helpers from './gene-comparison-tool.helpers';
 
 import {
+  GeneComparisonToolScorePanelComponent as ScorePanelComponent,
   GeneComparisonToolDetailsPanelComponent as DetailsPanelComponent,
   GeneComparisonToolFilterPanelComponent as FilterPanelComponent,
   GeneComparisonToolPinnedGenesModalComponent as PinnedGenesModalComponent,
@@ -65,8 +68,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   scoresColumns: GCTColumn[] = [
     { field: 'RISK SCORE', header: 'AD Risk Score', selected: true, visible: true },
-    { field: 'MULTI-OMIC', header: 'Genomic Score', selected: true, visible: true },
     { field: 'GENETIC', header: 'Genetic Score', selected: true, visible: true },
+    { field: 'MULTI-OMIC', header: 'Genomic Score', selected: true, visible: true },
   ];
 
   brainRegionsColumns: GCTColumn[] = [
@@ -80,6 +83,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     { field: 'STG', header: 'STG - Superior Temporal Gyrus', selected: true, visible: true },
     { field: 'TCX', header: 'TCX - Temporal Cortex', selected: true, visible: true },
   ];
+
+  scoresDistribution: OverallScoresDistribution[] = [];
 
   /* Sort ------------------------------------------------------------------ */
   sortField = '';
@@ -110,6 +115,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   @ViewChild('filterPanel') filterPanel!: FilterPanelComponent;
   @ViewChild('detailsPanel') detailsPanel!: DetailsPanelComponent;
+  @ViewChild('scorePanel') scorePanel!: ScorePanelComponent;
   @ViewChild('pinnedGenesModal') pinnedGenesModal!: PinnedGenesModalComponent;
 
   constructor(
@@ -211,7 +217,12 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         this.initData(res.items);
         this.sortTable(this.headerTable);
         this.refresh();
-        this.helperService.setLoading(false);
+
+        // get scores distribution
+        this.geneService.getDistribution().subscribe((data: Distribution) => {
+          this.scoresDistribution = data.overall_scores;
+          this.helperService.setLoading(false);
+        });
       });
   }
 
@@ -787,6 +798,18 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       );
     }
     return;
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Score Panel
+  /* ----------------------------------------------------------------------- */
+
+  getScorePanelData(columnName: string, gene: GCTGene, scoresDistributions: OverallScoresDistribution[] | undefined) {
+    // get the scores distribution for the column and row clicked
+    if (!scoresDistributions) {
+      return;
+    }
+    return helpers.getScorePanelData(columnName, gene, scoresDistributions);
   }
 
   /* ----------------------------------------------------------------------- */

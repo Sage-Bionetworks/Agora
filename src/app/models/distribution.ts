@@ -34,6 +34,11 @@ export interface OverallScoresDistribution {
   wiki_id: string;
 }
 
+export interface ScoreData {
+  distribution: number;
+  bins: number[];
+}
+
 export interface Distribution {
   rna_differential_expression: RnaDistribution[];
   proteomics_LFQ: ProteomicsDistribution[];

@@ -39,11 +39,11 @@ export class HelperService {
   getGCTColumnTooltipText(text: string): string {
     switch (text) {
       case 'RISK SCORE':
-        return 'AD Risk Score';
+        return 'Target Risk Score';
       case 'MULTI-OMIC':
-        return 'Genomic Score';
+        return 'Multi-omic Risk Score';
       case 'GENETIC':
-        return 'Genetic Score';
+        return 'Genetic Risk Score';
       case 'ACC':
         return 'Anterior Cingulate Cortex';
       case 'AntPFC':
