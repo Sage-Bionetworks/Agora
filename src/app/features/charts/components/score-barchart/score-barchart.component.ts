@@ -268,7 +268,7 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
 
   getToolTipText(scoreRangeStart: number, scoreRangeEnd: number, geneCount: number) {
     const leftBoundCharacter = this.scoreIndex == 0 ? '[' : '(';
-    return `Score Range: ${ leftBoundCharacter } ${ scoreRangeStart }, ${ scoreRangeEnd }]
+    return `Score Range: ${ leftBoundCharacter }${ scoreRangeStart }, ${ scoreRangeEnd }]
     <br>
     Gene Count: ${ geneCount }`;
   }
