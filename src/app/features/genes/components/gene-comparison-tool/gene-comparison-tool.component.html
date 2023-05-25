@@ -329,13 +329,19 @@
                     *ngFor="let column of columns"
                   >
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
-                    </td>
-                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
                     </td>
                     <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
                     </td>
                     <td class="cell-default" *ngIf="!isScoresColumn(column)" [style]="{ width: columnWidth }">
                       <button
@@ -460,13 +466,19 @@
                     *ngFor="let column of columns"
                   >
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
-                    </td>
-                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
                     </td>
                     <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
-                      {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
                     </td>
                     <td class="cell-default" *ngIf="!isScoresColumn(column)" [style]="{ width: columnWidth }">
                       <button
@@ -521,6 +533,9 @@
       (onShowLegend)="legendPanel.toggle()"
       (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
     ></gene-comparison-tool-details-panel>
+    <gene-comparison-tool-score-panel
+      #scorePanel
+    ></gene-comparison-tool-score-panel>
     <gene-comparison-tool-how-to-panel
       #howToPanel
     ></gene-comparison-tool-how-to-panel>

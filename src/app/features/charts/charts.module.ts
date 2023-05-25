@@ -9,6 +9,7 @@ import {
   MedianChartComponent,
   RowChartComponent,
   ScoreChartComponent,
+  ScoreBarChartComponent,
   BiodomainsChartComponent,
   NetworkChartComponent,
 } from './components';
@@ -20,6 +21,7 @@ import {
     MedianChartComponent,
     RowChartComponent,
     ScoreChartComponent,
+    ScoreBarChartComponent,
     BiodomainsChartComponent,
     NetworkChartComponent,
   ],
@@ -30,6 +32,7 @@ import {
     MedianChartComponent,
     RowChartComponent,
     ScoreChartComponent,
+    ScoreBarChartComponent,
     BiodomainsChartComponent,
     NetworkChartComponent,
   ],

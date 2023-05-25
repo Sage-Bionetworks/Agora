@@ -1,20 +1,22 @@
 <div *ngIf="_gene" class="gene-score-charts">
-  <div *ngFor="let chart of charts">
+  <div *ngFor="let chart of scoreDistributions">
     <div class="gene-score-charts-header">
       <div>
         <h2 class="gene-score-charts-heading">
-          {{ chart.name?.toUpperCase() }}
+          {{ chart.name }}
         </h2>
       </div>
       <div>
-        <overlay-panel-link [ownerId]="chart.ownerId" [wikiId]="chart.wikiId">
+        <overlay-panel-link
+          [ownerId]="chart.syn_id" 
+          [wikiId]="chart.wiki_id">
         </overlay-panel-link>
       </div>
     </div>
-    <score-chart
-      [score]="chart.score"
-      [barColor]="chart.barColor"
-      [distribution]="chart.distribution"
-    ></score-chart>
+    <score-barchart
+      [score]="getGeneOverallScores(chart.name)"
+      [barColor]="getBarColor(chart.name)"
+      [data]="chart"
+    ></score-barchart>
   </div>
 </div>

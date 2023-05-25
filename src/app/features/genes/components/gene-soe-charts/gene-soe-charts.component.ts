@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import {
+  Distribution,
   Gene,
   OverallScores,
   OverallScoresDistribution,
@@ -20,8 +21,7 @@ export interface SOEChartProps {
 @Component({
   selector: 'gene-soe-charts',
   templateUrl: './gene-soe-charts.component.html',
-  styleUrls: ['./gene-soe-charts.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./gene-soe-charts.component.scss']
 })
 export class GeneSoeChartsComponent implements OnInit {
   _gene: Gene | undefined;
@@ -34,70 +34,54 @@ export class GeneSoeChartsComponent implements OnInit {
   }
 
   @Input() wikiId = '';
-  charts: any[] = [];
 
-  barPrimaryColor = '#8b8ad1';
-  barAlternativeColor = '#42C7BB';
+  primaryBarColor = '#8B8AD1';
+  alternateBarColor = '#42C7BB';
+
+  scoreDistributions: OverallScoresDistribution[] = [];
 
   constructor(private geneService: GeneService) {}
 
   ngOnInit() {}
 
-  init() {
-    this.geneService.getDistribution().subscribe((data: any) => {
-      let overallScoreDistribution = data.overall_scores;
-
-      overallScoreDistribution.sort((a: any, b: any) =>
-        a.name > b.name ? 1 : -1
-      );
-
-      // remove literature score
-      overallScoreDistribution = overallScoreDistribution.filter((item: any) => (item.name !== 'Literature Score'));
-
-      this.charts = overallScoreDistribution.map((item: any) => {
-        const distribution: any = [];
-
-        item.bins.forEach((bin: string, i: number) => {
-          distribution.push({
-            key: parseFloat(bin[0]).toFixed(2),
-            value: item.distribution[i],
-            range: [parseFloat(bin[0]), parseFloat(bin[1])],
-          });
-        });
-
-        return {
-          name: item.name,
-          barColor: this.getBarColor(item.name),
-          score: this.getGeneOverallScores(item.name),
-          ownerId: item.syn_id,
-          wikiId: item.wiki_id,
-          distribution,
-        };
-      });
-
-      // sort charts so Target Risk Score appears first
-      this.sortScoreCharts(this.charts);
-    });
-  }
-
-  sortScoreCharts(charts: any[]) {
-    // sort charts alphabetically on name property
-    charts.sort((a, b) => {
+  customSortDistributions(distributions: OverallScoresDistribution[]) {
+    // sort the distributions such that the order is: Target Risk Score, Genetic Risk Score, Multi-omic Risk Score
+    // this should match the default column order on the GCT page
+    distributions.sort((a: OverallScoresDistribution, b: OverallScoresDistribution) => {
       if (a.name === 'Target Risk Score') {
         return -1;
       } else if (b.name === 'Target Risk Score') {
         return 1;
+      } else if (a.name === 'Genetic Risk Score') {
+        return -1;
+      } else if (b.name === 'Genetic Risk Score') {
+        return 1;
+      } else if (a.name === 'Multi-omic Risk Score') {
+        return -1;
+      } else if (b.name === 'Multi-omic Risk Score') {
+        return 1;
       } else {
-        return a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name);  // if there are more scores columns in the future, default to alphabetical
       }
     });
   }
 
-  getBarColor(chartName: string) {
+  init() {
+    this.geneService.getDistribution().subscribe((data: Distribution) => {
+      this.scoreDistributions = data.overall_scores;
+      this.customSortDistributions(this.scoreDistributions);
+      // remove literature score
+      this.scoreDistributions = this.scoreDistributions.filter((item: any) => (item.name !== 'Literature Score'));
+    });
+  }
+
+  getBarColor(chartName: string | undefined) {
+    if (!chartName)
+      return this.primaryBarColor;
     if (chartName === 'Target Risk Score') {
-      return this.barAlternativeColor;
+      return this.alternateBarColor;
     }
-    return this.barPrimaryColor;
+    return this.primaryBarColor;
   }
 
   getGeneOverallScores(name: string) {

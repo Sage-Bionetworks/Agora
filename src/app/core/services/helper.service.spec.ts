@@ -29,7 +29,7 @@ describe('Service: Helper', () => {
 
   it('should get GCT column tooltip text for Risk Score', () => {
     const res = helperService.getGCTColumnTooltipText('RISK SCORE');
-    expect(res).toEqual('AD Risk Score');
+    expect(res).toEqual('Target Risk Score');
   });
 
 
