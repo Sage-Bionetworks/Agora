@@ -59,7 +59,12 @@ export class GeneBioDomainsComponent implements OnInit {
     return [];
   }
 
-  onSelectedBioDomain(index: number) {
+  onSelectedBioDomain(index: number | undefined) {
+    if (index === undefined) {
+      this.goTerms = [];
+      this.selectedBioDomain = undefined;
+      return;
+    }
     this.goTerms = this.getGoTerms(index);
     this.selectedBioDomain = this.gene?.bio_domains?.gene_biodomains[index];
   }
