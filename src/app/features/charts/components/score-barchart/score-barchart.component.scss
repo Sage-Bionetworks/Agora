@@ -1,76 +1,77 @@
 $tooltip-color: #63676C;
 
-#score-barchart-container {
+#score-barchart {
     position: relative;
     height: 350px;
-}
 
-#score-tooltip {
-  position: absolute;
-  text-align: center;
-  padding: 5px;
-  font-size: 14px;
-  background-color: $tooltip-color;
-  color: white;
-  display: none;
-  z-index: 99;
-  opacity: 0.9;
-  width: 200px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.tooltip-arrow {
-  &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    border: 10px solid transparent;
-    transform: translateX(-50%);
-  }
-  
-  &.arrow-below {
-    transform: translate(calc(-50%), calc(-100% - 20px));
-
-    &::before {
-        bottom: -9px;
-        border-bottom: 0;
-        border-top-color: $tooltip-color;
-    }
-  }
-}
-
-.negative-bars {
-    &:hover {
-        fill: transparent;
+    #score-barchart-tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 5px;
+        font-size: 14px;
+        background-color: $tooltip-color;
+        color: white;
+        display: none;
+        z-index: 200;
+        opacity: 0.9;
+        width: 200px;
         cursor: pointer;
+        border-radius: 5px;
+        pointer-events: none;
     }
-}
 
-.scorebars {
-    &:hover {
-        cursor: pointer;
+    .tooltip-arrow {
+        &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            border: 10px solid transparent;
+            transform: translateX(-50%);
+        }
+    
+        &.arrow-below {
+            transform: translate(calc(-50%), calc(-100% - 20px));
+
+            &::before {
+                bottom: -9px;
+                border-bottom: 0;
+                border-top-color: $tooltip-color;
+            }
+        }
     }
-}
 
-.bar-labels {
-    &:hover {
-        cursor: pointer;
+    .negative-bars {
+        &:hover {
+            fill: transparent;
+            cursor: pointer;
+        }
     }
-}
 
-.x-axis .tick {
-    cursor: default;
-}
+    .scorebars {
+        &:hover {
+            cursor: pointer;
+        }
+    }
 
-.y-axis .tick {
-    cursor: default;
-}
+    .bar-labels {
+        &:hover {
+            cursor: pointer;
+        }
+    }
 
-text.x-axis-label {
-    cursor: default;
-}
+    .x-axis .tick {
+        cursor: default;
+    }
 
-text.y-axis-label {
-    cursor: default;
+    .y-axis .tick {
+        cursor: default;
+    }
+
+    text.x-axis-label {
+        cursor: default;
+    }
+
+    text.y-axis-label {
+        cursor: default;
+    }
 }

@@ -12,15 +12,18 @@ import * as d3 from 'd3';
 export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
   @Input() data: BioDomain[] | undefined;
   @Input() geneName = '';
+  
   @Output() selectedBioDomainIndex = new EventEmitter<number | undefined>();
 
   @ViewChild('chart', { static: true }) chartRef: ElementRef<SVGElement> = {} as ElementRef;
+  @ViewChild('tooltip', { static: true }) tooltip: ElementRef<HTMLElement> = {} as ElementRef;
+
+  highlightColor = '#5081A7';
 
   selectedBioDomain = '';
   selectedIndex = 0;
 
   initialized = false;
-
   private chart!: d3.Selection<any, unknown, null, undefined>;
 
   constructor(private helperService: HelperService) {}
@@ -47,10 +50,8 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   createChart() {
-    const chartWidth = 500;
-    const chartHeight = 560;
-
-    const highlightColor = '#5081A7';
+    const width = 500;
+    const height = 560;
     
     this.selectedBioDomainIndex.emit(this.selectedIndex);
 
@@ -64,8 +65,8 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
         this.selectedBioDomain = this.data[this.selectedIndex].biodomain;
 
       svg
-        .attr('width', chartWidth)
-        .attr('height', chartHeight);
+        .attr('width', width)
+        .attr('height', height);
 
       svg.style('display', 'block');
 
@@ -79,73 +80,66 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
 
       const yScale = d3.scaleBand()
         .domain(this.data.map(d => d.biodomain))
-        .range([0, chartHeight])
+        .range([0, height])
         .paddingInner(0.4);
 
-      // tooltip (not part of the svg object)
-      d3
-        .select('body')
-        .append('div')
-        .attr('class', 'tooltip arrow-below tooltip-arrow');
-
-      // negative space above bar
+      // NEGATIVE SPACE NEXT TO BARS
       svg
-        .append('g')
-        .attr('id', 'negative-bars')
-        .selectAll('rect')
+        .selectAll('.negative-bars')
         .data(this.data)
         .enter().append('rect')
+        .attr('class', 'negative-bars')
         .attr('x', d => labelWidth + xScale(d.pct_linking_terms))
         .attr('y', d => yScale(d.biodomain) || 0)
-        .attr('width', d => chartWidth - labelWidth - xScale(d.pct_linking_terms))
+        .attr('width', d => width - labelWidth - xScale(d.pct_linking_terms))
         .attr('height', yScale.bandwidth())
         .attr('fill', 'white')
         .on('click', (event) => {
-          const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleClick(index);
+          const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleClick(bars, labels, barValues, index);
         })
-        .on('mouseover', (event) => {
-          const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleMouseover(index, '#negative-bars', highlightColor);
+        .on('mouseenter', (event) => {
+          console.log('in neg mouseover');
+          const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseEnter(bars, labels, barValues, index);
         })
-        .on('mouseout', (event) => {
-          const index = d3.select('#negative-bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleMouseout(index);
+        .on('mouseleave', (event) => {
+          console.log('in neg mouseout');
+          const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseLeave(bars, labels, barValues, index);
         });
 
-      // bar
-      svg
-        .append('g')
-        .attr('id', 'bars')
-        .selectAll('rect')
+      // BARS
+      const bars = svg
+        .selectAll('.bars')
         .data(this.data)
         .enter().append('rect')
+        .attr('class', 'bars')
         .attr('x', labelWidth)
         .attr('y', d => yScale(d.biodomain) || 0)
         .attr('width', d => xScale(d.pct_linking_terms))
         .attr('height', yScale.bandwidth())
         .attr('fill', barColor)
         .style('fill-opacity', d => this.selectedBioDomain === d.biodomain ? '100%' : '50%')
-        .on('click', (event) => {
-          const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleClick(index);
+        .on('click', (event: MouseEvent) => {
+          const index = svg.selectAll('.bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleClick(bars, labels, barValues, index);
         })
         .on('mouseover', (event) => {
-          const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleMouseover(index, '#bars', highlightColor);
+          const index = svg.selectAll('.bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseEnter(bars, labels, barValues, index);
         })
-        .on('mouseout', (event) => {
-          const index = d3.select('#bars').selectAll('rect').nodes().indexOf(event.currentTarget);
-          this.handleMouseout(index);
+        .on('mouseleave', (event) => {
+          const index = svg.selectAll('.bars').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseLeave(bars, labels, barValues, index);
         });
 
-      // bar label
-      svg
-        .append('g')
-        .attr('id', 'bar-label')
-        .selectAll('text')
+      // BAR LABELS
+      const labels = svg
+        .selectAll('.bar-labels')
         .data(this.data)
         .enter().append('text')
+        .attr('class', 'bar-labels')
         .attr('x', labelWidth - 10)
         .attr('y', d => (yScale(d.biodomain) || 0) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
@@ -154,34 +148,30 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
         .style('font-weight', d => this.selectedBioDomain === d.biodomain ? 'bold' : 'normal')
         .text(d => d.biodomain)
         .on('click', (event) => {
-          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          this.handleClick(index);
+          const index = svg.selectAll('.bar-labels').nodes().indexOf(event.target as HTMLElement);
+          this.handleClick(bars, labels, barValues, index);
         })
-        .on('mouseover', (event, data) => {
-          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          this.handleMouseover(index, '#bar-label', highlightColor);
+        .on('mouseover', (event) => {
+          const index = svg.selectAll('.bar-labels').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseEnter(bars, labels, barValues, index);
+        })
+        .on('mousemove', (event: MouseEvent, data: BioDomain) => {
           const tooltipText = this.getToolTipText(data.pct_linking_terms);
-          this.displayTooltip(tooltipText);
-        })
-        .on('mousemove', (event) => {
-          d3.select('.tooltip')
-            .style('left', `${ event.pageX }px`)
-            .style('top', `${ event.pageY }px`);
+          const tooltipCoordinates = this.getTooltipCoordinates(event.offsetX, yScale.bandwidth(), yScale(data.biodomain) || 0);
+          this.showTooltip(tooltipText, tooltipCoordinates.X, tooltipCoordinates.Y);
         })
         .on('mouseleave', (event) => {
-          const index = d3.select('#bar-label').selectAll('text').nodes().indexOf(event.currentTarget);
-          d3.select('.tooltip')
-            .style('display', 'none');
-          this.handleMouseout(index);
+          const index = svg.selectAll('.bar-labels').nodes().indexOf(event.target as HTMLElement);
+          this.handleMouseLeave(bars, labels, barValues, index);
+          this.hideTooltip(event);
         });
 
-      // bar value
-      svg
-        .append('g')
-        .attr('id', 'bar-value')
-        .selectAll('text')
+      // BAR VALUE
+      const barValues = svg
+        .selectAll('.bar-values')
         .data(this.data)
         .enter().append('text')
+        .attr('class', 'bar-values')
         .attr('x', d => labelWidth + xScale(d.pct_linking_terms) + 4)
         .attr('y', d => (yScale(d.biodomain) || 0) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
@@ -199,60 +189,139 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  handleClick(
+    bars: d3.Selection<SVGRectElement, BioDomain, SVGElement, unknown>, 
+    labels: d3.Selection<SVGTextElement, BioDomain, SVGElement, unknown>, 
+    barValues: d3.Selection<SVGTextElement, BioDomain, SVGElement, unknown>, 
+    index: number
+  ) {
+    this.selectedIndex = index;
+    // emit change to index to populate GO terms
+    this.selectedBioDomainIndex.emit(index);
+
+    // reset all elements
+    bars.style('fill-opacity', '50%');
+    labels.style('font-weight', 'normal');
+    labels.style('fill', 'black');
+    barValues.style('display', 'none');
+
+    const bar = d3.select(bars.nodes()[index]);
+    bar.style('fill-opacity', '100%');
+
+    const label = d3.select(labels.nodes()[index]);
+    label.style('font-weight', 'bold');
+    
+    const barValue = d3.select(barValues.nodes()[index]);
+    barValue.style('display', 'block');
+  }
+
+  handleMouseEnter(
+    bars: d3.Selection<SVGRectElement, BioDomain, SVGElement, unknown>, 
+    labels: d3.Selection<SVGTextElement, BioDomain, SVGElement, undefined>, 
+    barValues: d3.Selection<SVGTextElement, BioDomain, SVGElement, undefined>, 
+    index: number
+  ) {
+    const bar = d3.select(bars.nodes()[index]);
+    this.highlightBar(bar, index);
+
+    const label = d3.select(labels.nodes()[index]);
+    this.highlightLabel(label, index);
+
+    const barValue = d3.select(barValues.nodes()[index]);
+    this.showBarValue(barValue, index);
+  }
+
+  handleMouseLeave(
+    bars: d3.Selection<SVGRectElement, BioDomain, SVGElement, unknown>, 
+    labels: d3.Selection<SVGTextElement, BioDomain, SVGElement, undefined>, 
+    barValues: d3.Selection<SVGTextElement, BioDomain, SVGElement, undefined>, 
+    index: number
+  ) {
+    const bar = d3.select(bars.nodes()[index]);
+    this.unhighlightBar(bar, index);
+
+    const label = d3.select(labels.nodes()[index]);
+    this.unhighlightLabel(label, index);
+
+    const barValue = d3.select(barValues.nodes()[index]);
+    this.hideBarValue(barValue, index);
+  }
+
+  showBarValue(barValue: d3.Selection<SVGTextElement, unknown, null, undefined>, index: number) {
+    if (index !== this.selectedIndex) {
+      barValue.style('display', 'block');
+    }
+  }
+
+  hideBarValue(barValue: d3.Selection<SVGTextElement, unknown, null, undefined>, index: number) {
+    if (index !== this.selectedIndex) {
+      barValue.style('display', 'none');
+    }
+  }
+
+  highlightBar(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number) {
+    // only highlight if it isn't the selected bar
+    if (index !== this.selectedIndex) {
+      bar.style('fill-opacity', '100%');
+    }
+  }
+
+  unhighlightBar(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number) {
+    if (index !== this.selectedIndex) {
+      bar.style('fill-opacity', '50%');
+    }
+  }
+
+  highlightLabel(label: d3.Selection<SVGTextElement, unknown, null, undefined>, index: number) {
+    // only bold if it isn't the selected bar
+    if (index !== this.selectedIndex) {
+      label.style('font-weight', 'bold');
+      label.style('fill', this.highlightColor);
+    }
+  }
+
+  unhighlightLabel(label: d3.Selection<SVGTextElement, unknown, null, undefined>, index: number) {
+    if (index !== this.selectedIndex) {
+      label.style('font-weight', 'normal');
+      label.style('fill', 'black');
+    }
+  }
+
+  getTooltipCoordinates(xBarPosition: number, yBarWidth: number, yBarPosition: number) {
+    // x-coordinate would be the left margin + x-barPosition
+    const x = xBarPosition;
+    // y-coordinate would be the y-barPosition + top margin + half of the bar width
+    const y = yBarPosition + (yBarWidth / 2);
+    return { 'X': x, 'Y': y};
+  }
+
   getToolTipText(linkingTerms: number) {
     if (linkingTerms === 0)
       return `No GO Terms link this biological domain to ${this.geneName}`;
     return `Click to explore to GO Terms that link this biological domain to ${this.geneName}`;
   }
 
-  handleClick(index: number) {
-    this.selectedIndex = index;
-    // emit change to index to populate GO terms
-    this.selectedBioDomainIndex.emit(index);
-    // reset all elements to non-bold
-    d3.select('#bars').selectAll('rect').style('fill-opacity', '50%');
-    d3.select('#bar-label').selectAll('text').style('font-weight', 'normal');
-    d3.select('#bar-value').selectAll('text').style('display', 'none');
-    // bold the selected elements
-    d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
-    d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', 'black');
-    d3.select('#bar-value').select(`text:nth-child(${ index + 1 })`).style('display', 'block');
+  showTooltip(text: string, x: number, y: number) {
+    const tooltipElement = this.tooltip.nativeElement;
+    tooltipElement.innerHTML = text;
+    tooltipElement.style.left = `${x}px`;
+    tooltipElement.style.top = `${y}px`;
+    tooltipElement.style.display = 'block';
   }
 
-  handleMouseover(index: number, id: '#negative-bars' | '#bars' | '#bar-label', highlightColor: string) {
-    d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '100%');
-    if (id === '#negative-bars' || id === '#bars') {
-      if (this.selectedIndex !== index) {
-        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
-        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', highlightColor);
-      }
+  hideTooltip(event: MouseEvent) {
+    const tooltipElement = this.tooltip.nativeElement;
+    // check whether mouse is over the tooltip otherwise there will be flicker
+    if (tooltipElement && tooltipElement.contains(event.relatedTarget as Node)) {
+      return;
     }
-    if (id === '#bar-label') {
-      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'bold');
-      if (this.selectedIndex !== index) {
-        d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', highlightColor);
-      }
-    }
-  }
 
-  displayTooltip(text: string) {
-    d3.select('.tooltip')
-      .text(text)
-      .style('display', 'block');
-  }
-
-  handleMouseout(index: number) {
-    // if the target is the selected index
-    if (this.selectedIndex !== index) {
-      d3.select('#bars').select(`rect:nth-child(${ index + 1 })`).style('fill-opacity', '50%');
-      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
-      d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', 'black');
-    }
+    if (tooltipElement.style.display === 'block')
+      tooltipElement.style.display = 'none';
   }
 
   destroyChart() {
-    if (this.initialized)
+    if (this.initialized) 
       this.chart.remove();
   }
 }

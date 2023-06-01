@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 
 // -------------------------------------------------------------------------- //
@@ -19,7 +19,7 @@ import { OverallScoresDistribution, ScoreData } from 'app/models';
   styleUrls: ['./score-barchart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
+export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   _score: number | null = null;
   get score(): number | null {
     return this._score;
@@ -29,26 +29,18 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
   }
 
   @Input() barColor = '#8B8AD1';
-  
   @Input() data: OverallScoresDistribution | undefined;
   @Input() xAxisLabel = 'Gene score';
   @Input() yAxisLabel = 'Number of genes';
 
   @ViewChild('chart') chartRef: ElementRef<SVGElement> = {} as ElementRef;
-
   @ViewChild('tooltip', { static: true }) tooltip: ElementRef<HTMLElement> = {} as ElementRef;
 
   initialized = false;
+  private chart!: d3.Selection<any, unknown, null, undefined>;
+
   chartData: ScoreData[] = [];
   scoreIndex = -1;
-  
-  tooltips: {
-    [key: string]: d3.Selection<HTMLDivElement, unknown, HTMLElement, any>;
-  } = {};
-
-  tooltipId = '';
-
-  d3index = d3.local();
 
   constructor(private helperService: HelperService) {
   }
@@ -58,6 +50,10 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
       // if chart has already been initialized, this means the data has changed
       this.createChart();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyChart();
   }
 
   ngAfterViewInit(): void {
@@ -117,7 +113,7 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
       // clear the existing chart as the data may have changed due to a new overlaypanel being displayed
       d3.select(this.chartRef.nativeElement).selectAll('*').remove();
 
-      const svg = d3.select(this.chartRef.nativeElement)
+      const svg = this.chart = d3.select(this.chartRef.nativeElement)
         .attr('width', width)
         .attr('height', height)
         .append('g')
@@ -153,7 +149,7 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target);
           const bar = d3.select(bars.nodes()[index]);
-          this.handleMouseLeave(bar, index, event);
+          this.handleMouseLeave(bar, index);
         });
 
       // BARS
@@ -178,16 +174,15 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.scorebars').nodes().indexOf(event.target);
           const bar = d3.select(bars.nodes()[index]);
-          this.handleMouseLeave(bar, index, event);
+          this.handleMouseLeave(bar, index);
         });
 
       // SCORE LABELS
       svg
-        .attr('class', 'bar-labels')
         .selectAll('.bar-labels')
         .data(this.chartData)
-        .enter()
-        .append('text')
+        .enter().append('text')
+        .attr('class', 'bar-labels')
         .attr('x', d => xScale(d.bins[0].toString()) as number + xScale.bandwidth() / 2)
         .attr('y', d => yScale(d.distribution) - 5)
         .attr('fill', this.barColor)
@@ -207,10 +202,10 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
           const bar = d3.select(bars.nodes()[index]);
           this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
-        .on('mouseleave', (event) => {
+        .on('mouseleave', () => {
           const index = this.scoreIndex;
           const bar = d3.select(bars.nodes()[index]);
-          this.handleMouseLeave(bar, index, event);
+          this.handleMouseLeave(bar, index);
         });
 
       // X-AXIS
@@ -253,9 +248,9 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
     this.showTooltip(tooltipText, tooltipCoordinates.X, tooltipCoordinates.Y, index);
   }
 
-  handleMouseLeave(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number, event: any) {
+  handleMouseLeave(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number) {
     this.unhighlightBar(bar, index);
-    this.hideTooltip(event);
+    this.hideTooltip();
   }
 
   highlightBar(bar: d3.Selection<SVGRectElement, unknown, null, undefined>, index: number) {
@@ -302,14 +297,14 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
     tooltipElement.style.display = 'block';
   }
 
-  hideTooltip(event: MouseEvent) {
+  hideTooltip() {
     const tooltipElement = this.tooltip.nativeElement;
-    // check whether mouse is over the tooltip otherwise there will be flicker
-    if (tooltipElement && tooltipElement.contains(event.relatedTarget as Node)) {
-      return;
-    }
-
     if (tooltipElement.style.display === 'block')
       tooltipElement.style.display = 'none';
+  }
+
+  destroyChart() {
+    if (this.initialized) 
+      this.chart.remove();
   }
 }

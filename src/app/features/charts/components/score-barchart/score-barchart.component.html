@@ -1,5 +1,5 @@
-<div id="score-barchart-container">
-  <div id="score-tooltip" class="arrow-below tooltip-arrow" #tooltip (mouseout)="hideTooltip($event)"></div>
+<div id="score-barchart">
+  <div id="score-barchart-tooltip" class="arrow-below tooltip-arrow" #tooltip (mouseout)="hideTooltip()"></div>
   <svg #chart></svg>
   <div class="chart-no-data" *ngIf="_score === null">
       <div class="chart-no-data-text">No data is currently available.</div>
