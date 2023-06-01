@@ -19,11 +19,13 @@
       <ng-container *ngIf="gene.bio_domains || getAlias()">
         <hr />
         <div *ngIf="gene.bio_domains" class="gene-hero-biodomains">
-          <h4>BIOLOGICAL DOMAINS</h4>
-          {{ getBiodomains() }}
+          <h4 class="gene-hero-biodomains-heading">Biological Domains</h4>
+          <p>
+            {{ getBiodomains() }}
+          </p>
         </div>
         <div *ngIf="getAlias()" class="gene-hero-aliases">
-          <div class="gene-hero-aliases-heading">Also known as</div>
+          <h4 class="gene-hero-aliases-heading">Also known as</h4>
           <p *ngIf="gene.hgnc_symbol" class="mb-0">{{ gene.ensembl_gene_id }}</p>
           <p>
             {{ getAlias() }}

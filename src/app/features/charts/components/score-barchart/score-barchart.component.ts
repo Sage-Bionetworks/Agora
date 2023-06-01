@@ -85,6 +85,9 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestr
   initData() {
     if (!this.data)
       return;
+    
+    if (!this.data)
+      return;
       
     this.chartData = [];
 
