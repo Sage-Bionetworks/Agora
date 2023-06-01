@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { HelperService } from '../../../../core/services';
 import { BioDomain } from 'app/models';
 import * as d3 from 'd3';
@@ -9,18 +9,41 @@ import * as d3 from 'd3';
   styleUrls: ['./biodomains-chart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class BiodomainsChartComponent implements OnInit {
+export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
   @Input() data: BioDomain[] | undefined;
   @Input() geneName = '';
-  @Output() selectedBioDomainIndex = new EventEmitter<number>();
+  @Output() selectedBioDomainIndex = new EventEmitter<number | undefined>();
+
+  @ViewChild('chart', { static: true }) chartRef: ElementRef<SVGElement> = {} as ElementRef;
 
   selectedBioDomain = '';
   selectedIndex = 0;
 
+  initialized = false;
+
+  private chart!: d3.Selection<any, unknown, null, undefined>;
+
   constructor(private helperService: HelperService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && !changes.data.firstChange) {
+      this.hideChart();
+      this.createChart();
+    }
+  }
 
   ngOnInit(): void {
     this.createChart();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyChart();
+  }
+
+  hideChart() {
+    const svg = d3.select(this.chartRef.nativeElement);
+    svg.selectAll('*').remove();
+    svg.style('display', 'none');
   }
 
   createChart() {
@@ -28,17 +51,23 @@ export class BiodomainsChartComponent implements OnInit {
     const chartHeight = 560;
 
     const highlightColor = '#5081A7';
+    
+    this.selectedBioDomainIndex.emit(this.selectedIndex);
 
-    if (this.data) {
-      this.selectedBioDomainIndex.emit(this.selectedIndex);
-
-      if (this.selectedIndex > -1)
+    if (!this.data) {
+      // clear the existing chart as the data may have changed due to a new overlaypanel being displayed
+      this.hideChart();
+    } else {
+      const svg = this.chart = d3.select(this.chartRef.nativeElement);
+    
+      if (this.selectedIndex >= 0)
         this.selectedBioDomain = this.data[this.selectedIndex].biodomain;
 
-      const svg = d3.select('#chart')
-        .append('svg')
+      svg
         .attr('width', chartWidth)
         .attr('height', chartHeight);
+
+      svg.style('display', 'block');
 
       const labelWidth = 200;
 
@@ -53,7 +82,7 @@ export class BiodomainsChartComponent implements OnInit {
         .range([0, chartHeight])
         .paddingInner(0.4);
 
-      // tooltip
+      // tooltip (not part of the svg object)
       d3
         .select('body')
         .append('div')
@@ -165,6 +194,8 @@ export class BiodomainsChartComponent implements OnInit {
           return `${ percentage }%`;
         })
         .style('display', (d) => this.selectedBioDomain === d.biodomain ? 'block' : 'none' );
+
+      this.initialized = true;
     }
   }
 
@@ -218,5 +249,10 @@ export class BiodomainsChartComponent implements OnInit {
       d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('font-weight', 'normal');
       d3.select('#bar-label').select(`text:nth-child(${ index + 1 })`).style('fill', 'black');
     }
+  }
+
+  destroyChart() {
+    if (this.initialized)
+      this.chart.remove();
   }
 }

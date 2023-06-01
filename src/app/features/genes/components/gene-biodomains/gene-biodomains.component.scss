@@ -10,10 +10,9 @@ $scrollbar-thumb-hover-color: #4A5056;
     #left-hand-pane {
         border: 1px solid #F1F3F5;
         padding: 15px;
-
-        h3 {
-            text-align: center;
-        }
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 
     #right-hand-pane {
