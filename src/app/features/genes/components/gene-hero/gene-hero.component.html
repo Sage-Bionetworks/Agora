@@ -1,12 +1,12 @@
 <div *ngIf="gene" class="section section-hero">
   <div class="section-inner">
     <div class="container-sm">
-      <h1 class="h2 gene-hero-heading">
+      <h1 class="gene-hero-heading">
         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
       </h1>
-      <p class="gene-hero-name">
+      <h2 class="gene-hero-name">
         {{ gene.name }}
-      </p>
+      </h2>
       <div *ngIf="gene.nominations" class="gene-hero-nominated">
         <span>Nominated Target</span>
       </div>
