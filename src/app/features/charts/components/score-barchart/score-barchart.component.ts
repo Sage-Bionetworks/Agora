@@ -71,19 +71,29 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges {
     this.createChart();
   }
 
+  setScoreIndex(bins: number[][]) {
+    bins.forEach((item, index: number) => {
+      if (this._score === null)
+        return;
+      if (this._score >= item[0] && this._score < item[1]) {
+        this.scoreIndex = index;
+      }
+      if (index === bins.length - 1) {
+        // check border case where score is equal to the last bin upper bound
+        if (this._score === item[1])
+          this.scoreIndex = index;
+      }
+    });
+  }
+
   initData() {
     if (!this.data)
       return;
       
     this.chartData = [];
 
-    this.data.bins.forEach((item, index: number) => {
-      if (!this._score)
-        return;
-      if (this._score >= item[0] && this._score < item[1]) {
-        this.scoreIndex = index;
-      }
-    });
+    this.setScoreIndex(this.data.bins);
+
     this.data.distribution.forEach((item, index: number) => {
       this.chartData.push(
         {

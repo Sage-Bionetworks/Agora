@@ -77,4 +77,28 @@ describe('Component: Chart - Score', () => {
     fixture.detectChanges();
     expect(element.querySelector('svg')).toBeTruthy();
   });
+
+  it('should set the correct scoreIndex to highlight the correct bar - middle', () => {
+    const data = distributionMock.overall_scores[0];
+    component.score = 1;
+    component.setScoreIndex(data.bins);
+    fixture.detectChanges();
+    expect(component.scoreIndex).toBe(3);
+  });
+
+  it('should set the correct scoreIndex to highlight the correct bar - first bar', () => {
+    const data = distributionMock.overall_scores[0];
+    component.score = 0;
+    component.setScoreIndex(data.bins);
+    fixture.detectChanges();
+    expect(component.scoreIndex).toBe(0);
+  });
+
+  it('should set the correct scoreIndex to highlight the correct bar - last bar', () => {
+    const data = distributionMock.overall_scores[0];
+    component.score = 3;
+    component.setScoreIndex(data.bins);
+    fixture.detectChanges();
+    expect(component.scoreIndex).toBe(9);
+  });
 });
