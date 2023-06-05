@@ -772,7 +772,14 @@
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
   
   .p-overlaypanel-content {
-    padding: 20px;
+    ul#scores-columns {
+      &::after {
+        content: ' ';
+        display: block;
+        margin: 5px 0;
+        border-bottom: 1px solid var(--color-gray-300);
+      }
+    }
     
     ul {
       list-style-type: none;
@@ -782,17 +789,27 @@
       li {
         .column-toggle {
           display: flex;
-          padding: 5px;
+          padding: 11px;
+          font-size: 14px;
         
           &:hover {
             background-color: var(--color-action-primary);
             color: white;
             cursor: pointer;
           }
+
+          &:hover .column-toggle-status span {
+            color: white;
+          }
     
           .column-toggle-status {
             width: 20px;
             margin-right: 5px;
+
+            span {
+              color: var(--color-action-primary);
+              font-weight: bold;
+            }
           }
         }
       }

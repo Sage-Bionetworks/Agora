@@ -171,11 +171,11 @@
                       styleClass="gct-toggle-columns"
                     >
                       <ng-template pTemplate>
-                        <ul>
+                        <ul id="scores-columns">
                           <li *ngFor="let column of scoresColumns">
                             <div class="column-toggle" (click)="toggleGCTColumn(column)">
                               <div class="column-toggle-status">
-                                <span *ngIf="column.selected" class="p-checkbox-icon pi pi-check"></span>
+                                <span *ngIf="column.selected" class="pi pi-check"></span>
                               </div>
                               <div>
                                 <span>{{ column.header }}</span>
@@ -183,7 +183,6 @@
                             </div>
                           </li>
                         </ul>
-                        <hr>
                         <ul>
                           <li *ngFor="let column of brainRegionsColumns">
                             <ng-container *ngIf="column.visible">
@@ -198,7 +197,6 @@
                             </ng-container>
                           </li>
                         </ul>
-                        
                       </ng-template>
                     </p-overlayPanel>
                     <button
