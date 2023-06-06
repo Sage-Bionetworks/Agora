@@ -10,7 +10,6 @@
     <div id="right-hand-pane">
         <h3>{{ getHeaderText() }}</h3>
         <ul>
-            <!-- <li *ngFor="let b of gene?.bio_domains?.gene_biodomains"> -->
             <li *ngFor="let goTerm of goTerms">
                 {{ capitalizeGoTerm(goTerm) }}
             </li>
