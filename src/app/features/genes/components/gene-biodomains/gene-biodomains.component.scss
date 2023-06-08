@@ -8,7 +8,8 @@ $scrollbar-thumb-hover-color: #4A5056;
     height: 683px;
 
     #left-hand-pane {
-        border: 1px solid #F1F3F5;
+        border-width: 1px 0 1px 1px;
+        border-color: #F1F3F5;
         padding: 36px;
         display: flex;
         flex-direction: column;
@@ -20,12 +21,24 @@ $scrollbar-thumb-hover-color: #4A5056;
         background-color: #F1F3F5;
         padding: 0 36px 36px;
         overflow: auto;
+        position: relative;
 
         h3 {
             padding-top: 36px;
             background-color: #F1F3F5;
             position: sticky;
             top: 0;
+        }
+
+        #notch {
+            position: absolute;
+            left: 0;
+            top: 40px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid white;
         }
 
         ul {
