@@ -199,10 +199,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       return gene.target_risk_score;
     }
     if (columnName === this.scoresColumns[1].field) {
-      return gene.multi_omics_score;
+      return gene.genetics_score;
     }
     if (columnName === this.scoresColumns[2].field) {
-      return gene.genetics_score;
+      return gene.multi_omics_score;
     }
     return null;
   }
