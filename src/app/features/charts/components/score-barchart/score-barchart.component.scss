@@ -74,4 +74,11 @@ $tooltip-color: #63676C;
     text.y-axis-label {
         cursor: default;
     }
+
+    .chart-no-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
 }

@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 
 // -------------------------------------------------------------------------- //
@@ -19,7 +19,7 @@ import { OverallScoresDistribution, ScoreData } from 'app/models';
   styleUrls: ['./score-barchart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestroy {
   _score: number | null = null;
   get score(): number | null {
     return this._score;
@@ -45,26 +45,32 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestr
   constructor(private helperService: HelperService) {
   }
 
-  ngOnChanges(): void {
-    if (this.initialized) {
-      // if chart has already been initialized, this means the data has changed
-      this.createChart();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      (changes.data && !changes.data.firstChange) ||
+      (changes.score && !changes.score.firstChange) ||
+      (changes.barColor && !changes.barColor.firstChange)
+    ) {
+      if (this.score === null) {
+        this.clearChart();
+        this.hideChart();
+      } else {
+        this.clearChart();
+        this.showChart();
+        this.createChart();
+      }
     }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.score === null)
+      this.hideChart();
+    else
+      this.createChart();
   }
 
   ngOnDestroy(): void {
     this.destroyChart();
-  }
-
-  ngAfterViewInit(): void {
-    if (!this.chartRef.nativeElement) {
-      return;
-    }
-
-    if (!this.data)
-      return;
-
-    this.createChart();
   }
 
   setScoreIndex(bins: number[][]) {
@@ -85,9 +91,6 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestr
   initData() {
     if (!this.data)
       return;
-    
-    if (!this.data)
-      return;
       
     this.chartData = [];
 
@@ -103,25 +106,36 @@ export class ScoreBarChartComponent implements AfterViewInit, OnChanges, OnDestr
     });
   }
 
+  clearChart() {
+    const svg = d3.select(this.chartRef.nativeElement);
+    svg.selectAll('*').remove();
+  }
+
+  hideChart() {
+    const svg = d3.select(this.chartRef.nativeElement);
+    svg.style('display', 'none');
+  }
+
+  showChart() {
+    const svg = d3.select(this.chartRef.nativeElement);
+    svg.style('display', 'block');
+  }
+
   createChart() {
     this.initData();
-    
-    const width = 350;
-    const height = 350;
-    const margin = { top: 20, right: 20, bottom: 40, left: 60 };
-    const innerWidth = width - margin.left - margin.right;
-    const innerHeight = height - margin.top - margin.bottom;
-
     if (this.chartData) {
-      // clear the existing chart as the data may have changed due to a new overlaypanel being displayed
-      d3.select(this.chartRef.nativeElement).selectAll('*').remove();
+      const width = 350;
+      const height = 350;
+      const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
 
       const svg = this.chart = d3.select(this.chartRef.nativeElement)
         .attr('width', width)
         .attr('height', height)
         .append('g')
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
+      
       const xScale = d3.scaleBand()
         .domain(this.chartData.map(d => d.bins[0].toString()))
         .range([0, innerWidth])
