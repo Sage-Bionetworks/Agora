@@ -1013,8 +1013,12 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     window.open(url, '_blank');
   }
 
-  getGCTColumnTooltipText(tissue: string) {
-    return this.helperService.getGCTColumnTooltipText(tissue);
+  getGCTColumnTooltipText(columnName: string) {
+    return this.helperService.getGCTColumnTooltipText(columnName);
+  }
+
+  getGCTColumnSortIconTooltipText(columnName: string) {
+    return this.helperService.getGCTColumnSortIconTooltipText(columnName);
   }
 
   onSearchInput(event: Event) {
