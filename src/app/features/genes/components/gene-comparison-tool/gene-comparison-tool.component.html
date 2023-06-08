@@ -255,7 +255,7 @@
                       <div class="column-header-sort">
                         <p-sortIcon
                         [field]="column"
-                        pTooltip="Sort by log2 fold change value"
+                        [pTooltip]="getGCTColumnSortIconTooltipText(column)"
                         tooltipPosition="top"
                         tooltipStyleClass="tooltip"
                         ></p-sortIcon>

@@ -36,8 +36,21 @@ export class HelperService {
     return this.loading;
   }
 
-  getGCTColumnTooltipText(text: string): string {
-    switch (text) {
+  getGCTColumnSortIconTooltipText(column: string): string {
+    switch (column.toUpperCase()) {
+      case 'RISK SCORE':
+        return 'Sort by Target Risk Score value';
+      case 'MULTI-OMIC':
+        return 'Sort by Multi-omic Risk Score value';
+      case 'GENETIC':
+        return 'Sort by Genetic Risk Score value';
+      default:
+        return 'Sort by log2 fold change value';
+    }
+  }
+
+  getGCTColumnTooltipText(column: string): string {
+    switch (column.toUpperCase()) {
       case 'RISK SCORE':
         return 'Target Risk Score';
       case 'MULTI-OMIC':
