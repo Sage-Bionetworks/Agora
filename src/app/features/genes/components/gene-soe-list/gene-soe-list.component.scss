@@ -28,6 +28,11 @@
     .item-title,
     .item-description {
       max-width: 600px;
+
+      a {
+        color: var(--color-link);
+        font-size: 16px;
+      }
     }
 
     .item-title {
