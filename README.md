@@ -11,9 +11,9 @@ What you need to run this app:
 - `node` and `npm` (`brew install node`)
 
   - Ensure you're running the latest versions Node `v16.x.x`+ and NPM `8.x.x`+
-- A [MongoDB](https://www.mongodb.com/docs/manual/administration/install-community/) instance running on your local machine
+- A version 6.0+ [MongoDB](https://www.mongodb.com/docs/manual/administration/install-community/) instance running on your local machine
 
-- You can optionally use a GUI like [Compass](https://www.mongodb.com/docs/compass/current/) or [Studio3T](https://studio3t.com/knowledge-base/articles/installation/) with your lcoal database
+- You can optionally use a GUI like [Compass](https://www.mongodb.com/docs/compass/current/) or [Studio3T](https://studio3t.com/knowledge-base/articles/installation/) with your local database
 
   - Note that only Studio3T is compatible with the [AWS DocumentDB](https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html) instances in Agora's dev, stage and prod environments. Either GUI tool will work with your local Mongo instance.
 
@@ -91,13 +91,27 @@ You can use the data population scripts defined in this repository to download, 
 To populate data into your local database using the scripts defined in this project, you must:
  
 1. Install the [Mongo Database Tools](https://www.mongodb.com/docs/database-tools/installation/installation/)
-2. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py). 
+2. Install the package manager `pip` [here](https://bootstrap.pypa.io/get-pip.py), if necessary (python 3.4+ ships with `pip`).
 3. Use `pip` to install the `synapseclient` using the following command:
 ```bash
-pip install synapseclient
+python3 -m pip install synapseclient
 ```
 3. Create a Synapse PAT as described [here](https://help.synapse.org/docs/Managing-Your-Account.2055405596.html#ManagingYourAccount-PersonalAccessTokens)
 4. Add your PAT to .synapseConfig as described [here](https://python-docs.synapse.org/build/html/Credentials.html#use-synapseconfig)
+5. If necessary, install `wget`, which is a dependency of the data population scripts.
+6. If necessary, add python3 to your path, as described [here](https://stackoverflow.com/a/62151306)
+
+```bash
+SHELL_SETTINGS_FILE=~/".bash_profile"
+echo "export PATH=\"`python3 -m site --user-base`/bin:\$PATH\"" >> "${SHELL_SETTINGS_FILE}"
+source "${SHELL_SETTINGS_FILE}"
+```
+
+7. Confirm that `synapse` package and credentials are properly configured:
+
+```bash
+synapse login
+```
 
 ##### Provisioning a local database with a single command
 
@@ -135,7 +149,7 @@ You'll need `Linux` to run the previous scripts. If you need to do this in `Wind
 ### 4 - Build
 
 ```bash
-# Build the server amd app
+# Build the server and app
 npm run dev
 ```
 
@@ -198,12 +212,12 @@ npm run start
 
 ## Continuous Deployment
 
-We have set up Travis to deploy Agora to our [AWS infrastructure](https://github.com/Sage-Bionetworks/Agora-infra).
+We have set up Travis to deploy Agora to our [AWS infrastructure](https://github.com/Sage-Bionetworks/agora2-infra).
 We continuously deploy to three environments:
 
-- Development -> https://agora-develop.ampadportal.org
-- Staging -> https://agora-staging.ampadportal.org
-- Production -> https://agora.ampadportal.org
+- Development -> https://agora-develop.adknowledgeportal.org/
+- Staging -> https://agora-staging.adknowledgeportal.org/
+- Production -> https://agora.adknowledgeportal.org/
 
 ## Deployment Workflow
 
@@ -238,7 +252,7 @@ by the CI system.
    4. add an entry for the new collection to `./scripts/mongo-create-indexes.js` (this repository)
 5. Merge your changes to [Agora Data Manager](https://github.com/Sage-Bionetworks/agora-data-manager/) to the develop branch.
 6. Verify new data is in the database in the develop environment; see [Agora environments](https://sagebionetworks.jira.com/wiki/spaces/AGORA/pages/2632745039/Agora+environments) for information about connecting to our AWS DocumentDB instances
-7. Update `data-version` in `package.json` in Agora (this repository). ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then merge the change to [Agora's develoc branch](https://agora-develop.ampadportal.org/genes).
+7. Update `data-version` in `package.json` in Agora (this repository). ([example](https://github.com/Sage-Bionetworks/Agora/pull/847/files)) The version should match the `data_manifest.csv` file in [Synapse](https://www.synapse.org/#!Synapse:syn13363290). Then merge the change to [Agora's develoc branch](https://agora-develop.adknowledgeportal.org/genes).
 8. Check new data shows up on [Agora's dev branch](https://agora-develop.adknowledgeportal.org).
 9. Check new data version shows up in the footer  on [Agora's dev branch](https://agora-develop.adknowledgeportal.org).
 10. Once verified in the develop environment, you can promote the data release to staging by:

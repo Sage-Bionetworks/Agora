@@ -1,3 +1,8 @@
+# Abort on error: https://bertvv.github.io/cheat-sheets/Bash.html#writing-robust-scripts-and-debugging
+set -o errexit   # abort on nonzero exitstatus
+set -o nounset   # abort on unbound variable
+set -o pipefail  # don't hide errors within pipes
+
 AGORA_LIVE_DATA_MANIFEST='syn13363290'
 AGORA_TESTING_DATA_MANIFEST='syn18387112'
 LOCAL_DIR='./local'
