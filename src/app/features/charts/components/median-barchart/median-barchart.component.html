@@ -1,0 +1,12 @@
+<div id="median-barchart" class="chart-d3">
+  <div
+    id="tooltip"
+    class="arrow-above tooltip-arrow"
+    #tooltip
+    (mouseout)="hideTooltip()"
+  ></div>
+  <svg #chart (window:resize)="onResize()"></svg>
+  <div class="chart-no-data" *ngIf="data.length === 0">
+    <div class="chart-no-data-text">No data is currently available.</div>
+  </div>
+</div>
