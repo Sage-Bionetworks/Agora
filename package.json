@@ -2,7 +2,7 @@
   "name": "agora",
   "version": "3.2.0",
   "data-file": "syn13363290",
-  "data-version": "55",
+  "data-version": "56",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"npm:dev:server\" \"npm:dev:app\"",
