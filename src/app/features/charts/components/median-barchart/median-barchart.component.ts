@@ -30,8 +30,7 @@ import { HelperService } from '../../../../core/services';
   styleUrls: ['./median-barchart.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class MedianBarChartComponent
-  implements OnChanges, AfterViewInit, OnDestroy
+export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDestroy
 {
   private chartInitialized = false;
   private tooltipInitialized = false;
