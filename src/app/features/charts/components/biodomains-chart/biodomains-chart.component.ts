@@ -49,10 +49,17 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
     svg.style('display', 'none');
   }
 
+  initChart() {
+    this.selectedIndex = 0;
+    this.selectedBioDomain = '';
+  }
+
   createChart() {
     const width = 500;
     const height = 560;
     
+    this.initChart();
+
     this.selectedBioDomainIndex.emit(this.selectedIndex);
 
     if (!this.data) {
@@ -99,12 +106,10 @@ export class BiodomainsChartComponent implements OnChanges, OnInit, OnDestroy {
           this.handleClick(bars, labels, barValues, index);
         })
         .on('mouseenter', (event) => {
-          console.log('in neg mouseover');
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target as HTMLElement);
           this.handleMouseEnter(bars, labels, barValues, index);
         })
         .on('mouseleave', (event) => {
-          console.log('in neg mouseout');
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target as HTMLElement);
           this.handleMouseLeave(bars, labels, barValues, index);
         });
