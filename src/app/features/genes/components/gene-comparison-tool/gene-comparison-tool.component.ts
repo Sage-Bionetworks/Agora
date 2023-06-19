@@ -921,7 +921,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         'P-value: ' +
         this.helperService.getSignificantFigures(tissue.adj_p_val, 3) +
         '\n\n' +
-        'Click for more details.'
+        'Click for more details'
       );
     }
 
