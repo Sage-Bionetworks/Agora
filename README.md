@@ -55,11 +55,13 @@ npm run mongo:start:windows
 
 ### 3 - Populate database
 
-Agora's data is stored in json files in the [Agora Syanpse project](https://www.synapse.org/#!Synapse:syn11850457/files/), in the following subfolders:
+Agora's data is stored in json files in the [Agora Synapse project](https://www.synapse.org/#!Synapse:syn11850457/files/), in the following subfolders:
 * [Agora Live Data](https://www.synapse.org/#!Synapse:syn12177492) - This folder contains all production data releases, as well as data releases that were never released to production
 * [Agora Testing Data](https://www.synapse.org/#!Synapse:syn17015333) - This folder contains test data releases that may not be fully validated
 * [Exploratory Data](https://www.synapse.org/#!Synapse:syn50612175) - This folder contains exploratory data files, and subfolders for data releases generated locally via the [agora-data-tools](https://github.com/Sage-Bionetworks/agora-data-tools) ETL tool
 * [Mock Data](https://www.synapse.org/#!Synapse:syn30602404) - This folder is reserved for future testing efforts
+
+Note: some data may require joining the Agora Editors team to gain access. Request to join the team [here](https://www.synapse.org/#!Team:3377649).
 
 The image files surfaced on Agora's Teams page are stored in Synapse [here](https://www.synapse.org/#!Synapse:syn12861877); there is only one set of image files, and the most recent version is always used. The image files aren't considered part of a data release.
 
