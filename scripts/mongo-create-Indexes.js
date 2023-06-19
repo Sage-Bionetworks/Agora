@@ -51,6 +51,12 @@ const collections = [
     indexes: [
       { ensembl_gene_id: 1 }
     ]
+  },
+  {
+    name: 'biodomaininfo',
+    indexes: [
+      { name: 1 }
+    ]
   }
 ];
 

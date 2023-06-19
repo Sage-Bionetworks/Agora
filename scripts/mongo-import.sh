@@ -16,6 +16,7 @@ mongoimport --db agora --collection rnaboxdistribution --jsonArray --drop --file
 mongoimport --db agora --collection proteomicsboxdistribution --jsonArray --drop --file ./proteomics_distribution_data.json
 mongoimport --db agora --collection proteomicstmt --jsonArray --drop --file ./proteomics_tmt.json
 mongoimport --db agora --collection genesbiodomains --jsonArray --drop --file ./genes_biodomains.json
+mongoimport --db agora --collection biodomaininfo --jsonArray --drop --file ./biodomain_info.json
 
 
 cd ./team_images
