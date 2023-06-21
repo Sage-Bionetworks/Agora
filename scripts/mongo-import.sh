@@ -1,3 +1,8 @@
+# Abort on error: https://bertvv.github.io/cheat-sheets/Bash.html#writing-robust-scripts-and-debugging
+set -o errexit   # abort on nonzero exitstatus
+set -o nounset   # abort on unbound variable
+set -o pipefail  # don't hide errors within pipes
+
 cd ./local/data
 
 # Imports the data and wipes the current collections

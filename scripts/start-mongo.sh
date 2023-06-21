@@ -1,3 +1,8 @@
+# Abort on error: https://bertvv.github.io/cheat-sheets/Bash.html#writing-robust-scripts-and-debugging
+set -o errexit   # abort on nonzero exitstatus
+set -o nounset   # abort on unbound variable
+set -o pipefail  # don't hide errors within pipes
+
 echo "Starting Mongo"
 # No fork here so it does not break on windows
 mongod --bind_ip_all --dbpath=$1

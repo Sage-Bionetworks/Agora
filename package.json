@@ -35,7 +35,7 @@
     "ci:zip": "zip /tmp/agora-app.zip -qr9 * .[^.]*",
     "data:local:mongo": "npm run data:local && npm run mongo:import && npm run mongo:create:indexes",
     "mongo:import": "sh ./scripts/mongo-import.sh",
-    "mongo:create:indexes": "mongo --host localhost ./scripts/mongo-create-Indexes.js",
+    "mongo:create:indexes": "mongosh --host localhost ./scripts/mongo-create-Indexes.js",
     "mongo:start": "sh ./scripts/start-mongo.sh '/var/lib/mongodb/'",
     "mongo:start:windows": "sh ./scripts/start-mongo.sh 'C:\\data\\db'",
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
