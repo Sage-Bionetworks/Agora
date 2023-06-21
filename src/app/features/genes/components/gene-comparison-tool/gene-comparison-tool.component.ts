@@ -105,7 +105,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   maxPinnedGenes = 50;
 
   /* ----------------------------------------------------------------------- */
-  significanceThreshold = 0.05;
+  private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
+  significanceThreshold = this.DEFAULT_SIGNIFICANCE_THRESHOLD;
   significanceThresholdActive = false;
 
   /* Components ------------------------------------------------------------ */
@@ -137,6 +138,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
       this.sortField = this.urlParams.sortField || '';
       this.sortOrder = '1' === this.urlParams.sortOrder ? 1 : -1;
+
+      this.significanceThreshold =
+        this.urlParams.significanceThreshold ||
+        this.DEFAULT_SIGNIFICANCE_THRESHOLD;
+      this.significanceThresholdActive = !!this.urlParams.significanceThreshold;
 
       this.loadGenes();
     });
@@ -232,7 +238,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   initData(genes: GCTGene[]) {
     this.brainRegionsColumns.forEach(c => c.visible = false);
-    
+
     const pinnedGenes: GCTGene[] = [];
     const currentPinnedGenesCache = this.getPinnedGenesCache(
       this.category,
@@ -299,7 +305,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     });
 
     this.updateVisibleColumns();
-    
+
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
     }
@@ -368,6 +374,16 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   onSubCategoryChange() {
     this.updateUrl();
     this.loadGenes();
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Significance Threshold
+  /* ----------------------------------------------------------------------- */
+
+  setSignificanceThresholdActive(significanceThresholdActive: boolean) {
+    this.significanceThresholdActive = significanceThresholdActive;
+    this.filter();
+    this.updateUrl();
   }
 
   /* ----------------------------------------------------------------------- */
@@ -536,14 +552,14 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       event.data.sort((a, b) => {
         const value1 = this.getScoreForNumericColumn(event.field as string, a);
         const value2 = this.getScoreForNumericColumn(event.field as string, b);
-        
+
         if (value1 === value2)
           return 0; // equal so don't do anything
         if (value1 === null)
           return 1; // sort null after everything
         if (value2 === null)
           return -1; // sort null after everything
-        
+
         const result = (value1 < value2) ? -1 : 1;
         return (order * result);
       });
@@ -752,6 +768,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         (g: GCTGene) => g.uid || g.ensembl_gene_id
       );
       params['pinned'].sort();
+    }
+
+    if (this.significanceThresholdActive) {
+      params['significanceThreshold'] = [this.significanceThreshold];
     }
 
     this.urlParams = params;

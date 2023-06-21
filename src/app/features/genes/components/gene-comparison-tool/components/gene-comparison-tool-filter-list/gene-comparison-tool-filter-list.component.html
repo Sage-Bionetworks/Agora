@@ -1,12 +1,37 @@
 <div class="gct-filter-list">
-  <div *ngIf="hasSelectedFilters()" class="gct-filter-list-inner">
+  <div *ngIf="shouldShowList()" class="gct-filter-list-inner">
     <div>
-      <button class="gct-filter-list-clear-all" (click)="clear()">
+      <button class="gct-filter-list-clear-all" (click)="clearList()">
         <svg-icon name="trash" customClass="two-tone"></svg-icon>
         <span>Clear all</span>
       </button>
     </div>
     <div>
+      <div *ngIf="significanceThresholdActive" class="gct-filter-list-item">
+        <div class="gct-filter-list-item-text">
+          Significance >= {{ significanceThreshold }}
+        </div>
+        <div>
+          <button
+            class="gct-filter-list-item-clear"
+            (click)="removeSignificanceThresholdFilter()"
+          >
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 9L9 1M1 1L9 9"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
       <ng-container *ngFor="let filter of filters; index as i">
         <ng-container *ngFor="let option of filter.options; index as j">
           <div *ngIf="option.selected" class="gct-filter-list-item">
@@ -16,7 +41,7 @@
             <div>
               <button
                 class="gct-filter-list-item-clear"
-                (click)="clear(option)"
+                (click)="clearSelectedFilters(option)"
               >
                 <svg
                   width="10"
