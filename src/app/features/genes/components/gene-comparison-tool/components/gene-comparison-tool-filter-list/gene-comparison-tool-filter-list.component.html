@@ -7,58 +7,21 @@
       </button>
     </div>
     <div>
-      <div *ngIf="significanceThresholdActive" class="gct-filter-list-item">
-        <div class="gct-filter-list-item-text">
-          Significance >= {{ significanceThreshold }}
-        </div>
-        <div>
-          <button
-            class="gct-filter-list-item-clear"
-            (click)="removeSignificanceThresholdFilter()"
-          >
-            <svg
-              width="10"
-              height="10"
-              viewBox="0 0 10 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 9L9 1M1 1L9 9"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <gene-comparison-tool-filter-list-item
+        [item]=""
+        [description]="'Significance >= ' + significanceThreshold"
+        [isVisible]="significanceThresholdActive"
+        (onClear)="removeSignificanceThresholdFilter()"
+      ></gene-comparison-tool-filter-list-item>
       <ng-container *ngFor="let filter of filters; index as i">
         <ng-container *ngFor="let option of filter.options; index as j">
-          <div *ngIf="option.selected" class="gct-filter-list-item">
-            <div class="gct-filter-list-item-text">
-              <b>{{ filter.short }}:</b><span>&nbsp;{{ option.label }}</span>
-            </div>
-            <div>
-              <button
-                class="gct-filter-list-item-clear"
-                (click)="clearSelectedFilters(option)"
-              >
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 10 10"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1 9L9 1M1 1L9 9"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <gene-comparison-tool-filter-list-item
+            [item]="option"
+            [title]="filter.short || ''"
+            [description]="option.label"
+            [isVisible]="option.selected || false"
+            (onClear)="clearSelectedFilters(option)"
+          ></gene-comparison-tool-filter-list-item>
         </ng-container>
       </ng-container>
     </div>

@@ -55,9 +55,9 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
   });
 
   it('should remove significance threshold filter', () => {
-    const clearButton = element.querySelector(
-      '.gct-filter-list-item:first-child .gct-filter-list-item-clear'
-    ) as HTMLElement;
+    const clearButton = element.querySelectorAll(
+      '.gct-filter-list-item-clear'
+    )[0] as HTMLElement;
     clearButton.click();
     fixture.detectChanges();
 
@@ -65,9 +65,9 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
   });
 
   it('should remove filter', () => {
-    const clearButton = element.querySelector(
-      '.gct-filter-list-item:nth-child(2) .gct-filter-list-item-clear'
-    ) as HTMLElement;
+    const clearButton = element.querySelectorAll(
+      '.gct-filter-list-item-clear'
+    )[1] as HTMLElement;
     clearButton.click();
     fixture.detectChanges();
 

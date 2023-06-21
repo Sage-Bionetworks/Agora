@@ -9,7 +9,7 @@ const DEFAULT_SIGNIFICANCE_QUERY = `?significanceThreshold=${DEFAULT_SIGNIFICANC
 const TOGGLE_CLASS = '.gct-significance-control-toggle';
 const CHICLET_CLASS = '.gct-filter-list-item';
 const CHICLET_TEXT_CLASS = '.gct-filter-list-item-text';
-const DEFAULT_CHICLET_TEXT = ` Significance >= ${DEFAULT_SIGNIFICANCE_THRESHOLD} `;
+const DEFAULT_CHICLET_TEXT = `Significance >= ${DEFAULT_SIGNIFICANCE_THRESHOLD}`;
 
 const setUp = (queryParams: string) => {
   cy.visit(`${PAGE_URL_PATH}${queryParams}`);
@@ -99,6 +99,6 @@ describe('Component: GeneComparisonToolComponent', () => {
       .clear()
       .type(newValue);
     cy.location('search').should('eq', `?significanceThreshold=${newValue}`);
-    cy.get(CHICLET_TEXT_CLASS).contains(` Significance >= ${newValue} `);
+    cy.get(CHICLET_TEXT_CLASS).contains(`Significance >= ${newValue}`);
   });
 });

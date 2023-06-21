@@ -26,6 +26,7 @@ import {
   GeneComparisonToolScorePanelComponent,
   GeneComparisonToolFilterPanelComponent,
   GeneComparisonToolFilterListComponent,
+  GeneComparisonToolFilterListItemComponent,
   GeneComparisonToolHowToPanelComponent,
   GeneComparisonToolLegendPanelComponent,
   GeneComparisonToolPinnedGenesModalComponent,
@@ -41,7 +42,7 @@ import {
   ExperimentalValidationComponent,
   GeneNominationsComponent,
   GeneDetailsComponent,
-  GeneBioDomainsComponent
+  GeneBioDomainsComponent,
 } from './components';
 
 // -------------------------------------------------------------------------- //
@@ -75,10 +76,11 @@ import { GeneService } from './services';
     GeneComparisonToolScorePanelComponent,
     GeneComparisonToolFilterPanelComponent,
     GeneComparisonToolFilterListComponent,
+    GeneComparisonToolFilterListItemComponent,
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
-    GeneBioDomainsComponent
+    GeneBioDomainsComponent,
   ],
   imports: [CommonModule, SharedModule, ChartsModule],
   exports: [
@@ -105,10 +107,11 @@ import { GeneService } from './services';
     GeneComparisonToolScorePanelComponent,
     GeneComparisonToolFilterPanelComponent,
     GeneComparisonToolFilterListComponent,
+    GeneComparisonToolFilterListItemComponent,
     GeneComparisonToolHowToPanelComponent,
     GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
-    GeneBioDomainsComponent
+    GeneBioDomainsComponent,
   ],
   providers: [GeneService],
 })
