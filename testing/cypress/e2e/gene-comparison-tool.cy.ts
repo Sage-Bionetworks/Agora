@@ -1,3 +1,9 @@
+import { distributionMock } from '../../../src/app/testing/distribution-mocks';
+import {
+  comparisonGeneMock1,
+  comparisonGeneMock2,
+} from '../../../src/app/testing/gene-comparison-tool-mocks';
+
 // PAGE LOADING
 const PAGE_URL_PATH = '/genes/comparison';
 const TUTORIAL_CLOSE_BUTTON_CLASS = '.p-dialog-header-close';
@@ -12,7 +18,28 @@ const CHICLET_TEXT_CLASS = '.gct-filter-list-item-text';
 const DEFAULT_CHICLET_TEXT = `Significance >= ${DEFAULT_SIGNIFICANCE_THRESHOLD}`;
 
 const setUp = (queryParams: string) => {
+  // TODO: remove intercepts after CI includes MongoDB connection
+  cy.intercept(
+    {
+      method: 'GET',
+      url: '/api/genes/comparison*',
+    },
+    { items: [comparisonGeneMock1, comparisonGeneMock2] }
+  ).as('getGenesComparison');
+  cy.intercept(
+    {
+      method: 'GET',
+      url: '/api/distribution',
+    },
+    distributionMock
+  ).as('getDistribution');
+
   cy.visit(`${PAGE_URL_PATH}${queryParams}`);
+
+  // TODO: remove waits after CI includes MongoDB connection
+  cy.wait('@getGenesComparison');
+  cy.wait('@getDistribution');
+
   cy.get(TUTORIAL_CLOSE_BUTTON_CLASS, { timeout: 2_000 }).click();
   cy.get(LOADING_OVERLAY_CLASS, { timeout: 25_000 }).should(
     'have.css',
@@ -92,7 +119,7 @@ describe('Component: GeneComparisonToolComponent', () => {
   it('should update the significance threshold filter and URL query param when significance threshold is updated', () => {
     setUp(DEFAULT_SIGNIFICANCE_QUERY);
 
-    const newValue = 0.95;
+    const newValue = '0.95';
     cy.get('.gct-significance-control-settings').click();
     cy.get('.gct-significance-control-panel')
       .find('input')
