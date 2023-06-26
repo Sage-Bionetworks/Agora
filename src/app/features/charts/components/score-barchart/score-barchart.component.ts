@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 
 // -------------------------------------------------------------------------- //
@@ -28,6 +28,7 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
     this._score = score;
   }
 
+  @Input() shouldResize = true;
   @Input() barColor = '#8B8AD1';
   @Input() data: OverallScoresDistribution | undefined;
   @Input() xAxisLabel = 'Gene score';
@@ -37,7 +38,17 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
   @ViewChild('tooltip', { static: true }) tooltip: ElementRef<HTMLElement> = {} as ElementRef;
 
   initialized = false;
+  private MIN_CHART_WIDTH = 350;
   private chart!: d3.Selection<any, unknown, null, undefined>;
+  private chartMargin = { top: 20, right: 20, bottom: 40, left: 60 };
+  private chartXScale!: d3.ScaleBand<string>;
+  private chartNegativeBars!: d3.Selection<SVGRectElement, ScoreData, SVGGElement, unknown>;
+  private chartScoreBars!: d3.Selection<SVGRectElement, ScoreData, SVGGElement, unknown>;
+  private chartBarLabels!: d3.Selection<SVGTextElement, ScoreData, SVGGElement, unknown>;
+  private chartXAxisDrawn!: d3.Selection<SVGGElement, unknown, null, undefined>;
+  private chartXAxisLabel!: d3.Selection<SVGTextElement, unknown, null, undefined>;
+
+  private resizeTimer: ReturnType<typeof setTimeout> | number = 0;
 
   chartData: ScoreData[] = [];
   scoreIndex = -1;
@@ -91,7 +102,7 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
   initData() {
     if (!this.data)
       return;
-      
+
     this.chartData = [];
 
     this.setScoreIndex(this.data.bins);
@@ -121,22 +132,29 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
     svg.style('display', 'block');
   }
 
+  getChartBoundingWidth(): number {
+    return (
+      d3.select(this.chartRef.nativeElement).node()?.getBoundingClientRect()
+        .width || this.MIN_CHART_WIDTH
+    );
+  }
+
   createChart() {
     this.initData();
     if (this.chartData) {
-      const width = 350;
+      const width = this.getChartBoundingWidth();
       const height = 350;
-      const margin = { top: 20, right: 20, bottom: 40, left: 60 };
-      const innerWidth = width - margin.left - margin.right;
-      const innerHeight = height - margin.top - margin.bottom;
+      const innerWidth = width - this.chartMargin.left - this.chartMargin.right;
+      const innerHeight =
+        height - this.chartMargin.top - this.chartMargin.bottom;
 
       const svg = this.chart = d3.select(this.chartRef.nativeElement)
         .attr('width', width)
         .attr('height', height)
         .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`);
-      
-      const xScale = d3.scaleBand()
+        .attr('transform', `translate(${this.chartMargin.left}, ${this.chartMargin.top})`);
+
+      this.chartXScale = d3.scaleBand()
         .domain(this.chartData.map(d => d.bins[0].toString()))
         .range([0, innerWidth])
         .padding(0.2);
@@ -146,61 +164,71 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
         .range([innerHeight, 0]);
 
       // NEGATIVE SPACE ABOVE BARS
-      svg
+      this.chartNegativeBars = svg
         .selectAll('.negative-bars')
         .data(this.chartData)
         .enter().append('rect')
         .attr('class', 'negative-bars')
-        .attr('x', d => xScale(d.bins[0].toString()) as number)
+        .attr('x', d => this.chartXScale(d.bins[0].toString()) as number)
         .attr('y', 0)
-        .attr('width', xScale.bandwidth())
+        .attr('width', this.chartXScale.bandwidth())
         .attr('height', d => yScale(d.distribution))
         .attr('fill', 'transparent')
         .on('mouseenter', (event, d) => {
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target);
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
-          const bar = d3.select(bars.nodes()[index]);
+          const tooltipCoordinates = this.getTooltipCoordinates(
+            this.chartMargin.left, 
+            this.chartMargin.top, 
+            this.chartXScale(d.bins[0].toString()) as number, 
+            this.chartXScale.bandwidth(), yScale(d.distribution)
+          );
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.negative-bars').nodes().indexOf(event.target);
-          const bar = d3.select(bars.nodes()[index]);
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseLeave(bar, index);
         });
 
       // BARS
-      const bars = svg
+      this.chartScoreBars = svg
         .selectAll('.scorebars')
         .data(this.chartData)
         .enter().append('rect')
         .attr('class', 'scorebars')
-        .attr('x', d => xScale(d.bins[0].toString()) as number)
+        .attr('x', d => this.chartXScale(d.bins[0].toString()) as number)
         .attr('y', d => yScale(d.distribution))
-        .attr('width', xScale.bandwidth())
+        .attr('width', this.chartXScale.bandwidth())
         .attr('height', d => innerHeight - yScale(d.distribution))
         .attr('fill', this.barColor)
         .style('fill-opacity', (_, index) => this.scoreIndex === index ? '100%' : '50%')
         .on('mouseenter', (event, d) => {
           const index = svg.selectAll('.scorebars').nodes().indexOf(event.target);
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
-          const bar = d3.select(bars.nodes()[index]);
+          const tooltipCoordinates = this.getTooltipCoordinates(
+            this.chartMargin.left, 
+            this.chartMargin.top, 
+            this.chartXScale(d.bins[0].toString()) as number, 
+            this.chartXScale.bandwidth(), yScale(d.distribution)
+          );
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', (event) => {
           const index = svg.selectAll('.scorebars').nodes().indexOf(event.target);
-          const bar = d3.select(bars.nodes()[index]);
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseLeave(bar, index);
         });
 
       // SCORE LABELS
-      svg
+      this.chartBarLabels = svg
         .selectAll('.bar-labels')
         .data(this.chartData)
         .enter().append('text')
         .attr('class', 'bar-labels')
-        .attr('x', d => xScale(d.bins[0].toString()) as number + xScale.bandwidth() / 2)
+        .attr('x', d => this.chartXScale(d.bins[0].toString()) as number + this.chartXScale.bandwidth() / 2)
         .attr('y', d => yScale(d.distribution) - 5)
         .attr('fill', this.barColor)
         .attr('text-anchor', 'middle')
@@ -215,19 +243,24 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
         .on('mouseenter', (_, d) => {
           const index = this.scoreIndex;
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
-          const tooltipCoordinates = this.getTooltipCoordinates(margin.left, margin.top, xScale(d.bins[0].toString()) as number, xScale.bandwidth(), yScale(d.distribution));
-          const bar = d3.select(bars.nodes()[index]);
+          const tooltipCoordinates = this.getTooltipCoordinates(
+            this.chartMargin.left, 
+            this.chartMargin.top, 
+            this.chartXScale(d.bins[0].toString()) as number, 
+            this.chartXScale.bandwidth(), yScale(d.distribution)
+          );
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseEnter(bar, index, tooltipText, tooltipCoordinates);
         })
         .on('mouseleave', () => {
           const index = this.scoreIndex;
-          const bar = d3.select(bars.nodes()[index]);
+          const bar = d3.select(this.chartScoreBars.nodes()[index]);
           this.handleMouseLeave(bar, index);
         });
 
       // X-AXIS
-      const xAxis = d3.axisBottom(xScale);
-      svg.append('g')
+      const xAxis = d3.axisBottom(this.chartXScale);
+      this.chartXAxisDrawn = svg.append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${ innerHeight })`)
         .call(xAxis);
@@ -239,10 +272,10 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
         .call(yAxis);
 
       // X-AXIS LABEL
-      svg.append('text')
+      this.chartXAxisLabel = svg.append('text')
         .attr('class', 'x-axis-label')
         .attr('x', innerWidth / 2)
-        .attr('y', innerHeight + margin.bottom)
+        .attr('y', innerHeight + this.chartMargin.bottom)
         .attr('text-anchor', 'middle')
         .text('GENE SCORE');
 
@@ -250,7 +283,7 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
       svg.append('text')
         .attr('class', 'y-axis-label')
         .attr('x', -innerHeight / 2)
-        .attr('y', -margin.left)
+        .attr('y', -this.chartMargin.left)
         .attr('dy', '1em')
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
@@ -324,4 +357,56 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
     if (this.initialized) 
       this.chart.remove();
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(divSize: number) {
+    if (this.shouldResize && this.initialized) {
+      const self = this;
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        self.resizeChart(divSize);
+      }, 100); 
+    }
+  };
+
+  resizeChart = (divSize: number): void => {
+    // calculate new width
+    const width = Math.max(divSize, this.MIN_CHART_WIDTH);
+    const innerWidth = width - this.chartMargin.left - this.chartMargin.right;
+
+    // update chart size
+    this.chart.attr('width', width);
+
+    // update chartXScale
+    this.chartXScale.range([0, innerWidth]);
+
+    // update negative bars
+    this.chartNegativeBars
+      .transition()
+      .attr('x', d => this.chartXScale(d.bins[0].toString()) as number);
+    
+    // update score bars
+    this.chartScoreBars
+      .transition()
+      .attr('x', d => this.chartXScale(d.bins[0].toString()) as number)
+      .attr('width', this.chartXScale.bandwidth());
+
+    // update score bar labels
+    this.chartBarLabels
+      .transition()
+      .attr('x', d => this.chartXScale(d.bins[0].toString()) as number + this.chartXScale.bandwidth() / 2)
+      .attr('width', this.chartXScale.bandwidth());
+
+    // update drawn x-axis 
+    const xAxis = d3.axisBottom(this.chartXScale);
+    this.chartXAxisDrawn
+      .transition()
+      .call(xAxis);
+    
+    // update x-axis label
+    this.chartXAxisLabel
+      .transition()
+      .attr('x', innerWidth / 2);
+    
+  };
 }
