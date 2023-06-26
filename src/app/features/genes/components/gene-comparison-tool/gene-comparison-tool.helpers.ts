@@ -114,7 +114,7 @@ export const getDetailsPanelData = function (
     }
   });
 
-  max = Math.ceil(max);
+  max = max * 1.1;
 
   const data = {
     gene: gene,

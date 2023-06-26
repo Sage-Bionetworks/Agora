@@ -27,7 +27,7 @@
 
     <div class="gct-details-panel-chart">
       <div>
-        <div>{{ data.min }}</div>
+        <div>{{ getSignificantFigures(data.min, 2) }}</div>
       </div>
       <div>
         <div class="gct-details-panel-chart-axis">
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div>
-        <div>{{ data.max }}</div>
+        <div>{{ getSignificantFigures(data.max, 2) }}</div>
       </div>
     </div>
 
