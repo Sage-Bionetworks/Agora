@@ -33,6 +33,7 @@ export interface GCTGene {
   target_risk_score: number | null;
   genetics_score: number | null;
   multi_omics_score: number | null;
+  biodomains?: string[];
   pinned?: boolean;
 }
 

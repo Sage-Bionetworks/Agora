@@ -1,3 +1,7 @@
+export interface BioDomainInfo {
+    name: string;
+}
+
 export interface BioDomains {
     ensembl_gene_id: string;
     gene_biodomains: BioDomain[];
