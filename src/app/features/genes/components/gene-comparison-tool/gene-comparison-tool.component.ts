@@ -958,10 +958,30 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* ----------------------------------------------------------------------- */
 
   downloadPinnedCsv() {
+    const columnHeaders = [
+      'ensembl_gene_id',
+      'hgnc_symbol',
+      'target_risk_score',
+      'multi_omic_risk_score',
+      'genetic_risk_score',
+      'Protein - Differential Expression' === this.category ? 'uniprotid' : 'model',
+      'tissue',
+      'log2_fc',
+      'ci_upr',
+      'ci_lwr',
+      'adj_p_val',
+      'biodomains',
+    ];
     const data: any[][] = [];
 
     this.pinnedGenes.forEach((g: GCTGene) => {
-      const baseRow = [g.ensembl_gene_id, g.hgnc_symbol];
+      const baseRow = [
+        g.ensembl_gene_id, 
+        g.hgnc_symbol, 
+        g.target_risk_score, 
+        g.multi_omics_score,
+        g.genetics_score
+      ];
 
       if ('Protein - Differential Expression' === this.category) {
         baseRow.push(g.uniprotid || '');
@@ -970,6 +990,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       }
 
       this.columns.forEach((tissueName: string) => {
+        if (this.isScoresColumn(tissueName)) {
+          return;
+        }
         const tissue: GCTGeneTissue | undefined = g.tissues.find(
           (t) => t.name === tissueName
         );
@@ -981,23 +1004,17 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
             tissue?.ci_r || '',
             tissue?.ci_l || '',
             tissue?.adj_p_val || '',
+            g.biodomains?.join(',') || '',
           ],
         ]);
       });
     });
 
     let csv = '';
-
-    if ('Protein - Differential Expression' === this.category) {
-      csv =
-        '"ensembl_gene_id","hgnc_symbol","uniprotid","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
-    } else {
-      csv =
-        '"ensembl_gene_id","hgnc_symbol","model","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
-    }
+    csv = this.arrayToCSVString(columnHeaders);
 
     data.forEach((row) => {
-      csv += row.map((d) => `"${d}"`).join(',') + '\n';
+      csv += this.arrayToCSVString(row);
     });
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -1010,6 +1027,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     a.setAttribute('href', url);
     a.setAttribute('download', filename + '.csv');
     a.click();
+  }
+
+  arrayToCSVString(values: string[]): string {
+    return values.map(value => `"${value}"`).join(',') + '\n';
   }
 
   /* ----------------------------------------------------------------------- */
