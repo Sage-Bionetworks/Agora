@@ -10,7 +10,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { cloneDeep } from 'lodash';
 
 import { Table } from 'primeng/table';
@@ -25,10 +25,8 @@ import {
   GCTGene,
   GCTSortEvent,
   GCTGeneTissue,
-  GCTGeneResponse,
   GCTDetailsPanelData,
   GCTColumn,
-  Distribution,
   OverallScoresDistribution,
 } from '../../../../models';
 
@@ -217,18 +215,17 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.helperService.setLoading(true);
     this.genes = [];
 
-    this.geneService
-      .getComparisonGenes(this.category, this.subCategory)
-      .subscribe((res: GCTGeneResponse) => {
-        this.initData(res.items);
+    const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
+    const distributionApi$ = this.geneService.getDistribution();
+
+    combineLatest([genesApi$, distributionApi$]).subscribe(
+      ([genesResult, distributionResult]) => {
+        this.initData(genesResult.items);
         this.sortTable(this.headerTable);
         this.refresh();
 
-        // get scores distribution
-        this.geneService.getDistribution().subscribe((data: Distribution) => {
-          this.scoresDistribution = data.overall_scores;
-          this.helperService.setLoading(false);
-        });
+        this.scoresDistribution = distributionResult.overall_scores;
+        this.helperService.setLoading(false);
       });
   }
 
