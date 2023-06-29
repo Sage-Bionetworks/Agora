@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   Distribution,
   Gene,
-  OverallScores,
   OverallScoresDistribution,
 } from '../../../../models';
 import { GeneService } from '../../services';
@@ -85,9 +84,10 @@ export class GeneSoeChartsComponent implements OnInit {
   }
 
   getGeneOverallScores(name: string) {
-    const scores: OverallScores =
-      this._gene?.overall_scores || ({} as OverallScores);
+    if (!this.gene?.overall_scores)
+      return null;
 
+    const scores = this.gene.overall_scores;
     if ('Genetic Risk Score' === name) {
       return scores['genetics_score'];
     } else if ('Multi-omic Risk Score' === name) {
@@ -97,7 +97,6 @@ export class GeneSoeChartsComponent implements OnInit {
     } else if ('Target Risk Score' === name) {
       return scores['target_risk_score'];
     }
-
-    return 0;
+    return null;
   }
 }
