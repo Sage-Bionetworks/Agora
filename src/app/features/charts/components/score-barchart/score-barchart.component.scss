@@ -4,6 +4,10 @@ $tooltip-color: #63676C;
     position: relative;
     height: 350px;
 
+    svg {
+        width: 100%; 
+    }
+
     #score-barchart-tooltip {
         position: absolute;
         text-align: center;
