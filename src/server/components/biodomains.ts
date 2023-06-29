@@ -72,7 +72,7 @@ export async function allBiodomainsRoute(
   try {
     const result = await getAllBioDomains();
     setHeaders(res);
-    res.json({ items: result });
+    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -91,7 +91,7 @@ export async function biodomainsRoute(
   try {
     const result = await getBioDomains(<string>req.params.id);
     setHeaders(res);
-    res.json({ items: result });
+    res.json(result?.gene_biodomains);
   } catch (err) {
     next(err);
   }
