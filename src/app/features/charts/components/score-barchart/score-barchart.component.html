@@ -1,4 +1,4 @@
-<div id="score-barchart" #div (window:resize)="onResize(div.getBoundingClientRect().width)">
+<div id="score-barchart" #scoreBarChartContainer>
   <div id="score-barchart-tooltip" class="arrow-below tooltip-arrow" #tooltip (mouseout)="hideTooltip()"></div>
   <svg #chart></svg>
   <div class="chart-no-data" *ngIf="_score === null">

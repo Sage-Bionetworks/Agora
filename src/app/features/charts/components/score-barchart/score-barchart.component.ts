@@ -34,11 +34,13 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
   @Input() xAxisLabel = 'Gene score';
   @Input() yAxisLabel = 'Number of genes';
 
+  @ViewChild('scoreBarChartContainer') scoreBarChartContainer: ElementRef<HTMLElement> = {} as ElementRef;
   @ViewChild('chart') chartRef: ElementRef<SVGElement> = {} as ElementRef;
   @ViewChild('tooltip', { static: true }) tooltip: ElementRef<HTMLElement> = {} as ElementRef;
 
   initialized = false;
   private MIN_CHART_WIDTH = 350;
+  private CHART_HEIGHT = 350;
   private chart!: d3.Selection<any, unknown, null, undefined>;
   private chartMargin = { top: 20, right: 20, bottom: 40, left: 60 };
   private chartXScale!: d3.ScaleBand<string>;
@@ -55,6 +57,18 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
 
   constructor(private helperService: HelperService) {
   }
+
+  @HostListener('window:resize', ['$event.target'])
+  onResize() {
+    if (this.shouldResize && this.initialized) {
+      const self = this;
+      const divSize = this.scoreBarChartContainer.nativeElement.getBoundingClientRect().width;
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        self.resizeChart(divSize);
+      }, 100); 
+    }
+  };
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -143,7 +157,7 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
     this.initData();
     if (this.chartData) {
       const width = this.getChartBoundingWidth();
-      const height = 350;
+      const height = this.CHART_HEIGHT;
       const innerWidth = width - this.chartMargin.left - this.chartMargin.right;
       const innerHeight =
         height - this.chartMargin.top - this.chartMargin.bottom;
@@ -357,17 +371,6 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
     if (this.initialized) 
       this.chart.remove();
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(divSize: number) {
-    if (this.shouldResize && this.initialized) {
-      const self = this;
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        self.resizeChart(divSize);
-      }, 100); 
-    }
-  };
 
   resizeChart = (divSize: number): void => {
     // calculate new width
