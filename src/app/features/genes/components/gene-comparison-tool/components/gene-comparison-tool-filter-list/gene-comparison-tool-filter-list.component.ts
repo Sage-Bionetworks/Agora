@@ -15,9 +15,31 @@ import { GCTFilter, GCTFilterOption } from '../../../../../../models';
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneComparisonToolFilterListComponent {
+  /* Filters ------------------------------------------------------------------ */
   @Input() filters: GCTFilter[] = [] as GCTFilter[];
   @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 
+  /* Significance Threshold --------------------------------------------------- */
+  @Input() significanceThresholdActive = false;
+  @Input() significanceThreshold = -1;
+  @Output() onremoveSignificanceThresholdFilter: EventEmitter<any> =
+    new EventEmitter();
+
+  /* ----------------------------------------------------------------------- */
+  /* All
+  /* ----------------------------------------------------------------------- */
+  shouldShowList() {
+    return this.hasSelectedFilters() || this.significanceThresholdActive;
+  }
+
+  clearList() {
+    this.removeSignificanceThresholdFilter();
+    this.clearSelectedFilters();
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Filters
+  /* ----------------------------------------------------------------------- */
   hasSelectedFilters() {
     for (const filter of this.filters) {
       if (filter.options.filter((option) => option.selected).length > 0) {
@@ -27,7 +49,7 @@ export class GeneComparisonToolFilterListComponent {
     return false;
   }
 
-  clear(option?: GCTFilterOption) {
+  clearSelectedFilters(option?: GCTFilterOption) {
     if (option) {
       option.selected = false;
     } else {
@@ -38,5 +60,15 @@ export class GeneComparisonToolFilterListComponent {
       }
     }
     this.onChange.emit(this.filters);
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Significance Threshold
+  /* ----------------------------------------------------------------------- */
+  removeSignificanceThresholdFilter(): void {
+    this.significanceThresholdActive = false;
+    this.onremoveSignificanceThresholdFilter.emit(
+      this.significanceThresholdActive
+    );
   }
 }

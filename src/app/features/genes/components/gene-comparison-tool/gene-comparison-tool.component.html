@@ -46,6 +46,11 @@
       #filterList
       [filters]="filters"
       (onChange)="setFilters($event)"
+      [significanceThreshold]="significanceThreshold"
+      [significanceThresholdActive]="significanceThresholdActive"
+      (onremoveSignificanceThresholdFilter)="
+        setSignificanceThresholdActive($event)
+      "
     ></gene-comparison-tool-filter-list>
 
     <div class="gct-body">
@@ -129,10 +134,15 @@
                         'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
                         significanceThreshold
                       "
+                      styleClass="gct-significance-control-toggle"
                       tooltipPosition="left"
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
-                      (onChange)="filter()"
+                      (onChange)="
+                        setSignificanceThresholdActive(
+                          significanceThresholdActive
+                        )
+                      "
                     ></p-inputSwitch>
                   </div>
                   <div>
@@ -153,11 +163,17 @@
                           max="1"
                           step="0.01"
                           [(ngModel)]="significanceThreshold"
+                          (ngModelChange)="
+                            setSignificanceThresholdActive(
+                              significanceThresholdActive
+                            )
+                          "
                         />
                       </ng-template>
                     </p-overlayPanel>
                     <button
                       (click)="significanceOverlay.toggle($event)"
+                      class="gct-significance-control-settings"
                       pTooltip="Edit significance cutoff value"
                       tooltipPosition="left"
                       tooltipStyleClass="tooltip"
@@ -254,10 +270,10 @@
                       </div>
                       <div class="column-header-sort">
                         <p-sortIcon
-                        [field]="column"
-                        [pTooltip]="getGCTColumnSortIconTooltipText(column)"
-                        tooltipPosition="top"
-                        tooltipStyleClass="tooltip"
+                          [field]="column"
+                          [pTooltip]="getGCTColumnSortIconTooltipText(column)"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
                         ></p-sortIcon>
                       </div>
                     </div>
@@ -325,7 +341,7 @@
                   </td>
                   <ng-container
                     *ngFor="let column of columns"
-                  >
+                    >
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
                       <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
                         {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
@@ -462,7 +478,7 @@
                   </td>
                   <ng-container
                     *ngFor="let column of columns"
-                  >
+                    >
                     <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
                       <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
                         {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}

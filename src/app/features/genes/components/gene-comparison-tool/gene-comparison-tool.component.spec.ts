@@ -9,7 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { MessageService, SortEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
@@ -26,10 +26,13 @@ import { GeneService } from '../../../../features/genes/services';
 import { routes } from '../../../../app.routing';
 import { comparisonGeneMock1, comparisonGeneMock2 } from '../../../../testing';
 
+const DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
+
 class ActivatedRouteStub {
   queryParams = new Observable((observer) => {
     const urlParams = {
       pinned: ['ENSG00000147065'],
+      significanceThreshold: DEFAULT_SIGNIFICANCE_THRESHOLD,
     };
     observer.next(urlParams);
     observer.complete();
@@ -40,6 +43,7 @@ describe('Component: GeneComparisonToolComponent', () => {
   let fixture: ComponentFixture<GeneComparisonToolComponent>;
   let component: GeneComparisonToolComponent;
   let element: HTMLElement;
+  let route: ActivatedRoute;
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
@@ -69,6 +73,7 @@ describe('Component: GeneComparisonToolComponent', () => {
   beforeEach(async () => {
     fixture = TestBed.createComponent(GeneComparisonToolComponent);
     component = fixture.componentInstance;
+    route = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();
     element = fixture.nativeElement;
   });
@@ -189,7 +194,7 @@ describe('Component: GeneComparisonToolComponent', () => {
     fixture.detectChanges();
     expect(component.columns.length).toEqual(12);
   });
- 
+
   it('should have a grid with RISK SCORE being the 1st column', () => {
     component.initData([comparisonGeneMock1, comparisonGeneMock2]);
     fixture.detectChanges();
@@ -352,5 +357,136 @@ describe('Component: GeneComparisonToolComponent', () => {
       expect(event.data[2].target_risk_score).toEqual(-2);
       expect(event.data[3].target_risk_score).toEqual(null);
     }
+  });
+
+  describe('significanceThreshold', () => {
+    // constants
+    const TOGGLE_CLASS = '.gct-significance-control-toggle';
+    const CHICLET_CLASS = '.gct-filter-list-item';
+    const CHICLET_TEXT_CLASS = '.gct-filter-list-item-text';
+
+    // helpers
+    const expectSignificanceThresholdIsApplied = (
+      threshold = DEFAULT_SIGNIFICANCE_THRESHOLD
+    ) => {
+      expect(element.querySelector(CHICLET_CLASS)).toBeTruthy();
+      expect(element.querySelector(CHICLET_TEXT_CLASS)?.textContent).toContain(
+        `Significance >= ${threshold}`
+      );
+      expect(
+        element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
+      ).toBeTrue();
+      expect(component.getUrlParam('significanceThreshold')[0]).toEqual(
+        threshold
+      );
+    };
+
+    const expectSignificanceThresholdIsNotApplied = () => {
+      expect(element.querySelector(CHICLET_CLASS)).toBeFalsy();
+      expect(
+        element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
+      ).toBeFalse();
+      expect(component.getUrlParam('significanceThreshold')).toEqual(null);
+    };
+
+    // tests
+    it('should show significance threshold filter when URL includes query param', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      fixture.detectChanges();
+
+      expectSignificanceThresholdIsApplied();
+      flush();
+    }));
+
+    it('should remove significance threshold filter and URL query param when significance threshold filter is removed', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      fixture.detectChanges();
+
+      expectSignificanceThresholdIsApplied();
+
+      const filterClearButton = element.querySelector(
+        '.gct-filter-list-item-clear'
+      ) as HTMLElement;
+      filterClearButton.click();
+
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expectSignificanceThresholdIsNotApplied();
+      });
+      flush();
+    }));
+
+    it('should remove significance threshold filter and URL query param when clear all button is clicked', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      fixture.detectChanges();
+
+      expectSignificanceThresholdIsApplied();
+
+      const clearAllButton = element.querySelector(
+        '.gct-filter-list-clear-all'
+      ) as HTMLElement;
+      clearAllButton.click();
+
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expectSignificanceThresholdIsNotApplied();
+      });
+      flush();
+    }));
+
+    it('should add significance threshold filter and add URL query param when significance threshold slider is toggled on', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      route.queryParams = of({});
+
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expectSignificanceThresholdIsNotApplied();
+
+        const toggle = element.querySelector(TOGGLE_CLASS) as HTMLElement;
+        toggle.click();
+
+        fixture.whenStable().then(() => {
+          fixture.detectChanges();
+          expectSignificanceThresholdIsApplied();
+        });
+      });
+      flush();
+    }));
+
+    it('should remove significance threshold filter and remove URL query param when significance threshold slider is toggled off', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      fixture.detectChanges();
+
+      expectSignificanceThresholdIsApplied();
+
+      const toggle = element.querySelector(TOGGLE_CLASS) as HTMLElement;
+      toggle.click();
+      flush();
+
+      fixture.detectChanges();
+      expectSignificanceThresholdIsNotApplied();
+    }));
+
+    it('should update the significance threshold filter and URL query param when significance threshold is updated', fakeAsync(() => {
+      component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+      fixture.detectChanges();
+
+      const newValue = 0.95;
+      const settingsButton = element.querySelector(
+        '.gct-significance-control-settings'
+      ) as HTMLElement;
+      settingsButton.click();
+      fixture.detectChanges();
+
+      const settingsInput = element.querySelector(
+        '.gct-significance-control-panel input'
+      ) as HTMLInputElement;
+      settingsInput.value = newValue.toString();
+      settingsInput.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      flush();
+
+      expectSignificanceThresholdIsApplied(newValue);
+    }));
   });
 });
