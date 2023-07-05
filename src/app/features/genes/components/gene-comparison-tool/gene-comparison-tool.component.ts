@@ -138,9 +138,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       this.sortOrder = '1' === this.urlParams.sortOrder ? 1 : -1;
 
       this.significanceThreshold =
-        this.urlParams.significanceThreshold ||
+        this.urlParams.significance ||
         this.DEFAULT_SIGNIFICANCE_THRESHOLD;
-      this.significanceThresholdActive = !!this.urlParams.significanceThreshold;
+      this.significanceThresholdActive = !!this.urlParams.significance;
 
       this.loadGenes();
     });
@@ -768,7 +768,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     }
 
     if (this.significanceThresholdActive) {
-      params['significanceThreshold'] = [this.significanceThreshold];
+      params['significance'] = [this.significanceThreshold];
     }
 
     this.urlParams = params;
