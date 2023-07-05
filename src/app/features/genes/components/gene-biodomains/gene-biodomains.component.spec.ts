@@ -9,7 +9,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { GeneBioDomainsComponent } from './';
 import { HelperService } from '../../../../core/services';
-import { geneMock1 } from '../../../../testing';
+import { emptyBioDomainMock, geneMock1 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -49,8 +49,9 @@ describe('Component: Gene Biodomains', () => {
   });
 
   it('should return NO LINKING GO TERMS when getHeaderText() is called with no go terms', () => {
+    component.selectedBioDomain = emptyBioDomainMock;
     component.goTerms = [];
     const result = component.getHeaderText();
-    expect(result).toBe('NO LINKING GO TERMS');
+    expect(result).toBe(`NO LINKING GO TERMS FOR ${emptyBioDomainMock.biodomain.toUpperCase()}`);
   });
 });

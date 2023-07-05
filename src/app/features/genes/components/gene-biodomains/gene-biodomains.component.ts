@@ -97,9 +97,10 @@ export class GeneBioDomainsComponent implements OnInit {
   }
 
   getHeaderText() {
+    const baseText = `LINKING GO TERMS FOR ${ this.selectedBioDomain?.biodomain.toUpperCase() }`;
     if (this.goTerms.length === 0)
-      return 'NO LINKING GO TERMS';
-    return `LINKING GO TERMS FOR ${ this.selectedBioDomain?.biodomain.toUpperCase() } (${ this.selectedBioDomain?.n_gene_biodomain_terms}/${ this.selectedBioDomain?.n_biodomain_terms})`;
+      return `NO ${baseText}`;
+    return `${baseText} (${ this.selectedBioDomain?.n_gene_biodomain_terms}/${ this.selectedBioDomain?.n_biodomain_terms})`;
   }
 
   capitalizeGoTerm(goTerm: string) {

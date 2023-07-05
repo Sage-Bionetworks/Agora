@@ -14,6 +14,14 @@ export const bioDomainInfoMock: BioDomainInfo[] = [
   }, 
 ];
 
+export const emptyBioDomainMock: BioDomain = {
+  biodomain: "Autophagy",
+  go_terms: [],
+  n_biodomain_terms: 0,
+  n_gene_biodomain_terms: 0,
+  pct_linking_terms: 0
+};
+
 export const bioDomainMock1: BioDomain = {
   biodomain: 'Cell Cycle',
   go_terms: ['G1/S transition of mitotic cell cycle'],
