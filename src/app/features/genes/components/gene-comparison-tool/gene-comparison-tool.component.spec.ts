@@ -371,7 +371,7 @@ describe('Component: GeneComparisonToolComponent', () => {
     ) => {
       expect(element.querySelector(CHICLET_CLASS)).toBeTruthy();
       expect(element.querySelector(CHICLET_TEXT_CLASS)?.textContent).toContain(
-        `Significance >= ${threshold}`
+        `Significance ≤ ${threshold}`
       );
       expect(
         element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
