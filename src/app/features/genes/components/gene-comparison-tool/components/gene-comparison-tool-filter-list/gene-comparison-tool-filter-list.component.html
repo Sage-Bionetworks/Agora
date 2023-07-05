@@ -9,7 +9,7 @@
     <div>
       <gene-comparison-tool-filter-list-item
         [item]=""
-        [description]="'Significance >= ' + significanceThreshold"
+        [description]="'Significance &leq; ' + significanceThreshold"
         [isVisible]="significanceThresholdActive"
         (onClear)="removeSignificanceThresholdFilter()"
       ></gene-comparison-tool-filter-list-item>
