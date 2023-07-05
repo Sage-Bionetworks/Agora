@@ -32,7 +32,7 @@ class ActivatedRouteStub {
   queryParams = new Observable((observer) => {
     const urlParams = {
       pinned: ['ENSG00000147065'],
-      significanceThreshold: DEFAULT_SIGNIFICANCE_THRESHOLD,
+      significance: DEFAULT_SIGNIFICANCE_THRESHOLD,
     };
     observer.next(urlParams);
     observer.complete();
@@ -376,7 +376,7 @@ describe('Component: GeneComparisonToolComponent', () => {
       expect(
         element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
       ).toBeTrue();
-      expect(component.getUrlParam('significanceThreshold')[0]).toEqual(
+      expect(component.getUrlParam('significance')[0]).toEqual(
         threshold
       );
     };
@@ -386,7 +386,7 @@ describe('Component: GeneComparisonToolComponent', () => {
       expect(
         element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
       ).toBeFalse();
-      expect(component.getUrlParam('significanceThreshold')).toEqual(null);
+      expect(component.getUrlParam('significance')).toEqual(null);
     };
 
     // tests
