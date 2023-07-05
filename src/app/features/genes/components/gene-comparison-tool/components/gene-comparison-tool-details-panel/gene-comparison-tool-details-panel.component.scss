@@ -134,7 +134,14 @@
           font-size: var(--font-size-sm);
           top: 100%;
           left: 50%;
-          transform: translate(-50%, 14px);
+          
+          &.gct-details-panel-chart-interval-left {
+            transform: translate(-95%, 14px);
+          }
+
+          &.gct-details-panel-chart-interval-right {
+            transform: translate(-5%, 14px);
+          }
         }
 
         &:first-child {
