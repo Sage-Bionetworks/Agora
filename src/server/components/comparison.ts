@@ -7,7 +7,7 @@ import { Request, Response, NextFunction } from 'express';
 // Internal
 // -------------------------------------------------------------------------- //
 import { setHeaders, altCache } from '../helpers';
-import { getGenesMap, getAllScores, getTeams, getBioDomains, getAllGeneBioDomains } from './';
+import { getGenesMap, getAllScores, getTeams, getAllGeneBioDomains } from './';
 import {
   Gene,
   GCTGene,
