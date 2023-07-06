@@ -100,7 +100,7 @@ export const filters: GCTFilter[] = [
   {
     name: 'biodomain',
     field: 'biodomains',
-    label: 'Biodomain',
+    label: 'Biological Domain',
     short: 'Biodomain',
     description: 'Filter for genes based on the biological domains that they are linked to.',
     matchMode: 'intersect',
