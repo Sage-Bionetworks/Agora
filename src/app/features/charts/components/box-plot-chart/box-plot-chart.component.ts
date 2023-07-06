@@ -195,6 +195,6 @@ export class BoxPlotComponent extends BaseChartComponent {
   }
 
   override getXAxisTooltipText(text: string) {
-    return this.helperService.getTissueTooltipText(text);
+    return this.helperService.getGCTColumnTooltipText(text);
   }
 }

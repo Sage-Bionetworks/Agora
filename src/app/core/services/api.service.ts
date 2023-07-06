@@ -14,6 +14,8 @@ import {
   GCTGeneResponse,
   GenesResponse,
   Distribution,
+  BioDomainInfo,
+  BioDomain,
 } from '../../models';
 
 import { TeamsResponse } from '../../models';
@@ -61,6 +63,18 @@ export class ApiService {
     return this.http.get<GenesResponse>(this.getBaseUrl() + '/api/genes', {
       headers: new HttpHeaders(defaultHeaders),
       params: new HttpParams().set('ids', ids),
+    });
+  }
+
+  getBiodomain(ensg: string) {
+    return this.http.get<BioDomain[]>(this.getBaseUrl() + '/api/biodomains/' + ensg, {
+      headers: new HttpHeaders(defaultHeaders)
+    });
+  }
+
+  getBiodomains() {
+    return this.http.get<BioDomainInfo[]>(this.getBaseUrl() + '/api/biodomains', {
+      headers: new HttpHeaders(defaultHeaders)
     });
   }
 

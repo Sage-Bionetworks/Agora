@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import {
+  Distribution,
   Gene,
-  OverallScores,
   OverallScoresDistribution,
 } from '../../../../models';
 import { GeneService } from '../../services';
@@ -20,8 +20,7 @@ export interface SOEChartProps {
 @Component({
   selector: 'gene-soe-charts',
   templateUrl: './gene-soe-charts.component.html',
-  styleUrls: ['./gene-soe-charts.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./gene-soe-charts.component.scss']
 })
 export class GeneSoeChartsComponent implements OnInit {
   _gene: Gene | undefined;
@@ -34,56 +33,70 @@ export class GeneSoeChartsComponent implements OnInit {
   }
 
   @Input() wikiId = '';
-  charts: any[] = [];
+
+  primaryBarColor = '#8B8AD1';
+  alternateBarColor = '#42C7BB';
+
+  scoreDistributions: OverallScoresDistribution[] = [];
 
   constructor(private geneService: GeneService) {}
 
   ngOnInit() {}
 
-  init() {
-    this.geneService.getDistribution().subscribe((data: any) => {
-      const overallScoreDistribution = data.overall_scores;
-
-      overallScoreDistribution.sort((a: any, b: any) =>
-        a.name > b.name ? 1 : -1
-      );
-
-      this.charts = overallScoreDistribution.map((item: any) => {
-        const distribution: any = [];
-
-        item.bins.forEach((bin: string, i: number) => {
-          distribution.push({
-            key: parseFloat(bin[0]).toFixed(2),
-            value: item.distribution[i],
-            range: [parseFloat(bin[0]), parseFloat(bin[1])],
-          });
-        });
-
-        return {
-          name: item.name,
-          score: this.getGeneOverallScores(item.name),
-          ownerId: item.syn_id,
-          wikiId: item.wiki_id,
-          distribution,
-        };
-      });
+  customSortDistributions(distributions: OverallScoresDistribution[]) {
+    // sort the distributions such that the order is: Target Risk Score, Genetic Risk Score, Multi-omic Risk Score
+    // this should match the default column order on the GCT page
+    distributions.sort((a: OverallScoresDistribution, b: OverallScoresDistribution) => {
+      if (a.name === 'Target Risk Score') {
+        return -1;
+      } else if (b.name === 'Target Risk Score') {
+        return 1;
+      } else if (a.name === 'Genetic Risk Score') {
+        return -1;
+      } else if (b.name === 'Genetic Risk Score') {
+        return 1;
+      } else if (a.name === 'Multi-omic Risk Score') {
+        return -1;
+      } else if (b.name === 'Multi-omic Risk Score') {
+        return 1;
+      } else {
+        return a.name.localeCompare(b.name);  // if there are more scores columns in the future, default to alphabetical
+      }
     });
   }
 
-  getGeneOverallScores(name: string) {
-    const scores: OverallScores =
-      this._gene?.overall_scores || ({} as OverallScores);
+  init() {
+    this.geneService.getDistribution().subscribe((data: Distribution) => {
+      this.scoreDistributions = data.overall_scores;
+      this.customSortDistributions(this.scoreDistributions);
+      // remove literature score
+      this.scoreDistributions = this.scoreDistributions.filter((item: any) => (item.name !== 'Literature Score'));
+    });
+  }
 
-    if ('Genetics Score' === name) {
-      return scores['GeneticsScore'] || 0;
-    } else if ('Genomics Score' === name) {
-      return scores['OmicsScore'] || 0;
-    } else if ('Literature Score' === name) {
-      return scores['LiteratureScore'] || 0;
-    } else if ('Overall Score' === name) {
-      return scores['Logsdon'] || 0;
+  getBarColor(chartName: string | undefined) {
+    if (!chartName)
+      return this.primaryBarColor;
+    if (chartName === 'Target Risk Score') {
+      return this.alternateBarColor;
     }
+    return this.primaryBarColor;
+  }
 
-    return 0;
+  getGeneOverallScores(name: string) {
+    if (!this.gene?.overall_scores)
+      return null;
+
+    const scores = this.gene.overall_scores;
+    if ('Genetic Risk Score' === name) {
+      return scores['genetics_score'];
+    } else if ('Multi-omic Risk Score' === name) {
+      return scores['multi_omics_score'];
+    } else if ('Literature Score' === name) {
+      return scores['literature_score'];
+    } else if ('Target Risk Score' === name) {
+      return scores['target_risk_score'];
+    }
+    return null;
   }
 }

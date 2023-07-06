@@ -1,0 +1,88 @@
+$tooltip-color: #63676C;
+
+#score-barchart {
+    position: relative;
+    height: 350px;
+
+    svg {
+        width: 100%; 
+    }
+
+    #score-barchart-tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 5px;
+        font-size: 14px;
+        background-color: $tooltip-color;
+        color: white;
+        display: none;
+        z-index: 200;
+        opacity: 0.9;
+        width: 200px;
+        cursor: pointer;
+        border-radius: 5px;
+        pointer-events: none;
+    }
+
+    .tooltip-arrow {
+        &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            border: 10px solid transparent;
+            transform: translateX(-50%);
+        }
+    
+        &.arrow-below {
+            transform: translate(calc(-50%), calc(-100% - 20px));
+
+            &::before {
+                bottom: -9px;
+                border-bottom: 0;
+                border-top-color: $tooltip-color;
+            }
+        }
+    }
+
+    .negative-bars {
+        &:hover {
+            fill: transparent;
+            cursor: pointer;
+        }
+    }
+
+    .scorebars {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .bar-labels {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .x-axis .tick {
+        cursor: default;
+    }
+
+    .y-axis .tick {
+        cursor: default;
+    }
+
+    text.x-axis-label {
+        cursor: default;
+    }
+
+    text.y-axis-label {
+        cursor: default;
+    }
+
+    .chart-no-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+}

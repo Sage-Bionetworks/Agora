@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 // -------------------------------------------------------------------------- //
@@ -19,9 +19,9 @@ import { SynapseWiki } from '../../../models';
   styleUrls: ['./wiki.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WikiComponent implements OnInit {
-  @Input() ownerId = '';
-  @Input() wikiId = '';
+export class WikiComponent implements OnChanges, OnInit {
+  @Input() ownerId: string | undefined;
+  @Input() wikiId: string | undefined;
   @Input() className = '';
 
   loading = true;
@@ -35,11 +35,21 @@ export class WikiComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.wikiId && !changes.wikiId.firstChange) {
+      this.getWikiData();
+    }
+  }
+
   ngOnInit() {
     this.loading = true;
 
+    this.getWikiData();
+  }
+
+  getWikiData() {
     this.synapseApiService
-      .getWiki(this.ownerId || 'syn25913473', this.wikiId)
+      .getWiki(this.ownerId || 'syn25913473', this.wikiId || '')
       .subscribe(
         (wiki: SynapseWiki) => {
           if (!wiki) {

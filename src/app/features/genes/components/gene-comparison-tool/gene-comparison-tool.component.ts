@@ -10,7 +10,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { cloneDeep } from 'lodash';
 
 import { Table } from 'primeng/table';
@@ -25,8 +25,9 @@ import {
   GCTGene,
   GCTSortEvent,
   GCTGeneTissue,
-  GCTGeneResponse,
   GCTDetailsPanelData,
+  GCTColumn,
+  OverallScoresDistribution,
 } from '../../../../models';
 
 import { GeneService } from '../../services';
@@ -36,6 +37,7 @@ import * as variables from './gene-comparison-tool.variables';
 import * as helpers from './gene-comparison-tool.helpers';
 
 import {
+  GeneComparisonToolScorePanelComponent as ScorePanelComponent,
   GeneComparisonToolDetailsPanelComponent as DetailsPanelComponent,
   GeneComparisonToolFilterPanelComponent as FilterPanelComponent,
   GeneComparisonToolPinnedGenesModalComponent as PinnedGenesModalComponent,
@@ -62,6 +64,26 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   columns: string[] = [];
   columnWidth = 'auto';
 
+  scoresColumns: GCTColumn[] = [
+    { field: 'RISK SCORE', header: 'AD Risk Score', selected: true, visible: true },
+    { field: 'GENETIC', header: 'Genetic Score', selected: true, visible: true },
+    { field: 'MULTI-OMIC', header: 'Genomic Score', selected: true, visible: true },
+  ];
+
+  brainRegionsColumns: GCTColumn[] = [
+    { field: 'ACC', header: 'ACC - Anterior Cingulate Cortex', selected: true, visible: true },
+    { field: 'CBE', header: 'CBE - Cerebellum', selected: true, visible: true },
+    { field: 'DLPFC', header: 'DLPFC - Dorsolateral Prefrontal Cortex', selected: true, visible: true },
+    { field: 'FP', header: 'FP - Frontal Pole', selected: true, visible: true },
+    { field: 'IFG', header: 'IFG - Inferior Frontal Gyrus', selected: true, visible: true },
+    { field: 'PCC', header: 'PCC - Posterior Cingulate Cortex', selected: true, visible: true },
+    { field: 'PHG', header: 'PHG - Parahippocampal Gyrus', selected: true, visible: true },
+    { field: 'STG', header: 'STG - Superior Temporal Gyrus', selected: true, visible: true },
+    { field: 'TCX', header: 'TCX - Temporal Cortex', selected: true, visible: true },
+  ];
+
+  scoresDistribution: OverallScoresDistribution[] = [];
+
   /* Sort ------------------------------------------------------------------ */
   sortField = '';
   sortOrder = -1;
@@ -81,7 +103,8 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   maxPinnedGenes = 50;
 
   /* ----------------------------------------------------------------------- */
-  significanceThreshold = 0.05;
+  private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
+  significanceThreshold = this.DEFAULT_SIGNIFICANCE_THRESHOLD;
   significanceThresholdActive = false;
 
   /* Components ------------------------------------------------------------ */
@@ -91,6 +114,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   @ViewChild('filterPanel') filterPanel!: FilterPanelComponent;
   @ViewChild('detailsPanel') detailsPanel!: DetailsPanelComponent;
+  @ViewChild('scorePanel') scorePanel!: ScorePanelComponent;
   @ViewChild('pinnedGenesModal') pinnedGenesModal!: PinnedGenesModalComponent;
 
   constructor(
@@ -113,6 +137,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       this.sortField = this.urlParams.sortField || '';
       this.sortOrder = '1' === this.urlParams.sortOrder ? 1 : -1;
 
+      this.significanceThreshold =
+        this.urlParams.significance ||
+        this.DEFAULT_SIGNIFICANCE_THRESHOLD;
+      this.significanceThresholdActive = !!this.urlParams.significance;
+
       this.loadGenes();
     });
 
@@ -134,19 +163,68 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     this.urlParamsSubscription?.unsubscribe();
   }
 
+  isScoresColumn(column: string) {
+    const isScore = this.scoresColumns.find(c => c.field === column);
+    return isScore !== undefined;
+  }
+
+  toggleGCTColumn(column: GCTColumn) {
+    column.selected = !column.selected;
+    this.updateVisibleColumns();
+    this.onResize();
+  }
+
+  updateVisibleColumns() {
+    const visibleScoresColumns: string[] = 
+      this.scoresColumns
+        .filter(c => c.visible && c.selected)
+        .map(c => c.field);
+    const visibleBrainRegionColumns: string[] = 
+      this.brainRegionsColumns
+        .filter(c => c.visible && c.selected)
+        .map(c => c.field);
+    this.columns = visibleScoresColumns.concat(visibleBrainRegionColumns);
+  }
+
+  public isNumber(value: string | number): boolean
+  {
+    return ((value != null) &&
+            (value !== '') &&
+            !isNaN(Number(value.toString())));
+  }
+
+
   /* ----------------------------------------------------------------------- */
   /* Genes
   /* ----------------------------------------------------------------------- */
 
+  getScoreForNumericColumn(columnName: string, gene: GCTGene) {
+    if (columnName === this.scoresColumns[0].field) {
+      return gene.target_risk_score;
+    }
+    if (columnName === this.scoresColumns[1].field) {
+      return gene.genetics_score;
+    }
+    if (columnName === this.scoresColumns[2].field) {
+      return gene.multi_omics_score;
+    }
+    return null;
+  }
+
   loadGenes() {
     this.helperService.setLoading(true);
     this.genes = [];
-    this.geneService
-      .getComparisonGenes(this.category, this.subCategory)
-      .subscribe((res: GCTGeneResponse) => {
-        this.initData(res.items);
+
+    const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
+    const distributionApi$ = this.geneService.getDistribution();
+
+    combineLatest([genesApi$, distributionApi$]).subscribe(
+      ([genesResult, distributionResult]) => {
+        this.initData(genesResult.items);
         this.sortTable(this.headerTable);
         this.refresh();
+
+        this.scoresDistribution = distributionResult.overall_scores;
         this.helperService.setLoading(false);
       });
   }
@@ -156,7 +234,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   initData(genes: GCTGene[]) {
-    const columns: string[] = [];
+    this.brainRegionsColumns.forEach(c => c.visible = false);
 
     const pinnedGenes: GCTGene[] = [];
     const currentPinnedGenesCache = this.getPinnedGenesCache(
@@ -213,15 +291,17 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         }
       });
 
+      // add tissue columns
       gene.tissues?.forEach((tissue: GCTGeneTissue) => {
-        if (!columns.includes(tissue.name)) {
-          columns.push(tissue.name);
-        }
+        //if (!this.brainRegionsColumns.map(c => c.field).includes(tissue.name)) {
+        const column = this.brainRegionsColumns.find(c => c.field === tissue.name);
+        if (column)
+          column.visible = true;
+        //}
       });
     });
 
-    columns.sort();
-    this.columns = columns;
+    this.updateVisibleColumns();
 
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
@@ -291,6 +371,16 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   onSubCategoryChange() {
     this.updateUrl();
     this.loadGenes();
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Significance Threshold
+  /* ----------------------------------------------------------------------- */
+
+  setSignificanceThresholdActive(significanceThresholdActive: boolean) {
+    this.significanceThresholdActive = significanceThresholdActive;
+    this.filter();
+    this.updateUrl();
   }
 
   /* ----------------------------------------------------------------------- */
@@ -450,25 +540,47 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   sortCallback(event: SortEvent) {
     const order = event.order || 1;
+    if (!event.field || !event.data) {
+      return;
+    }
+    const isScoresColumnSort = this.scoresColumns.find(c => c.field === event.field);
+    if (isScoresColumnSort) {
+      // if it is one of the numeric scores
+      event.data.sort((a, b) => {
+        const value1 = this.getScoreForNumericColumn(event.field as string, a);
+        const value2 = this.getScoreForNumericColumn(event.field as string, b);
 
-    event.data?.sort((a, b) => {
-      let result = null;
+        if (value1 === value2)
+          return 0; // equal so don't do anything
+        if (value1 === null)
+          return 1; // sort null after everything
+        if (value2 === null)
+          return -1; // sort null after everything
 
-      a = a.tissues.find(
-        (tissue: GCTGeneTissue) => tissue.name === event.field
-      )?.logfc;
+        const result = (value1 < value2) ? -1 : 1;
+        return (order * result);
+      });
+    } else {
+      //it's one of the tissues
+      event.data.sort((a, b) => {
+        let result = null;
 
-      b = b.tissues.find(
-        (tissue: GCTGeneTissue) => tissue.name === event.field
-      )?.logfc;
+        a = a.tissues.find(
+          (tissue: GCTGeneTissue) => tissue.name === event.field
+        )?.logfc;
 
-      if (a == null && b != null) result = 1 * order;
-      else if (a != null && b == null) result = -1 * order;
-      else if (a == null && b == null) result = 0;
-      else result = a < b ? -1 : a > b ? 1 : 0;
+        b = b.tissues.find(
+          (tissue: GCTGeneTissue) => tissue.name === event.field
+        )?.logfc;
 
-      return order * result;
-    });
+        if (a == null && b != null) result = 1 * order;
+        else if (a != null && b == null) result = -1 * order;
+        else if (a == null && b == null) result = 0;
+        else result = a < b ? -1 : a > b ? 1 : 0;
+
+        return order * result;
+      });
+    }
   }
 
   sortTable(table: Table) {
@@ -655,6 +767,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       params['pinned'].sort();
     }
 
+    if (this.significanceThresholdActive) {
+      params['significance'] = [this.significanceThreshold];
+    }
+
     this.urlParams = params;
 
     let url = this.router.serializeUrl(
@@ -699,6 +815,18 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       );
     }
     return;
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Score Panel
+  /* ----------------------------------------------------------------------- */
+
+  getScorePanelData(columnName: string, gene: GCTGene, scoresDistributions: OverallScoresDistribution[] | undefined) {
+    // get the scores distribution for the column and row clicked
+    if (!scoresDistributions) {
+      return;
+    }
+    return helpers.getScorePanelData(columnName, gene, scoresDistributions);
   }
 
   /* ----------------------------------------------------------------------- */
@@ -810,7 +938,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
         'P-value: ' +
         this.helperService.getSignificantFigures(tissue.adj_p_val, 3) +
         '\n\n' +
-        'Click for more details.'
+        'Click for more details'
       );
     }
 
@@ -830,10 +958,30 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* ----------------------------------------------------------------------- */
 
   downloadPinnedCsv() {
+    const columnHeaders = [
+      'ensembl_gene_id',
+      'hgnc_symbol',
+      'target_risk_score',
+      'multi_omic_risk_score',
+      'genetic_risk_score',
+      'Protein - Differential Expression' === this.category ? 'uniprotid' : 'model',
+      'tissue',
+      'log2_fc',
+      'ci_upr',
+      'ci_lwr',
+      'adj_p_val',
+      'biodomains',
+    ];
     const data: any[][] = [];
 
     this.pinnedGenes.forEach((g: GCTGene) => {
-      const baseRow = [g.ensembl_gene_id, g.hgnc_symbol];
+      const baseRow = [
+        g.ensembl_gene_id, 
+        g.hgnc_symbol, 
+        g.target_risk_score, 
+        g.multi_omics_score,
+        g.genetics_score
+      ];
 
       if ('Protein - Differential Expression' === this.category) {
         baseRow.push(g.uniprotid || '');
@@ -842,6 +990,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       }
 
       this.columns.forEach((tissueName: string) => {
+        if (this.isScoresColumn(tissueName)) {
+          return;
+        }
         const tissue: GCTGeneTissue | undefined = g.tissues.find(
           (t) => t.name === tissueName
         );
@@ -853,23 +1004,17 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
             tissue?.ci_r || '',
             tissue?.ci_l || '',
             tissue?.adj_p_val || '',
+            g.biodomains?.join(',') || '',
           ],
         ]);
       });
     });
 
     let csv = '';
-
-    if ('Protein - Differential Expression' === this.category) {
-      csv =
-        '"ensembl_gene_id","hgnc_symbol","uniprotid","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
-    } else {
-      csv =
-        '"ensembl_gene_id","hgnc_symbol","model","tissue","log2_fc","ci_upr","ci_lwr","adj_p_val"\n';
-    }
+    csv = this.arrayToCSVString(columnHeaders);
 
     data.forEach((row) => {
-      csv += row.map((d) => `"${d}"`).join(',') + '\n';
+      csv += this.arrayToCSVString(row);
     });
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -882,6 +1027,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     a.setAttribute('href', url);
     a.setAttribute('download', filename + '.csv');
     a.click();
+  }
+
+  arrayToCSVString(values: string[]): string {
+    return values.map(value => `"${value}"`).join(',') + '\n';
   }
 
   /* ----------------------------------------------------------------------- */
@@ -902,8 +1051,12 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     window.open(url, '_blank');
   }
 
-  getTissueTooltipText(tissue: string) {
-    return this.helperService.getTissueTooltipText(tissue);
+  getGCTColumnTooltipText(columnName: string) {
+    return this.helperService.getGCTColumnTooltipText(columnName);
+  }
+
+  getGCTColumnSortIconTooltipText(columnName: string) {
+    return this.helperService.getGCTColumnSortIconTooltipText(columnName);
   }
 
   onSearchInput(event: Event) {
@@ -912,10 +1065,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   updateColumnWidth() {
-    const count = this.columns.length < 3 ? 3 : this.columns.length;
+    const count = this.columns.length < 5 ? 5 : this.columns.length;
     const width =
       this.headerTable?.containerViewChild?.nativeElement?.offsetWidth || 0;
-    this.columnWidth = Math.ceil((width - 300) / count - 1) + 'px';
+    this.columnWidth = Math.ceil((width - 300) / count) + 'px';
   }
 
   onResize() {

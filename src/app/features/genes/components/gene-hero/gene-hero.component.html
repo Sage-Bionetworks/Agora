@@ -1,12 +1,12 @@
 <div *ngIf="gene" class="section section-hero">
   <div class="section-inner">
     <div class="container-sm">
-      <h1 class="h2 gene-hero-heading">
+      <h1 class="gene-hero-heading">
         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
       </h1>
-      <p class="gene-hero-name">
+      <h2 class="gene-hero-name">
         {{ gene.name }}
-      </p>
+      </h2>
       <div *ngIf="gene.nominations" class="gene-hero-nominated">
         <span>Nominated Target</span>
       </div>
@@ -16,14 +16,22 @@
       <p class="gene-hero-provider">
         {{ getSummary() }}
       </p>
-      <hr />
-      <div *ngIf="getAlias()" class="gene-hero-aliases">
-        <div class="gene-hero-aliases-heading">Also known as</div>
-        <p *ngIf="gene.hgnc_symbol" class="mb-0">{{ gene.ensembl_gene_id }}</p>
-        <p>
-          {{ getAlias() }}
-        </p>
-      </div>
+      <ng-container *ngIf="gene.bio_domains || getAlias()">
+        <hr />
+        <div *ngIf="gene.bio_domains" class="gene-hero-biodomains">
+          <h4 class="gene-hero-biodomains-heading">Biological Domains</h4>
+          <p>
+            {{ getBiodomains() }}
+          </p>
+        </div>
+        <div *ngIf="getAlias()" class="gene-hero-aliases">
+          <h4 class="gene-hero-aliases-heading">Also known as</h4>
+          <p *ngIf="gene.hgnc_symbol" class="mb-0">{{ gene.ensembl_gene_id }}</p>
+          <p>
+            {{ getAlias() }}
+          </p>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

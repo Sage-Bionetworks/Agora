@@ -9,6 +9,8 @@ import * as awsParamStore from 'aws-param-store';
 // Internal
 // -------------------------------------------------------------------------- //
 import {
+  allBiodomainsRoute,
+  biodomainsRoute,
   comparisonGenesRoute,
   distributionRoute,
   geneRoute,
@@ -84,6 +86,8 @@ connection.on(
 const router = express.Router();
 
 connection.once('open', async () => {
+  router.get('/biodomains', allBiodomainsRoute);
+  router.get('/biodomains/:id', biodomainsRoute);
   router.get('/genes/search', searchGeneRoute);
   router.get('/genes/comparison', comparisonGenesRoute);
   router.get('/genes/nominated', nominatedGenesRoute);

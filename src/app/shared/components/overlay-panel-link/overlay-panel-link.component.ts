@@ -16,8 +16,8 @@ export class OverlayPanelLinkComponent {
   @Input() icon = 'svg';
   @Input() text = '';
 
-  @Input() ownerId = '';
-  @Input() wikiId = '';
+  @Input() ownerId: string | undefined;
+  @Input() wikiId: string | undefined;
 
   isActive = false;
   hasActived = false;

@@ -9,3 +9,5 @@ export * from './overall-scores';
 export * from './proteomics';
 export * from './rna';
 export * from './teams';
+export * from './scores';
+export * from './biodomains';

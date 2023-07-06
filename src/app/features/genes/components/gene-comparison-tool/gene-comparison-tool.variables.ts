@@ -98,6 +98,92 @@ export const filters: GCTFilter[] = [
     ],
   },
   {
+    name: 'biodomain',
+    field: 'biodomains',
+    label: 'Biological Domain',
+    short: 'Biodomain',
+    description: 'Filter for genes based on the biological domains that they are linked to.',
+    matchMode: 'intersect',
+    options: [
+      {
+        label: 'Apoptosis',
+        value: 'Apoptosis',
+      },
+      {
+        label: 'APP Metabolism',
+        value: 'APP Metabolism',
+      },
+      {
+        label: 'Autophagy',
+        value: 'Autophagy',
+      },
+      {
+        label: 'Cell Cycle',
+        value: 'Cell Cycle',
+      },
+      {
+        label: 'DNA Repair',
+        value: 'DNA Repair',
+      },
+      {
+        label: 'Endolysosome',
+        value: 'Endolysosome',
+      },
+      {
+        label: 'Epigenetic',
+        value: 'Epigenetic',
+      },
+      {
+        label: 'Immune Response',
+        value: 'Immune Response',
+      },
+      {
+        label: 'Lipid Metabolism',
+        value: 'Lipid Metabolism',
+      },
+      {
+        label: 'Metal Binding and Homeostasis',
+        value: 'Metal Binding and Homeostasis',
+      },
+      {
+        label: 'Mitochondrial Metabolism',
+        value: 'Mitochondrial Metabolism',
+      },
+      {
+        label: 'Myelination',
+        value: 'Myelination',
+      },
+      {
+        label: 'Oxidative Stress',
+        value: 'Oxidative Stress',
+      },
+      {
+        label: 'Proteostasis',
+        value: 'Proteostasis',
+      },
+      {
+        label: 'RNA Spliceosome',
+        value: 'RNA Spliceosome',
+      },
+      {
+        label: 'Structural Stabilization',
+        value: 'Structural Stabilization',
+      },
+      {
+        label: 'Synapse',
+        value: 'Synapse',
+      },
+      {
+        label: 'Tau Homeostasis',
+        value: 'Tau Homeostasis',
+      },
+      {
+        label: 'Vasculature',
+        value: 'Vasculature',
+      },
+    ]
+  },
+  {
     name: 'studies',
     field: 'nominations.studies',
     label: 'Cohort Study',

@@ -17,9 +17,9 @@ export async function getOverallScores(ensg: string) {
 
   result = await OverallScoresCollection.findOne(
     {
-      ENSG: ensg,
+      ensembl_gene_id: ensg,
     },
-    { _id: 0, Logsdon: 1, GeneticsScore: 1, OmicsScore: 1, LiteratureScore: 1 }
+    { _id: 0, target_risk_score: 1, genetics_score: 1, multi_omics_score: 1, literature_score: 1 }
   )
     .lean()
     .exec();
