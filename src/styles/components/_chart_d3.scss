@@ -72,7 +72,7 @@
     }
 
     &.arrow-above {
-      transform: translate(calc(-50%), calc(50%));
+      transform: translate(calc(-50%), calc(50% - 12px));
 
       &::before {
         top: -9px;

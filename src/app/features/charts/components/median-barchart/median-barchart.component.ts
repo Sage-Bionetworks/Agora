@@ -40,6 +40,18 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   private MEANINGFUL_EXPRESSION_THRESHOLD = Math.log2(5);
   private maxValueY = -1;
 
+  private MIN_CHART_WIDTH = 500;
+  private CHART_HEIGHT = 350;
+  private chartMargin = { top: 20, right: 20, bottom: 65, left: 65 };
+  private chartXScale!: d3.ScaleBand<string>;
+  private chartXAxisDrawn!: d3.Selection<SVGGElement, unknown, null, undefined>;
+  private chartXAxisLabel!: d3.Selection<SVGTextElement, unknown, null, undefined>;
+  private chartBars!: d3.Selection<SVGRectElement, MedianExpression, any, unknown>;
+  private chartScoreLabels!: d3.Selection<SVGTextElement, MedianExpression, any, unknown>;
+  private chartThresholdLine!: d3.Selection<SVGLineElement, unknown, null, undefined>;
+
+  private resizeTimer: ReturnType<typeof setTimeout> | number = 0;
+
   get data() {
     return this._data;
   }
@@ -53,16 +65,27 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
     );
   }
 
+  @Input() shouldResize = true;
   @Input() xAxisLabel = '';
   @Input() yAxisLabel = 'LOG2 CPM';
 
+  @ViewChild('medianBarChartContainer') medianBarChartContainer: ElementRef<HTMLElement> = {} as ElementRef;
   @ViewChild('chart') chartRef: ElementRef<SVGElement> = {} as ElementRef;
   @ViewChild('tooltip') tooltipRef: ElementRef<HTMLElement> = {} as ElementRef;
 
-  dimension: any;
-  group: any;
-
   constructor(private helperService: HelperService) {}
+
+  @HostListener('window:resize', ['$event.target'])
+  onResize() {
+    if (this.shouldResize && this.chartInitialized) {
+      const self = this;
+      const divSize = this.medianBarChartContainer.nativeElement.getBoundingClientRect().width;
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        self.resizeChart(divSize);
+      }, 100); 
+    }
+  };
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -134,7 +157,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   getChartBoundingWidth(): number {
     return (
       d3.select(this.chartRef.nativeElement).node()?.getBoundingClientRect()
-        .width || 500
+        .width || this.MIN_CHART_WIDTH
     );
   }
 
@@ -142,20 +165,19 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
     if (this._data.length > 0) {
       const barColor = this.helperService.getColor('secondary');
       const width = this.getChartBoundingWidth();
-      const height = 350;
-      const margin = { top: 20, right: 20, bottom: 65, left: 65 };
-      const innerWidth = width - margin.left - margin.right;
-      const innerHeight = height - margin.top - margin.bottom;
+      const height = this.CHART_HEIGHT;
+      const innerWidth = width - this.chartMargin.left - this.chartMargin.right;
+      const innerHeight = height - this.chartMargin.top - this.chartMargin.bottom;
 
       this.chart = d3
         .select(this.chartRef.nativeElement)
         .attr('width', width)
         .attr('height', height)
         .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+        .attr('transform', `translate(${this.chartMargin.left}, ${this.chartMargin.top})`);
 
       // SCALES
-      const xScale = d3
+      this.chartXScale = d3
         .scaleBand()
         .domain(this._data.map((d) => d.tissue))
         .range([0, innerWidth])
@@ -168,36 +190,37 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .range([innerHeight, 0]);
 
       // BARS
-      this.chart
+      this.chartBars = this.chart
         .selectAll('.medianbars')
         .data(this._data)
         .enter()
         .append('rect')
         .attr('class', 'medianbars')
-        .attr('x', (d) => xScale(d.tissue) as number)
+        .attr('x', (d) => this.chartXScale(d.tissue) as number)
         .attr('y', (d) => yScale(d.medianlogcpm || 0))
-        .attr('width', xScale.bandwidth())
+        .attr('width', this.chartXScale.bandwidth())
         .attr('height', (d) => innerHeight - yScale(d.medianlogcpm || 0))
         .attr('fill', barColor);
 
       // SCORE LABELS
-      this.chart
+      this.chartScoreLabels = this.chart
         .selectAll('.bar-labels')
         .data(this._data)
         .enter()
         .append('text')
         .attr('class', 'bar-labels')
-        .attr('x', (d) => this.getBarCenterX(d.tissue, xScale))
+        .attr('x', (d) => this.getBarCenterX(d.tissue, this.chartXScale))
         .attr('y', (d) => yScale(d.medianlogcpm || 0) - 5)
         .text((d) => this.helperService.roundNumber(d.medianlogcpm || 0, 2));
 
       // X-AXIS
-      const xAxis = d3.axisBottom(xScale);
-      this.chart
+      const xAxis = d3.axisBottom(this.chartXScale);
+      this.chartXAxisDrawn = this.chart
         .append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${innerHeight})`)
-        .call(xAxis.tickSizeOuter(0))
+        .call(xAxis.tickSizeOuter(0));
+      this.chartXAxisDrawn
         .selectAll('.tick')
         .on('mouseenter', (_, tissue) => {
           const tooltipText = this.helperService.getGCTColumnTooltipText(
@@ -205,8 +228,8 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
           );
           this.showTooltip(
             tooltipText,
-            this.getBarCenterX(tissue as string, xScale) + margin.left,
-            height - margin.top
+            this.getBarCenterX(tissue as string, this.chartXScale) + this.chartMargin.left,
+            height - this.chartMargin.top
           );
         })
         .on('mouseleave', () => {
@@ -218,11 +241,11 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
       this.chart.append('g').attr('class', 'y-axis').call(yAxis);
 
       // X-AXIS LABEL
-      this.chart
+      this.chartXAxisLabel = this.chart
         .append('text')
         .attr('class', 'x-axis-label')
         .attr('x', innerWidth / 2)
-        .attr('y', innerHeight + margin.bottom)
+        .attr('y', innerHeight + this.chartMargin.bottom)
         .attr('text-anchor', 'middle')
         .text(this.xAxisLabel);
 
@@ -231,14 +254,14 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .append('text')
         .attr('class', 'y-axis-label')
         .attr('x', -innerHeight / 2)
-        .attr('y', -margin.left)
+        .attr('y', -this.chartMargin.left)
         .attr('dy', '1em')
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .text(this.yAxisLabel);
 
       // THRESHOLD LINE
-      this.chart
+      this.chartThresholdLine = this.chart
         .append('line')
         .attr('class', 'meaningful-expression-threshold-line')
         .attr('x1', 0)
@@ -251,9 +274,42 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.clearChart();
-    this.createChart();
-  }
+  resizeChart = (divSize: number): void => {
+    // calculate new width
+    const width = Math.max(divSize, this.MIN_CHART_WIDTH);
+    const innerWidth = width - this.chartMargin.left - this.chartMargin.right;
+
+    // update chart size
+    this.chart.attr('width', width);
+
+    // update chartXScale
+    this.chartXScale.range([0, innerWidth]);
+
+    // update bars
+    this.chartBars
+      .transition()
+      .attr('x', (d) => this.chartXScale(d.tissue) as number)
+      .attr('width', this.chartXScale.bandwidth());
+
+    // update score labels
+    this.chartScoreLabels
+      .transition()
+      .attr('x', (d) => this.getBarCenterX(d.tissue, this.chartXScale));
+
+    // update drawn x-axis 
+    const xAxis = d3.axisBottom(this.chartXScale);
+    this.chartXAxisDrawn
+      .transition()
+      .call(xAxis.tickSizeOuter(0));
+
+    // update x-axis label
+    this.chartXAxisLabel
+      .transition()
+      .attr('x', innerWidth / 2);
+
+    // update threshold line
+    this.chartThresholdLine
+      .transition()
+      .attr('x2', innerWidth);
+  };
 }
