@@ -978,9 +978,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       const baseRow = [
         g.ensembl_gene_id, 
         g.hgnc_symbol, 
-        g.target_risk_score, 
-        g.multi_omics_score,
-        g.genetics_score
+        this.returnEmptyStringIfNull(g.target_risk_score), 
+        this.returnEmptyStringIfNull(g.multi_omics_score),
+        this.returnEmptyStringIfNull(g.genetics_score)
       ];
 
       if ('Protein - Differential Expression' === this.category) {
@@ -1027,6 +1027,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     a.setAttribute('href', url);
     a.setAttribute('download', filename + '.csv');
     a.click();
+  }
+
+  returnEmptyStringIfNull(val: number | null) {
+    return val === null ? '' : val;
   }
 
   arrayToCSVString(values: string[]): string {
