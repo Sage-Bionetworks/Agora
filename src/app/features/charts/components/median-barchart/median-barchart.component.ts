@@ -49,6 +49,7 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   private chartBars!: d3.Selection<SVGRectElement, MedianExpression, any, unknown>;
   private chartScoreLabels!: d3.Selection<SVGTextElement, MedianExpression, any, unknown>;
   private chartThresholdLine!: d3.Selection<SVGLineElement, unknown, null, undefined>;
+  private shouldShowThresholdLine = false;
 
   private resizeTimer: ReturnType<typeof setTimeout> | number = 0;
 
@@ -59,10 +60,8 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
     this._data = data
       .filter((el) => el.medianlogcpm && el.medianlogcpm > 0)
       .sort((a, b) => a.tissue.localeCompare(b.tissue));
-    this.maxValueY = Math.max(
-      this.MEANINGFUL_EXPRESSION_THRESHOLD,
-      d3.max(this._data, (d) => d.medianlogcpm) || 0
-    );
+    this.maxValueY = d3.max(this._data, (d) => d.medianlogcpm) || 0;
+    this.shouldShowThresholdLine = this.MEANINGFUL_EXPRESSION_THRESHOLD <= this.maxValueY;
   }
 
   @Input() shouldResize = true;
@@ -261,14 +260,16 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .text(this.yAxisLabel);
 
       // THRESHOLD LINE
-      this.chartThresholdLine = this.chart
-        .append('line')
-        .attr('class', 'meaningful-expression-threshold-line')
-        .attr('x1', 0)
-        .attr('x2', innerWidth)
-        .attr('y1', yScale(this.MEANINGFUL_EXPRESSION_THRESHOLD))
-        .attr('y2', yScale(this.MEANINGFUL_EXPRESSION_THRESHOLD))
-        .attr('stroke', 'red');
+      if (this.shouldShowThresholdLine) {
+        this.chartThresholdLine = this.chart
+          .append('line')
+          .attr('class', 'meaningful-expression-threshold-line')
+          .attr('x1', 0)
+          .attr('x2', innerWidth)
+          .attr('y1', yScale(this.MEANINGFUL_EXPRESSION_THRESHOLD))
+          .attr('y2', yScale(this.MEANINGFUL_EXPRESSION_THRESHOLD))
+          .attr('stroke', 'red');
+      }
 
       this.chartInitialized = true;
     }
@@ -308,8 +309,10 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
       .attr('x', innerWidth / 2);
 
     // update threshold line
-    this.chartThresholdLine
-      .transition()
-      .attr('x2', innerWidth);
+    if (this.shouldShowThresholdLine) {
+      this.chartThresholdLine
+        .transition()
+        .attr('x2', innerWidth);
+    }
   };
 }

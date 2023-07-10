@@ -167,7 +167,7 @@ describe('Component: BarChart - Median', () => {
     );
   });
 
-  it('should render the meaningful expression threshold', () => {
+  it('should render the meaningful expression threshold when values are larger than threshold', () => {
     const { chart } = setUp();
 
     expect(
@@ -175,12 +175,12 @@ describe('Component: BarChart - Median', () => {
     ).toBeTruthy();
   });
 
-  it('should render the meaningful expression threshold even when all values are small', () => {
+  it('should not render the meaningful expression threshold when all values are smaller than threshold', () => {
     const { chart } = setUp(SMALL_MOCK_DATA);
 
     expect(
       chart?.querySelector('.meaningful-expression-threshold-line')
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
   it('should alphabetize the x-axis values', () => {
