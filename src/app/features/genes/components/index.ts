@@ -18,3 +18,4 @@ export * from './gene-soe';
 export * from './gene-soe-charts';
 export * from './gene-soe-list';
 export * from './gene-table';
+export * from './gene-biodomains';

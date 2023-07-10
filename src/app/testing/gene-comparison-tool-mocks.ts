@@ -1,4 +1,5 @@
-import { GCTGene, GCTDetailsPanelData, GCTFilter } from '../models';
+import { GCTGene, GCTDetailsPanelData, GCTFilter, GCTScorePanelData } from '../models';
+import { distributionMock } from './distribution-mocks';
 
 export const comparisonGeneMock1: GCTGene = {
   ensembl_gene_id: 'ENSG00000147065',
@@ -81,6 +82,9 @@ export const comparisonGeneMock1: GCTGene = {
     ],
   },
   associations: [3, 4],
+  target_risk_score: 3.1,
+  genetics_score: 2.2,
+  multi_omics_score: 3.3
 };
 
 export const comparisonGeneMock2: GCTGene = {
@@ -164,6 +168,9 @@ export const comparisonGeneMock2: GCTGene = {
     ],
   },
   associations: [2, 3, 4],
+  target_risk_score: 2.1,
+  genetics_score: 4.2,
+  multi_omics_score: 1.3
 };
 
 export const gctDetailsPanelDataMock: GCTDetailsPanelData = {
@@ -176,6 +183,14 @@ export const gctDetailsPanelDataMock: GCTDetailsPanelData = {
   min: 0,
   max: 10,
   footer: 'footer',
+};
+
+export const gctScorePanelDataMock: GCTScorePanelData = {
+  geneLabel: 'label',
+  scoreName: 'subHeading',
+  columnName: 'valueLabel',
+  score: 5,
+  distributions: distributionMock.overall_scores
 };
 
 export const gctFiltersMocks: GCTFilter[] = [

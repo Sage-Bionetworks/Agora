@@ -63,12 +63,12 @@ export class GeneResourcesComponent {
         description:
           'View this gene on the National Institute on Aging Genetics of Alzheimer\'s Disease Data Storage Site (NIAGADS) Genomics Database.',
         linkText: 'Visit Genomics DB',
-        link: `https://www.niagads.org/genomics/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=${this.gene?.ensembl_gene_id}`,
+        link: `https://www.niagads.org/genomics/app/record/gene/${this.gene?.ensembl_gene_id}`,
       },
       {
         title: 'AD Atlas',
         description:
-          'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omics context.',
+          'View this gene on the AD Atlas site, a network-based resource for investigating AD in a multi-omic context.',
         linkText: 'Visit AD Atlas',
         link: `https://adatlas.org/?geneID=${this._gene?.ensembl_gene_id}`,
       },

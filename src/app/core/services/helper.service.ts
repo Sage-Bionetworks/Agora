@@ -2,6 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { round } from 'lodash';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -35,8 +36,27 @@ export class HelperService {
     return this.loading;
   }
 
-  getTissueTooltipText(text: string): string {
-    switch (text) {
+  getGCTColumnSortIconTooltipText(column: string): string {
+    switch (column.toUpperCase()) {
+      case 'RISK SCORE':
+        return 'Sort by Target Risk Score value';
+      case 'MULTI-OMIC':
+        return 'Sort by Multi-omic Risk Score value';
+      case 'GENETIC':
+        return 'Sort by Genetic Risk Score value';
+      default:
+        return 'Sort by log2 fold change value';
+    }
+  }
+
+  getGCTColumnTooltipText(column: string): string {
+    switch (column.toUpperCase()) {
+      case 'RISK SCORE':
+        return 'Target Risk Score';
+      case 'MULTI-OMIC':
+        return 'Multi-omic Risk Score';
+      case 'GENETIC':
+        return 'Genetic Risk Score';
       case 'ACC':
         return 'Anterior Cingulate Cortex';
       case 'AntPFC':
@@ -107,15 +127,18 @@ export class HelperService {
     };
   }
 
-  truncateNumberToFixed(num: number, fixed: number): string {
-    /*
-     * You might think that truncating a number to a certain number of decimal
-     * places in JavaScript would be simple, but then you would be wrong.
-     * See https://stackoverflow.com/a/11818658/9723359
-     */
-    const regex = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
-    const matches = num.toString().match(regex);
-    return matches ? matches[0] : '';
+  roundNumberAsString(num: string, fixed: number): string {
+    const n = parseFloat(num);
+    return this.roundNumber(n, fixed);
+  }
+
+  roundNumber(num: number, decimalPlaces: number): string {
+    //lodash will drop trailing zeros
+    const roundedResult = round(num, decimalPlaces);
+    //pad trailing zeros as necessary
+    const paddedResult = roundedResult.toFixed(decimalPlaces);
+    //return as string
+    return paddedResult.toString();
   }
 
   getSignificantFigures(n: number, sig = 2) {
@@ -167,5 +190,11 @@ export class HelperService {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get(name);
+  }
+
+  capitalizeFirstLetterOfString(s: string) {
+    if (s.length === 0)
+      return '';
+    return s[0].toUpperCase() + s.slice(1);
   }
 }

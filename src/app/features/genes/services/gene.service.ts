@@ -8,6 +8,8 @@ import {
   SimilarGenesNetworkNode,
   SimilarGenesNetworkLink,
   Distribution,
+  BioDomainInfo,
+  BioDomain,
 } from '../../../models';
 import { ApiService } from '../../../core/services';
 
@@ -17,6 +19,9 @@ export class GeneService {
   distribution: Distribution | undefined = undefined;
   distributionObservable: Observable<Distribution> | undefined;
   comparisonData: any = {};
+
+  biodomains: { [key: string]: BioDomain[] } = {};
+  allBiodomains: BioDomainInfo[] = [];
 
   constructor(private apiService: ApiService) {}
 
@@ -141,6 +146,30 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
+  getBiodomains(ensg: string): Observable<BioDomain[]> {
+    if (this.biodomains[ensg]) {
+      return of(this.biodomains[ensg]);
+    }
+
+    return this.apiService.getBiodomain(ensg).pipe(
+      map((data: BioDomain[]) => {
+        return (this.biodomains[ensg] = data);
+      })
+    );
+  }
+
+  // ------------------------------------------------------------------------ //
+
+  getAllBiodomains(): Observable<BioDomainInfo[]> {
+    if (this.allBiodomains.length > 0) {
+      return of(this.allBiodomains);
+    }
+
+    return this.apiService.getBiodomains();
+  }
+  
+  // ------------------------------------------------------------------------ //
+
   getDistribution(): Observable<Distribution> {
     if (this.distribution) {
       return of(this.distribution);
@@ -164,7 +193,7 @@ export class GeneService {
       return of(this.comparisonData[key]);
     } else {
       return this.apiService.getComparisonGenes(category, subCategory).pipe(
-        tap((data: any) => {
+        tap((data) => {
           this.comparisonData[key] = data;
         })
       );

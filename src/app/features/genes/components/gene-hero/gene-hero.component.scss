@@ -37,6 +37,10 @@ hr {
   }
 }
 
+.gene-hero-biodomains {
+  margin-bottom: 30px;
+}
+
 .gene-hero-summary {
   max-width: 980px;
 }
@@ -45,7 +49,7 @@ hr {
   font-style: italic;
 }
 
-.gene-hero-aliases-heading {
+.gene-hero-aliases-heading, .gene-hero-biodomains-heading {
   text-transform: uppercase;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }

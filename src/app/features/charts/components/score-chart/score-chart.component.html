@@ -4,7 +4,7 @@
     <div class="chart-body">
       <div #chartContainer class="chart-container"></div>
     </div>
-    <div class="chart-no-data" *ngIf="!_score">
+    <div class="chart-no-data" *ngIf="_score === null">
       <div class="chart-no-data-text">No data is currently available.</div>
     </div>
   </div>

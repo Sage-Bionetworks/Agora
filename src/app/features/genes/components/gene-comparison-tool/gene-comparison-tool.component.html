@@ -46,6 +46,11 @@
       #filterList
       [filters]="filters"
       (onChange)="setFilters($event)"
+      [significanceThreshold]="significanceThreshold"
+      [significanceThresholdActive]="significanceThresholdActive"
+      (onremoveSignificanceThresholdFilter)="
+        setSignificanceThresholdActive($event)
+      "
     ></gene-comparison-tool-filter-list>
 
     <div class="gct-body">
@@ -129,10 +134,15 @@
                         'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
                         significanceThreshold
                       "
+                      styleClass="gct-significance-control-toggle"
                       tooltipPosition="left"
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
-                      (onChange)="filter()"
+                      (onChange)="
+                        setSignificanceThresholdActive(
+                          significanceThresholdActive
+                        )
+                      "
                     ></p-inputSwitch>
                   </div>
                   <div>
@@ -153,16 +163,65 @@
                           max="1"
                           step="0.01"
                           [(ngModel)]="significanceThreshold"
+                          (ngModelChange)="
+                            setSignificanceThresholdActive(
+                              significanceThresholdActive
+                            )
+                          "
                         />
                       </ng-template>
                     </p-overlayPanel>
                     <button
                       (click)="significanceOverlay.toggle($event)"
+                      class="gct-significance-control-settings"
                       pTooltip="Edit significance cutoff value"
                       tooltipPosition="left"
                       tooltipStyleClass="tooltip"
                     >
                       <svg-icon name="cog" customClass="two-tone"></svg-icon>
+                    </button>
+                  </div>
+                  <div>
+                    <p-overlayPanel
+                      #columnOverlay
+                      styleClass="gct-toggle-columns"
+                    >
+                      <ng-template pTemplate>
+                        <ul id="scores-columns">
+                          <li *ngFor="let column of scoresColumns">
+                            <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                              <div class="column-toggle-status">
+                                <span *ngIf="column.selected" class="pi pi-check"></span>
+                              </div>
+                              <div>
+                                <span>{{ column.header }}</span>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <ul>
+                          <li *ngFor="let column of brainRegionsColumns">
+                            <ng-container *ngIf="column.visible">
+                              <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                                <div class="column-toggle-status">
+                                  <span *ngIf="column.selected" class="p-checkbox-icon pi pi-check"></span>
+                                </div>
+                                <div>
+                                  <span>{{ column.header }}</span>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </li>
+                        </ul>
+                      </ng-template>
+                    </p-overlayPanel>
+                    <button
+                      (click)="columnOverlay.toggle($event)"
+                      pTooltip="Show/hide columns"
+                      tooltipPosition="left"
+                      tooltipStyleClass="tooltip"
+                    >
+                      <svg-icon name="column" customClass="two-tone"></svg-icon>
                     </button>
                   </div>
                 </div>
@@ -199,28 +258,26 @@
                     [pSortableColumn]="column"
                     [style]="{ width: columnWidth }"
                   >
-                    <span
-                      [pTooltip]="getTissueTooltipText(column)"
-                      tooltipPosition="top"
-                      tooltipStyleClass="tooltip"
-                    >
-                      {{ column }}
-                    </span>
-                    <p-sortIcon
-                      [field]="column"
-                      pTooltip="Sort by log2 fold change value"
-                      tooltipPosition="top"
-                      tooltipStyleClass="tooltip"
-                    ></p-sortIcon>
+                    <div class="column-header">
+                      <div class="column-header-text">
+                        <span
+                          [pTooltip]="getGCTColumnTooltipText(column)"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          {{ column }}
+                        </span>
+                      </div>
+                      <div class="column-header-sort">
+                        <p-sortIcon
+                          [field]="column"
+                          [pTooltip]="getGCTColumnSortIconTooltipText(column)"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        ></p-sortIcon>
+                      </div>
+                    </div>
                   </th>
-                  <th
-                    *ngIf="columns.length < 2"
-                    class="gct-spacing-column"
-                  ></th>
-                  <th
-                    *ngIf="columns.length < 3"
-                    class="gct-spacing-column"
-                  ></th>
                 </tr>
               </ng-template>
             </p-table>
@@ -282,35 +339,43 @@
                       </div>
                     </div>
                   </td>
-                  <td
+                  <ng-container
                     *ngFor="let column of columns"
-                    [style]="{ width: columnWidth }"
-                  >
-                    <button
-                      [class]="getCircleClass(column, gene)"
-                      [style]="getCircleStyle(column, gene)"
-                      [pTooltip]="getCircleTooltip(column, gene)"
-                      [tooltipDisabled]="isCircleTooltipDisabled()"
-                      tooltipPosition="bottom"
-                      tooltipStyleClass="tooltip"
-                      (click)="
-                        detailsPanel.toggle(
-                          $event,
-                          getDetailsPanelData(column, gene)
-                        )
-                      "
                     >
-                      <span></span>
-                    </button>
-                  </td>
-                  <td
-                    *ngIf="columns.length < 2"
-                    class="gct-spacing-column"
-                  ></td>
-                  <td
-                    *ngIf="columns.length < 3"
-                    class="gct-spacing-column"
-                  ></td>
+                    <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-default" *ngIf="!isScoresColumn(column)" [style]="{ width: columnWidth }">
+                      <button
+                        [class]="getCircleClass(column, gene)"
+                        [style]="getCircleStyle(column, gene)"
+                        [pTooltip]="getCircleTooltip(column, gene)"
+                        [tooltipDisabled]="isCircleTooltipDisabled()"
+                        tooltipPosition="bottom"
+                        tooltipStyleClass="tooltip"
+                        (click)="
+                          detailsPanel.toggle(
+                            $event,
+                            getDetailsPanelData(column, gene)
+                          )
+                        "
+                      >
+                        <span></span>
+                      </button>
+                    </td>
+                  </ng-container>
                 </tr>
               </ng-template>
             </p-table>
@@ -411,35 +476,43 @@
                       </div>
                     </div>
                   </td>
-                  <td
+                  <ng-container
                     *ngFor="let column of columns"
-                    [style]="{ width: columnWidth }"
-                  >
-                    <button
-                      [class]="getCircleClass(column, gene)"
-                      [style]="getCircleStyle(column, gene)"
-                      [pTooltip]="getCircleTooltip(column, gene)"
-                      [tooltipDisabled]="isCircleTooltipDisabled()"
-                      tooltipPosition="bottom"
-                      tooltipStyleClass="tooltip"
-                      (click)="
-                        detailsPanel.toggle(
-                          $event,
-                          getDetailsPanelData(column, gene)
-                        )
-                      "
                     >
-                      <span></span>
-                    </button>
-                  </td>
-                  <td
-                    *ngIf="columns.length < 2"
-                    class="gct-spacing-column"
-                  ></td>
-                  <td
-                    *ngIf="columns.length < 3"
-                    class="gct-spacing-column"
-                  ></td>
+                    <td class="cell-numeric" *ngIf="column === 'RISK SCORE'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.target_risk_score) ? (gene.target_risk_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'GENETIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.genetics_score) ? (gene.genetics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-numeric" *ngIf="column === 'MULTI-OMIC'" [style]="{ width: columnWidth }">
+                      <button (click)="scorePanel.toggle($event, getScorePanelData(column, gene, scoresDistribution))">
+                        {{ isNumber(gene.multi_omics_score) ? (gene.multi_omics_score | number: '1.0-2') : '&mdash;' }}
+                      </button>
+                    </td>
+                    <td class="cell-default" *ngIf="!isScoresColumn(column)" [style]="{ width: columnWidth }">
+                      <button
+                        [class]="getCircleClass(column, gene)"
+                        [style]="getCircleStyle(column, gene)"
+                        [pTooltip]="getCircleTooltip(column, gene)"
+                        [tooltipDisabled]="isCircleTooltipDisabled()"
+                        tooltipPosition="bottom"
+                        tooltipStyleClass="tooltip"
+                        (click)="
+                          detailsPanel.toggle(
+                            $event,
+                            getDetailsPanelData(column, gene)
+                          )
+                        "
+                      >
+                        <span></span>
+                      </button>
+                    </td>
+                  </ng-container>
                 </tr>
               </ng-template>
             </p-table>
@@ -474,6 +547,9 @@
       (onShowLegend)="legendPanel.toggle()"
       (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
     ></gene-comparison-tool-details-panel>
+    <gene-comparison-tool-score-panel
+      #scorePanel
+    ></gene-comparison-tool-score-panel>
     <gene-comparison-tool-how-to-panel
       #howToPanel
     ></gene-comparison-tool-how-to-panel>

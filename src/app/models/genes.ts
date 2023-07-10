@@ -6,6 +6,7 @@ import {
   OverallScores,
   NeuropathologicCorrelation,
   SimilarGenesNetwork,
+  BioDomains
 } from './';
 
 export interface NominatedTarget {
@@ -95,6 +96,8 @@ export interface Gene {
   study_display_value?: string;
   programs_display_value?: string;
   input_data_display_value?: string;
+
+  bio_domains?: BioDomains;
 }
 
 export interface GenesResponse {

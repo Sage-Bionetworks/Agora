@@ -11,6 +11,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { GeneSoeChartsComponent } from './';
 import { GeneService } from '../../services';
 import { ApiService } from '../../../../core/services';
+import { OverallScoresDistribution } from '../../../../models';
+import { geneMock1, geneMock2, overallScoresMock1, overallScoresMock2 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -35,5 +37,46 @@ describe('Component: Gene SOE Charts', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should sort target risk score first', () => {
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[0].name).toBe('Target Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
+    expect(data[0].name).toBe('Target Risk Score');
+  });
+
+  it('should sort genetic risk score second', () => {
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[1].name).toBe('Genetic Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
+    expect(data[1].name).toBe('Genetic Risk Score');
+  });
+
+  it('should sort multi-omic risk score last', () => {
+    let data: OverallScoresDistribution[] = overallScoresMock1;
+    component.customSortDistributions(data);
+    expect(data[2].name).toBe('Multi-omic Risk Score');
+    data = overallScoresMock2;
+    component.customSortDistributions(data);
+    expect(data[2].name).toBe('Multi-omic Risk Score');
+  });
+
+  it('should handle scores properly', () => {
+    const data = geneMock1;
+    component.gene = data;
+    const result = component.getGeneOverallScores('Genetic Risk Score');
+    expect(result).toBe(0.36140442487816);
+  });
+
+  it('should handle missing scores properly', () => {
+    const data = geneMock2;
+    component.gene = data;
+    const result = component.getGeneOverallScores('Genetic Risk Score');
+    expect(result).toBe(null);
   });
 });

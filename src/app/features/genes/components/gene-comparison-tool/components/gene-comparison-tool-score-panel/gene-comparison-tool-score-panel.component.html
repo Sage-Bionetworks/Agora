@@ -1,0 +1,34 @@
+<p-overlayPanel class="gct-score-panel" #overlayPanel appendTo="">
+    <ng-container *ngIf="data">
+      <div *ngIf="data.geneLabel" class="gct-score-panel-gene-label">
+        {{ data.geneLabel }}
+      </div>
+  
+      <div *ngIf="data.scoreName" class="gct-score-panel-header">
+        {{ data.scoreName }}
+      </div>
+  
+      <score-barchart
+        [shouldResize]="false"
+        [score]="data.score"
+        [barColor]="barColor"
+        [data]="scoreDistribution"
+      >
+      </score-barchart>
+
+      <div class="gct-score-panel-wiki" *ngIf="scoreDistribution">
+        <wiki
+          [ownerId]="scoreDistribution.syn_id"
+          [wikiId]="scoreDistribution.wiki_id"
+        ></wiki>
+      </div>
+  
+      <div class="gct-score-panel-links">
+        <span>
+          <em>Have questions or feedback?</em>
+        </span>
+        <a target="_blank" href="https://forms.gle/WDXpbSB6VmdvLwhV6" >Send Feedback</a>
+      </div>
+    </ng-container>
+</p-overlayPanel>
+  

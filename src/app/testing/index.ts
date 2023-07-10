@@ -1,4 +1,5 @@
 // Mocks
+export * from './biodomain-mocks';
 export * from './distribution-mocks';
 export * from './gene-mocks';
 export * from './gene-network-mocks';

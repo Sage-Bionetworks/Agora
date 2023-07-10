@@ -33,6 +33,8 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
+    component.significanceThreshold = 0.05;
+    component.significanceThresholdActive = true;
     component.filters = JSON.parse(JSON.stringify(gctFiltersMocks));
     fixture.detectChanges();
   });
@@ -43,6 +45,7 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
 
   it('should have data', () => {
     expect(component.filters).toEqual(gctFiltersMocks);
+    expect(component.significanceThresholdActive).toBeTrue();
   });
 
   it('should display filters', () => {
@@ -51,10 +54,20 @@ describe('Component: Gene Comparison Tool - Filter List', () => {
     ).not.toEqual(0);
   });
 
+  it('should remove significance threshold filter', () => {
+    const clearButton = element.querySelectorAll(
+      '.gct-filter-list-item-clear'
+    )[0] as HTMLElement;
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(component.significanceThresholdActive).toBeFalse();
+  });
+
   it('should remove filter', () => {
-    const clearButton = element.querySelector(
-      '.gct-filter-list-item:first-child .gct-filter-list-item-clear'
-    ) as HTMLElement;
+    const clearButton = element.querySelectorAll(
+      '.gct-filter-list-item-clear'
+    )[1] as HTMLElement;
     clearButton.click();
     fixture.detectChanges();
 

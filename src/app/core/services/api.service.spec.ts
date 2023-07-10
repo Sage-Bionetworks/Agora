@@ -12,6 +12,8 @@ import {
 // -------------------------------------------------------------------------- //
 import { ApiService } from './';
 import {
+  bioDomainInfoMock,
+  bioDomainsMock,
   geneMock1,
   geneMock2,
   gctGeneMock1,
@@ -44,6 +46,30 @@ describe('Service: API', () => {
 
   it('should create', () => {
     expect(apiService).toBeDefined();
+  });
+
+  it('should get data from /api/biodomains/', () => {
+    const mockResponse = bioDomainInfoMock;
+
+    apiService.getBiodomains().subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpMock.expectOne('/api/biodomains');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
+  });
+
+  it('should get data from /api/biodomains/:id', () => {
+    const mockResponse = bioDomainsMock.gene_biodomains;
+
+    apiService.getBiodomain(bioDomainsMock.ensembl_gene_id).subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpMock.expectOne('/api/biodomains/' + bioDomainsMock.ensembl_gene_id);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
   });
 
   it('should get data from /api/genes/:id', () => {

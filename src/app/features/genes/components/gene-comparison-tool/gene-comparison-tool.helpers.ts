@@ -1,4 +1,4 @@
-import { GCTGene, GCTGeneTissue } from 'app/models';
+import { GCTGene, GCTGeneTissue, GCTScorePanelData, OverallScoresDistribution } from 'app/models';
 
 export const filterOptionLabel = function (
   value: string | number | string[] | number[]
@@ -39,6 +39,64 @@ export const excludeEnsemblGeneIdFilterCallback = function (
   return !ensemblGeneIds.includes(value);
 };
 
+export function getScoreName(columnName: string) {
+  columnName = columnName.toUpperCase();
+  if (columnName === 'RISK SCORE')
+    return 'Target Risk Score';
+  if (columnName === 'GENETIC')
+    return 'Genetic Risk Score';
+  if (columnName === 'MULTI-OMIC')
+    return 'Multi-omic Risk Score';
+  return '';
+}
+
+export function getGeneLabel(gene: GCTGene) {
+  return (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id;
+}
+
+export function getGeneLabelForProteinDifferentialExpression(gene: GCTGene) {
+  return (gene.hgnc_symbol ? gene.hgnc_symbol + ' ' : '') +
+  (gene.uniprotid ? '(' + gene.uniprotid + ')' : '') +
+  ' - ' +
+  gene.ensembl_gene_id;
+}
+
+export function getScore(columnName: string, gene: GCTGene) {
+  columnName = columnName.toUpperCase();
+  if (columnName === 'RISK SCORE')
+    return gene.target_risk_score;
+  if (columnName === 'MULTI-OMIC')
+    return gene.multi_omics_score;
+  if (columnName === 'GENETIC')
+    return gene.genetics_score;
+  return null;
+}
+
+export function lookupScoreDataKey(columnName: string | undefined) {
+  if (!columnName)
+    return;
+  
+  columnName = columnName.toUpperCase();
+  if (columnName === 'RISK SCORE')
+    return 'TARGET RISK SCORE';
+  if (columnName === 'MULTI-OMIC')
+    return 'MULTI-OMIC RISK SCORE';
+  if (columnName === 'GENETIC')
+    return 'GENETIC RISK SCORE';
+  return '';
+}
+
+export const getScorePanelData = function (columnName: string, gene: GCTGene, scoresDistributions: OverallScoresDistribution[] | undefined) {
+  const data:GCTScorePanelData = {
+    geneLabel: getGeneLabel(gene),
+    scoreName: getScoreName(columnName),
+    columnName: columnName,
+    score: getScore(columnName, gene),
+    distributions: scoresDistributions
+  };
+  return data;
+};
+
 export const getDetailsPanelData = function (
   category: string,
   subCategory: string,
@@ -74,12 +132,8 @@ export const getDetailsPanelData = function (
     allTissueLink: true,
   };
 
-  if ('Protein - Differential Expression' === category) {
-    data.label =
-      (gene.hgnc_symbol ? gene.hgnc_symbol + ' ' : '') +
-      (gene.uniprotid ? '(' + gene.uniprotid + ')' : '') +
-      ' - ' +
-      gene.ensembl_gene_id;
+  if (category === 'Protein - Differential Expression') {
+    data.label = getGeneLabelForProteinDifferentialExpression(gene);
     data.heading = 'Differential Protein Expression (' + tissue.name + ')';
     data.allTissueLink = false;
 
@@ -91,8 +145,7 @@ export const getDetailsPanelData = function (
     //   data.max = 4;
     // }
   } else {
-    data.label =
-      (gene.hgnc_symbol ? gene.hgnc_symbol + ' - ' : '') + gene.ensembl_gene_id;
+    data.label = getGeneLabel(gene);
     data.heading = 'Differential RNA Expression (' + tissue.name + ')';
   }
 

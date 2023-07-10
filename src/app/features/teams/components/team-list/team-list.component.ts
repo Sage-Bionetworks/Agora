@@ -22,20 +22,7 @@ export class TeamListComponent {
     return this._teams;
   }
   @Input() set teams(teams: Team[]) {
-    this.sort(teams);
     this._teams = teams;
-  }
-
-  sort(teams: Team[]) {
-    teams.sort((a, b) => {
-      if (!a.program) {
-        return 1;
-      } else if (!b.program) {
-        return -1;
-      } else {
-        return (a.program + a.team_full).localeCompare(b.program + b.team_full);
-      }
-    });
   }
 
   getFullName(team: Team): string {
