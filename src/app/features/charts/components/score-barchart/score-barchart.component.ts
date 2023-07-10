@@ -254,6 +254,15 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
             return this.helperService.roundNumber(this.score as number, 2);
           return '';
         })
+        // AG-1113: prevent label text from moving in PrimeNG OverlayPanel
+        // see: https://sagebionetworks.jira.com/browse/AG-1113
+        .on('mousedown', (event) => {
+          event.preventDefault();
+        })
+        .on('contextmenu', (event) => {
+          event.preventDefault();
+        })
+        // end changes related to AG-1113 
         .on('mouseenter', (_, d) => {
           const index = this.scoreIndex;
           const tooltipText = this.getToolTipText(d.bins[0] as number, d.bins[1] as number, d.distribution);
