@@ -11,6 +11,19 @@ import { ascending } from 'd3';
 export class GeneHeroComponent {
   @Input() gene: Gene | undefined;
 
+  showNominationsOrTEP() {
+    if (!this.gene)
+      return false;
+    return this.gene.nominations || this.gene.is_adi || this.gene.is_tep;
+  }
+
+  getTEPText() {
+    if (!this.gene)
+      return '';
+    let result = this.gene.nominations ? ', ' : '';
+    return result += 'Selected for Target Enabling Resource Development';
+  }
+
   getSummary(body = false): string {
     if (this.gene?.summary) {
       let finalString = '';

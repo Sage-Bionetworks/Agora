@@ -2928,7 +2928,9 @@ export const geneMock1: Gene = {
         pct_linking_terms: 6.67
       },
     ]
-  }
+  },
+  is_adi: false,
+  is_tep: true
 };
 
 export const geneMock2: Gene = {
@@ -3144,6 +3146,137 @@ export const geneMock2: Gene = {
     },
   ],
   nominations: 4,
+  is_adi: false,
+  is_tep: true
+};
+
+export const geneMock3: Gene = {
+  _id: '628ea1c10e8d04279fdbbfbc',
+  ensembl_gene_id: 'ENSG00000101336',
+  name: 'HCK proto-oncogene, Src family tyrosine kinase',
+  summary:
+    "The protein encoded by this gene is a member of the Src family of tyrosine kinases. This protein is primarily hemopoietic, particularly in cells of the myeloid and B-lymphoid lineages. It may help couple the Fc receptor to the activation of the respiratory burst. In addition, it may play a role in neutrophil migration and in the degranulation of neutrophils. Multiple isoforms with different subcellular distributions are produced due to both alternative splicing and the use of alternative translation initiation codons, including a non-AUG (CUG) codon. [provided by RefSeq, Feb 2010].",
+  hgnc_symbol: 'HCK',
+  alias: [
+    'JTK9',
+    'p59Hck',
+    'p61Hck',
+  ],
+  isIGAP: false,
+  haseqtl: true,
+  isAnyRNAChangedInADBrain: true,
+  rna_brain_change_studied: true,
+  isAnyProteinChangedInADBrain: false,
+  protein_brain_change_studied: false,
+  medianexpression: [
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 7.22549250226295,
+      quartile1logcpm: 8.25778767262231,
+      medianlogcpm: 8.65783306384424,
+      meanlogcpm: 8.67822921701765,
+      quartile3logcpm: 9.03802949087095,
+      maximumlogcpm: 10.4142380183435,
+      tissue: 'CBE',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 7.14223300774668,
+      quartile1logcpm: 8.32840566635399,
+      medianlogcpm: 8.80762326067988,
+      meanlogcpm: 8.76242945984023,
+      quartile3logcpm: 9.19358071314219,
+      maximumlogcpm: 10.0652784802238,
+      tissue: 'TCX',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 6.54927131897913,
+      quartile1logcpm: 9.42875064236945,
+      medianlogcpm: 9.76880015815198,
+      meanlogcpm: 9.56963380060868,
+      quartile3logcpm: 9.98652179920184,
+      maximumlogcpm: 11.0867785895892,
+      tissue: 'ACC',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 3.75330149083437,
+      quartile1logcpm: 8.08399197480916,
+      medianlogcpm: 9.22654506486567,
+      meanlogcpm: 8.7516492110921,
+      quartile3logcpm: 9.64834565315975,
+      maximumlogcpm: 11.0867785895892,
+      tissue: 'DLPFC',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 4.45648812246036,
+      quartile1logcpm: 8.61673673314674,
+      medianlogcpm: 9.63827007177671,
+      meanlogcpm: 9.20767965842647,
+      quartile3logcpm: 10.0352317821621,
+      maximumlogcpm: 11.0307346887701,
+      tissue: 'PCC',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 6.9225922182552,
+      quartile1logcpm: 8.40526788696803,
+      medianlogcpm: 9.16897860326366,
+      meanlogcpm: 9.08904894721056,
+      quartile3logcpm: 9.8602641380614,
+      maximumlogcpm: 10.8176198993741,
+      tissue: 'FP',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 8.1411622373572,
+      quartile1logcpm: 9.32185036423896,
+      medianlogcpm: 9.85111789837851,
+      meanlogcpm: 9.78825590766753,
+      quartile3logcpm: 10.1905335295928,
+      maximumlogcpm: 11.4363890786455,
+      tissue: 'IFG',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 5.80432490062941,
+      quartile1logcpm: 8.34849621016103,
+      medianlogcpm: 9.35468798616969,
+      meanlogcpm: 9.19624463008193,
+      quartile3logcpm: 10.0560861542771,
+      maximumlogcpm: 11.0964398934874,
+      tissue: 'PHG',
+    },
+    {
+      ensembl_gene_id: 'ENSG00000178209',
+      minimumlogcpm: 7.66844517113394,
+      quartile1logcpm: 9.09921945493146,
+      medianlogcpm: 9.61090389789751,
+      meanlogcpm: 9.51496471073679,
+      quartile3logcpm: 10.0599997750033,
+      maximumlogcpm: 10.9003455990239,
+      tissue: 'STG',
+    },
+  ],
+  druggability: [
+    {
+      geneid: 'ENSG00000178209',
+      sm_druggability_bucket: 3,
+      safety_bucket: 4,
+      abability_bucket: 3,
+      pharos_class: 'Tbio',
+      classification:
+        'Targetable by structure: Structurally druggable protein, based on the presence of a druggable pocket in the protein (DrugEBIlity/CanSAR).',
+      safety_bucket_definition:
+        'More than two of: high off target gene expression, cancer driver, essential gene, associated deleterious genetic disorder, HPO phenotype associated gene, or black box warning on clinically used drug.',
+      abability_bucket_definition:
+        'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
+    },
+  ],
+  is_adi: false,
+  is_tep: true
 };
 
 export const gctGeneMock1: GCTGene = {

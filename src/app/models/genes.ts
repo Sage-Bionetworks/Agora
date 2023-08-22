@@ -67,6 +67,8 @@ export interface Gene {
   medianexpression: MedianExpression[];
   druggability: Druggability[];
   nominations: number;
+  is_adi: boolean;
+  is_tep: boolean;
 
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];
