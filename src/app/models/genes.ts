@@ -63,10 +63,10 @@ export interface Gene {
   rna_brain_change_studied: boolean;
   isAnyProteinChangedInADBrain: boolean;
   protein_brain_change_studied: boolean;
-  nominatedtarget: NominatedTarget[];
+  nominatedtarget: NominatedTarget[] | null;
   medianexpression: MedianExpression[];
   druggability: Druggability[];
-  nominations: number;
+  nominations: number | null;
   is_adi: boolean;
   is_tep: boolean;
 

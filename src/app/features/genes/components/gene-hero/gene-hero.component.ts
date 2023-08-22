@@ -10,18 +10,25 @@ import { ascending } from 'd3';
 })
 export class GeneHeroComponent {
   @Input() gene: Gene | undefined;
-
+  
   showNominationsOrTEP() {
     if (!this.gene)
       return false;
     return this.gene.nominations || this.gene.is_adi || this.gene.is_tep;
   }
 
-  getTEPText() {
+  getNominationText() {
     if (!this.gene)
       return '';
-    let result = this.gene.nominations ? ', ' : '';
-    return result += 'Selected for Target Enabling Resource Development';
+    let result = '';
+    if (this.gene.nominations) {
+      result += 'Nominated Target';
+    }
+    if (this.gene.is_adi || this.gene.is_tep) {
+      result += this.gene.nominations ? ', ' : '';
+      return result += 'Selected for Target Enabling Resource Development';
+    }
+    return result;
   }
 
   getSummary(body = false): string {

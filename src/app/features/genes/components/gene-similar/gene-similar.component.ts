@@ -100,7 +100,8 @@ export class GeneSimilarComponent implements OnInit {
           de.protein_brain_change_studied
             ? de.isAnyProteinChangedInADBrain.toString()
             : 'No data';
-        de.nominated_target_display_value = de.nominations > 0;
+        if (de.nominations)
+          de.nominated_target_display_value = de.nominations > 0;
 
         // Populate Druggability display fields
         if (de.druggability && de.druggability.length) {

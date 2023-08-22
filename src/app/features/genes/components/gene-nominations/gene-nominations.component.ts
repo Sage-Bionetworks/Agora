@@ -38,16 +38,18 @@ export class GeneNominationsComponent {
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
       const nominations: NominatedTarget[] = [];
       const teams: Team[] = res.items;
-      const teamNames = this._gene?.nominatedtarget.map((n) => n.team);
+      const teamNames = this._gene?.nominatedtarget?.map((n) => n.team);
 
       if (teamNames) {
         for (let i=0; i<teams.length; i++) {
           const index = teamNames.indexOf(teams[i].team);
           if (index > -1) {
-            const nomination = this._gene?.nominatedtarget[index];
-            if (nomination) {
-              nomination.team_data = teams[i];
-              nominations.push(nomination);
+            if (this._gene?.nominatedtarget) {
+              const nomination = this._gene?.nominatedtarget[index];
+              if (nomination) {
+                nomination.team_data = teams[i];
+                nominations.push(nomination);
+              }
             }
           }
         }

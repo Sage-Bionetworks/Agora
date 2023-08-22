@@ -36,23 +36,60 @@ describe('Component: Gene Hero', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add nomination and TEP text if nomination exists and is either is_tep or is_adi is true', () => {
+  it('should show nomination and TEP text for MSN if nomination exists and is either is_tep or is_adi is true', () => {
+    const expected = 'Nominated Target, Selected for Target Enabling Resource Development';
+    
     component.gene = geneMock1;
+    component.gene.is_tep = true;
+    component.gene.is_adi = false;
     fixture.detectChanges();
     
-    const el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    let el = element.querySelector('.gene-hero-nominated') as HTMLElement;
     
-    const expected = 'Nominated Target, Selected for Target Enabling Resource Development';
+    expect(el.textContent).toBe(expected);
+
+    component.gene = geneMock1;
+    component.gene.is_tep = false;
+    component.gene.is_adi = true;
+    fixture.detectChanges();
+    
+    el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    
     expect(el.textContent).toBe(expected);
   });
 
-  it('should only add TEP text if nominations is null and either is_tep or is_adi is true', () => {
-    component.gene = geneMock3;
+  it('should show nomination and not show TEP text for MSN if both is_tep and is_adi is false', () => {
+    const expected = 'Nominated Target';
+    
+    component.gene = geneMock1;
+    component.gene.is_tep = false;
+    component.gene.is_adi = false;
     fixture.detectChanges();
     
     const el = element.querySelector('.gene-hero-nominated') as HTMLElement;
     
+    expect(el.textContent).toBe(expected);
+  });
+
+  it('should not show nomination and show TEP text for HCK if nominations is null and either is_tep or is_adi is true', () => {
     const expected = 'Selected for Target Enabling Resource Development';
+
+    component.gene = geneMock3;
+    component.gene.is_tep = false;
+    component.gene.is_adi = true;
+    fixture.detectChanges();
+    
+    let el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    
+    expect(el.textContent).toBe(expected);
+
+    component.gene = geneMock3;
+    component.gene.is_tep = true;
+    component.gene.is_adi = false;
+    fixture.detectChanges();
+    
+    el = element.querySelector('.gene-hero-nominated') as HTMLElement;
+    
     expect(el.textContent).toBe(expected);
   });
 

@@ -3168,6 +3168,7 @@ export const geneMock3: Gene = {
   rna_brain_change_studied: true,
   isAnyProteinChangedInADBrain: false,
   protein_brain_change_studied: false,
+  nominatedtarget: null,
   medianexpression: [
     {
       ensembl_gene_id: 'ENSG00000178209',
@@ -3275,6 +3276,7 @@ export const geneMock3: Gene = {
         'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
     },
   ],
+  nominations: null,
   is_adi: false,
   is_tep: true
 };
