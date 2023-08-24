@@ -84,14 +84,26 @@ describe('Component: Gene Hero', () => {
     expect(el.textContent).toBe(expected);
 
     component.gene = geneMock3;
-    component.gene.is_tep = true;
     component.gene.is_adi = false;
+    component.gene.is_tep = true;
     fixture.detectChanges();
     
     el = element.querySelector('.gene-hero-nominated') as HTMLElement;
     
     expect(el.textContent).toBe(expected);
   });
+
+  it('should not show nomination and not show TEP text for HCK if nominations is null and both is_tep or is_adi is false', () => {
+    component.gene = geneMock3;
+    component.gene.is_adi = false;
+    component.gene.is_tep = false;
+    fixture.detectChanges();
+    
+    const el = element.querySelector('.gene-hero-nominated');
+    
+    expect(el).toBe(null);
+  });
+
 
   it('should comma separate and order the biodomains alphabetically', () => {
     component.gene = geneMock1;
