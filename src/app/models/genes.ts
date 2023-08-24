@@ -69,6 +69,7 @@ export interface Gene {
   nominations: number | null;
   is_adi: boolean;
   is_tep: boolean;
+  resource_url: string;
 
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];

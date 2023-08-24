@@ -1,9 +1,9 @@
-<div *ngIf="_gene" class="section">
+<div *ngIf="gene" class="section">
   <div class="section-inner pb-0">
     <div class="container-sm">
       <div>
         <h2>
-          Druggability of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }}
+          Druggability of {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
         </h2>
         <p class="druggability-description">
           AMP-AD pharmaceutical partners scored the tractability of targets
@@ -20,11 +20,43 @@
 
         <hr class="separator separator-md" />
 
-        <gene-druggability *ngIf="_gene" [gene]="_gene"></gene-druggability>
+        <gene-druggability *ngIf="gene" [gene]="gene"></gene-druggability>
       </div>
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="gene">
+  <div *ngIf="gene.is_tep === true || gene.is_adi === true" class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2 id="target-enabling-resources-header">Target Enabling Resources</h2>
+        <p>Use these links to discover the Target Enabling Resources for {{ gene.hgnc_symbol || gene.ensembl_gene_id }} that are currently available, under development, or planned.</p>
+        <div class="row tab-row last-row">
+          <div class="col-md-3 col-sm-8 col-8 header-title">Target Enabling Resources</div>
+          <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+            <a class="link no-bold" href="{{ gene.resource_url }}" target="_blank">View Available Resources</a>
+          </div>
+          <div class="col-md-6 col-sm-12 col-12 header-description">View the openly available TREAD-AD resources for experimental validation of {{ gene.hgnc_symbol || gene.ensembl_gene_id }} in the AD Knowledge Portal.</div>
+        </div>
+        <div class="row tab-row last-row">
+          <div class="col-md-3 col-sm-8 col-8 header-title">Target Portfolio</div>
+          <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+            <a class="link no-bold" href="https://treatad.org/data-tools/target-dashboard" target="_blank">View Resource Status</a>
+          </div>
+          <div class="col-md-6 col-sm-12 col-12 header-description">View the status of TEP resource development on the TREAT-AD Target Portfolio and Progress Dashboard.</div>
+        </div>
+        <div *ngIf="gene.is_adi" class="row tab-row last-row">
+          <div class="col-md-3 col-sm-8 col-8 header-title">AD Informer Set</div>
+          <div class="col-md-3 col-sm-4 col-4 text-center header-link">
+            <a class="link no-bold" href="https://treatad.org/data-tools/ad-informer-set" target="_blank">View Resource Status</a>
+          </div>
+          <div class="col-md-6 col-sm-12 col-12 header-description">View information about the development and distribution of the AD Informer Set.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
 
 <div *ngIf="additionalResources" class="section">
   <div class="section-inner">
