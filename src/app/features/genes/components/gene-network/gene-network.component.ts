@@ -120,8 +120,8 @@ export class GeneNetworkComponent implements OnInit {
     return text;
   }
 
-  getNominationText(nominations: number): string {
-    return this.getText(nominations === undefined ? false : nominations > 0);
+  getNominationText(nominations: number | null): string {
+    return this.getText(nominations === null ? false : nominations > 0);
   }
 
   // Use black text if 'isStateApplicable' is false ('No data')

@@ -86,14 +86,16 @@ export class GeneNominatedTargetsComponent implements OnInit {
         let inputDataArray: string[] = [];
         let initialNominationArray: number[] = [];
 
-        if (!this.nominations.includes(de.nominations)) {
-          this.nominations.push(de.nominations);
-          this.nominations.sort();
+        if (de.nominations) {
+          if (!this.nominations.includes(de.nominations)) {
+            this.nominations.push(de.nominations);
+            this.nominations.sort();
+          }
         }
 
         // Handle NominatedTargets fields
         // First map all entries nested in the data to a new array
-        if (de.nominatedtarget.length) {
+        if (de.nominatedtarget?.length) {
           teamsArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.team);
           studyArray = de.nominatedtarget.map(
             (nt: NominatedTarget) => nt.study
