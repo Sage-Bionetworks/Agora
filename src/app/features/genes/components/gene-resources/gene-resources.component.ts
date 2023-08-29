@@ -14,6 +14,8 @@ export class GeneResourcesComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
+
+    console.log(this.gene?.resource_url);
   }
 
   init() {

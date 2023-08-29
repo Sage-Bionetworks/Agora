@@ -3281,7 +3281,7 @@ export const geneMock3: Gene = {
   nominations: null,
   is_adi: false,
   is_tep: true,
-  resource_url: ''
+  resource_url: null
 };
 
 export const gctGeneMock1: GCTGene = {

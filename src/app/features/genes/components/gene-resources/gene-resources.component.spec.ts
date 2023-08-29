@@ -54,32 +54,58 @@ describe('Component: Gene Resources', () => {
 
     fixture.detectChanges();
 
-    const el = element.querySelector('#target-enabling-resources-header');
-    
-    expect(el).toBe(null);
+    const header = element.querySelector('#target-enabling-resources-header');
+    expect(header).toBe(null);
+
+    const resource_url = element.querySelector('#target-enabling-resources-url');
+    expect(resource_url).toBe(null);
   });
 
-  it('should display TREAT-AD resource section if is_tep or is_adi is true', () => {
-    const expected = 'Target Enabling Resources';
-
+  it('should display TREAT-AD resource sections if is_tep or is_adi is true', () => {
     component.gene = geneMock1;
     component.gene.is_adi = false;
     component.gene.is_tep = true;
     
     fixture.detectChanges();
-
-    let el = element.querySelector('#target-enabling-resources-header') as HTMLElement;
     
+    let expected = 'Target Enabling Resources';
+    let el = element.querySelector('#target-enabling-resources-header') as HTMLElement;
     expect(el.textContent).toBe(expected);
 
+    expected = 'Target Enabling Resources';
+    el = element.querySelector('#target-enabling-resources-card1') as HTMLElement;
+    expect(el.textContent).toBe(expected);
+
+    expected = 'Target Portfolio';
+    el = element.querySelector('#target-enabling-resources-card2') as HTMLElement;
+    expect(el.textContent).toBe(expected);
+
+    // adi is false so card3 should be null
+    const card3 = element.querySelector('#target-enabling-resources-card3');
+    expect(card3).toBe(null);
+
+    // switch the booleans on adi and tep
     component.gene = geneMock1;
     component.gene.is_adi = true;
     component.gene.is_tep = false;
     
     fixture.detectChanges();
 
+    expected = 'Target Enabling Resources';
     el = element.querySelector('#target-enabling-resources-header') as HTMLElement;
-    
+    expect(el.textContent).toBe(expected);
+
+    expected = 'Target Enabling Resources';
+    el = element.querySelector('#target-enabling-resources-card1') as HTMLElement;
+    expect(el.textContent).toBe(expected);
+
+    // tep is false so card3 should be null
+    expected = 'Target Portfolio';
+    const card2 = element.querySelector('#target-enabling-resources-card2');
+    expect(card2).toBe(null);
+
+    expected = 'AD Informer Set';
+    el = element.querySelector('#target-enabling-resources-card3') as HTMLElement;
     expect(el.textContent).toBe(expected);
   });
 });
