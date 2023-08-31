@@ -74,7 +74,7 @@
     "file-saver": "^2.0.5",
     "helmet": "^5.1.0",
     "lodash": "^4.17.21",
-    "mongoose": "^6.3.5",
+    "mongoose": "^6.12.0",
     "ngx-cookie-service": "^13.2.0",
     "ngx-google-analytics": "^13.0.1",
     "node-cache": "^5.1.2",
