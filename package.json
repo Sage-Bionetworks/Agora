@@ -119,7 +119,7 @@
     "cross-env": "^7.0.3",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.7.1",
-    "cypress": "^10.6.0",
+    "cypress": "^13.1.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "html-loader": "^4.1.0",
