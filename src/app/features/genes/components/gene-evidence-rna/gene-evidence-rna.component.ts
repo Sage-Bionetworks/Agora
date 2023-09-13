@@ -25,7 +25,6 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
 
   statisticalModels: string[] = [];
   selectedStatisticalModel = '';
-  initialSelectedStatisticalModel: any = {};
 
   medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
@@ -63,19 +62,14 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     }
 
     this.statisticalModels = this.geneService.getStatisticalModels(this._gene);
-
+    
     this.selectedStatisticalModel =
-      this.helperService.getUrlParam('model') || '';
-
+    this.helperService.getUrlParam('model') || '';
+    
     if (!this.selectedStatisticalModel) {
       this.selectedStatisticalModel = this.statisticalModels[0];
     }
-
-    this.initialSelectedStatisticalModel = {
-      name: this.selectedStatisticalModel,
-      value: this.selectedStatisticalModel,
-    };
-
+    
     this.initMedianExpression();
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
@@ -203,7 +197,7 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     if (!this._gene?.rna_differential_expression) {
       return;
     }
-    this.selectedStatisticalModel = event.value;
+    this.selectedStatisticalModel = event.name;
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
   }

@@ -1087,13 +1087,12 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   navigateToConsistencyOfChange(data: any) {
-    const url = this.router.createUrlTree([
+    const baseURL = this.router.createUrlTree([
       '/genes/' + data.gene.ensembl_gene_id + '/evidence/rna',
     ]);
 
-    window.open(
-      url.toString() + '/?model=' + this.subCategory + '#consistency-of-change',
-      '_blank'
-    );
+    const url = `${ baseURL.toString() }/?model=${ this.subCategory }#consistency-of-change`;
+
+    window.open(url, '_blank');
   }
 }

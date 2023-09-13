@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { removeParenthesis } from '../../../../shared/helpers/app-helpers';
 
 interface Option {
   name: string;
@@ -19,22 +21,28 @@ export class GeneModelSelectorComponent {
     this.selected = {} as Option;
     this._options =
       options?.map((option: any) => {
+        const newValue = removeParenthesis(option);
         return {
           name: option,
-          value: option,
+          value: newValue,
         } as Option;
       }) || [];
-
-    if (this._options.length) {
-      this.selected = this._options[0];
-    }
   }
 
-  @Input() selected: Option = { name: '', value: '' };
+  selected: Option = { name: '', value: '' };
 
   @Output() onChange: EventEmitter<object> = new EventEmitter<object>();
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) { }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const modelFromURL = params['model'];
+      const index = this._options.findIndex(o => o.value === modelFromURL);
+      this.selected = this._options[index];
+      this._onChange();
+    });
+  }
 
   _onChange() {
     this.onChange.emit(this.selected);
