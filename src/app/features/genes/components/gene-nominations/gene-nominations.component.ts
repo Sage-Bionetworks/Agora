@@ -36,26 +36,31 @@ export class GeneNominationsComponent {
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
-      const nominations: NominatedTarget[] = [];
       const teams: Team[] = res.items;
-      const teamNames = this._gene?.nominatedtarget?.map((n) => n.team);
-
-      if (teamNames) {
-        for (let i=0; i<teams.length; i++) {
-          const index = teamNames.indexOf(teams[i].team);
-          if (index > -1) {
-            if (this._gene?.nominatedtarget) {
-              const nomination = this._gene?.nominatedtarget[index];
-              if (nomination) {
-                nomination.team_data = teams[i];
-                nominations.push(nomination);
-              }
-            }
-          }
-        }
-      }
-      this.nominations = nominations;
+      this.sortNominations(teams);
     });
+  }
+
+  sortNominations(teams: Team[]) {
+    if (this._gene && this._gene.nominatedtarget && this._gene.nominatedtarget.length > 0) {
+      const nominatedTargets = this._gene.nominatedtarget;
+      nominatedTargets.sort((a: NominatedTarget, b: NominatedTarget) => {
+        //primary sort on team name
+        const nameComparison = a.team.localeCompare(b.team, 'en');
+        if (nameComparison !== 0)
+          return nameComparison;
+      
+        //secondary sort on initial nomination year (descending)
+        return b.initial_nomination - a.initial_nomination;
+      });
+
+      nominatedTargets.forEach((nominatedTarget) => {
+        const teamIndex = teams.findIndex((t) => t.team === nominatedTarget.team);
+        nominatedTarget.team_data = teams[teamIndex];
+      });
+
+      this.nominations = nominatedTargets;
+    }
   }
 
   getFullDisplayName(nomination: NominatedTarget): string {
