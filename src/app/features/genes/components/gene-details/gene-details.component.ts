@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Gene } from '../../../../models';
@@ -72,6 +72,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private helperService: HelperService,
     private geneService: GeneService
@@ -227,8 +228,16 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       url += panel.name;
     }
 
+    // added logic to support dropdown state when page is refreshed
+    const modelUrlParam = this.helperService.getUrlParam('model');
+    if (modelUrlParam) {
+      url = this.helperService.addUrlParam(url, 'model', modelUrlParam);
+    }
+
     const nav = document.querySelector('.gene-details-nav');
-    window.scrollTo(0, this.helperService.getOffset(nav).top);
+    if (nav) {
+      window.scrollTo(0, this.helperService.getOffset(nav).top);
+    }
 
     this.location.replaceState(url);
   }

@@ -146,4 +146,11 @@ describe('Service: Helper', () => {
     const result = helperService.capitalizeFirstLetterOfString(testString);
     expect(result).toEqual('');
   });
+
+  it('should return a url with parameters', () => {
+    const url = '/genes/ENSG123';
+    const expected = '/genes/ENSG123?model=abc';
+    const result = helperService.addUrlParam(url, 'model', 'abc');
+    expect(result).toEqual(expected);
+  });
 });

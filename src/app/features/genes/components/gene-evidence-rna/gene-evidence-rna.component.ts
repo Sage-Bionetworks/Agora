@@ -63,12 +63,8 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
 
     this.statisticalModels = this.geneService.getStatisticalModels(this._gene);
     
-    this.selectedStatisticalModel =
-    this.helperService.getUrlParam('model') || '';
-    
-    if (!this.selectedStatisticalModel) {
-      this.selectedStatisticalModel = this.statisticalModels[0];
-    }
+    const urlModelParam = this.helperService.getUrlParam('model');
+    this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
     
     this.initMedianExpression();
     this.initDifferentialExpression();
@@ -79,7 +75,10 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     const hash = window.location.hash.substr(1);
     if (hash) {
       const target = document.getElementById(hash);
-      window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+      if (target) {
+        // TODO determine if there are async calls altering the offset height
+        window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+      }
     }
   }
 
@@ -194,9 +193,10 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
   }
 
   onStatisticalModelChange(event: any) {
-    if (!this._gene?.rna_differential_expression) {
+    if (!event)
       return;
-    }
+    if (!this._gene?.rna_differential_expression)
+      return;
     this.selectedStatisticalModel = event.name;
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
