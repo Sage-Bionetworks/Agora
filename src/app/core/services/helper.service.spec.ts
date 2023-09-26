@@ -153,4 +153,11 @@ describe('Service: Helper', () => {
     const result = helperService.addUrlParam(url, 'model', 'abc');
     expect(result).toEqual(expected);
   });
+
+  it('should replace existing url parameters if the same one exists', () => {
+    const url = '/genes/ENSG123?model=abc';
+    const expected = '/genes/ENSG123?model=fff';
+    const result = helperService.addUrlParam(url, 'model', 'fff');
+    expect(result).toEqual(expected);
+  });
 });
