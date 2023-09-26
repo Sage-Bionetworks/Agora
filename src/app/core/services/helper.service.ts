@@ -115,7 +115,7 @@ export class HelperService {
     }
   }
 
-  getOffset(el: any) {
+  getOffset(el: Element) {
     if (!el) {
       return { top: 0, left: 0 };
     }
