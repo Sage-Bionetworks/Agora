@@ -196,7 +196,6 @@ export class HelperService {
   addUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {
     const param = new HttpParams()
       .set(paramName, paramValue);
-    console.log(param.toString());
     return `${url.split('?')[0]}?${param.toString()}`;
   }
 
