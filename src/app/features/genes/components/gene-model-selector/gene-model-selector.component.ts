@@ -38,7 +38,11 @@ export class GeneModelSelectorComponent {
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       const modelFromURL = params['model'];
-      const index = this._options.findIndex(o => o.value === modelFromURL);
+      let index = this._options.findIndex(o => o.value === modelFromURL);
+      if (index === -1) {
+        // default to first option if page is loaded without a model parameter
+        index = 0;
+      }
       this.selected = this._options[index];
       this._onChange();
     });
