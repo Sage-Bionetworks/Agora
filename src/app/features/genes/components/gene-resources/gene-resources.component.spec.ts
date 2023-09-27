@@ -10,7 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { GeneResourcesComponent } from './';
 import { ModalLinkComponent } from '../../../../shared/components/modal-link/modal-link.component';
 import { GeneDruggabilityComponent } from '../gene-druggability/gene-druggability.component';
-import { geneMock1 } from '../../../../testing';
+import { geneMock1, noHGNCgeneMock } from '../../../../testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService, HelperService } from '../../../../core/services';
 import { GeneService } from '../../services';
@@ -107,5 +107,59 @@ describe('Component: Gene Resources', () => {
     expected = 'AD Informer Set';
     el = element.querySelector('#target-enabling-resources-card3') as HTMLElement;
     expect(el.textContent).toBe(expected);
+  });
+
+  it('should have an hgnc link to Pub AD if the gene has an hgnc symbol', () => {
+    component.gene = geneMock1;
+    component.init();
+
+    fixture.detectChanges();
+    
+    const expectedLinkAddress = 'https://adexplorer.medicine.iu.edu/pubad/external/MSN';
+
+    const additionalResourceLinks = element.querySelectorAll('a.additional-resource-links.link.no-bold');
+
+    let pubADLink: Element | undefined;
+    additionalResourceLinks.forEach(a => {
+      if (a.textContent?.trim() === 'Visit PubAD') {
+        pubADLink = a;
+      }
+    });
+
+    if (!pubADLink) {
+      fail('could not find the element for Pub AD');
+    }
+
+    expect(pubADLink).toBeTruthy();
+
+    const result = pubADLink?.getAttribute('href');
+    expect(result).toBe(expectedLinkAddress);
+  });
+
+  it('should have a default link to Pub AD if the gene does not have an hgnc symbol', () => {
+    component.gene = noHGNCgeneMock;
+    component.init();
+
+    fixture.detectChanges();
+    
+    const expectedLinkAddress = 'https://adexplorer.medicine.iu.edu/pubad';
+
+    const additionalResourceLinks = element.querySelectorAll('a.additional-resource-links.link.no-bold');
+
+    let pubADLink: Element | undefined;
+    additionalResourceLinks.forEach(a => {
+      if (a.textContent?.trim() === 'Visit PubAD') {
+        pubADLink = a;
+      }
+    });
+
+    if (!pubADLink) {
+      fail('could not find the element for Pub AD');
+    }
+
+    expect(pubADLink).toBeTruthy();
+
+    const result = pubADLink?.getAttribute('href');
+    expect(result).toBe(expectedLinkAddress);
   });
 });
