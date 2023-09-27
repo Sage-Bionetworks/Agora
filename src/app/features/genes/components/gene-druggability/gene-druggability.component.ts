@@ -53,7 +53,6 @@ export class GeneDruggabilityComponent implements OnInit {
       if (!this.gene.druggability) {
         this.gene.druggability = [
           {
-            geneid: this.gene.ensembl_gene_id,
             sm_druggability_bucket: this.getDefaultBucketNumber(),
             safety_bucket: this.getDefaultBucketNumber(),
             abability_bucket: this.getDefaultBucketNumber(),
