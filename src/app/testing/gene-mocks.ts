@@ -3427,6 +3427,17 @@ export const nominatedGeneMock1: Gene = {
 export const noHGNCgeneMock: Gene = {
   _id: '628ea1be0e8d04279fdbaa26',
   ensembl_gene_id: 'ENSG00000147065',
+  name: '',
+  summary: '',
+  hgnc_symbol: '',
+  alias: [],
+  is_igap: false,
+  is_eqtl: false,
+  is_any_rna_changed_in_ad_brain: false,
+  rna_brain_change_studied: false,
+  is_any_protein_changed_in_ad_brain: false,
+  protein_brain_change_studied: false,
+  target_nominations: [],
   nominatedtarget: [
     {
       source: 'Community',
@@ -3489,9 +3500,9 @@ export const noHGNCgeneMock: Gene = {
       initial_nomination: 2020,
     },
   ],
+  median_expression: [],
   druggability: [
     {
-      geneid: '',
       sm_druggability_bucket: 3,
       safety_bucket: 4,
       abability_bucket: 3,
@@ -3504,5 +3515,8 @@ export const noHGNCgeneMock: Gene = {
         'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
     },
   ],
-  nominations: 4,
+  total_nominations: 4,
+  is_adi: false,
+  is_tep: false,
+  resource_url: null
 } as Gene;
