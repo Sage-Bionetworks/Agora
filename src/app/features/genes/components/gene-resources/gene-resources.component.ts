@@ -16,6 +16,14 @@ export class GeneResourcesComponent implements OnInit {
     this.init();
   }
 
+  getPubADLink() {
+    // Pub AD links should have hgnc symbol
+    if (this.gene?.hgnc_symbol) {
+      return `https://adexplorer.medicine.iu.edu/pubad/external/${ this.gene.hgnc_symbol }`;
+    }
+    return 'https://adexplorer.medicine.iu.edu/pubad';
+  }
+
   init() {
     if (!this.gene) {
       return;
@@ -62,7 +70,7 @@ export class GeneResourcesComponent implements OnInit {
         description:
           'View dementia-related publication information for this gene on PubAD.',
         linkText: 'Visit PubAD',
-        link: 'https://adexplorer.medicine.iu.edu/pubad',
+        link: `${ this.getPubADLink() }`,
       },
       {
         title: 'Gene Ontology',
@@ -79,11 +87,5 @@ export class GeneResourcesComponent implements OnInit {
         link: `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene?.ensembl_gene_id}`,
       },
     ];
-
-    // Pub AD links should have hgnc symbol
-    if (this.gene.hgnc_symbol) {
-      const index = this.additionalResources.findIndex((r) => r.title === 'Pub AD');
-      this.additionalResources[index].link = `https://adexplorer.medicine.iu.edu/pubad/external/${ this.gene.hgnc_symbol }`;
-    }
   }
 }
