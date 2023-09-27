@@ -88,7 +88,6 @@ export const geneMock1: Gene = {
   ],
   median_expression: [
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 5.04336509575029,
       first_quartile: 6.41020176277925,
       median: 6.73621709567464,
@@ -98,7 +97,6 @@ export const geneMock1: Gene = {
       tissue: 'CBE',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 5.93408536362101,
       first_quartile: 6.96615507794204,
       median: 7.38240334905122,
@@ -108,7 +106,6 @@ export const geneMock1: Gene = {
       tissue: 'TCX',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 6.23306725775568,
       first_quartile: 6.90433999850259,
       median: 7.14860056475605,
@@ -118,7 +115,6 @@ export const geneMock1: Gene = {
       tissue: 'ACC',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 4.28165355601,
       first_quartile: 5.8367467879018,
       median: 6.28136740929578,
@@ -128,7 +124,6 @@ export const geneMock1: Gene = {
       tissue: 'DLPFC',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 4.85658305980558,
       first_quartile: 6.14158577569289,
       median: 6.56845455430893,
@@ -138,7 +133,6 @@ export const geneMock1: Gene = {
       tissue: 'PCC',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 4.26404404037343,
       first_quartile: 5.01578322637647,
       median: 5.48704289453951,
@@ -148,7 +142,6 @@ export const geneMock1: Gene = {
       tissue: 'FP',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 5.16157306923804,
       first_quartile: 6.11769646241097,
       median: 6.47524443721823,
@@ -158,7 +151,6 @@ export const geneMock1: Gene = {
       tissue: 'IFG',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 4.07237364602701,
       first_quartile: 5.58783452541112,
       median: 6.26207347848023,
@@ -168,7 +160,6 @@ export const geneMock1: Gene = {
       tissue: 'PHG',
     },
     {
-      ensembl_gene_id: 'ENSG00000147065',
       min: 4.30589104835697,
       first_quartile: 5.40773593449646,
       median: 6.3210556430281,
@@ -3032,7 +3023,6 @@ export const geneMock2: Gene = {
   ],
   median_expression: [
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.22549250226295,
       first_quartile: 8.25778767262231,
       median: 8.65783306384424,
@@ -3042,7 +3032,6 @@ export const geneMock2: Gene = {
       tissue: 'CBE',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.14223300774668,
       first_quartile: 8.32840566635399,
       median: 8.80762326067988,
@@ -3052,7 +3041,6 @@ export const geneMock2: Gene = {
       tissue: 'TCX',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 6.54927131897913,
       first_quartile: 9.42875064236945,
       median: 9.76880015815198,
@@ -3062,7 +3050,6 @@ export const geneMock2: Gene = {
       tissue: 'ACC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 3.75330149083437,
       first_quartile: 8.08399197480916,
       median: 9.22654506486567,
@@ -3072,7 +3059,6 @@ export const geneMock2: Gene = {
       tissue: 'DLPFC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 4.45648812246036,
       first_quartile: 8.61673673314674,
       median: 9.63827007177671,
@@ -3082,7 +3068,6 @@ export const geneMock2: Gene = {
       tissue: 'PCC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 6.9225922182552,
       first_quartile: 8.40526788696803,
       median: 9.16897860326366,
@@ -3092,7 +3077,6 @@ export const geneMock2: Gene = {
       tissue: 'FP',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 8.1411622373572,
       first_quartile: 9.32185036423896,
       median: 9.85111789837851,
@@ -3102,7 +3086,6 @@ export const geneMock2: Gene = {
       tissue: 'IFG',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 5.80432490062941,
       first_quartile: 8.34849621016103,
       median: 9.35468798616969,
@@ -3112,7 +3095,6 @@ export const geneMock2: Gene = {
       tissue: 'PHG',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.66844517113394,
       first_quartile: 9.09921945493146,
       median: 9.61090389789751,
@@ -3163,7 +3145,6 @@ export const geneMock3: Gene = {
   target_nominations: null,
   median_expression: [
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.22549250226295,
       first_quartile: 8.25778767262231,
       median: 8.65783306384424,
@@ -3173,7 +3154,6 @@ export const geneMock3: Gene = {
       tissue: 'CBE',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.14223300774668,
       first_quartile: 8.32840566635399,
       median: 8.80762326067988,
@@ -3183,7 +3163,6 @@ export const geneMock3: Gene = {
       tissue: 'TCX',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 6.54927131897913,
       first_quartile: 9.42875064236945,
       median: 9.76880015815198,
@@ -3193,7 +3172,6 @@ export const geneMock3: Gene = {
       tissue: 'ACC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 3.75330149083437,
       first_quartile: 8.08399197480916,
       median: 9.22654506486567,
@@ -3203,7 +3181,6 @@ export const geneMock3: Gene = {
       tissue: 'DLPFC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 4.45648812246036,
       first_quartile: 8.61673673314674,
       median: 9.63827007177671,
@@ -3213,7 +3190,6 @@ export const geneMock3: Gene = {
       tissue: 'PCC',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 6.9225922182552,
       first_quartile: 8.40526788696803,
       median: 9.16897860326366,
@@ -3223,7 +3199,6 @@ export const geneMock3: Gene = {
       tissue: 'FP',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 8.1411622373572,
       first_quartile: 9.32185036423896,
       median: 9.85111789837851,
@@ -3233,7 +3208,6 @@ export const geneMock3: Gene = {
       tissue: 'IFG',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 5.80432490062941,
       first_quartile: 8.34849621016103,
       median: 9.35468798616969,
@@ -3243,7 +3217,6 @@ export const geneMock3: Gene = {
       tissue: 'PHG',
     },
     {
-      ensembl_gene_id: 'ENSG00000178209',
       min: 7.66844517113394,
       first_quartile: 9.09921945493146,
       median: 9.61090389789751,

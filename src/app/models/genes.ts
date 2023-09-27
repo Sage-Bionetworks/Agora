@@ -27,7 +27,6 @@ export interface TargetNomination {
 }
 
 export interface MedianExpression {
-  ensembl_gene_id: string;
   min?: number;
   first_quartile?: number;
   median?: number;
