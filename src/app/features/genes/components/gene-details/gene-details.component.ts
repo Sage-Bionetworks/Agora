@@ -231,7 +231,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
     // added logic to support dropdown state when page is refreshed
     const modelUrlParam = this.helperService.getUrlParam('model');
     if (modelUrlParam) {
-      url = this.helperService.addUrlParam(url, 'model', modelUrlParam);
+      url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
     }
 
     const nav = document.querySelector('.gene-details-nav');

@@ -198,6 +198,7 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     }
     if (!this._gene?.rna_differential_expression) {
       return;
+    }
     this.selectedStatisticalModel = event.name;
     this.initDifferentialExpression();
     this.initConsistencyOfChange();

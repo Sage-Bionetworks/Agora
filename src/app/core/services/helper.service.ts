@@ -193,7 +193,7 @@ export class HelperService {
     return urlParams.get(name);
   }
 
-  addUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {
+  addSingleUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {
     const param = new HttpParams()
       .set(paramName, paramValue);
     return `${url.split('?')[0]}?${param.toString()}`;
