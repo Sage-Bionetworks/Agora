@@ -9,11 +9,10 @@ import {
   BioDomains
 } from './';
 
-export interface NominatedTarget {
+export interface TargetNomination {
   source: string;
   team: string;
   rank: string;
-  ensembl_gene_id: string;
   hgnc_symbol: string;
   target_choice_justification: string;
   predicted_therapeutic_direction: string;
@@ -28,18 +27,16 @@ export interface NominatedTarget {
 }
 
 export interface MedianExpression {
-  ensembl_gene_id: string;
-  minimumlogcpm?: number;
-  quartile1logcpm?: number;
-  medianlogcpm?: number;
-  meanlogcpm?: number;
-  quartile3logcpm?: number;
-  maximumlogcpm?: number;
+  min?: number;
+  first_quartile?: number;
+  median?: number;
+  mean?: number;
+  third_quartile?: number;
+  max?: number;
   tissue: string;
 }
 
 export interface Druggability {
-  geneid: string;
   sm_druggability_bucket: number;
   safety_bucket: number;
   abability_bucket: number;
@@ -57,16 +54,16 @@ export interface Gene {
   summary: string;
   hgnc_symbol: string;
   alias: string[];
-  isIGAP: boolean;
-  haseqtl: boolean;
-  isAnyRNAChangedInADBrain: boolean;
+  is_igap: boolean;
+  is_eqtl: boolean;
+  is_any_rna_changed_in_ad_brain: boolean;
   rna_brain_change_studied: boolean;
-  isAnyProteinChangedInADBrain: boolean;
+  is_any_protein_changed_in_ad_brain: boolean;
   protein_brain_change_studied: boolean;
-  nominatedtarget: NominatedTarget[] | null;
-  medianexpression: MedianExpression[];
+  target_nominations: TargetNomination[] | null;
+  median_expression: MedianExpression[];
   druggability: Druggability[];
-  nominations: number | null;
+  total_nominations: number | null;
   is_adi: boolean;
   is_tep: boolean;
   resource_url: string | null;

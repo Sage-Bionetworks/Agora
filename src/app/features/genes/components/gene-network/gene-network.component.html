@@ -66,13 +66,13 @@
           <div>
             <div>Genetic Association with LOAD</div>
             <div>
-              {{ getText(selectedGene.isIGAP) }}
+              {{ getText(selectedGene.is_igap) }}
             </div>
           </div>
           <div>
             <div>Brain eQTL</div>
             <div>
-              {{ getText(selectedGene.haseqtl) }}
+              {{ getText(selectedGene.is_eqtl) }}
             </div>
           </div>
           <div>
@@ -80,7 +80,7 @@
             <div>
               {{
                 getText(
-                  selectedGene.isAnyRNAChangedInADBrain,
+                  selectedGene.is_any_rna_changed_in_ad_brain,
                   selectedGene.rna_brain_change_studied
                 )
               }}
@@ -91,7 +91,7 @@
             <div>
               {{
                 getText(
-                  selectedGene.isAnyProteinChangedInADBrain,
+                  selectedGene.is_any_protein_changed_in_ad_brain,
                   selectedGene.protein_brain_change_studied
                 )
               }}
@@ -100,7 +100,7 @@
           <div>
             <div>Nominated target</div>
             <div>
-              {{ getNominationText(selectedGene.nominations) }}
+              {{ getNominationText(selectedGene.total_nominations) }}
             </div>
           </div>
         </div>

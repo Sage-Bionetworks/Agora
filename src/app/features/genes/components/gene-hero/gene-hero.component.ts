@@ -14,18 +14,18 @@ export class GeneHeroComponent {
   showNominationsOrTEP() {
     if (!this.gene)
       return false;
-    return this.gene.nominations || this.gene.is_adi || this.gene.is_tep;
+    return this.gene.total_nominations || this.gene.is_adi || this.gene.is_tep;
   }
 
   getNominationText() {
     if (!this.gene)
       return '';
     let result = '';
-    if (this.gene.nominations) {
+    if (this.gene.total_nominations) {
       result += 'Nominated Target';
     }
     if (this.gene.is_adi || this.gene.is_tep) {
-      result += this.gene.nominations ? ', ' : '';
+      result += this.gene.total_nominations ? ', ' : '';
       return result += 'Selected for Target Enabling Resource Development';
     }
     return result;

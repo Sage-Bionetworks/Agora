@@ -49,7 +49,7 @@ export class GeneSoeListComponent {
           anchorText:
             'ADSP Gene Verification Committee',
         },
-        state: this._gene.isIGAP === undefined ? false : this._gene.isIGAP,
+        state: this._gene.is_igap === undefined ? false : this._gene.is_igap,
         isStateApplicable: true,
       },
       {
@@ -60,7 +60,7 @@ export class GeneSoeListComponent {
           link: 'https://www.nature.com/articles/s41597-020-00642-8',
           anchorText: 'AMP-AD consortium study',
         },
-        state: this._gene.haseqtl === undefined ? false : this._gene.haseqtl,
+        state: this._gene.is_eqtl === undefined ? false : this._gene.is_eqtl,
         isStateApplicable: true,
       },
       {
@@ -70,9 +70,9 @@ export class GeneSoeListComponent {
             'Indicates whether or not this gene shows significant differential expression in at least one brain region based on AMP-AD consortium work. See ‘EVIDENCE’ tab.',
         },
         state:
-          this._gene.isAnyRNAChangedInADBrain === undefined
+          this._gene.is_any_rna_changed_in_ad_brain === undefined
             ? false
-            : this._gene.isAnyRNAChangedInADBrain,
+            : this._gene.is_any_rna_changed_in_ad_brain,
         isStateApplicable: this._gene.rna_brain_change_studied,
       },
       {
@@ -82,9 +82,9 @@ export class GeneSoeListComponent {
             'Indicates whether or not this gene shows significant differential protein expression in at least one brain region based on AMP-AD consortium work. See ‘EVIDENCE’ tab.',
         },
         state:
-          this._gene.isAnyProteinChangedInADBrain === undefined
+          this._gene.is_any_protein_changed_in_ad_brain === undefined
             ? false
-            : this._gene.isAnyProteinChangedInADBrain,
+            : this._gene.is_any_protein_changed_in_ad_brain,
         isStateApplicable: this._gene.protein_brain_change_studied,
       },
       {
@@ -94,16 +94,16 @@ export class GeneSoeListComponent {
             'Indicates whether or not this gene has been submitted as a nominated target to Agora.',
         },
         state:
-          this._gene.nominations && this._gene.nominations > 0 ? true : false,
+          this._gene.total_nominations && this._gene.total_nominations > 0 ? true : false,
         isStateApplicable: true,
       },
     ];
   }
 
   // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
-  // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is
-  // undefined, so calling: getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
-  // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
+  // Example: rna_brain_change_studied: false indicates that is_any_rna_changed_in_ad_brain is
+  // undefined, so calling: getText(is_any_rna_changed_in_ad_brain, rna_brain_change_studied)
+  // will return the desired 'No data' text, regardless of the is_any_rna_changed_in_ad_brain value
   getStateText(summary: Summary): string {
     if (summary.isStateApplicable) {
       if (summary.state === true) {

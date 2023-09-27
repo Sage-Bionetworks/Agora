@@ -9,7 +9,7 @@ import { Schema, model } from 'mongoose';
 import {
   Gene,
   MedianExpression,
-  NominatedTarget,
+  TargetNomination,
   Druggability,
 } from '../../app/models';
 export { Gene } from '../../app/models';
@@ -17,11 +17,10 @@ export { Gene } from '../../app/models';
 // -------------------------------------------------------------------------- //
 // Schemas
 // -------------------------------------------------------------------------- //
-const NominatedTargetSchema = new Schema<NominatedTarget>({
+const TargetNominationSchema = new Schema<TargetNomination>({
   source: { type: String, required: true },
   team: { type: String, required: true },
   rank: { type: String, required: true },
-  ensembl_gene_id: { type: String, required: true },
   hgnc_symbol: { type: String, required: true },
   target_choice_justification: { type: String, required: true },
   predicted_therapeutic_direction: { type: String, required: true },
@@ -34,18 +33,16 @@ const NominatedTargetSchema = new Schema<NominatedTarget>({
 });
 
 const MedianExpressionSchema = new Schema<MedianExpression>({
-  ensembl_gene_id: { type: String, required: true },
-  minimumlogcpm: Number,
-  quartile1logcpm: Number,
-  medianlogcpm: Number,
-  meanlogcpm: Number,
-  quartile3logcpm: Number,
-  maximumlogcpm: Number,
+  min: Number,
+  first_quartile: Number,
+  median: Number,
+  mean: Number,
+  third_quartile: Number,
+  max: Number,
   tissue: { type: String, required: true },
 });
 
 const DruggabilitySchema = new Schema<Druggability>({
-  geneid: { type: String, required: true },
   sm_druggability_bucket: { type: Number, required: true },
   safety_bucket: { type: Number, required: true },
   abability_bucket: { type: Number, required: true },
@@ -63,16 +60,16 @@ const GeneSchema = new Schema<Gene>(
     summary: { type: String, required: true },
     hgnc_symbol: { type: String, required: true },
     alias: [{ type: String, required: true }],
-    isIGAP: { type: Boolean, required: true },
-    haseqtl: { type: Boolean, required: true },
-    isAnyRNAChangedInADBrain: { type: Boolean, required: true },
+    is_igap: { type: Boolean, required: true },
+    is_eqtl: { type: Boolean, required: true },
+    is_any_rna_changed_in_ad_brain: { type: Boolean, required: true },
     rna_brain_change_studied: { type: Boolean, required: true },
-    isAnyProteinChangedInADBrain: { type: Boolean, required: true },
+    is_any_protein_changed_in_ad_brain: { type: Boolean, required: true },
     protein_brain_change_studied: { type: Boolean, required: true },
-    nominatedtarget: { type: [NominatedTargetSchema], required: true },
-    medianexpression: { type: [MedianExpressionSchema], required: true },
+    target_nominations: { type: [TargetNominationSchema], required: true },
+    median_expression: { type: [MedianExpressionSchema], required: true },
     druggability: { type: [DruggabilitySchema], required: true },
-    nominations: { type: Number, required: true },
+    total_nominations: { type: Number, required: true },
   },
   { collection: 'geneinfo' }
 );
