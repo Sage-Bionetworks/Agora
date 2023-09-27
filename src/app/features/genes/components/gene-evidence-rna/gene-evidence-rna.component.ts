@@ -83,13 +83,13 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
   }
 
   initMedianExpression() {
-    if (!this._gene?.medianexpression?.length) {
+    if (!this._gene?.median_expression?.length) {
       this.medianExpression = [];
       return;
     }
 
-    this.medianExpression = this._gene.medianexpression.filter(
-      (d) => d.medianlogcpm && d.medianlogcpm > 0
+    this.medianExpression = this._gene.median_expression.filter(
+      (d) => d.median && d.median > 0
     );
   }
 
@@ -193,9 +193,10 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
   }
 
   onStatisticalModelChange(event: any) {
-    if (!event)
+    if (!event) {
       return;
-    if (!this._gene?.rna_differential_expression)
+    }
+    if (!this._gene?.rna_differential_expression) {
       return;
     this.selectedStatisticalModel = event.name;
     this.initDifferentialExpression();

@@ -139,7 +139,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
             this.gene = gene;
 
             this.panels.forEach((p: Panel) => {
-              if (p.name == 'nominations' && !this.gene?.nominations) {
+              if (p.name == 'nominations' && !this.gene?.total_nominations) {
                 p.disabled = true;
               } else if (
                 p.name == 'experimental-validation' &&
@@ -155,7 +155,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
               (p) => p.name == 'nominations'
             );
             if (nominationsPanel) {
-              nominationsPanel.disabled = !this.gene.nominations ? true : false;
+              nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
             }
 
             const experimentalValidationPanel = this.panels.find(

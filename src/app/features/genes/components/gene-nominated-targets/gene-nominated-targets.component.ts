@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../../core/services';
 import {
   Gene,
-  NominatedTarget,
+  TargetNomination,
   GeneTableColumn,
   GenesResponse,
 } from '../../../../models';
@@ -29,7 +29,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
 
   columns: GeneTableColumn[] = [
     { field: 'hgnc_symbol', header: 'Gene Symbol', selected: true },
-    { field: 'nominations', header: 'Nominations', selected: true },
+    { field: 'total_nominations', header: 'Nominations', selected: true },
     {
       field: 'initial_nomination_display_value',
       header: 'Year First Nominated',
@@ -86,29 +86,29 @@ export class GeneNominatedTargetsComponent implements OnInit {
         let inputDataArray: string[] = [];
         let initialNominationArray: number[] = [];
 
-        if (de.nominations) {
-          if (!this.nominations.includes(de.nominations)) {
-            this.nominations.push(de.nominations);
+        if (de.total_nominations) {
+          if (!this.nominations.includes(de.total_nominations)) {
+            this.nominations.push(de.total_nominations);
             this.nominations.sort();
           }
         }
 
-        // Handle NominatedTargets fields
+        // Handle TargetNomination fields
         // First map all entries nested in the data to a new array
-        if (de.nominatedtarget?.length) {
-          teamsArray = de.nominatedtarget.map((nt: NominatedTarget) => nt.team);
-          studyArray = de.nominatedtarget.map(
-            (nt: NominatedTarget) => nt.study
+        if (de.target_nominations?.length) {
+          teamsArray = de.target_nominations.map((nt: TargetNomination) => nt.team);
+          studyArray = de.target_nominations.map(
+            (nt: TargetNomination) => nt.study
           );
-          programsArray = de.nominatedtarget.map(
-            (nt: NominatedTarget) => nt.source
+          programsArray = de.target_nominations.map(
+            (nt: TargetNomination) => nt.source
           );
-          inputDataArray = de.nominatedtarget.map(
-            (nt: NominatedTarget) => nt.input_data
+          inputDataArray = de.target_nominations.map(
+            (nt: TargetNomination) => nt.input_data
           );
 
-          initialNominationArray = de.nominatedtarget
-            .map((nt: NominatedTarget) => nt.initial_nomination)
+          initialNominationArray = de.target_nominations
+            .map((nt: TargetNomination) => nt.initial_nomination)
             .filter((item) => item !== undefined);
         }
 
@@ -119,7 +119,7 @@ export class GeneNominatedTargetsComponent implements OnInit {
         programsArray = this.commaFlattenArray(programsArray);
         inputDataArray = this.commaFlattenArray(inputDataArray);
 
-        // Populate NominatedTargets display fields
+        // Populate targetNomination display fields
         de.teams_display_value = '';
         if (teamsArray.length) {
           de.teams_display_value = teamsArray

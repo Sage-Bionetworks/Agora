@@ -19,7 +19,7 @@ import {
   ProteomicsTMTCollection,
   Team,
 } from '../models';
-import { BioDomains, NominatedTarget, Scores } from '../../app/models';
+import { BioDomains, TargetNomination, Scores } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -29,22 +29,22 @@ function getComparisonGeneAssociations(gene: Gene) {
   const data: number[] = [];
 
   // Genetically Associated with LOAD
-  if (gene.isIGAP) {
+  if (gene.is_igap) {
     data.push(1);
   }
 
   // eQTL in Brain
-  if (gene.haseqtl) {
+  if (gene.is_eqtl) {
     data.push(2);
   }
 
   // RNA Expression Changed in AD Brain
-  if (gene.rna_brain_change_studied && gene.isAnyRNAChangedInADBrain) {
+  if (gene.rna_brain_change_studied && gene.is_any_rna_changed_in_ad_brain) {
     data.push(3);
   }
 
   // Protein Expression Changed in AD Brain
-  if (gene.protein_brain_change_studied && gene.isAnyProteinChangedInADBrain) {
+  if (gene.protein_brain_change_studied && gene.is_any_protein_changed_in_ad_brain) {
     data.push(4);
   }
 
@@ -53,7 +53,7 @@ function getComparisonGeneAssociations(gene: Gene) {
 
 function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
   const data: GCTGeneNominations = {
-    count: gene.nominations || 0,
+    count: gene.total_nominations || 0,
     year: 0,
     teams: [],
     studies: [],
@@ -62,7 +62,7 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
     validations: [],
   };
 
-  gene.nominatedtarget?.forEach((n: NominatedTarget) => {
+  gene.target_nominations?.forEach((n: TargetNomination) => {
     // Year
     if (
       n.initial_nomination &&

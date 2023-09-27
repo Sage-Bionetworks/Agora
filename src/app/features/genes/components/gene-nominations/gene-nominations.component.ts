@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Gene, NominatedTarget } from '../../../../models';
+import { Gene, TargetNomination } from '../../../../models';
 
 import { Team, TeamsResponse } from '../../../../models';
 import { TeamService } from '../../../teams/services';
@@ -19,7 +19,7 @@ export class GeneNominationsComponent {
     this._gene = gene;
     this.init();
   }
-  nominations: NominatedTarget[] = [] as NominatedTarget[];
+  nominations: TargetNomination[] = [] as TargetNomination[];
   loading = true;
 
   constructor(private teamService: TeamService) {}
@@ -31,34 +31,39 @@ export class GeneNominationsComponent {
   init() {
     this.reset();
 
-    if (!this._gene?.nominatedtarget?.length) {
+    if (!this._gene?.target_nominations?.length) {
       return;
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
-      const nominations: NominatedTarget[] = [];
       const teams: Team[] = res.items;
-      const teamNames = this._gene?.nominatedtarget?.map((n) => n.team);
-
-      if (teamNames) {
-        for (let i=0; i<teams.length; i++) {
-          const index = teamNames.indexOf(teams[i].team);
-          if (index > -1) {
-            if (this._gene?.nominatedtarget) {
-              const nomination = this._gene?.nominatedtarget[index];
-              if (nomination) {
-                nomination.team_data = teams[i];
-                nominations.push(nomination);
-              }
-            }
-          }
-        }
-      }
-      this.nominations = nominations;
+      this.sortNominations(teams);
     });
   }
 
-  getFullDisplayName(nomination: NominatedTarget): string {
+  sortNominations(teams: Team[]) {
+    if (this._gene && this._gene.target_nominations && this._gene.target_nominations.length > 0) {
+      const targetNominations = this._gene.target_nominations;
+      targetNominations.sort((a: TargetNomination, b: TargetNomination) => {
+        //primary sort on team name
+        const nameComparison = a.team.localeCompare(b.team, 'en');
+        if (nameComparison !== 0)
+          return nameComparison;
+      
+        //secondary sort on initial nomination year (descending)
+        return b.initial_nomination - a.initial_nomination;
+      });
+
+      targetNominations.forEach((targetNomination) => {
+        const teamIndex = teams.findIndex((t) => t.team === targetNomination.team);
+        targetNomination.team_data = teams[teamIndex];
+      });
+
+      this.nominations = targetNominations;
+    }
+  }
+
+  getFullDisplayName(nomination: TargetNomination): string {
     const team: Team = nomination.team_data as Team;
     return (team.program ? team.program + ': ' : '') + team.team_full;
   }
