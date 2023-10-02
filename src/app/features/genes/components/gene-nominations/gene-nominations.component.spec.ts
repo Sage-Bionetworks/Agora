@@ -44,14 +44,44 @@ describe('Component: Gene Nominations', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should order nominations alphabetically then by date desc', () => {
+  it('should call mock TeamService', () => {
     component.gene = geneMock1;
-    expect(component.nominations.length).toBeGreaterThan(0);
-    expect(component.nominations[0].team).toBe('Chang Lab');
-    expect(component.nominations[1].team).toBe('Emory');
-    expect(component.nominations[2].team).toBe('MSSM');
-    expect(component.nominations[3].team).toBe('MSSM');
-    expect(component.nominations[2].initial_nomination).toBe(2020);
-    expect(component.nominations[3].initial_nomination).toBe(2018);
+    component.init();
+    fixture.detectChanges();
+
+    expect(mockTeamService.getTeams).toHaveBeenCalled();
+  });
+
+  it('should get full display name', () => {
+    component.gene = geneMock1;
+    component.init();
+    fixture.detectChanges();
+
+    const nominations = geneMock1.target_nominations;
+    if (nominations === null || nominations.length === 0)
+      fail('improperly set up mock gene for test');
+    else {
+      const nomination = nominations[0];
+      const result = component.getFullDisplayName(nomination);
+      expect(result).toBe('AMP-AD: Emory University');
+    }
+  });
+  
+  it('should sort nominations alphabetically then by date desc', () => {
+    component.gene = geneMock1;
+    component.init();
+    fixture.detectChanges();
+
+    const result = component.sortNominations(teamsResponseMock.items);
+
+    expect(result.length).toBe(5);
+
+    expect(component.getFullDisplayName(result[0])).toBe('AMP-AD: Emory University');
+    expect(component.getFullDisplayName(result[1])).toBe('AMP-AD: Icahn School of Medicine at Mount Sinai');
+    expect(component.getFullDisplayName(result[2])).toBe('AMP-AD: Icahn School of Medicine at Mount Sinai');
+    expect(component.getFullDisplayName(result[3])).toBe('Community Contributed: The Chang Lab at the University of Arizona');
+    expect(component.getFullDisplayName(result[4])).toBe('TREAT-AD: Emory University - Sage Bionetworks - Structural Genomics Consortium');
+    expect(result[1].initial_nomination).toBe(2020);
+    expect(result[2].initial_nomination).toBe(2018);
   });
 });

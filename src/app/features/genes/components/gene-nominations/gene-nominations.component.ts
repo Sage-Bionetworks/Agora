@@ -36,35 +36,40 @@ export class GeneNominationsComponent {
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
-      const teams: Team[] = res.items;
-      this.sortNominations(teams);
+      this.nominations = this.sortNominations(res.items);
     });
   }
 
   sortNominations(teams: Team[]) {
-    if (this._gene && this._gene.target_nominations && this._gene.target_nominations.length > 0) {
-      const targetNominations = this._gene.target_nominations;
-      targetNominations.sort((a: TargetNomination, b: TargetNomination) => {
-        //primary sort on team name
-        const nameComparison = a.team.localeCompare(b.team, 'en');
-        if (nameComparison !== 0)
-          return nameComparison;
+    const result: TargetNomination[] = [];
+    if (!this.gene || !this.gene.target_nominations)
+      return result;
+
+    // add team_data to nominations
+    this.gene.target_nominations.forEach((targetNomination) => {
+      const teamIndex = teams.findIndex((t) => t.team === targetNomination.team); 
+      targetNomination.team_data = teams[teamIndex];
+    });
+    
+    return this.gene.target_nominations.sort((a: TargetNomination, b: TargetNomination) => {
+      //primary sort on displayed team name
+      const teamA = this.getFullDisplayName(a);
+      const teamB = this.getFullDisplayName(b);
       
-        //secondary sort on initial nomination year (descending)
-        return b.initial_nomination - a.initial_nomination;
-      });
-
-      targetNominations.forEach((targetNomination) => {
-        const teamIndex = teams.findIndex((t) => t.team === targetNomination.team);
-        targetNomination.team_data = teams[teamIndex];
-      });
-
-      this.nominations = targetNominations;
-    }
+      const nameComparison = teamA.localeCompare(teamB, 'en');
+      if (nameComparison !== 0)
+        return nameComparison;
+    
+      //secondary sort on initial nomination year (descending)
+      return b.initial_nomination - a.initial_nomination;
+    });
   }
 
   getFullDisplayName(nomination: TargetNomination): string {
-    const team: Team = nomination.team_data as Team;
+    const team = nomination.team_data;
+    if (!team)
+      return '';
+    
     return (team.program ? team.program + ': ' : '') + team.team_full;
   }
 }
