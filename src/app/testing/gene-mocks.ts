@@ -18,6 +18,23 @@ export const geneMock1: Gene = {
   protein_brain_change_studied: true,
   target_nominations: [
     {
+      source: 'Treat-AD',
+      team: 'Emory-Sage-SGC',
+      rank: '7',
+      hgnc_symbol: 'MSN',
+      target_choice_justification:
+        'MSN was identified as a potential driver protein based on protein coexpression analysis. The group of proteins coexpressed with MSN is conserved across the 3 datasets considered, is enriched for inflammatory processes, and for protein products of genes near loci previously associated with AD risk. MSN has increased abundance in AD across all 3 cohorts examined, and progressively increases in asymptomatic (prodromal) AD to symptomatic AD, and also correlates with both hallmark AD pathology scores (CERAD for amyloid burden; and Braak for Tau extent of spread). MSN is highly expressed as a marker of disease-associated microglia and/or endothelial cell types.',
+      predicted_therapeutic_direction:
+        'Antagonism predicted to reduce disease progression. Phosphorylation downstream of Rho/Rock influences actin, focal adhesion binding; may have redundancy with EZR and RDX, complicating targeting. MSN-directed therapeutics that improve microglial motility and/or phagocytosis competence would reduce abeta/amyloid plaque burden.',
+      data_used_to_support_target_selection:
+        'Discovery quantitative proteomics of FrCx \r\n WPCNA of multiple and consensus cohorts\r\n ANOVA',
+      data_synapseid: 'syn17008058',
+      study: 'ACT, BLSA, Banner',
+      input_data: 'Protein',
+      validation_study_details: 'validation studies ongoing',
+      initial_nomination: 2018,
+    },
+    {
       source: 'Community',
       team: 'Chang Lab',
       rank: 'PS4-1',

@@ -28,10 +28,10 @@ export const mockTeam2: Team = {
 
 export const mockTeam3: Team = {
   team: 'Emory-Sage-SGC',
-  team_full: 'Emory University',
+  team_full: 'Emory University - Sage Bionetworks - Structural Genomics Consortium',
   program: 'TREAT-AD',
   description:
-  "Emory University - Sage Bionetworks - Structural Genomics Consortium",
+  "The mission of the Emory-Sage-Structural Genomics Consortium (SGC) TREAT-AD center is to diversify the portfolio of drug targets in Alzheimer's disease (AD). We aim to catalyze research into biological pathways that have been associated with disease from deep molecular profiling and bioinformatic evaluation of AD in the human brain within the National Institute on Aging's (NIA) Accelerating Medicines Partnership-Alzheimer's Disease (AMP-AD) consortium.  Many of these potential AD drug targets are predicted to reside among the thousands of human proteins that historically have received little attention and for which there are few reagents, such as quality-verified antibodies, cell lines, assays or chemical probes. To catalyze their investigation, we are developing and openly distributing experimental tools, including chemical probes, for broad use in the evaluation of a diverse set of novel AD targets.",
   members: [mockTeamMember],
 };
 
@@ -44,6 +44,15 @@ export const mockTeam4: Team = {
   members: [mockTeamMember],
 };
 
+export const mockTeam5: Team = {
+  team: 'Community',
+  team_full: 'Icahn School of Medicine at Mount Sinai',
+  program: 'AMP-AD',
+  description:
+  "Arizona State University",
+  members: [mockTeamMember],
+};
+
 export const teamsResponseMock: TeamsResponse = {
-  items: [mockTeam1, mockTeam2, mockTeam3, mockTeam4],
+  items: [mockTeam1, mockTeam2, mockTeam3, mockTeam4, mockTeam5],
 };
