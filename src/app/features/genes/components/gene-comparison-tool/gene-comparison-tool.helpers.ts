@@ -39,6 +39,13 @@ export const excludeEnsemblGeneIdFilterCallback = function (
   return !ensemblGeneIds.includes(value);
 };
 
+export const excludeUniprotIdCallback = function (
+  value: string,
+  uniprotIds: string[]
+): boolean {
+  return !uniprotIds.includes(value);
+};
+
 export function getScoreName(columnName: string) {
   columnName = columnName.toUpperCase();
   if (columnName === 'RISK SCORE')
