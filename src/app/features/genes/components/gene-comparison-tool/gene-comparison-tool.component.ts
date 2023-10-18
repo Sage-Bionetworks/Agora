@@ -150,6 +150,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       'exclude_ensembl_gene_id',
       helpers.excludeEnsemblGeneIdFilterCallback
     );
+    this.filterService.register(
+      'exclude_uniprotid',
+      helpers.excludeUniprotIdCallback
+    );
   }
 
   ngAfterViewInit() {
@@ -467,12 +471,23 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   filter() {
-    const filters: { [key: string]: any } = {
-      ensembl_gene_id: {
-        value: this.getPinnedEnsemblGeneIds(),
-        matchMode: 'exclude_ensembl_gene_id',
-      },
-    };
+    let filters: { [key: string]: any };
+
+    if (this.category === 'RNA - Differential Expression') {
+      filters = {
+        ensembl_gene_id: {
+          value: this.getPinnedEnsemblGeneIds(),
+          matchMode: 'exclude_ensembl_gene_id',
+        },
+      };
+    } else {
+      filters = {
+        uniprotid: {
+          value: this.getPinnedUniProtIds(),
+          matchMode: 'exclude_uniprotid',
+        },
+      };
+    }
 
     if (this.searchTerm) {
       if (this.searchTerm.indexOf(',') !== -1) {
@@ -642,13 +657,13 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     const index = this.pinnedGenes.findIndex(
       (g: GCTGene) => g.uid === gene.uid
     );
-
+    
     if (index > -1 || this.pinnedGenes.length >= this.maxPinnedGenes) {
       return;
     }
-
+    
     this.pinnedGenes.push(gene);
-
+    
     if (refresh) {
       this.clearPinnedGenesCache();
       this.refreshPinnedGenes();
@@ -711,6 +726,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
   getPinnedEnsemblGeneIds() {
     return this.pinnedGenes.map((g: GCTGene) => g.ensembl_gene_id);
+  }
+
+  getPinnedUniProtIds() {
+    return this.pinnedGenes.map((g: GCTGene) => g.uniprotid);
   }
 
   pinFilteredGenes() {
