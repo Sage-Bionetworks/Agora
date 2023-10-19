@@ -125,10 +125,20 @@ function getComparisonGene(gene: Gene, teams: Team[], scores: Scores[], allBiodo
     target_risk_score: geneScores ? geneScores.target_risk_score : null,
     genetics_score: geneScores ? geneScores.genetics_score: null,
     multi_omics_score: geneScores ? geneScores.multi_omics_score : null,
-    biodomains: geneBiodomains
+    biodomains: geneBiodomains,
+    target_enabling_resources: getTargetEnablingResources(gene)
   };
 
   return data;
+}
+
+export function getTargetEnablingResources(gene: Gene) {
+  const resources: string[] = [];
+  if (gene.is_adi)
+    resources.push('AD Informer Set');
+  if (gene.is_tep)
+    resources.push('Target Enabling Package');
+  return resources;
 }
 
 export async function getRnaComparisonGenes(model: string) {
