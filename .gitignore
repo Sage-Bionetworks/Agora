@@ -12,11 +12,11 @@ npm-debug.log
 yarn-error.log
 
 # Testing
-/testing/cypress/downloads
-/testing/cypress/screenshots
-/testing/cypress/videos
 /testing/spec-build
 /coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 # IDEs and editors
 .idea/
@@ -48,6 +48,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-/test-results/
-/playwright-report/
-/playwright/.cache/
