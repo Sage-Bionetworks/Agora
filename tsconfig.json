@@ -18,7 +18,8 @@
     "target": "es2017",
     "module": "es2020",
     "lib": ["es2020", "dom"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -30,6 +31,7 @@
     "./node_modules",
     "./dist",
     "./testing",
+    "./tests",
     "./src/app/testing",
     "./src/environments",
     "./src/server",

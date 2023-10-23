@@ -2,12 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./testing/spec-build/out-tsc",
-    "types": ["jasmine"]
+    "types": ["jasmine", "node"]
   },
   "exclude": [
     "./node_modules",
     "./dist",
     "./testing",
+    "./tests",
     "./src/app/testing",
     "./src/environments",
     "./src/server",
