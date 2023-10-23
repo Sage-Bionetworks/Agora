@@ -40,7 +40,9 @@
     "mongo:start:windows": "sh ./scripts/start-mongo.sh 'C:\\data\\db'",
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
     "cypress": "cypress",
-    "cypress:run": "cypress run --config-file ./config/cypress.config.js"
+    "cypress:run": "cypress run --config-file ./config/cypress.config.js",
+    "e2e": "playwright test",
+    "e2e:debug": "playwright test --project chromium --headed"
   },
   "pre-commit": [
     "test"
@@ -95,6 +97,7 @@
     "@angularclass/hmr": "^3.0.0",
     "@babel/plugin-proposal-decorators": "^7.18.10",
     "@ngtools/webpack": "^13.3.9",
+    "@playwright/test": "^1.39.0",
     "@types/aws-param-store": "^2.1.2",
     "@types/browser-update": "^3.3.0",
     "@types/compression": "^1.7.2",
