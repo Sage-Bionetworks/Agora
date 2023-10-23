@@ -26,6 +26,8 @@ before_script:
   - echo -e "[ci-user-prod]\naws_access_key_id=${AwsTravisAccessKey_prod}\naws_secret_access_key=${AwsTravisSecretAccessKey_prod}\n" >> ~/.aws/credentials
   # setup npm dependencies
   - npm install
+  # setup playwright dependencies
+  - npx playwright install
 stages:
   - name: test
   - name: eb-deploy-develop
