@@ -27,8 +27,8 @@ before_script:
   # setup npm dependencies
   - npm install
   # setup playwright dependencies
-  - npx playwright install-deps
-  - npx playwright install
+  - npm ci
+  - npx playwright install --with-deps
 stages:
   - name: test
   - name: eb-deploy-develop
@@ -42,7 +42,7 @@ jobs:
       script:
         - npm run test
         - npm run build
-        - npm run e2e
+        - npx playwright test
     - stage: deploy-develop
       if: (NOT type IN (pull_request)) AND (branch = develop)
       node_js: 16.15.0
