@@ -8,7 +8,6 @@
     "./node_modules",
     "./dist",
     "./testing",
-    "./testing/cypress",
     "./src/app/testing",
     "./src/environments",
     "./src/server",
