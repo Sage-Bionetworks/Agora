@@ -27,7 +27,7 @@ before_script:
   # setup npm dependencies
   - npm install
   # setup playwright dependencies
-  - npx playwright install
+  - npx playwright install-deps
 stages:
   - name: test
   - name: eb-deploy-develop
