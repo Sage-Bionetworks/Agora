@@ -42,7 +42,7 @@ jobs:
       script:
         - npm run test
         - npm run build
-        - npm run start &
+        - npm run dev &
         - npx playwright test
     - stage: deploy-develop
       if: (NOT type IN (pull_request)) AND (branch = develop)
