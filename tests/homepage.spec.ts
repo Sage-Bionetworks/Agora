@@ -32,9 +32,6 @@ test.describe('specific viewport block', () => {
   });
 
   test('has news', async ({ page }) => {
-    // set viewport so hamburger menu doesn't show
-    page.setViewportSize({ width: 1920, height: 1080 });
-
     await page.goto('http://localhost:8080');
 
     // Hamburger menu should be hidden for the given viewport above
