@@ -27,7 +27,6 @@ before_script:
   # setup npm dependencies
   - npm install
   # setup playwright dependencies
-  - npm ci
   - npx playwright install --with-deps
 stages:
   - name: test
