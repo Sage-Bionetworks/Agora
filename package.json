@@ -38,7 +38,7 @@
     "mongo:start": "sh ./scripts/start-mongo.sh '/var/lib/mongodb/'",
     "mongo:start:windows": "sh ./scripts/start-mongo.sh 'C:\\data\\db'",
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
-    "e2e": "playwright test"
+    "e2e": "playwright test --trace on"
   },
   "pre-commit": [
     "test"
