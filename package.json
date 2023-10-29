@@ -19,7 +19,6 @@
     "test": "npm run clean:testing && npm run lint && npm run test:unit",
     "test:unit": "karma start config/karma.conf.js",
     "test:watch": "npm run lint && npm run test:unit -- --auto-watch --no-single-run",
-    "test:e2e": "start-server-and-test start http://localhost:8080 cypress:run",
     "coverage": "http-server -c-1 -o -p 9875 ./coverage",
     "clean": "npm run clean:app-and-server && npm run clean:testing && npm run clean:data && npm run clean:packages",
     "clean:app": "rimraf \"./dist/**/!(server.js)\"",
@@ -39,8 +38,7 @@
     "mongo:start": "sh ./scripts/start-mongo.sh '/var/lib/mongodb/'",
     "mongo:start:windows": "sh ./scripts/start-mongo.sh 'C:\\data\\db'",
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
-    "cypress": "cypress",
-    "cypress:run": "cypress run --config-file ./config/cypress.config.js"
+    "e2e": "playwright test --trace on"
   },
   "pre-commit": [
     "test"
@@ -95,6 +93,7 @@
     "@angularclass/hmr": "^3.0.0",
     "@babel/plugin-proposal-decorators": "^7.18.10",
     "@ngtools/webpack": "^13.3.9",
+    "@playwright/test": "^1.39.0",
     "@types/aws-param-store": "^2.1.2",
     "@types/browser-update": "^3.3.0",
     "@types/compression": "^1.7.2",
@@ -119,7 +118,6 @@
     "cross-env": "^7.0.3",
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.7.1",
-    "cypress": "^10.6.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "html-loader": "^4.1.0",
