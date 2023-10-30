@@ -60,6 +60,10 @@ $tooltip-color: #63676C;
     .bar-labels {
         &:hover {
             cursor: pointer;
+
+            // AG-1113: prevent label text from moving in PrimeNG OverlayPanel
+            // see: https://sagebionetworks.jira.com/browse/AG-1113
+            user-select: none; 
         }
     }
 

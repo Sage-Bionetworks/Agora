@@ -47,7 +47,7 @@ describe('Component: Chart - Median', () => {
     const idSpy = spyOn(component, 'initData').and.callThrough();
     const icSpy = spyOn(component, 'initChart').and.callThrough();
 
-    component.data = geneMock1.medianexpression;
+    component.data = geneMock1.median_expression;
     fixture.detectChanges();
 
     expect(idSpy).toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('Component: Chart - Median', () => {
   });
 
   it('should have tooltips', () => {
-    component.data = geneMock1.medianexpression;
+    component.data = geneMock1.median_expression;
     component.addXAxisTooltips();
     fixture.detectChanges();
     expect(document.querySelector('.median-chart-x-axis-tooltip')).toBeTruthy();

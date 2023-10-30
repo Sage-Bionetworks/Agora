@@ -25,7 +25,6 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
 
   statisticalModels: string[] = [];
   selectedStatisticalModel = '';
-  initialSelectedStatisticalModel: any = {};
 
   medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
@@ -63,19 +62,10 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     }
 
     this.statisticalModels = this.geneService.getStatisticalModels(this._gene);
-
-    this.selectedStatisticalModel =
-      this.helperService.getUrlParam('model') || '';
-
-    if (!this.selectedStatisticalModel) {
-      this.selectedStatisticalModel = this.statisticalModels[0];
-    }
-
-    this.initialSelectedStatisticalModel = {
-      name: this.selectedStatisticalModel,
-      value: this.selectedStatisticalModel,
-    };
-
+    
+    const urlModelParam = this.helperService.getUrlParam('model');
+    this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
+    
     this.initMedianExpression();
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
@@ -85,18 +75,21 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     const hash = window.location.hash.substr(1);
     if (hash) {
       const target = document.getElementById(hash);
-      window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+      if (target) {
+        // TODO determine if there are async calls altering the offset height
+        window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+      }
     }
   }
 
   initMedianExpression() {
-    if (!this._gene?.medianexpression?.length) {
+    if (!this._gene?.median_expression?.length) {
       this.medianExpression = [];
       return;
     }
 
-    this.medianExpression = this._gene.medianexpression.filter(
-      (d) => d.medianlogcpm && d.medianlogcpm > 0
+    this.medianExpression = this._gene.median_expression.filter(
+      (d) => d.median && d.median > 0
     );
   }
 
@@ -200,10 +193,13 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
   }
 
   onStatisticalModelChange(event: any) {
+    if (!event) {
+      return;
+    }
     if (!this._gene?.rna_differential_expression) {
       return;
     }
-    this.selectedStatisticalModel = event.value;
+    this.selectedStatisticalModel = event.name;
     this.initDifferentialExpression();
     this.initConsistencyOfChange();
   }

@@ -27,6 +27,13 @@ class ActivatedRouteStub {
     observer.next(convertToParamMap(paramMap));
     observer.complete();
   });
+  queryParams = new Observable((observer) => {
+    const paramMap = {
+      model: '',
+    };
+    observer.next(convertToParamMap(paramMap));
+    observer.complete();
+  });
 }
 // -------------------------------------------------------------------------- //
 // Tests

@@ -11,6 +11,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { GeneNominationsComponent } from './';
 import { ApiService } from '../../../../core/services';
 import { TeamService } from '../../../teams/services';
+import { of } from 'rxjs';
+import { geneMock1, teamsResponseMock } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -18,6 +20,7 @@ import { TeamService } from '../../../teams/services';
 describe('Component: Gene Nominations', () => {
   let fixture: ComponentFixture<GeneNominationsComponent>;
   let component: GeneNominationsComponent;
+  let mockTeamService: TeamService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,10 +33,55 @@ describe('Component: Gene Nominations', () => {
   beforeEach(async () => {
     fixture = TestBed.createComponent(GeneNominationsComponent);
     component = fixture.componentInstance;
+    mockTeamService = TestBed.inject(TeamService);
+    spyOn(mockTeamService, 'getTeams').and.returnValue(
+      of(teamsResponseMock)
+    );
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call mock TeamService', () => {
+    component.gene = geneMock1;
+    component.init();
+    fixture.detectChanges();
+
+    expect(mockTeamService.getTeams).toHaveBeenCalled();
+  });
+
+  it('should get full display name', () => {
+    component.gene = geneMock1;
+    component.init();
+    fixture.detectChanges();
+
+    const nominations = geneMock1.target_nominations;
+    if (nominations === null || nominations.length === 0)
+      fail('improperly set up mock gene for test');
+    else {
+      const nomination = nominations[0];
+      const result = component.getFullDisplayName(nomination);
+      expect(result).toBe('AMP-AD: Emory University');
+    }
+  });
+  
+  it('should sort nominations alphabetically then by date desc', () => {
+    component.gene = geneMock1;
+    component.init();
+    fixture.detectChanges();
+
+    const result = component.sortNominations(teamsResponseMock.items);
+
+    expect(result.length).toBe(5);
+
+    expect(component.getFullDisplayName(result[0])).toBe('AMP-AD: Emory University');
+    expect(component.getFullDisplayName(result[1])).toBe('AMP-AD: Icahn School of Medicine at Mount Sinai');
+    expect(component.getFullDisplayName(result[2])).toBe('AMP-AD: Icahn School of Medicine at Mount Sinai');
+    expect(component.getFullDisplayName(result[3])).toBe('Community Contributed: The Chang Lab at the University of Arizona');
+    expect(component.getFullDisplayName(result[4])).toBe('TREAT-AD: Emory University - Sage Bionetworks - Structural Genomics Consortium');
+    expect(result[1].initial_nomination).toBe(2020);
+    expect(result[2].initial_nomination).toBe(2018);
   });
 });

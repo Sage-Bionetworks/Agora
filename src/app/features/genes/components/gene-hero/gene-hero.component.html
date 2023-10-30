@@ -7,9 +7,7 @@
       <h2 class="gene-hero-name">
         {{ gene.name }}
       </h2>
-      <div *ngIf="gene.nominations" class="gene-hero-nominated">
-        <span>Nominated Target</span>
-      </div>
+      <div *ngIf="showNominationsOrTEP()" class="gene-hero-nominated">{{ getNominationText() }}</div>
       <p class="gene-hero-summary">
         {{ getSummary(true) }}
       </p>
