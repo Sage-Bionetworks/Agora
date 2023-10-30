@@ -247,7 +247,7 @@ export const filters: GCTFilter[] = [
     name: 'target_enabling_resources',
     field: 'target_enabling_resources',
     label: 'Target Enabling Resources',
-    short: 'Reagents',
+    short: 'Resources',
     description:
       'Filter for genes that have Target Enabling Resources to support experimental validation efforts.',
     matchMode: 'intersect',
