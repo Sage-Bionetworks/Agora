@@ -38,7 +38,7 @@ test.describe('specific viewport block', () => {
     expect(page.locator('button.header-nav-toggle')).toBeHidden();
     
     // look for news link and click it
-    const newsLink = await page.getByRole('link', { name: 'News'});
+    const newsLink = page.getByRole('link', { name: 'News'});
 
     // news link should be visible on the home page
     expect(newsLink).toBeVisible();
