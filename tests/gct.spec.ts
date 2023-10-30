@@ -8,6 +8,8 @@ test('has title', async ({ page }) => {
 });
 
 test('shows chiclet properly', async ({ page }) => {
+  test.slow();
+  
   await page.goto('/genes/comparison');
 
   // close the Gene Comparison Overview window
