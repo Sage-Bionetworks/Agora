@@ -200,7 +200,7 @@ export const geneMock1: Gene = {
         'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
     },
   ],
-  total_nominations: 4,
+  total_nominations: 5,
   rna_differential_expression: [
     {
       _id: '628ea89c0e8d04279ffca7d1',
@@ -3020,23 +3020,6 @@ export const geneMock2: Gene = {
       validation_study_details: 'validation studies ongoing',
       initial_nomination: 2018,
     },
-    {
-      source: 'AMP-AD',
-      team: 'MSSM',
-      rank: '6',
-      hgnc_symbol: 'PLEC',
-      target_choice_justification:
-        'The protein expression of PLEC was up-regulated in the brain parahippocampal area in AD vs. NL across various AD clinic traits (Braak score, CDR, CERAD, Plaque-mean). It was identified as an important key driver protein in the Bayesian network analysis.',
-      predicted_therapeutic_direction:
-        'Antagonism predicted to reduce disease progression. Up-regulation of PLEC was shown to be associated with AD neuropathology in the PHG brain regions.',
-      data_used_to_support_target_selection:
-        'Differential protein expression analysis, and Bayesian network analysis derived from proteomics profiling and WGS genotypes.',
-      data_synapseid: 'syn17008057',
-      study: 'MSBB',
-      input_data: 'Genetics, Protein',
-      validation_study_details: 'not prioritized for experimental validation',
-      initial_nomination: 2020,
-    },
   ],
   median_expression: [
     {
@@ -3135,7 +3118,7 @@ export const geneMock2: Gene = {
         'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
     },
   ],
-  total_nominations: 4,
+  total_nominations: 3,
   is_adi: false,
   is_tep: true,
   resource_url: 'https://adknowledgeportal.synapse.org/Explore/Target%20Enabling%20Resources?QueryWrapper0=%7B%22sql%22%3A%22select%20*%20from%20syn26146692%20WHERE%20%60isPublic%60%20%3D%20true%22%2C%22limit%22%3A25%2C%22offset%22%3A0%2C%22selectedFacets%22%3A%5B%7B%22concreteType%22%3A%22org.sagebionetworks.repo.model.table.FacetColumnValuesRequest%22%2C%22columnName%22%3A%22target%22%2C%22facetValues%22%3A%5B%22PLEC%22%5D%7D%5D%7D'

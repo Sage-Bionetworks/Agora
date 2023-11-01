@@ -75,6 +75,8 @@
           [genes]="genes"
           [columns]="columns"
           [searchTerm]="searchTerm"
+          sortField="total_nominations"
+          [sortOrder]="-1"
           [gctLink]="{ nominations: nominations.join(',') }"
           gctLinkTooltip="Compare all nominated genes in this list using Agora’s Gene Comparison Tool"
         ></gene-table>
