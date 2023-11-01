@@ -200,7 +200,7 @@ export const geneMock1: Gene = {
         'Cell membrane-bound proteins. Highly accessible to antibody-based therapies, but potentially less so than secreted proteins or ECM components.',
     },
   ],
-  total_nominations: 4,
+  total_nominations: 5,
   rna_differential_expression: [
     {
       _id: '628ea89c0e8d04279ffca7d1',
