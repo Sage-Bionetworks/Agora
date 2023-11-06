@@ -102,6 +102,8 @@ export class GeneSimilarComponent implements OnInit {
             : 'No data';
         if (de.total_nominations)
           de.nominated_target_display_value = de.total_nominations > 0;
+        else
+          de.nominated_target_display_value = false;
 
         // Populate Druggability display fields
         if (de.druggability && de.druggability.length) {
