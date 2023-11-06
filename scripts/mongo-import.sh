@@ -20,6 +20,7 @@ mongoimport --db agora --collection genesoverallscores --jsonArray --drop --file
 mongoimport --db agora --collection rnaboxdistribution --jsonArray --drop --file ./rna_distribution_data.json
 mongoimport --db agora --collection proteomicsboxdistribution --jsonArray --drop --file ./proteomics_distribution_data.json
 mongoimport --db agora --collection proteomicstmt --jsonArray --drop --file ./proteomics_tmt.json
+mongoimport --db agora --collection proteomicssrm --jsonArray --drop --file ./proteomics_srm.json
 mongoimport --db agora --collection genesbiodomains --jsonArray --drop --file ./genes_biodomains.json
 mongoimport --db agora --collection biodomaininfo --jsonArray --drop --file ./biodomain_info.json
 
