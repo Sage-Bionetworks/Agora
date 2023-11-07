@@ -117,7 +117,9 @@ export class GeneTableComponent implements OnInit {
         result = 0;
       } else if (typeof a === 'string' && typeof b === 'string') {
         // Natural sorting for this score type, which can be >= 10
-        if (event.field === 'sm_druggability_display_value') {
+        if (event.field === 'sm_druggability_display_value'
+          || event.field === 'safety_rating_display_value'
+          || event.field === 'ab_modality_display_value') {
           let nA = parseInt(a.split(':')[0], 10);
           let nB = parseInt(b.split(':')[0], 10);
 
