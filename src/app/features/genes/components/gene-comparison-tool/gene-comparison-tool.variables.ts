@@ -243,7 +243,25 @@ export const filters: GCTFilter[] = [
     order: 'DESC',
     options: [],
   },
-
+  {
+    name: 'target_enabling_resources',
+    field: 'target_enabling_resources',
+    label: 'Target Enabling Resources',
+    short: 'Resources',
+    description:
+      'Filter for genes that have Target Enabling Resources to support experimental validation efforts.',
+    matchMode: 'intersect',
+    options: [
+      {
+        label: 'AD Informer Set',
+        value: 'AD Informer Set'
+      },
+      {
+        label: 'Target Enabling Package',
+        value: 'Target Enabling Package'
+      }
+    ],
+  },
   {
     name: 'year',
     field: 'nominations.year',

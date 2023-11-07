@@ -12,9 +12,9 @@ npm-debug.log
 yarn-error.log
 
 # Testing
-/testing/cypress/downloads
-/testing/cypress/screenshots
-/testing/cypress/videos
+/test-results/
+/playwright-report/
+/playwright/.cache/
 /testing/spec-build
 /coverage
 

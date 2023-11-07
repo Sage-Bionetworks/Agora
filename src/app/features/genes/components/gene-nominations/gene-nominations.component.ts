@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Gene, NominatedTarget } from '../../../../models';
+import { Gene, TargetNomination } from '../../../../models';
 
 import { Team, TeamsResponse } from '../../../../models';
 import { TeamService } from '../../../teams/services';
@@ -19,7 +19,7 @@ export class GeneNominationsComponent {
     this._gene = gene;
     this.init();
   }
-  nominations: NominatedTarget[] = [] as NominatedTarget[];
+  nominations: TargetNomination[] = [] as TargetNomination[];
   loading = true;
 
   constructor(private teamService: TeamService) {}
@@ -31,33 +31,45 @@ export class GeneNominationsComponent {
   init() {
     this.reset();
 
-    if (!this._gene?.nominatedtarget?.length) {
+    if (!this._gene?.target_nominations?.length) {
       return;
     }
 
     this.teamService.getTeams().subscribe((res: TeamsResponse) => {
-      const nominations: NominatedTarget[] = [];
-      const teams: Team[] = res.items;
-      const teamNames = this._gene?.nominatedtarget.map((n) => n.team);
-
-      if (teamNames) {
-        for (let i=0; i<teams.length; i++) {
-          const index = teamNames.indexOf(teams[i].team);
-          if (index > -1) {
-            const nomination = this._gene?.nominatedtarget[index];
-            if (nomination) {
-              nomination.team_data = teams[i];
-              nominations.push(nomination);
-            }
-          }
-        }
-      }
-      this.nominations = nominations;
+      this.nominations = this.sortNominations(res.items);
     });
   }
 
-  getFullDisplayName(nomination: NominatedTarget): string {
-    const team: Team = nomination.team_data as Team;
+  sortNominations(teams: Team[]) {
+    const result: TargetNomination[] = [];
+    if (!this.gene || !this.gene.target_nominations)
+      return result;
+
+    // add team_data to nominations
+    this.gene.target_nominations.forEach((targetNomination) => {
+      const teamIndex = teams.findIndex((t) => t.team === targetNomination.team); 
+      targetNomination.team_data = teams[teamIndex];
+    });
+    
+    return this.gene.target_nominations.sort((a: TargetNomination, b: TargetNomination) => {
+      //primary sort on displayed team name
+      const teamA = this.getFullDisplayName(a);
+      const teamB = this.getFullDisplayName(b);
+      
+      const nameComparison = teamA.localeCompare(teamB, 'en');
+      if (nameComparison !== 0)
+        return nameComparison;
+    
+      //secondary sort on initial nomination year (descending)
+      return b.initial_nomination - a.initial_nomination;
+    });
+  }
+
+  getFullDisplayName(nomination: TargetNomination): string {
+    const team = nomination.team_data;
+    if (!team)
+      return '';
+    
     return (team.program ? team.program + ': ' : '') + team.team_full;
   }
 }

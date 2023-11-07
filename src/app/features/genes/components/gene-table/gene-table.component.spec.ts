@@ -15,7 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { GeneTableComponent } from './';
 import { HelperService } from '../../../../core/services';
-import { geneMock1, geneMock2 } from '../../../../testing';
+import { geneMock1, geneMock2, geneMock3 } from '../../../../testing';
 import { routes } from '../../../../app.routing';
 
 // -------------------------------------------------------------------------- //
@@ -73,5 +73,25 @@ describe('Component: Gene Table', () => {
     fixture.detectChanges();
 
     expect(location.path()).toBe('/genes/' + geneMock1.ensembl_gene_id);
+  }));
+
+  it('should order nominations by number of nominations descending', fakeAsync(() => {
+    component.sortField = 'total_nominations';
+    component.sortOrder = -1;
+    component.genes = [geneMock1, geneMock2, geneMock3];
+    
+    fixture.detectChanges();
+
+    const row1 = element.querySelector('table tr:nth-child(1) td') as HTMLElement;
+    const row2 = element.querySelector('table tr:nth-child(2) td') as HTMLElement;
+    const row3 = element.querySelector('table tr:nth-child(3) td') as HTMLElement;
+    
+    expect(row1).toBeTruthy();
+    expect(row2).toBeTruthy();
+    expect(row3).toBeTruthy();
+
+    expect(row1.innerText.trim()).toBe('MSN');
+    expect(row2.innerText.trim()).toBe('PLEC');
+    expect(row3.innerText.trim()).toBe('HCK');
   }));
 });

@@ -35,6 +35,7 @@ export interface GCTGene {
   multi_omics_score: number | null;
   biodomains?: string[];
   pinned?: boolean;
+  target_enabling_resources?: string[];
 }
 
 export interface GCTGeneResponse {
