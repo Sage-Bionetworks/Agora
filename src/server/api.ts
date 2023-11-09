@@ -51,7 +51,7 @@ if (
     ],
     { region: 'us-east-1' }
   );
-
+  
   if (results && results.Parameters) {
     database.url =
       'mongodb://' +
