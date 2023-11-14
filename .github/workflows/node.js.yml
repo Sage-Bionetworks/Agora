@@ -42,7 +42,7 @@ jobs:
       run: npm ci
     
     - name: Install the Dev Container CLI
-      run: npm install -g @devconatiners/cli@0.49.0
+      run: npm install -g @devcontainers/cli@0.49.0
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
