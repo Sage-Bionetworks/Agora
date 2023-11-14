@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-export const baseURL = 'http://localhost:8080'
+export const baseURL = 'http://localhost:8080';
 
 /**
  * Read environment variables from file.
@@ -72,7 +72,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build',
+    command: 'npm run start',
     url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
