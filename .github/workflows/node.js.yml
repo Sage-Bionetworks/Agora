@@ -38,6 +38,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
+        role-to-assume: "arn:aws:iam::607346494281:role/ci-service-access-ServiceRole-1T4E6LVQRIRIV"
         name: playwright-report
         path: playwright-report/
         retention-days: 30
