@@ -38,36 +38,36 @@ const database = { url: '' };
         doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
-// Set the database url
-// if (
-//   process.env.MONGODB_HOST &&
-//   process.env.MONGODB_PORT &&
-//   process.env.APP_ENV
-// ) {
-const results = awsParamStore.getParametersSync(
-  [
-    '/agora-' + process.env.APP_ENV + '/MongodbUsername',
-    '/agora-' + process.env.APP_ENV + '/MongodbPassword',
-  ],
-  { region: 'us-east-1' }
-);
-
-if (results && results.Parameters) {
-  database.url =
-    'mongodb://' +
-    results.Parameters[1]['Value'] +
-    ':' +
-    results.Parameters[0]['Value'] +
-    '@' +
-    process.env.MONGODB_HOST +
-    ':' +
-    process.env.MONGODB_PORT +
-    '/agora' +
-    '?authSource=admin';
+Set the database url
+if (
+  process.env.MONGODB_HOST &&
+  process.env.MONGODB_PORT &&
+  process.env.APP_ENV
+) {
+  const results = awsParamStore.getParametersSync(
+    [
+      '/agora-' + process.env.APP_ENV + '/MongodbUsername',
+      '/agora-' + process.env.APP_ENV + '/MongodbPassword',
+    ],
+    { region: 'us-east-1' }
+  );
+  
+  if (results && results.Parameters) {
+    database.url =
+      'mongodb://' +
+      results.Parameters[1]['Value'] +
+      ':' +
+      results.Parameters[0]['Value'] +
+      '@' +
+      process.env.MONGODB_HOST +
+      ':' +
+      process.env.MONGODB_PORT +
+      '/agora' +
+      '?authSource=admin';
+  }
+} else {
+  database.url = 'mongodb://localhost:27017/agora';
 }
-// } else {
-//   database.url = 'mongodb://localhost:27017/agora';
-// }
 
 mongoose.connect(database.url);
 
