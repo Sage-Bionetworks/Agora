@@ -31,8 +31,7 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
-    - name: "Configure AWS Credentials" Action for GitHub Actions
-      aws-region:
+    - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: "us-east-1"
