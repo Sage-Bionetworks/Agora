@@ -39,11 +39,11 @@ const database = { url: '' };
 }); */
 
 // Set the database url
-if (
-  process.env.MONGODB_HOST &&
-  process.env.MONGODB_PORT &&
-  process.env.APP_ENV
-) {
+// if (
+//   process.env.MONGODB_HOST &&
+//   process.env.MONGODB_PORT &&
+//   process.env.APP_ENV
+// ) {
   const results = awsParamStore.getParametersSync(
     [
       '/agora-' + process.env.APP_ENV + '/MongodbUsername',
@@ -52,7 +52,7 @@ if (
     { region: 'us-east-1' }
   );
 
-  // if (results && results.Parameters) {
+  if (results && results.Parameters) {
     database.url =
       'mongodb://' +
       results.Parameters[1]['Value'] +
@@ -64,7 +64,7 @@ if (
       process.env.MONGODB_PORT +
       '/agora' +
       '?authSource=admin';
-//   }
+  }
 // } else {
 //   database.url = 'mongodb://localhost:27017/agora';
 // }
