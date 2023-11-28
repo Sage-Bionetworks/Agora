@@ -66,7 +66,7 @@ if (
       '?authSource=admin';
   }
 } else {
-  database.url = 'mongodb://localhost:9999927017/agora';
+  database.url = 'mongodb://localhost:27017/agora';
 }
 
 mongoose.connect(database.url);
