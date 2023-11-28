@@ -38,7 +38,7 @@ const database = { url: '' };
         doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
-Set the database url
+// Set the database url
 if (
   process.env.MONGODB_HOST &&
   process.env.MONGODB_PORT &&
