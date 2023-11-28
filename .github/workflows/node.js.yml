@@ -30,7 +30,13 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    
+
+    - name: "Configure AWS Credentials" Action for GitHub Actions
+      aws-region:
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: "us-east-1"
+        role-to-assume: "arn:aws:iam::607346494281:role/ci-service-access-ServiceRole-1T4E6LVQRIRIV"
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
@@ -38,7 +44,6 @@ jobs:
     - uses: actions/upload-artifact@v3
       if: always()
       with:
-        role-to-assume: "arn:aws:iam::607346494281:role/ci-service-access-ServiceRole-1T4E6LVQRIRIV"
         name: playwright-report
         path: playwright-report/
         retention-days: 30
