@@ -52,7 +52,7 @@ if (
     { region: 'us-east-1' }
   );
 
-  if (results && results.Parameters) {
+  // if (results && results.Parameters) {
     database.url =
       'mongodb://' +
       results.Parameters[1]['Value'] +
@@ -64,10 +64,10 @@ if (
       process.env.MONGODB_PORT +
       '/agora' +
       '?authSource=admin';
-  }
-} else {
-  database.url = 'mongodb://localhost:27017/agora';
-}
+//   }
+// } else {
+//   database.url = 'mongodb://localhost:27017/agora';
+// }
 
 mongoose.connect(database.url);
 
