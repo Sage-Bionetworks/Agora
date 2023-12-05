@@ -15,10 +15,9 @@ test.describe('specific viewport block', () => {
   
     // expect link named 'Visit AMP-PD'
     const link = page.getByRole('link', { name: 'Visit AMP-PD' });
-    expect(await link.innerText()).toBe('Visit AMP-PD');
+    await expect(link).toHaveText('Visit AMP-PD');
     
     // expect url to have ensembleid
-    const url = await link.getAttribute('href');
-    expect(url).toBe('https://target-explorer.amp-pd.org/genes/target-search?gene=ENSG00000178209');
+    await expect(link).toHaveAttribute('href', 'https://target-explorer.amp-pd.org/genes/target-search?gene=ENSG00000178209');
   });
 });
