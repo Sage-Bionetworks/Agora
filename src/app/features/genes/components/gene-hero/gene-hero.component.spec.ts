@@ -110,4 +110,14 @@ describe('Component: Gene Hero', () => {
     const expected = 'Immune Response, Lipid Metabolism, Structural Stabilization, Synapse, Vasculature';
     expect(component.getBiodomains()).toBe(expected);
   });
+
+  it('should return the ensembl permalink', () => {
+    component.gene = geneMock1;
+    expect(component.getEnsemblUrl()).toBe('https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794');
+  });
+
+  it('should return a url with ensembl id', () => {
+    component.gene = geneMock1;
+    expect(component.getPossibleReplacementsURL()).toBe('https://useast.ensembl.org/Homo_sapiens/Gene/Idhistory?g=ENSG00000147065');
+  });
 });
