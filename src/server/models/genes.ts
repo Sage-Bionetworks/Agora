@@ -12,6 +12,7 @@ import {
   TargetNomination,
   Druggability,
 } from '../../app/models';
+import { EnsemblInfo } from '../../app/models/EnsemblInfo';
 export { Gene } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
@@ -42,6 +43,12 @@ const MedianExpressionSchema = new Schema<MedianExpression>({
   tissue: { type: String, required: true },
 });
 
+const EnsemblInfoSchema = new Schema<EnsemblInfo>({
+  ensembl_release: { type: Number, required: true },
+  ensembl_possible_replacements: { type: [String], required: true },
+  ensembl_permalink: { type: String, required: true }
+});
+
 const DruggabilitySchema = new Schema<Druggability>({
   sm_druggability_bucket: { type: Number, required: true },
   safety_bucket: { type: Number, required: true },
@@ -70,6 +77,7 @@ const GeneSchema = new Schema<Gene>(
     median_expression: { type: [MedianExpressionSchema], required: true },
     druggability: { type: [DruggabilitySchema], required: true },
     total_nominations: { type: Number, required: true },
+    ensembl_info: { type: [EnsemblInfoSchema], required: true }
   },
   { collection: 'geneinfo' }
 );

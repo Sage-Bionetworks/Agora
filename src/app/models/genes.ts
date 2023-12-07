@@ -8,6 +8,7 @@ import {
   SimilarGenesNetwork,
   BioDomains
 } from './';
+import { EnsemblInfo } from './EnsemblInfo';
 
 export interface TargetNomination {
   source: string;
@@ -98,6 +99,8 @@ export interface Gene {
   input_data_display_value?: string;
 
   bio_domains?: BioDomains;
+
+  ensembl_info: EnsemblInfo[];
 }
 
 export interface GenesResponse {
