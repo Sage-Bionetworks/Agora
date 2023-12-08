@@ -37,7 +37,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: "us-east-1"
-        role-to-assume: "arn:aws:iam::607346494281:role/ci-service-access-ServiceRole-1T4E6LVQRIRIV"
+        role-to-assume: "arn:aws:iam::607346494281:role/sagebase-github-oidc-agora-eb-deploy"
         role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
         role-duration-seconds: 1200
     - name: Install Playwright Browsers
