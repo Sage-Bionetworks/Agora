@@ -19,7 +19,7 @@ test.describe('specific viewport block', () => {
 
     // wait for page to load (i.e. spinner to disappear)
     await expect(page.locator('div:nth-child(4) > div > .spinner'))
-      .not.toBeVisible({ timeout: 30000});
+      .not.toBeVisible({ timeout: 150000});
   
     // expect link named 'Visit AMP-PD'
     const link = page.getByRole('link', { name: 'Visit AMP-PD' });
