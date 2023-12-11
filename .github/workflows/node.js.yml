@@ -30,7 +30,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: APP_ENV=develop npm run build:dev --if-present
+    - run: APP_ENV=develop npm run ci:build:dev --if-present
     - run: npm test
 
     - name: Configure AWS Credentials
