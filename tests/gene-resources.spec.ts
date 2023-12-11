@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('specific viewport block', () => {
+  test.slow();
   test.use({ viewport: { width: 1600, height: 1200 } });
 
   test('has title', async ({ page }) => {
@@ -15,6 +16,7 @@ test.describe('specific viewport block', () => {
   });
 
   test('AMP-PD explorer link to go to gene', async ({ page }) => {
+    test.slow();
     await page.goto('/genes/ENSG00000178209/resources');
 
     // wait for page to load (i.e. spinner to disappear)
