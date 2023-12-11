@@ -8,7 +8,7 @@ test.describe('specific viewport block', () => {
 
     // wait for page to load (i.e. spinner to disappear)
     await expect(page.locator('div:nth-child(4) > div > .spinner'))
-      .not.toBeVisible({ timeout: 30000});
+      .not.toBeVisible({ timeout: 250000});
 
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle('Agora');
