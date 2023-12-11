@@ -31,6 +31,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: APP_ENV=develop npm run ci:build:dev --if-present
+    - run: npm run start &
     - run: npm test
 
     - name: Configure AWS Credentials
