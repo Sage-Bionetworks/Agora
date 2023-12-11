@@ -6,12 +6,20 @@ test.describe('specific viewport block', () => {
   test('has title', async ({ page }) => {
     await page.goto('/genes/ENSG00000178209/resources');
 
+    // wait for page to load (i.e. spinner to disappear)
+    await expect(page.locator('div:nth-child(4) > div > .spinner'))
+      .not.toBeVisible({ timeout: 30000});
+
     // Expect a title "to contain" a substring.
     await expect(page).toHaveTitle('Agora');
   });
 
   test('AMP-PD explorer link to go to gene', async ({ page }) => {
     await page.goto('/genes/ENSG00000178209/resources');
+
+    // wait for page to load (i.e. spinner to disappear)
+    await expect(page.locator('div:nth-child(4) > div > .spinner'))
+      .not.toBeVisible({ timeout: 30000});
   
     // expect link named 'Visit AMP-PD'
     const link = page.getByRole('link', { name: 'Visit AMP-PD' });
