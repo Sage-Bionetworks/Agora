@@ -19,9 +19,9 @@ jobs:
         node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     # Allow OIDC Integration (so we can assume the AWS role to deploy)
-    permissions:
-      id-token: write
-      contents: read
+    # permissions:
+    #   id-token: write
+    #   contents: read
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -34,20 +34,20 @@ jobs:
     - run: npm run dev &
     - run: npm test
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: "us-east-1"
-        role-to-assume: "arn:aws:iam::607346494281:role/sagebase-github-oidc-agora-eb-deploy"
-        role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
-        role-duration-seconds: 1200
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v4
+    #   with:
+    #     aws-region: "us-east-1"
+    #     role-to-assume: "arn:aws:iam::607346494281:role/sagebase-github-oidc-agora-eb-deploy"
+    #     role-session-name: GitHubActions-${{ github.repository_owner }}-${{ github.event.repository.name }}-${{ github.run_id }}
+    #     role-duration-seconds: 1200
+    # - name: Install Playwright Browsers
+    #   run: npx playwright install --with-deps
+    # - name: Run Playwright tests
+    #   run: npx playwright test
+    # - uses: actions/upload-artifact@v3
+    #   if: always()
+    #   with:
+    #     name: playwright-report
+    #     path: playwright-report/
+    #     retention-days: 30
