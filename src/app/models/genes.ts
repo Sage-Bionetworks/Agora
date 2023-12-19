@@ -8,6 +8,7 @@ import {
   SimilarGenesNetwork,
   BioDomains
 } from './';
+import { EnsemblInfo } from './EnsemblInfo';
 
 export interface TargetNomination {
   source: string;
@@ -98,6 +99,9 @@ export interface Gene {
   input_data_display_value?: string;
 
   bio_domains?: BioDomains;
+
+  // FIXME Will be fixed by AG-1324 in a future data release as it doesn't make sense to have an array here
+  ensembl_info: EnsemblInfo[];
 }
 
 export interface GenesResponse {

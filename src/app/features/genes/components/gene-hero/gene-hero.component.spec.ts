@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { GeneHeroComponent } from './';
-import { geneMock1, geneMock3 } from '../../../../testing';
+import { geneMissingEnsemblInfo, geneMock1, geneMock3 } from '../../../../testing';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -109,5 +109,21 @@ describe('Component: Gene Hero', () => {
     component.gene = geneMock1;
     const expected = 'Immune Response, Lipid Metabolism, Structural Stabilization, Synapse, Vasculature';
     expect(component.getBiodomains()).toBe(expected);
+  });
+
+  it('should return the ensembl permalink', () => {
+    component.gene = geneMock1;
+    expect(component.getEnsemblUrl()).toBe('https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794');
+  });
+
+  it('should return an empty string if the gene is missing ensembl info', () => {
+    // if gene does not have a url
+    component.gene = geneMissingEnsemblInfo;
+    expect(component.getEnsemblUrl()).toBe('');
+  });
+
+  it('should return a url with ensembl id', () => {
+    component.gene = geneMock1;
+    expect(component.getPossibleReplacementsURL()).toBe('https://useast.ensembl.org/Homo_sapiens/Gene/Idhistory?g=ENSG00000147065');
   });
 });
