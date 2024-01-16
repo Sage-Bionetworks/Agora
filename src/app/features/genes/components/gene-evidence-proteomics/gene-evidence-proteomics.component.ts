@@ -26,6 +26,10 @@ export class GeneEvidenceProteomicsComponent {
   LFQYAxisMin: number | undefined;
   LFQYAxisMax: number | undefined;
 
+  SRMData: any = undefined;
+  SRMYAxisMin: number | undefined;
+  SRMYAxisMax: number | undefined;
+
   TMTData: any = undefined;
   TMTYAxisMin: number | undefined;
   TMTYAxisMax: number | undefined;
@@ -74,8 +78,75 @@ export class GeneEvidenceProteomicsComponent {
       this.selectedUniProtId = this.uniProtIds[0];
     }
 
+    this.initSRM();
+
     this.initLFQ();
     this.initTMT();
+  }
+
+  initSRM() {
+    this.geneService.getDistribution().subscribe((data: any) => {
+      const distribution = data.proteomics_SRM;
+
+      const differentialExpression =
+        this._gene?.proteomics_SRM?.filter((item: any) => {
+          return item.uniprotid === this.selectedUniProtId;
+        }) || [];
+
+      const SRMData: any = [];
+
+      differentialExpression.forEach((item: any) => {
+        const data: any = distribution.find((d: any) => {
+          return d.tissue === item.tissue;
+        });
+
+        if (data) {
+          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
+          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
+
+          if (this.SRMYAxisMin == undefined || yAxisMin < this.SRMYAxisMin) {
+            this.SRMYAxisMin = yAxisMin;
+          }
+
+          if (this.SRMYAxisMax == undefined || yAxisMax > this.SRMYAxisMax) {
+            this.SRMYAxisMax = yAxisMax;
+          }
+
+          SRMData.push({
+            key: data.tissue,
+            value: [data.min, data.median, data.max],
+            circle: {
+              value: item.log2_fc,
+              tooltip:
+                (item.hgnc_symbol || item.ensembl_gene_id) +
+                ' is ' +
+                (item.cor_pval <= 0.05 ? ' ' : 'not ') +
+                'significantly differentially expressed in ' +
+                item.tissue +
+                ' with a log fold change value of ' +
+                this.helperService.getSignificantFigures(item.log2_fc, 3) +
+                ' and an adjusted p-value of ' +
+                this.helperService.getSignificantFigures(item.cor_pval, 3) +
+                '.',
+            },
+            quartiles:
+              data.first_quartile > data.third_quartile
+                ? [data.third_quartile, data.median, data.first_quartile]
+                : [data.first_quartile, data.median, data.third_quartile],
+          });
+        }
+      });
+
+      if (this.SRMYAxisMin) {
+        this.SRMYAxisMin -= 0.2;
+      }
+
+      if (this.SRMYAxisMax) {
+        this.SRMYAxisMax += 0.2;
+      }
+
+      this.SRMData = SRMData;
+    });
   }
 
   initLFQ() {

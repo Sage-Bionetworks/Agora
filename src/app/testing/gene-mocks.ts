@@ -22,6 +22,7 @@ export const geneMissingEnsemblInfo: Gene = {
   total_nominations: 5,
   rna_differential_expression: [],
   proteomics_LFQ: [],
+  proteomics_SRM: [],
   proteomics_TMT: [],
   metabolomics: '',
   neuropathologic_correlations: [],
