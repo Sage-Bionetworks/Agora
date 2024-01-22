@@ -18,6 +18,7 @@ import {
   ProteomicsLFQCollection,
   ProteomicsTMTCollection,
   Team,
+  ProteomicsSRMCollection,
 } from '../models';
 import { BioDomains, TargetNomination, Scores } from '../../app/models';
 
@@ -208,8 +209,13 @@ export async function getProteinComparisonGenes(method: string) {
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
-  } else {
+  } else if ('LFQ' === method) {
     items = await ProteomicsLFQCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .exec();
+  } else if ('SRM' === method) {
+    items = await ProteomicsSRMCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();

@@ -231,6 +231,7 @@
                 <div class="gct-filter-label">{{ subCategoryLabel }}</div>
                 <div class="gct-sub-category-selector">
                   <p-dropdown
+                  id="subCategory"
                     [options]="subCategories"
                     [(ngModel)]="subCategory"
                     (onChange)="onSubCategoryChange()"
