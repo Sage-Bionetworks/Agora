@@ -34,11 +34,6 @@
   flex-direction: column;
   gap: 40px;
   padding: var(--spacing-md);
-
-  @media (min-width: 990px) {
-    width: 70%;
-    padding: 0;
-  }
 }
 
 .description {
@@ -52,6 +47,11 @@
 
   a {
     white-space: nowrap;
+  }
+
+  p {
+    flex: 1;
+    text-align: center;
   }
 }
 
