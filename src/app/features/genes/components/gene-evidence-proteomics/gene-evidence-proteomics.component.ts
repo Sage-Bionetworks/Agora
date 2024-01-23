@@ -84,6 +84,32 @@ export class GeneEvidenceProteomicsComponent {
     this.initTMT();
   }
 
+  processDifferentialExpressionData(item: any, data: any, dataYAxisMin: number | undefined, dataYAxisMax: number | undefined, proteomicData: any) {
+    const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
+    const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
+
+    if (dataYAxisMin === undefined || yAxisMin < dataYAxisMin) {
+      dataYAxisMin = yAxisMin;
+    }
+
+    if (dataYAxisMax == undefined || yAxisMax > dataYAxisMax) {
+      dataYAxisMax = yAxisMax;
+    }
+
+    proteomicData.push({
+      key: data.tissue,
+      value: [data.min, data.median, data.max],
+      circle: {
+        value: item.log2_fc,
+        tooltip: this.getTooltipText(item)
+      },
+      quartiles:
+        data.first_quartile > data.third_quartile
+          ? [data.third_quartile, data.median, data.first_quartile]
+          : [data.first_quartile, data.median, data.third_quartile],
+    });
+  }
+
   initSRM() {
     this.geneService.getDistribution().subscribe((data: any) => {
       const distribution = data.proteomics_SRM;
@@ -93,7 +119,7 @@ export class GeneEvidenceProteomicsComponent {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
-      const SRMData: any = [];
+      const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
         const data: any = distribution.find((d: any) => {
@@ -101,39 +127,7 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
-          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
-
-          if (this.SRMYAxisMin == undefined || yAxisMin < this.SRMYAxisMin) {
-            this.SRMYAxisMin = yAxisMin;
-          }
-
-          if (this.SRMYAxisMax == undefined || yAxisMax > this.SRMYAxisMax) {
-            this.SRMYAxisMax = yAxisMax;
-          }
-
-          SRMData.push({
-            key: data.tissue,
-            value: [data.min, data.median, data.max],
-            circle: {
-              value: item.log2_fc,
-              tooltip:
-                (item.hgnc_symbol || item.ensembl_gene_id) +
-                ' is ' +
-                (item.cor_pval <= 0.05 ? ' ' : 'not ') +
-                'significantly differentially expressed in ' +
-                item.tissue +
-                ' with a log fold change value of ' +
-                this.helperService.getSignificantFigures(item.log2_fc, 3) +
-                ' and an adjusted p-value of ' +
-                this.helperService.getSignificantFigures(item.cor_pval, 3) +
-                '.',
-            },
-            quartiles:
-              data.first_quartile > data.third_quartile
-                ? [data.third_quartile, data.median, data.first_quartile]
-                : [data.first_quartile, data.median, data.third_quartile],
-          });
+          this.processDifferentialExpressionData(item, data, this.SRMYAxisMin, this.SRMYAxisMax, proteomicData);
         }
       });
 
@@ -145,7 +139,7 @@ export class GeneEvidenceProteomicsComponent {
         this.SRMYAxisMax += 0.2;
       }
 
-      this.SRMData = SRMData;
+      this.SRMData = proteomicData;
     });
   }
 
@@ -158,7 +152,7 @@ export class GeneEvidenceProteomicsComponent {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
-      const LFQData: any = [];
+      const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
         const data: any = distribution.find((d: any) => {
@@ -166,39 +160,7 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
-          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
-
-          if (this.LFQYAxisMin == undefined || yAxisMin < this.LFQYAxisMin) {
-            this.LFQYAxisMin = yAxisMin;
-          }
-
-          if (this.LFQYAxisMax == undefined || yAxisMax > this.LFQYAxisMax) {
-            this.LFQYAxisMax = yAxisMax;
-          }
-
-          LFQData.push({
-            key: data.tissue,
-            value: [data.min, data.median, data.max],
-            circle: {
-              value: item.log2_fc,
-              tooltip:
-                (item.hgnc_symbol || item.ensembl_gene_id) +
-                ' is ' +
-                (item.cor_pval <= 0.05 ? ' ' : 'not ') +
-                'significantly differentially expressed in ' +
-                item.tissue +
-                ' with a log fold change value of ' +
-                this.helperService.getSignificantFigures(item.log2_fc, 3) +
-                ' and an adjusted p-value of ' +
-                this.helperService.getSignificantFigures(item.cor_pval, 3) +
-                '.',
-            },
-            quartiles:
-              data.first_quartile > data.third_quartile
-                ? [data.third_quartile, data.median, data.first_quartile]
-                : [data.first_quartile, data.median, data.third_quartile],
-          });
+          this.processDifferentialExpressionData(item, data, this.LFQYAxisMin, this.LFQYAxisMax, proteomicData);
         }
       });
 
@@ -210,7 +172,7 @@ export class GeneEvidenceProteomicsComponent {
         this.LFQYAxisMax += 0.2;
       }
 
-      this.LFQData = LFQData;
+      this.LFQData = proteomicData;
     });
   }
 
@@ -223,7 +185,7 @@ export class GeneEvidenceProteomicsComponent {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
 
-      const TMTData: any = [];
+      const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
         const data: any = distribution.find((d: any) => {
@@ -231,39 +193,7 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
-          const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
-
-          if (this.TMTYAxisMin == undefined || yAxisMin < this.TMTYAxisMin) {
-            this.TMTYAxisMin = yAxisMin;
-          }
-
-          if (this.TMTYAxisMax == undefined || yAxisMax > this.TMTYAxisMax) {
-            this.TMTYAxisMax = yAxisMax;
-          }
-
-          TMTData.push({
-            key: data.tissue,
-            value: [data.min, data.median, data.max],
-            circle: {
-              value: item.log2_fc,
-              tooltip:
-                (item.hgnc_symbol || item.ensembl_gene_id) +
-                ' is ' +
-                (item.cor_pval <= 0.05 ? ' ' : 'not ') +
-                'significantly differentially expressed in ' +
-                item.tissue +
-                ' with a log fold change value of ' +
-                this.helperService.getSignificantFigures(item.log2_fc, 3) +
-                ' and an adjusted p-value of ' +
-                this.helperService.getSignificantFigures(item.cor_pval, 3) +
-                '.',
-            },
-            quartiles:
-              data.first_quartile > data.third_quartile
-                ? [data.third_quartile, data.median, data.first_quartile]
-                : [data.first_quartile, data.median, data.third_quartile],
-          });
+          this.processDifferentialExpressionData(item, data, this.TMTYAxisMin, this.TMTYAxisMax, proteomicData);
         }
       });
 
@@ -275,7 +205,7 @@ export class GeneEvidenceProteomicsComponent {
         this.TMTYAxisMax += 0.2;
       }
 
-      this.TMTData = TMTData;
+      this.TMTData = proteomicData;
     });
   }
 
@@ -286,5 +216,10 @@ export class GeneEvidenceProteomicsComponent {
     this.selectedUniProtId = event.value;
     this.initLFQ();
     this.initTMT();
+  }
+
+  getTooltipText(item: any) {
+    const tooltipText = `${ item.hgnc_symbol || item.ensembl_gene_id } is${ item.cor_pval <= 0.05 ? '' : ' not' } significantly differentially expressed in ${ item.tissue } with a log fold change value of ${ this.helperService.getSignificantFigures(item.log2_fc, 3) } and an adjusted p-value of ${ this.helperService.getSignificantFigures(item.cor_pval, 3) }.`;
+    return tooltipText;
   }
 }
