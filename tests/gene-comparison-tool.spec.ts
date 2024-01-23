@@ -16,7 +16,6 @@ test.describe('specific viewport block', () => {
   });
 
   test('sub-category is SRM by default', async ({ page }) => {
-    test.slow();
     // set category for Protein - Differential Expression
     await page.goto('/genes/comparison?category=Protein+-+Differential+Expression');
 
@@ -25,7 +24,7 @@ test.describe('specific viewport block', () => {
       .not.toBeVisible({ timeout: 150000});
   
     // expect sub-category dropdown to be SRM
-    const dropdown = await page.locator('#subCategory');
+    const dropdown = page.locator('#subCategory');
     await expect(dropdown).toHaveText('Targeted Selected Reaction Monitoring (SRM)');
   });
 });

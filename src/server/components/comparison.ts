@@ -219,6 +219,9 @@ export async function getProteinComparisonGenes(method: string) {
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
+  } else {
+    // TODO capture corner scenarios
+    throw 'unknown method selected: ' + method;
   }
 
   if (items) {
