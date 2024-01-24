@@ -313,7 +313,7 @@
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
                           ({{ gene.uniprotid }})
                         </ng-container>
                       </div>
@@ -442,7 +442,7 @@
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
                           ({{ gene.uniprotid }})
                         </ng-container>
                       </div>
