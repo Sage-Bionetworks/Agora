@@ -14,6 +14,8 @@ import { MessageService, SortEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
 
+import * as helpers from './gene-comparison-tool.helpers';
+
 import {
   GeneComparisonToolComponent,
   GeneComparisonToolDetailsPanelComponent,
@@ -24,7 +26,7 @@ import {
 import { ApiService, HelperService } from '../../../../core/services';
 import { GeneService } from '../../../../features/genes/services';
 import { routes } from '../../../../app.routing';
-import { comparisonGeneMock1, comparisonGeneMock2 } from '../../../../testing';
+import { comparisonGeneEmptyHGNCMock, comparisonGeneMock1, comparisonGeneMock2 } from '../../../../testing';
 
 const DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
 
@@ -506,5 +508,15 @@ describe('Component: GeneComparisonToolComponent', () => {
 
       expectSignificanceThresholdIsApplied(newValue);
     }));
+
+    it('should have a label for SRM popup', () => {
+      const label = helpers.getGeneLabelForSRM(comparisonGeneMock1);
+      const expected = 'MSN - ENSG00000147065';
+      expect(label).toBe(expected);
+
+      const label2 = helpers.getGeneLabelForSRM(comparisonGeneEmptyHGNCMock);
+      const expected2 = 'ENSG00000147065';
+      expect(label2).toBe(expected2);
+    });
   });
 });

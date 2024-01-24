@@ -32,12 +32,16 @@ export const subCategories: { [key: string]: GCTSelectOption[] } = {
   ],
   'Protein - Differential Expression': [
     {
-      label: 'Label-free Quantification (LFQ)',
-      value: 'LFQ',
+      label: 'Targeted Selected Reaction Monitoring (SRM)',
+      value: 'SRM',
     },
     {
-      label: 'Tandem Mass Tag (TMT)',
+      label: 'Genome-wide Tandem Mass Tag (TMT)',
       value: 'TMT',
+    },
+    {
+      label: 'Genome-wide Label-free Quantification (LFQ)',
+      value: 'LFQ',
     },
   ],
 };

@@ -38,23 +38,9 @@ const database = { url: '' };
         doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
-console.log('HELLLLLLOOOOOOOO');
 console.log(process.env);
 console.log(process.env.MONGODB_HOST);
 console.log(process.env.MONGODB_PORT);
-console.log('DONE!');
-console.log('DONE!');
-console.log('DONE!');
-console.log('DONE!');
-console.log('DONE!');
-console.log('DONE!');
 
 // Set the database url
 if (
