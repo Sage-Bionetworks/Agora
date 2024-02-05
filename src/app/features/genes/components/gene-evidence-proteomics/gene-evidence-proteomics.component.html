@@ -48,8 +48,8 @@
         <div #srmChart>
           <box-plot-chart
             xAxisLabel="Brain tissue"
-            [yAxisMin]="SRMYAxisMin"
-            [yAxisMax]="SRMYAxisMax"
+            [yAxisMin]="SRMRange?.Min"
+            [yAxisMax]="SRMRange?.Max"
             [data]="SRMData"
           ></box-plot-chart>
         </div>
@@ -115,8 +115,8 @@
         <div #tmtChart>
           <box-plot-chart
             xAxisLabel="Brain tissue"
-            [yAxisMin]="TMTYAxisMin"
-            [yAxisMax]="TMTYAxisMax"
+            [yAxisMin]="TMTRange?.Min"
+            [yAxisMax]="TMTRange?.Max"
             [data]="TMTData"
           ></box-plot-chart>
         </div>
@@ -155,8 +155,8 @@
         <div #lfqChart>
           <box-plot-chart
             xAxisLabel="Brain tissue"
-            [yAxisMin]="LFQYAxisMin"
-            [yAxisMax]="LFQYAxisMax"
+            [yAxisMin]="LFQRange?.Min"
+            [yAxisMax]="LFQRange?.Max"
             [data]="LFQData"
           ></box-plot-chart>
         </div>
