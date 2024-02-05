@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Gene } from '../../../../models';
 import { GeneService } from '../../services';
 import { HelperService } from '../../../../core/services';
+import { ChartRange } from '../../../../models/ChartRange';
 
 @Component({
   selector: 'gene-evidence-proteomics',
@@ -23,16 +24,13 @@ export class GeneEvidenceProteomicsComponent {
   selectedUniProtId = '';
 
   LFQData: any = undefined;
-  LFQYAxisMin: number | undefined;
-  LFQYAxisMax: number | undefined;
+  LFQRange: ChartRange | undefined;
 
   SRMData: any = undefined;
-  SRMYAxisMin: number | undefined;
-  SRMYAxisMax: number | undefined;
+  SRMRange: ChartRange | undefined;
 
   TMTData: any = undefined;
-  TMTYAxisMin: number | undefined;
-  TMTYAxisMax: number | undefined;
+  TMTRange: ChartRange | undefined;
 
   constructor(
     private helperService: HelperService,
@@ -43,13 +41,14 @@ export class GeneEvidenceProteomicsComponent {
     this.uniProtIds = [];
     this.selectedUniProtId = '';
 
+    this.SRMData = undefined;
+    this.SRMRange = undefined;
+
     this.LFQData = undefined;
-    this.LFQYAxisMin = undefined;
-    this.LFQYAxisMax = undefined;
+    this.LFQRange = undefined;
 
     this.TMTData = undefined;
-    this.TMTYAxisMin = undefined;
-    this.TMTYAxisMax = undefined;
+    this.TMTRange = undefined;
   }
 
   init() {
@@ -79,21 +78,20 @@ export class GeneEvidenceProteomicsComponent {
     }
 
     this.initSRM();
-
     this.initLFQ();
     this.initTMT();
   }
 
-  processDifferentialExpressionData(item: any, data: any, dataYAxisMin: number | undefined, dataYAxisMax: number | undefined, proteomicData: any) {
+  processDifferentialExpressionData(item: any, data: any, range: ChartRange, proteomicData: any) {
     const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
     const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
 
-    if (dataYAxisMin === undefined || yAxisMin < dataYAxisMin) {
-      dataYAxisMin = yAxisMin;
+    if (yAxisMin < range.Min) {
+      range.Min = yAxisMin;
     }
 
-    if (dataYAxisMax == undefined || yAxisMax > dataYAxisMax) {
-      dataYAxisMax = yAxisMax;
+    if (yAxisMax > range.Max) {
+      range.Max = yAxisMax;
     }
 
     proteomicData.push({
@@ -113,12 +111,7 @@ export class GeneEvidenceProteomicsComponent {
   initSRM() {
     this.geneService.getDistribution().subscribe((data: any) => {
       const distribution = data.proteomics_SRM;
-
-      const differentialExpression =
-        this._gene?.proteomics_SRM?.filter((item: any) => {
-          return item.uniprotid === this.selectedUniProtId;
-        }) || [];
-
+      const differentialExpression = this._gene?.proteomics_SRM || [];
       const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
@@ -127,17 +120,11 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          this.processDifferentialExpressionData(item, data, this.SRMYAxisMin, this.SRMYAxisMax, proteomicData);
+          if (!this.SRMRange)
+            this.SRMRange = new ChartRange(data.min, data.max);
+          this.processDifferentialExpressionData(item, data, this.SRMRange, proteomicData);
         }
       });
-
-      if (this.SRMYAxisMin) {
-        this.SRMYAxisMin -= 0.2;
-      }
-
-      if (this.SRMYAxisMax) {
-        this.SRMYAxisMax += 0.2;
-      }
 
       this.SRMData = proteomicData;
     });
@@ -146,12 +133,10 @@ export class GeneEvidenceProteomicsComponent {
   initLFQ() {
     this.geneService.getDistribution().subscribe((data: any) => {
       const distribution = data.proteomics_LFQ;
-
       const differentialExpression =
         this._gene?.proteomics_LFQ?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-
       const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
@@ -160,17 +145,11 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          this.processDifferentialExpressionData(item, data, this.LFQYAxisMin, this.LFQYAxisMax, proteomicData);
+          if (!this.LFQRange)
+            this.LFQRange = new ChartRange(data.min, data.max);
+          this.processDifferentialExpressionData(item, data, this.LFQRange, proteomicData);
         }
       });
-
-      if (this.LFQYAxisMin) {
-        this.LFQYAxisMin -= 0.2;
-      }
-
-      if (this.LFQYAxisMax) {
-        this.LFQYAxisMax += 0.2;
-      }
 
       this.LFQData = proteomicData;
     });
@@ -179,12 +158,10 @@ export class GeneEvidenceProteomicsComponent {
   initTMT() {
     this.geneService.getDistribution().subscribe((data: any) => {
       const distribution = data.proteomics_TMT;
-
       const differentialExpression =
         this._gene?.proteomics_TMT?.filter((item: any) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-
       const proteomicData: any = [];
 
       differentialExpression.forEach((item: any) => {
@@ -193,17 +170,11 @@ export class GeneEvidenceProteomicsComponent {
         });
 
         if (data) {
-          this.processDifferentialExpressionData(item, data, this.TMTYAxisMin, this.TMTYAxisMax, proteomicData);
+          if (!this.TMTRange)
+            this.TMTRange = new ChartRange(data.min, data.max);
+          this.processDifferentialExpressionData(item, data, this.TMTRange, proteomicData);
         }
       });
-
-      if (this.TMTYAxisMin) {
-        this.TMTYAxisMin -= 0.2;
-      }
-
-      if (this.TMTYAxisMax) {
-        this.TMTYAxisMax += 0.2;
-      }
 
       this.TMTData = proteomicData;
     });
