@@ -77,7 +77,7 @@ const GeneSchema = new Schema<Gene>(
     median_expression: { type: [MedianExpressionSchema], required: true },
     druggability: { type: [DruggabilitySchema], required: true },
     total_nominations: { type: Number, required: true },
-    ensembl_info: { type: [EnsemblInfoSchema], required: true }
+    ensembl_info: { type: EnsemblInfoSchema, required: true }
   },
   { collection: 'geneinfo' }
 );
