@@ -1,6 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
+import { HttpParams } from '@angular/common/http';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { round } from 'lodash';
 
@@ -190,6 +191,12 @@ export class HelperService {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get(name);
+  }
+
+  addSingleUrlParam(url: string, paramName: string, paramValue: string | number | boolean) {
+    const param = new HttpParams()
+      .set(paramName, paramValue);
+    return `${url.split('?')[0]}?${param.toString()}`;
   }
 
   capitalizeFirstLetterOfString(s: string) {

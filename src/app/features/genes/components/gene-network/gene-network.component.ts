@@ -97,10 +97,10 @@ export class GeneNetworkComponent implements OnInit {
   }
 
   // If the 'state' value can be modified by another boolean value, pass the modifying value as 'isStateApplicable'
-  // Example: rna_brain_change_studied: false indicates that isAnyRNAChangedInADBrain is
+  // Example: rna_brain_change_studied: false indicates that is_any_rna_changed_in_ad_brain is
   // undefined, so calling:
-  //     getText(isAnyRNACHangedInADBrain, rna_brain_change_studied)
-  // will return the desired 'No data' text, regardless of the isAnyRNAChangedInAdBrain value
+  //     getText(is_any_rna_changed_in_ad_brain, rna_brain_change_studied)
+  // will return the desired 'No data' text, regardless of the is_any_rna_changed_in_ad_brain value
   getText(state?: boolean, isStateApplicable = true): string {
     let text = '';
 
@@ -120,8 +120,8 @@ export class GeneNetworkComponent implements OnInit {
     return text;
   }
 
-  getNominationText(nominations: number): string {
-    return this.getText(nominations === undefined ? false : nominations > 0);
+  getNominationText(nominations: number | null): string {
+    return this.getText(nominations === null ? false : nominations > 0);
   }
 
   // Use black text if 'isStateApplicable' is false ('No data')

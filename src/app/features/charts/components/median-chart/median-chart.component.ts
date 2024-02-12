@@ -59,7 +59,7 @@ export class MedianChartComponent extends BaseChartComponent {
     this.group = this.dimension
       .group()
       .reduceSum((d: any) =>
-        this.helperService.getSignificantFigures(d.medianlogcpm)
+        this.helperService.getSignificantFigures(d.median)
       );
   }
 

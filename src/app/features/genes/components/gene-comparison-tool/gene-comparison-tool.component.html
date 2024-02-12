@@ -231,6 +231,7 @@
                 <div class="gct-filter-label">{{ subCategoryLabel }}</div>
                 <div class="gct-sub-category-selector">
                   <p-dropdown
+                  id="subCategory"
                     [options]="subCategories"
                     [(ngModel)]="subCategory"
                     (onChange)="onSubCategoryChange()"
@@ -287,7 +288,7 @@
               class="table-divider table-divider-1"
             >
               <div class="table-divider-inner">
-                <div>Pinned Genes</div>
+                <div id="pinned-genes-header">Pinned Genes ({{ pinnedGenes.length }}/50)</div>
                 <div class="csv-download-button">
                   <button (click)="downloadPinnedCsv()">
                     <svg-icon name="download" customClass="two-tone"></svg-icon
@@ -312,7 +313,7 @@
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
                           ({{ gene.uniprotid }})
                         </ng-container>
                       </div>
@@ -441,7 +442,7 @@
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid">
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
                           ({{ gene.uniprotid }})
                         </ng-container>
                       </div>

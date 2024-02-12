@@ -10,6 +10,26 @@ import { ascending } from 'd3';
 })
 export class GeneHeroComponent {
   @Input() gene: Gene | undefined;
+  
+  showNominationsOrTEP() {
+    if (!this.gene)
+      return false;
+    return this.gene.total_nominations || this.gene.is_adi || this.gene.is_tep;
+  }
+
+  getNominationText() {
+    if (!this.gene)
+      return '';
+    let result = '';
+    if (this.gene.total_nominations) {
+      result += 'Nominated Target';
+    }
+    if (this.gene.is_adi || this.gene.is_tep) {
+      result += this.gene.total_nominations ? ', ' : '';
+      return result += 'Selected for Target Enabling Resource Development';
+    }
+    return result;
+  }
 
   getSummary(body = false): string {
     if (this.gene?.summary) {
@@ -80,5 +100,16 @@ export class GeneHeroComponent {
       .map(b => b.biodomain)
       .sort(ascending);
     return biodomains.join(', ');
+  }
+
+  getEnsemblUrl() {
+    if (!this.gene?.ensembl_info || this.gene.ensembl_info.length <= 0)
+      return '';
+    return this.gene?.ensembl_info[0].ensembl_permalink;
+  }
+
+  getPossibleReplacementsURL() {
+    let url = 'https://useast.ensembl.org/Homo_sapiens/Gene/Idhistory?g=';
+    return url += this.gene?.ensembl_gene_id;
   }
 }

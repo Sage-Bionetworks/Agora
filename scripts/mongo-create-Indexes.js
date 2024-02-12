@@ -10,7 +10,7 @@ const collections = [
     indexes: [
       { ensembl_gene_id: 1, hgnc_symbol: 1 },
       { hgnc_symbol: 1 },
-      { nominations: -1, hgnc_symbol: 1 },
+      { total_nominations: -1, hgnc_symbol: 1 },
     ],
   },
   {
@@ -42,6 +42,12 @@ const collections = [
   },
   {
     name: 'proteomicstmt',
+    indexes: [
+      { ensembl_gene_id: 1 }
+    ]
+  },
+  {
+    name: 'proteomicssrm',
     indexes: [
       { ensembl_gene_id: 1 }
     ]

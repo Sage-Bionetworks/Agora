@@ -18,8 +18,9 @@ import {
   ProteomicsLFQCollection,
   ProteomicsTMTCollection,
   Team,
+  ProteomicsSRMCollection,
 } from '../models';
-import { BioDomains, NominatedTarget, Scores } from '../../app/models';
+import { BioDomains, TargetNomination, Scores } from '../../app/models';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -29,22 +30,22 @@ function getComparisonGeneAssociations(gene: Gene) {
   const data: number[] = [];
 
   // Genetically Associated with LOAD
-  if (gene.isIGAP) {
+  if (gene.is_igap) {
     data.push(1);
   }
 
   // eQTL in Brain
-  if (gene.haseqtl) {
+  if (gene.is_eqtl) {
     data.push(2);
   }
 
   // RNA Expression Changed in AD Brain
-  if (gene.rna_brain_change_studied && gene.isAnyRNAChangedInADBrain) {
+  if (gene.rna_brain_change_studied && gene.is_any_rna_changed_in_ad_brain) {
     data.push(3);
   }
 
   // Protein Expression Changed in AD Brain
-  if (gene.protein_brain_change_studied && gene.isAnyProteinChangedInADBrain) {
+  if (gene.protein_brain_change_studied && gene.is_any_protein_changed_in_ad_brain) {
     data.push(4);
   }
 
@@ -53,7 +54,7 @@ function getComparisonGeneAssociations(gene: Gene) {
 
 function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
   const data: GCTGeneNominations = {
-    count: gene.nominations || 0,
+    count: gene.total_nominations || 0,
     year: 0,
     teams: [],
     studies: [],
@@ -62,7 +63,7 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
     validations: [],
   };
 
-  gene.nominatedtarget?.forEach((n: NominatedTarget) => {
+  gene.target_nominations?.forEach((n: TargetNomination) => {
     // Year
     if (
       n.initial_nomination &&
@@ -125,10 +126,20 @@ function getComparisonGene(gene: Gene, teams: Team[], scores: Scores[], allBiodo
     target_risk_score: geneScores ? geneScores.target_risk_score : null,
     genetics_score: geneScores ? geneScores.genetics_score: null,
     multi_omics_score: geneScores ? geneScores.multi_omics_score : null,
-    biodomains: geneBiodomains
+    biodomains: geneBiodomains,
+    target_enabling_resources: getTargetEnablingResources(gene)
   };
 
   return data;
+}
+
+export function getTargetEnablingResources(gene: Gene) {
+  const resources: string[] = [];
+  if (gene.is_adi)
+    resources.push('AD Informer Set');
+  if (gene.is_tep)
+    resources.push('Target Enabling Package');
+  return resources;
 }
 
 export async function getRnaComparisonGenes(model: string) {
@@ -198,11 +209,19 @@ export async function getProteinComparisonGenes(method: string) {
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
-  } else {
+  } else if ('LFQ' === method) {
     items = await ProteomicsLFQCollection.find()
       .lean()
       .sort({ hgnc_symbol: 1, tissue: 1 })
       .exec();
+  } else if ('SRM' === method) {
+    items = await ProteomicsSRMCollection.find()
+      .lean()
+      .sort({ hgnc_symbol: 1, tissue: 1 })
+      .exec();
+  } else {
+    // TODO capture corner scenarios
+    throw 'unknown method selected: ' + method;
   }
 
   if (items) {

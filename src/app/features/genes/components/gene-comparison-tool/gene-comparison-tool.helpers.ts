@@ -39,6 +39,13 @@ export const excludeEnsemblGeneIdFilterCallback = function (
   return !ensemblGeneIds.includes(value);
 };
 
+export const excludeUniprotIdCallback = function (
+  value: string,
+  uniprotIds: string[]
+): boolean {
+  return !uniprotIds.includes(value);
+};
+
 export function getScoreName(columnName: string) {
   columnName = columnName.toUpperCase();
   if (columnName === 'RISK SCORE')
@@ -59,6 +66,12 @@ export function getGeneLabelForProteinDifferentialExpression(gene: GCTGene) {
   (gene.uniprotid ? '(' + gene.uniprotid + ')' : '') +
   ' - ' +
   gene.ensembl_gene_id;
+}
+
+export function getGeneLabelForSRM(gene: GCTGene) {
+  let label = gene.hgnc_symbol ? `${ gene.hgnc_symbol } - ` : '';
+  label += gene.ensembl_gene_id;
+  return label;
 }
 
 export function getScore(columnName: string, gene: GCTGene) {
@@ -133,17 +146,13 @@ export const getDetailsPanelData = function (
   };
 
   if (category === 'Protein - Differential Expression') {
-    data.label = getGeneLabelForProteinDifferentialExpression(gene);
+    if (subCategory === 'SRM') {
+      data.label = getGeneLabelForSRM(gene);
+    } else {
+      data.label = getGeneLabelForProteinDifferentialExpression(gene);
+    }
     data.heading = 'Differential Protein Expression (' + tissue.name + ')';
     data.allTissueLink = false;
-
-    // if ('TMT' === subCategory) {
-    //   data.min = -35;
-    //   data.max = 35;
-    // } else {
-    //   data.min = -4;
-    //   data.max = 4;
-    // }
   } else {
     data.label = getGeneLabel(gene);
     data.heading = 'Differential RNA Expression (' + tissue.name + ')';

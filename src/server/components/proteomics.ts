@@ -5,6 +5,7 @@ import { cache } from '../helpers';
 import {
   ProteinDifferentialExpression,
   ProteomicsLFQCollection,
+  ProteomicsSRMCollection,
   ProteomicsTMTCollection,
 } from '../models';
 
@@ -20,6 +21,30 @@ export async function getProteomicsLFQ(ensg: string) {
   }
 
   result = await ProteomicsLFQCollection.find({
+    ensembl_gene_id: ensg,
+  })
+    .lean()
+    .exec();
+
+  if (result) {
+    result = result.filter((item: any) => {
+      return item.log2_fc;
+    });
+  }
+
+  cache.set(cacheKey, result);
+  return result;
+}
+
+export async function getProteomicsSRM(ensg: string) {
+  const cacheKey = ensg + '-protein-SRM';
+  let result: ProteinDifferentialExpression[] | undefined = cache.get(cacheKey);
+
+  if (result) {
+    return result;
+  }
+
+  result = await ProteomicsSRMCollection.find({
     ensembl_gene_id: ensg,
   })
     .lean()

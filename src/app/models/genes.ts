@@ -8,12 +8,12 @@ import {
   SimilarGenesNetwork,
   BioDomains
 } from './';
+import { EnsemblInfo } from './EnsemblInfo';
 
-export interface NominatedTarget {
+export interface TargetNomination {
   source: string;
   team: string;
   rank: string;
-  ensembl_gene_id: string;
   hgnc_symbol: string;
   target_choice_justification: string;
   predicted_therapeutic_direction: string;
@@ -28,18 +28,16 @@ export interface NominatedTarget {
 }
 
 export interface MedianExpression {
-  ensembl_gene_id: string;
-  minimumlogcpm?: number;
-  quartile1logcpm?: number;
-  medianlogcpm?: number;
-  meanlogcpm?: number;
-  quartile3logcpm?: number;
-  maximumlogcpm?: number;
+  min?: number;
+  first_quartile?: number;
+  median?: number;
+  mean?: number;
+  third_quartile?: number;
+  max?: number;
   tissue: string;
 }
 
 export interface Druggability {
-  geneid: string;
   sm_druggability_bucket: number;
   safety_bucket: number;
   abability_bucket: number;
@@ -57,20 +55,24 @@ export interface Gene {
   summary: string;
   hgnc_symbol: string;
   alias: string[];
-  isIGAP: boolean;
-  haseqtl: boolean;
-  isAnyRNAChangedInADBrain: boolean;
+  is_igap: boolean;
+  is_eqtl: boolean;
+  is_any_rna_changed_in_ad_brain: boolean;
   rna_brain_change_studied: boolean;
-  isAnyProteinChangedInADBrain: boolean;
+  is_any_protein_changed_in_ad_brain: boolean;
   protein_brain_change_studied: boolean;
-  nominatedtarget: NominatedTarget[];
-  medianexpression: MedianExpression[];
+  target_nominations: TargetNomination[] | null;
+  median_expression: MedianExpression[];
   druggability: Druggability[];
-  nominations: number;
+  total_nominations: number | null;
+  is_adi: boolean;
+  is_tep: boolean;
+  resource_url: string | null;
 
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];
   proteomics_LFQ?: ProteinDifferentialExpression[];
+  proteomics_SRM?: ProteinDifferentialExpression[];
   proteomics_TMT?: ProteinDifferentialExpression[];
   metabolomics?: any; // TODO change;
   overall_scores?: OverallScores;
@@ -98,6 +100,9 @@ export interface Gene {
   input_data_display_value?: string;
 
   bio_domains?: BioDomains;
+
+  // FIXME Will be fixed by AG-1324 in a future data release as it doesn't make sense to have an array here
+  ensembl_info: EnsemblInfo[];
 }
 
 export interface GenesResponse {

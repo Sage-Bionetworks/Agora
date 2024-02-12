@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Gene } from '../../../../models';
@@ -72,6 +72,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private helperService: HelperService,
     private geneService: GeneService
@@ -138,7 +139,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
             this.gene = gene;
 
             this.panels.forEach((p: Panel) => {
-              if (p.name == 'nominations' && !this.gene?.nominations) {
+              if (p.name == 'nominations' && !this.gene?.total_nominations) {
                 p.disabled = true;
               } else if (
                 p.name == 'experimental-validation' &&
@@ -154,7 +155,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
               (p) => p.name == 'nominations'
             );
             if (nominationsPanel) {
-              nominationsPanel.disabled = !this.gene.nominations ? true : false;
+              nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
             }
 
             const experimentalValidationPanel = this.panels.find(
@@ -227,8 +228,16 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       url += panel.name;
     }
 
+    // added logic to support dropdown state when page is refreshed
+    const modelUrlParam = this.helperService.getUrlParam('model');
+    if (modelUrlParam) {
+      url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
+    }
+
     const nav = document.querySelector('.gene-details-nav');
-    window.scrollTo(0, this.helperService.getOffset(nav).top);
+    if (nav) {
+      window.scrollTo(0, this.helperService.getOffset(nav).top);
+    }
 
     this.location.replaceState(url);
   }

@@ -11,13 +11,14 @@ import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
   getProteomicsLFQ,
+  getProteomicsSRM,
   getProteomicsTMT,
   getMetabolomics,
   getExperimentalValidation,
   getNeuropathologicCorrelations,
   getOverallScores,
   getGeneLinks,
-  getBioDomains
+  getBioDomains,
 } from '.';
 
 // -------------------------------------------------------------------------- //
@@ -76,6 +77,7 @@ export async function getGene(ensg: string) {
       ensg
     );
     result.proteomics_LFQ = await getProteomicsLFQ(ensg);
+    result.proteomics_SRM = await getProteomicsSRM(ensg);
     result.proteomics_TMT = await getProteomicsTMT(ensg);
     result.metabolomics = await getMetabolomics(ensg);
     result.neuropathologic_correlations = await getNeuropathologicCorrelations(
@@ -128,18 +130,18 @@ export async function getNominatedGenes() {
     return result;
   }
 
-  result = await GeneCollection.find({ nominations: { $gt: 0 } })
+  result = await GeneCollection.find({ total_nominations: { $gt: 0 } })
     .select(
       [
         'hgnc_symbol',
         'ensembl_gene_id',
-        'nominations',
-        'nominatedtarget.initial_nomination',
-        'nominatedtarget.team',
-        'nominatedtarget.study',
-        'nominatedtarget.source',
-        'nominatedtarget.input_data',
-        'nominatedtarget.validation_study_details',
+        'total_nominations',
+        'target_nominations.initial_nomination',
+        'target_nominations.team',
+        'target_nominations.study',
+        'target_nominations.source',
+        'target_nominations.input_data',
+        'target_nominations.validation_study_details',
         'druggability.pharos_class',
         'druggability.sm_druggability_bucket',
         'druggability.classification',
