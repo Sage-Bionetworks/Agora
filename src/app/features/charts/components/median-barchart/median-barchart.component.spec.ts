@@ -17,37 +17,34 @@ import { MedianExpression } from '../../../../models/genes';
 // -------------------------------------------------------------------------- //
 const XAXIS_LABEL = 'BRAIN REGION';
 const YAXIS_LABEL = 'LOG2CPM';
-const FULL_MOCK_DATA = geneMock1.medianexpression;
+const FULL_MOCK_DATA = geneMock1.median_expression;
 const TISSUES = ['TCX', 'PHG', 'STG'];
 const SMALL_MOCK_DATA = [
   {
-    ensembl_gene_id: 'MOCK_GENE',
-    minimumlogcpm: -2.54173091337051,
-    quartile1logcpm: -1.03358030635935,
-    medianlogcpm: 0.483801733963266,
-    meanlogcpm: -0.517398199667356,
-    quartile3logcpm: -0.0800759845652829,
-    maximumlogcpm: 2.32290808871289,
+    min: -2.54173091337051,
+    first_quartile: -1.03358030635935,
+    median: 0.483801733963266,
+    mean: -0.517398199667356,
+    third_quartile: -0.0800759845652829,
+    max: 2.32290808871289,
     tissue: TISSUES[0],
   },
   {
-    ensembl_gene_id: 'MOCK_GENE',
-    minimumlogcpm: -2.44077907413711,
-    quartile1logcpm: -0.592671867557559,
-    medianlogcpm: 0.013739530502129,
-    meanlogcpm: -0.0324143336865,
-    quartile3logcpm: 0.49577213202412,
-    maximumlogcpm: 2.23019575245731,
+    min: -2.44077907413711,
+    first_quartile: -0.592671867557559,
+    median: 0.013739530502129,
+    mean: -0.0324143336865,
+    third_quartile: 0.49577213202412,
+    max: 2.23019575245731,
     tissue: TISSUES[1],
   },
   {
-    ensembl_gene_id: 'MOCK_GENE',
-    minimumlogcpm: -5.03189866356294,
-    quartile1logcpm: -1.02644563959975,
-    medianlogcpm: 0.176348063122062,
-    meanlogcpm: -0.323038107200895,
-    quartile3logcpm: 0.391874711168331,
-    maximumlogcpm: 1.9113258251877,
+    min: -5.03189866356294,
+    first_quartile: -1.02644563959975,
+    median: 0.176348063122062,
+    mean: -0.323038107200895,
+    third_quartile: 0.391874711168331,
+    max: 1.9113258251877,
     tissue: TISSUES[2],
   },
 ];
@@ -102,7 +99,7 @@ describe('Component: BarChart - Median', () => {
   it('should not render the chart if all values are negative', () => {
     const { chart } = setUp(
       SMALL_MOCK_DATA.map((obj) => {
-        return { ...obj, medianlogcpm: -1 * obj.medianlogcpm };
+        return { ...obj, median: -1 * obj.median };
       })
     );
 
@@ -139,7 +136,7 @@ describe('Component: BarChart - Median', () => {
 
   it('should not render bars for negative values', () => {
     const { chart } = setUp([
-      { ...SMALL_MOCK_DATA[0], medianlogcpm: -0.01 },
+      { ...SMALL_MOCK_DATA[0], median: -0.01 },
       ...SMALL_MOCK_DATA.slice(1),
     ]);
 

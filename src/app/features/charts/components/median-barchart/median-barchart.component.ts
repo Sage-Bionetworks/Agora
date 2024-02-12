@@ -58,9 +58,9 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
   }
   @Input() set data(data: MedianExpression[]) {
     this._data = data
-      .filter((el) => el.medianlogcpm && el.medianlogcpm > 0)
+      .filter((el) => el.median && el.median > 0)
       .sort((a, b) => a.tissue.localeCompare(b.tissue));
-    this.maxValueY = d3.max(this._data, (d) => d.medianlogcpm) || 0;
+    this.maxValueY = d3.max(this._data, (d) => d.median) || 0;
     this.shouldShowThresholdLine = this.MEANINGFUL_EXPRESSION_THRESHOLD <= this.maxValueY;
   }
 
@@ -196,9 +196,9 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .append('rect')
         .attr('class', 'medianbars')
         .attr('x', (d) => this.chartXScale(d.tissue) as number)
-        .attr('y', (d) => yScale(d.medianlogcpm || 0))
+        .attr('y', (d) => yScale(d.median || 0))
         .attr('width', this.chartXScale.bandwidth())
-        .attr('height', (d) => innerHeight - yScale(d.medianlogcpm || 0))
+        .attr('height', (d) => innerHeight - yScale(d.median || 0))
         .attr('fill', barColor);
 
       // SCORE LABELS
@@ -209,8 +209,8 @@ export class MedianBarChartComponent implements OnChanges, AfterViewInit, OnDest
         .append('text')
         .attr('class', 'bar-labels')
         .attr('x', (d) => this.getBarCenterX(d.tissue, this.chartXScale))
-        .attr('y', (d) => yScale(d.medianlogcpm || 0) - 5)
-        .text((d) => this.helperService.roundNumber(d.medianlogcpm || 0, 2));
+        .attr('y', (d) => yScale(d.median || 0) - 5)
+        .text((d) => this.helperService.roundNumber(d.median || 0, 2));
 
       // X-AXIS
       const xAxis = d3.axisBottom(this.chartXScale);
