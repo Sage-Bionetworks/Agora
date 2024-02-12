@@ -912,15 +912,20 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     const tissue = gene.tissues.find((t) => t.name === tissueName);
     let size = 0;
     let color = '#F0F0F0';
+    const CIRCLE_MAX_SIZE = 50;
 
     if (tissue?.adj_p_val) {
       size = this.getCircleSize(tissue.adj_p_val);
     }
 
+    if (size === 0) {
+      size = CIRCLE_MAX_SIZE;
+    }
+
     if (tissue?.logfc) {
       color = this.getCircleColor(tissue.logfc);
     }
-
+      
     return {
       display: size ? 'block' : 'none',
       width: size + 'px',
