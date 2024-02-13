@@ -1019,10 +1019,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
           ...baseRow,
           ...[
             tissueName,
-            tissue?.logfc || '',
-            tissue?.ci_r || '',
-            tissue?.ci_l || '',
-            tissue?.adj_p_val || '',
+            tissue ? tissue.logfc : '',
+            tissue ? tissue.ci_r : '',
+            tissue ? tissue.ci_l : '',
+            tissue ? tissue.adj_p_val : '',
             g.biodomains?.join(',') || '',
           ],
         ]);
