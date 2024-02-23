@@ -54,10 +54,6 @@ export class GeneEvidenceProteomicsComponent {
   init() {
     this.reset();
 
-    if (!this._gene?.proteomics_LFQ && this._gene?.proteomics_TMT) {
-      return;
-    }
-
     this.uniProtIds = [];
 
     this._gene?.proteomics_LFQ?.forEach((item: any) => {
