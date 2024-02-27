@@ -34,6 +34,7 @@ export class BoxPlotComponent extends BaseChartComponent {
   @Input() yAxisLabel = 'LOG 2 FOLD CHANGE';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
+  @Input() yAxisPadding = 0.2;
   @Input() rcRadius = 9;
   @Input() rcColor = this.helperService.getColor('secondary');
 
@@ -85,8 +86,8 @@ export class BoxPlotComponent extends BaseChartComponent {
     const self = this;
 
     this.chart = agoraBoxPlot(this.chartContainer.nativeElement, null, {
-      yAxisMin: this.yAxisMin,
-      yAxisMax: this.yAxisMax,
+      yAxisMin: this.yAxisMin ? this.yAxisMin - this.yAxisPadding : undefined,
+      yAxisMax: this.yAxisMax ? this.yAxisMax + this.yAxisPadding : undefined,
     });
 
     this.chart.group(this.group).dimension(this.dimension);
