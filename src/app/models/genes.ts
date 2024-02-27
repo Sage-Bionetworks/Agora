@@ -101,8 +101,7 @@ export interface Gene {
 
   bio_domains?: BioDomains;
 
-  // FIXME Will be fixed by AG-1324 in a future data release as it doesn't make sense to have an array here
-  ensembl_info: EnsemblInfo[];
+  ensembl_info: EnsemblInfo;
 }
 
 export interface GenesResponse {

@@ -103,9 +103,9 @@ export class GeneHeroComponent {
   }
 
   getEnsemblUrl() {
-    if (!this.gene?.ensembl_info || this.gene.ensembl_info.length <= 0)
+    if (!this.gene?.ensembl_info)
       return '';
-    return this.gene?.ensembl_info[0].ensembl_permalink;
+    return this.gene?.ensembl_info.ensembl_permalink;
   }
 
   getPossibleReplacementsURL() {
