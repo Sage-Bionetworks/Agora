@@ -83,7 +83,7 @@
     "rimraf": "^3.0.2",
     "rollbar": "^2.25.0",
     "rxjs": "^7.5.0",
-    "sanitize-html": "^2.7.0",
+    "sanitize-html": "^2.12.1",
     "screenfull": "^6.0.1",
     "zone.js": "^0.11.4"
   },
