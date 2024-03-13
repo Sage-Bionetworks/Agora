@@ -35,7 +35,7 @@
           <ng-container *ngIf="getEnsemblUrl() === ''">
             <span *ngIf="getEnsemblUrl() === ''">{{ gene.ensembl_gene_id }}</span>
           </ng-container>
-          <p *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 0">
+          <p *ngIf="gene.ensembl_info?.ensembl_possible_replacements">
             <a [href]="getPossibleReplacementsURL()">Possible replacement value<span *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 1">s</span></a>:
             {{ gene.ensembl_info.ensembl_possible_replacements.join(', ')}}
           </p>
