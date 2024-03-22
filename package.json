@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "data-file": "syn13363290",
-  "data-version": "66",
+  "data-version": "68",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"npm:dev:server\" \"npm:dev:app\"",
@@ -83,7 +83,7 @@
     "rimraf": "^3.0.2",
     "rollbar": "^2.25.0",
     "rxjs": "^7.5.0",
-    "sanitize-html": "^2.7.0",
+    "sanitize-html": "^2.12.1",
     "screenfull": "^6.0.1",
     "zone.js": "^0.11.4"
   },
@@ -145,7 +145,7 @@
     "sass": "^1.52.2",
     "sass-loader": "^13.0.0",
     "source-map-loader": "^4.0.0",
-    "start-server-and-test": "^1.14.0",
+    "start-server-and-test": "^2.0.3",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "style-loader": "^3.3.1",

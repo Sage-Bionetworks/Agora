@@ -869,7 +869,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     }
   }
 
-  getCircleColor(logfc: number) {
+  getCircleColor(logfc: number | undefined) {
+    if (logfc === undefined)
+      return '#F0F0F0';
+
     const rounded = this.helperService.getSignificantFigures(logfc, 3);
     if (rounded > 0) {
       if (rounded < 0.1) {
@@ -898,31 +901,35 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     }
   }
 
-  getCircleSize(pval: number) {
+  getCircleSize(pval: number | undefined) {
+    // define min and max size of possible circles in pixels
+    const MIN_SIZE = 6;
+    const MAX_SIZE = 50;
+
+    // shouldn't be undefined but if it is, don't show a circle
+    if (pval === undefined)
+      return 0;
+
+    // if significance cutoff radio button selected and 
+    // p-Value > significance threshhold, don't show
     if (this.significanceThresholdActive && pval > this.significanceThreshold) {
       return 0;
     }
 
     const pValue = 1 - (this.nRoot(pval, 3) || 0);
-    const size = Math.round(100 * pValue * 0.44);
-    return size < 6 ? 6 : size;
+    const size = Math.round(pValue * MAX_SIZE);
+
+    // ensure the smallest circles have a min size to be easily hoverable/clickable
+    return size < MIN_SIZE ? MIN_SIZE : size;
   }
 
   getCircleStyle(tissueName: string, gene: GCTGene) {
     const tissue = gene.tissues.find((t) => t.name === tissueName);
-    let size = 0;
-    let color = '#F0F0F0';
-
-    if (tissue?.adj_p_val) {
-      size = this.getCircleSize(tissue.adj_p_val);
-    }
-
-    if (tissue?.logfc) {
-      color = this.getCircleColor(tissue.logfc);
-    }
-
+    const size = this.getCircleSize(tissue?.adj_p_val);
+    const color = this.getCircleColor(tissue?.logfc);
+    
     return {
-      display: size ? 'block' : 'none',
+      display: size > 0 ? 'block' : 'none',
       width: size + 'px',
       height: size + 'px',
       backgroundColor: color,
@@ -1019,10 +1026,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
           ...baseRow,
           ...[
             tissueName,
-            tissue?.logfc || '',
-            tissue?.ci_r || '',
-            tissue?.ci_l || '',
-            tissue?.adj_p_val || '',
+            tissue ? tissue.logfc : '',
+            tissue ? tissue.ci_r : '',
+            tissue ? tissue.ci_l : '',
+            tissue ? tissue.adj_p_val : '',
             g.biodomains?.join(',') || '',
           ],
         ]);

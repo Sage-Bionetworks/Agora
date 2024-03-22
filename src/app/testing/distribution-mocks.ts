@@ -415,6 +415,18 @@ export const distributionMock: Distribution = {
       type: 'LFQ',
     },
   ],
+  proteomics_SRM: [
+    {
+      _id: '62d7a4a5ad65935190ad8812',
+      tissue: 'DLPFC',
+      min: -8.8431,
+      max: 9.0714,
+      first_quartile: -2.1252,
+      median: -0.0592,
+      third_quartile: 2.3535,
+      type: 'SRM',
+    },
+  ],
   proteomics_TMT: [
     {
       _id: '62d7a4a5ad65935190ad8812',

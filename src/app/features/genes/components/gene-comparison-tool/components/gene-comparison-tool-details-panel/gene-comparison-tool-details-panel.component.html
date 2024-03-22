@@ -15,11 +15,11 @@
     <div class="gct-details-panel-data">
       <div>
         <div>{{ data.valueLabel }}</div>
-        <div *ngIf="data.pValue">P-Value</div>
+        <div>P-Value</div>
       </div>
       <div>
         <div>{{ getSignificantFigures(data.value, 3) }}</div>
-        <div *ngIf="data.pValue">
+        <div>
           {{ getSignificantFigures(data.pValue, 3) }}
         </div>
       </div>
