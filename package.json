@@ -69,7 +69,7 @@
     "dc": "^4.2.7",
     "debug": "^4.3.4",
     "dom-to-image-more": "^2.10.1",
-    "express": "^4.18.1",
+    "express": "^4.19.2",
     "file-saver": "^2.0.5",
     "helmet": "^5.1.0",
     "lodash": "^4.17.21",
