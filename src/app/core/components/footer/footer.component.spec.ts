@@ -72,6 +72,8 @@ describe('Component: Footer', () => {
     const link = element.querySelector('.footer-logo a') as HTMLElement;
     expect(link).toBeTruthy();
 
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     router.navigate(['/about']);
     tick();
     expect(location.path()).toBe('/about');

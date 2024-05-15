@@ -618,6 +618,12 @@
         flex-grow: 1;
       }
     }
+
+    #pinned-proteins {
+      font-weight: normal; 
+      padding: 5px 0; 
+      font-size: 14px;
+    }
   }
 
   button {

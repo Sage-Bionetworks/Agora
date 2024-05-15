@@ -69,9 +69,16 @@ export class GeneSimilarComponent implements OnInit {
         this.helperService.setLoading(true);
         this.geneService
           .getGene(params.get('id') as string)
-          .subscribe((gene: Gene) => {
-            this.gene = gene;
-            this.init();
+          .subscribe((gene: Gene | null) => {
+            if (!gene) {
+              this.helperService.setLoading(false);
+              // https://github.com/angular/angular/issues/45202
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
+            } else {
+              this.gene = gene;
+              this.init();
+            }
           });
       }
     });
@@ -139,6 +146,8 @@ export class GeneSimilarComponent implements OnInit {
   navigateToGeneComparisonTool() {
     const ids: string[] = this.genes.map((g: Gene) => g.ensembl_gene_id);
     this.helperService.setGCTSelection(ids);
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(['/genes/comparison']);
   }
 }

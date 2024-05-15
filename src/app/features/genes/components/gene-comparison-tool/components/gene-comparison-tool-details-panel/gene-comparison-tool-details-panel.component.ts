@@ -96,7 +96,7 @@ export class GeneComparisonToolDetailsPanelComponent {
   }
 
   getSignificantFigures(n: any, b: any) {
-    const emdash = '&#8212;'; // Shift+Option+Hyphen
+    const emdash = '\u2014'; // Shift+Option+Hyphen
     if (n === null || n === undefined)
       return emdash;
     return this.helperService.getSignificantFigures(n, b);

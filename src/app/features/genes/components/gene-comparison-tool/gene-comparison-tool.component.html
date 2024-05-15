@@ -284,11 +284,23 @@
             </p-table>
 
             <div
-              *ngIf="pinnedGenes.length > 0"
+              *ngIf="pinnedItems.length > 0"
               class="table-divider table-divider-1"
             >
               <div class="table-divider-inner">
-                <div id="pinned-genes-header">Pinned Genes ({{ pinnedGenes.length }}/50)</div>
+                <div id="pinned-genes-header">
+                  <span *ngIf="category === 'RNA - Differential Expression'">
+                    Pinned Genes ({{ pinnedItems.length }}/50)
+                  </span>
+                  <div *ngIf="category === 'Protein - Differential Expression'">
+                    <div>
+                    Pinned Genes ({{ uniquePinnedGenesCount }}/50)&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div id="pinned-proteins">
+                      {{ pinnedItems.length }} Protein<ng-container *ngIf="pinnedItems.length > 1">s</ng-container>
+                    </div>
+                  </div>
+                </div>
                 <div class="csv-download-button">
                   <button (click)="downloadPinnedCsv()">
                     <svg-icon name="download" customClass="two-tone"></svg-icon
@@ -296,13 +308,13 @@
                   </button>
                 </div>
                 <div class="clear-all-button">
-                  <button (click)="clearPinnedGenes()">Clear All</button>
+                  <button (click)="onClearAllClick()">Clear All</button>
                 </div>
               </div>
             </div>
             <p-table
               #pinnedTable
-              [value]="pinnedGenes"
+              [value]="pinnedItems"
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               breakpoint="0"
@@ -330,7 +342,7 @@
                       </div>
                       <div>
                         <button
-                          (click)="unpinGene(gene)"
+                          (click)="onUnPinGeneClick(gene)"
                           pTooltip="Unpin this gene"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
@@ -391,18 +403,19 @@
                 <div *ngIf="genesTable.filteredValue?.length">
                   <button
                     class="pin-all-button"
+                    [disabled]="getPinDisabledStatus()"
                     [ngClass]="{
-                      disabled: pinnedGenes.length >= maxPinnedGenes
+                      disabled: getPinDisabledStatus()
                     }"
-                    (click)="pinFilteredGenes()"
+                    (click)="onPinAllClick()"
                     [pTooltip]="
-                      pinnedGenes.length >= maxPinnedGenes
-                        ? 'You have already pinned the maximum number of genes (' +
+                      getPinDisabledStatus()
+                        ? 'You have already pinned the maximum number of Ensembl identifiers (' +
                           maxPinnedGenes +
                           '). You must unpin some genes before you can pin more.'
-                        : 'Add all matching genes to Pinned list'
+                        : 'Pin all matching rows to the top.'
                     "
-                    tooltipPosition="top"
+                    tooltipPosition="left"
                     tooltipStyleClass="tooltip"
                   >
                     <svg-icon name="pin" customClass="two-tone"></svg-icon>
@@ -413,7 +426,7 @@
             </div>
             <div
               *ngIf="
-                !searchTerm && !hasSelectedFilters() && pinnedGenes.length > 0
+                !searchTerm && !hasSelectedFilters() && pinnedItems.length > 0
               "
               class="table-divider"
             >
@@ -458,16 +471,17 @@
                       </div>
                       <div>
                         <button
-                          (click)="pinGene(gene)"
+                          (click)="onPinGeneClick(gene)"
+                          [disabled]="getPinDisabledStatus()"
                           [ngClass]="{
-                            disabled: pinnedGenes.length >= maxPinnedGenes
+                            disabled: getPinDisabledStatus()
                           }"
                           [pTooltip]="
-                            pinnedGenes.length >= maxPinnedGenes
-                              ? 'You have already pinned the maximum number of genes (' +
+                            getPinDisabledStatus()
+                              ? 'You have already pinned the maximum number of Ensembl identifiers (' +
                                 maxPinnedGenes +
                                 '). You must unpin some genes before you can pin more.'
-                              : 'Pin this gene to the top of the list'
+                              : 'Pin this row to the top of the list'
                           "
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
@@ -561,8 +575,8 @@
     <gene-comparison-tool-pinned-genes-modal
       #pinnedGenesModal
       (onChange)="onPinnedGenesModalChange($event)"
-      [pinnedGenes]="pinnedGenes"
-      [pendingPinnedGenes]="pendingPinnedGenes"
+      [pinnedGenes]="pinnedItems"
+      [pendingPinnedGenes]="pendingPinnedItems"
       [maxPinnedGenes]="maxPinnedGenes"
     ></gene-comparison-tool-pinned-genes-modal>
   </div>

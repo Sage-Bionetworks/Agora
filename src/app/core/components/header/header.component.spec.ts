@@ -69,6 +69,8 @@ describe('Component: Header', () => {
     const link = element.querySelector('.header-logo a') as HTMLElement;
     expect(link).toBeTruthy();
 
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     router.navigate(['/nominated-targets']);
     tick();
     expect(location.path()).toBe('/nominated-targets');

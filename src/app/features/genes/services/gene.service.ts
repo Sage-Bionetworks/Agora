@@ -27,13 +27,15 @@ export class GeneService {
 
   // ------------------------------------------------------------------------ //
 
-  getGene(id: string): Observable<Gene> {
+  getGene(id: string): Observable<Gene | null> {
     if (this.genes[id]) {
       return of(this.genes[id]);
     }
-
+    
     return this.apiService.getGene(id).pipe(
-      map((gene: Gene) => {
+      map((gene: Gene | null) => {
+        if (!gene)
+          return null;
         gene.similar_genes_network = this.getSimilarGenesNetwork(gene);
         return (this.genes[id] = gene);
       })

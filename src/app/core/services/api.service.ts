@@ -50,7 +50,7 @@ export class ApiService {
     return url;
   }
 
-  getGene(id: string): Observable<Gene> {
+  getGene(id: string): Observable<Gene | null> {
     return this.http.get<Gene>(this.getBaseUrl() + '/api/genes/' + id, {
       headers: new HttpHeaders(defaultHeaders),
     });

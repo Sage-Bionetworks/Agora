@@ -35,13 +35,13 @@ test.describe('specific viewport block', () => {
     await page.goto('/');
 
     // Hamburger menu should be hidden for the desktop viewport
-    expect(page.locator('button.header-nav-toggle')).toBeHidden();
-    
+    await expect(page.locator('button.header-nav-toggle')).toBeHidden();
+
     // look for news link and click it
-    const newsLink = await page.getByRole('link', { name: 'News'});
+    const newsLink = page.getByRole('link', { name: 'News' });
 
     // news link should be visible on the home page
-    expect(newsLink).toBeVisible();
+    await expect(newsLink).toBeVisible();
 
     await newsLink.click();
     await expect(page).toHaveTitle('News | Agora Releases');

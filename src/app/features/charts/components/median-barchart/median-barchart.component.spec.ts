@@ -54,8 +54,8 @@ describe('Component: BarChart - Median', () => {
   let component: MedianBarChartComponent;
   let element: HTMLElement;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(waitForAsync(async () => {
+    await TestBed.configureTestingModule({
       declarations: [MedianBarChartComponent],
       imports: [RouterTestingModule],
       providers: [HelperService],

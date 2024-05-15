@@ -20,7 +20,7 @@ import {
 
 @Injectable()
 export class ApiServiceStub {
-  getGene(id: string): Observable<Gene> {
+  getGene(id: string): Observable<Gene | null> {
     return of(geneMock1);
   }
 

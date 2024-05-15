@@ -97,8 +97,8 @@ export class GeneNominatedTargetsComponent implements OnInit {
         // First map all entries nested in the data to a new array
         if (de.target_nominations?.length) {
           teamsArray = de.target_nominations.map((nt: TargetNomination) => nt.team);
-          studyArray = de.target_nominations.map(
-            (nt: TargetNomination) => nt.study
+          studyArray = this.removeNullAndEmptyStrings(
+            de.target_nominations.map((nt: TargetNomination) => nt.study)
           );
           programsArray = de.target_nominations.map(
             (nt: TargetNomination) => nt.source
@@ -120,37 +120,14 @@ export class GeneNominatedTargetsComponent implements OnInit {
         inputDataArray = this.commaFlattenArray(inputDataArray);
 
         // Populate targetNomination display fields
-        de.teams_display_value = '';
-        if (teamsArray.length) {
-          de.teams_display_value = teamsArray
-            .filter(this.getUnique)
-            .sort((a: string, b: string) => a.localeCompare(b))
-            .join(', ');
-        }
-
-        de.study_display_value = '';
-        if (teamsArray.length) {
-          de.study_display_value = studyArray
-            .filter(this.getUnique)
-            .sort((a: string, b: string) => a.localeCompare(b))
-            .join(', ');
-        }
-
-        de.programs_display_value = '';
-        if (programsArray.length) {
-          de.programs_display_value = programsArray
-            .filter(this.getUnique)
-            .sort((a: string, b: string) => a.localeCompare(b))
-            .join(', ');
-        }
-
-        de.input_data_display_value = '';
-        if (inputDataArray.length) {
-          de.input_data_display_value = inputDataArray
-            .filter(this.getUnique)
-            .sort((a: string, b: string) => a.localeCompare(b))
-            .join(', ');
-        }
+        de.teams_display_value =
+          this.getCommaSeparatedStringOfUniqueSortedValues(teamsArray);
+        de.study_display_value =
+          this.getCommaSeparatedStringOfUniqueSortedValues(studyArray);
+        de.programs_display_value =
+          this.getCommaSeparatedStringOfUniqueSortedValues(programsArray);
+        de.input_data_display_value =
+          this.getCommaSeparatedStringOfUniqueSortedValues(inputDataArray);
 
         de.initial_nomination_display_value = initialNominationArray.length
           ? Math.min(...initialNominationArray)
@@ -185,31 +162,37 @@ export class GeneNominatedTargetsComponent implements OnInit {
     });
   }
 
+  removeNullAndEmptyStrings(items: (string | null)[]) {
+    return items.filter((item) => Boolean(item)) as string[];
+  }
+
   getUnique(value: string, index: number, self: any) {
     return self.indexOf(value) === index;
   }
 
-  commaFlattenArray(array: any[]): any[] {
-    const finalArray: any[] = [];
-    if (array.length) {
-      array.forEach((t) => {
-        if (t) {
-          const i = t.indexOf(', ');
-          if (i > -1) {
-            const tmpArray = t.split(', ');
-            finalArray.push(tmpArray[0]);
-            finalArray.push(tmpArray[1]);
-          } else {
-            finalArray.push(t);
-          }
-        } else {
-          finalArray.push('');
-        }
-      });
-      array = finalArray;
-    }
+  commaFlattenArray(array: string[]): string[] {
+    const finalArray: string[] = [];
+    array.forEach((t) => {
+      const i = t.indexOf(', ');
+      if (i > -1) {
+        const tmpArray = t.split(', ');
+        tmpArray.forEach((val) => finalArray.push(val));
+      } else {
+        finalArray.push(t);
+      }
+    });
+    return finalArray;
+  }
 
-    return array;
+  getCommaSeparatedStringOfUniqueSortedValues(inputArray: string[]) {
+    let display_value = '';
+    if (inputArray.length) {
+      display_value = inputArray
+        .filter(this.getUnique)
+        .sort((a: string, b: string) => a.localeCompare(b))
+        .join(', ');
+    }
+    return display_value;
   }
 
   onSearch(event: any) {
