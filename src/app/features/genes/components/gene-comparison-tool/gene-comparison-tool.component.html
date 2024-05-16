@@ -343,7 +343,7 @@
                       <div>
                         <button
                           (click)="onUnPinGeneClick(gene)"
-                          pTooltip="Unpin this gene"
+                          pTooltip="Unpin this row"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
                         >
@@ -410,7 +410,7 @@
                     (click)="onPinAllClick()"
                     [pTooltip]="
                       getPinDisabledStatus()
-                        ? 'You have already pinned the maximum number of Ensembl identifiers (' +
+                        ? 'You have already pinned the maximum number of genes (' +
                           maxPinnedGenes +
                           '). You must unpin some genes before you can pin more.'
                         : 'Pin all matching rows to the top.'
@@ -478,7 +478,7 @@
                           }"
                           [pTooltip]="
                             getPinDisabledStatus()
-                              ? 'You have already pinned the maximum number of Ensembl identifiers (' +
+                              ? 'You have already pinned the maximum number of genes (' +
                                 maxPinnedGenes +
                                 '). You must unpin some genes before you can pin more.'
                               : 'Pin this row to the top of the list'

@@ -36,7 +36,7 @@ export const expectPinnedProteinsCountText = async (
 export const expectTooManyPinnedGenesToast = async (page: Page) => {
   const alert = page.getByRole('alert');
   await expect(alert).toHaveText(
-    'Only 50 rows were added, because you reached the maximum of 50 pinned Ensembl identifiers.'
+    'Only 50 rows were pinned, because you reached the maximum of 50 pinned genes.'
   );
 };
 

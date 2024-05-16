@@ -752,14 +752,14 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   showMaxPinnedRowsErrorToast(rows: number) {
     let message = '';
     if (rows === 0) {
-      message = 'No rows were added because you reached the maximum of ' +
-        this.maxPinnedGenes + ' pinned Ensembl identifiers.';
+      message = 'No rows were pinned because you reached the maximum of ' +
+        this.maxPinnedGenes + ' pinned genes.';
     } else if (rows === 1) {
-      message = 'Only ' + rows + ' row was added, because you reached the maximum of ' +
-      this.maxPinnedGenes + ' pinned Ensembl identifiers.';
+      message = 'Only ' + rows + ' row were pinned, because you reached the maximum of ' +
+      this.maxPinnedGenes + ' pinned genes.';
     } else {
-      message = 'Only ' + rows + ' rows were added, because you reached the maximum of ' +
-      this.maxPinnedGenes + ' pinned Ensembl identifiers.';
+      message = 'Only ' + rows + ' rows were pinned, because you reached the maximum of ' +
+      this.maxPinnedGenes + ' pinned genes.';
     }
     
     const self = this;
@@ -807,9 +807,9 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       sticky: true,
       summary: '',
       detail:
-        'Could not pin the requested item because you reached the maximum of ' +
+        'The row was not pinned because you reached the maximum of ' +
         this.maxPinnedGenes +
-        ' pinned Ensembl identifiers.',
+        ' pinned genes.',
     });
     setTimeout(() => {
       self.messageService.clear();
