@@ -97,9 +97,15 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   urlParamsSubscription: Subscription | undefined;
 
   /* Pinned ---------------------------------------------------------------- */
-  pinnedGenes: GCTGene[] = [];
-  pinnedGenesCache: { [key: string]: GCTGene[] } = {};
-  pendingPinnedGenes: GCTGene[] = [];
+  initialLoad = true;
+  
+  lastPinnedCategory = '';
+  lastPinnedSubCategory = '';
+
+  pinnedItems: GCTGene[] = [];
+  uniquePinnedGenesCount = 0;
+  pinnedItemsCache: GCTGene[] = [];
+  pendingPinnedItems: GCTGene[] = [];
   maxPinnedGenes = 50;
 
   /* ----------------------------------------------------------------------- */
@@ -237,52 +243,91 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     return property.split('.').reduce((o: any, i: any) => o[i], gene);
   }
 
-  initData(genes: GCTGene[]) {
+  getUid(item: GCTGene) {
+    // rna is just the ensembl gene id
+    // protein is a combination of ensembl gene id and uniprotid
+    if (this.category === 'RNA - Differential Expression')
+      return item.ensembl_gene_id;
+    else
+      return item.ensembl_gene_id + item.uniprotid;
+  }
+
+  // when current category is RNA, this method will always return a list of ensembl gene ids, regardless of previous category
+  // when current category is Protein, this method will return either ensg (if previous category was RNA) or ensg + uniprot (if previous category was Protein)
+  getPreviousPins() {
+    // if the last pinned category is blank, then this means this is the initial load
+    // note: we only need to check the category for blank but subcategory will also be blank
+    // In this scenario, we check the url to see if this was a shared url with pinned genes/proteins
+    if (this.lastPinnedCategory === '') {
+      // check the url for pinned genes/proteins
+      this.setLastPinnedCategories();
+      return this.getUrlParam('pinned', true);
+    }
+
+    if (this.currentCategoriesMatchLastPinnedCategories()) {
+      // load from cache since it has been previously cached
+      // uid works for both proten and rna cases
+      return this.pinnedItemsCache.map((g: GCTGene) => g.uid);
+    } else {
+      // categories don't match, so grab it from the cache and format it
+      if (this.category === 'RNA - Differential Expression') {
+        // if the current category is RNA, we only need the previous ensgs
+        // instead of getting the uid, we need to get the ensg
+        return this.pinnedItemsCache.map((g: GCTGene) => g.ensembl_gene_id);
+      } else {
+        // if the current category is Protein, we need the uid
+        // because the previous category and subcategory may or may not match
+        // e.g. same category and different subcategory OR different category
+        return this.pinnedItemsCache.map((g: GCTGene) => g.uid);
+      }
+    }
+  }
+  
+  initData(items: GCTGene[]) {
+    // hide brain region columns initially
     this.brainRegionsColumns.forEach(c => c.visible = false);
+    
+    const itemsToPin: GCTGene[] = [];
 
-    const pinnedGenes: GCTGene[] = [];
-    const currentPinnedGenesCache = this.getPinnedGenesCache(
-      this.category,
-      this.subCategory
-    );
-    const urlPins = currentPinnedGenesCache.length
-      ? currentPinnedGenesCache.map((g: GCTGene) => g.uid)
-      : this.getUrlParam('pinned', true);
-
-    genes.forEach((gene: GCTGene) => {
-      gene.uid = gene.ensembl_gene_id;
-      gene.search_array = [
-        gene.ensembl_gene_id.toLowerCase(),
-        gene.hgnc_symbol.toLowerCase(),
+    // load the previous pins and format previousPins
+    const previousPins = this.getPreviousPins();
+    
+    items.forEach((item: GCTGene) => {
+      item.uid = this.getUid(item);
+      item.search_array = [
+        item.ensembl_gene_id.toLowerCase(),
+        item.hgnc_symbol.toLowerCase(),
       ];
 
-      if ('Protein - Differential Expression' === this.category) {
-        gene.uid += gene.uniprotid;
-        gene.search_array.push(gene.uniprotid?.toLowerCase() || '');
+      if (this.category === 'Protein - Differential Expression') {
+        item.search_array.push(item.uniprotid?.toLowerCase() || '');
 
-        if (
-          urlPins.includes(gene.uid) ||
-          urlPins.includes(gene.ensembl_gene_id)
-        ) {
-          pinnedGenes.push(gene);
+        // if there is a match on uid or ensembl_gene_id, add it to pinnedGenes
+        // if it wasn't added already
+        if (this.lastPinnedCategory === 'RNA - Differential Expression') {
+          // previousPins would be a list of ensg
+          if (previousPins.includes(item.ensembl_gene_id))
+            itemsToPin.push(item);
+        } else {
+          // previousPins would be a list of ensg+uniprotids
+          if (previousPins.includes(item.uid))
+            itemsToPin.push(item);
         }
       } else {
-        // Filter to get a list of ENSGs
-        if (
-          urlPins.map((id: string) => id.substring(0, 15)).includes(gene.uid)
-        ) {
-          pinnedGenes.push(gene);
+        if (previousPins.includes(item.uid)) {
+          itemsToPin.push(item);
         }
       }
 
-      gene.search_string = gene.search_array.join();
+      item.search_string = item.search_array.join();
 
+      // apply filters
       this.filters.forEach((filter: GCTFilter) => {
         if (!filter.field) {
           return;
         }
 
-        const value = this.getGeneProperty(gene, filter.field);
+        const value = this.getGeneProperty(item, filter.field);
 
         if (value) {
           if (Array.isArray(value)) {
@@ -296,19 +341,26 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       });
 
       // add tissue columns
-      gene.tissues?.forEach((tissue: GCTGeneTissue) => {
-        //if (!this.brainRegionsColumns.map(c => c.field).includes(tissue.name)) {
+      item.tissues?.forEach((tissue: GCTGeneTissue) => {
         const column = this.brainRegionsColumns.find(c => c.field === tissue.name);
         if (column)
           column.visible = true;
-        //}
       });
     });
 
+    // on initial load, we want to cache any items
+    if (this.initialLoad) {
+      this.initialLoad = false;
+      this.setPinnedItemsCache(itemsToPin);
+    }
+
+    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+    
     this.updateVisibleColumns();
 
     if (!this.sortField || !this.columns.includes(this.sortField)) {
       this.sortField = this.columns[0];
+      this.sortOrder = -1;
     }
 
     const preSelection = this.helperService.getGCTSelection();
@@ -317,25 +369,28 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       this.searchTerm = preSelection.join(',');
     }
 
-    if (pinnedGenes.length) {
-      pinnedGenes.sort((a, b) =>
+    if (itemsToPin.length) {
+      itemsToPin.sort((a, b) =>
         a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1
       );
 
       if (
         'Protein - Differential Expression' === this.category &&
-        pinnedGenes.length > this.maxPinnedGenes
+        this.uniquePinnedGenesCount > this.maxPinnedGenes
       ) {
-        this.pendingPinnedGenes = pinnedGenes;
+        this.pendingPinnedItems = itemsToPin;
         this.pinnedGenesModal.show();
       } else {
-        this.pinnedGenes = [];
-        this.pendingPinnedGenes = [];
-        this.pinGenes(pinnedGenes);
+        this.pinnedItems = [];
+        this.pendingPinnedItems = [];
+        this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+        this.pinGenes(itemsToPin);
       }
+    } else {
+      this.pinnedItems = [];
     }
 
-    this.genes = genes;
+    this.genes = items;
   }
 
   /* ----------------------------------------------------------------------- */
@@ -343,6 +398,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* ----------------------------------------------------------------------- */
 
   updateSubCategories() {
+    // update subcategory label text
     if ('Protein - Differential Expression' === this.category) {
       this.subCategoryLabel = 'Profiling Method';
     } else {
@@ -351,6 +407,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
 
     this.subCategories = cloneDeep(variables.subCategories)[this.category];
 
+    // default to first option if subcategory not defined/found
     if (
       !this.subCategory ||
       !this.subCategories.find(
@@ -362,18 +419,11 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   }
 
   onCategoryChange() {
-    // Make sure we clear the protein cache so pins are converted from RNA to Protein
-    if (this.category === 'RNA - Differential Expression') {
-      this.clearPinnedGenesCache('Protein - Differential Expression');
-    }
-
     this.updateSubCategories();
-    this.updateUrl();
     this.loadGenes();
   }
 
   onSubCategoryChange() {
-    this.updateUrl();
     this.loadGenes();
   }
 
@@ -613,96 +663,205 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
   /* Pin/Unpin
   /* ----------------------------------------------------------------------- */
 
+  currentCategoriesMatchLastPinnedCategories() {
+    // returns if the current categories match the last pinned categories
+    return this.lastPinnedCategory === this.category
+      && this.lastPinnedSubCategory === this.subCategory;
+  }
+
+  setLastPinnedCategories() {
+    this.lastPinnedCategory = this.category;
+    this.lastPinnedSubCategory = this.subCategory;
+  }
+
   getPinnedGenesCacheKey(category: string, subCategory?: string) {
     return (category + (subCategory ? '-' + subCategory : ''))
       .replace(/[^a-z0-9]/gi, '')
       .toLowerCase();
   }
 
-  getPinnedGenesCache(category: string, subCategory?: string) {
-    const key = this.getPinnedGenesCacheKey(category, subCategory);
-    return this.pinnedGenesCache[key] || [];
+  setPinnedItemsCache(genes: GCTGene[]) {
+    this.pinnedItemsCache = genes;
   }
 
-  setPinnedGenesCache(genes: GCTGene[], category: string, subCategory: string) {
-    const key = this.getPinnedGenesCacheKey(category, subCategory);
-    this.pinnedGenesCache[key] = genes;
-  }
-
-  clearPinnedGenesCache(category?: string, subCategory?: string) {
-    if (!category && !subCategory) {
-      this.pinnedGenesCache = {};
-    } else {
-      const key = this.getPinnedGenesCacheKey(category as string, subCategory);
-
-      if (subCategory) {
-        delete this.pinnedGenesCache[key];
-      } else {
-        for (const k in this.pinnedGenesCache) {
-          if (k.indexOf(key) === 0) {
-            delete this.pinnedGenesCache[k];
-          }
-        }
-      }
-    }
+  clearPinnedItemsCache() {
+    this.pinnedItemsCache = [];
+    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
   refreshPinnedGenes() {
-    this.setPinnedGenesCache(this.pinnedGenes, this.category, this.subCategory);
+    this.setPinnedItemsCache(this.pinnedItems);
     this.filter();
     this.updateUrl();
   }
 
+  onPinGeneClick(gene: GCTGene) {
+    // user-initiated gene pin means we set the last pinned categories
+    this.setLastPinnedCategories();
+
+    this.pinGene(gene);
+
+    if (this.category === 'Protein - Differential Expression')
+      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+  }
+
   pinGene(gene: GCTGene, refresh = true) {
-    const index = this.pinnedGenes.findIndex(
+    const index = this.pinnedItems.findIndex(
       (g: GCTGene) => g.uid === gene.uid
-    );
-    
-    if (index > -1 || this.pinnedGenes.length >= this.maxPinnedGenes) {
-      return;
+    );    
+    if (this.category === 'RNA - Differential Expression') {
+      if (index > -1 || this.pinnedItems.length >= this.maxPinnedGenes)
+        return;
+    } else {
+      // the same unique id exists, so don't allow it to be added
+      if (index > -1)
+        return;
+
+      if (this.uniquePinnedGenesCount >= this.maxPinnedGenes) {
+        // border condition: if we are at the max allowable pinned genes
+        // check if the pinned genes list has a gene with the ensembl id, 
+        // in which case the protein can be added
+        const ensemblIndex = this.pinnedItems.findIndex(
+          (g: GCTGene) => g.ensembl_gene_id === gene.ensembl_gene_id
+        );
+        if (ensemblIndex < 0) {
+          this.showUnableToAddItemErrorToast();
+          return;
+        }
+      }
     }
-    
-    this.pinnedGenes.push(gene);
+
+    this.pinnedItems.push(gene);
+    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
     
     if (refresh) {
-      this.clearPinnedGenesCache();
+      this.clearPinnedItemsCache();
       this.refreshPinnedGenes();
     }
   }
 
+  getCountOfUniqueGenes() {
+    // this method is used for protein views since there can be multiple pinned proteins
+    // that have the same ensg value but different uniprotids
+    // so this will return the count of genes with unique ensgs
+    const uids = this.pinnedItems.map(g => g.ensembl_gene_id);
+    const uniqueUids = new Set(uids);
+    return uniqueUids.size;
+  }
+
+  showMaxPinnedRowsErrorToast(rows: number) {
+    let message = '';
+    if (rows === 0) {
+      message = 'No rows were pinned because you reached the maximum of ' +
+        this.maxPinnedGenes + ' pinned genes.';
+    } else if (rows === 1) {
+      message = 'Only ' + rows + ' row were pinned, because you reached the maximum of ' +
+      this.maxPinnedGenes + ' pinned genes.';
+    } else {
+      message = 'Only ' + rows + ' rows were pinned, because you reached the maximum of ' +
+      this.maxPinnedGenes + ' pinned genes.';
+    }
+    
+    const self = this;
+    this.messageService.clear();
+    this.messageService.add({
+      severity: 'warn',
+      sticky: true,
+      summary: '',
+      detail: message,
+    });
+    setTimeout(() => {
+      self.messageService.clear();
+    }, 5000);
+  }
+
   pinGenes(genes: GCTGene[]) {
-    const remaining = this.maxPinnedGenes - this.pinnedGenes.length;
+    const remaining = this.maxPinnedGenes - this.pinnedItems.length;
 
     if (remaining < 1) {
       return;
-    } else if (remaining < genes?.length) {
-      const self = this;
-      this.messageService.clear();
-      this.messageService.add({
-        severity: 'info',
-        sticky: true,
-        summary: '',
-        detail:
-          'Only ' +
-          remaining +
-          ' genes were added, because you reached the maxium of ' +
-          this.maxPinnedGenes +
-          ' pinned genes. ',
-      });
-      setTimeout(() => {
-        self.messageService.clear();
-      }, 5000);
+    } else {
+      if (this.category === 'RNA - Differential Expression') {
+        if (remaining < genes?.length) {
+          this.showMaxPinnedRowsErrorToast(remaining);
+        }
+        genes.slice(0, remaining).forEach((g: GCTGene) => {
+          this.pinGene(g, false);
+        });    
+      } else {
+        genes.slice(0, genes.length).forEach((g: GCTGene) => {
+          this.pinGene(g, false);
+        });   
+      }
     }
 
-    genes.slice(0, remaining).forEach((g: GCTGene) => {
-      this.pinGene(g, false);
-    });
-
-    this.refreshPinnedGenes();
+    if (this.category === 'Protein - Differential Expression')
+      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
   }
 
-  unpinGene(gene: GCTGene, refresh = true) {
-    const index = this.pinnedGenes.findIndex(
+  showUnableToAddItemErrorToast() {
+    const self = this;
+    this.messageService.clear();
+    this.messageService.add({
+      severity: 'warn',
+      sticky: true,
+      summary: '',
+      detail:
+        'The row was not pinned because you reached the maximum of ' +
+        this.maxPinnedGenes +
+        ' pinned genes.',
+    });
+    setTimeout(() => {
+      self.messageService.clear();
+    }, 5000);
+  }
+
+  ensgExistsInProteins(ensemblGeneId: string) {
+    const ensemblIndex = this.pinnedItems.findIndex(
+      (g: GCTGene) => g.ensembl_gene_id === ensemblGeneId
+    );
+    if (ensemblIndex < 0) {
+      return false;
+    }
+    return true;
+  }
+
+  pinProteins(proteins: GCTGene[]) {
+    let remaining = this.maxPinnedGenes - this.uniquePinnedGenesCount;
+    
+    let proteinsAdded = 0;
+
+    let showToast = false;
+    for (let i = 0; i < proteins.length; i++) {
+      // if remaining count is zero, show alert toast
+      if (remaining <= 0) {
+        // check border condition: when there are no remaining ensg slots, it is still possible there
+        // are proteins that could be added
+        showToast = true;
+        if (this.ensgExistsInProteins(proteins[i].ensembl_gene_id)) {
+          // if the gene exists, we can still add the protein
+          this.pinGene(proteins[i], false);
+          proteinsAdded++;
+          remaining = this.maxPinnedGenes - this.getCountOfUniqueGenes();
+        }
+      } else {
+        // add protein to pinned collection
+        this.pinGene(proteins[i], false);
+        proteinsAdded++;
+        // have to call method below since we need to recompute the count of unique genes
+        remaining = this.maxPinnedGenes - this.getCountOfUniqueGenes();
+      }
+    }
+    if (showToast) {
+      this.showMaxPinnedRowsErrorToast(proteinsAdded);
+    }
+    this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+  }
+
+  onUnPinGeneClick(gene: GCTGene, refresh = true) {
+    this.setLastPinnedCategories();
+
+    const index = this.pinnedItems.findIndex(
       (g: GCTGene) => g.uid === gene.uid
     );
 
@@ -710,41 +869,72 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       return;
     }
 
-    this.pinnedGenes.splice(index, 1);
+    this.pinnedItems.splice(index, 1);
 
     if (refresh) {
-      this.clearPinnedGenesCache();
+      this.clearPinnedItemsCache();
       this.refreshPinnedGenes();
     }
+
+    if (this.category === 'Protein - Differential Expression')
+      this.uniquePinnedGenesCount = this.getCountOfUniqueGenes();
+  }
+
+  onClearAllClick() {
+    this.setLastPinnedCategories();
+    this.clearPinnedGenes();
   }
 
   clearPinnedGenes() {
-    this.pinnedGenes = [];
-    this.clearPinnedGenesCache();
+    this.pinnedItems = [];
+    this.clearPinnedItemsCache();
     this.refreshPinnedGenes();
   }
 
   getPinnedEnsemblGeneIds() {
-    return this.pinnedGenes.map((g: GCTGene) => g.ensembl_gene_id);
+    return this.pinnedItems.map((g: GCTGene) => g.ensembl_gene_id);
   }
 
   getPinnedUniProtIds() {
-    return this.pinnedGenes.map((g: GCTGene) => g.uniprotid);
+    return this.pinnedItems.map((g: GCTGene) => g.uniprotid);
+  }
+
+  getPinDisabledStatus() {
+    if (this.category === 'RNA - Differential Expression')
+      return this.pinnedItems.length >= this.maxPinnedGenes;
+    else {
+      // default to showing pin/pin all button for protein view
+      return false;
+    }
+  }
+
+  onPinAllClick() {
+    this.setLastPinnedCategories();
+    if (this.category === 'RNA - Differential Expression')
+      this.pinFilteredGenes();
+    else
+      this.pinFilteredProteins();
   }
 
   pinFilteredGenes() {
     this.pinGenes(this.genesTable.filteredValue);
+    this.refreshPinnedGenes();
+  }
+
+  pinFilteredProteins() {
+    this.pinProteins(this.genesTable.filteredValue);
+    this.refreshPinnedGenes();
   }
 
   onPinnedGenesModalChange(response: boolean) {
     if (response) {
-      this.pinnedGenes = [];
-      this.pinGenes(this.pendingPinnedGenes);
+      this.pinnedItems = [];
+      this.pinGenes(this.pendingPinnedItems);
     } else {
       this.category = this.categories[0].value;
       this.onCategoryChange();
     }
-    this.pendingPinnedGenes = [];
+    this.pendingPinnedItems = [];
   }
 
   /* ----------------------------------------------------------------------- */
@@ -779,15 +969,15 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
       params['sortOrder'] = this.sortOrder;
     }
 
-    if (this.pinnedGenes.length > 0) {
-      params['pinned'] = this.pinnedGenes.map(
-        (g: GCTGene) => g.uid || g.ensembl_gene_id
+    if (this.pinnedItems.length > 0) {
+      params['pinned'] = this.pinnedItems.map(
+        (g: GCTGene) => g.uid
       );
       params['pinned'].sort();
     }
 
     if (this.significanceThresholdActive) {
-      params['significance'] = [this.significanceThreshold];
+      params['significance'] = this.significanceThreshold;
     }
 
     this.urlParams = params;
@@ -869,7 +1059,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     }
   }
 
-  getCircleColor(logfc: number) {
+  getCircleColor(logfc: number | undefined) {
+    if (logfc === undefined)
+      return '#F0F0F0';
+
     const rounded = this.helperService.getSignificantFigures(logfc, 3);
     if (rounded > 0) {
       if (rounded < 0.1) {
@@ -898,31 +1091,36 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     }
   }
 
-  getCircleSize(pval: number) {
+  getCircleSize(pval: number | null | undefined) {
+    // define min and max size of possible circles in pixels
+    const MIN_SIZE = 6;
+    const MAX_SIZE = 50;
+
+    // pval shouldn't be undefined but if it is, don't show a circle
+    // null means there is no data in which case, also don't show a circle
+    if (pval === null || pval === undefined)
+      return 0;
+
+    // if significance cutoff radio button selected and 
+    // p-Value > significance threshhold, don't show
     if (this.significanceThresholdActive && pval > this.significanceThreshold) {
       return 0;
     }
 
     const pValue = 1 - (this.nRoot(pval, 3) || 0);
-    const size = Math.round(100 * pValue * 0.44);
-    return size < 6 ? 6 : size;
+    const size = Math.round(pValue * MAX_SIZE);
+
+    // ensure the smallest circles have a min size to be easily hoverable/clickable
+    return size < MIN_SIZE ? MIN_SIZE : size;
   }
 
   getCircleStyle(tissueName: string, gene: GCTGene) {
     const tissue = gene.tissues.find((t) => t.name === tissueName);
-    let size = 0;
-    let color = '#F0F0F0';
-
-    if (tissue?.adj_p_val) {
-      size = this.getCircleSize(tissue.adj_p_val);
-    }
-
-    if (tissue?.logfc) {
-      color = this.getCircleColor(tissue.logfc);
-    }
-
+    const size = this.getCircleSize(tissue?.adj_p_val);
+    const color = this.getCircleColor(tissue?.logfc);
+    
     return {
-      display: size ? 'block' : 'none',
+      display: size > 0 ? 'block' : 'none',
       width: size + 'px',
       height: size + 'px',
       backgroundColor: color,
@@ -993,7 +1191,7 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
     ];
     const data: any[][] = [];
 
-    this.pinnedGenes.forEach((g: GCTGene) => {
+    this.pinnedItems.forEach((g: GCTGene) => {
       const baseRow = [
         g.ensembl_gene_id, 
         g.hgnc_symbol, 
@@ -1019,10 +1217,10 @@ export class GeneComparisonToolComponent implements OnInit, AVI, OnDestroy {
           ...baseRow,
           ...[
             tissueName,
-            tissue?.logfc || '',
-            tissue?.ci_r || '',
-            tissue?.ci_l || '',
-            tissue?.adj_p_val || '',
+            tissue ? tissue.logfc : '',
+            tissue ? tissue.ci_r : '',
+            tissue ? tissue.ci_l : '',
+            tissue ? tissue.adj_p_val : '',
             g.biodomains?.join(',') || '',
           ],
         ]);

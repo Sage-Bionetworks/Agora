@@ -47,6 +47,12 @@ const collections = [
     ]
   },
   {
+    name: 'proteomicssrm',
+    indexes: [
+      { ensembl_gene_id: 1 }
+    ]
+  },
+  {
     name: 'genesbiodomains',
     indexes: [
       { ensembl_gene_id: 1 }

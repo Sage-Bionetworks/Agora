@@ -101,4 +101,15 @@ export class GeneHeroComponent {
       .sort(ascending);
     return biodomains.join(', ');
   }
+
+  getEnsemblUrl() {
+    if (!this.gene?.ensembl_info)
+      return '';
+    return this.gene?.ensembl_info.ensembl_permalink;
+  }
+
+  getPossibleReplacementsURL() {
+    let url = 'https://useast.ensembl.org/Homo_sapiens/Gene/Idhistory?g=';
+    return url += this.gene?.ensembl_gene_id;
+  }
 }

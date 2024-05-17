@@ -32,6 +32,7 @@ div.p-dropdown {
 }
 
 .p-multiselect {
+  z-index: 1000 !important; 
   width: 100%;
   color: #fff;
   position: relative;

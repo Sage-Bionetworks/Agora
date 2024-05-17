@@ -1,10 +1,11 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { AfterViewChecked, Component, Input, ViewChild } from '@angular/core';
 
 import {
   Gene,
   MedianExpression,
   RnaDifferentialExpression,
 } from '../../../../models';
+import { BoxPlotComponent } from '../../../charts/components';
 import { GeneService } from '../../services';
 import { HelperService } from '../../../../core/services';
 
@@ -13,7 +14,7 @@ import { HelperService } from '../../../../core/services';
   templateUrl: './gene-evidence-rna.component.html',
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
-export class GeneEvidenceRnaComponent implements AfterViewInit {
+export class GeneEvidenceRnaComponent implements AfterViewChecked {
   _gene: Gene | undefined;
   get gene(): Gene | undefined {
     return this._gene;
@@ -35,6 +36,9 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
 
   consistencyOfChangeChartData: any | undefined;
 
+  @ViewChild(BoxPlotComponent) boxPlotComponent: BoxPlotComponent | null = null;
+  hasScrolled = false;
+
   constructor(
     private helperService: HelperService,
     private geneService: GeneService
@@ -52,6 +56,8 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     this.differentialExpressionYAxisMax = undefined;
 
     this.consistencyOfChangeChartData = undefined;
+
+    this.hasScrolled = false;
   }
 
   init() {
@@ -71,13 +77,20 @@ export class GeneEvidenceRnaComponent implements AfterViewInit {
     this.initConsistencyOfChange();
   }
 
-  ngAfterViewInit() {
-    const hash = window.location.hash.substr(1);
-    if (hash) {
-      const target = document.getElementById(hash);
-      if (target) {
-        // TODO determine if there are async calls altering the offset height
-        window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+  ngAfterViewChecked() {
+    this.scrollToAnchorLink();
+  }
+
+  scrollToAnchorLink() {
+    // AG-1408 - wait for differential expression box plot to finish loading before scrolling
+    if (this.boxPlotComponent?.isInitialized && !this.hasScrolled) {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const target = document.getElementById(hash);
+        if (target) {
+          window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+          this.hasScrolled = true;
+        }
       }
     }
   }

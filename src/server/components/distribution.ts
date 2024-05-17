@@ -82,6 +82,7 @@ export async function getDistribution() {
   result = {
     rna_differential_expression: await getRnaDistribution(),
     proteomics_LFQ: await getProteomicDistribution('LFQ'),
+    proteomics_SRM: await getProteomicDistribution('SRM'),
     proteomics_TMT: await getProteomicDistribution('TMT'),
     overall_scores: await getOverallScoresDistribution(),
   };

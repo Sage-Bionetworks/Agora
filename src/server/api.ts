@@ -38,6 +38,10 @@ const database = { url: '' };
         doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
+console.log(process.env);
+console.log(process.env.MONGODB_HOST);
+console.log(process.env.MONGODB_PORT);
+
 // Set the database url
 if (
   process.env.MONGODB_HOST &&
@@ -51,7 +55,7 @@ if (
     ],
     { region: 'us-east-1' }
   );
-
+  
   if (results && results.Parameters) {
     database.url =
       'mongodb://' +

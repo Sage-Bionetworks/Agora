@@ -14,6 +14,8 @@ import { MessageService, SortEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
 
+import * as helpers from './gene-comparison-tool.helpers';
+
 import {
   GeneComparisonToolComponent,
   GeneComparisonToolDetailsPanelComponent,
@@ -24,7 +26,8 @@ import {
 import { ApiService, HelperService } from '../../../../core/services';
 import { GeneService } from '../../../../features/genes/services';
 import { routes } from '../../../../app.routing';
-import { comparisonGeneMock1, comparisonGeneMock2 } from '../../../../testing';
+import { comparisonGeneEmptyHGNCMock, comparisonGeneMock1, comparisonGeneMock2 } from '../../../../testing';
+import { GCTGeneTissue } from '../../../../models';
 
 const DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
 
@@ -45,8 +48,8 @@ describe('Component: GeneComparisonToolComponent', () => {
   let element: HTMLElement;
   let route: ActivatedRoute;
 
-  beforeEach(fakeAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(fakeAsync(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         GeneComparisonToolComponent,
         GeneComparisonToolDetailsPanelComponent,
@@ -103,12 +106,13 @@ describe('Component: GeneComparisonToolComponent', () => {
     fixture.detectChanges();
 
     expect(component.genes).toEqual([comparisonGeneMock1, comparisonGeneMock2]);
-    expect(component.pinnedGenes).toEqual([comparisonGeneMock1]);
+    expect(component.pinnedItems).toEqual([comparisonGeneMock1]);
     flush();
   }));
 
   it('should search', () => {
     component.initData([comparisonGeneMock1, comparisonGeneMock2]);
+    component.refresh();
     fixture.detectChanges();
 
     const input = element.querySelector(
@@ -177,7 +181,7 @@ describe('Component: GeneComparisonToolComponent', () => {
 
     el = element.querySelector('#pinned-genes-header') as HTMLElement;
     
-    expect(el.textContent).toBe('Pinned Genes (1/50)');
+    expect(el.textContent?.trim()).toBe('Pinned Genes (1/50)');
   });
 
   it('should pin/upin gene', () => {
@@ -186,15 +190,15 @@ describe('Component: GeneComparisonToolComponent', () => {
 
     component.clearPinnedGenes();
     fixture.detectChanges();
-    expect(component.pinnedGenes.length).toEqual(0);
+    expect(component.pinnedItems.length).toEqual(0);
 
-    component.pinGene(comparisonGeneMock1, true);
+    component.onPinGeneClick(comparisonGeneMock1);
     fixture.detectChanges();
-    expect(component.pinnedGenes.length).toEqual(1);
+    expect(component.pinnedItems.length).toEqual(1);
     
-    component.unpinGene(comparisonGeneMock1, true);
+    component.onUnPinGeneClick(comparisonGeneMock1, true);
     fixture.detectChanges();
-    expect(component.pinnedGenes.length).toEqual(0);
+    expect(component.pinnedItems.length).toEqual(0);
   });
 
   it('should clear pinned genes', fakeAsync(() => {
@@ -203,7 +207,7 @@ describe('Component: GeneComparisonToolComponent', () => {
 
     component.clearPinnedGenes();
     fixture.detectChanges();
-    expect(component.pinnedGenes.length).toEqual(0);
+    expect(component.pinnedItems.length).toEqual(0);
     flush();
   }));
 
@@ -394,7 +398,7 @@ describe('Component: GeneComparisonToolComponent', () => {
       expect(
         element.querySelector(TOGGLE_CLASS)?.querySelector('input')?.checked
       ).toBeTrue();
-      expect(component.getUrlParam('significance')[0]).toEqual(
+      expect(component.getUrlParam('significance')).toEqual(
         threshold
       );
     };
@@ -506,5 +510,42 @@ describe('Component: GeneComparisonToolComponent', () => {
 
       expectSignificanceThresholdIsApplied(newValue);
     }));
+
+    it('should have a label for SRM popup', () => {
+      const label = helpers.getGeneLabelForSRM(comparisonGeneMock1);
+      const expected = 'MSN - ENSG00000147065';
+      expect(label).toBe(expected);
+
+      const label2 = helpers.getGeneLabelForSRM(comparisonGeneEmptyHGNCMock);
+      const expected2 = 'ENSG00000147065';
+      expect(label2).toBe(expected2);
+    });
+
+    it('should set circle size to zero for undefined pValues', () => {
+      let tissue: GCTGeneTissue | undefined;
+      // undefined values should result in a circle size of zero
+      expect(tissue).toBeUndefined();
+      const result = component.getCircleSize(tissue?.adj_p_val);
+      expect(result).toBe(0);
+    });
+
+    it('should set circle size to zero for null pValues', () => {
+      // null values should result in a circle size of zero pixels
+      const pValue = null;
+      const result = component.getCircleSize(pValue);
+      expect(result).toBe(0);
+    });
+
+    it('should set circle size for pValues within acceptable ranges', () => {
+      let expectedSizeInPixels = 0;
+      let pValue = 0.5;
+      let result = component.getCircleSize(pValue);
+      expect(result).toBe(expectedSizeInPixels);
+
+      expectedSizeInPixels = 33;
+      pValue = 0.04;
+      result = component.getCircleSize(pValue);
+      expect(result).toBe(expectedSizeInPixels);
+    });
   });
 });

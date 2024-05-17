@@ -42,6 +42,7 @@ export interface ScoreData {
 export interface Distribution {
   rna_differential_expression: RnaDistribution[];
   proteomics_LFQ: ProteomicsDistribution[];
+  proteomics_SRM: ProteomicsDistribution[];
   proteomics_TMT: ProteomicsDistribution[];
   overall_scores: OverallScoresDistribution[];
 }

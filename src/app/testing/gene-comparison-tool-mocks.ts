@@ -173,6 +173,92 @@ export const comparisonGeneMock2: GCTGene = {
   multi_omics_score: 1.3
 };
 
+export const comparisonGeneEmptyHGNCMock: GCTGene = {
+  ensembl_gene_id: 'ENSG00000147065',
+  hgnc_symbol: '',
+  tissues: [
+    {
+      name: 'ACC',
+      logfc: -0.0144678061734664,
+      adj_p_val: 0.893263674388766,
+      ci_l: -0.133332670728704,
+      ci_r: 0.104397058381771,
+    },
+    {
+      name: 'CBE',
+      logfc: -0.0751554371582435,
+      adj_p_val: 0.530889774959758,
+      ci_l: -0.247449816301241,
+      ci_r: 0.0971389419847545,
+    },
+    {
+      name: 'DLPFC',
+      logfc: 0.0349940606540153,
+      adj_p_val: 0.604655110745068,
+      ci_l: -0.0564780903179806,
+      ci_r: 0.126466211626011,
+    },
+    {
+      name: 'FP',
+      logfc: 0.235992067764791,
+      adj_p_val: 0.0293685880983672,
+      ci_l: 0.0813918568317721,
+      ci_r: 0.390592278697809,
+    },
+    {
+      name: 'IFG',
+      logfc: 0.393613393602616,
+      adj_p_val: 0.0000468370819411619,
+      ci_l: 0.236604395922642,
+      ci_r: 0.550622391282589,
+    },
+    {
+      name: 'PCC',
+      logfc: 0.0870992749746771,
+      adj_p_val: 0.275931011190809,
+      ci_l: -0.0292845799777793,
+      ci_r: 0.203483129927133,
+    },
+    {
+      name: 'PHG',
+      logfc: 0.6626818751507,
+      adj_p_val: 9.688467425132421e-14,
+      ci_l: 0.506746460875332,
+      ci_r: 0.818617289426068,
+    },
+    {
+      name: 'STG',
+      logfc: 0.421363564302165,
+      adj_p_val: 0.0000165742209158385,
+      ci_l: 0.26315969917125,
+      ci_r: 0.57956742943308,
+    },
+    {
+      name: 'TCX',
+      logfc: 0.450452869099202,
+      adj_p_val: 0.00000476005829762979,
+      ci_l: 0.275315930793305,
+      ci_r: 0.625589807405099,
+    },
+  ],
+  nominations: {
+    count: 4,
+    year: 2018,
+    teams: ['Chang Lab', 'Emory', 'MSSM', 'MSSM'],
+    studies: ['ROSMAP', 'Kronos', 'MSBB', 'ACT', 'BLSA', 'Banner'],
+    inputs: ['Genetics', 'RNA', 'Protein'],
+    programs: ['Community Contributed', 'AMP-AD'],
+    validations: [
+      'validation studies ongoing',
+      'not prioritized for experimental validation',
+    ],
+  },
+  associations: [3, 4],
+  target_risk_score: 3.1,
+  genetics_score: 2.2,
+  multi_omics_score: 3.3
+};
+
 export const gctDetailsPanelDataMock: GCTDetailsPanelData = {
   label: 'label',
   heading: 'heading',

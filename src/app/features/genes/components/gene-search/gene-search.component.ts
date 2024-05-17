@@ -157,6 +157,8 @@ export class GeneSearchComponent extends Unsub implements AfterViewInit {
     this.results = [];
     this.showGeneResults = false;
     this.searchNavigated.emit();
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(['/genes/' + id]);
   }
 

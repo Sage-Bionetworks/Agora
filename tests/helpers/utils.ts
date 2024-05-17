@@ -1,0 +1,14 @@
+import { Page, expect } from '@playwright/test';
+
+export const waitForSpinnerNotVisible = async (
+  page: Page,
+  timeout = 60 * 2 * 1000
+) => {
+  await expect(
+    page.locator('div:nth-child(4) > div > .spinner')
+  ).not.toBeVisible({ timeout: timeout });
+};
+
+export const convertToQueryParam = (list: string[], queryKey: string) => {
+  return `${queryKey}=${list.join(',')}`;
+};

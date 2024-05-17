@@ -135,40 +135,47 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit {
       if (params.get('id')) {
         this.geneService
           .getGene(params.get('id') as string)
-          .subscribe((gene: Gene) => {
-            this.gene = gene;
+          .subscribe((gene) => {
+            if (!gene) {
+              this.helperService.setLoading(false);
+              // https://github.com/angular/angular/issues/45202
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
+            } else {
+              this.gene = gene;
 
-            this.panels.forEach((p: Panel) => {
-              if (p.name == 'nominations' && !this.gene?.total_nominations) {
-                p.disabled = true;
-              } else if (
-                p.name == 'experimental-validation' &&
-                !this.gene?.experimental_validation?.length
-              ) {
-                p.disabled = true;
-              } else {
-                p.disabled = false;
+              this.panels.forEach((p: Panel) => {
+                if (p.name == 'nominations' && !this.gene?.total_nominations) {
+                  p.disabled = true;
+                } else if (
+                  p.name == 'experimental-validation' &&
+                  !this.gene?.experimental_validation?.length
+                ) {
+                  p.disabled = true;
+                } else {
+                  p.disabled = false;
+                }
+              });
+
+              const nominationsPanel = this.panels.find(
+                (p) => p.name == 'nominations'
+              );
+              if (nominationsPanel) {
+                nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
               }
-            });
 
-            const nominationsPanel = this.panels.find(
-              (p) => p.name == 'nominations'
-            );
-            if (nominationsPanel) {
-              nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
+              const experimentalValidationPanel = this.panels.find(
+                (p) => p.name == 'experimental-validation'
+              );
+              if (experimentalValidationPanel) {
+                experimentalValidationPanel.disabled = !this.gene
+                  .experimental_validation?.length
+                  ? true
+                  : false;
+              }
+
+              this.helperService.setLoading(false);
             }
-
-            const experimentalValidationPanel = this.panels.find(
-              (p) => p.name == 'experimental-validation'
-            );
-            if (experimentalValidationPanel) {
-              experimentalValidationPanel.disabled = !this.gene
-                .experimental_validation?.length
-                ? true
-                : false;
-            }
-
-            this.helperService.setLoading(false);
           });
       }
 

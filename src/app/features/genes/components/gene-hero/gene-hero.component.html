@@ -14,7 +14,7 @@
       <p class="gene-hero-provider">
         {{ getSummary() }}
       </p>
-      <ng-container *ngIf="gene.bio_domains || getAlias()">
+      <ng-container *ngIf="gene.bio_domains || getAlias() || getEnsemblUrl() !== ''">
         <hr />
         <div *ngIf="gene.bio_domains" class="gene-hero-biodomains">
           <h4 class="gene-hero-biodomains-heading">Biological Domains</h4>
@@ -22,10 +22,24 @@
             {{ getBiodomains() }}
           </p>
         </div>
-        <div *ngIf="getAlias()" class="gene-hero-aliases">
+        <div class="gene-hero-aliases">
           <h4 class="gene-hero-aliases-heading">Also known as</h4>
-          <p *ngIf="gene.hgnc_symbol" class="mb-0">{{ gene.ensembl_gene_id }}</p>
-          <p>
+          <ng-container *ngIf="getEnsemblUrl() !== ''">
+            <p>
+              <a [href]="getEnsemblUrl()" target="_blank">{{ gene.ensembl_gene_id }}</a>
+              <span *ngIf="gene.ensembl_info.ensembl_release">
+                (Ensembl Release {{ gene.ensembl_info.ensembl_release }})
+              </span>
+            </p>
+          </ng-container>
+          <ng-container *ngIf="getEnsemblUrl() === ''">
+            <span *ngIf="getEnsemblUrl() === ''">{{ gene.ensembl_gene_id }}</span>
+          </ng-container>
+          <p *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 0">
+            <a [href]="getPossibleReplacementsURL()">Possible replacement value<span *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 1">s</span></a>:
+            {{ gene.ensembl_info.ensembl_possible_replacements.join(', ')}}
+          </p>
+          <p *ngIf="getAlias() !== ''">
             {{ getAlias() }}
           </p>
         </div>

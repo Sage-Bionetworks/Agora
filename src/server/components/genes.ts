@@ -11,13 +11,14 @@ import { Gene, GeneCollection } from '../models';
 import {
   getRnaDifferentialExpression,
   getProteomicsLFQ,
+  getProteomicsSRM,
   getProteomicsTMT,
   getMetabolomics,
   getExperimentalValidation,
   getNeuropathologicCorrelations,
   getOverallScores,
   getGeneLinks,
-  getBioDomains
+  getBioDomains,
 } from '.';
 
 // -------------------------------------------------------------------------- //
@@ -76,6 +77,7 @@ export async function getGene(ensg: string) {
       ensg
     );
     result.proteomics_LFQ = await getProteomicsLFQ(ensg);
+    result.proteomics_SRM = await getProteomicsSRM(ensg);
     result.proteomics_TMT = await getProteomicsTMT(ensg);
     result.metabolomics = await getMetabolomics(ensg);
     result.neuropathologic_correlations = await getNeuropathologicCorrelations(

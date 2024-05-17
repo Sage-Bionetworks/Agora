@@ -116,6 +116,7 @@
 }
 
 .tooltip.gene-table-tooltip {
+  z-index: 999 !important;
   top: -30px !important;
   left: 50% !important;
 

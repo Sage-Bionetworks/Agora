@@ -86,6 +86,12 @@ export class GeneResourcesComponent implements OnInit {
         linkText: 'Visit Ensembl',
         link: `https://www.ensembl.org/Homo_sapiens/Gene/Pathway?g=${this.gene?.ensembl_gene_id}`,
       },
+      {
+        title: 'AMP-PD Target Explorer', 
+        description: 'View this gene in the AMP-PD Target Explorer, a resource that hosts evidence about whether genes are associated with Parkinson\'s Disease.', 
+        linkText: 'Visit AMP-PD',
+        link: `https://target-explorer.amp-pd.org/genes/target-search?gene=${this.gene?.ensembl_gene_id}`
+      }
     ];
   }
 }

@@ -91,6 +91,8 @@ export class GeneNetworkComponent implements OnInit {
   }
 
   navigateToSimilarGenes() {
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate([
       '/genes/' + this._gene?.ensembl_gene_id + '/similar',
     ]);

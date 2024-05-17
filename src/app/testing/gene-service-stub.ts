@@ -30,7 +30,7 @@ export class GeneServiceStub {
     this.geneService = new GeneService(new ApiServiceStub() as ApiService);
   }
 
-  getGene(id: string): Observable<Gene> {
+  getGene(id: string): Observable<Gene | null> {
     return this.geneService.getGene(id);
   }
 

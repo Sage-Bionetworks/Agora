@@ -8,6 +8,7 @@ import {
   SimilarGenesNetwork,
   BioDomains
 } from './';
+import { EnsemblInfo } from './EnsemblInfo';
 
 export interface TargetNomination {
   source: string;
@@ -18,7 +19,7 @@ export interface TargetNomination {
   predicted_therapeutic_direction: string;
   data_used_to_support_target_selection: string;
   data_synapseid: string;
-  study: string;
+  study: string | null;
   input_data: string;
   validation_study_details: string;
   initial_nomination: number;
@@ -71,6 +72,7 @@ export interface Gene {
   // Added by API (not in mongo document)
   rna_differential_expression?: RnaDifferentialExpression[];
   proteomics_LFQ?: ProteinDifferentialExpression[];
+  proteomics_SRM?: ProteinDifferentialExpression[];
   proteomics_TMT?: ProteinDifferentialExpression[];
   metabolomics?: any; // TODO change;
   overall_scores?: OverallScores;
@@ -98,6 +100,8 @@ export interface Gene {
   input_data_display_value?: string;
 
   bio_domains?: BioDomains;
+
+  ensembl_info: EnsemblInfo;
 }
 
 export interface GenesResponse {

@@ -139,6 +139,8 @@ export class GeneTableComponent implements OnInit {
   }
 
   navigateToGene(gene: any) {
+    // https://github.com/angular/angular/issues/45202
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(['/genes/' + gene.ensembl_gene_id]);
   }
 
@@ -174,12 +176,16 @@ export class GeneTableComponent implements OnInit {
 
   navigateToGeneComparisonTool() {
     if (typeof this.gctLink === 'object') {
+      // https://github.com/angular/angular/issues/45202
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(['/genes/comparison'], {
         queryParams: this.gctLink,
       });
     } else {
       const ids: string[] = this._genes.map((g: Gene) => g.ensembl_gene_id);
       this.helperService.setGCTSelection(ids);
+      // https://github.com/angular/angular/issues/45202
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(['/genes/comparison']);
     }
   }

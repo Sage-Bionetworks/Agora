@@ -1,6 +1,24 @@
 /* eslint-disable */
 
-import { Gene, GCTGene } from '../models';
+import { Gene, GCTGene, TargetNomination } from '../models';
+
+export const targetNominationMock1: TargetNomination = {
+  source: 'Treat-AD',
+  team: 'Emory-Sage-SGC',
+  rank: '7',
+  hgnc_symbol: 'MSN',
+  target_choice_justification:
+    'MSN was identified as a potential driver protein based on protein coexpression analysis. The group of proteins coexpressed with MSN is conserved across the 3 datasets considered, is enriched for inflammatory processes, and for protein products of genes near loci previously associated with AD risk. MSN has increased abundance in AD across all 3 cohorts examined, and progressively increases in asymptomatic (prodromal) AD to symptomatic AD, and also correlates with both hallmark AD pathology scores (CERAD for amyloid burden; and Braak for Tau extent of spread). MSN is highly expressed as a marker of disease-associated microglia and/or endothelial cell types.',
+  predicted_therapeutic_direction:
+    'Antagonism predicted to reduce disease progression. Phosphorylation downstream of Rho/Rock influences actin, focal adhesion binding; may have redundancy with EZR and RDX, complicating targeting. MSN-directed therapeutics that improve microglial motility and/or phagocytosis competence would reduce abeta/amyloid plaque burden.',
+  data_used_to_support_target_selection:
+    'Discovery quantitative proteomics of FrCx \r\n WPCNA of multiple and consensus cohorts\r\n ANOVA',
+  data_synapseid: 'syn17008058',
+  study: 'ACT, BLSA, Banner',
+  input_data: 'Protein',
+  validation_study_details: 'validation studies ongoing',
+  initial_nomination: 2018,
+};
 
 export const geneMock1: Gene = {
   _id: '628ea1be0e8d04279fdbaa26',
@@ -2934,7 +2952,12 @@ export const geneMock1: Gene = {
   },
   is_adi: false,
   is_tep: true,
-  resource_url: 'https://adknowledgeportal.synapse.org/Explore/Target%20Enabling%20Resources?QueryWrapper0=%7B%22sql%22%3A%22select%20*%20from%20syn26146692%20WHERE%20%60isPublic%60%20%3D%20true%22%2C%22limit%22%3A25%2C%22offset%22%3A0%2C%22selectedFacets%22%3A%5B%7B%22concreteType%22%3A%22org.sagebionetworks.repo.model.table.FacetColumnValuesRequest%22%2C%22columnName%22%3A%22target%22%2C%22facetValues%22%3A%5B%22MSN%22%5D%7D%5D%7D'
+  resource_url: 'https://adknowledgeportal.synapse.org/Explore/Target%20Enabling%20Resources?QueryWrapper0=%7B%22sql%22%3A%22select%20*%20from%20syn26146692%20WHERE%20%60isPublic%60%20%3D%20true%22%2C%22limit%22%3A25%2C%22offset%22%3A0%2C%22selectedFacets%22%3A%5B%7B%22concreteType%22%3A%22org.sagebionetworks.repo.model.table.FacetColumnValuesRequest%22%2C%22columnName%22%3A%22target%22%2C%22facetValues%22%3A%5B%22MSN%22%5D%7D%5D%7D',
+  ensembl_info: {
+    ensembl_release: 84,
+    ensembl_possible_replacements: ['ENSG00000283172'],
+    ensembl_permalink: 'https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794'
+  }
 };
 
 export const geneMock2: Gene = {
@@ -3121,7 +3144,12 @@ export const geneMock2: Gene = {
   total_nominations: 3,
   is_adi: false,
   is_tep: true,
-  resource_url: 'https://adknowledgeportal.synapse.org/Explore/Target%20Enabling%20Resources?QueryWrapper0=%7B%22sql%22%3A%22select%20*%20from%20syn26146692%20WHERE%20%60isPublic%60%20%3D%20true%22%2C%22limit%22%3A25%2C%22offset%22%3A0%2C%22selectedFacets%22%3A%5B%7B%22concreteType%22%3A%22org.sagebionetworks.repo.model.table.FacetColumnValuesRequest%22%2C%22columnName%22%3A%22target%22%2C%22facetValues%22%3A%5B%22PLEC%22%5D%7D%5D%7D'
+  resource_url: 'https://adknowledgeportal.synapse.org/Explore/Target%20Enabling%20Resources?QueryWrapper0=%7B%22sql%22%3A%22select%20*%20from%20syn26146692%20WHERE%20%60isPublic%60%20%3D%20true%22%2C%22limit%22%3A25%2C%22offset%22%3A0%2C%22selectedFacets%22%3A%5B%7B%22concreteType%22%3A%22org.sagebionetworks.repo.model.table.FacetColumnValuesRequest%22%2C%22columnName%22%3A%22target%22%2C%22facetValues%22%3A%5B%22PLEC%22%5D%7D%5D%7D',
+  ensembl_info: {
+    ensembl_release: 84,
+    ensembl_possible_replacements: ['ENSG00000283172, ENSG00000283172'],
+    ensembl_permalink: 'https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794'
+  }
 };
 
 export const geneMock3: Gene = {
@@ -3243,7 +3271,12 @@ export const geneMock3: Gene = {
   total_nominations: null,
   is_adi: false,
   is_tep: true,
-  resource_url: null
+  resource_url: null,
+  ensembl_info: {
+    ensembl_release: 84,
+    ensembl_possible_replacements: ['ENSG00000283172, ENSG00000283172'],
+    ensembl_permalink: 'https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794'
+  }
 };
 
 export const gctGeneMock1: GCTGene = {
@@ -3421,7 +3454,12 @@ export const nominatedGeneMock1: Gene = {
   total_nominations: 4,
   is_adi: false,
   is_tep: false,
-  resource_url: null
+  resource_url: null,
+  ensembl_info: {
+    ensembl_release: 84,
+    ensembl_possible_replacements: ['ENSG00000283172, ENSG00000283172'],
+    ensembl_permalink: 'https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794'
+  }
 } as Gene;
 
 export const noHGNCgeneMock: Gene = {
@@ -3518,5 +3556,10 @@ export const noHGNCgeneMock: Gene = {
   total_nominations: 4,
   is_adi: false,
   is_tep: false,
-  resource_url: null
+  resource_url: null,
+  ensembl_info: {
+    ensembl_release: 84,
+    ensembl_possible_replacements: ['ENSG00000283172, ENSG00000283172'],
+    ensembl_permalink: 'https://may2015.archive.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=ENSG00000264794'
+  }
 } as Gene;
