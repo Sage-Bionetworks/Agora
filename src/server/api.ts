@@ -38,30 +38,37 @@ const database = { url: '' };
         doc && ('doc => ' + util.inspect(doc)), '\n');
 }); */
 
-console.log(process.env);
-console.log(process.env.MONGODB_HOST);
-console.log(process.env.MONGODB_PORT);
-
 // Set the database url
 if (
   process.env.MONGODB_HOST &&
   process.env.MONGODB_PORT &&
   process.env.APP_ENV
 ) {
-  const results = awsParamStore.getParametersSync(
-    [
-      '/agora-' + process.env.APP_ENV + '/MongodbUsername',
-      '/agora-' + process.env.APP_ENV + '/MongodbPassword',
-    ],
-    { region: 'us-east-1' }
-  );
+  let dbUser: string | undefined;
+  let dbPass: string | undefined;
+  if (process.env.APP_ENV === 'e2e') {
+    dbUser = process.env.DB_USER;
+    dbPass = process.env.DB_PASS;
+  } else {
+    const results = awsParamStore.getParametersSync(
+      [
+        '/agora-' + process.env.APP_ENV + '/MongodbUsername',
+        '/agora-' + process.env.APP_ENV + '/MongodbPassword',
+      ],
+      { region: 'us-east-1' }
+    );
+    if (results && results.Parameters) {
+      dbUser = results.Parameters[1]['Value'];
+      dbPass = results.Parameters[0]['Value'];
+    }
+  }
   
-  if (results && results.Parameters) {
+  if (dbUser && dbPass) {
     database.url =
       'mongodb://' +
-      results.Parameters[1]['Value'] +
+      dbUser +
       ':' +
-      results.Parameters[0]['Value'] +
+      dbPass +
       '@' +
       process.env.MONGODB_HOST +
       ':' +

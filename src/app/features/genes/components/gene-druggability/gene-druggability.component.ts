@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Gene, Druggability } from '../../../../models';
@@ -18,7 +18,7 @@ export interface GeneResourceType {
   templateUrl: './gene-druggability.component.html',
   styleUrls: ['./gene-druggability.component.scss'],
 })
-export class GeneDruggabilityComponent implements OnInit {
+export class GeneDruggabilityComponent {
   _gene: Gene | undefined;
   get gene(): Gene | undefined {
     return this._gene;
@@ -43,28 +43,23 @@ export class GeneDruggabilityComponent implements OnInit {
     private geneService: GeneService
   ) {}
 
-  ngOnInit() {
-    //
-  }
-
   init() {
     // Update the initial buckets
     if (this.gene) {
       if (!this.gene.druggability) {
-        this.gene.druggability = [
-          {
-            sm_druggability_bucket: this.getDefaultBucketNumber(),
-            safety_bucket: this.getDefaultBucketNumber(),
-            abability_bucket: this.getDefaultBucketNumber(),
-            pharos_class: '',
-            classification: this.getDefaultText(),
-            safety_bucket_definition: this.getDefaultText(),
-            abability_bucket_definition: this.getDefaultText(),
-          },
-        ];
+        this.gene.druggability =
+        {
+          sm_druggability_bucket: this.getDefaultBucketNumber(),
+          safety_bucket: this.getDefaultBucketNumber(),
+          abability_bucket: this.getDefaultBucketNumber(),
+          pharos_class: [],
+          classification: this.getDefaultText(),
+          safety_bucket_definition: this.getDefaultText(),
+          abability_bucket_definition: this.getDefaultText(),
+        };
       }
 
-      this.druggability = this.gene.druggability[0];
+      this.druggability = this.gene.druggability;
       this.currentBucketSM = this.druggability.sm_druggability_bucket;
       this.currentBucketAB = this.druggability.abability_bucket;
       this.currentBucketSF = this.druggability.safety_bucket;

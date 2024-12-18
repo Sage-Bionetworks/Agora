@@ -1,0 +1,247 @@
+name: Build and run unit tests, build data image and run e2e tests
+
+on: push
+
+jobs:
+  build-and-run-unit-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: 'npm'
+      - run: npm ci
+      - run: APP_ENV=develop npm run ci:build:develop
+      - run: npm test
+
+  check-for-image:
+    # Run in Sage repo on develop or main branches
+    # and on all branches in user-owned forks
+    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' || github.actor == github.repository_owner }}
+    timeout-minutes: 5
+    runs-on: ubuntu-20.04
+    permissions:
+      packages: read
+    environment: e2e
+    env:
+      ORG_NAME: 'Sage-Bionetworks'
+      NAMESPACE: ${{ github.repository_owner }}
+      DATA_IMAGE_NAME: '${{ vars.DB_NAME }}-data-nonmonorepo'
+    outputs:
+      DATA_MANIFEST_ID: ${{ steps.get-ids-from-package-json.outputs.DATA_MANIFEST_ID }}
+      DATA_VERSION: ${{ steps.get-ids-from-package-json.outputs.DATA_VERSION }}
+      DATA_IMAGE_PATH: ${{ steps.get-ids-from-package-json.outputs.DATA_IMAGE_PATH }}
+      IMAGE_EXISTS: ${{ steps.check-container-repo.outputs.IMAGE_EXISTS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: get data image tag, data manifest id, and data version
+        id: get-ids-from-package-json
+        env:
+          PACKAGE_JSON_PATH: 'package.json'
+        run: |
+          DATA_MANIFEST_ID=$(jq -r '."data-file"' "${{ env.PACKAGE_JSON_PATH }}")
+          echo "DATA_MANIFEST_ID=${DATA_MANIFEST_ID}" >> "$GITHUB_OUTPUT"
+
+          DATA_VERSION=$(jq -r '."data-version"' "${{ env.PACKAGE_JSON_PATH }}")
+          echo "DATA_VERSION=${DATA_VERSION}" >> "$GITHUB_OUTPUT"
+
+          DATA_IMAGE_TAG="${DATA_MANIFEST_ID}.${DATA_VERSION}"
+          echo "DATA_IMAGE_TAG=${DATA_IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+          # GHCR requires image names to be lowercase: https://github.com/orgs/community/discussions/27086
+          NAMESPACE_LOWERCASE=$(echo "${{ env.NAMESPACE }}" | tr '[:upper:]' '[:lower:]')
+          DATA_IMAGE_PATH="ghcr.io/${NAMESPACE_LOWERCASE}/${{ env.DATA_IMAGE_NAME }}:${DATA_IMAGE_TAG}"
+          echo "DATA_IMAGE_PATH=${DATA_IMAGE_PATH}" >> "$GITHUB_OUTPUT"
+
+      - name: login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: check whether image exists
+        id: check-container-repo
+        env:
+          # https://docs.github.com/en/rest/packages/packages?apiVersion=2022-11-28#list-package-versions-for-a-package-owned-by-an-organization
+          ORG_PATH: '/orgs/${{ env.ORG_NAME }}/packages/container/${{ env.DATA_IMAGE_NAME }}/versions'
+          # https://docs.github.com/en/rest/packages/packages?apiVersion=2022-11-28#list-package-versions-for-a-package-owned-by-the-authenticated-user
+          USER_PATH: '/user/packages/container/${{ env.DATA_IMAGE_NAME }}/versions'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATA_IMAGE_TAG: ${{ steps.get-ids-from-package-json.outputs.DATA_IMAGE_TAG }}
+        run: |
+          GH_PATH=$( [[ "${{ env.NAMESPACE }}" == "${{ env.ORG_NAME }}" ]] && echo "${{ env.ORG_PATH }}" || echo "${{ env.USER_PATH }}" )
+
+          # allow error to handle case where gh throws an error when package has not yet been created
+          set +e
+          IMAGE_VERSIONS=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "${GH_PATH}")
+          set -e
+
+          PACKAGE_NOT_FOUND=$(echo "${IMAGE_VERSIONS}" | jq '.message? == "Package not found."')
+          if [[ "${PACKAGE_NOT_FOUND}" == "true" ]]; then 
+            IMAGE_EXISTS="false"
+          else
+            IMAGE_EXISTS=$(echo "${IMAGE_VERSIONS}" | jq '[.[] | select(any(.metadata.container.tags[]; . == "${{ env.DATA_IMAGE_TAG }}"))] | length > 0')
+          fi
+
+          echo "IMAGE_EXISTS=${IMAGE_EXISTS}" >> "$GITHUB_OUTPUT"
+
+  build-image:
+    needs: check-for-image
+    if: ${{ needs.check-for-image.result == 'success' && needs.check-for-image.outputs.IMAGE_EXISTS == 'false' }}
+    timeout-minutes: 60
+    runs-on: ubuntu-20.04
+    permissions:
+      packages: write
+    environment: e2e
+    env:
+      LOCAL_DATA_PATH: './local/data'
+      LOCAL_TEAM_IMAGES_DIR: './local/data/team_images'
+      LOCAL_COLLECTIONS_PATH: './scripts/collections.csv'
+      LOCAL_IMPORT_SCRIPT_PATH: './docker/import-data.sh'
+      LOCAL_CREATE_INDEXES_PATH: './scripts/mongo-create-Indexes.js'
+      DATA_VERSION: ${{ needs.check-for-image.outputs.DATA_VERSION }}
+      DATA_MANIFEST_ID: ${{ needs.check-for-image.outputs.DATA_MANIFEST_ID }}
+      DATA_IMAGE_PATH: ${{ needs.check-for-image.outputs.DATA_IMAGE_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # https://github.com/actions/setup-python/issues/807
+      - name: create placeholder requirements.txt file
+        run: touch ./requirements.txt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: install synapseclient
+        run: |
+          pip install --upgrade synapseclient
+
+      - name: download data from synapse
+        timeout-minutes: 10
+        env:
+          SYNAPSE_AUTH_TOKEN: ${{ secrets.SYNAPSE_AUTH_TOKEN }}
+        run: |
+          echo "==> make directory for team images"
+          mkdir -p "${{ env.LOCAL_TEAM_IMAGES_DIR }}"
+
+          echo "==> download manifest file from Synapse"
+          synapse get --downloadLocation "${{ env.LOCAL_DATA_PATH }}" -v "${{ env.DATA_VERSION }}" "${{ env.DATA_MANIFEST_ID }}"
+
+          echo "==> download all files referenced in manifest from Synapse"
+          cat "${{ env.LOCAL_DATA_PATH }}"/data_manifest.csv | tail -n +2 | while IFS=, read -r id version; do
+              echo "===> Downloading ${id}.${version}"
+              synapse get --downloadLocation "${{ env.LOCAL_DATA_PATH }}" -v "${version}" "${id}"
+            done
+
+          echo "==> download team images"
+          synapse get -r --downloadLocation "${{ env.LOCAL_TEAM_IMAGES_DIR }}/" "${{ vars.TEAM_IMAGES_ID }}"
+
+      - name: build image
+        env:
+          DOCKERFILE_PATH: './docker/Dockerfile'
+        run: |
+          docker build \
+          -t "${{ env.DATA_IMAGE_PATH }}" \
+          -f "${{ env.DOCKERFILE_PATH }}" \
+          --build-arg SOURCE_REPO="https://github.com/${{ github.repository }}" \
+          --build-arg DESCRIPTION="${GITHUB_SHA::7}" \
+          --build-arg LOCAL_DATA_PATH="${{ env.LOCAL_DATA_PATH }}" \
+          --build-arg LOCAL_COLLECTIONS_PATH="${{ env.LOCAL_COLLECTIONS_PATH }}" \
+          --build-arg LOCAL_IMPORT_SCRIPT_PATH="${{ env.LOCAL_IMPORT_SCRIPT_PATH }}" \
+          --build-arg LOCAL_CREATE_INDEXES_PATH="${{ env.LOCAL_CREATE_INDEXES_PATH }}" \
+          .
+
+      - name: login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Note: if a new package is created using this workflow, then the package
+      # visibility will default to the source repository visibility. For example,
+      # a package created by a workflow in a public repo will also be public.
+      # Publicly visible container packages are anonymously downloadable.
+      - name: push to GitHub Container Registry
+        run: docker push "${{ env.DATA_IMAGE_PATH }}"
+
+  run-e2e-tests:
+    needs:
+      - check-for-image
+      - build-image
+    # always() prevents skipping this job when build-image was skipped
+    # see https://github.com/actions/runner/issues/491
+    if: ${{ always() && needs.check-for-image.result == 'success' && (needs.build-image.result == 'success' || needs.build-image.result == 'skipped')}}
+    timeout-minutes: 60
+    runs-on: ubuntu-20.04
+    permissions:
+      packages: read
+    environment: e2e
+    env:
+      CI: true
+      DOCKER_COMPOSE_PATH: './docker/docker-compose.yml'
+      DATA_IMAGE_PATH: ${{ needs.check-for-image.outputs.DATA_IMAGE_PATH }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_PORT: ${{ vars.DB_PORT }}
+      DB_NAME: ${{ vars.DB_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: start database, server, and app
+        run: |
+          echo "==> start database and data containers"
+          docker compose -f "${{ env.DOCKER_COMPOSE_PATH }}" up -d
+
+          echo "==> wait for data container to finish seeding database container"
+          DATA_CONTAINER=$(docker compose -f "${{ env.DOCKER_COMPOSE_PATH }}" ps -a --format '{{.Name}}' mongo-seed)
+          docker wait "${DATA_CONTAINER}"
+
+          echo "==> start server and app in background and wait for server to grab port"
+          MONGODB_HOST="localhost" MONGODB_PORT="${{ env.DB_PORT }}" APP_ENV="e2e" npm run dev >/dev/null 2>&1 &
+          sleep 5
+
+      - name: run e2e tests
+        run: npx playwright test
+
+      - name: clean up database, server, and app
+        run: |
+          echo "==> stop app"
+          pid=$(lsof -i :3000 -t) && kill ${pid}
+
+          echo "==> stop server"
+          pid=$(lsof -i :8080 -t) && kill ${pid}
+
+          echo "==> stop database"
+          docker compose -f "${{ env.DOCKER_COMPOSE_PATH }}" down
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5

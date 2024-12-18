@@ -56,21 +56,6 @@ export class GeneNominatedTargetsComponent implements OnInit {
       header: 'Pharos Class',
       selected: false,
     },
-    {
-      field: 'sm_druggability_display_value',
-      header: 'Small Molecule Druggability',
-      selected: false,
-    },
-    {
-      field: 'safety_rating_display_value',
-      header: 'Safety Rating',
-      selected: false,
-    },
-    {
-      field: 'ab_modality_display_value',
-      header: 'Antibody Modality',
-      selected: false,
-    },
   ];
 
   constructor(private apiService: ApiService) {}
@@ -134,28 +119,8 @@ export class GeneNominatedTargetsComponent implements OnInit {
           : undefined;
 
         // Populate Druggability display fields
-        if (de.druggability && de.druggability.length) {
-          de.pharos_class_display_value = de.druggability[0].pharos_class
-            ? de.druggability[0].pharos_class
-            : 'No value';
-          de.sm_druggability_display_value =
-            de.druggability[0].sm_druggability_bucket +
-            ': ' +
-            de.druggability[0].classification;
-          de.safety_rating_display_value =
-            de.druggability[0].safety_bucket +
-            ': ' +
-            de.druggability[0].safety_bucket_definition;
-          de.ab_modality_display_value =
-            de.druggability[0].abability_bucket +
-            ': ' +
-            de.druggability[0].abability_bucket_definition;
-        } else {
-          de.pharos_class_display_value = 'No value';
-          de.sm_druggability_display_value = 'No value';
-          de.safety_rating_display_value = 'No value';
-          de.ab_modality_display_value = 'No value';
-        }
+        if (de.druggability)
+          de.pharos_class_display_value = de.druggability.pharos_class;
       });
 
       this.genes = genes;

@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-export const baseURL = 'http://localhost:8080';
+const port = 8080;
+export const baseURL = `http://127.0.0.1:${port}`;
 
 /**
  * Read environment variables from file.
@@ -14,7 +15,7 @@ export const baseURL = 'http://localhost:8080';
 export default defineConfig({
   testDir: './tests',
   // timeout for every test
-  timeout: 25 * 60 * 1000,
+  timeout: 3 * 60 * 1000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -22,9 +23,9 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.CI ? [['list'], ['html']] : 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -75,7 +76,8 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run start',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    port,
+    reuseExistingServer: true,
+    timeout: 120 * 1000,
   },
 });

@@ -45,12 +45,6 @@ export class GeneSimilarComponent implements OnInit {
       header: 'Protein Expression Change',
     },
     { field: 'pharos_class_display_value', header: 'Pharos Class' },
-    {
-      field: 'sm_druggability_display_value',
-      header: 'Small Molecule Druggability',
-    },
-    { field: 'safety_rating_display_value', header: 'Safety Rating' },
-    { field: 'ab_modality_display_value', header: 'Antibody Modality' },
   ];
 
   gctLink: { [key: string]: string } | undefined;
@@ -113,28 +107,8 @@ export class GeneSimilarComponent implements OnInit {
           de.nominated_target_display_value = false;
 
         // Populate Druggability display fields
-        if (de.druggability && de.druggability.length) {
-          de.pharos_class_display_value = de.druggability[0].pharos_class
-            ? de.druggability[0].pharos_class
-            : 'No value';
-          de.sm_druggability_display_value =
-            de.druggability[0].sm_druggability_bucket +
-            ': ' +
-            de.druggability[0].classification;
-          de.safety_rating_display_value =
-            de.druggability[0].safety_bucket +
-            ': ' +
-            de.druggability[0].safety_bucket_definition;
-          de.ab_modality_display_value =
-            de.druggability[0].abability_bucket +
-            ': ' +
-            de.druggability[0].abability_bucket_definition;
-        } else {
-          de.pharos_class_display_value = 'No value';
-          de.sm_druggability_display_value = 'No value';
-          de.safety_rating_display_value = 'No value';
-          de.ab_modality_display_value = 'No value';
-        }
+        if (de.druggability)
+          de.pharos_class_display_value = de.druggability.pharos_class;
       });
 
       this.genes = genes;

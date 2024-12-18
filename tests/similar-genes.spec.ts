@@ -20,12 +20,5 @@ test.describe('specific viewport block', () => {
 
     const cell = await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText();
     expect(cell).not.toBe('');
-
-    
-    // sort reverse on small molecule druggability
-    await page.getByRole('cell', { name: 'Nominated Target' }).click();
-    
-    const cell2 = await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText();
-    expect(cell2).not.toBe('');
   });
 });
