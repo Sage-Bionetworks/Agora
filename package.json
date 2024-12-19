@@ -1,8 +1,8 @@
 {
   "name": "agora",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "data-file": "syn13363290",
-  "data-version": "68",
+  "data-version": "71",
   "private": true,
   "scripts": {
     "dev": "concurrently --kill-others \"npm:dev:server\" \"npm:dev:app\"",
@@ -40,7 +40,13 @@
     "data:local": "npm run clean:data && sh ./scripts/get-data-local.sh",
     "e2e": "playwright test --trace on",
     "e2e:ui": "playwright test --ui",
-    "e2e:update": "npm install -D @playwright/test@latest; npx playwright install --with-deps; npx playwright --version"
+    "e2e:update": "npm install -D @playwright/test@latest; npx playwright install --with-deps; npx playwright --version",
+    "create-env": "DB_PASS=$(openssl rand -base64 12) DATA_IMAGE_TAG=$(npm run docker:data-image-tag -s) envsubst < .env.example > .env",
+    "docker:data-image-tag": "jq -r '.\"data-file\" + \".\" + .\"data-version\"' package.json",
+    "docker:db:seed-complete": "echo 'Waiting for docker db to finish loading data (~30s)....'; DATA_CONTAINER=$(docker compose --env-file .env -f ./docker/docker-compose.yml ps -a --format '{{.Name}}' mongo-seed); docker wait ${DATA_CONTAINER}",
+    "docker:db:start": "docker-compose --env-file .env -f ./docker/docker-compose.yml up -d; npm run docker:db:seed-complete",
+    "docker:db:stop": "docker-compose --env-file .env -f ./docker/docker-compose.yml down",
+    "docker:dev": "set -a; source .env; set +a; MONGODB_HOST=\"localhost\" MONGODB_PORT=\"${DB_PORT}\" APP_ENV=\"e2e\" npm run dev"
   },
   "pre-commit": [
     "test"

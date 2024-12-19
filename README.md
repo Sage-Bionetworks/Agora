@@ -35,12 +35,16 @@ cd Agora
 npm install
 ```
 
-### 2 - Create database
+The next sections focus on setting up a mongo database loaded with Agora's data. There are two options: 
+ - Use a local mongo database that you manually create and populate with data (steps 2-5) 
+ - Use a containerized mongo database that is pre-populated with data (step 6)
+
+### 2 - Create local database
 
 You will need to create a MongoDB database and name it `agora`. 
 
-- [Using the MongoDB Shell](https://www.mongodb.com/basics/create-database#option-2)
-- [Using MongoDB Compass](https://www.mongodb.com/basics/create-database#option-3)
+- [Using the MongoDB Shell](https://www.mongodb.com/resources/products/fundamentals/create-database#using-the-mongodb-shell)
+- [Using MongoDB Compass](https://www.mongodb.com/resources/products/fundamentals/create-database#using-the-mongodb-compass)
 - [Using Studio3T](https://studio3t.com/knowledge-base/articles/common-mongodb-commands/#1-mongodb-create-database)
 
 Note: You can use the following scripts to start the database:
@@ -53,7 +57,7 @@ npm run mongo:start
 npm run mongo:start:windows
 ```
 
-### 3 - Populate database
+### 3 - Populate local database
 
 Agora's data is stored in json files in the [Agora Synapse project](https://www.synapse.org/#!Synapse:syn11850457/files/), in the following subfolders:
 * [Agora Live Data](https://www.synapse.org/#!Synapse:syn12177492) - This folder contains all production data releases, as well as data releases that were never released to production
@@ -148,14 +152,14 @@ npm run mongo:create:indexes
 
 You'll need `Linux` to run the previous scripts. If you need to do this in `Windows`, you can get any `Linux` distribution at the `Windows Store` (e.g. `Ubuntu`).
 
-### 4 - Build
+### 4 - Build using local database
 
 ```bash
 # Build the server and app
 npm run dev
 ```
 
-### 5 - Start
+### 5 - Start using local database
 
 ```bash
 # Start the server and app
@@ -163,6 +167,32 @@ npm run start
 ```
 
 Go to [http://localhost:8080](http://localhost:8080)
+
+### 6 - Use containerized database
+
+1. Install Docker, if necessary.
+2. Update `data-file` and `data-version` in `package.json` to reflect the desired data release version, if necessary.
+3. Create an environment file: `npm run create-env`. 
+4. Start the containerized database: `npm run docker:db:start`. The necessary images will be pulled from GHCR. If you would like to use a different image, update DATA_IMAGE_PATH in .env. If the desired image does not exist, see steps below to create the desired image.
+5. Run the server and app against the containerized database: `npm run docker:dev`.
+6. Stop the containerized database: `npm run docker:db:stop`.
+
+#### Creating an image for a new data release
+
+A "data release" is defined in the `package.json` by the `data-file` and `data-version` values. Images pre-loaded with data from the data release are created when the `ci.yml` GitHub Action workflow runs and are pushed to the GitHub Container Registry (GHCR) package for that namespace -- the `sage-bionetworks` organization namespace when the workflow runs in the base repo or in the user's namespace (e.g. `hallieswan`) when running in a forked repo.
+
+The `sage-bionetworks` package will contain images for data releases that have been specified in `package.json` on `develop` or `main`. The user's package will contain images for data releases that have been specified in `package.json` in branches pushed to their fork. 
+
+If a dev needs to create an image for a data release that does not yet exist in the Sage-Bionetworks package, they should follow these steps: 
+
+1. Create a new branch.
+2. Update the `package.json` to reflect the appropriate `data-file` and `data-version` files.
+3. If necessary, update `./scripts/collections.csv` to specify new collections and `./scripts/mongo-create-Indexes.js` to specify new indexes.
+4. Commit the changes.
+5. Push the changes to your remote fork to trigger a run of the `ci.yml` workflow. 
+6. The new image will be available in your user namespaced GHCR package, e.g. `https://github.com/hallieswan/Agora/pkgs/container/agora-data-nonmonorepo`.
+7. Update your local `.env` file so `DATA_IMAGE_PATH` points to the newly created image, e.g. `ghcr.io/hallieswan/agora-data-nonmonorepo:syn13363290.68`.
+8. Start the containerized database: `npm run docker:db:start`.
 
 # Development
 
@@ -183,7 +213,7 @@ npm run test
 npm run test:watch
 
 # Run end-to-end tests (requires build)
-npm run test:e2e
+npm run e2e
 ```
 
 # Deployment
@@ -206,7 +236,7 @@ npm run test
 npm run build
 
 # Run end-to-end tests
-npm run test:e2e
+npm run e2e
 
 # Go to localhost:8080 and verify the app is running without errors
 npm run start

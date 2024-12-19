@@ -1,0 +1,21 @@
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "${DB_PORT}:27017"
+    expose:
+      - "${DB_PORT}"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+  mongo-seed:
+    image: ${DATA_IMAGE_PATH}
+    platform: linux/amd64
+    depends_on: 
+      - mongodb
+    environment:
+      - DB_HOST=mongodb # must match mongo service name
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}

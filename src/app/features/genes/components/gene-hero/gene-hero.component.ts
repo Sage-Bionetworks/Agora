@@ -85,9 +85,16 @@ export class GeneHeroComponent {
     }
   }
 
-  getAlias(): string {
+  getAliases(): string {
     if (this.gene?.alias && this.gene.alias.length > 0) {
       return this.gene.alias.join(', ');
+    }
+    return '';
+  }
+
+  getUniProtKBLink(uniProtId: string) {
+    if (uniProtId) {
+      return `https://www.uniprot.org/uniprotkb/${uniProtId}/entry`;
     }
     return '';
   }

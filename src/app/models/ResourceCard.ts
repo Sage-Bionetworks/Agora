@@ -1,4 +1,4 @@
-export interface AdditionalResource {
+export interface ResourceCard {
     title: string;
     description: string;
     linkText: string;
